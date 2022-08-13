@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Выбор диска</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="devices"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Содержание</a> &middot; <a href="howto.html">Работа</a> &middot; 
+<a href="menu.html">Меню</a> &middot; <a href="menu_disk.html">Диск</a> &middot; Выбрать диск&nbsp;/ задачу
+<hr />
+<h2>Выбор диска&nbsp;/ задачи</h2>
+<p>Выбор диска&nbsp;/ образа&nbsp;/ лог-файла для дальнейшей <a href="howto.html">работы</a>,
+выбор другой задачи.</p>
+<p><b>Если диск недоступен или имеет неверный размер -</b> 
+см. <a href="sysrequire.html">системные требования</a>.
+</p>
+<p>
+Для выбора между опциями <span class="ii">физ. устройства</span> и 
+<span class="ii">логические диски</span> см. раздел <a href="openvolume.html">Открытие тома</a>.
+</p>
+<p>
+Кнопка <span class="ii">Параметры</span> позволяет выбрать интерфейс и настроить другие 
+<a href="devioparams.html">параметры</a> ввода-вывода
+<a href="badrecovery.html">для работы с поврежденным диском</a>.
+</p>
+
+<p>В <b>Linux</b> можно использовать опцию <span class="ii">Образы дисков&nbsp;/ логи</span>,
+чтобы вручную указать пути для некоторых устройств или виртуальных дисков, которые не отображаются в списке,
+например, <span class="tt">/dev/mmcblk0</span> или <span class="tt">/dev/mapper/truecrypt1</span>.
+</p>
+
+<p>Опция <span id="vhd" class="ii">Образы дисков&nbsp;/ логи</span> позволяет открывать образы дисков
+и загружать логи сканирования.
+Клик или клавиша <span class="ii">Enter</span> на верхнем элементе добавляет новый файл для дальнейшей работы.
+Кроме обычных посекторных образов поддерживаются файлы образов виртуальных дисков 
+VHD&nbsp;/ VHDX, VMDK 
+(без поддержки сжатия&nbsp;/ шифрования&nbsp;/ записи); 
+в редакции <a href="editions.html">Professional</a> - также образы E01&nbsp;/ Smart (со сжатием).
+</p>
+
+<p>
+Если требуется открыть файл с нестандартным&nbsp;/ отсутсвующим расширением,
+следует переключить опцию фильтра в окне открытия файла.
+В <strong>macOS</strong> дополнительно нужно нажать <span class="ii">Детали/Параметры</span>.
+</p>
+
+<p>Опция <span class="ii">Показать разделы</span> включает экспресс-поиск и показ <a href="partitions.html">Разделов</a> 
+сразу после открытия диска.</p>
+
+<h4>Другие задачи</h4>
+<p>
+С помощью опции <span class="ii">Образы дисков&nbsp;/ логи</span> можно также загрузить 
+конфигурацию или лог расчета <a href="raids.html">массива RAID</a> или лог 
+<a href="fullscan.html">Полного сканирования</a>.
+</p>
+<p>
+Опции <span class="ii"><a href="raids.html">собрать RAID</a></span> и 
+<span class="ii"><a href="copysectors.html">Копировать секторы</a></span>
+выполняют переход к соответствующим задачам.</p>
+</p>
+
+</div></div>
+</body>
+</html>

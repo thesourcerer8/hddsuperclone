@@ -1,0 +1,235 @@
+
+
+
+
+
+
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'Western Digital ROYL process SA.'
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+
+include good_subroutines
+
+# set a blank string variable to compare with user input
+# make sure not to set this anyplace else
+sets $null = ""
+
+# set this to itself for use with the menu system
+# make sure not to set this anyplace else
+# if it was not previously set it will = 0
+seti $using_menu = $using_menu
+
+# set the file name to be read
+while 1 = 1
+  variablecheck $file
+  if $error_level < 16
+    seti $ask = 1
+  elseif $using_menu = 1
+    seti $ask = 1
+  endif
+  if $ask = 1
+    echo "Enter file name:"
+    userinput $choicestring
+    if $choicestring != $null
+      sets $file = $choicestring
+      break
+    else
+      echo "Choice cannot be blank!"
+    endif
+  else
+    break
+  endif
+done
+
+getfilesize $file
+seti $file_size = $error_level
+if $file_size < 0
+  echo "ERROR! File " $file " not found!"
+  previousscript
+endif
+echo "Reading the file"
+seti $scratchpad_size = $file_size
+scratchpadsize $scratchpad_size
+clearscratchpad
+readscratchpad $file 0 0 $scratchpad_size
+
+# show it on the screen
+#printscratchpad 0 $scratchpad_size
+
+seti $mod01_location = -1
+gosub find_mod01
+if $mod01_location > -1
+  echo "mod01 found at position " $mod01_location
+  gosub process_mod01
+else
+  echo "mod01 not found"
+endif
+
+
+
+
+previousscript
+end
+
+
+
+subroutine find_mod01
+  # search for the directory module 01
+  echo "Searching for module 01."
+  sets $header_check = "ROYL"
+  seti $position = 0
+  seti $search_end = $scratchpad_size - 4
+  while $position < $search_end
+    sets $header = scratchpad $position 4
+    if $header = $header_check
+      # process the module
+      seti $working_offset = $position
+      seti $working_offset = $position + 8
+      seti $mod_id = scratchpad $working_offset w
+      if $mod_id = 1
+        seti $mod01_location = $position
+        returnsub
+      endif
+    endif
+    seti $position = $position + 512
+  done
+endsubroutine
+
+
+
+
+
+
+subroutine process_mod01
+  # process the module
+  seti $working_offset = $mod01_location
+  #echo "Header:"
+  #printscratchpad $working_offset 4
+  seti $working_offset = $mod01_location + 8
+  seti $mod_id = scratchpad $working_offset w
+  hex
+  #echo "Module ID = 0x" $mod_id
+
+  # find how many sectors the module contains
+  seti $working_offset = $mod01_location + 0xa
+  seti $mod_length_sectors = scratchpad $working_offset
+  seti $working_offset = $mod01_location + 0xb
+  seti $tempnum = scratchpad $working_offset
+  seti $tempnum = $tempnum > 8
+  seti $mod_length_sectors = $mod_length_sectors + $tempnum
+
+  #echo "Size in sectors = 0x" $mod_length_sectors
+  seti $working_offset = $mod01_location + 0xc
+  seti $checksum = scratchpad $working_offset dw
+  #echo "32 bit checksum = 0x" $checksum
+  seti $working_offset = $mod01_location + 0x10
+  #echo "Mod version:"
+  #printscratchpad $working_offset 8
+  decimal
+
+  seti $module_size = $mod_length_sectors * 512
+  seti $calculated_checksum = 0
+  seti $count = 0
+  while $count < $module_size
+    seti $working_offset = $mod01_location + $count
+    if $working_offset > $search_end
+      echo "end of module is past end of rom"
+      break
+    endif
+    seti $dword = scratchpad $working_offset dw
+    seti $calculated_checksum = $calculated_checksum + $dword
+    seti $count = $count + 4
+    # skip the actual checksum bytes
+    if $count = 0xc
+      seti $count = $count + 4
+    endif
+  done
+  seti $calculated_checksum = $calculated_checksum & 0xffffffff
+  seti $calculated_checksum = 0xffffffff - $calculated_checksum
+  seti $calculated_checksum = $calculated_checksum + 1
+
+  hex
+  if $checksum = $calculated_checksum
+    sets $checkstring = " calulated=0x" $calculated_checksum " (good)"
+  else
+    sets $checkstring = " calulated=0x" $calculated_checksum " (bad)"
+  endif
+  echo "pos=0x" $position " ModID=0x" $mod_id " size=0x" $module_size $checkstring
+  decimal
+
+  seti $working_offset = $mod01_location + 0x30
+  seti $total_records = scratchpad $working_offset w
+  hex
+  echo "Total records = 0x" $total_records
+  decimal
+
+  # process the data records
+  seti $record_count = 0
+  seti $offset = 0x32 + $mod01_location
+  echo ""
+  while $record_count < $total_records
+    seti $record_count = $record_count + 1
+    seti $record_length = scratchpad $offset b
+    #printscratchpad $offset $record_length
+    seti $working_offset = $offset + 1
+    seti $module_copies = scratchpad $working_offset b
+    seti $working_offset = $offset + 2
+    seti $module_id = scratchpad $working_offset w
+    seti $working_offset = $offset + 4
+    seti $module_size = scratchpad $working_offset w
+    seti $working_offset = $offset + 0xa
+    seti $module_location1 = scratchpad $working_offset dw
+    seti $working_offset = $offset + 0xe
+    seti $module_location2 = scratchpad $working_offset dw
+    sets $found1 = "not-found"
+    sets $found2 = "not-found"
+    gosub check_module
+
+    hex
+    echo "ID=0x" $module_id " sectors=0x" $module_size " copies=0x" $module_copies " copy1=0x" $module_location1 " copy2=0x" $module_location2 " " $found1 " " $found2
+    decimal
+    seti $offset = $offset + $record_length
+
+  done
+endsubroutine
+
+
+
+
+
+subroutine check_module
+  seti $module_offset = $module_location1 * 512
+  sets $header_check = "ROYL"
+  sets $header = scratchpad $module_offset 4
+  if $header = $header_check
+    seti $working_offset = $module_offset + 8
+    seti $mod_id = scratchpad $working_offset w
+    if $mod_id = $module_id
+      sets $found1 = "found"
+    endif
+  endif
+  seti $module_offset = $module_location2 * 512
+  sets $header_check = "ROYL"
+  sets $header = scratchpad $module_offset 4
+  if $header = $header_check
+    seti $working_offset = $module_offset + 8
+    seti $mod_id = scratchpad $working_offset w
+    if $mod_id = $module_id
+      sets $found2 = "found"
+    endif
+  endif
+endsubroutine
+
+
+
+
+
+

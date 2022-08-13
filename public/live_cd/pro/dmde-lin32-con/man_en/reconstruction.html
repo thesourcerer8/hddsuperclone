@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Virtual File System Reconstruction</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="reconstruction"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">TOC</a> &middot; <a href="howto.html">Work</a> &middot; 
+<a href="menu.html">Menu</a> &middot; <a href="menu_tools.html">Tools</a>
+<hr />
+<h3>Virtual File System Reconstruction</h3>
+<p>
+Open virtual directory <span class="ii">[All Found / Virtual FS]</span> in the <a href="filepanel.html">File Panel</a>
+to virtually reconstruct directory structure and prepare found and removed files and directories for 
+<a href="datarecovery.html">recovery</a>.
+You may reopen the directory again to get more or less results in the reconstruction depending on your need.
+</p>
+<p>
+The results of the <a href="fullscan.html">Full Scan</a> are used (if the scan was performed).
+If files are recovered incorrectly you should try found different volumes -
+return to the results of the <a href="fullscan.html">Full Scan</a> 
+or to the window <a href="partitions.html">Partitions</a> and open the next volume.
+</p>
+<h4>FAT/exFAT</h4>
+<div class="l">
+<b class="ii">Rescan current file system</b>
+<p>
+Rescan the entire volume if the results within the current FS format only are needed
+and <a href="fullscan.html">Full Scan</a> is not fulfilled.
+</p>
+<b class="ii">Default reconstruction</b>
+<p>Use the results of the <a href="fullscan.html">Full Scan</a>.
+</p>
+<b>FAT Tables Options ("<span class="ii">Parameters</span>")</b>
+<p>
+FAT tables contain cluster chains to assemble fragmented files and directories.
+By testing tables the software selects which table to use or not to use both.
+However you may try different options to achieve better results
+of the reconstruction and data recovery in the whole or for specific files.
+</p>
+<p>
+You may choose which table copy to use (<b>FAT1</b> or <b>FAT2</b>) or not to use both. 
+The option <b class="ii">check (do not use bad sectors)</b> may allow avoiding some wrong chains
+if there is some damage in tables. 
+ExFAT has only one FAT table which cannot be properly tested 
+(values are correctly defined for fragmented file chains only).
+</p>
+
+<h4>Non-FAT File Systems</h4>
+<div class="l">
+<b class="ii">Pure FS Reconstruction</b>
+<p>
+The option provides results within the original FS only.
+For slightly damaged FS these are enough and the most accurate results.
+</p>
+<b class="ii">Default Reconstruction, Less (--) or More (++) Results</b>
+<p>
+Use the results of <a href="fullscan.html">Full Scan</a>.
+You may decrease and increase the number of results with buttons <b class="ii">--</b>&nbsp;and <b class="ii">++</b>.
+The color indicator schematically shows the quality and the number of the selected results
+(the more additional results the worse their quality).
+</p>
+<div class="spec">
+<b class="ii">Advanced</b>
+<p>Advanced parameters are primarily for specialists to make some corrections for the reconstruction
+if a file system is significantly damaged.
+</p>
+<b class="ii">MFT Numbers</b> (NTFS)
+<p>
+Filter files by MFT numbers for a partial reconstruction 
+(may be useful if there is not enough RAM for the entire reconstruction).
+</p>
+<b class="ii">prevent wrong merging</b>
+<p>
+Prevent possible wrong merging of directory branches by considering time stamps.
+</p>
+<b class="ii">process INDX'es</b> (NTFS)
+<p>
+Better (but slower) directory structure reconstruction using information from INDX'es 
+on top of omitted MFT info (<b class="ii">max</b> - force INDX processing).
+</p>
+<b>Shifted</b> (NTFS)
+<p>
+Include shifted MFT records 
+(<a href="fullscan.html">Full Scan</a> must be performed before).
+</p>
+<b>Extra Found</b> (NTFS)
+<p>
+Include extra found files into the reconstruction 
+(may contain more garbage but may help if some file is not recoverable other ways).
+</p>
+<b>Tech. Records</b> (NTFS)
+<p>
+Include special MFT records into the reconstruction for analysis.
+</p>
+<span class="ii">MFT / FS Fragments</span>
+<p>Manually select FS fragments to use in the reconstruction.
+Fragments are grouped by the relevance to the opened volume (calculated statistically):<br />
+<span class="ii">the best</span>, <span class="ii">correct</span> - most relevant and relevant,<br />
+<b class="ii">related</b> - may be relevant to the opened volume variants (cf. <a href="fullscan.html">Full Scan</a>),<br />
+<b class="ii">unknown</b> - relevant volume is not detected,<br />
+<b class="ii">extraneous</b> - relevant to a different volume,<br />
+<b class="ii">small (extra found)</b> - too small for statistics,<br />
+<b class="ii">disabled</b> - incompatible due to different FS parameters.
+</p>
+<h5>ReFS</h5>
+<p>
+In ReFS v3 any directory node contains a volume id. 
+<span class="ii">Other</span> nodes 
+in the <span class="ii">FS Fragments</span> list
+are nodes with an id which is different from the opened volume id.
+</p>
+<p>
+In a correct FS <span class="ii">top</span> nodes contain links for all 
+<span class="ii">rest</span> nodes (intermediate and leaf nodes).
+Upon any change ReFS writes new node versions in a new location and update links so 
+there may be many <span class="ii">old directory nodes</span> without references.
+However for a damaged FS there may be also lost nodes among them.
+By default <span class="ii">old directory nodes</span> are processed as well
+but a file version control is used to exclude old file refernces 
+(unless the option <span class="ii">include all old file entries</span> is turned on).
+</p>
+</div>
+</div>
+
+</div></div>
+</body>
+</html>

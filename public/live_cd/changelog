@@ -1,0 +1,246 @@
+HDDLiveCD changelog
+
+2022_7_24
+Updated HDDSuperClone to version 2.3.3
+Updated ddrescueview to version 0.4.5
+
+2022_04_30
+Updated HDDSuperClone to version 2.3.3
+Updated DMDE to version 4.0.0.800
+
+2022_02_12
+Updated HDDSCViewer to version 1.0
+Updated DMDE to version 3.9.0.795
+
+2022_01_23
+Updated HDDSuperClone to version 2.3.2
+Updated HDDSCViewer to version 0.9.beta
+Updated ddresuce to 1.26
+
+2022_01_15
+Updated HDDSuperClone to version 2.3.1
+Updated hdparm to version 9.63
+Updated DMDE to version 3.9.0.791
+
+2021_09_12
+Updated HDDSuperClone to version 2.3.0
+
+2021_08_01
+Updated HDDSuperClone to version 2.2.24
+Updated hdparm to version 9.62
+Added NVMe-CLI (64 bit ISO only)
+Added Bless Hex Editor
+Added wxHexEditor
+
+2021_03_20
+Updated HDDSuperClone to version 2.2.23
+
+2021_02_07
+Updated HDDSuperClone to version 2.2.22
+
+2021_01_17
+Updated HDDSuperClone to version 2.2.21
+32 bit ISO is now based on Xubuntu 14.04.5
+64 bit ISO is now based on Xubuntu 18.04.5
+Added a menu option for easy drive disabling
+Removed options for installing the OS
+
+2020_12_06
+Updated HDDSuperClone to version 2.2.20
+
+2020_11_15
+Updated HDDSuperClone to version 2.2.19
+Updated DMDE to version 3.8.0.790
+
+2020_10_04
+Updated HDDSuperClone to version 2.2.18
+
+2020_06_23
+Updated HDDSuperClone to version 2.2.17
+Updated DMDE to 3.7.1.777-beta
+
+2020_06_20
+Updated HDDSuperClone to version 2.2.16
+Added HFS+ support
+
+2020_05_02
+Updated HDDSuperClone to version 2.2.15
+
+2020_04_25
+Updated HDDSuperClone to version 2.2.14
+Updated ddrescue to version 1.25
+
+2020_02_29
+Updated HDDSuperClone to version 2.2.13
+
+2020_02_16
+Updated HDDSuperClone to version 2.2.12
+Fixed a bug with the disable screen saver desktop icon
+Updated the 64 bit LiveCD to 18.04.4 for virtual driver stability
+
+2020_02_06
+Updated HDDSuperClone to version 2.2.11
+
+2020_02_02
+Updated HDDSuperClone to version 2.2.10
+Added DMDE version 3.6.0.770
+Added desktop icon to disable screen saver
+
+2020_01_26
+Updated HDDSuperClone to version 2.2.9
+
+2020_01_24
+Updated the 2020_01_21 x64 image to include the missing hddscviewer
+
+2020_01_21
+Updated HDDSuperClone to version 2.2.8
+
+2020_01_01
+Updated HDDSuperClone to version 2.2.7
+
+2019_12_23
+Updated HDDSuperClone to version 2.2.6
+
+2019_11_24
+Updated HDDSuperClone to version 2.2.5
+
+2019_11_17
+Updated HDDSuperClone to version 2.2.4
+
+2019_11_10
+Updated HDDSuperClone to version 2.2.3
+
+2019_10_27
+Updated HDDSuperClone to version 2.2.2
+
+2019_09_08
+Updated HDDSuperClone to version 2.2.1
+
+2019_09_01
+Updated HDDSCViewer to version 0.8.beta
+
+2019_08_24
+Updated HDDSuperClone to version 2.2.0
+
+2019_08_18
+Updated HDDSuperClone to version 2.1.14
+
+2019_08_04
+Updated HDDSuperClone to version 2.1.13
+
+2019_04_27
+Updated HDDSuperClone to version 2.1.12
+
+2019_04_23
+Updated HDDSuperClone to version 2.1.11
+
+2019_04_19
+Updated HDDSuperClone to version 2.1.10
+
+2019_03_28
+Updated HDDSuperClone to version 2.1.9
+Updated ddrescue to version 1.24
+
+2019_02_16
+Added exFAT support
+
+2019_02_03
+Updated HDDSuperClone to version 2.1.8
+
+2019_01_16
+Updated HDDSuperClone to version 2.1.7
+
+2019_01_02
+Updated HDDSuperClone to version 2.1.6
+
+2018_12_22
+Updated HDDSuperClone to version 2.1.5
+
+2018_12_04
+Updated HDDSuperClone to version 2.1.4
+Updated HDDSCViewer to version 0.7.alpha
+
+2018_11_17
+Updated HDDSuperClone to version 2.1.3
+Updated hdparm to 9.58
+
+2018_10_29
+Updated HDDSuperClone to version 2.1.2
+
+2018_10_21
+Updated HDDSuperClone to version 2.1.1
+
+2018_10_20
+Updated HDDSuperClone to version 2.1.0
+
+2018_10_13
+Updated HDDSuperClone to version 2.0.3
+
+2018_09_09
+Updated HDDSuperClone to version 2.0.2
+
+2018_09_08
+Updated HDDSuperClone to version 2.0.1
+
+2018_08_26
+Updated HDDSuperClone to version 2.0.
+Updated version of hdparm to 9.56.
+
+2018_07_14
+Updated HDDSuperClone to version 1.99.3.beta. Updated HDDSCViewer to version 0.6.1.alpha.
+
+2018_07_05
+Updated HDDSuperClone to version 1.99.2.beta.
+
+2018_06_18
+Updated HDDSuperClone to version 1.99.1.beta.
+Updated ddrescue to version 1.23.
+Added updated version of hdparm 9.54.
+
+2017_11_19
+Updated HDDSuperClone to version 1.12. Updated HDDSCViewer to version 0.6-alpha.
+
+2017_08_27
+Updated HDDSuperClone to version 1.10.gui.beta.
+
+2017_06_29
+Updated HDDSuperClone to version 1.9.gui.beta. Updated HDDSCViewer to version 0.5-alpha.
+
+2017_05_29-1
+Updated HDDSuperClone to version 1.8.1_gui_beta. Fixed the issue where removable storage was being automounted.
+
+2017_05_29
+Updated HDDSuperClone to version 1.8_gui_beta.
+
+2017_03_04
+Updated HDDSuperClone to version 1.7, and ddrescue to version 1.22.
+
+2017_02_08
+Updated HDDSuperClone to version 1.6.1,
+
+2017_01_29
+Updated HDDSuperClone to version 1.6, and HDDSuperTool to version 1.10-1.8.
+
+2017_01_12
+Updated HDDSuperClone to version 1.5.1
+
+2017_01_10
+Updated HDDSuperClone to version 1.5, and HDDSuperTool to version 1.9-1.8. This version of the live CD has been removed due to a bug in HDDSuperClone version 1.5.
+
+2016_11_25
+Updated HDDSuperClone to version 1.4, HDDSuperTool to version 1.8-1.7, and ddrutility to version 2.8. Fixed the issue with ddrutility not being installed.
+
+2016_10_15
+Updated HDDSuperClone to version 1.3, and HDDViewer to version 0.4-alpha.
+
+2016_09_06
+Updated HDDSCViewer to 0.3-alpha. Changed the method of building the live CD. This should not have any major effect on the end product.
+
+2016_07_31
+Updated HDDSuperClone to version 1.2, and HDDViewer to version 0.2-alpha.
+
+2016_07_25
+All languages are available on the ISO. Added ddrescue version 1.21, ddrescueview version 0.3, and ddrutility version 2.7 to the list of installed programs.
+
+2016_07_24
+Initial release with HDDSuperClone, HDDSuperTool, and HDDViewer installed. Automount and autorun are disabled by default. The ISO only contains the english language.

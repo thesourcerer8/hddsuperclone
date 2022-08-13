@@ -1,0 +1,125 @@
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'scsi read 12.'
+  echo 'Example: hddsupertool -f scsi_read12'
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+
+# set a blank string variable to compare with user input
+# make sure not to set this anyplace else
+sets $null = ""
+
+gosub readsectors
+previousscript
+
+subroutine readsectors
+  while 1 = 1
+    echo "Enter starting sector:"
+    userinput $choicestring
+    if $choicestring != $null
+      seti $sector = $choicestring 0
+      break
+    else
+      echo "Choice cannot be blank!"
+    endif
+  done
+
+  while 1 = 1
+    echo "Enter count:"
+    userinput $choicestring
+    if $choicestring != $null
+      seti $count = $choicestring 0
+      break
+    else
+      echo "Choice cannot be blank!"
+    endif
+  done
+  gosub readsectors12
+  gosub show_sense_data
+  gosub show_passthrough_cmd_status
+  gosub show_sense_buffer
+endsubroutine
+
+
+
+subroutine readsectors12
+  seti $lba1 = $sector & 0xff
+  seti $lba2 = $sector > 8
+  seti $lba2 = $lba2 & 0xff
+  seti $lba3 = $sector > 16
+  seti $lba3 = $lba3 & 0xff
+  seti $lba4 = $sector > 24
+  seti $lba4 = $lba4 & 0xff
+  seti $lba5 = $sector > 32
+  seti $lba5 = $lba5 & 0xff
+  seti $lba6 = $sector > 40
+  seti $lba6 = $lba6 & 0xff
+  seti $lba7 = $sector > 48
+  seti $lba7 = $lba7 & 0xff
+  seti $lba8 = $sector > 56
+  seti $lba8 = $lba8 & 0xff
+
+  seti $cnt1 = $count & 0xff
+  seti $cnt2 = $count > 8
+  seti $cnt2 = $cnt2 & 0xff
+  seti $cnt3 = $count > 16
+  seti $cnt3 = $cnt3 & 0xff
+  seti $cnt4 = $count > 24
+  seti $cnt4 = $cnt4 & 0xff
+
+  seti $cbwcommand1 = 0xa8
+  seti $cbwcommand2 = 0
+  seti $cbwcommand3 = $lba4
+  seti $cbwcommand4 = $lba3
+  seti $cbwcommand5 = $lba2
+  seti $cbwcommand6 = $lba1
+  seti $cbwcommand7 = $cnt4
+  seti $cbwcommand8 = $cnt3
+  seti $cbwcommand9 = $cnt2
+  seti $cbwcommand10 = $cnt1
+  seti $cbwcommand11 = 0
+  seti $cbwcommand12 = 0
+
+  seti $bufsize = $count * 512
+  buffersize $bufsize
+  DIRECTION FROM
+  SCSI12CMD $cbwcommand1 $cbwcommand2 $cbwcommand3 $cbwcommand4 $cbwcommand5 $cbwcommand6 $cbwcommand7 $cbwcommand8 $cbwcommand9 $cbwcommand10 $cbwcommand11 $cbwcommand12
+  printbuffer 0 $bufsize
+
+endsubroutine
+
+
+
+subroutine show_sense_data
+  if $direct_mode = 0
+    hex
+    echo "sense_key=0x" $io_sense_key " asc=0x" $io_asc " ascq=0x" $io_ascq
+    decimal
+  endif
+endsubroutine
+
+
+subroutine show_passthrough_cmd_status
+  if $direct_mode = 0
+    echo "status=" $io_status " masked_status=" $io_masked_status " msg_status=" $io_msg_status
+    echo "sb_len_wr=" $io_sb_len_wr " host_status=" $io_host_status " driver_status=" $io_driver_status
+    echo "resid=" $io_resid " duration=" $io_duration " info=" $io_info
+  endif
+endsubroutine
+
+
+subroutine show_sense_buffer
+  if $direct_mode = 0
+    echo "Sense buffer:"
+    printsensebuffer 0 $io_sb_len_wr
+  endif
+endsubroutine
+
+
+previousscript

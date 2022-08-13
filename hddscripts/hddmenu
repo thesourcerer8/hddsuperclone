@@ -1,0 +1,75 @@
+# main menu
+seti $printhelp = $printhelp
+
+# set this so scripts know the menu is being used
+seti $using_menu = 1
+
+# this needs to be initially set so it can be used later
+seti $help = $help
+
+while 1 = 1
+  echo " "
+  echo "Main menu"
+  echo "q) Quit"
+  echo "h) Toggle script help
+  echo "1) Device information
+  echo "2) Read sectors"
+  echo "3) Write sectors"
+  echo "4) Erase sectors"
+  echo "5) Tools"
+  echo "6) Security"
+  echo "7) VSC"
+  echo "8) Custom"
+
+  if $printhelp = 1
+    exit 0
+  endif
+
+  echo "Enter your choice:"
+  userinput $choicestring
+
+  if $choicestring = q
+    break
+
+  elseif $choicestring = h
+    if $help = 0
+      seti $help = 1
+      echo "Help is now turned on"
+    else
+      seti $help = 0
+      echo "Help is now turned off"
+    endif
+
+  elseif $choicestring = 1
+    loadscript hddsubmenu_info
+
+  elseif $choicestring = 2
+    loadscript hddsubmenu_read
+
+  elseif $choicestring = 3
+    loadscript hddsubmenu_write
+
+  elseif $choicestring = 4
+    loadscript hddsubmenu_erase
+
+  elseif $choicestring = 5
+    loadscript hddsubmenu_tools
+
+  elseif $choicestring = 6
+    loadscript hddsubmenu_security
+
+  elseif $choicestring = 7
+    loadscript hddsubmenu_vsc
+
+  elseif $choicestring = 8
+    loadscript hddsubmenu_custom
+
+
+  else
+    echo "bad choice= " $choicestring
+  endif
+
+
+
+done
+end

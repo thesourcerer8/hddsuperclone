@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Меню Редактор</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Содержание</a> &middot; <a href="howto.html">Работа</a> &middot; <a href="menu.html">Меню</a>
+<hr />
+<h2>Меню "Редактор"</h2>
+<p>
+Выбор объекта для просмотра/редактирования в <a href="diskeditor.html">Дисковом редакторе</a>.
+</p>
+<table>
+<tr><th class="ii">Таблица разделов</th><td>
+Открыть все секторы диска. <br />Перейти к MBR (к начальному сектору диска).
+</td></tr>
+<tr><th class="ii">Загрузочный сектор</th><td>
+Открыть все секторы тома. <br />Перейти к boot-сектору тома.
+</td></tr>
+<tr><th class="ii">Копия загрузочного сектора</th><td>
+Открыть все секторы тома. Перейти к копии boot-сектора.
+</td></tr>
+<tr><th class="ii">Корневая директория</th><td>
+Открыть корневую директорию тома.
+</td></tr>
+<tr><th class="ii">FAT/MFT</th><td>
+Для FAT - открыть FAT1 (основную таблицу кластеров), для NTFS - открыть MFT.
+</td></tr>
+<tr><th class="ii">FAT Copy/MFT Mirror</th><td>
+Для FAT - открыть FAT2 (копию таблицы кластеров), для NTFS - открыть MFTMirr.
+</td></tr>
+<tr><th class="ii">Файл MFT...</th><td>
+Открыть MFT. Перейти к укзанному файлу MFT.
+</td></tr>
+<tr><th class="ii">Кластер...</th><td>
+Открыть все секторы тома. Перейти к указанному кластеру тома.
+</td></tr>
+<tr><th class="ii">Сектор тома...</th><td>
+Открыть все секторы тома. перейти к указанному секору тома.
+</td></tr>
+<tr><th class="ii">Физические секторы...</th><td>
+Открыть указанные секторы диска. Перейти к указанному сектору.
+</td></tr>
+<tr><th class="ii">Данные файла</th><td>
+Открыть файл, расположенный в текущем кластере.
+</td></tr>
+<tr><th class="ii">Директория</th><td>
+Открыть директорию, содержащую текущий файл. <br />Перейти к файловой записи.
+</td></tr>
+<tr><th class="ii">Кластер FAT/файл MFT</th><td>
+Для FAT - открыть FAT1; <br />перейти в к кластеру FAT1, соответствующему текущему кластеру тома.<br />
+Для NTFS - открыть MFT; <br />перейти к записи MFT, соответствующей текущему файлу или кластеру тома.<br />
+</td></tr>
+<tr><th class="ii">Карта кластеров</th><td>
+Открыть <a href="clustermap.html">Карту кластеров</a>. 
+Перейти к кластеру карты, соответстующему текущему кластеру тома.
+</td></tr>
+<tr><th class="ii">Переход к позиции объекта...</th><td>
+Перейти к указнной позиции в открытом объекте.
+</td></tr>
+</table>
+
+<p>
+Перед выполнением команд необходимо <a href="openvolume.html">открыть том</a>
+(кроме команд <span class="ii">Таблица разделов</span>, <span class="ii">Физические секторы</span>).
+</p>                 
+
+</div></div>
+</body>
+</html>

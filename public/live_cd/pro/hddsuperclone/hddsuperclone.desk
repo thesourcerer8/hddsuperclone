@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=HDDSuperClone       
+Comment=HDDSuperClone
+Exec=x-terminal-emulator -e "bash -c 'sudo hddsuperclone;$SHELL'"
+Icon=utilities-terminal
+Terminal=false
+Type=Application
+Categories=Utility;
+Name[en_US]=HDDSuperClone

@@ -1,0 +1,109 @@
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'Western Digital ROYL dump all modules using vendor specific commands.'
+  echo 'This will dump the sectors of the modules to the files "modulexxxx.bin".'
+  echo 'Note that some USB drives do not support these vendor specific commands.'
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+
+include good_subroutines
+
+# set the filename to be read
+sets $filename = "mod01.bin"
+
+
+# read the sectors from the file
+readscratchpad $filename 0 0 $scratchpad_size
+# show it on the screen
+#printscratchpad 0 $scratchpad_size
+
+# disable vendor specific commands
+buffersize 0
+setreadpio
+ata28cmd 0x44 0x0b 0x00 0x44 0x57 0xa0 0x80
+# check if command failed
+gosub status_check
+
+
+# process the module
+echo "Header:"
+printscratchpad 0 4
+seti $mod_id = scratchpad 8 w
+hex
+echo "Module ID = 0x" $mod_id
+echo "Size in sectors = 0x" $mod_length_sectors
+seti $checksum = scratchpad 0xc dw
+echo "32 bit checksum = 0x" $checksum
+seti $total_records = scratchpad 0x30 w
+echo "Total records = 0x" $total_records
+decimal
+sets $header = scratchpad 0 4
+sets $header_check = "ROYL"
+if $header != $header_check
+  echo "Header is not 'ROYL', exiting"
+  previousscript
+endif
+
+# calculate checksum
+seti $calculated_checksum = 0
+seti $count = 0
+while $count < $scratchpad_size
+  seti $dword = scratchpad $count dw
+  seti $calculated_checksum = $calculated_checksum + $dword
+  seti $count = $count + 4
+  # skip the actual checksum bytes
+  if $count = 0xc
+    seti $count = $count + 4
+  endif
+done
+seti $calculated_checksum = $calculated_checksum & 0xffffffff
+seti $calculated_checksum = 0xffffffff - $calculated_checksum
+seti $calculated_checksum = $calculated_checksum + 1
+if $checksum = $calculated_checksum
+  sets $message = " (good)"
+else
+  sets $message = " (BAD)"
+endif
+hex
+echo "Calculated Checksum = 0x" $calculated_checksum $message
+decimal
+if $checksum != $calculated_checksum
+  echo "Calculated checksum does not match actual, exiting"
+  previousscript
+endif
+
+# process the data records
+seti $record_count = 0
+seti $offset = 0x32
+echo ""
+while $record_count < $total_records
+  seti $record_count = $record_count + 1
+  seti $record_length = scratchpad $offset b
+  seti $next_record_offset = $offset + $record_length
+  seti $offset = $offset + 2
+  seti $module_id = scratchpad $offset w
+  seti $offset = $offset + 2
+  seti $module_size = scratchpad $offset w
+  hex
+  echo "Module ID = 0x" $module_id "  Size in sectors = 0x" $module_size
+  decimal
+  seti $offset = $next_record_offset
+
+done
+
+
+
+
+previousscript
+end
+
+
+
+
+

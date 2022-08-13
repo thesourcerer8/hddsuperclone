@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=HDDSCViewer       
+Comment=HDDSCViewer
+Exec=x-terminal-emulator -e "bash -c 'hddscviewer;$SHELL'"
+Icon=utilities-terminal
+Terminal=false
+Type=Application
+Categories=Utility;
+Name[en_US]=HDDSCViewer

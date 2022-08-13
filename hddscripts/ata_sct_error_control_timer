@@ -1,0 +1,186 @@
+seti $help = $help
+seti $printhelp = $printhelp
+if $help = 1
+  echo 'This command is not supported by all drives.'
+  echo 'View the results of the identify device command to check support.'
+  echo 'Get the value of the read error control timer.'
+  echo 'Optionally set the value of the read error control timer.'
+  echo 'This command uses the number variable "timer".'
+  echo 'Timer can be a value from 0-65535.'
+  echo 'The timer controls how much time before giving up on a read error.'
+  echo 'Normally this is in 100ms increments (value of 5 would be 500ms),'
+  echo ' but this is drive specific (try different values to see what happens).'
+  echo 'The default value is 0 (unlimited, all recovery proceedures are tried).'
+  echo 'This value is not permenant, it resets with a power cycle.'
+  echo 'If timer is not set it will only show the current value.'
+  echo 'Example to show current error timer:'
+  echo '  hddsupertool -t /dev/sda -f ata_sct_error_control_timer'
+  echo 'Example to set the error control timer to 1:'
+  echo '  hddsupertool -t /dev/sda -f ata_sct_error_control_timer timer=1'
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+
+include good_subroutines
+
+# set a blank string variable to compare with user input
+# make sure not to set this anyplace else
+sets $null = ""
+
+# set this to itself for use with the menu system
+# make sure not to set this anyplace else
+# if it was not previously set it will = 0
+seti $using_menu = $using_menu
+
+
+# find out if using menus or if variables were set on the command line, and ask for input if they were not set
+
+seti $ask = 0
+while 1 = 1
+  variablecheck $timer
+  if $using_menu = 1
+    seti $ask = 1
+  elseif $error_level < 16
+    seti $timer = -1
+  endif
+  if $ask = 1
+    echo "Enter new timer value, or leave blank for no change:"
+    userinput $choicestring
+    if $choicestring != $null
+      seti $timer = $choicestring 0
+      break
+    else
+      seti $timer = -1
+      break
+    endif
+  else
+    break
+  endif
+done
+
+
+
+
+# set the buffer size
+buffersize 512
+
+# set the LBAs to 0
+seti $LBAlow = 0
+seti $LBAmid = 0
+seti $LBAhigh = 0
+
+# set some things for the ata write command
+setwritepio
+# set features to 0
+seti $features = 0
+# set count to 1
+seti $count = 1
+# set device to 0
+seti $device = 0
+# set lba to log page e0
+seti $LBAlow = 0xe0
+# set the command for write log extended
+seti $command = 0x3f
+
+# make sure buffer is clear
+clearbuffer
+
+# set the buffer data to return the error recovery control timer
+setbuffer 0
+  03 00 02 00 01
+endbuffer
+
+# perform the command
+ata48cmd $features $count $LBAhigh $LBAmid $LBAlow $device $command
+
+# check if command failed
+seti $command_failed = 0
+gosub check_command_status
+if $command_failed = 1
+  echo "Command failed!"
+  gosub show_sense_data
+  gosub show_ata_return_status
+  previousscript
+endif
+
+seti $temp = $ata_return_lba < 8
+seti $current_timer = $temp & 0xff00
+seti $temp = $ata_return_count & 0xff
+seti $current_timer = $current_timer + $temp
+echo "Current error control timer = " $current_timer
+
+if $timer > -1
+  # set the time limit bytes
+  seti $timelow = $timer & 0xff
+  seti $timehigh = $timer > 8
+  seti $timehigh = $timehigh & 0xff
+
+  clearbuffer
+  # data to set the error recovery control timer
+  # set action code to error recovery control
+  seti $actionlow = 0x03
+  seti $actionhigh = 0x00
+  # set function code to set new time
+  seti $functionlow = 0x01
+  seti $functionhigh = 0x00
+  # set selection code to the read timer
+  seti $selectionlow = 0x01
+  seti $selectionhigh = 0x00
+
+  # set the buffer data
+  setbuffer 0
+    $actionlow $actionhigh $functionlow $functionhigh $selectionlow $selectionhigh $timelow $timehigh
+  endbuffer
+
+  # perform the command
+  ata48cmd $features $count $LBAhigh $LBAmid $LBAlow $device $command
+
+  # check if command failed
+  seti $command_failed = 0
+  gosub check_command_status
+  if $command_failed = 1
+    echo "Command failed!"
+    gosub show_sense_data
+    gosub show_ata_return_status
+    previousscript
+  endif
+
+  clearbuffer
+  # set the buffer data to return the error recovery control timer
+  setbuffer 0
+    03 00 02 00 01
+  endbuffer
+  # perform the command
+  ata48cmd $features $count $LBAhigh $LBAmid $LBAlow $device $command
+
+  # check if command failed
+  seti $command_failed = 0
+  gosub check_command_status
+  if $command_failed = 1
+    echo "Command failed!"
+    gosub show_sense_data
+    gosub show_ata_return_status
+    previousscript
+  endif
+
+  seti $temp = $ata_return_lba < 8
+  seti $new_timer = $temp & 0xff00
+  seti $temp = $ata_return_count & 0xff
+  seti $new_timer = $new_timer + $temp
+  echo "New error control timer = " $new_timer
+
+endif
+
+
+
+
+previousscript
+end
+
+
+
+

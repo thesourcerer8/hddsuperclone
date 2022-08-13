@@ -1,0 +1,1 @@
+~/hddsupertool/public/live_cd/script.sh

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Disable Screensaver
+Comment=Disable Screensaver
+Exec=x-terminal-emulator -e "bash -c 'echo xset -dpms;echo xset s off;xset -dpms;xset s off;echo to re-enable screensaver: xset +dpms; echo to re-enable screensaver: xset s on;$SHELL'"
+Icon=utilities-terminal
+Terminal=false
+Type=Application
+Categories=Application;
+Name[en_US]=Disable Screensaver

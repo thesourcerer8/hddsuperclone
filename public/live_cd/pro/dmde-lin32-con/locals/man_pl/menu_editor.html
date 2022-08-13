@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Menu Edytor</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Spis treści</a> &middot; <a href="howto.html">Praca</a> &middot; <a href="menu.html">Menu</a>
+<hr />
+<h2>Menu "Edytor"</h2>
+<p>
+Wybierz obiekt, aby otworzyć w <a href="diskeditor.html">Edytorze disku</a>.
+</p>
+<table>
+<tr><th class="ii">Tablica particji</th><td>
+Otwórz wszystkie sektory dysku. <br />Idź do sektora MBR (pierwszy sektor dysku).
+</td></tr>
+<tr><th class="ii">Boot Sektor</th><td>
+Otwórz wszystkie sektory woluminu. <br />Idź do boot-sektora woluminu (pierwszy sektor otwartego wolumnu).
+</td></tr>
+<tr><th class="ii">Kopia Boot Sektora</th><td>
+Otwórz wszystkie sektory woluminu. <br />Idź do kopii boot-sektora woluminu.
+</td></tr>
+<tr><th class="ii">Root katalog</th><td>
+Otwórz główny katalog woluminu.
+</td></tr>
+<tr><th class="ii">FAT/MFT</th><td>
+Otwórz FAT1 (głównej tablicy klastrów) dla FAT, MFT dla NTFS.
+</td></tr>
+<tr><th class="ii">FAT Copy/MFT Mirror</th><td>
+Otwórz FAT2 (kopię tablicy klastrów) dla FAT, MFTMirr dla NTFS.
+</td></tr>
+<tr><th class="ii">MFT Record...</th><td>
+Otwórz MFT. Idź do określonego pliku MFT.
+</td></tr>
+<tr><th class="ii">Klaster&nbsp;woluminu...</th><td>
+Otwórz wszystkie sektory woluminu. <br />Idź do określonego klastra woluminu.
+</td></tr>
+<tr><th class="ii">Sektor woluminu...</th><td>
+Otwórz wszystkie sektory woluminu. <br />Idź do określonego sektora woluminu.
+</td></tr>
+<tr><th class="ii">Sektory fizyczne...</th><td>
+Otwórz określone sektory dysku. <br />Idź do określonego sektora dysku.
+</td></tr>
+<tr><th class="ii">Dane pliku</th><td>
+Otwórz plik znajduje się na bieżącym klastre.
+</td></tr>
+<tr><th class="ii">Wpis katalogu</th><td>
+Otwórz katalog zawierający bieżący plik. Idź do wpisu w pliku.
+</td></tr>
+<tr><th class="ii">Klaster FAT/MFT record</th><td>
+Dla FAT: otwórz FAT1; <br />idź do klastra FAT1 odpowiada bieżącego klastra woluminu. <br />
+Dla NTFS: otwarte MFT; <br />idź do rekordu MFT odpowiadające bieżącym pliku lub klastra woluminu.<br />
+</td></tr>
+<tr><th class="ii">Mapa klastrów</th><td>
+Otwórz <a href="clustermap.html">Mapu clusterów</a>. 
+Idź do klastra mapu odpowiednią bieżącego klastra woluminu.
+</td></tr>
+<tr><th class="ii">Idź do obiektu Offset...</th><td>
+Idź do określonej pozycji otwarty obiektu.
+</td></tr>
+</table>
+
+<p>
+Oprócz komend <span class="ii">Tablica particji</span> i <span class="ii">Sektory fizyczne</span> 
+należy <a href="openvolume.html">otworzyć woluminu</a> na początku.
+</p>                 
+
+</div></div>
+</body>
+</html>

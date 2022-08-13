@@ -1,0 +1,292 @@
+DMDE Change Log
+
+Version 4.0.0.800 (2022-03-06)
+	new: Btrfs support (without RAID support)
+	new: new ReFS modifications support (up to v3.7)
+	improved: interface improvements
+	fixed: APFS reconstruction critical bug
+	fixed: support for APFS "duplicated" files
+	other improvements and fixes
+
+Version 3.8.0.790 (2020-11-08)
+	new: APFS support (without encryption)
+	new: image preview (for standard graphics)
+	new: Portuguese Brazilian, Simplified Chinese translations
+	fixed: HFS support critical bugs
+	fixed: extfs Full Scan critical bug processing damaged inodes
+	other improvements and fixes
+
+Version 3.6.1.773 (2019-10-12)
+	new: 64-bit version for macOS
+
+Version 3.6.0.770 (2019-09-14)
+	new: ReFS v1/v3 support
+	new: filtering Raw results by using cluster map
+	new: applying Raw results to FS data
+	new: support for VMDK disk image files
+	new: support for EWF disk image files (e01/etc., Professional Edition only)
+	improved: cluster map support (diff. FS types / damaged FS / reports)
+	improved: more presize detection of RAID parameters, fixed offset detection
+	fixed: HFS support critical bugs
+	fixed: extfs some rare parameters support
+	fixed: exFAT found directory fragments processing
+	fixed: copying sectors bug when loading log with retried bad ranges
+	other improvements and fixes
+
+Version 3.4.4.740 (2018-08-03)
+	new: version for macOS
+	new: GUI version for Linux
+	improved: size detection of some Jpeg files (Raw search)
+	fixed: support for custom EOF signatures (Raw search)
+	other improvements and fixes
+
+Version 3.4.2.722 (2017-11-21)
+	new: Apple partitioning support (read-only)
+	new: HFS+/HFSX support including complex HFS search
+	new: popup hints
+	improved: detection of some file types (Raw search)
+	improved: custom file signature support (detection, complex signatures)
+	fixed: RAID-6 detection critical bug
+	other improvements and fixes
+
+Version 3.2.0.692 (2017-01-14)
+	new: tabbed interface to work with multiple devices and objects
+	new: custom file signatures support
+	new: detection of RAID parameters
+	new: support for VHD and VHDX dynamic disk image files
+	new: SMART report reading
+	new: NTFS encrypted file recovery (without decryption)
+	new: NTFS option: reading MFT from an external file
+	new: disk imaging option: splitted image creation
+	improved: exFAT boot sector recognition during fullscan
+	improved: improved NTFS reconstruction by processing INDX records
+	improved: better name recognition for some removed NTFS files
+	other improvements and fixes
+
+Version 3.0.6.648 (2016-06-22)
+	new: recovery of some truncated NTFS files
+	improved: file signatures and size detection
+	improved: branches separation of directory tree (NTFS and extfs)
+	fixed: NTFS search critical bug
+	fixed: storing/loading found signatures to/from log
+	fixed: RAID-5 forward dynamic parity: wrong striping
+	new: French, Italian, Spanish, Persian (+RTL UI) translation
+	other improvements and fixes
+
+Version 3.0.4.630 (2015-10-15)
+	new: Full Scan (multiple FS and Raw search, improved interface)
+	new: Raw file search by signatures
+	new: NTFS extended search (FS structures and file signatures based)
+	new: exFAT extended search (FS structures and file signatures based)
+	new: extfs extended search (FS structures based)
+	new: extfs removed entries processing
+	new: FAT32 removed file recovery using signatures
+	other improvements and fixes
+
+Version 2.10.2.564 (2014-12-11)
+	improved: NTFS reconstruction default filters
+	fixed: exFAT reconstruction when there are removed directories
+	fixed: ex(FAT) table processing memory exception
+	fixed: search string in 64-bit version
+	fixed: extFS superblock detection in 64-bit version
+	fixed: extFS 64-bit support
+	other fixes
+
+Version 2.10.0.560 (2014-07-12)
+	added: Basic exFAT support
+	added: DOS ASPI support
+	improved: FAT reconstruction
+	fixed: 64-bit versions issues
+	some bugs fixed
+
+Version 2.8.2.546 (2014-04-18)
+	fixed: extfs: missing files while recovering
+	fixed: extfs: reporting error for sparse files
+	fixed: extfs inode template
+	fixed: DOS version bugs (device selection when copy sectors)
+	fixed: DOS ATA reset option is not visible
+	other fixes
+
+Version 2.8.0.542 (2014-02-13)
+	added: Basic Ext2/3/4 support
+	added: Disk Editor: custom template support
+	fixed: critical error when open some USB devices
+	minor improvements and fixes
+
+Version 2.6.0.522 (2013-11-18)
+	added: GUID partitioning (GPT) support (edit mode)
+	added: Disk images/clones: load/save parameters, write log; resume using log (Prof. Edition)
+	added: Disk images/clones: simultaneous read and write in two threads (Linux and Windows)
+	added: Bad I/O option: replace bad sector data by filler
+	added: RAID: RAID-6 support (only XOR recovery), custom striping, load/save parameters
+	added: Undo, Redo support (Disk Editor, Partition Manager)
+	added: ATA software reset (DOS ATA)
+	added: Unicode support for Windows console interface, Linux terminal interface, Disk Editor
+	added: NTFS reconstruction: MFT fragment manager
+	added: additional NTFS features to recover lost or damaged files
+	added: NTFS Search: search shifted MFT records
+	improved: NTFS Search: handling many MFT fragments optimization
+	improved: FAT Search: search volumes w/o subdirectories, detect small FAT tables
+	other improvements
+
+Version 2.4.6.448 (2013-08-29)
+	fixed: erroneous omission of some close small MFT fragments
+	fixed: handling found MFT fragment larger than 2GB
+	fixed: cache error (data confusion on drives >2TiB in some special cases)
+	fixed: search by name (last symbol omission for name without extension)
+	other bugs fixed
+
+Version 2.4.4.442 (2012-09-05)
+	fixed: RAID redundant data parity use when disk is absent
+	fixed: read backward issues
+	fixed: NTFS Search 64-bit cluster support
+	minor improvements and fixes
+
+Version 2.4.2 (2012-04-05)
+	fixed: disk size detection
+	fixed: NTFS sparse file support
+	fixed: GPT copy test
+	fixed: Chinese Big5 Code issue
+	other bugs fixed
+
+Version 2.4.0 (2011-12-18)
+	improved: partition search (flash disks, Vista/Win7 partitioning)
+	improved: handling directory recovery with the same names
+	improved: FAT volume scan uses FAT Search results
+	added: recovery reports
+	added: exFAT boot sector, Ext2/3/4 superblock detection
+	added: RAID delayed parity support, RAID-4 support
+	added: NTFS alternate data stream support
+	fixed: Large sector support
+	fixed: NTFS search critical bug on MFT gaps
+	fixed: special sector search critical bug
+	fixed: device I/O error handling bug
+	fixed: pci scan for ATA devices over non-default ports (DOS)
+	fixed: DMA transfer completing detection (DOS)
+	other improvements
+	other bugs fixed
+
+Version 2.2.2 (2010-12-10)
+	imporved: FAT search speed up
+	imporved: NTFS search speed up
+	improved: partition manager
+	fixed, improved: volume locking
+	added: customizable device I/O error handler (Professional Edition only)
+	added: DMA I/O under DOS (Professional Edition only)
+	added: recover NTFS multirecord files w/o attribute list
+	added: support for compressed files when cluster size is less than 4KB
+	some bugs fixed
+
+Version 2.0.1 (2009-09-20)
+	added: version for Linux terminal
+	added: support for devices larger than 1TB
+	added: device I/O retry dialog
+	added: RAID partial support
+	added: GPT partial support
+	added: Unicode name support
+	added: support for large NTFS compressed files
+	added: multi language support
+	added: file and directory marking for group recovery
+	improved: device access 
+	interface improved
+	other improvements
+	some bugs fixed
+
+Version 01.39 (2008-05-01)
+	added: Windows XP+ theme support
+	added: write siupport under Windows Vista+
+
+Version 01.38 (2007-09-03)
+	added: GUI version
+	improved: NTFS search
+	improved: processing lost FAT directories
+	some bugs fixed
+
+Version 01.37 (2007-07-23)
+	improved: faster input/output operations
+	added: recovery NTFS directory structure (full version only)
+	added: support for disk images
+	added: support for IDE ATA drives in DOS version
+	added: support for DOS logical drives DOS version
+	interface improved
+	some bugs fixed
+
+Version 01.36 (2006-10-22)
+	added: russian/english interface
+	added: work with FAT volumes with damaged directories structure
+	added: directory recovery (full version only)
+	some bugs fixed
+
+Version 01.35 (2006-09-10)
+	added: cluster map
+	added: support for FAT files >2GB and NTFS files >4GB
+	fixed: NTFS Search
+	fixed: writing to MFT reserved area when create NTFS files and directories
+	fixed: NTFS directory recovery (support for 64bits, file attributes corrected)
+
+Version 01.34 (2006-07-27)
+	added: support for different NTFS versions
+	fixed: processing NTFS volumes without MFT record 0
+	improved: NTFS indexes reading
+
+Version 01.33 (2006-07-19)
+	fixed: MFTMirr updating after MFT modification
+	fixed: NTFS extended attribute processing
+
+Version 01.32 (2006-07-13)
+	added: direct NTFS write access
+	some small bugs fixed
+
+Version 01.30 (2006-06-26)
+	critical bug fixed: detecting XBIOS in 32bit DOS version
+	fixed: NTFS FILE fragmented record processing
+	added: FAT Search
+	added: file panel for FAT
+	added: write file to sectors, save sectors to file
+	added: work without FAT tables, with bad FAT tables
+	improved: partition manager
+	improved: NTFS file enumeration
+	improved: removed file recovery for FAT
+	improved: interface
+	changed: Windows event handler
+	some other logical bugs fixed
+	some other modifications
+
+Version 01.23 (2006-03-27)
+	fixed: processing cluster chains for removed FAT files
+	fixed: mouse and keyboard processing under Windows
+
+Version 01.22 (2006-03-23)
+	added: versions for Windows NT/2000/XP
+	some interface improvements
+
+Version 01.21 (2006-03-17)
+	added: 32-bit DOS version
+	some interface improvements
+	some bugs fixed
+
+Version 01.20 (2006-01-09)
+	added: quick search for lost partitions
+	added: simple partition manager
+	added: file recovery
+	some bugs fixed
+
+Version 01.11 (2005-12-23)
+	improved: NTFS Search (more information used, some bugs fixed)
+
+Version 01.10 (2005-11-18)
+	added: NTFS Search
+	added: safe processing compressed files with errors
+	fixed: memory loss
+	fixed: error handling
+	some interface modifications
+
+Version 01.04 (2005-09-17)
+	added: support for NTFS volumes without MFT
+	fixed: incorrect partition start sector for DOS extended partitions
+
+Version 01.03 (2005-09-09)
+	added: viewing MFT record details
+	fixed: NTFS compression processing
+	fixed: NTFS extended attribute processing
+	fixed: searching for string

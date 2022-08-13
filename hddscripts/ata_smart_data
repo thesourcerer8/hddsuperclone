@@ -1,0 +1,391 @@
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'This will read the smart data from the drive and display the results.'
+  echo 'Example: hddsupertool -t /dev/sda -f ata_smart_data'
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+
+include good_subroutines
+
+
+buffersize 512
+setreadpio
+
+# read threshold data
+clearbuffer
+ata28cmd 0xd1 0 0 0x4f 0xc2 0xa0 0xb0
+seti $threshold_success = 1
+# check if command failed
+seti $command_failed = 0
+gosub check_command_status
+if $command_failed = 1
+  seti $threshold_success = 0
+endif
+
+#echo "Raw buffer:"
+#printbuffer 0 512
+copybuffertoscratchpad 0 0 512
+
+# read attribute data
+clearbuffer
+ata28cmd 0xd0 0 0 0x4f 0xc2 0xa0 0xb0
+
+# check if command failed
+seti $command_failed = 0
+gosub check_command_status
+if $command_failed = 1
+  echo "Command failed!"
+  gosub show_sense_data
+  gosub show_ata_return_status
+  previousscript
+endif
+
+#echo "Raw buffer:"
+#printbuffer 0 512
+
+
+seti $version = buffer 0 w
+echo "Smart structure version= " $version
+
+echo "ID#   FLAG  VALUE WORST THRESH   RAW DATA          ATTRIBUTE NAME"
+sets $attribute_name = " "
+seti $offset = 2
+seti $count = 0
+seti $warning = 0
+while $count < 30
+  seti $attribute_id = buffer $offset
+  seti $offset = $offset + 1
+  if $attribute_id < 10
+    sets $spaces = "  "
+  elseif $attribute_id < 100
+    sets $spaces = " "
+  else
+    sets $spaces = ""
+  endif
+  sets $attributestring = $spaces $attribute_id
+
+  seti $flags = buffer $offset w
+  seti $offset = $offset + 2
+  if $flags < 0x10
+    sets $zeros = "0x000"
+  elseif $flags < 0x100
+    sets $zeros = "0x00"
+  elseif $flags < 0x1000
+    sets $zeros = "0x0"
+  else
+    sets $zeros = "0x"
+  endif
+  hex
+  sets $flagstring = $zeros $flags
+  decimal
+
+  seti $current_value = buffer $offset
+  seti $offset = $offset + 1
+  if $current_value < 10
+    sets $spaces = "  "
+  elseif $current_value < 100
+    sets $spaces = " "
+  else
+    sets $spaces = ""
+  endif
+  sets $currentstring = $spaces $current_value
+
+  seti $worst_value = buffer $offset
+  seti $offset = $offset + 1
+  if $worst_value < 10
+    sets $spaces = "  "
+  elseif $worst_value < 100
+    sets $spaces = " "
+  else
+    sets $spaces = ""
+  endif
+  sets $worststring = $spaces $worst_value
+
+  seti $rawdata = buffer $offset dw
+  seti $offset = $offset + 4
+  seti $otherdata = buffer $offset w
+  seti $offset = $offset + 2
+  seti $otherdata = $otherdata < 32
+  seti $rawdata = $rawdata + $otherdata
+  seti $otherdata = buffer $offset
+  seti $offset = $offset + 1
+  seti $otherdata = $otherdata < 48
+  seti $rawdata = $rawdata + $otherdata
+
+  if $rawdata < 0x10
+    sets $zeros = "0x0000000000000"
+  elseif $rawdata < 0x100
+    sets $zeros = "0x000000000000"
+  elseif $rawdata < 0x1000
+    sets $zeros = "0x00000000000"
+  elseif $rawdata < 0x10000
+    sets $zeros = "0x0000000000"
+  elseif $rawdata < 0x100000
+    sets $zeros = "0x000000000"
+  elseif $rawdata < 0x1000000
+    sets $zeros = "0x00000000"
+  elseif $rawdata < 0x10000000
+    sets $zeros = "0x0000000"
+  elseif $rawdata < 0x100000000
+    sets $zeros = "0x000000"
+  elseif $rawdata < 0x1000000000
+    sets $zeros = "0x00000"
+  elseif $rawdata < 0x10000000000
+    sets $zeros = "0x0000"
+  elseif $rawdata < 0x100000000000
+    sets $zeros = "0x000"
+  elseif $rawdata < 0x1000000000000
+    sets $zeros = "0x00"
+  elseif $rawdata < 0x10000000000000
+    sets $zeros = "0x0"
+  else
+    sets $zeros = "0x"
+  endif
+  hex
+  sets $datastring = $zeros $rawdata
+  decimal
+
+  seti $threshold = 0
+  seti $threshold_value = $threshold
+  if $threshold_success = 1
+    gosub get_threshold_data
+    seti $threshold = $threshold_value
+    sets $threshold_warning = " "
+    if $attribute_id > 0
+      if $current_value <= $threshold
+        seti $warning = 1
+        sets $threshold_warning = "*"
+      elseif $worst_value <= $threshold
+        seti $warning = 1
+        sets $threshold_warning = "*"
+      endif
+    endif
+  endif
+  if $threshold < 10
+    sets $spaces = "  "
+  elseif $threshold < 100
+    sets $spaces = " "
+  else
+    sets $spaces = ""
+  endif
+  sets $thresholdstring = $spaces $threshold_warning $threshold
+
+  if $attribute_id > 0
+    gosub get_attribute_name
+    echo $attributestring "  " $flagstring "  " $currentstring "   " $worststring "  " $thresholdstring "   " $datastring "   " $attribute_name
+  endif
+
+  seti $count = $count + 1
+done
+
+if $warning > 0
+  echo "Warning! One or more of the values has hit its threshold."
+endif
+
+previousscript
+
+
+
+subroutine get_threshold_data
+  seti $t_offset = 2
+  seti $t_count = 0
+  while $t_count < 30
+    seti $threshold_id = scratchpad $t_offset
+    seti $t_offset = $t_offset + 1
+
+    if $threshold_id = $attribute_id
+      seti $threshold_value = scratchpad $t_offset
+      break
+    endif
+
+    seti $t_offset = $t_offset + 11
+    seti $t_count = $t_count + 1
+  done
+endsubroutine
+
+
+
+
+subroutine get_attribute_name
+  if $attribute_id = 1
+    sets $attribute_name = "Read Error Rate"
+  elseif $attribute_id = 2
+    sets $attribute_name = "Throughput Performance"
+  elseif $attribute_id = 3
+    sets $attribute_name = "Spin-Up Time"
+  elseif $attribute_id = 4
+    sets $attribute_name = "Start/Stop Count"
+  elseif $attribute_id = 5
+    sets $attribute_name = "Reallocated Sectors Count"
+  elseif $attribute_id = 6
+    sets $attribute_name = "Read Channel Margin"
+  elseif $attribute_id = 7
+    sets $attribute_name = "Seek Error Rate"
+  elseif $attribute_id = 8
+    sets $attribute_name = "Seek Time Performance"
+  elseif $attribute_id = 9
+    sets $attribute_name = "Power-On Hours Count"
+  elseif $attribute_id = 10
+    sets $attribute_name = "Spin Retry Count"
+  elseif $attribute_id = 11
+    sets $attribute_name = "Calibration Retries"
+  elseif $attribute_id = 12
+    sets $attribute_name = "Power Cycle Count"
+  elseif $attribute_id = 13
+    sets $attribute_name = "Soft Read Error Rate"
+  elseif $attribute_id = 100
+    sets $attribute_name = "Erase/Program Cycles"
+  elseif $attribute_id = 103
+    sets $attribute_name = "Translation Table Rebuild"
+  elseif $attribute_id = 166
+    sets $attribute_name = "Min W/E Cycle"
+  elseif $attribute_id = 167
+    sets $attribute_name = "Min Bad Block/Die"
+  elseif $attribute_id = 168
+    sets $attribute_name = "Maximum Erase Cycle"
+  elseif $attribute_id = 169
+    sets $attribute_name = "Total Bad Block"
+  elseif $attribute_id = 170
+    sets $attribute_name = "Reserved Block Count"
+  elseif $attribute_id = 171
+    sets $attribute_name = "Program Fail Count"
+  elseif $attribute_id = 172
+    sets $attribute_name = "Erase Fail Count"
+  elseif $attribute_id = 173
+    sets $attribute_name = "Wear Leveller Worst Case Erase Count"
+  elseif $attribute_id = 174
+    sets $attribute_name = "Unexpected Power Loss"
+  elseif $attribute_id = 175
+    sets $attribute_name = "Program Fail Count"
+  elseif $attribute_id = 176
+    sets $attribute_name = "Erase Fail Count"
+  elseif $attribute_id = 177
+    sets $attribute_name = "Wear Leveling Count"
+  elseif $attribute_id = 178
+    sets $attribute_name = "Used Reserved Block Count"
+  elseif $attribute_id = 179
+    sets $attribute_name = "Used Reserved Block Count"
+  elseif $attribute_id = 180
+    sets $attribute_name = "Unused Reserved Block Count"
+  elseif $attribute_id = 181
+    sets $attribute_name = "Program Fail Count"
+  elseif $attribute_id = 182
+    sets $attribute_name = "Erase Fail Count"
+  elseif $attribute_id = 183
+    sets $attribute_name = "SATA Downshifts"
+  elseif $attribute_id = 184
+    sets $attribute_name = "End-to-End error"
+  elseif $attribute_id = 185
+    sets $attribute_name = "Head Stability"
+  elseif $attribute_id = 186
+    sets $attribute_name = "Induced Op-Vibration Detection"
+  elseif $attribute_id = 187
+    sets $attribute_name = "Reported Uncorrectable Errors"
+  elseif $attribute_id = 188
+    sets $attribute_name = "Command Timeout"
+  elseif $attribute_id = 189
+    sets $attribute_name = "High Fly Writes"
+  elseif $attribute_id = 190
+    sets $attribute_name = "Temperature"
+  elseif $attribute_id = 191
+    sets $attribute_name = "G-Sense Errors"
+  elseif $attribute_id = 192
+    sets $attribute_name = "Power-Off Retract Cycles"
+  elseif $attribute_id = 193
+    sets $attribute_name = "Load/Unload Cycles"
+  elseif $attribute_id = 194
+    sets $attribute_name = "Temperature"
+  elseif $attribute_id = 195
+    sets $attribute_name = "Hardware ECC Recovered"
+  elseif $attribute_id = 196
+    sets $attribute_name = "Reallocation Events"
+  elseif $attribute_id = 197
+    sets $attribute_name = "Current Pending Sectors"
+  elseif $attribute_id = 198
+    sets $attribute_name = "Off-line Uncorrectable"
+  elseif $attribute_id = 199
+    sets $attribute_name = "UDMA CRC Error Rate"
+  elseif $attribute_id = 200
+    sets $attribute_name = "Write Error Rate"
+  elseif $attribute_id = 201
+    sets $attribute_name = "Soft Read Errors"
+  elseif $attribute_id = 202
+    sets $attribute_name = "Data Address Mark Errors"
+  elseif $attribute_id = 203
+    sets $attribute_name = "Run Out Cancel"
+  elseif $attribute_id = 204
+    sets $attribute_name = "Soft ECC Corrections"
+  elseif $attribute_id = 205
+    sets $attribute_name = "Thermal Asperity Rate"
+  elseif $attribute_id = 206
+    sets $attribute_name = "Flying Height"
+  elseif $attribute_id = 207
+    sets $attribute_name = "Spin High Current"
+  elseif $attribute_id = 208
+    sets $attribute_name = "Spin Buzz"
+  elseif $attribute_id = 209
+    sets $attribute_name = "Offline Seek Performance"
+  elseif $attribute_id = 210
+    sets $attribute_name = "Vibration During Write"
+  elseif $attribute_id = 211
+    sets $attribute_name = "Vibration During Write"
+  elseif $attribute_id = 212
+    sets $attribute_name = "Shock During Write"
+  elseif $attribute_id = 220
+    sets $attribute_name = "Disk Shift"
+  elseif $attribute_id = 221
+    sets $attribute_name = "G-Sense Error Rate"
+  elseif $attribute_id = 222
+    sets $attribute_name = "Loaded Hours"
+  elseif $attribute_id = 223
+    sets $attribute_name = "Load/Unload Retries"
+  elseif $attribute_id = 224
+    sets $attribute_name = "Load Friction"
+  elseif $attribute_id = 225
+    sets $attribute_name = "Load/Unload Cycles"
+  elseif $attribute_id = 226
+    sets $attribute_name = "Load-in Time"
+  elseif $attribute_id = 227
+    sets $attribute_name = "Torque Amplification Count"
+  elseif $attribute_id = 228
+    sets $attribute_name = "Power-Off Retracts"
+  elseif $attribute_id = 230
+    sets $attribute_name = "GMR Head Amplitude"
+  elseif $attribute_id = 231
+    sets $attribute_name = "Temperature"
+  elseif $attribute_id = 232
+    sets $attribute_name = "Available Reserved Space"
+  elseif $attribute_id = 233
+    sets $attribute_name = "Media Wearout Indicator"
+  elseif $attribute_id = 234
+    sets $attribute_name = "Average/Maximum Erase Count"
+  elseif $attribute_id = 235
+    sets $attribute_name = "Good/System(Free) Block Count"
+  elseif $attribute_id = 240
+    sets $attribute_name = "Head Flying Hours"
+  elseif $attribute_id = 241
+    sets $attribute_name = "Total LBAs Written"
+  elseif $attribute_id = 242
+    sets $attribute_name = "Total LBAs Read"
+  elseif $attribute_id = 249
+    sets $attribute_name = "NAND_Writes_1GiB"
+  elseif $attribute_id = 250
+    sets $attribute_name = "Read Error Retry Rate"
+  elseif $attribute_id = 254
+    sets $attribute_name = "Free Fall Protection"
+
+  else
+    sets $attribute_name = "Unknown"
+  endif
+endsubroutine
+
+
+
+end
+

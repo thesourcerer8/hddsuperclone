@@ -1,0 +1,81 @@
+seti $help = $help
+seti $printhelp = $printhelp
+if $help = 1
+  echo 'rebuild assist test set bad head'
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+
+include good_subroutines
+
+# set a blank string variable to compare with user input
+# make sure not to set this anyplace else
+sets $null = ""
+
+# set this to itself for use with the menu system
+# make sure not to set this anyplace else
+# if it was not previously set it will = 0
+seti $using_menu = $using_menu
+
+
+
+
+
+
+# set the buffer size
+buffersize 512
+
+# set the LBAs to 0
+seti $LBAlow = 0
+seti $LBAmid = 0
+seti $LBAhigh = 0
+
+# set some things for the ata command
+setwritepio
+# set features to 0
+seti $features = 0
+# set count to 1
+seti $count = 1
+# set device to 0
+seti $device = 0
+# set lba to log page 15
+seti $LBAlow = 0x15
+# set the command for write log extended
+seti $command = 0x3f
+
+# make sure buffer is clear
+clearbuffer
+
+# set the buffer data
+setbuffer 0
+  01 00 00 00 00 00 00 00 00 00 00 00 01 00 00 00
+endbuffer
+
+# perform the command
+ata48cmd $features $count $LBAhigh $LBAmid $LBAlow $device $command
+
+# check if command failed
+seti $command_failed = 0
+gosub check_command_status
+if $command_failed = 1
+  echo "Command failed!"
+  gosub show_sense_data
+  gosub show_ata_return_status
+  previousscript
+endif
+
+#printbuffer 0 512
+
+
+
+
+previousscript
+end
+
+
+
+

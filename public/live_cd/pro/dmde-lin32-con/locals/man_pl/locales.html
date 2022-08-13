@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Jezyki</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="locales"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Spis treści</a> &middot; <a href="setup.html">Instalacja i uruchamianie</a>
+<hr />
+<h2>Jezyki/Lokalizacja</h2>
+
+<h3>Okno dialogowe "Select Language"</h3>
+<p><b>Apply Codepages.</b>
+Jeśli opcja jest zaznaczona to kodowanie strony ANSI i OEM z wybranego pliku lokalizacji jest używane.
+</p>
+
+<p><b>Translit.</b>
+Transliteruje interfejs jeśli występują problemy z wyświetlaniem symboli narodowych.
+</p>
+
+<div class="spec">
+<h3>Kodowe strony - Interfejs i odzyskiwanie danych</h3>
+<p>
+Jeśli jest obsługiwany przez OS, DMDE używa Unicode dla interfejsu i podczas odzyskiwania nazw plików.
+Inaczej <strong>strona kodowa ANSI</strong> jest używana w OS Windows 98/ME,
+<strong>strona Kodowa OEM</strong> jest używana w systemie DOS, 
+symbole z poza wybranej strony kodowej interfejsu są transliterowane lub podstawiane.
+</p>
+
+<p>
+<strong>Strona kodowa OEM</strong> jest używana również podczas odczytu krótkich narodowych nazw (format 8.3)
+z woluminów FAT.
+</p>
+<p>
+Domyślnie używana jest strona kodowa OS (jeśli dotyczy). 
+Strony kodowye z <a href="inifile.html">pliku ini</a> (opcjonalnie) nadpisują ją. 
+Strony kodowe z wybranego pliku lng (<span class="tt">*.lng</span>) zmieniają wszystko, 
+jeśli opcja <b>Apply Codepages</b> jest zaznaczona w oknie dialogowym 
+"Select Language".
+Plik lng-string <span class="tt">107=</span> przeznaczony jest dla strony kodowej ANSI, 
+plik lng-string <span class="tt">108=</span> przeznaczony jest dla strony kodowej OEM.
+</p>
+</div>
+
+<div class="spec">
+<h3>Ustawieńia pliku INI</h3>
+<p>
+<!--b>loadlngfiles=</b><br />
+<b>loadcptables=</b><br /-->
+<b>usecodepage=</b> strona kodowa ANSI<br />
+<b>oemcodepage=</b> strona kodowa OEM<br />
+<b>translitenable=</b> (<span class="tt">Translit</span>)<br />
+<b>viewtranslit=</b> (<span class="tt">Translit</span>)<br />
+</p>
+</div>
+
+</div></div>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Skrypt obsługi We/Wy dysku</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="deviohsc"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Spis treści</a> &middot; <a href="howto.html">Praca</a> &middot; 
+<a href="menu.html">Menu</a> &middot; <a href="menu_disk.html">Dysk</a>
+<hr />
+<h3>Skrypt obsługi We/Wy dysku</h3>
+<a href="devioparams.html">Parametry We/Wy</a>
+&nbsp;
+<a href="deviodlg.html">Okno dialogowe We/Wy</a> 
+<p>
+Skrypt ten może być używane do logowania błędów We/Wy i rozszerzone przetwarzanie błędów 
+(w tym połączeń zewnętrznych programu). 
+Ta funkcja jest dostępna w <a href="editions.html">Professional Edition</a> tylko.
+</p>
+<p>
+Skrypt może być załadowany lub zmodyfikowane przez <a href="devioparams.html">parametry We/Wy urządzenia</a> 
+(przycisk <span class="ii">Skrypt</span>).
+</p>
+<p>
+Plik <span class="tt">ondevhsc.txt</span> zawiera krótki opis dostępnych komend i kilka przykładowych skryptów.
+</p>
+<p>
+Możliwe linii skryptu są w postaci:<br />
+<span class="tt">IF WARUNEK KOMENDA</span><br />
+lub<br />
+<span class="tt">KOMENDA</span><br />
+lub<br />
+<span class="tt">:LABEL</span><br />
+<br />
+gdzie <span class="tt">WARUNEK</span> jest nierówności lub równości
+  (<span class="tt">!=</span>, <span class="tt">&gt;</span>, <span class="tt">&lt;</span>, <span class="tt">&gt;=</span>, <span class="tt">&lt;=</span>, <span class="tt">=</span>) dwóch ilości,
+  i ilość jest albo stałą liczbą całkowitą (<span class="tt">0</span>, <span class="tt">1</span>, ...)
+  lub zmienna (lista poniżej)
+  lub proste wyrażenie matematyczne (operatorów <span class="tt">+</span>, <span class="tt">-</span>, <span class="tt">*</span>, <span class="tt">%</span>, <span class="tt">/</span>, 
+  bez nawiasów, ignorując matematyczny porządek z operatorów),
+np. <span class="tt">%ERROR%=0</span><br />
+<br />
+Komentarze są poprzedzane przez dwa minusy (<span class="tt">--</span>)
+</p>
+<h4>Zmienne</h4>
+Wszystkie są od zera
+<br />
+-- %CONFIRM%  - =1 jeśli <span class="ii">Potwierdź</span> naciśnięciu, =0 jeśli <span class="ii">Anuluj</span> przycisku <br />
+                (okno dialogowe czeka na wybór użytkownika)<br />
+-- %DISKNUM%  - numer dysku w macierzy RAID<br />
+-- %TRYNUM%   - numer próba<br />
+-- %LBA%      - numer pierwszego sektora We/Wy<br />
+-- %SECNUM%   - liczba sektorów<br />
+-- %ERROR%    - numer błędu<br />
+-- %ATASTATUS% - ATA Status Register (zdefiniowany, jeśli BSY bit jest wyzerowany, DOS ATA tylko)<br />
+-- %ATAERROR% - ATA Error Register (zdefiniowany, jeśli ERR bit <span class="tt">%ATASTATUS%</span> jest ustawiony)<br />
+-- %LINE%     - bieżący numer linii w skrypcie<br />
+-- %SERVICE%  - typu usługi We/Wy: <br />
+
+--  <b>0</b>-ATA 
+  <b>1</b>-ATAPI
+  <b>3</b>-BIOSINT13OLD 
+  <b>4</b>-BIOSINT13<br />
+--  <b>5</b>-DOSINT25 
+  <b>6</b>-DOSINT73 
+  <b>7</b>-DOSASPI
+  <b>8</b>-DOSMSCDEX
+  <b>9</b>-DOSFILE  <br />
+--  <b>11</b>-WINFILE 
+  <b>12</b>-WINSCSI 
+  <b>13</b>-WIN9XINT13  
+  <b>14</b>-WINATA  <br />
+--  <b>20</b>-LINUXFILE
+  <b>21</b>-LINUXSCSI
+<br />
+-- %LASTRES%  - wynik z poprzedniego komendy<br />
+-- %LASTERR%  - błąd z poprzedniej komendy<br />
+
+<h4>Komendy</h4>
+-- SHOWDLG          - życie okno wyskakujące We/Wy urządzenia<br />
+-- WAIT             - oczekiwanie na wybór użytkownika<br />
+-- DELAY N          - opóźnienie N ms<br />
+-- EXECCMD CMDLINE  - wykonywanie zewnętrznych komendu CMDLINE za pomocą interpretera komend <br />
+                     (czyli "cmd CMDLINE" w systemie Windows)<br />
+-- EXECCMDQ CMDLINE - wykonać bez tworzenia nowego okna konsoli <br />
+-- EXEC "FILENAME" CMDLINE  - wezwanie zewnętrznego program FILENAME z parametrem CMDLINE<br />
+-- EXECQ "FILENAME" CMDLINE - wezwanie bez tworzenia nowego okna konsoli<br />
+-- MSDOS            - wezwanie procesoru komen (nie są obsługiwane w systemie Linux)<br />
+-- GOTO LABELNAME   - skok do etykiety LABELNAME w skrypcie (do linii <span class="tt">:LABELNAME</span>)<br />
+-- RETURN           - skrypt przerwie, obsluga błędu zgodnie z <a href="devioparams.html">parametrami We/Wu urządzenia</a><br />
+-- RETRETRY         - skrypt przerwie jak wciśnięty <span class="ii">Ponów</span> przycisk<br />
+-- RETIGNORE        - skrypt przerwie jak wciśnięty <span class="ii">Ignoruj</span> przycisk<br />
+-- RETABORT         - skrypt przerwie jak wciśnięty <span class="ii">Przerwij</span> przycisk<br />
+
+-- ADDLOG "FILENAME" LOGLINE - napisz LOGLINE do pliku FILENAME <br />
+                   (LOGLINE łańcuch może zawierać zmienne)<br />
+-- CANCELIO         - wezwanie <b>CancelIO</b> (WinNT + tylko)<br />
+		      (dostępna, jeśli urządzenie jest otwarte z <b>overlapped</b> się opcja)<br />
+-- OVLRESLT N       - sprawdź wynik <b>Overlapped</b>-operacji (N=1: czekać; N=0: nie czekać) (WinNT+ tylko)<br />
+                      (muszą być używane, jeśli urządzenie jest otwarte z <span class="ii">overlapped</span> opcja)<br /> 
+-- RESETHANDLE      - otwórz ponownie uchwyt dysku<br />
+-- RESETDEVLIST     - update the list of devices, reopen disk handle<br />
+-- ATARESET         - ATA Soft Reset (DOS ATA  tylko)<br />
+-- ATARESETDET      - ATA Soft Reset i ATA Identify (DOS ATA tylko)<br />
+<p></p>
+<h4>Specyfikatory formatu</h4>
+<p>
+-- Aby cyfrowy format wyjściowy nazwy zmiennej może nastąpić <br />
+-- przez format specyfikatora po dwukropku, np. <br />
+-- %LBA:8x%         - szerokość: 8, szesnastkowy
+</p>
+<h4>Przykład skryptu</h4>
+<p style="font-family:monospace">
+IF %ERROR%=0 RETURN  -- wyjść jeśli nie błąd na We/Wy<br />
+IF %ERROR%=128 GOTO LABEL1<br />
+IF %ERROR%=5 GOTO LABEL1<br />
+RETURN<br />
+<br />
+:LABEL1<br />
+IF %CONFIRM%=0 RETRETRY -- spróbuj ponownie , jeśli przycisk Anuluj jest wciśnięty<br />
+                        -- kontynuować wykonywanie skryptu, jeśli Potwierdź jest wciśnięty <br />
+EXECCMD /K ECHO error %ERROR% at LBA: %LBA% (%SECNUM%) try: %TRYNUM%. Wpisz EXIT aby powrócić.<br />
+IF %TRYNUM%&lt;2 RETRETRY<br />
+DELAY 500<br />
+ADDLOG "C:\ERRORS.LOG" error %ERROR:x% at LBA: %LBA:10% (%SECNUM%) try: %TRYNUM%<br />
+RETIGNORE
+</p>
+
+</div>
+</div>
+</body>
+</html>

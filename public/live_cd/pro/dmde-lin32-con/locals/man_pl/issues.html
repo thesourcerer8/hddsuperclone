@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Problemy i ograniczenia</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Spis treści</a> &middot; <a href="tocabout.html">O DMDE</a>
+<hr />
+<h2>Znane problemy i inne ograniczenia</h2>
+<h3>Odzyskiwanie danych</h3>
+<ul>
+<li>Odzyskiwanie danych można wykonać tylko na inny dysk (partycję), 
+dysk docelowy musi być obsługiwany przez system operacyjny 
+(np. w DOS/Win9x/ME można odzyskać tylko na dysk sformatowany w systemie FAT)
+</li>
+<li>DOS, Win9x/ME: symbole unicode w nazwach plików poza wybraną stroną kodową 
+zastępowane są podkreśleniami ("<span class="tt">_</span>")
+lub są transliterowane według załadowanej tablicy translit</li>
+<li>DOS, Win9x/ME lub FAT: pliki większe niż 4&nbsp;GB 
+można odzyskać tylko z podziałem na części ze względu na ograniczenie FAT</li>
+<li>Twarde linki NTFS są odzyskiwane jako różne pliki</li>
+<li>Alternatywne strumienie NTFS można odzyskać tylko dla docelowe partycji NTFS</li>
+<li>NTFS directory alternate data streams can be recovered only after <a href="reconstruction.html">FS reconstruction</a></li>
+<li>Odzyskiwanie plików z szyfrowaniem NTFS do 4&nbsp;GB</li>
+<li>Uprawnienia i właścicieli NTFS nie są obsługiwane</li>
+<li>Maximum name length supported: 255 characters</li>
+<li>Linki symboliczne nie są obsługiwane</li>
+<li>Symbolic links, special attributes, other FS-specific options are not supported</li>
+<li>Win9x/ME: dyski większe niż 128&nbsp;GB nie są obsługiwane bez specjalnej poprawki do sterowników systemu Windows</li>
+<li>Maksymalna długość ścieżki: 259 znaków dla DOS, 4096 znaków dla Windows, Linux, macOS</li>
+<li>Maksymalna długość ścieżki obsługiwanej przez DOS: 79 lub 127 znaków (dla nazwy DOS) 
+w zależności od wersji DOS</li>
+<li>Głębokość podkatalogów do 1024 
+(można zwiększyć za pomocą <a href="inifile.html">parametru</a> <span class="tt">maxrecoverdepth=</span>)</li>
+<li>Jeśli substytucji nazwa jest używana pod DOS, 
+obsługa nazw (np. auto zmiana nazwy) nie jest obsługiwana</li>
+</ul>
+
+<h3>Obsługa zapisu NTFS</h3>
+<ul>
+<li>Dziennik nie jest obsługiwany</li>
+<li>SECURITY INFORMATION nie jest obsługiwany na tworzenie 
+(dostęp do plików i katalogów należy ustawić przy użyciu funkcji uprawnienień OS)</li>
+<li>OBJECTID nie jest obsługiwany</li>
+<li>Dodatkowe tworzenie nazw zgodnych DOS nie jest obsługiwany</li>
+<li>Skompresowane pliki nie są obsługiwane</li>
+<li>Alternatywne strumienie danych nie są obsługiwane</li>
+<li>Aby przydzielić / dołączyć plik wymagane jest ciągłe wolne miejsce</li>
+</ul>
+
+<h3>Inne</h3>
+<ul>
+<li id="RAM3GB">
+Oprogramowanie może pracować w ramach dostępnej pamięci RAM.
+32-bitowe wersje może wykorzystać maksymalnie do 3&nbsp;GB pamięci RAM 
+(do ~10 milionów plików i 2 milionów fold.);
+DOS może uzyskać dostęp do jeszcze mniejszej ilości pamięci
+</li>
+<li>brak dodatkowej obsługi plików <a href="devices.html#vhd">obrazów dysków wirtualnych</a> w DOS</li>
+<li>NTFS alternate data streams for a file are displayed only in a single directory 
+(no matter the file may be hard linked to multiple directories)</li>
+<li>Do 2K pozycji w liście <a href="devices.html">urządzeń</a></li>
+<li>Do 16K niestandardowych elementów obrotu danych przy konstruowaniu <a href="raids.html">Custom RAID</a></li>
+<li>Do 2K widoczne woluminów dla <a href="fullscan.html">pełnego skanowania</a> 
+(<a href="inifile.html">parametr</a> <span class="tt">showvolumesnum=</span>)</li>
+<li>Do 16 milionów fragmentów MFT dla NTFS podczas <a href="fullscan.html">pełnego skanowania</a> 
+(<a href="inifile.html">parametr</a> <span class="tt">ntfsmaxmftruns=</span>)</li>
+<li>Maksymalna głębokość szukaj <a href="menu_volume.html">Panelu szukania plików</a> do 1K katalogów</li>
+<li>Obsługa klawiatur i mysz jest ograniczona w systemie Linux 
+(skróty klawiaturowe i klawisze specjalne mogą nie być obsługiwane)</li>
+</ul>
+
+</div></div>
+</body>
+</html>

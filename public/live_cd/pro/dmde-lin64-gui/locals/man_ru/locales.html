@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Языки/Локализация</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="locales"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Содержание</a> &middot; <a href="setup.html">Установка и запуск</a>
+<hr />
+<h2>Языки/Локализация</h2>
+<h3>Окно диалога &quot;Select Language&quot;</h3>
+<p><b>Apply Codepages.</b>
+При включении опции используются кодовые страницы ANSI и OEM, указанные в языковом файле
+(вместо системных кодовых страниц).
+</p>
+
+<p><b>Translit.</b>
+Принудительная транислитерация интерфейса 
+(в случае проблем с отображением национальных символов).
+</p>
+
+<div class="spec">
+<h3>Кодовые страницы - интерфейс и восстановление данных</h3>
+<p>
+Если имеется поддержка ОС, то используются интерфейс и имена файлов в Юникоде.
+Иначе кодировка
+<strong>ANSI code page</strong> используется в OS Windows 98/ME,
+<strong>OEM code page</strong> используется в DOS,
+а символы вне выбранных кодовых страниц транслитерируются или заменяются.
+</p>
+<p>
+<strong>OEM code page</strong> также используется при чтении
+национальных коротких имён (формат 8.3) на томах FAT. 
+</p>
+<p>
+По умолчанию используются кодовые страницы операционной системы 
+(если определяются).
+Настройки из <a href="inifile.html">ini-файла</a> переопределяют
+кодовые страницы (если указаны).
+Кодовые страницы из выбранного lng-файла (*.lng) переопределяют
+предыдущие настройки, если выбрана опция <span class="ii">Apply Codepages</span> 
+в окне диалога <b>&quot;Select Language&quot;</b>.
+Строка <span class="tt">107=</span> lng-файла определяет кодировку ANSI, 
+строка <span class="tt">108=</span> - кодировку OEM.
+</p>
+</div>
+
+<div class="spec">
+<h3>Параметры INI-файла</h3>
+<p>
+<!--b>loadlngfiles=</b><br />
+<b>loadcptables=</b><br /-->
+<b>usecodepage=</b> ANSI code page<br />
+<b>oemcodepage=</b> OEM code page<br />
+<b>translitenable=</b> (<span class="tt">Translit</span>)<br />
+<b>viewtranslit=</b> (<span class="tt">Translit</span>)<br />
+</p>
+</div>
+</div></div>
+</body>
+</html>

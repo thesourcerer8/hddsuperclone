@@ -1,0 +1,88 @@
+seti $printhelp = $printhelp
+
+
+while 1 = 1
+  echo " "
+  echo "Tools menu"
+  echo "q) Quit"
+  echo "p) Previous menu"
+  echo "h) Toggle script help"
+  echo "1) Scan device"
+  echo "2) Make a bad sector"
+  echo "3) Write uncorrectable"
+  echo "4) Disable read look ahead"
+  echo "5) Enable read look ahead"
+  echo "6) Error Control Timer (SCT)"
+  echo "7) Reset Device
+  echo "8) Get device status"
+  echo "9) Hard Reset
+
+  if $printhelp = 1
+    exit 0
+  endif
+
+  echo "Enter your choice:
+  userinput $choicestring
+
+  if $choicestring = q
+    break
+
+  elseif $choicestring = p
+    previousscript
+
+  elseif $choicestring = h
+    if $help = 0
+      seti $help = 1
+      echo "Help is now turned on"
+    else
+      seti $help = 0
+      echo "Help is now turned off"
+    endif
+
+  elseif $choicestring = 1
+    loadscript ata_scan_device
+    break
+
+  elseif $choicestring = 2
+    loadscript ata28_makebad
+    break
+
+  elseif $choicestring = 3
+    loadscript ata48_write_uncorrectable
+    break
+
+  elseif $choicestring = 4
+    loadscript ata_disable_look_ahead
+    break
+
+  elseif $choicestring = 5
+    loadscript ata_enable_look_ahead
+    break
+
+  elseif $choicestring = 6
+    loadscript ata_sct_error_control_timer
+    break
+
+  elseif $choicestring = 7
+    loadscript reset
+    break
+
+  elseif $choicestring = 8
+    loadscript ata_status
+    break
+
+  elseif $choicestring = 9
+    loadscript reset_hard
+    break
+
+
+
+
+  else
+    echo "bad choice= " $choicestring
+  endif
+
+
+
+done
+end

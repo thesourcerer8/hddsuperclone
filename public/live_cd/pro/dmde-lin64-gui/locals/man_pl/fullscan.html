@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Pełne skanowanie</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="fullscan"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Spis treści</a> &middot; <a href="howto.html">Praca</a> &middot; 
+<a href="menu.html">Menu</a> &middot; <a href="menu_tools.html">Narzędzia</a>
+<hr />
+<h2>Pełne skanowanie</h2>
+<p>
+<a href="#raw">Raw File Search</a> 
+&nbsp;
+</p>
+<p>
+Kompleksowe metody wyszukiwania umożliwia znajdowanie i odbudowy w pamięci strukturze katalogów uszkodzenia systemu plików
+lub znaleźć utraconych plików znanych typów przez podpisów, jeśli nie może być stosowany system plików.
+</p>
+<p>
+Jeśli system plików nie jest poważnie uszkodzony, to znaleźć wolumin mogą być otwarte 
+przed zakończeniem skanowania.
+Przy wyborze wolumenu można kierować się wskaźnikami jakości i innymi parametrami 
+(szczegóły znajdują się <a href="#columns">poniżej</a>).
+</p>
+<p>
+Przed rozpoczęciem pracy ze specjalnymi rodzajami nośników 
+(RAID&nbsp;/ woluminy z dzieleniem (striping), zaszyfrowane nośniki, obrazy dysków) 
+należy zapoznać się z <a href="openvolume.html#open_sstor">odpowiednimi instrukcjami</a> 
+(w sekcji <a href="openvolume.html">otwarcie woluminów</a>), 
+w przeciwnym razie Pełne skanowanie da nieprawidłowe wyniki system plików,
+jeśli po prostu uruchomisz na poszczególnych dyskach źródłowych. 
+W przypadku zwykłej partycji zaleca się otwarcie fizycznego urządzenia i zeskanowanie obszaru partycji 
+(łącznie z wszystkimi możliwymi obszarami zajmowanymi przez partycję) 
+zamiast próby pracy z uszkodzonym dyskiem logicznym. 
+Oprogramowanie może odczytać poza wybranym obszarem, jeśli jest to konieczne.
+</p>
+<p>
+<b>Dla tego samego wolumenu można podać różne warianty</b>, 
+które są użyteczne <b>tylko</b> w najbardziej złożonych przypadkach 
+(takich jak przerywana transformacja system plików: 
+ruch&nbsp;/ podział&nbsp;/ scalanie&nbsp;/ zmiana rozmiaru&nbsp;/ zmiana rozmiaru klastra lub łączone woluminy). 
+W takich przypadkach niektóre pliki można odzyskać poprawnie z jednego wariantu wolumenu, 
+a inne z innego, mimo że te same pliki mogą być widoczne w obu wariantach wolumenu. 
+Otwórz wybrany wariant jako wolumin i <a href="datarecovery.html">odzyskaj</a> pliki. 
+Jeśli brakuje plików lub są one odzyskiwane niepoprawnie, należy kontynuować skanowanie lub spróbować innego wariantu.
+</p>
+
+<table><tr>
+<th class="ii">Otwórz&nbsp;wolumin</th><td>Otwórz woluminu wybranego z listy.</td></tr>
+<tr><th class="ii">Zapisz...</th><td>Zapisz dziennik skanowania do pliku.</td></tr>
+<tr><th class="ii">Otwórz...</th><td>Załaduj dziennik skanowania z pliku 
+(kontynuacja poprzednich skanowania lub wykorzystanie wcześniejszych wyników wyszukiwania).
+</td></tr>
+<tr><th class="ii">Start/Stop</th><td>Start/stop skanowania.
+Jeśli parametry skanowania nie zostaną zmienione skanowania będzie kontynuowana.
+</td></tr>
+<tr><th class="ii">Parametry</th><td>
+Obszar skanowania, FS, parametry do zbierania danych i obliczania woluminów.
+<p class="spec">
+<span class="ii">Jumping scan</span> - 
+skanowania prowadzić selektywnie w całym dysku stopniowo pokrywającego cały obszar skanowania. 
+Pozwala to na znalezienie woluminów bez wcześniejszego pełnego skanowania. 
+Woluminy z dużej liczby plików znajdowane są w pierwszej kolejności.
+</p>
+</td></tr>
+<tr><th class="ii">Log-file</th><td>
+Options to save the scan state and results automatically to a file
+</td></tr>
+<tr><th class="ii">Menu</th><td>Poza tym, pozwala na zmianę kolejności sortowania głośności.</td></tr>
+</table>
+
+<p>
+Kolumny <b class="ii">%</b> i <b class="ii">Zgodne</b> pozwalają na oszacowanie jakości odzyskiwania danych z znalezionego 
+wariantu woluminu (procent i liczba prawidłowych połączeń -
+the percentage and number of correct interconnections between FS structures and files 
+found by <a href="#raw">signatures</a> for <b>NTFS, exFAT, HFS</b>;
+and for other file systems only FS structures are checked).
+</p>
+<p>
+<b class="ii">Min. rozmiar</b>
+jest minimalny rozmiar woluminu, zawierający wszystkie pliki najlepszych blokach systemu plików woluminu.
+</p>
+
+<p>
+Kolumna <b class="ii">Wskaźniki</b> pokazuje brak (uszkodzenia) ("<b class="ii">-</b>") lub obecność ("<b class="ii">+</b>") 
+odpowiedniej konstrukcji FS (<b class="ii">B/C</b> - sektor rozruchowy / kopia;
+dla <b>FAT</b>:
+<b class="ii">F</b> - tablica FAT/kopia, <b class="ii">R</b> - katalog główny).
+</p>
+
+<h3 id="raw">Wyszukiwanie plików Raw</h3>
+<p>
+Sygnatury&nbsp;/ podpisy plików są używane w ostateczności w celu znalezienia utraconych plików, 
+gdy odzyskanie przez systemy plików (powyżej) nie jest możliwe. 
+
+Dodatkowo podpisy plików są wykorzystywane jako punkty odniesienia do obliczenia woluminów <b>NTFS, exFAT, HFS</b>.
+
+Służą również do oznaczania i filtrowania plików znalezionych zarówno przez system plików, 
+jak i przez sygnatury, 
+czyli pliki z dużym prawdopodobieństwem odzyskania 
+(patrz <a href="filepanel.html#fileicons">ikony panelu plików</a>). 
+</p>
+<p>
+Raw wyniki są dostępne w katalogu <span class="ii">$Raw</span> 
+w <a href="filepanel.html">panelu plików</a> po otwarciu woluminu.
+
+Aby wykluczyć wyniki znalezione przez system plików otwartego woluminu, 
+możesz użyć symbolicznego katalogu <span class="ii">$Raw - Filtr wyniki Raw</span> 
+(funkcje <a href="clustermap.html">mapy klastrów</a> są używane do określania i wykluczania 
+miejsca zajmowanego przez pliki).
+</p>
+<p>
+Zwykle nie ma powodów, aby otwierać wyniki Raw pojedynczo, 
+gdy zostaną znalezione woluminy FS powyżej. 
+</p>
+<p>
+W przypadku niektórych wbudowanych typów plików kolejne fragmenty można łączyć w jeden plik, 
+więc liczba plików w panelu plików może być mniejsza niż w wynikach skanowania.
+</p>
+
+<h3>Dodawanie nowych typów plików</h3>
+<p>
+Oprócz wbudowanych typów plików i odpowiednich sygnatur, 
+możliwe jest dodawanie nowych typów przez użytkownika 
+(tylko jeśli te typy mają unikatowe podpisy): 
+Pełne skanowanie (parametry) - <span class="ii">Raw: Podpisy plików</span>&nbsp;- <span class="ii">Dodaj</span>.
+</p>
+<p>
+W prostych przypadkach możliwe jest automatyczne obliczanie podpisu nowego typu na podstawie przykładowych plików. 
+Należy nacisnąć przycisk "<span class="ii">...</span>" i określić możliwe rozszerzenia (oddzielone przecinkiem) 
+i ścieżkę, w której znajdują się pliki robocze potrzebnego typu. 
+Jeśli odzyskiwanie odbywa się z aparatu, możesz pobrać inne zdjęcie&nbsp;/ wideo na nowy nośnik w tym samym formacie, 
+aby uzyskać przykładowe pliki.
+</p>
+
+<div class="spec">
+<p>
+The option <span class="ii">use for FS calculation</span>
+enables checking interconnections between FS structures and files found by the signature.
+Additionally the files in the FS will be marked in a <a href="filepanel.html#fileicons">File Panel</a>
+as found also by a signature (or not found).
+<br />
+
+Multiple comma separated <span class="ii">Extensions</span> may be specified for <span class="ii">FS calculation</span>.<br />
+Mark signature as <span class="ii">reliable</span> if it contains at least 4 different bytes at a fixed position
+(do not mark otherwise not to truncate other files if false positives happen).<br />
+<span class="ii">File-container</span> may contain other file types inside
+(mark in order not to truncate when other type files are met).<br />
+<span class="ii">EOF Signature</span> is an optional signature at the end of a file.
+</p>
+</div>
+
+</div></div>
+</body>
+</html>

@@ -1,0 +1,96 @@
+seti $printhelp = $printhelp
+
+while 1 = 1
+  echo " "
+  echo "VSC menu"
+  echo "q) Quit"
+  echo "p) Previous menu"
+  echo "h) Toggle script help
+  echo "1) WD dump mod 42 (older Caviar drives)"
+  echo "2) WD royl (Marvel) dump mod 02"
+  echo "3) WD royl (Marvel) dump mod 32"
+  echo "4) WD royl (Marvel) patch mod 02 (slow fix)"
+  echo "5) WD royl (Marvel) patch mod 32 (slow fix additional)"
+  echo "6) WD royl (Marvel) dump all modules"
+  echo "7) WD royl (Marvel) dump selected module"
+  echo "8) WD royl (Marvel) read rom"
+  echo "9) WD royl (Marvel) check rom file"
+  echo "10) WD royl (Marvel) write rom (dangerous)"
+  echo "11) WD royl (Marvel) write module (dangerous)"
+
+  if $printhelp = 1
+    exit 0
+  endif
+
+  echo "Enter your choice:
+  userinput $choicestring
+
+  if $choicestring = q
+    break
+
+  elseif $choicestring = p
+    previousscript
+
+  elseif $choicestring = h
+    if $help = 0
+      seti $help = 1
+      echo "Help is now turned on"
+    else
+      seti $help = 0
+      echo "Help is now turned off"
+    endif
+
+  elseif $choicestring = 1
+    loadscript wd_dump_mod42
+    break
+
+  elseif $choicestring = 2
+    loadscript wd_royl_dump_mod02
+    break
+
+  elseif $choicestring = 3
+    loadscript wd_royl_dump_mod32
+    break
+
+  elseif $choicestring = 4
+    loadscript wd_royl_patch_mod02
+    break
+
+  elseif $choicestring = 5
+    loadscript wd_royl_patch_mod32
+    break
+
+  elseif $choicestring = 6
+    loadscript wd_royl_dump_mod_all
+    break
+
+  elseif $choicestring = 7
+    loadscript wd_royl_dump_mod_select
+    break
+
+  elseif $choicestring = 8
+    loadscript wd_royl_read_rom
+    break
+
+  elseif $choicestring = 9
+    loadscript wd_royl_check_rom
+    break
+
+  elseif $choicestring = 10
+    loadscript wd_royl_write_rom
+    break
+
+  elseif $choicestring = 11
+    loadscript wd_royl_write_mod
+    break
+
+
+
+  else
+    echo "bad choice= " $choicestring
+  endif
+
+
+
+done
+end

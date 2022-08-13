@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - File Panel</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="filepanel"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Table of contents</a> &middot; <a href="howto.html">How to use</a>
+<hr />
+<h2>File Panel</h2>
+<p>
+File panel displays virtual directory structure 
+and allows browsing through directories and selecting items to
+<a href="datarecovery.html">recover</a>
+or to open them in the <a href="diskeditor.html">Disk Editor</a>.
+You should <a href="openvolume.html">open a volume</a> to access the file panel.
+</p>
+<p>
+Open virtual directory <span class="ii">[All Found / Virtual FS]</span> 
+to <a href="reconstruction.html">virtually reconstruct file system</a> 
+and display all found and removed files and directories.
+The results of <a href="fullscan.html">Full Scan</a> are used 
+for reconstruction.
+</p>
+<p>
+To recover files marked as "found" or "deleted" (see icon description below)
+the corresponding options must be selected
+in the <a href="datarecovery.html">data recovery</a> dialog box.
+</p>
+<p class="spec">
+Directory structure is virtual and may differ from 
+the one that can be found directly on the disk or in the standard browser.
+Virtual names are enclosed in square brackets or begin with the sign <b>$</b>
+and are usually placed in the topmost level of the directory structure.
+Virtual directory <b>$Root</b> generally corresponds 
+to a root directory of a volume in the standard browser.
+</p>
+<table>
+<tr><td>Press [<span class="ii">F2</span>]/[<span class="ii">Shift+F9</span>]/[<span class="ii">Shift+F10</span>] or right click the item
+for a context menu.</td></tr>
+<tr><td>Press [<span class="ii">Enter</span>] key or double click 
+to open the directory, or open the file in the <a href="diskeditor.html">Disk Editor</a>
+or for <a href="menu_windows.html#preview">preview</a>.</td></tr>
+<tr><td>Press [<span class="ii">Ctrl+Enter</span>] to open the item in the <a href="diskeditor.html">Disk Editor</a>.</td></tr>
+<tr><td>Press [<span class="ii">Insert</span>] key or [<span class="ii">Space Bar</span>] or click the checkbox 
+to toggle marking the item for recovery.</td></tr>
+</table>
+<h3>File Attributes</h3>
+<p>
+<span class="tt">E/C/s</span>: encrypted/compressed/sparce (NTFS)<br />
+<span class="tt">D</span>: directory<br />
+<span class="tt">R/H/S/A</span>: hidden/read only/system/archive<br />
+<span class="tt">x/f</span>: "deleted"/"found"<br />
+</p>
+<h3>File Icons</h3>
+<table class="pics" id="diricons">
+<tr><th>&nbsp;GUI</th><th>Console&nbsp;</th><th>Icon Description</th></tr>
+<tr><td width="48" valign="top"><div style="position:relative">
+<img src="642.png" alt="yellow dir" style="clip:rect(0 47px 24px 24px);left:-16px;" /></div></td>
+<td valign="top"><span class="tt">[.]</span> </td>
+<td>normal directory containing files</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="light yellow dir" style="clip:rect(0 95px 24px 72px);left:-64px;" /></div></td>
+<td valign="top"><span class="tt">[&nbsp;]</span> </td>
+<td>directory not containing files</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="yellow dir red dot" style="clip:rect(0 239px 24px 216px);left:-208px;" /></div></td>
+<td valign="top"><span class="tt">[x]</span> </td>
+<td>directory containing deleted files</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="yellow dir cyan dot" style="clip:rect(0 263px 24px 240px);left:-232px;" /></div></td>
+<td valign="top"><span class="tt">[f]</span> </td>
+<td>directory containing "found" files</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="yellow dir cyan dot red dot" style="clip:rect(0 287px 24px 264px);left:-256px;" /></div></td>
+<td valign="top"><span class="tt">[x}</span> </td>
+<td>directory containing deleted and "found" files</td></tr>
+
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="yellow dir trash mark" style="clip:rect(0 143px 24px 120px);left:-112px;" /></div></td>
+<td valign="top"><span class="tt">(x)</span> </td>
+<td>deleted directory</td></tr>
+
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="yellow dir cyan dot trash mark" style="clip:rect(0 551px 24px 528px);left:-520px;" /></div></td>
+<td valign="top"><span class="tt">(f)</span> </td>
+<td>deleted directory containing "found" files</td></tr>
+
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="yellow dir trash mark in brackets" style="clip:rect(0 167px 24px 144px);left:-136px;" /></div></td>
+<td valign="top"><span class="tt">(.]</span> </td>
+<td>deleted directory containing not deleted files (some kind of FS error)</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="yellow dir cyan dot trash mark" style="clip:rect(0 911px 24px 888px);left:-880px;" /></div></td>
+<td valign="top"><span class="tt">(f]</span> </td>
+<td>deleted directory containing normal and "found" files (FS error)</td></tr>
+
+
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="cyan dir" style="clip:rect(0 71px 24px 48px);left:-40px;" /></div></td>
+<td valign="top"><span class="tt">{f}</span> </td>
+<td>"found" directory (FS block number in square brackets follows name)</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="cyan dir yellow dot" style="clip:rect(0 503px 24px 480px);left:-472px;" /></div></td>
+<td valign="top"><span class="tt">{.}</span> </td>
+<td>"found" directory containing normal files</td></tr>
+
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="cyan dir brown dot" style="clip:rect(0 311px 24px 288px);left:-280px;" /></div></td>
+<td valign="top"><span class="tt">{x}</span> </td>
+<td>"found" directory containing deleted files</td></tr>
+
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="cyan dir yellow dot red dot" style="clip:rect(0 527px 24px 504px);left:-496px;" /></div></td>
+<td valign="top"><span class="tt">{.)</span> </td>
+<td>"found" directory containing normal and deleted files</td></tr>
+
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="cyan dir trash mark" style="clip:rect(0 455px 24px 432px);left:-424px;" /></div></td>
+<td valign="top"><span class="tt">(x}</span> </td>
+<td>"found" deleted directory</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="cyan dir yellow dot trash mark" style="clip:rect(0 575px 24px 552px);left:-544px;" /></div></td>
+<td valign="top"><span class="tt">(r}</span></td>
+<td>"found" deleted directory containing deleted files</td></tr>
+
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="cyan dir trash mark" style="clip:rect(0 935px 24px 912px);left:-904px;" /></div></td>
+<td valign="top"><span class="tt">(f}</span> </td>
+<td>"found" deleted directory containing not deleted files</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="cyan dir trash mark" style="clip:rect(0 959px 24px 936px);left:-928px;" /></div></td>
+<td valign="top"><span class="tt">(.}</span> </td>
+<td>"found" deleted directory containing not deleted and normal files</td></tr>
+
+<tr><td valign="top" id="fileicons"><div style="position:relative">
+<img src="642.png" alt="file" style="clip:rect(0 599px 24px 576px);left:-568px;" /></div></td>
+<td valign="top"><span class="tt">&nbsp;.&nbsp;</span> </td>
+<td>normal file (within the base file system structures)</td></tr>
+
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="file top left green bottom red" style="clip:rect(0 1031px 24px 1008px);left:-1000px;" /></div></td>
+<td valign="top"><span class="tt">+.&nbsp;</span> </td>
+<td>[normal] FS file also found by signatures (if <a href="fullscan.html#raw">Raw-search</a> was performed)</td></tr>
+
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="file top left green bottom red" style="clip:rect(0 1128px 24px 1104px);left:-1096px;" /></div></td>
+<td valign="top"><span class="tt">-.&nbsp;</span> </td>
+<td>[normal] FS file not found by signatures at the corresponding disk location, 
+<i>maybe</i> damaged file&nbsp;/ wrong type&nbsp;/ not recognized</td></tr>
+
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="cyan file" style="clip:rect(0 623px 24px 600px);left:-592px;" /></div></td>
+<td valign="top"><span class="tt">&nbsp;f&nbsp;</span> </td>
+<td>"found" file (within additionally found FS fragment, fragment number is in square brackets,
+[J] indicates FS journal)</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="file trash mark" style="clip:rect(0 647px 24px 624px);left:-616px;" /></div></td>
+<td valign="top"><span class="tt">&nbsp;x&nbsp;</span> </td>
+<td>deleted file</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="cyan file trash mark" style="clip:rect(0 671px 24px 648px);left:-640px;" /></div></td>
+<td valign="top"><span class="tt">&nbsp;xf</span> </td>
+<td>"found" deleted file</td></tr>
+
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="file top left green" style="clip:rect(0 791px 24px 768px);left:-760px;" /></div></td>
+<td valign="top"><span class="tt">+.&nbsp;</span> </td>
+<td>file found <a href="fullscan.html#raw">by signature</a> (Raw)</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="file top left bottom right green" style="clip:rect(0 815px 24px 792px);left:-784px;" /></div></td>
+<td valign="top"><span class="tt">+.+</span> </td>
+<td>file found by signature, end file signature (EOF) is found</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="file top left green bottom right red" style="clip:rect(0 839px 24px 816px);left:-808px;" /></div></td>
+<td valign="top"><span class="tt">+.-</span> </td>
+<td>file found by signature, end signature not found</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="file top left green bottom red" style="clip:rect(0 863px 24px 840px);left:-832px;" /></div></td>
+<td valign="top"><span class="tt">+.~</span> </td>
+<td>file by signature, size detected, probably fragmented or partially overwritten</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="file top left green bottom red" style="clip:rect(0 887px 24px 864px);left:-856px;" /></div></td>
+<td valign="top"><span class="tt">&nbsp;.+</span> </td>
+<td>file found by end signature</td></tr>
+
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="yellow dir cyan triangle" style="clip:rect(0 335px 24px 312px);left:-304px;" /></div></td>
+<td valign="top"><span class="tt">[&gt;]</span> </td>
+<td>directory which content is not completely known</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="file seam" title="green star" style="clip:rect(0 719px 24px 696px);left:-688px;" /></div></td>
+<td valign="top"><span class="tt">|.|</span> </td>
+<td>virtual directory containing several FS records belonging to a single file
+</td></tr>
+
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="blue dir" style="clip:rect(0 431px 24px 408px);left:-400px;" /></div></td>
+<td valign="top"><span class="tt">[.]</span> </td>
+<td><span class="tt">$MetaData</span> - virtual directory containing special FS files</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="blue dir" style="clip:rect(0 431px 24px 408px);left:-400px;" /></div></td>
+<td valign="top"><span class="tt">[.]</span> </td>
+<td><span class="tt">$NonameFiles</span>: contains files whose names and parents are lost</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="cyan dir" style="clip:rect(0 71px 24px 48px);left:-40px;" /></div></td>
+<td valign="top"><span class="tt">{f}</span> </td>
+<td><span class="tt">$Raw</span>: contains files found <a href="fullscan.html#raw">by signatures</a></td></tr>
+
+<tr><td valign="top"><div style="position:relative">
+<img src="642.png" alt="file" style="clip:rect(0 599px 24px 576px);left:-568px;" /></div></td>
+<td valign="top"><span class="tt">&nbsp;.&nbsp;</span></td>
+<td><span class="tt">FileName:StreamName</span> - NTFS alternate data stream
+(displayed after <a href="reconstruction.html">FS reconstruction</a>)
+</td></tr>
+</table>
+
+</div></div>
+</body>
+</html>

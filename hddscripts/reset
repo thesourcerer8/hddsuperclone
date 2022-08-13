@@ -1,0 +1,27 @@
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'This will soft reset the device if direct IO.'
+  echo 'If passthrough it will reopen the device.'
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+
+include good_subroutines
+
+
+if $direct_mode = 0
+  echo "Reopening the device"
+  reopendisk
+else
+  echo "Performing a soft reset"
+  softreset
+  gosub show_ata_return_status
+endif
+
+previousscript
+end

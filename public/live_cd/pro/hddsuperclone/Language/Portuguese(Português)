@@ -1,0 +1,938 @@
+_HDDSuperClone_2.3.1_20220115_
+|__|0000|__|
+Arquivo
+|__|0001|__|
+Desistir
+|__|0002|__|
+Projeto aberto
+|__|0003|__|
+Carregar arquivo de projeto (progresso)
+|__|0004|__|
+Erro!
+|__|0005|__|
+Aviso
+|__|0006|__|
+Erro ao processar o arquivo de log!
+O arquivo de log não foi carregado.
+
+|__|0007|__|
+O arquivo de log tem erros!
+O arquivo de log precisará ser reparado antes de poder ser usado.
+Consulte as mensagens do console para obter mais informações.
+
+|__|0008|__|
+Língua
+|__|0009|__|
+Exportar idioma
+|__|0010|__|
+Importar idioma
+|__|0011|__|
+Não é possível abrir o arquivo para gravação
+|__|0012|__|
+Não é possível abrir o arquivo para leitura
+|__|0013|__|
+Erro ao processar o arquivo de idioma importado
+|__|0014|__|
+Idioma alterado com sucesso!
+|__|0015|__|
+Sucesso!
+|__|0016|__|
+Novo projeto
+|__|0017|__|
+Novo arquivo de projeto (progresso)
+|__|0018|__|
+Opções
+|__|0019|__|
+Escolha a unidade de origem
+|__|0020|__|
+Escolha o destino
+|__|0021|__|
+Erro ao selecionar a fonte
+|__|0022|__|
+Erro ao selecionar o destino
+|__|0023|__|
+Escolha a imagem de destino
+|__|0024|__|
+AVISO: Esta unidade também está disponível para o SO!
+Isso é muito perigoso e provavelmente resultaria em uma falha no computador!
+Certifique-se de seguir as instruções sobre como ocultar a unidade!
+
+|__|0025|__|
+AVISO: O dispositivo selecionado é um escravo no controlador!
+Isso nem sempre funciona como esperado!
+Isso pode ser muito perigoso e resultar em perda de dados (ou pior)!
+Recomenda-se que o dispositivo seja mestre no controlador!
+
+|__|0026|__|
+AVISO: Possivelmente há outra unidade no mesmo controlador!
+Você NUNCA deve trabalhar com uma unidade quando outra unidade estiver no mesmo controlador!
+Isso pode ser muito perigoso e resultar em perda de dados (ou pior)!
+
+|__|0027|__|
+Você deve escolher um projeto primeiro.
+|__|0028|__|
+Dirigir
+|__|0029|__|
+Arquivo de imagem
+|__|0030|__|
+NULL (Sem destino)
+|__|0031|__|
+Escolher arquivo de imagem
+|__|0032|__|
+Conectar
+|__|0033|__|
+desconectar
+|__|0034|__|
+Começar
+|__|0035|__|
+Pare
+|__|0036|__|
+Você deve se desconectar primeiro.
+|__|0037|__|
+Você deve se conectar primeiro.
+|__|0038|__|
+Você deve escolher um projeto, origem e destino antes de se conectar.
+|__|0039|__|
+Não foi possível conectar dispositivos
+|__|0040|__|
+Dispositivos agora conectados
+|__|0041|__|
+Dispositivos agora desconectados
+|__|0042|__|
+Origem e Destino não podem ser o mesmo dispositivo
+|__|0043|__|
+Nenhum projeto escolhido
+
+|__|0044|__|
+Nenhuma fonte escolhida
+
+|__|0045|__|
+Nenhum destino escolhido
+
+|__|0046|__|
+Drives
+|__|0047|__|
+Modo
+|__|0048|__|
+Detecção automática de passagem
+|__|0049|__|
+SCSI de passagem
+|__|0050|__|
+ATA de passagem
+|__|0051|__|
+IDE direto
+|__|0052|__|
+AHCI direto
+|__|0053|__|
+Configurações
+|__|0054|__|
+Configurações avançadas
+|__|0055|__|
+O modo direto na versão gratuita é apenas PIO!
+
+|__|0056|__|
+A recuperação também é limitada a 10 por cento!
+
+|__|0057|__|
+Clonar configurações
+|__|0058|__|
+Fase 1
+|__|0059|__|
+Fase 2
+|__|0060|__|
+Fase 3
+|__|0061|__|
+Fase 4
+|__|0062|__|
+Dividir
+|__|0063|__|
+Dividir 2
+|__|0064|__|
+Trim (substitui a divisão)
+|__|0065|__|
+Raspar
+|__|0066|__|
+Mark Bad Head
+|__|0067|__|
+Leia Cabeça Ruim
+|__|0068|__|
+Marcha ré
+|__|0069|__|
+Pular rápido
+|__|0070|__|
+Controle de Fase
+|__|0071|__|
+Novas tentativas
+|__|0072|__|
+Tamanho do cluster (LBA)
+|__|0073|__|
+Deslocamento de entrada (LBA)
+|__|0074|__|
+Tamanho (LBA)
+|__|0075|__|
+Tamanho do bloco (LBA)
+|__|0076|__|
+Pular Tamanho (LBA) fase-1-2-3
+|__|0077|__|
+Tamanho máximo de salto (LBA) fase-1-2
+|__|0078|__|
+Skip Threshold (ms) phase-1-2
+|__|0079|__|
+Salto de taxa (kB/s) fase-3
+|__|0080|__|
+Sair em Slow (kB/s) fase-1-2
+|__|0081|__|
+Sair no Tempo Lento (s) fase-1-2
+|__|0082|__|
+Erro ao gravar o arquivo de log de progresso
+|__|0083|__|
+Salvar arquivo de projeto como
+|__|0084|__|
+Salvar projeto
+|__|0085|__|
+Salvar projeto como
+|__|0086|__|
+Ferramentas
+|__|0087|__|
+Redefinir status atual
+|__|0088|__|
+OK
+|__|0089|__|
+Cancelar
+|__|0090|__|
+Isso redefinirá o status atual do log para a Fase1,
+e posição atual para 0,
+e redefinir todos os dados de salto
+|__|0091|__|
+Redefinir registro
+|__|0092|__|
+Isto irá redefinir a posição para 0,
+o status atual para não testado,
+e mudará todos os blocos inacabados
+no log para um status de não tentado.
+Isso também redefinirá todos os dados ignorados.
+|__|0093|__|
+Registro de reparo
+|__|0094|__|
+Isso irá reparar o log de progresso atual na memória.
+Recomenda-se fazer uma cópia de backup do log antes de reparar.
+|__|0095|__|
+Preencher Zero
+|__|0096|__|
+Marca de preenchimento
+|__|0097|__|
+Carregar arquivo de domínio
+|__|0098|__|
+Você deve iniciar um novo projeto antes de importar um arquivo de log ddrescue
+|__|0099|__|
+Importar arquivo de log (mapa) do ddrescue
+|__|0100|__|
+Exportar arquivo de log (mapa) do ddrescue
+|__|0101|__|
+Erro ao exportar o arquivo de log (mapa) do ddrescue
+|__|0102|__|
+Projeto
+|__|0103|__|
+Fonte
+|__|0104|__|
+Destino (todos os dados serão sobrescritos!)
+|__|0105|__|
+Domínio
+|__|0106|__|
+Total LBA
+|__|0107|__|
+LBA para ler
+|__|0108|__|
+Tamanho do domínio
+|__|0109|__|
+Tempo de execução
+|__|0110|__|
+Tempo restante
+|__|0111|__|
+Posição atual
+|__|0112|__|
+Status atual
+|__|0113|__|
+Taxa atual
+|__|0114|__|
+Taxa recente
+|__|0115|__|
+Taxa total
+|__|0116|__|
+Tamanho de salto básico
+|__|0117|__|
+Salta
+|__|0118|__|
+Pular corridas
+|__|0119|__|
+Pular redefinições
+|__|0120|__|
+Tamanho da última execução
+|__|0121|__|
+Finalizado
+|__|0122|__|
+Não testado
+|__|0123|__|
+Não aparado
+|__|0124|__|
+Não dividido
+|__|0125|__|
+Não raspado
+|__|0126|__|
+Ruim
+|__|0127|__|
+Visualização de dados
+|__|0128|__|
+Atual / Recente / Mais Longo
+|__|0129|__|
+Preenchidas
+|__|0130|__|
+Tentado novamente
+|__|0131|__|
+Tentativas restantes
+|__|0132|__|
+Limpar domínio
+|__|0133|__|
+Erro ao gravar o arquivo de log de backup
+|__|0134|__|
+Em formação
+|__|0135|__|
+Saindo devido à baixa velocidade de leitura
+|__|0136|__|
+Erro interno do programa, posição não encontrada no arquivo de log de progresso
+|__|0137|__|
+Erro interno do programa, a verificação de domínio retornou a posição fora do intervalo
+|__|0138|__|
+Verificação de domínio de processamento de erro interno do programa
+|__|0139|__|
+Erro: o destino é detectado como sendo a unidade do sistema operacional host
+|__|0140|__|
+Erro: Não é possível abrir o destino
+|__|0141|__|
+Erro: Não foi possível buscar o destino
+|__|0142|__|
+Erro: Não foi possível obter o tamanho do destino
+|__|0143|__|
+Erro: a origem foi detectada para ser montada
+|__|0144|__|
+Recomenda-se desmontar todas as partições na origem.
+Você pode usar a opção --force para usar a fonte de qualquer maneira (não recomendado).
+|__|0145|__|
+Erro: Não é possível abrir o código-fonte
+|__|0146|__|
+Falha ao executar o comando de identificação do dispositivo
+|__|0147|__|
+
+Estado/Erro
+|__|0148|__|
+Erro de E/S do host durante a identificação
+|__|0149|__|
+Erro: o comando Read Capacity falhou com os dados de detecção
+|__|0150|__|
+Erro de E/S do host durante a capacidade
+|__|0151|__|
+Erro: o tamanho da fonte é inválido
+|__|0152|__|
+Erro: o tamanho de leitura ultrapassa o final do dispositivo
+|__|0153|__|
+Erro: falha do dispositivo detectada na fonte
+|__|0154|__|
+Erro de E/S do host durante a leitura da fonte
+|__|0155|__|
+A leitura do modo direto da versão gratuita atingiu o limite de 10%
+|__|0156|__|
+Erro: Não é possível gravar no destino
+|__|0157|__|
+Erro ao gravar dados no destino
+|__|0158|__|
+Falha na verificação do tamanho do dispositivo de origem
+|__|0159|__|
+Não foi possível reabrir o dispositivo de origem
+|__|0160|__|
+A unidade de origem não respondeu corretamente ao comando de identificação
+|__|0161|__|
+A unidade de origem respondeu com erro para identificar o comando
+|__|0162|__|
+Erro de E/S do host durante a identificação da unidade de origem
+|__|0163|__|
+A unidade de origem não respondeu corretamente ao comando de capacidade de leitura
+|__|0164|__|
+Erro de E/S do host durante o comando de capacidade de origem
+|__|0165|__|
+A unidade de origem informa o tamanho errado/tamanho alterado
+|__|0166|__|
+Erro ao alterar o status do bloco, bloco não encontrado
+|__|0167|__|
+Erro ao alterar o status do bloco, não está dentro do bloco
+|__|0168|__|
+O resgate é concluído usando as configurações atuais
+|__|0169|__|
+Erro ao alocar memória
+|__|0170|__|
+Não é possível obter o endereço físico do buffer no intervalo de 32 bits.
+Tente iniciar o driver de disco virtual.
+
+A alternativa é tentar escolher o modo novamente (mudar para o modo diferente e voltar) ou reiniciar o programa.
+|__|0171|__|
+posix_memalign falhou
+|__|0172|__|
+ERRO: Tamanho máximo do bloco de rascunho excedido
+|__|0173|__|
+ERRO: Tamanho máximo do buffer de detecção excedido
+|__|0174|__|
+Não crie log de backup
+|__|0175|__|
+Forçar acesso ao disco montado (não recomendado)
+|__|0176|__|
+Ative a alteração do deslocamento de saída (use com cuidado)
+|__|0177|__|
+Deslocamento de saída (o valor padrão é -1, siga o deslocamento de entrada)
+|__|0178|__|
+Você deve reabrir a configuração avançada para que esta alteração tenha efeito
+|__|0179|__|
+Ação a ser executada em caso de erro grave da unidade:
+|__|0180|__|
+Pare de clonar com mensagem de erro
+|__|0181|__|
+Comando de chamada:
+|__|0182|__|
+A unidade ainda não responde após a chamada de comando
+|__|0183|__|
+O comando chamado falhou com o sinal/status de saída
+|__|0184|__|
+Comando de teste
+|__|0185|__|
+O comando foi concluído normalmente
+|__|0186|__|
+Erro ao calcular CHS, valor fora dos limites
+|__|0187|__|
+Desativado (mais seguro se houver uma perda de energia)
+|__|0188|__|
+Ativado (mais rápido)
+|__|0189|__|
+Buffer de gravação do sistema operacional (deve ser desconectado para ter efeito)
+|__|0190|__|
+Ajuda
+|__|0191|__|
+Cerca de
+|__|0192|__|
+Configurações do temporizador
+|__|0193|__|
+Essas configurações de temporizador são apenas para os modos Direct IDE e Direct AHCI.
+Eles não têm efeito com os modos de passagem.
+
+|__|0194|__|
+Tempo de espera ocupado inicial (ms)
+|__|0195|__|
+Tempo de espera ocupado (ms)
+|__|0196|__|
+Tempo de reinicialização suave (ms)
+|__|0197|__|
+Tempo de reinicialização total (ms)
+|__|0198|__|
+Redefinir tempo limite (ms)
+|__|0199|__|
+Tempo limite geral (ms)
+|__|0200|__|
+Ação para redefinir o tempo limite
+|__|0201|__|
+Fazer nada
+|__|0202|__|
+O fim não é igual ao tamanho da unidade!
+Tamanho dos relatórios do arquivo de log de
+|__|0203|__|
+,
+mas a fonte tem um tamanho de
+|__|0204|__|
+.
+Tem certeza de que este é o arquivo de log de progresso correto para esta unidade?
+
+|__|0205|__|
+Forçar o mesmo controlador/escravo (não recomendado)
+|__|0206|__|
+Modo PIO
+|__|0207|__|
+Temporizadores de fase (temporizadores de reinicialização suave)
+|__|0208|__|
+Tempo de reinicialização da fase 1-2 (ms)
+|__|0209|__|
+Tempo de reinicialização da fase 3 (ms)
+|__|0210|__|
+Tempo de reinicialização da fase 4 (ms)
+|__|0211|__|
+Tempo de reinicialização de aparar/dividir (ms)
+|__|0212|__|
+Dividir 2 tempo de reinicialização (ms)
+|__|0213|__|
+Tempo de redefinição de raspagem (ms)
+|__|0214|__|
+Ativar temporizadores de fase
+|__|0215|__|
+Dispositivo de bloco genérico
+|__|0216|__|
+Dispositivo de origem genérico
+|__|0217|__|
+Erro: Não foi possível buscar a fonte
+|__|0218|__|
+Erro: Não foi possível ler a fonte
+|__|0219|__|
+Erro: o tamanho da fonte não é divisível pelo tamanho do setor,
+tamanho da fonte é
+|__|0220|__|
+Arquivo de origem genérico
+|__|0221|__|
+Deslocamento de alinhamento (LBA)
+|__|0222|__|
+Tamanho do setor (bytes)
+|__|0223|__|
+Tente novamente o tempo de redefinição (ms)
+|__|0224|__|
+Habilite o uso de retorno ATA para marcar setores defeituosos
+|__|0225|__|
+Ativar registros de fase
+|__|0226|__|
+Clone
+Modo
+|__|0227|__|
+Virtual
+Modo 1
+|__|0228|__|
+Modo Clone/Driver
+|__|0229|__|
+Clone
+|__|0230|__|
+Modo 1
+|__|0231|__|
+Erro ao abrir o driver de disco virtual
+|__|0232|__|
+Erro ao parar o driver de disco virtual
+|__|0233|__|
+Erro ao fechar o driver de disco virtual
+|__|0234|__|
+Erro ao iniciar o driver de disco virtual
+|__|0235|__|
+Erro: Offset não permitido no modo driver
+|__|0236|__|
+Erro de buffer de driver interno
+|__|0237|__|
+Erro: Não é possível ler do destino
+|__|0238|__|
+Virtual
+Modo 2
+|__|0239|__|
+Virtual
+Modo 3
+|__|0240|__|
+Virtual
+Modo 4
+|__|0241|__|
+Modo 2
+|__|0242|__|
+Modo 3
+|__|0243|__|
+Modo 4
+|__|0244|__|
+Virtual
+Modo 5
+|__|0245|__|
+Modo 5
+|__|0246|__|
+Erro: tamanho de setor ímpar não permitido no modo de driver
+|__|0247|__|
+Erro: tempo limite ou erro do driver
+|__|0248|__|
+Suave
+Redefinir
+|__|0249|__|
+Difícil
+Redefinir
+|__|0250|__|
+Aviso! 
+Usar o modo de driver com destino nulo limpará o log de progresso atual.
+Depois de clicar em Iniciar, o log será limpo.
+Se você deseja manter o log atual, desconecte e faça uma cópia.
+|__|0251|__|
+Iniciar driver de disco virtual
+|__|0252|__|
+Parar driver de disco virtual
+|__|0253|__|
+Saltos lentos
+|__|0254|__|
+Tamanho da última leitura
+|__|0255|__|
+Erro interno do programa, posição não encontrada no domínio
+|__|0256|__|
+Apenas driver virtual
+|__|0257|__|
+Novo arquivo de domínio
+|__|0258|__|
+Salvar arquivo de domínio
+|__|0259|__|
+Salvar arquivo de domínio como
+|__|0260|__|
+Carregar arquivo de ativação
+|__|0261|__|
+Ativação falhou
+|__|0262|__|
+Ativação bem sucedida.
+Você deve reiniciar o programa para que as alterações tenham efeito.
+|__|0263|__|
+Confirmar operação
+|__|0264|__|
+Deseja remover a ativação?
+|__|0265|__|
+Remover ativação
+|__|0266|__|
+Operação falhou
+
+|__|0267|__|
+Operação concluída com sucesso
+
+|__|0268|__|
+Erro! 
+O disco está bloqueado por segurança!
+|__|0269|__|
+Desativar portas
+|__|0270|__|
+Erro: Não foi possível abrir o arquivo
+|__|0271|__|
+Erro: nenhum arquivo de backup
+|__|0272|__|
+Desative as portas do modo AHCI para ocultar uma unidade do sistema operacional.
+Aviso! 
+Se você desabilitar a porta da unidade do sistema operacional,
+o sistema não será capaz de inicializar!
+|__|0273|__|
+Insira as portas que você deseja desabilitar como números inteiros separados por espaços.
+É melhor que os números de porta estejam em ordem do menor para o maior.
+Você pode encontrar informações de porta listando as unidades de origem no modo AHCI.
+
+|__|0274|__|
+Portas desabilitadas atuais (dados GRUB)
+|__|0275|__|
+Definir portas desativadas
+|__|0276|__|
+Portas desabilitadas atualizadas (dados GRUB)
+|__|0277|__|
+Atualizar portas
+|__|0278|__|
+Erro: a cópia do arquivo falhou
+|__|0279|__|
+Erro: Falha na atualização do GRUB
+|__|0280|__|
+Consulte a saída do console do terminal para obter mais informações
+|__|0281|__|
+Erro: Não foi possível localizar a linha no GRUB
+|__|0282|__|
+Você está prestes a fazer uma alteração na configuração de inicialização.
+Uma reinicialização será necessária para que as alterações entrem em vigor.
+|__|0283|__|
+Restaurar a configuração original da porta de inicialização
+|__|0284|__|
+Habilitar gravação SCSI no destino (para tamanho de setor ímpar)
+|__|0285|__|
+Ativar o ajuste do tamanho do setor de saída
+|__|0286|__|
+Ajuste do tamanho do setor de saída
+|__|0287|__|
+Opções de saída do driver de dispositivo de disco virtual para erros de leitura
+|__|0288|__|
+Erro de leitura de retorno (padrão)
+|__|0289|__|
+Retornar dados preenchidos com zero
+|__|0290|__|
+Dados preenchidos com marca de retorno
+|__|0291|__|
+Tamanho mínimo de leitura do cluster do disco virtual (modo 3)
+|__|0292|__|
+Nome do dispositivo de disco virtual
+|__|0293|__|
+O driver de dispositivo de disco virtual não está em execução
+|__|0294|__|
+Apagar destino
+|__|0295|__|
+Você está prestes a apagar todos os dados do destino!
+Tem certeza de que deseja apagar todos os dados?
+|__|0296|__|
+Analisar
+|__|0297|__|
+Resultados
+|__|0298|__|
+Total, Bom, Ruim, Lento
+|__|0299|__|
+Ativar análise estendida
+|__|0300|__|
+Parado
+|__|0301|__|
+Aparar
+|__|0302|__|
+Dividindo 1
+|__|0303|__|
+Dividindo 2
+|__|0304|__|
+Raspagem
+|__|0305|__|
+Tentando novamente
+|__|0306|__|
+Enchimento
+|__|0307|__|
+Apagando
+|__|0308|__|
+(Cabeça má)
+|__|0309|__|
+Destino de leitura
+|__|0310|__|
+Lendo:
+|__|0311|__|
+Analisando
+|__|0312|__|
+Detectando variação
+|__|0313|__|
+Fase 1
+|__|0314|__|
+Fase 2
+|__|0315|__|
+Fase 3
+|__|0316|__|
+Fase 4
+|__|0317|__|
+Finalizado
+|__|0318|__|
+(Marcha ré)
+|__|0319|__|
+O driver já está instalado e ativo
+
+|__|0320|__|
+A memória do driver agora está conectada
+
+|__|0321|__|
+Erro ao conectar à memória do driver
+
+|__|0322|__|
+Não é possível abrir para escrita
+|__|0323|__|
+Falha na criação, consulte o console para obter mais informações
+|__|0324|__|
+Falha ao instalar o módulo de driver, consulte o console para obter mais informações
+|__|0325|__|
+Sucesso na instalação do driver
+
+|__|0326|__|
+Falha ao remover o módulo de driver, consulte o console para obter mais informações
+|__|0327|__|
+Sucesso na remoção do driver
+
+|__|0328|__|
+Tempos de leitura de variação baixo/alto:
+|__|0329|__|
+Zona
+|__|0330|__|
+Total
+|__|0331|__|
+Boa
+|__|0332|__|
+Ruim
+|__|0333|__|
+Baixo
+|__|0334|__|
+Alto
+|__|0335|__|
+Média
+|__|0336|__|
+Zonas
+|__|0337|__|
+Exibir resultados de análise
+|__|0338|__|
+Erro: Ignorar redefinição detectada. 
+As configurações podem precisar ser alteradas.
+O tamanho do salto pode ser muito baixo ou muito alto.
+A unidade pode ter um problema de lentidão causando muitos saltos lentos.
+Se você recebeu esta mensagem muito rapidamente, pode não estar lendo nenhum dado.
+Consulte o manual de instruções para obter mais informações.
+|__|0339|__|
+Manual de Instruções HTML
+|__|0340|__|
+Erro: SMART não compatível com este dispositivo
+|__|0341|__|
+Erro: SMART não ativado neste dispositivo
+|__|0342|__|
+Erro: não é possível ler os dados SMART do dispositivo
+|__|0343|__|
+identificação
+|__|0344|__|
+Bandeiras
+|__|0345|__|
+Atual
+|__|0346|__|
+Pior
+|__|0347|__|
+Limiar
+|__|0348|__|
+Dados não tratados
+|__|0349|__|
+Nome do Atributo
+|__|0350|__|
+Versão da estrutura de dados SMART
+|__|0351|__|
+INTELIGENTE
+|__|0352|__|
+Exibir resultados SMART
+|__|0353|__|
+O arquivo de imagem existe atualmente.
+Isso continuará a recuperação usando este arquivo de imagem.
+|__|0354|__|
+Use o tamanho do setor físico como lógico para o disco virtual
+|__|0355|__|
+Lento
+Motorista
+|__|0356|__|
+Use as cores dos botões na barra de status inferior
+|__|0357|__|
+TEXTO DO MANUAL DE INSTRUÇÕES
+|__|0358|__|
+Configurações do relé principal
+|__|0359|__|
+Configurações da placa de relé primário
+|__|0360|__|
+Placa de relé atual
+|__|0361|__|
+Escolha a placa de relé primária
+|__|0362|__|
+Condição de ativação
+|__|0363|__|
+Energize o relé 1
+|__|0364|__|
+Energize o relé 2
+|__|0365|__|
+Energize o relé 3
+|__|0366|__|
+Energize o relé 4
+|__|0367|__|
+Energize o relé 5
+|__|0368|__|
+Energize o relé 6
+|__|0369|__|
+Energize o relé 7
+|__|0370|__|
+Energize o relé 8
+|__|0371|__|
+Condição de desativação
+|__|0372|__|
+Tempo de ativação (s)
+|__|0373|__|
+Tempo de atraso pós-ativação (s)
+|__|0374|__|
+Operação do relé de teste
+|__|0375|__|
+Configurações da placa de relé
+|__|0376|__|
+Escolha o relé USB
+|__|0377|__|
+Erro ao escolher o relé USB
+|__|0378|__|
+Erro ao operar o relé, consulte o console para obter mais informações
+|__|0379|__|
+Erro: Nenhum relé foi escolhido
+|__|0380|__|
+Ativar relé primário
+|__|0381|__|
+Ativar relé primário
+|__|0382|__|
+Ativar (Desligar)
+|__|0383|__|
+Desativar (Ligar)
+|__|0384|__|
+Este tamanho de setor não é compatível com o modo selecionado na versão gratuita.
+O modo genérico é o único modo na versão gratuita que permite um tamanho de setor diferente de 512 ou 4096.
+
+|__|0385|__|
+O resgate não terminou
+|__|0386|__|
+O resgate parou antes da conclusão.
+Código de parada \u003d
+|__|0387|__|
+Exibir resultados de identificação
+|__|0388|__|
+USB direto
+|__|0389|__|
+Opções de redefinição de USB
+|__|0390|__|
+Ativar redefinição em massa de USB
+|__|0391|__|
+Ativar a reinicialização suave do USB
+|__|0392|__|
+Ativar reinicialização forçada USB
+|__|0393|__|
+Ativar redefinição da porta USB
+|__|0394|__|
+Você está prestes a desativar o driver de armazenamento em massa USB,
+após o qual nenhum dispositivo de armazenamento USB será detectado pelo sistema operacional.
+|__|0395|__|
+Você está prestes a restaurar o driver de armazenamento em massa USB.
+|__|0396|__|
+Desative o driver de armazenamento em massa USB
+|__|0397|__|
+Restaurar driver de armazenamento em massa USB
+|__|0398|__|
+Aviso! 
+O destino é menor que a origem.
+Alguns dados podem não ser copiados.
+|__|0399|__|
+Ativar leitura duas vezes no tempo limite
+|__|0400|__|
+USB ATA direto
+|__|0401|__|
+Adicionar ao domínio do arquivo de bytes DMDE
+|__|0402|__|
+Erro: o domínio não está ativo ou nenhum arquivo de domínio foi carregado
+|__|0403|__|
+Sempre espere pelos temporizadores de redefinição
+|__|0404|__|
+Ativar a mudança da posição atual (pode afetar o algoritmo de salto)
+|__|0405|__|
+Apenas disco virtual IO SCSI
+|__|0406|__|
+Lento
+|__|0407|__|
+Problema de firmware de resposta lenta
+|__|0408|__|
+Problema de acesso parcial
+|__|0409|__|
+Cabeça ruim ou fraca
+|__|0410|__|
+Estendido
+Analisar
+|__|0411|__|
+Ativar assistente de reconstrução
+|__|0412|__|
+Assistente de reconstrução
+|__|0413|__|
+O assistente de reconstrução funciona apenas no modo ahci direto
+|__|0414|__|
+A assistência de reconstrução não é compatível com este dispositivo
+|__|0415|__|
+Erro ao desativar a assistência de reconstrução
+|__|0416|__|
+Erro ao ativar a assistência de reconstrução
+|__|0417|__|
+Selecionar unidade lógica
+|__|0418|__|
+Este dispositivo tem mais de 1 unidade lógica.
+Por favor, escolha qual unidade lógica.
+|__|0419|__|
+Possíveis Unidades Lógicas
+|__|0420|__|
+Definir unidade lógica
+|__|0421|__|
+Desligar
+|__|0422|__|
+Ligar
+|__|0423|__|
+Corrigir erro de memória do driver
+|__|0424|__|
+Tente conectar novamente em caso de falha após o ciclo de alimentação do relé
+|__|0425|__|
+Taxa máxima de leitura (kB/s)
+|__|0426|__|
+Não execute a identificação ao listar os dispositivos de origem
+

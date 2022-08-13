@@ -1,0 +1,21 @@
+ddru_ntfsbitmap - Part of the ddrutility tool set
+Reads the bitmap file from a NTFS partition and creates a domain logfile to use
+with GNU ddrescue so that only the used portion of the partition is recovered.
+
+Usage: ddru_ntfsbitmap [options] <source_disk> <output_logfile>
+
+OPTIONS:
+ -v, --version                 Show version and exit
+ -h, --help                    Show help and exit
+ -D, --debug                   Turn on debugging and create a debug file
+ -V, --verbose                 Show additional information
+ -g, --mingap <clusters>       Minumum gap size for unused space (default 0)
+ -i, --inputoffset <bytes>     Set input offset (partition offset)
+ -o, --options	<"options">    Options to pass to ddrescue, use quotes
+ -m, --mftdomain <file>        Create an additional domain file for the MFT
+ -r, --restart                 Delete all output files and start over
+
+Report bugs to maximus57@hotmail.com
+Or better yet, report bugs at the project home page
+Ddrutility homepage: http://sourceforge.net/projects/ddrutility/
+

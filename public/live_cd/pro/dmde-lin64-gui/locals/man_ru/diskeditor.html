@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Дисковый редактор</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="diskeditor"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Содержание</a> &middot; <a href="howto.html">Работа с программой</a>
+<hr />
+<h2>Дисковый редактор</h2>
+<p>
+Дисковый редактор позволяет просматривать и редактировать различные дисковые объекты,
+такие как секторы, файлы и другие структуры диска и файловой системы
+в шестнадчатеричном и форматном (структурированном) режимах,
+включая использование <a href="templates.html">пользовательских шаблонов</a> для разбора данных.
+</p>
+<p>
+<b><a href="changes.html">Ознакомьтесь с <span style="color:red">предупреждением по ссылке</span></a></b> 
+перед применением изменений.
+</p>
+<b>Выбор объекта:</b>
+<ul>
+<li>из меню <a href="menu_editor.html">Редактор</a> -
+для выбора объекта диска или файловой системы или перехода к заданной позиции</li>
+<li> из <a href="filepanel.html">панели файлов</a> -
+для выбора файла или директории (клик правой кнопкой - контекстное меню или клавиши [<span class="ii">Ctrl+Enter</span>])
+</li>
+</ul>
+<p>
+<b>Выбор режима просмотра (шаблона):</b> меню <a href="menu_viewas.html">Режим</a>.
+</p>
+<p>
+<b>Переход в режим редактирования:</b> 
+меню <a href="menu_edit.html">Правка</a> - <span class="ii">Режим редактирования</span> [<span class="ii">Ctrl+E</span>].
+<br />
+Редактирование файлов NTFS поддерживается только в <a href="menu_viewas.html#rawdata">RAW режиме</a>.
+</p>
+<p>
+<b>Запись изменений на диск:</b> меню <span class="ii">Диск</span> - <a href="changes.html#apply">Применить изменения</a> [<span class="ii">Ctrl+W</span>].
+</p>
+
+<p>
+Меню <a href="menu_tools.html">Сервис</a> содержит дополнительные функции:<br />
+&nbsp; &bull; <a href="copysectors.html">Копировать&nbsp;секторы...</a>:
+сохранить выделенный блок или весь объект в файл<br />
+&nbsp; &bull; <a href="fillsectors.html">Заполнить&nbsp;секторы...</a>:
+заполнить секторы шаблоном<br />
+&nbsp; &bull; <a href="searchssector.html#string">Найти&nbsp;строку</a>:
+найти строку в выбранном объекте<br />
+&nbsp; &bull; <a href="searchssector.html#struct">Найти&nbsp;спец.&nbsp;сектор</a>:
+найти определённую структуру данных на диске<br />
+</p>
+
+<p class="spec">
+Жёлтый цвет текста в редакторе обозначает изменения, не записанные на диск.<br />
+Серый текст обозначает неиспользуемые данные (неиспользуемая часть кластера, не занятая запись, и т.д.).<br />
+Зелёный цвет данных обозначает ошибки ввода-вывода при чтении соответствующих секторов.<br />
+Красный текст обозначает логические ошибки в данных.
+</p>
+
+</div></div>
+</body>
+</html>

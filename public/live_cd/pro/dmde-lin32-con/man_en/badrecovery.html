@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Working with Failing Devices</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">TOC</a> &middot; <a href="howto.html">Work</a> &middot; 
+<a href="datarecovery.html">Data Recovery</a>
+<hr />
+<h3>Working with Failing Devices</h3>
+<p>
+If you are in doubt about physical health of your device
+(input-output errors, slow responding, extraneous sounds, there was a hit, fall etc.) 
+it is highly recommended to address to specialists having specialized equipment. 
+Any further work with the disk (including even starting up) may worsen the problem 
+and cause complete inability to recover data. So any further attempts are at your own risk.
+Anyway it is possible only if the software can access the device (contents are readable), 
+and device size is detected correctly (see the <a href="sysrequire.html">System Requirements</a>).
+</p>
+<h4>Software Bads</h4>
+<p>
+Some errors may arise due to external reasons: bad contacts, power loss, etc.
+If a sector is not completely or incorrectly written 
+then the device reports an error when reading such sector
+even there is no physical damage (a software bad). 
+The device is working normally excepting errors when reading some sectors. 
+In such case you should fix the problem source
+(check if PCB contacts are oxidised, replace wires, provide reliable power, etc.) 
+and continue accessing the device safely if there are no new errors and no other problems
+(and of course there was no hit, the device is not responding slow, etc.)
+Anyway it is recommended to make a copy to a healthy disk.
+</p>
+<h4>Device Cloning</h4>
+<p>
+During data recovery there may be multiple access to the same disk areas:
+programs usually scan the entire disk, 
+then read again FS structures when building a directory tree for the selected volume,
+then read again FS and data when recovering selected files; 
+different settings and software may be tried as well.
+The every additional attempt damages the device more and more.
+</p>
+<p>
+So it is highly recommended to first clone the failing disk to a healthy device 
+and work further with the copy.
+</p>
+<p>
+In DMDE you may use the tool <a href="copysectors.html">Copy Sectors</a> to make the device clone.
+However the most safe and effective way is to use special equipment by data recovery specialists. 
+</p>
+
+<h4 id="disksetup">Selecting OS and Working in OS</h4>
+<p>
+Normally OS may also work actively with the device damaging it more, 
+interfere while working with it, as well may write unwantedly to the source disk. 
+The recommendation on OS selection are in the section <a href="setup.html">Installation and Run</a>.
+</p>
+<p>
+It is also recommended to use <a href="devioparams.html">the mode</a> <span class="ii">IO SCSI</span>
+(in Windows/Linux, or <span class="ii">ATA Interface</span> in DOS)
+as it is more fast and less aggressive.
+</p>
+<p>
+To completely prevent the OS from working with the device partitions you may temporarily "switch off" 
+a partition table.
+In DMDE you may use commands <span class="ii">MBR Off&nbsp;/ GPT Off</span> 
+in the <a href="partition.html">Partitions</a> window, 
+then Apply, and restart the OS or reconnect the disk.
+Later you may similarly "turn on" the partition table (<span class="ii">MBR On&nbsp;/ GPT On</span>).
+</p>
+
+<h4>If Cloning is Impossible</h4>
+<p>
+Sometimes the device state does not allow entire cloning.
+Full copy may take an unreasonable time but you need to recover only some important files.
+In such case you may try data recovery without performing a full scan.
+</p>
+<p>
+DMDE allows opening volumes and finding some files without preliminary full scan.
+You may try opening the volume if it is visible in the window <a href="partitions.html">Partitions</a> 
+just after selecting the <a href="devices.html">device</a>.
+You may also try opening volumes as soon as they appear in the results of 
+<a href="fullscan.html">Full Scan</a> without waiting its completion.
+Make sure to <span class="ii">Save</span> scan results to avoid future rescanning in case of some failure.
+Open the volume and recover the most important files first and check if they can be opened/played.
+</p>
+
+</div></div>
+</body>
+</html>

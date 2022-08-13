@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Kopiuj sektory</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="copysectors"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Spis treści</a> &middot; <a href="howto.html">Praca</a> &middot; 
+<a href="menu.html">Menu</a> &middot; <a href="menu_tools.html">Narzędzia</a>
+<hr />
+<h3>Kopiuj sektory</h3>
+
+<a href="badrecovery.html">Praca z uszkodzonymi urządzeniami</a>
+&nbsp;
+<a href="devices.html">Otwieranie obrazów dysków</a>
+
+<p>
+Narzędzie do tworzenia i przywracania obrazów dysków, klonowania całych dysków, tworzenia zrzutów.
+</p>
+<p>
+Po wybraniu pliku jako miejsca docelowego zostanie utworzony plik obrazu.
+</p>
+<p>
+Jeśli zamiast tego wybierzesz dysk/partycję jako miejsce docelowe, 
+zapis zostanie wykonany bezpośrednio na dysk,
+<strong>wszystkie dane na dysku docelowym zostaną nadpisane</strong>,
+docelowy system plików zostanie usunięty.
+</p>
+<p>
+Jeśli zapiszesz coś na dysku zawierającym utracone dane (np. nałożenie poprawki), 
+<strong><a href="changes.html">może to spowodować dalszą utratę danych</a></strong>.
+</p>
+
+<h4>Źródło i docelowy</h4>
+
+<table>
+<tr><td><span class="ii">Dysk</span></td><td>
+<a href="devices.html">Wybierz urządzenie</a>, logiczne dysku (wolumen), obraz, <a href="raids.html">RAID</a> 
+jako źródłowych/docelowych sektory</td></tr>
+<tr><td><span class="ii">Partycje</span></td><td>
+Wybierz partycję jako źródłowych/docelowych sektorów (przycisk <span class="ii">Urządzenie</span>, aby wybrać dysk)</td></tr>
+<tr><td>&nbsp;</td><td>
+Aby wybrać cały urządzenia/dysku/RAID kliknij dwukrotnie najwyższej pozycji na liście partycji</td></tr>
+<tr><td><span class="ii">Plik</span></td><td>
+Użyj pliku jako źródłowy/docelowy bajtów (lub <span class="ii">Urządzenie</span> &middot; <span class="ii">Plik obrazu</span>,
+aby używać plik jako źródłowe/docelowe sektory)</td></tr>
+<tr><td><span class="ii">Edytor</span></td><td>
+Użyj obiekt otwarty w <a href="diskeditor.html">Edytorze Disku</a> jako źródła bajtów</td></tr>
+<tr><td><span class="ii">Wybrane</span></td><td>
+Użyj wybranego bloku obiektu Edytorze Disku jako źródło bajtów</td></tr>
+</table>
+<p>
+Źródłowy <span class="ii">Początkowy sektor/bajt</span>, 
+<span class="ii">Końcowy sektor/bajt</span>, 
+<span class="ii">Liszba sectorów/Rozmiar w bajtach</span>
+są wypełniane automatycznie przy wyborze źródła za pomocą przycisków. 
+Pola mogą być zmieniane ręcznie w celu określenia przesunięcia i wielkość porcji do skopiowania.
+</p>
+<p>
+Docelowy <span class="ii">Początkowy sektor</span> również wypełniane automatycznie 
+przy wyborze docelowego obiektu za pomocą przycisków <span class="ii">Urządzenie</span>, <span class="ii">Partycje</span>.
+<span class="ii">Początkowy sektor</span> jest określona w stosunku do początku wybranego obiektu docelowego.
+</p>
+<p>
+The button <b>Split</b> allows splitting the destination file into parts.
+A RAID configuration <span class="tt">raidinfo.ini</span> is also created to open later the splitted image
+or to continue writing the splitted image (to specify/open using <a href="devices.html">Device</a> -
+<span class="ii">Disk Images / Logs</span>).
+</p>
+<p class="spec">
+Kiedy <span class="ii">Edytor</span> lub <span class="ii">Wybrany</span> jest używany jako źródło 
+to niektóre błędy (np. nieprawidłowa klastra lub numerów sektorów) zostaną zignorowane.
+</p>
+
+<h4>Parametry</h4>
+
+<p><span class="ii">Plik dziennika</span> może być wykorzystywane do śledzenia już skopiowane zakresy 
+i uzyskania numerów sektorów z błędami. Numery sektora są bezwzględne do urządzenia źródłowego.
+</p>
+
+<p>Opcja "<span class="ii">Użyć dziennik dla kontynuowania</span>" mogą być używane 
+do dalszego kopiowania automatycznie z ostatniej pozycji
+(opcja jest dostępna tylko w wersji <a href="editions.html">Professional Edition</a>).
+To także może być używany do kopiowania multi-pass w kilku przechodzi
+(w tym niesekwencyjnej kopiowania w różnych kierunkach),
+aby kopiować pominięty sektory poprzedni przechodzi. 
+</p>
+<p>
+Opcja "<span class="ii">Ponów uszkodzonych sektorów z dziennika</span>" może być użyty, 
+aby ponowić próbę kopiowania uszkodzonych sektorów z dziennika, 
+gdy wszystkie pominięte sektory są już skopiowane
+(dostępno tylko w <a href="editions.html">Professional Edition</a>).
+Dziennik nie może być wykorzystywane do dalszego kopiowania uszkodzonych sektorów 
+(na każdym przechodzi uszkodzony sektory zostały skopiowane od początku).
+</p>
+<p>
+<span class="ii">Wyczyść bufor dziennika gdy skopiowano liczba sektorów</span>:
+aktualizacja pliku dziennika regularnie, gdy liczba sektorów jest kopiowany.
+</p>
+<p>
+Przycisk "<span class="ii">Parametry</span>" pozwala skonfigurować 
+<a href="devioparams.html">parametrów We/Wy</a> do obsługi błędów.
+Zmiana niektórych parametrów (<span class="ii">Skakać przez sektory</span>, 
+<span class="ii">ilość ponowny prób</span>, 
+<span class="ii">ilość sektorów w buforze We/Wy</span>) przy 
+<span class="ii">użyciu dziennika dla kontynuowania kopiowania</span>
+może spowodować kopiowanie poprzednio pominiętych sektorów (np. jeśli zmniejszyć parametru 
+<span class="ii">Skakać przez sektory</span>).
+</p>              
+
+<p><span class="ii">Kopia odwrotny:</span> kopiowanie od końca do początku. Być może przydatne przy tworzeniu obrazu dysku z uszkodzonymi 
+sektorami.
+</p>
+
+<p><span class="ii">W dwóch wątkach:</span> wykonywać operacje odczytu i zapisu w równoległych wątków w celu zwiększenia prędkości. 
+Nie należy używać opcji dla kopiowania dysków z błędami.
+</p>
+
+<p>Pole <span class="ii">Kontynuować od sektora/bajt</span> określa pozycję do dalszego kopiowania.
+Pozycja jest w stosunku do początku źródłowego. 
+Podczas kopiowania w odwrotnym kierunku, kopiowanie rozpoczyna previos do określonej pozycji i idzie do tyłu 
+(np., jeśli ustawione na <span class="tt">10</span> ówczesnego sektora, <b>9</b> zostanie skopiowana pierwsza 
+i kopiowanie będzie przejść na początek).
+</p>
+
+<p>Opcja <span class="ii">Zablokuj źródło dla kopii</span> 
+jest do blokowania woluminy znajdujące się na obszarze źródłowym, 
+aby zapobiec modyfikacji źródła podczas kopiowania (tylko w systemie Windows).
+</p>
+
+
+<h5 id="devcopymenu">Menu</h5>
+
+<p><span class="ii">Zapisz / Załaduj</span>: zapisz / załaduj ustawienia do pliku / z pliku.
+</p>
+
+<p><span class="ii">Eksportuj dziennik do pliku mapy ddrescue</span>:
+przekonwertuj plik dziennika do formatu pliku mapy ddrescue.
+</p>
+
+<p><span class="ii">Eksportuj błędne i pominięte zakresy z dziennika</span>:
+pobierz listę uszkodzonych i pominiętych sektorów. 
+Lista może być następnie wykorzystana do uzyskania informacji o uszkodzonych plikach 
+znajdujących się w uszkodzonych sektorach 
+(zobacz <a href="datarecovery.html#drseclist">Odzyskiwanie danych</a>).
+</p>
+
+</div></div>
+</body>
+</html>

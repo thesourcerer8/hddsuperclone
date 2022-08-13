@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Menu Tryb</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+<style type="text/css">/*<![CDATA[*/
+td,th{vertical-align:top}
+/*]]>*/</style>
+</head>
+<body>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Spis treści</a> &middot; <a href="howto.html">Praca</a> &middot; <a href="menu.html">Menu</a>
+<hr />
+<h2>Menu &quot;Tryb&quot;</h2>
+<p>
+Przełącz tryb wyświetlania danych w <a href="diskeditor.html">Edytorze disku</a>.
+</p>
+<table>
+<tr><th class="ii">Własne szablony</th><td>
+Wybierz <a href="templates.html">szablon niestandardowy</a>
+</td></tr>
+<tr><th class="ii" id="hex"><span id="text"></span>Heksadecymalny, Tekst</th><td>
+Użyj menu <span class="ii">Kodowanie</span> dla zmiany widoku kodowej tablicy.
+</td></tr>
+<tr><th class="ii" id="fatdir">Katalog FAT</th><td>
+Naciśnij [<span class="ii">Enter</span>], aby otworzyć dane pliku lub katalog w oknie edytora 
+(jeżeli FAT jest <a href="openvolume.html">otwarty</a>).
+</td></tr>
+<tr><th class="ii" id="fat">FAT12/FAT16/FAT32</th><td>
+<!--FAT12 not editable.<br/-->
+Tablica klastrów FAT. 
+Naciśnij [<span class="ii">Enter</span>] aby przejść do odpowiedniego klastra woluminu.
+</td></tr>
+<tr><th class="ii" id="part">Tablica partycji MBR/GPT</th><td>
+Użyj polecenia ponownie lub naciśnij [<span class="ii">F6</span>], 
+aby przełączyć się między MBR/GPT/GPT kopii. 
+Naciśnij [<span class="ii">Enter</span>] aby przejść do wspomnianego sektora.
+</td></tr>
+<tr><th class="ii" id="boot">FAT/FAT32/NTFS Boot Record</th><td>
+Sektor startowy woluminu. 
+Użyj komendy ponownie lub naciśnij [<span class="ii">F7</span>], aby wybrać następny systemu plików. 
+Naciśnij [<span class="ii">Enter</span>], aby <a href="openvolume.html">otworzyć woluminu</a>.
+</td></tr>
+<tr><th class="ii" id="ntfsdir">Katalog NTFS</th><td>
+IndX-record katalogu NTFS. 
+Naciśnij [<span class="ii">Enter</span>], aby otworzyć plik lub katalog w oknie edytora 
+(jeżeli wolumin NTFS jest <a href="openvolume.html">otwarte</a>).
+</td></tr>
+<tr><th class="ii" id="mft">MFT Record</th><td>
+Naciśnij [<span class="ii">Enter</span>], aby otworzyć wybrany atrybut lub katalogu w 
+oknie edytora. Naciśnij <span class="ii">Przestrzeń</span>, aby wyświetlić szczegóły atrybutu.
+</td></tr>
+<tr><th class="ii" id="rawdata">RAW sectory pliku NTFS</th><td>
+Przełączanie między dekodowane dane pliku i RAW danych sektora (jak na dysku).
+</td></tr>
+<tr><th class="ii" id="encode">Kodowanie...</th><td>
+Wybierz kodowej tablicy do tłumaczenia tekst w trybie <span class="ii">Hexadecimal</span>/<span class="ii">Tekst</span>.
+</td></tr>
+</table>
+
+</div></div>
+</body>
+</html>

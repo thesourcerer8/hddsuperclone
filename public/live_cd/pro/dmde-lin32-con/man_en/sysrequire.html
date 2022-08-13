@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - System Requirements</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">TOC</a> &middot; <a href="setup.html">Installation and Run</a>
+<hr />
+<h2>System Requirements</h2>
+
+<a href="#windows">Windows</a> 
+&nbsp;
+<a href="#linux">Linux</a> 
+&nbsp;
+<a href="#macos">MacOS</a> 
+&nbsp;
+<a href="#dos">DOS</a> 
+
+<h3>Common Requirements</h3>
+<ul>
+<li>Drives: without significant hardware/firmware problems<br />
+<strong style="color:#ff0000;">Attention!</strong>
+If a device has physical problems 
+(disk is not accessible, input-ouput errors, extraneous sounds, slow performance, 
+there was a hit, etc.) 
+it is recommended to address to specialists - see
+the section <a href="badrecovery.html">Working with Failing Devices</a></li>
+<li>See the section <a href="setup.html">installation and Run</a> for recommended OS environment</li>
+<li>CPU: Intel compatible (i486 and higher)</li>
+<li>To save/use results, reports, and settings a valid partition is required 
+which is supported by the operating system 
+(in particular, FAT partition is required to work in DOS/Win9x/ME)</li>
+<li>See also <a href="issues.html">Issues and Limitations</a></li>
+</ul>
+
+<h4 id="size">Wrong Device Size</h4>
+<p>
+Do not work with a disk which size is detected incorrectly.
+It is possible to resolve some size related issues by yourself - 
+see <a href="http://blog.atola.com/restoring-factory-hard-drive-capacity/" target="_blank">then guide from an external source</a>.
+</p>
+<ul>
+<li><b>Capacity Limitation Jumper</b> is misplaced (device size is limited to <b>32GB</b>)</li>
+<li><b>HPA</b> is erroneously applyed. 
+Device size usually becomes <b>1TB less</b> or similar (typical to some GIGABYTE motherboards).
+Try software:
+HDD&nbsp;Capacity&nbsp;Restore Tool (Windows), <span class="tt">hdparm</span> (Linux), HDAT2, MHDD, Victoria (DOS)</li>
+<li>No large drive support in <b>OS</b> - see below</li>
+<li><b>Incorrect drivers</b> for SATA/USB controller (no correct <b>3TB+</b> support).
+Device is displayed tipically <b>2.2TB less</b>. Update drivers</li>
+<li><b>USB enclosure</b>&nbsp;/ another adapter has no correct <b>3TB+</b> support. 
+Change adapter or attach device directly</li>
+<li><b>Zero size</b>: the device is not accessible, you should address to specialists</li>
+</ul>
+
+<h3 id="windows">Windows 2K+ (2K/XP/Vista/7/higher)</h3>
+<ul>
+<li>Recommended: Windows XP + SP2 and higher</li>
+<li>32-bit versions work in both 32-bit and 64-bit Windows</li>
+<li>Administrator privileges</li>
+<li>Drives: supported by OS</li>
+<li>For drives <b>larger than 2TB</b>, Windows Vista/7/higher is required
+with the most recent versions of controller drivers installed</li>
+<li>For drives larger than 128GB in Windows 2K/XP
+certain ServicePacks must be installed (Windows 2K SP4 and Windows XP SP2)
+and LBA48 support must be switched on in the system registry of Windows 2K.
+Windows 2K/XP does not support drives larger than 2TB 
+with the exception of special XP-compatible USB-boxes
+</li>
+</ul>
+
+<h3>Windows 98/ME</h3>
+<ul>
+<li>Drives: supported by OS<br />
+<strong style="color:#ff0000;">Attention!</strong>
+Windows 9x/ME handles 128GB and larger drives incorrectly unless special patches are installed.
+You may reload computer in MS-DOS mode and use DOS version to access drives via BIOS or ATA-interface
+</li>
+</ul>
+
+<h3 id="linux">Linux</h3>
+<ul>
+<li>OS: Latest Linux distributions with <span class="tt">libc</span> library</li>
+<li>32-bit shared libraries to run 32-bit versions on 64-bit Linux (e.g. <span class="tt">libc6-i386</span> package)</li>
+<li>Drives: supported by OS</li>
+<li>Superuser rights</li>
+<li>Root terminal or emulator (xterm, Konsole, Gnome-Terminal, etc.) for console version,
+or <span class="tt">gtk2.0</span> library for GUI version</li>
+<li>utf-8 locale support</li>
+</ul>
+
+<h3 id="macos">MacOS</h3>
+<ul>
+<li>OS: macOS 10.12+</li>
+<li>Administrator privileges</li>
+<li>Drives: supported by OS, see <a href="setup.html#macos">Installation and Run</a>
+</li>
+</ul>
+
+<h3 id="dos">DOS</h3>
+<ul>
+<li>OS: MS-DOS 5.0+ compatible</li>
+<li>Drives: supported by BIOS or supported by DOS (using ASPI drivers) or supporting ATA-interface (IDE or SATA).
+SATA disks must be switched to IDE-compatible mode in BIOS for direct ATA-access</li>
+<li>DOS Extender (file CWSDPMI.EXE &copy; 2000 CW Sandmann in the software directory is enough)</li>
+<li>At least 200 KB of low memory free</li>
+<li>At least 64 MB of extended memory</li>
+<li>For extended name duplicates handling during data recovery 
+long name driver is required (e.g., DOSLFN.COM &copy; Haftman software)</li>
+<li>If you wish to use a mouse then mouse driver for DOS is required</li>
+</ul>
+
+</div></div>
+</body>
+</html>

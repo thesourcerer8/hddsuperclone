@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Device I/O Parameters</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="devioparams"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">TOC</a> &middot; <a href="howto.html">Work</a> &middot; <a href="menu.html">Menu</a> &middot; 
+<a href="menu_disk.html">Disk</a>
+<hr />
+<h2>Device I/O Parameters</h2>
+
+<a href="deviodlg.html">Device I/O Dialog Box</a> 
+&nbsp;
+<a href="deviohsc.html">Device I/O Handler Script</a>
+
+<h3 id="deviface">Interface</h3>
+
+<p>A way to access disk&nbsp;/ volume sectors (may be set when <a href="devices.html">selecting device</a>).</p>
+<p><span class="ii">RW&nbsp;Access</span>: open a device with write permissions (OS specific).</p>
+<p><span class="ii">Allow&nbsp;Write</span>: enable <a href="changes.html">write operations</a> for the device
+(<a href="changes.html">global read-only mode</a> must be disabled).</p>
+
+<p><span class="ii">IO&nbsp;FILE</span>: use default OS functions to access disks 
+(the most compatible, but may be not optimal for <a href="badrecovery.html">failing drives</a>,
+not supported in DOS).</p>
+
+<h4>OS Windows</h4>
+<table>
+<tr><th class="ii">IO&nbsp;SCSI</th><td>use SCSI driver (lower level, recommended
+to reduce the number of OS I/O attempts, and to bypass some OS write blocking)</td></tr>
+<tr><th class="ii">IO&nbsp;ATA</th><td>use lower level ATA driver for IDE&nbsp;/ SATA disks
+(may be poorly implemented in OS)</td></tr>
+<tr><th class="ii">Overlapped</th><td>use overlapped I/O 
+(seems bogus for devices, not recommended)</td></tr>
+</table>
+
+<h4>DOS</h4>
+<ul><li>
+<span class="ii">ATA Interface</span> (direct access, recommended for disks with damages, 
+see the <a href="sysrequire.html#dos">requirements</a>)
+<table>
+<tr><th class="ii">ATA Interface</th><td>for HDD/SSD</td></tr>
+<tr><th class="ii">ATAPI Interface</th><td>for CD/DVD</td></tr>
+<tr><th class="ii">use DMA</th><td>use faster DMA access for ATA (<a href="editions.html">Professional Edition</a> only)</td></tr>
+<tr><th class="ii">use LBA48</th><td>to access more than 128&nbsp;GiB</td></tr>
+<tr><th class="ii">raw CD access</th><td>to access non-digital CD</td></tr>
+</table>
+</li>
+<li>
+<span class="ii">BIOS Services</span> (the most compatible access way in DOS)
+<table>
+<tr><th class="ii">Old BIOS Service</th><td>old CHS access supporting up to 8.4GB</td></tr>
+<tr><th class="ii">Ext BIOS Service</th><td>LBA access</td></tr>
+</table>
+</li>
+<li>
+<span class="ii">DOS Services</span> (for logical disks)
+<table>
+<tr><th class="ii">DOS Int 25/26</th><td>DOS functions</td></tr>
+<tr><th class="ii">Win9x-FAT32 Calls</th><td>new DOS functions</td></tr>
+<tr><th class="ii">MSCDEX Services</th><td>for CD/DVD</td></tr>
+</table>
+</li>
+<li>
+<span class="ii">DOS ASPI</span> (access for SCSI, USB, and other devices if ASPI drivers are loaded)
+</li>
+</ul>
+
+<h3>I/O Errors</h3>
+<p>
+A way to handle I/O errors.
+</p>
+<p>
+<span class="ii">Skip I/O Errors</span>:
+an option to automatically continue an operation after a number of <span class="ii">auto retries</span>
+when I/O errors happen. If turned off the user choice is required within <a href="deviodlg.html">I/O dialog box</a>.
+</p>
+<p>
+<span class="ii">Do not wait if device is not ready</span>:
+continue an operation even if a device is not ready (not recommended).<br />
+</p>
+<p style="margin-left:5px;">
+<span class="ii">always:</span> apply to future operations.<br />
+<span class="ii">now:</span> apply to current operation.
+</p>
+<p>
+<span class="ii">Auto retries number on CRC Error</span>:
+a number of additional I/O retries when an I/O error happens.
+Do not use <span class="ii">IO FILE</span> <a href="#deviface">interface</a> 
+to avoid OS Windows additional retries and delays.
+</p>
+<div class="spec">
+<p>
+Zero value (<span class="tt">0</span>) stands for no additional retries, 
+herewith the rest sectors of the block after the error will not be read to the <b>I/O buffer</b>,
+or even moreover the entire <b>I/O buffer</b> contents may be undefined on error for some devices/drivers.
+</p>
+<p>
+If the value is non-zero then sectors are being read one by one until an I/O error is encountered. 
+The error sector is being read until the number of auto retries is reached or the sector is read succesfully.
+</p>
+<p>
+Increasing of retries number increases the percent of data successfully read but decreases
+device lifetime due to heavy load.
+</p>
+</div>
+<p>
+<span class="ii">Auto retries number on Seek Error</span>:
+additional I/O retries for errors other than "CRC". 
+</p>
+<p class="spec">
+Input error is assumed to be a seek error if I/O buffer contents is not changed 
+after I/O (or it is zero filled). 
+Usually seek errors significantly slow down I/O and not recoverable on retries.
+</p>
+<p>
+<span class="ii">Pattern for representing bad sectors (hex)</span>:
+4-byte little-endian value (in hex) to fill the data buffer when reading bad sectors (on I/O errors).
+</p>
+<p>
+<span class="ii">Jump over sectors after error</span>:
+skip the given number of sectors when an unrecoverable error is encountered.
+</p>
+<p class="spec">
+If there are areas of sequential bad sectors then skipping significantly reduces loading and further device damaging.
+Herewith the recovery quality reduces if there are only individual bad sectors.
+</p>
+<p>
+<span class="ii">Read back after jump</span>:
+read skipped sectors backward after a jump until an I/O error is encountered.
+</p>
+<p class="spec">
+The option is unavailable if the number of sectors to skip is too big. 
+The feature improves the percent of the data succesfully read.
+</p>
+<p>
+<span class="ii">Pattern for representing skipped sectors (hex)</span>:
+4-byte little-endian value (in hex) to fill the data buffer for skipped/over jumped sectors.
+</p>
+
+<h3 id="deviopar_more">Additional Parameters</h3>
+<p>
+<span class="ii">I/O buffer size in sectors</span>:
+the maximum number of sectors transferred per I/O operation.
+</p>
+<p>
+<span class="ii">Timeout, msec.</span>:
+time in milliseconds to wait for a device responce 
+(for DOS <a href="#deviface"><span class="ii">ATA Interface</span></a>). 
+</p>
+<p>
+<span class="ii">SCSI/ATA Timeout, s.</span>:
+timeout for <span class="ii">IO&nbsp;SCSI/ATA</span> <a href="#deviface">interfaces</a> 
+(OS dependent, may be unsupported).
+</p>
+<p>
+<span class="ii">Update device handle / devices list on error</span>:
+may be needed if a device was disconnected.
+</p>
+<p>
+<span class="ii">Retry I/O on device connection</span>:
+automatically resume the operation when the device is reconnected (Windows GUI only).
+</p>
+<p>
+<span class="ii">ATA software reset if busy</span>:
+perform ATA soft reset if device is busy after a <span class="ii">timeout</span> 
+(for DOS <span class="ii">ATA interface</span>).
+</p>
+<p>
+<span class="ii">ATA software reset timeout, ms.</span>:
+time to wait for a device readiness after ATA soft reset.
+</p>
+<p>
+<span class="ii">Script...</span>: set custom <a href="deviohsc.html">Device I/O Handler</a>.
+</p>
+<p>
+<span class="ii">SMART</span>: show SMART report.
+</p>
+&nbsp;
+</div></div>
+</body>
+</html>

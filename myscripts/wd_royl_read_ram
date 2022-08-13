@@ -1,0 +1,440 @@
+
+
+
+
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'WD dump ram'
+  echo 'This requires the text variable "file" to be set.'
+  echo '"file" is the name of the file to dump the ram.'
+
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+echo ""
+
+include good_subroutines
+
+# set a blank string variable to compare with user input
+# make sure not to set this anyplace else
+sets $null = ""
+
+# set this to itself for use with the menu system
+# make sure not to set this anyplace else
+# if it was not previously set it will = 0
+seti $using_menu = $using_menu
+
+# set the file name to be read from
+while 1 = 1
+  variablecheck $file
+  if $error_level < 16
+    seti $ask = 1
+  elseif $using_menu = 1
+    seti $ask = 1
+  endif
+  if $ask = 1
+    echo "Enter file name:"
+    userinput $choicestring
+    if $choicestring != $null
+      sets $file = $choicestring
+      break
+    else
+      echo "Choice cannot be blank!"
+    endif
+  else
+    break
+  endif
+done
+
+deletefile $file
+
+
+# set these for later, and to make it easy to change if needed
+seti $ram_read_block_size = 65536
+
+seti $ram_start = 0x8000000
+seti $ram_size = 0x40000
+seti $max_ram_size = 0x2000000
+
+# this is only needed to help keep the script happy
+# ram can be read as small as 1 byte
+if $ram_size < $ram_read_block_size
+  seti $ram_read_block_size = $ram_size
+endif
+seti $divide_check = $ram_read_block_size % 512
+if $divide_check != 0
+  echo "ram_read_block_size is not dividable by 512"
+  previousscript
+endif
+
+
+seti $idle_tries = 0
+while $idle_tries < 100
+  seti $idle_tries = $idle_tries + 1
+  echo "idle attempt " $idle_tries
+  gettime
+  seti $startreadtime = $time
+  gosub idle
+  gosub idle
+  gettime
+  seti $endreadtime = $time
+  seti $elapsedtime = $endreadtime - $startreadtime
+  if $elapsedtime < 100000
+    break
+  endif
+done
+
+gosub find_ram_size
+
+gosub dump_ram
+
+
+previousscript
+end
+
+
+
+
+
+subroutine find_ram_size
+  gosub enable_vsc
+
+  seti $find_ram_read_size = 0x200
+  scratchpadsize $find_ram_read_size
+  seti $position = $ram_start
+  seti $remainder = $find_ram_read_size
+  if $remainder != 0
+    seti $write_offset = 0
+    seti $read_size = $remainder
+    hex
+    echo "position=0x" $position "  rsize=0x" $read_size
+    decimal
+    # vsc to prepare for ram read
+    #echo "prepare to read ram"
+    buffersize 0x200
+    clearbuffer
+    seti $offsetl = $position & 0xff
+    seti $offsetm1 = $position > 8
+    seti $offsetm1 = $offsetm1 & 0xff
+    seti $offsetm2 = $position > 16
+    seti $offsetm2 = $offsetm2 & 0xff
+    seti $offseth = $position > 24
+    seti $offseth = $offseth & 0xff
+    seti $sizel = $read_size & 0xff
+    seti $sizem1 = $read_size > 8
+    seti $sizem1 = $sizem1 & 0xff
+    seti $sizem2 = $read_size > 16
+    seti $sizem2 = $sizem2 & 0xff
+    seti $sizeh = $read_size > 24
+    seti $sizeh = $sizeh & 0xff
+    setbuffer 0
+      13 00 01 00 $offsetl $offsetm1 $offsetm2 $offseth $sizel $sizem1 $sizem2 $sizeh
+    endbuffer
+    setwritepio
+    ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+    # check if command failed
+    gosub status_check
+    # vsc to get the ram
+    seti $sectors = $read_size / 512
+    buffersize $read_size
+    clearbuffer
+    setreadpio
+    #echo "reading ram"
+    ata28cmd 0xd5 $sectors 0xbf 0x4f 0xc2 0xa0 0xb0
+    # check if command failed
+    gosub status_check
+    # copy the buffer to the scratchpad
+    copybuffertoscratchpad 0 $write_offset $read_size
+  endif
+
+  printscratchpad 0 512
+
+  seti $read_size = $find_ram_read_size
+  while 1 = 1
+    seti $position = $ram_start + $ram_size
+    hex
+    echo "position=0x" $position "  size=0x" $read_size
+    decimal
+    # vsc to prepare for ram read
+    #echo "prepare to read ram"
+    buffersize 0x200
+    clearbuffer
+    seti $offsetl = $position & 0xff
+    seti $offsetm1 = $position > 8
+    seti $offsetm1 = $offsetm1 & 0xff
+    seti $offsetm2 = $position > 16
+    seti $offsetm2 = $offsetm2 & 0xff
+    seti $offseth = $position > 24
+    seti $offseth = $offseth & 0xff
+    seti $sizel = $read_size & 0xff
+    seti $sizem1 = $read_size > 8
+    seti $sizem1 = $sizem1 & 0xff
+    seti $sizem2 = $read_size > 16
+    seti $sizem2 = $sizem2 & 0xff
+    seti $sizeh = $read_size > 24
+    seti $sizeh = $sizeh & 0xff
+    setbuffer 0
+      13 00 01 00 $offsetl $offsetm1 $offsetm2 $offseth $sizel $sizem1 $sizem2 $sizeh
+    endbuffer
+    hex
+    #echo "keysector= 13 00 01 00 " $offsetl " " $offsetm1 " " $offsetm2 " " $offseth " " $sizel " " $sizem1 " " $sizem2 " " $sizeh
+    setwritepio
+    ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+    # check if command failed
+    gosub status_check
+
+    # vsc to get the ram
+    seti $sectors = $read_size / 512
+    buffersize $read_size
+    clearbuffer
+    setreadpio
+    #echo "reading ram"
+    ata28cmd 0xd5 $sectors 0xbf 0x4f 0xc2 0xa0 0xb0
+    hex
+    #echo "command= d5 " $sectors " bf 4f c2 a0 b0"
+    decimal
+    # check if command failed
+    gosub status_check
+
+    seti $compare = 0
+    seti $found_match = 1
+    while $compare < 512
+      seti $cmp = buffer $compare qw
+      seti $check = scratchpad $compare qw
+      if $cmp != $check
+        seti $found_match = 0
+        break
+      endif
+      seti $compare = $compare + 8
+    done
+    if $found_match = 1
+      hex
+      echo "ram size is 0x" $ram_size
+      decimal
+      break
+    endif
+
+    seti $ram_size = $ram_size * 2
+    if $ram_size > $max_ram_size
+      hex
+      echo "ram size not found, using default maximum size of 0x" $max_ram_size
+      decimal
+      seti $ram_size = $max_ram_size
+      break
+    endif
+  done
+
+  gosub disable_vsc
+endsubroutine
+
+
+
+
+
+subroutine dump_ram
+  gosub enable_vsc
+
+  #scratchpadsize $ram_size
+  seti $position = $ram_start
+  seti $read_size = $ram_read_block_size
+  seti $block_count = $ram_size / $ram_read_block_size
+  seti $remainder = $ram_size % $ram_read_block_size
+  seti $count = 0
+  while $count < $block_count
+    hex
+    echo "position=0x" $position "  size=0x" $read_size
+    decimal
+    # vsc to prepare for ram read
+    #echo "prepare to read ram"
+    buffersize 0x200
+    clearbuffer
+    seti $offsetl = $position & 0xff
+    seti $offsetm1 = $position > 8
+    seti $offsetm1 = $offsetm1 & 0xff
+    seti $offsetm2 = $position > 16
+    seti $offsetm2 = $offsetm2 & 0xff
+    seti $offseth = $position > 24
+    seti $offseth = $offseth & 0xff
+    seti $sizel = $read_size & 0xff
+    seti $sizem1 = $read_size > 8
+    seti $sizem1 = $sizem1 & 0xff
+    seti $sizem2 = $read_size > 16
+    seti $sizem2 = $sizem2 & 0xff
+    seti $sizeh = $read_size > 24
+    seti $sizeh = $sizeh & 0xff
+    setbuffer 0
+      13 00 01 00 $offsetl $offsetm1 $offsetm2 $offseth $sizel $sizem1 $sizem2 $sizeh
+    endbuffer
+    hex
+    #echo "keysector= 13 00 01 00 " $offsetl " " $offsetm1 " " $offsetm2 " " $offseth " " $sizel " " $sizem1 " " $sizem2 " " $sizeh
+    setwritepio
+    ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+    #echo "command= d6 01 be 4f c2 a0 b0"
+    decimal
+    # check if command failed
+    gosub status_check
+
+    # vsc to get the ram
+    seti $sectors = $read_size / 512
+    buffersize $read_size
+    clearbuffer
+    setreadpio
+    #echo "reading ram"
+    ata28cmd 0xd5 $sectors 0xbf 0x4f 0xc2 0xa0 0xb0
+    hex
+    #echo "command= d5 " $sectors " bf 4f c2 a0 b0"
+    decimal
+    # check if command failed
+    gosub status_check
+    seti $write_offset = $count * $read_size
+    # copy the buffer to the scratchpad
+    #copybuffertoscratchpad 0 $write_offset $read_size
+    # write the buffer to file
+    writebuffer $file 0 $write_offset $read_size
+    seti $count = $count + 1
+    seti $position = $position + $ram_read_block_size
+  done
+
+  if $remainder != 0
+    seti $write_offset = $write_offset + $read_size
+    seti $read_size = $remainder
+    hex
+    echo "position=0x" $position "  rsize=0x" $read_size
+    decimal
+    # vsc to prepare for ram read
+    echo "prepare to read ram"
+    buffersize 0x200
+    clearbuffer
+    seti $offsetl = $position & 0xff
+    seti $offsetm1 = $position > 8
+    seti $offsetm1 = $offsetm1 & 0xff
+    seti $offsetm2 = $position > 16
+    seti $offsetm2 = $offsetm2 & 0xff
+    seti $offseth = $position > 24
+    seti $offseth = $offseth & 0xff
+    seti $sizel = $read_size & 0xff
+    seti $sizem1 = $read_size > 8
+    seti $sizem1 = $sizem1 & 0xff
+    seti $sizem2 = $read_size > 16
+    seti $sizem2 = $sizem2 & 0xff
+    seti $sizeh = $read_size > 24
+    seti $sizeh = $sizeh & 0xff
+    setbuffer 0
+      13 00 01 00 $offsetl $offsetm1 $offsetm2 $offseth $sizel $sizem1 $sizem2 $sizeh
+    endbuffer
+    hex
+    #echo "keysector= 13 00 01 00 " $offsetl " " $offsetm1 " " $offsetm2 " " $offseth " " $sizel " " $sizem1 " " $sizem2 " " $sizeh
+    setwritepio
+    ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+    #echo "command= d6 01 be 4f c2 a0 b0"
+    decimal
+    # check if command failed
+    gosub status_check
+    # send again
+    ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+    # check if command failed
+    gosub status_check
+
+    # vsc to get the ram
+    seti $sectors = $read_size / 512
+    buffersize $read_size
+    clearbuffer
+    setreadpio
+    #echo "reading ram"
+    ata28cmd 0xd5 $sectors 0xbf 0x4f 0xc2 0xa0 0xb0
+    hex
+    #echo "command= d5 " $sectors " bf 4f c2 a0 b0"
+    decimal
+    # check if command failed
+    gosub status_check
+    # copy the buffer to the scratchpad
+    #copybuffertoscratchpad 0 $write_offset $read_size
+    # write the buffer to file
+    writebuffer $file 0 $write_offset $read_size
+  endif
+
+  gosub disable_vsc
+  echo "ram dump successful"
+endsubroutine
+
+
+
+
+
+subroutine status_check
+  seti $command_failed = 0
+  gosub check_command_status
+  if $command_failed = 1
+    echo "Command failed!"
+    gosub show_sense_data
+    gosub show_ata_return_status
+    previousscript
+  endif
+endsubroutine
+
+
+
+subroutine enable_vsc
+  # enable vendor specific commands
+  echo "enable vsc"
+  buffersize 0
+  setreadpio
+  ata28cmd 0x45 0x0b 0x00 0x44 0x57 0xa0 0x80
+  # check if command failed
+  gosub status_check
+endsubroutine
+
+
+
+subroutine disable_vsc
+  # disable vendor specific commands
+  echo "disable vsc"
+  buffersize 0
+  setreadpio
+  ata28cmd 0x44 0x0b 0x00 0x44 0x57 0xa0 0x80
+  # check if command failed
+  gosub status_check
+endsubroutine
+
+
+
+subroutine idle
+  buffersize 0
+  setreadpio
+
+  # set the count to 0
+  seti $count = 0
+
+  # set the LBA for the unload command
+  seti $LBAlow = 0x4c
+  seti $LBAmid = 0x4e
+  seti $LBAhigh = 0x55
+
+  # set features to unload
+  seti $features = 0x44
+  # set device bits 7(compatibility) 5(compatibility)
+  seti $device = 0xa0
+  # set the command for idle immediate
+  seti $command = 0xe1
+
+  # perform the command
+  ata28cmd $features $count $LBAlow $LBAmid $LBAhigh $device $command
+
+  # check if command failed
+  seti $command_failed = 0
+  gosub check_command_status
+  if $command_failed = 1
+    echo "Command failed!"
+    gosub show_sense_data
+    gosub show_ata_return_status
+    previousscript
+  endif
+endsubroutine
+
+
+

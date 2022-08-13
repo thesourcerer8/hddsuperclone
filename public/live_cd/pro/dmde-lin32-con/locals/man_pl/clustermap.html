@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Mapa klastrów</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="clustermap"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Spis treści</a> &middot; <a href="howto.html">Praca</a> &middot; 
+<a href="menu.html">Menu</a> &middot; <a href="menu_tools.html">Narzędzia</a>
+<hr />
+<h2>Mapa klastrów (alokacja plików)</h2>
+<a href="#cmapreport">Raport mapy klastrów</a> 
+<p>
+Mapa klastrów pokazuje, które klastry woluminu są używane i do jakich plików należą. 
+Użyj polecenia menu <span class="ii">Okna</span> &middot; <span class="ii">Mapa klastrów</span>, 
+aby wyświetlić&nbsp;/ zamknąć mapę klastrów i <span class="ii">Cluster Map Compact Mode</span>, 
+aby przełączać się między wyświetlaniem pojedynczych klastrów i całych fragmentów plików.
+</p>
+<p>
+Aby korzystać z map klastrów pierwszy <a href="openvolume.html">otwórz tom</a> 
+i aktualizuj mapu klastrów (menu <span class="ii">Narzędzia</span>).
+</p>
+<p>
+Aby przejść do konkretnej położenie użyć komendy menu
+</p>
+<ul>
+<li><span class="ii">Edytor</span>-<span class="ii">Klaster woluminu</span> [<span class="ii">Alt+C</span>], aby przejść do konkretnego klastra woluminu</li>
+<li><span class="ii">Edytor</span>-<span class="ii">Sektor woluminu</span> [<span class="ii">Alt+S</span>], aby przejść do konkretnego sektora woluminu</li>
+<li><span class="ii">Edytor</span>-<span class="ii">Sektor fizyczny</span> [<span class="ii">Alt+P</span>], aby przejść do konkretnego sektora urządzenia</li>
+</ul>
+<p>
+Aby to zrobić znajduje się tam użyć komendy menu
+</p>
+<ul>
+<li><span class="ii">Editor</span>-<span class="ii">Mapa klastrów</span> [<span class="ii">Ctrl+M</span>], aby otworzyć mapę klastrów w wybranym miejscu.</li>
+<li><span class="ii">Editor</span>-<span class="ii">Dane pliku</span> [<span class="ii">Ctrl+Alt+F</span>], aby otworzyć plik w wybranym miejscu.</li>
+</ul>
+<p>
+Po otwarciu mapy klastrów [<span class="ii">Ctrl + podwójne kliknięcie</span>] lub [<span class="ii">Ctrl + Enter</span>] 
+otwiera panel plików z zaznaczonym plikiem 
+(funkcja może wymagać wstępnej <a href="reconstruction.html">rekonstrukcji FS</a> w zależności od FS).
+</p>
+<p>
+Ciąg statusu mapie klastrów ma następujący format:<br /> 
+<b>[bieżący klaster / liczba klastrów]
+"pliku (strumień) nazwę" VCN: numer klastra na plik</b>
+</p>
+<h3 id="cmapreport">Raport mapy klastrów</h3>
+<p>
+Raport pozwala uzyskać listę plików znajdujących się w określonych sektorach. 
+Na przykład, pozwala na konwersję listy uszkodzonych sektorów na listę uszkodzonych plików. 
+Aby wyświetlić pełne ścieżki plików, może być konieczna wstępna <a href="reconstruction.html">rekonstrukcja FS</a> 
+w zależności od FS.
+</p>
+<p>
+Aby zamiast tego utworzyć listę sektorów zajmowanych przez pliki, użyj list 
+<a href="datarecovery.html">Odzyskiwanie danych</a> 
+(przycisk <span class="ii">Lista</span> w oknie dialogowym "Odzyskaj").
+</p>
+
+</div></div>
+</body>
+</html>

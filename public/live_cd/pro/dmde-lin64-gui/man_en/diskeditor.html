@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Disk Editor</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="diskeditor"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Table of contents</a> &middot; <a href="howto.html">How to use</a>
+<hr />
+<h2>Disk Editor</h2>
+<p>
+Disk editor allows you to view and edit disk objects such as sectors, 
+files and other file system and disk structures in hexadecimal and formatted (structured) modes
+including the use of <a href="templates.html">Custom Templates</a> to parse data.
+</p>
+<p>
+<b><a href="changes.html">Read <span style="color:red">the warning on this link</span></a></b> 
+before applying changes to a disk.
+</p>
+<b>Select Object:</b><br />
+<ul>
+<li>use the menu <a href="menu_editor.html">Editor</a> to select disk or file system object 
+or to jump to a specified position</li>
+<li>use <a href="filepanel.html">File panel</a> to select a file or directory
+(right click for a context menu or press [<span class="ii">Ctrl+Enter</span>])</li>
+</ul>
+<p>
+<b>Select View Mode (Template):</b> menu <a href="menu_viewas.html">Mode</a>.
+</p>
+<p>
+<b>Enable Edit Mode:</b> menu <a href="menu_edit.html">Edit</a> - <span class="ii">Edit Mode</span> [<span class="ii">Ctrl+E</span>].
+<br />
+NTFS file editing is supported in <a href="menu_viewas.html#rawdata">RAW mode</a> only.
+</p>
+<b>Apply Changes:</b> menu <span class="ii">Disk</span> - <a href="changes.html">Apply Changes</a> [<span class="ii">Ctrl+W</span>].
+
+<p>
+Use the menu <a href="menu_tools.html">Tools</a> for additional functions: <br />
+&nbsp; &bull; <a href="copysectors.html">Copy&nbsp;sectors...</a>
+to write the selection or the entire object to a file.<br />
+&nbsp; &bull; <a href="fillsectors.html">Fill&nbsp;sectors...</a>
+to fill sectors with a pattern.<br />
+&nbsp; &bull; <a href="searchssector.html#string">Search&nbsp;string</a> 
+to search string in the selected object.<br />
+&nbsp; &bull; <a href="searchssector.html#struct">Search&nbsp;spec.&nbsp;sector</a>
+to find some data structure on a disk.<br />
+</p>
+<p class="spec">
+Yellow text color in the Disk Editor indicates modified but not written data.<br />
+Grayed text color indicates unused data (unused part of the cluster, unused entry, etc.).<br />
+Green data color indicates I/O errors while reading corresponding sector.<br />
+Red text color indicates logical errors in the data.
+</p>
+</div></div>
+</body>
+</html>

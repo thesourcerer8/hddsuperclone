@@ -1,0 +1,747 @@
+
+
+
+echo 'Western Digital ROYL write rom from file using vendor specific commands.'
+echo 'WARNING: THIS IS DANGEROUS AND COULD KILL THE DRIVE!!!'
+echo 'DO NOT STOP THIS PROCESS OR REMOVE POWER FROM THE DRIVE!!!'
+echo 'IF THE ROM GETS ERASED BUT NOT WRITTEN, DO NOT REMOVE POWER!!!'
+echo 'USE AT YOUR OWN RISK!!!'
+echo 'If you write an incompatible ROM you could kill the drive!'
+echo 'If the erase works but the write fails, you could kill the drive!'
+echo 'In this emergency case, use slow and stupid mode to attempt to write.'
+echo 'Do not use slow and stupid mode unless you erased the rom and are stuck.'
+echo 'It is recommended to perform another ROM dump and check after writing'
+echo '  to be sure it worked. Use the other scripts for these functions.'
+echo 'If the script fails for any reason, it is recommended to do another dump'
+echo '  and check to make sure ROM is still in good condition.'
+
+
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'This requires the text variable "file" to be set.'
+  echo '"file" is the name of the file to dump the rom.'
+  echo 'This requires the number variable "slow_and_stupid" to be set.'
+  echo '"slow_and_stupid" is an emergency mode if the flash is erased but not written.'
+  echo 'A value of 0 is off, any other value is on.'
+  echo 'It is not recommended to use slow_and_stupid unless needed.'
+
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+echo ""
+
+include good_subroutines
+
+# set these for later, and to make it easy to change if needed
+# make sure they are evenly dividable by 512
+# in the case of a stubborn USB drive try setting them to 512 (dangerous)
+seti $main_read_block_size = 65536
+seti $alt_read_block_size = 16384
+
+seti $divide_check = $main_read_block_size % 512
+if $divide_check != 0
+  echo "main_read_block_size is not dividable by 512"
+  previousscript
+endif
+seti $divide_check = $alt_read_block_size % 512
+if $divide_check != 0
+  echo "alt_read_block_size is not dividable by 512"
+  previousscript
+endif
+
+# do some general safety checks
+# check for direct mode which is safest to use
+if $direct_mode = 0
+  echo "WARNING! Passthrough mode detected."
+  echo "It is recommended to use direct mode for ROM write."
+  echo 'Type "DANGEROUS" to continue anyway:'
+  userinput $choicestring
+  sets $safety = "DANGEROUS"
+  if $choicestring != $safety
+    echo "You chose not to continue"
+    previousscript
+  endif
+  # check is drive is connected directly or not
+  buffersize 512
+  direction from
+  scsi6cmd 0x12 0 0 0 0x44 0
+  gosub check_command_status
+  sets $value = buffer 8 3
+  sets $value_check = "ATA"
+  if $value != $value_check
+    echo "WARNING! The drive is not directly connected!"
+    echo "It is very dangerous to write ROM to a USB attached drive!"
+    echo 'Type "VERY DANGEROUS" to continue anyway:'
+    userinput $choicestring
+    sets $safety = "VERY DANGEROUS"
+    if $choicestring != $safety
+      echo "You chose not to continue"
+      previousscript
+    endif
+  endif
+endif
+
+# set a blank string variable to compare with user input
+# make sure not to set this anyplace else
+sets $null = ""
+
+# set this to itself for use with the menu system
+# make sure not to set this anyplace else
+# if it was not previously set it will = 0
+seti $using_menu = $using_menu
+
+# set the file name to be read from
+while 1 = 1
+  variablecheck $file
+  if $error_level < 16
+    seti $ask = 1
+  elseif $using_menu = 1
+    seti $ask = 1
+  endif
+  if $ask = 1
+    echo "Enter file name:"
+    userinput $choicestring
+    if $choicestring != $null
+      sets $file = $choicestring
+      break
+    else
+      echo "Choice cannot be blank!"
+    endif
+  else
+    break
+  endif
+done
+
+# set normal or slow and stupid mode
+while 1 = 1
+  sets $sstring = "slow and stupid"
+  variablecheck $slow_and_stupid
+  if $error_level < 16
+    seti $ask = 1
+  elseif $using_menu = 1
+    seti $ask = 1
+  endif
+  if $ask = 1
+    echo 'Type "slow and stupid" for emergency mode'
+    echo 'Otherwise just hit enter to continue (recommended)'
+    userinput $choicestring
+    if $choicestring = $sstring
+      seti $slow_and_stupid = 1
+      echo "Using slow and stupid mode"
+      break
+    else
+      seti $slow_and_stupid = 0
+      break
+    endif
+  else
+    break
+  endif
+done
+
+
+gosub identify_device
+
+gosub dump_rom
+
+if $slow_and_stupid = 0
+  gosub process_rom
+endif
+
+gosub read_file
+
+gosub process_rom
+
+gosub write_rom
+
+gosub verify_rom
+
+previousscript
+end
+
+
+
+subroutine identify_device
+  # get model and serial using identify device command
+  echo "Performing identify device command"
+  buffersize 512
+  setreadpio
+  ata28cmd 0 0 0 0 0 0xa0 0xec
+  # check if command failed
+  gosub status_check
+  # extract model and serial and trim leading and trailing spaces
+  sets $model = "null"
+  sets $serial = "null"
+  wordflipbuffer 0 512
+  seti $count = 0
+  seti $start_offset = 54
+  while $count < 40
+    seti $byte = buffer $start_offset
+    if $byte > 0x20
+      break
+    endif
+    seti $start_offset = $start_offset + 1
+    seti $count = $count + 1
+  done
+  seti $count = 0
+  seti $end_offset = 93
+  while $count < 40
+    seti $byte = buffer $end_offset
+    if $byte > 0x20
+      break
+    endif
+    seti $end_offset = $end_offset - 1
+    seti $count = $count + 1
+  done
+  seti $end_offset = $end_offset + 1
+  seti $size = $end_offset - $start_offset
+  if $size > 0
+    sets $model = buffer $start_offset $size
+  endif
+  # find out if it is a WD drive
+  sets $wdcheck = buffer $start_offset 3
+  sets $compare = "WDC"
+  if $wdcheck != $compare
+    echo "Model: " $model
+    echo "Drive is not WD
+    #previousscript
+  endif
+
+  seti $count = 0
+  seti $start_offset = 20
+  while $count < 20
+    seti $byte = buffer $start_offset
+    if $byte > 0x20
+      break
+    endif
+    seti $start_offset = $start_offset + 1
+    seti $count = $count + 1
+  done
+  seti $count = 0
+  seti $end_offset = 39
+  while $count < 20
+    seti $byte = buffer $end_offset
+    if $byte > 0x20
+      break
+    endif
+    seti $end_offset = $end_offset - 1
+    seti $count = $count + 1
+  done
+  seti $end_offset = $end_offset + 1
+  seti $size = $end_offset - $start_offset
+  if $size > 0
+    sets $serial = buffer $start_offset $size
+  endif
+
+  clearbuffer
+
+  echo "Model: " $model
+  echo "Serial: " $serial
+
+  # set the backup file name
+  gettime
+  sets $backup_filename = "rom_dump_" $model "_" $serial "_" $date ".bin"
+endsubroutine
+
+
+
+subroutine dump_rom
+  gosub enable_vsc
+
+  # vsc to prepare to get drive data table
+  echo "prepare to get data table"
+  buffersize 0x200
+  clearbuffer
+  setbuffer 0
+    0d 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00
+  endbuffer
+  setwritepio
+  ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+  # send again
+  ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+
+  # vsc to get to get drive data table
+  echo "getting data table"
+  buffersize 0x200
+  clearbuffer
+  setreadpio
+  ata28cmd 0xd5 0x01 0xbf 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+
+  #printbuffer 0 256
+  # get the number of 16K rom blocks
+  seti $rom_blocks = buffer 164
+
+  # vsc to prepare for rom read
+  echo "prepare to read rom"
+  buffersize 0x200
+  clearbuffer
+  setbuffer 0
+    24 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00
+  endbuffer
+  setwritepio
+  ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+  # send again
+  ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+
+  # vsc to get the rom
+  # the rom block size is 16K, or 32 sectors (0x20)
+  # 32 sectors * 512 bytes per sector = 16384
+  seti $rom_size = $rom_blocks * 16384
+  seti $expected_rom_size = $rom_size
+  hex
+  sets $string = "0x" $rom_size
+  decimal
+  echo "rom size = " $rom_size " (" $string ")"
+  echo "reading rom"
+  scratchpadsize $rom_size
+  seti $divide_check = $rom_size % $main_read_block_size
+  if $divide_check = 0
+    seti $buffer_size = $main_read_block_size
+    seti $sectors = $main_read_block_size / 512
+    seti $block_count = $rom_size / $main_read_block_size
+  else
+    seti $buffer_size = $alt_read_block_size
+    seti $sectors = $alt_read_block_size / 512
+    seti $block_count = $rom_size / $alt_read_block_size
+  endif
+  buffersize $buffer_size
+  clearbuffer
+  setreadpio
+  seti $count = 0
+  while $count < $block_count
+    ata28cmd 0xd5 $sectors 0xbf 0x4f 0xc2 0xa0 0xb0
+    # check if command failed
+    gosub status_check
+    # copy the buffer to the scratchpad
+    seti $offset = $count * $buffer_size
+    copybuffertoscratchpad 0 $offset $buffer_size
+    # write the buffer to file
+    writebuffer $file 0 $offset $buffer_size
+    seti $count = $count + 1
+    seti $transferred = $count * $buffer_size
+    echo $transferred
+  done
+
+  gosub disable_vsc
+  echo "rom dump successful"
+  seti $original_rom_size = $rom_size
+endsubroutine
+
+
+
+
+subroutine read_file
+  getfilesize $file
+  seti $file_size = $error_level
+  if $file_size < 0
+    echo "ERROR! File " $file " not found!"
+    previousscript
+  endif
+  if $expected_rom_size != $file_size
+    hex
+    echo "ERROR! Expected ROM size is 0x" $expected_rom_size " but file size is 0x" $file_size
+    decimal
+    previousscript
+  endif
+  echo "Reading the rom file"
+  seti $rom_size = $file_size
+  hex
+  sets $string = "0x" $rom_size
+  decimal
+  echo "rom size = " $rom_size " (" $string ")"
+  scratchpadsize $rom_size
+  clearscratchpad
+  readscratchpad $file 0 0 $rom_size
+
+  # set the number of 16K rom blocks
+  seti $rom_blocks = $rom_size / 16384
+  seti $divide_check = $rom_size % 16384
+  if $divide_check != 0
+    echo "ERROR! Filesize of " $file " is not evenly dividable by 16384!"
+    echo "The rom has not been written to the drive!"
+    previousscript
+  endif
+endsubroutine
+
+
+
+
+subroutine read_backup_file
+  getfilesize $backup_filename
+  seti $file_size = $error_level
+  if $file_size < 0
+    echo "ERROR! File " $backup_filename " not found!"
+    previousscript
+  endif
+  echo "Reading the rom backup file"
+  seti $rom_size = $file_size
+  hex
+  sets $string = "0x" $rom_size
+  decimal
+  echo "rom size = " $rom_size " (" $string ")"
+  scratchpadsize $rom_size
+  clearscratchpad
+  readscratchpad $backup_filename 0 0 $rom_size
+
+  # set the number of 16K rom blocks
+  seti $rom_blocks = $rom_size / 16384
+  seti $divide_check = $rom_size % 16384
+  if $divide_check != 0
+    echo "ERROR! Filesize of " $backup_filename " is not evenly dividable by 16384!"
+    echo "The rom has not been written to the drive!"
+    previousscript
+  endif
+endsubroutine
+
+
+
+
+subroutine process_rom
+  echo "processing rom"
+  #printscratchpad 0 512
+  seti $pmcblock_number = 0
+  seti $error = 0
+  while 1 = 1
+    seti $table_offset = $pmcblock_number * 32
+    seti $working_offset = $table_offset
+    seti $block_number = scratchpad $table_offset
+    if $pmcblock_number = 0
+      if $block_number != 0x5a
+        hex
+        echo "ERROR: expecting first byte of 0x5a but found 0x" $block_number
+        decimal
+        seti $error = $error + 1
+        break
+      endif
+    elseif $pmcblock_number != $block_number
+      hex
+      echo "ERROR: expecting block number 0x" $pmcblock_number " but found 0x" $block_number
+      decimal
+      seti $error = $error + 1
+      break
+    endif
+
+    seti $working_offset = $table_offset + 4
+    seti $checksum_location = scratchpad $working_offset dw
+    seti $working_offset = $table_offset + 8
+    seti $block_size = scratchpad $working_offset dw
+    seti $checksum_length = $checksum_location - $block_size
+    seti $working_offset = $table_offset + 0x0c
+    seti $block_start = scratchpad $working_offset dw
+    seti $block_end = $block_start + $checksum_location
+    seti $working_offset = $table_offset + 0x0e
+    seti $last_entry = scratchpad $working_offset
+    seti $working_offset = $table_offset + 0x1f
+    seti $table_checksum = scratchpad $working_offset
+
+    seti $calulated_tablechk = 0
+    seti $count = 0
+    while $count < 31
+      seti $position = $table_offset + $count
+      seti $byte = scratchpad $position
+      seti $calulated_tablechk = $calulated_tablechk + $byte
+      seti $count = $count + 1
+    done
+    seti $calulated_tablechk = $calulated_tablechk & 0xff
+    if $table_checksum != $calulated_tablechk
+      echo "ERROR: bad table checksum"
+      seti $error = $error + 1
+    endif
+
+    if $checksum_length = 1
+      seti $position = $block_start + $block_size
+      seti $checksum = scratchpad $position
+      seti $calculated_checksum = 0
+      seti $count = 0
+      while $count < $block_size
+        seti $position = $block_start + $count
+        seti $byte = scratchpad $position
+        seti $calculated_checksum = $calculated_checksum + $byte
+        seti $count = $count + 1
+      done
+      seti $calculated_checksum = $calculated_checksum & 0xff
+    elseif $checksum_length = 2
+      seti $position = $block_start + $block_size
+      seti $checksum = scratchpad $position w
+      seti $calculated_checksum = 0
+      seti $count = 0
+      while $count < $block_size
+        seti $position = $block_start + $count
+        seti $word = scratchpad $position w
+        seti $calculated_checksum = $calculated_checksum + $word
+        seti $count = $count + 2
+      done
+      seti $calculated_checksum = $calculated_checksum & 0xffff
+      #seti $calculated_checksum = 0xffff - $calculated_checksum
+      #seti $calculated_checksum = $calculated_checksum + 1
+    else
+      echo "ERROR: bad checksum length of " $checksum_length
+      seti $error = $error + 1
+    endif
+
+
+    hex
+    if $checksum = $calculated_checksum
+      sets $checkstring = " calulated=0x" $calculated_checksum " (good)"
+    else
+      sets $checkstring = " calulated=0x" $calculated_checksum " (BAD)"
+    endif
+    echo "block=0x" $pmcblock_number " start=0x" $block_start " size=0x" $block_size " checksum=0x" $checksum $checkstring
+    decimal
+
+    if $last_entry != 0
+      echo "finished processing blocks"
+      break
+    endif
+    seti $pmcblock_number = $pmcblock_number + 1
+  done
+
+  if $error != 0
+    echo "There were errors processing the rom, it will not be written."
+    previousscript
+  endif
+endsubroutine
+
+
+
+
+subroutine write_rom
+  echo "Preparing to erase and write ROM."
+  echo 'Type "YES" to continue: '
+  sets $safety = "YES"
+  userinput $choicestring
+  if $choicestring != $safety
+    echo 'You did not type "YES", aborting'
+    previousscript
+  endif
+
+  echo "ABOUT TO ERASE AND WRITE ROM!"
+  echo "DO NOT STOP THIS PROCESS OR REMOVE POWER FROM THE DRIVE!"
+  gosub enable_vsc
+
+  # vsc to erase the rom
+  echo "erasing rom"
+  buffersize 0x200
+  clearbuffer
+  setbuffer 0
+    24 00 03 00 00 00 00 00 00 00 00 00 00 00 00 00
+  endbuffer
+  setwritepio
+  ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+  echo "rom erase complete"
+
+  # vsc to prepare for rom write
+  echo "prepare to write rom"
+  buffersize 0x200
+  clearbuffer
+  setbuffer 0
+    24 00 02 00 00 00 00 00 00 00 00 00 00 00 00 00
+  endbuffer
+  setwritepio
+  ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+  # send again
+  ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+
+  # vsc to write the rom
+  hex
+  sets $string = "0x" $rom_size
+  decimal
+  echo "rom size = " $rom_size " (" $string ")"
+  echo "writing rom"
+  if $slow_and_stupid != 0
+    seti $buffer_size = 512
+    seti $sectors = 1
+    seti $rom_blocks = $rom_size / 512
+  else
+    seti $buffer_size = 16384
+    seti $sectors = 0x20
+  endif
+  buffersize $buffer_size
+  clearbuffer
+  setwritepio
+  seti $count = 0
+  while $count < $rom_blocks
+    seti $offset = $count * $buffer_size
+    copyscratchpadtobuffer $offset 0 $buffer_size
+    ata28cmd 0xd6 $sectors 0xbf 0x4f 0xc2 0xa0 0xb0
+    # check if command failed
+    gosub status_check
+    seti $count = $count + 1
+    echo $count
+  done
+
+  gosub disable_vsc
+  echo "rom write successful"
+endsubroutine
+
+
+
+subroutine verify_rom
+  echo "Verifying the ROM"
+  gosub enable_vsc
+
+  # vsc to prepare to get drive data table
+  echo "prepare to get data table"
+  buffersize 0x200
+  clearbuffer
+  setbuffer 0
+    0d 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00
+  endbuffer
+  setwritepio
+  ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+  # send again
+  ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+
+  # vsc to get to get drive data table
+  echo "getting data table"
+  buffersize 0x200
+  clearbuffer
+  setreadpio
+  ata28cmd 0xd5 0x01 0xbf 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+
+  #printbuffer 0 256
+  # get the number of 16K rom blocks
+  seti $rom_blocks = buffer 164
+
+  # vsc to prepare for rom read
+  echo "prepare to read rom"
+  buffersize 0x200
+  clearbuffer
+  setbuffer 0
+    24 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00
+  endbuffer
+  setwritepio
+  ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+  # send again
+  ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+
+  # vsc to get the rom
+  # the rom block size is 16K, or 32 sectors (0x20)
+  # 32 sectors * 512 bytes per sector = 16384
+  seti $rom_size = $rom_blocks * 16384
+  hex
+  sets $string = "0x" $rom_size
+  decimal
+  echo "rom size = " $rom_size " (" $string ")"
+  echo "reading rom"
+  buffersize 16384
+  clearbuffer
+  setreadpio
+  seti $count = 0
+  while $count < $rom_blocks
+    ata28cmd 0xd5 0x20 0xbf 0x4f 0xc2 0xa0 0xb0
+    # check if command failed
+    gosub status_check
+
+    # compare the data
+    seti $offset = $count * 16384
+    seti $byte_count = 0
+    while $byte_count < 16384
+      seti $b = buffer $byte_count
+      seti $s = scratchpad $offset
+      if $b != $s
+        seti $verify_check = 1
+        echo $offset " " $b " " $s
+        break
+      endif
+      seti $offset = $offset + 1
+      seti $byte_count = $byte_count + 1
+    done
+    if $verify_check != 0
+      break
+    endif
+
+    seti $count = $count + 1
+    echo $count
+  done
+
+  gosub disable_vsc
+  if $verify_check = 0
+    echo "Data verified!"
+  else
+    echo "WARNING! The data failed verification!"
+    echo "It appears the data write was unsuccessful!"
+  endif
+endsubroutine
+
+
+
+subroutine status_check
+  seti $command_failed = 0
+  gosub check_command_status
+  if $command_failed = 1
+    echo "Command failed!"
+    gosub show_sense_data
+    gosub show_ata_return_status
+    previousscript
+  endif
+endsubroutine
+
+
+
+subroutine status_check_no_exit
+  seti $command_failed = 0
+  gosub check_command_status
+  if $command_failed = 1
+    echo "Command failed!"
+    gosub show_sense_data
+    gosub show_ata_return_status
+  endif
+endsubroutine
+
+
+
+subroutine enable_vsc
+  # enable vendor specific commands
+  echo "enable vsc"
+  buffersize 0
+  setreadpio
+  ata28cmd 0x45 0x0b 0x00 0x44 0x57 0xa0 0x80
+  # check if command failed
+  gosub status_check
+endsubroutine
+
+
+
+subroutine disable_vsc
+  # disable vendor specific commands
+  echo "disable vsc"
+  buffersize 0
+  setreadpio
+  ata28cmd 0x44 0x0b 0x00 0x44 0x57 0xa0 0x80
+  # check if command failed
+  gosub status_check
+endsubroutine
+
+
+

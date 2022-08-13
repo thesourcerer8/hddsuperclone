@@ -1,0 +1,139 @@
+
+  DMDE 4.0 - DM Disk Editor and Data Recovery Software
+  Copyright (C) 2005-2022 Dmitry Sidorov
+
+  http://dmde.com/
+  http://softdm.com/
+
+  END-USER LICENSE AGREEMENT
+
+  This End-User License Agreement ("EULA") is a legal agreement 
+  between you (either a natural person or juridical entity) and 
+  the SOFTWARE author Dmitry Sidorov. By using the SOFTWARE you 
+  agree to all terms of the EULA.
+
+  1. GRANT OF LICENSE
+
+  1.0. EDITIONS
+
+  The scope of granted rights depends on the EDITION (license type) 
+  and the number of license copies provided for you.
+
+  The EDITION, the number of copies, and the number of supported OS 
+  platforms is specified in your license order. For the EDITION, the 
+  number of copies, and the license end date see also the SOFTWARE 
+  "About" box (access is through the menu "Help"). If the number of 
+  copies is not specified expressly then one (1) license is provided. 
+  If the license end date is not specified then there is no time limit. 
+
+  1.1. FREE EDITION
+
+  For FREE EDITION only the paragraphs 1.1, 5, and 6 are applied.
+
+  An unlimited number of FREE EDITION copies may be used for non-
+  commercial purposes including educational purposes of institutions 
+  and evaluation purposes. Only files from the current panel may be 
+  recovered and no more than 4000 files at a time (per command call).
+
+  You may reproduce and distribute FREE EDITION copies under the 
+  following set of conditions only: the SOFTWARE is obtained directly 
+  from the SOFTWARE author or on the SOFTWARE websites; keys and other 
+  components of other EDITIONS are not transmitted; the composition 
+  and components of the SOFTWARE are not changed (except for 
+  reversible transcoding); the SOFTWARE origin, authorship, terms of 
+  this EULA are available to the end user explicitly. FREE EDITION may 
+  be included in free and paid packages.
+
+  1.2.1. EDITIONS "EXPRESS" AND "PERSONAL": PERSONAL USE ONLY
+
+  With the editions "EXPRESS" and "PERSONAL", you may use the SOFTWARE 
+  for personal non-commercial purposes only. The usage in 
+  organizations and any direct or indirect benefit are prohibited.
+
+  1.2.2. STANDARD EDITION: USE FOR OWN NEEDS ONLY
+
+  With STANDARD EDITION, you may use the SOFTWARE as a person or 
+  organization for own needs only. Data recovery services for third 
+  parties are prohibited. In particular, any organization or its 
+  employee or other person providing data recovery services may not 
+  use the SOFTWARE.
+
+  1.3. RIGHTS TO RUN AND KEEP SOFTWARE COPIES
+
+  You may simultaneously run instances of the SOFTWARE within the 
+  number of provided license copies (the number of unfinished processes 
+  must not exceed the number of license copies).
+
+  In total, you may create and keep two (2) SOFTWARE copies more than 
+  the number of license copies. A single copy may include multiple 
+  SOFTWARE versions in the same data storage.
+
+  2. ACTIVATION
+
+  Activation associates the SOFTWARE run to a specific computer 
+  hardware configuration and unlocks full SOFTWARE functionality. 
+  Activation requires sending a hardware identification code to 
+  SOFTWARE activation sites to obtain an unlocking code.
+
+  Activation may be rejected if you run the SOFTWARE on more than 
+  three (3) hardware configurations per year per license copy. The 
+  CPU or motherboard change (including ROM-stored serial number 
+  change), the use of additional virtualization imply the change 
+  of hardware. Some other hardware or software changes may require 
+  additional (allowed) SOFTWARE reactivation.
+
+  If the license expires, you may continue using the SOFTWARE 
+  in the previous environment, however, no support, including 
+  reactivation, is provided.
+
+  3. SOFTWARE UPDATES
+
+  If the existing version support discontinues you may use the 
+  succeeding available version, and the newer agreement replaces the 
+  previous one in those stipulations only which clarify the terms and 
+  explicitly enhance your rights. In other cases updates may be used 
+  entirely under the terms of new supplied license agreements only.
+
+  You may use previous available SOFTWARE versions under the terms 
+  of this EULA too. However running previous versions (considering the 
+  number before the first dot) is regarded as a run on a different 
+  hardware assuming the restrictions of the paragraph 2.
+
+  4. SOFTWARE UPGRADES
+
+  Upgrade is a change of a complete set, the number of license copies, 
+  or the EDITION. To apply the SOFTWARE upgrade, you must first have a 
+  license that is eligible for the upgrade. Upon the upgrade, the new 
+  agreement supersedes the previous one, and you may no longer use keys 
+  and other components provided under the previous license.
+
+  5. DESCRIPTION OF OTHER RIGHTS AND LIMITATIONS
+
+  You may not use the SOFTWARE otherwise than expressly provided by 
+  law, this EULA, and additional agreements with the SOFTWARE author.
+
+  This EULA does not grant you rights to create derivative work, to 
+  reverse engineer, decompile, disassemble, or otherwise study the 
+  SOFTWARE code, nor to sell, rent, lease or sublicense the SOFTWARE.
+
+  Violation of any EULA terms automatically terminates the EULA and 
+  your rights to use the SOFTWARE.
+
+  The SOFTWARE author retains all the rights of the author.
+
+  6. LIMITED WARRANTY
+
+  THE AUTHOR OF THE SOFTWARE EXPRESSLY DISCLAIMS ANY WARRANTY FOR 
+  THE SOFTWARE. THE SOFTWARE AND ANY RELATED DOCUMENTATION IS 
+  PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED 
+  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES 
+  OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR 
+  NON-INFRINGEMENT. THE ENTIRE RISK ARISING OUT OF USE OR 
+  PERFORMANCE OF THE SOFTWARE REMAINS WITH YOU. IN NO EVENT SHALL 
+  THE AUTHOR OF THE SOFTWARE BE LIABLE FOR ANY DAMAGES WHATSOEVER 
+  ARISING OUT OF USE OR INABILITY TO USE THE SOFTWARE (INCLUDING 
+  BUT NOT LIMITED TO ANY DATA LOSS OR DISTORTION, LOSS OF BUSINESS 
+  PROFITS, BUSINESS INTERRUPTION, LOSS OF BUSINESS INFORMATION, 
+  PERSONAL INJURY, LOSS OF PRIVACY OR OTHER PECUNIARY OR OTHER 
+  LOSS WHATSOEVER), EVEN IF THE AUTHOR HAS BEEN ADVISED OF THE 
+  POSSIBILITY OF SUCH DAMAGES.

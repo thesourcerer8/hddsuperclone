@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Blokuj woluminy</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="lockvolumes"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Spis treści</a> &middot; <a href="howto.html">Praca</a> &middot; 
+<a href="menu.html">Menu</a> &middot; <a href="menu_disk.html">Dysk</a>
+<hr />
+<h3>Blokuj woluminy</h3>
+
+<p>
+Blokowanie woluminów jest stosowana w systemie Windows NT + do zapisu RAW, 
+aby zapobiec jednoczesny dostęp OS do woluminów w tym samym czasie.
+</p>
+<p>
+DMDE próbuje zablokować woluminy automatycznie, gdy jest to konieczne. 
+Jednak, blokowanie może się nie powieść, jeśli wolumin jest używany przez system lub inne aplikacje. 
+W tym przypadku, DMDE wniosków o dopuszczenie do ponawiania lub odinstalowania nie są zablokowane woluminów. 
+Zamknij wszystkie aplikacje, które mogą użyć woluminu i ponów próbę.
+</p>
+<table>
+<tr><th>Ponów</th><td>Spróbuj ponownie zablokować woluminy</td></tr>
+<tr><th>Zmuszaj</th><td>Odinstalować wolumin. 
+<span style="color:red;"><b>Uwaga!</b></span>  
+Wszystkie użyte deskryptory woluminu uchwyty zostaną utracone, 
+np. niezapisane dane w otwartych plikach zostaną utracone</td></tr>
+<tr><th>Ignoruj</th><td>Spróbuj piśmie RAW bez blokowania woluminu. 
+<span style="color:red;"><b>Uwaga!</b></span>  
+Systema plików mogą być uszkodzone lub zapis RAW może być odrzucone przez operacyjny system</td></tr>
+<tr><th>Anuluj</th><td>Anulować operację</td></tr>
+</table>
+<p>
+<span style="color:red;"><b>Uwaga!</b></span>  
+Nie należy zablokować lub odinstalować wolumin, z którego DMDE oprogramowanie działa. 
+Nie możesz zablokować lub dezinstalacji woluminu systemu.
+</p>
+<p>
+DMDE odblokowuje woluminy podczas zamykania urządzenia stosowane obecnie.
+</p>
+<p>
+Dodatkowo można ręcznie zarządzać blokowaniem woluminów za pomocą menu 
+<span class="ii">Dysk</span> &middot; <span class="ii">Blokuj woluminy do zapisu</span>.
+</p>
+
+</div></div>
+</body>
+</html>

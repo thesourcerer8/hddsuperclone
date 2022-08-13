@@ -1,0 +1,407 @@
+
+
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'Western Digital ROYL read data table.'
+  echo 'This requires the text variable "file" to be set.'
+
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+
+include good_subroutines
+
+# set a blank string variable to compare with user input
+# make sure not to set this anyplace else
+sets $null = ""
+
+# set this to itself for use with the menu system
+# make sure not to set this anyplace else
+# if it was not previously set it will = 0
+seti $using_menu = $using_menu
+
+# set the file name to be written
+while 1 = 0
+  variablecheck $file
+  if $error_level < 16
+    seti $ask = 1
+  elseif $using_menu = 1
+    seti $ask = 1
+  endif
+  if $ask = 1
+    echo "Enter file name:"
+    userinput $choicestring
+    if $choicestring != $null
+      sets $file = $choicestring
+      break
+    else
+      echo "Choice cannot be blank!"
+    endif
+  else
+    break
+  endif
+done
+
+
+gosub enable_vsc
+
+# vsc to prepare to get drive data table
+echo "prepare to get data table"
+buffersize 0x200
+clearbuffer
+setbuffer 0
+  0d 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00
+endbuffer
+setwritepio
+ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+# check if command failed
+gosub status_check
+
+# vsc to get to get drive data table
+echo "getting data table"
+buffersize 0x200
+clearbuffer
+setreadpio
+ata28cmd 0xd5 0x01 0xbf 0x4f 0xc2 0xa0 0xb0
+# check if command failed
+gosub status_check
+copybuffertoscratchpad 0 0 512
+
+gosub disable_vsc
+
+echo "data table read done"
+
+printscratchpad 0 512
+
+seti $offset = 0
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 2
+seti $bytes = 1
+gosub process_offset
+
+seti $offset = 10
+seti $bytes = 1
+gosub process_offset
+
+seti $offset = 18
+seti $bytes = 1
+gosub process_offset
+
+seti $offset = 26
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 28
+seti $bytes = 1
+gosub process_offset
+
+seti $offset = 29
+seti $bytes = 1
+gosub process_offset
+
+seti $offset = 30
+seti $bytes = 1
+gosub process_offset
+
+seti $offset = 31
+seti $bytes = 1
+gosub process_offset
+
+seti $offset = 32
+seti $bytes = 1
+gosub process_offset
+
+seti $offset = 33
+seti $bytes = 1
+gosub process_offset
+
+seti $offset = 34
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 36
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 38
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 40
+seti $bytes = 4
+gosub process_offset
+
+seti $offset = 44
+seti $bytes = 1
+gosub process_offset
+
+seti $offset = 45
+seti $bytes = 1
+gosub process_offset
+
+seti $offset = 46
+seti $bytes = 1
+gosub process_offset
+
+seti $offset = 47
+seti $bytes = 1
+gosub process_offset
+
+seti $offset = 48
+seti $bytes = 1
+gosub process_offset
+
+seti $offset = 49
+seti $bytes = 1
+gosub process_offset
+
+seti $offset = 50
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 52
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 54
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 56
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 58
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 60
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 62
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 64
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 66
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 68
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 70
+seti $bytes = 1
+gosub process_offset
+
+seti $offset = 71
+seti $bytes = 1
+gosub process_offset
+
+seti $offset = 72
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 74
+seti $bytes = 1
+gosub process_offset
+
+seti $offset = 76
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 78
+seti $bytes = 1
+gosub process_offset
+
+seti $offset = 86
+seti $bytes = 1
+gosub process_offset
+
+seti $offset = 94
+seti $bytes = 4
+gosub process_offset
+
+seti $offset = 118
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 120
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 122
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 124
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 126
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 128
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 130
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 132
+seti $bytes = 4
+gosub process_offset
+
+seti $offset = 136
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 138
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 140
+seti $bytes = 1
+gosub process_offset
+
+seti $offset = 142
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 144
+seti $bytes = 1
+gosub process_offset
+
+seti $offset = 148
+seti $bytes = 4
+gosub process_offset
+
+seti $offset = 156
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 158
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 160
+seti $bytes = 1
+gosub process_offset
+
+seti $offset = 164
+seti $bytes = 1
+gosub process_offset
+
+seti $offset = 165
+seti $bytes = 1
+gosub process_offset
+
+seti $offset = 166
+seti $bytes = 1
+gosub process_offset
+
+seti $offset = 167
+seti $bytes = 1
+gosub process_offset
+
+seti $offset = 168
+seti $bytes = 1
+gosub process_offset
+
+seti $offset = 170
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 172
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 0
+seti $bytes = 2
+gosub process_offset
+
+seti $offset = 0
+seti $bytes = 2
+gosub process_offset
+
+
+
+previousscript
+end
+
+
+
+subroutine process_offset
+  if $bytes = 1
+    seti $value = scratchpad $offset b
+  elseif $bytes = 2
+    seti $value = scratchpad $offset w
+  elseif $bytes = 4
+    seti $value = scratchpad $offset dw
+  elseif $bytes = 8
+    seti $value = scratchpad $offset qw
+  else
+    seti $value = 0
+    echo "BYTE COUNT OUT OF RANGE"
+  endif
+  hex
+  sets $offset_string = "0x" $offset
+  sets $value_string = "0x" $value
+  sets $bytes_string = "0x" $bytes
+  decimal
+  echo "offset=" $offset " (" $offset_string ")  value=" $value " (" $value_string ")(" $bytes " bytes)"
+endsubroutine
+
+
+
+subroutine status_check
+  seti $command_failed = 0
+  gosub check_command_status
+  if $command_failed = 1
+    echo "Command failed!"
+    gosub show_sense_data
+    gosub show_ata_return_status
+    previousscript
+  endif
+endsubroutine
+
+
+
+subroutine enable_vsc
+  # enable vendor specific commands
+  echo "enable vsc"
+  buffersize 0
+  setreadpio
+  ata28cmd 0x45 0x0b 0x00 0x44 0x57 0xa0 0x80
+  # check if command failed
+  gosub status_check
+endsubroutine
+
+
+
+subroutine disable_vsc
+  # disable vendor specific commands
+  echo "disable vsc"
+  buffersize 0
+  setreadpio
+  ata28cmd 0x44 0x0b 0x00 0x44 0x57 0xa0 0x80
+  # check if command failed
+  gosub status_check
+endsubroutine
+
+
+

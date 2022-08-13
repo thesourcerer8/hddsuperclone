@@ -1,0 +1,671 @@
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'usb test 3.'
+  echo 'Example: hddsupertool -f usb_test3'
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+
+# set a blank string variable to compare with user input
+# make sure not to set this anyplace else
+sets $null = ""
+
+
+
+# requesttype
+seti $USB_DIR_OUT = 0
+seti $USB_ENDPOINT_OUT = 0x02
+seti $USB_DIR_IN = 0x80
+seti $USB_ENDPOINT_IN = 0x81
+seti $USB_TYPE_CLASS = 0x21
+
+#seti $USB_ENDPOINT_OUT = 0x0a
+#seti $USB_ENDPOINT_IN = 0x8b
+
+
+# cbw csw signature
+seti $cbwsig1 = 0x55
+seti $cbwsig2 = 0x53
+seti $cbwsig3 = 0x42
+seti $cbwsig4 = 0x43
+
+# cbw csw tag (remember to increment for each command)
+seti $cbwtag = 1
+gosub setcbwtag
+
+# cbw data transfer length (remember to set before each command)
+seti $cbwdatalen = 0
+gosub setcbwdatalen
+
+# cbw transfer direction (remember to set before each command)
+seti $cbwflags = $USB_DIR_IN
+
+# cbw command length (remember to set before each command)
+seti $cbwcommandlen = 0
+
+usbtimeout 6000
+seti $sectorsize = 512
+
+
+
+seti $usbrequesttype = 0
+seti $usbrequest = 0
+seti $usbvalue = 0
+seti $usbindex = 0
+usbbuffersize 8
+
+while 1 = 1
+  echo " "
+  echo "usb mass storage test functions"
+  echo "q) Quit"
+  echo "p) Previous menu"
+  echo "h) Toggle script help
+  echo "1) identify"
+  echo "2) read 10"
+  echo "3) bulk only reset"
+  echo "4) endpoint in reset"
+  echo "5) endpoint out reset"
+  echo "6) reset recovery"
+  echo "7) get endpoint status"
+  echo "8) soft reset 12"
+  echo "9) hard reset 12"
+  echo "10) request sense"
+  echo "11) usb reset"
+  echo "12) inquiry"
+  echo "13) read capacity 10"
+  echo "14) read capacity 16"
+  echo "15) read 6"
+  echo "16) get csw"
+
+  if $printhelp = 1
+    exit 0
+  endif
+
+  echo "Enter your choice:
+  userinput $choicestring
+
+  if $choicestring = q
+    break
+
+  elseif $choicestring = p
+    previousscript
+
+  elseif $choicestring = h
+    if $help = 0
+      seti $help = 1
+      echo "Help is now turned on"
+    else
+      seti $help = 0
+      echo "Help is now turned off"
+    endif
+
+  elseif $choicestring = 1
+    gosub testidentify
+
+  elseif $choicestring = 2
+    gosub read10
+
+  elseif $choicestring = 3
+    gosub bulkreset
+
+  elseif $choicestring = 4
+    gosub endpointinreset
+
+  elseif $choicestring = 5
+    gosub endpointoutreset
+
+  elseif $choicestring = 6
+    gosub resetrecovery
+
+  elseif $choicestring = 7
+    gosub getendpointstatus
+
+  elseif $choicestring = 8
+    gosub softreset12
+
+  elseif $choicestring = 9
+    gosub hardreset12
+
+  elseif $choicestring = 10
+    gosub requestsense
+
+  elseif $choicestring = 11
+    gosub dousbreset
+
+  elseif $choicestring = 12
+    gosub testinquiry
+
+  elseif $choicestring = 13
+    gosub readcapacity10
+
+  elseif $choicestring = 14
+    gosub readcapacity16
+
+  elseif $choicestring = 15
+    gosub read6
+
+  elseif $choicestring = 16
+    gosub getcsw
+
+
+  else
+    echo "bad choice= " $choicestring
+  endif
+
+done
+end
+
+
+
+subroutine setcbwtag
+  seti $cbwtag1 = $cbwtag & 0xff
+  seti $cbwtag2 = $cbwtag > 8
+  seti $cbwtag2 = $cbwtag2 & 0xff
+  seti $cbwtag3 = $cbwtag > 16
+  seti $cbwtag3 = $cbwtag3 & 0xff
+  seti $cbwtag4 = $cbwtag > 24
+  seti $cbwtag4 = $cbwtag4 & 0xff
+endsubroutine
+
+
+subroutine setcbwdatalen
+  seti $cbwdatalen1 = $cbwdatalen & 0xff
+  seti $cbwdatalen2 = $cbwdatalen > 8
+  seti $cbwdatalen2 = $cbwdatalen2 & 0xff
+  seti $cbwdatalen3 = $cbwdatalen > 16
+  seti $cbwdatalen3 = $cbwdatalen3 & 0xff
+  seti $cbwdatalen4 = $cbwdatalen > 24
+  seti $cbwdatalen4 = $cbwdatalen4 & 0xff
+endsubroutine
+
+
+subroutine bulkreset
+  seti $usbrequesttype = 0x21
+  seti $usbrequest = 0xff
+  seti $usbvalue = 0
+  seti $usbindex = 0
+  usbbuffersize 0
+  sendusbcontrolmsg $usbrequesttype $usbrequest $usbvalue $usbindex
+  echo "bulk reset return=" $usb_return_status
+endsubroutine
+
+
+subroutine endpointinreset
+  seti $usbrequesttype = 0x02
+  seti $usbrequest = 0x01
+  seti $usbvalue = 0
+  seti $usbindex = $USB_ENDPOINT_IN
+  usbbuffersize 0
+  sendusbcontrolmsg $usbrequesttype $usbrequest $usbvalue $usbindex
+  echo "reset in return=" $usb_return_status
+endsubroutine
+
+
+subroutine endpointoutreset
+  seti $usbrequesttype = 0x02
+  seti $usbrequest = 0x01
+  seti $usbvalue = 0
+  seti $usbindex = $USB_ENDPOINT_OUT
+  usbbuffersize 0
+  sendusbcontrolmsg $usbrequesttype $usbrequest $usbvalue $usbindex
+  echo "reset out return=" $usb_return_status
+endsubroutine
+
+
+subroutine resetrecovery
+  gosub bulkreset
+  gosub endpointinreset
+  gosub endpointoutreset
+endsubroutine
+
+
+subroutine getendpointstatus
+  seti $usbrequesttype = 0x82
+  seti $usbrequest = 0
+  seti $usbvalue = 0
+  seti $usbindex = 0
+  usbbuffersize 2
+  #sendusbcontrolmsg $usbrequesttype $usbrequest $usbvalue $usbindex
+  #printusbbuffer 0 2
+  #echo "endpoint 0 status return=" $usb_return_status
+  seti $usbindex = $USB_ENDPOINT_IN
+  sendusbcontrolmsg $usbrequesttype $usbrequest $usbvalue $usbindex
+  seti $endpointinstatus = usbbuffer 0 w
+  printusbbuffer 0 2
+  echo "endpoint in status return=" $usb_return_status "
+  seti $usbindex = $USB_ENDPOINT_OUT
+  sendusbcontrolmsg $usbrequesttype $usbrequest $usbvalue $usbindex
+  seti $endpointoutstatus = usbbuffer 0 w
+  printusbbuffer 0 2
+  echo "endpoint out status return=" $usb_return_status
+endsubroutine
+
+
+subroutine autoreset
+  gosub getendpointstatus
+  if $endpointinstatus != 0
+    gosub endpointinreset
+  endif
+  if $endpointoutstatus != 0
+    gosub endpointoutreset
+  endif
+endsubroutine
+
+
+subroutine testidentify
+  usbbuffersize 31
+  setusbbuffer 0
+    0x55 0x53 0x42 0x43 0x2f 1 0 0
+    0 2 0 0 0x80 0 0x0c 0xa1
+    8 0x2e 0 0 0 0 0 0xa0
+    0xec 0 0 0 0 0 0
+  endusbbuffer
+  usbrawwrite
+  echo "write cbw return=" $usb_return_status
+  usbbuffersize 512
+  usbrawread
+  echo "read data return=" $usb_return_status
+  printusbbuffer 0 512
+  usbbuffersize 13
+  usbrawread
+  echo "read csw return=" $usb_return_status
+  printusbbuffer 0 13
+endsubroutine
+
+
+subroutine testinquiry
+  seti $datasize = 0x2c
+  usbbuffersize 31
+  setusbbuffer 0
+    0x55 0x53 0x42 0x43 0x2f 1 0 0
+    $datasize 0 0 0 0x80 0 0x06 0x12
+    0 0 0 $datasize 0 0 0 0
+    0 0 0 0 0 0 0
+  endusbbuffer
+  usbrawwrite
+  echo "write cbw return=" $usb_return_status
+  usbbuffersize $datasize
+  usbrawread
+  echo "read data return=" $usb_return_status
+  printusbbuffer 0 $datasize
+  usbbuffersize 13
+  usbrawread
+  if $usb_return_status != 13
+    gosub endpointinreset
+    usbbuffersize 13
+    usbrawread
+  endif
+  echo "read csw return=" $usb_return_status
+endsubroutine
+
+
+subroutine readcapacity10
+  seti $datasize = 8
+  usbbuffersize 31
+  setusbbuffer 0
+    0x55 0x53 0x42 0x43 8 6 4 2
+    $datasize 0 0 0 0x80 0 0x0a 0x25
+    0 0 0 0 0 0 0 0
+    0 0 0 0 0 0 0
+  endusbbuffer
+  usbrawwrite
+  echo "write cbw return=" $usb_return_status
+  usbbuffersize $datasize
+  usbrawread
+  echo "read data return=" $usb_return_status
+  printusbbuffer 0 $datasize
+  if $datasize != $usb_return_status
+    gosub autoreset
+  endif
+  usbbuffersize 13
+  usbrawread
+  echo "read csw return=" $usb_return_status
+  printusbbuffer 0 13
+endsubroutine
+
+
+subroutine readcapacity16
+  seti $datasize = 32
+  usbbuffersize 31
+  setusbbuffer 0
+    0x55 0x53 0x42 0x43 8 6 4 2
+    $datasize 0 0 0 0x80 0 0x10 0x9e
+    0x10 0 0 0 0 0 0 0
+    0 0 0 0 $datasize 0 0
+  endusbbuffer
+  usbrawwrite
+  echo "write cbw return=" $usb_return_status
+  usbbuffersize $datasize
+  usbrawread
+  echo "read data return=" $usb_return_status
+  printusbbuffer 0 $datasize
+  if $datasize != $usb_return_status
+    gosub autoreset
+  endif
+  usbbuffersize 13
+  usbrawread
+  echo "read csw return=" $usb_return_status
+  printusbbuffer 0 13
+endsubroutine
+
+
+subroutine read10
+  seti $sector = 0
+  seti $count = 1
+  seti $sectorsize = 512
+
+  seti $lba1 = $sector & 0xff
+  seti $lba2 = $sector > 8
+  seti $lba2 = $lba2 & 0xff
+  seti $lba3 = $sector > 16
+  seti $lba3 = $lba3 & 0xff
+  seti $lba4 = $sector > 24
+  seti $lba4 = $lba4 & 0xff
+  seti $lba5 = $sector > 32
+  seti $lba5 = $lba5 & 0xff
+  seti $lba6 = $sector > 40
+  seti $lba6 = $lba6 & 0xff
+  seti $lba7 = $sector > 48
+  seti $lba7 = $lba7 & 0xff
+  seti $lba8 = $sector > 56
+  seti $lba8 = $lba8 & 0xff
+
+  seti $cnt1 = $count & 0xff
+  seti $cnt2 = $count > 8
+  seti $cnt2 = $cnt2 & 0xff
+  seti $cnt3 = $count > 16
+  seti $cnt3 = $cnt3 & 0xff
+  seti $cnt4 = $count > 24
+  seti $cnt4 = $cnt4 & 0xff
+
+  seti $cbwtag = $cbwtag + 1
+  gosub setcbwtag
+  seti $cbwdatalen = $count * $sectorsize
+  gosub setcbwdatalen
+  seti $cbwflags = $USB_DIR_IN
+  seti $cbwcommandlen = 10
+  seti $cbwcommand1 = 0x28
+  seti $cbwcommand2 = 0
+  seti $cbwcommand3 = $lba4
+  seti $cbwcommand4 = $lba3
+  seti $cbwcommand5 = $lba2
+  seti $cbwcommand6 = $lba1
+  seti $cbwcommand7 = 0
+  seti $cbwcommand8 = $cnt2
+  seti $cbwcommand9 = $cnt1
+  seti $cbwcommand10 = 0
+  seti $cbwcommand11 = 0
+  seti $cbwcommand12 = 0
+  seti $cbwcommand13 = 0
+  seti $cbwcommand14 = 0
+  seti $cbwcommand15 = 0
+  seti $cbwcommand16 = 0
+
+  gosub setcbwbuffer
+  gettime
+  echo $date
+  printusbbuffer 0 31
+  usbrawwrite
+  echo "write cbw return=" $usb_return_status
+  usbbuffersize $cbwdatalen
+  gettime
+  echo $date
+  usbrawread
+  echo "read data return=" $usb_return_status
+  if $usb_return_status != $cbwdatalen
+    echo "read error, performing in reset"
+    gosub endpointinreset
+  endif
+  seti $cswsuccess = 0
+  seti $cswgood = 0
+  gosub getcsw
+  if $cswgood = 0
+    echo "failed to get valid csw"
+  elseif $cswsuccess = 0
+    echo "csw reports error"
+  endif
+endsubroutine
+
+
+subroutine read6
+  seti $sector = 0
+  seti $count = 1
+  seti $sectorsize = 512
+
+  seti $lba1 = $sector & 0xff
+  seti $lba2 = $sector > 8
+  seti $lba2 = $lba2 & 0xff
+  seti $lba3 = $sector > 16
+  seti $lba3 = $lba3 & 0xff
+  seti $lba4 = $sector > 24
+  seti $lba4 = $lba4 & 0xff
+  seti $lba5 = $sector > 32
+  seti $lba5 = $lba5 & 0xff
+  seti $lba6 = $sector > 40
+  seti $lba6 = $lba6 & 0xff
+  seti $lba7 = $sector > 48
+  seti $lba7 = $lba7 & 0xff
+  seti $lba8 = $sector > 56
+  seti $lba8 = $lba8 & 0xff
+
+  seti $cnt1 = $count & 0xff
+  seti $cnt2 = $count > 8
+  seti $cnt2 = $cnt2 & 0xff
+  seti $cnt3 = $count > 16
+  seti $cnt3 = $cnt3 & 0xff
+  seti $cnt4 = $count > 24
+  seti $cnt4 = $cnt4 & 0xff
+
+  seti $cbwtag = $cbwtag + 1
+  gosub setcbwtag
+  seti $cbwdatalen = $count * $sectorsize
+  gosub setcbwdatalen
+  seti $cbwflags = $USB_DIR_IN
+  seti $cbwcommandlen = 6
+  seti $cbwcommand1 = 0x08
+  seti $cbwcommand2 = $lba3
+  seti $cbwcommand3 = $lba2
+  seti $cbwcommand4 = $lba1
+  seti $cbwcommand5 = $cnt1
+  seti $cbwcommand6 = 0
+  seti $cbwcommand7 = 0
+  seti $cbwcommand8 = 0
+  seti $cbwcommand9 = 0
+  seti $cbwcommand10 = 0
+  seti $cbwcommand11 = 0
+  seti $cbwcommand12 = 0
+  seti $cbwcommand13 = 0
+  seti $cbwcommand14 = 0
+  seti $cbwcommand15 = 0
+  seti $cbwcommand16 = 0
+
+  gosub setcbwbuffer
+  gettime
+  echo $date
+  printusbbuffer 0 31
+  usbrawwrite
+  echo "write cbw return=" $usb_return_status
+  usbbuffersize $cbwdatalen
+  gettime
+  echo $date
+  usbrawread
+  echo "read data return=" $usb_return_status
+  if $usb_return_status != $cbwdatalen
+    echo "read error, performing in reset"
+    gosub endpointinreset
+  endif
+  seti $cswsuccess = 0
+  seti $cswgood = 0
+  gosub getcsw
+  if $cswgood = 0
+    echo "failed to get valid csw"
+  elseif $cswsuccess = 0
+    echo "csw reports error"
+  endif
+endsubroutine
+
+
+subroutine getcsw
+  usbbuffersize 13
+  usbrawread
+  echo "read csw return=" $usb_return_status
+  if $usb_return_status = 13
+    printusbbuffer 0 13
+    seti $cswsig = usbbuffer 0 dw
+    if $cswsig = 0x53425355
+      echo "good cswsig"
+      seti $cswgood = 1
+      seti $cswstatus = usbbuffer 12 b
+      if $cswstatus = 0
+        echo "csw success"
+        seti $cswsuccess = 1
+      else
+        echo "csw fail"
+      endif
+    else
+      echo "bad cswsig"
+    endif
+  else
+    echo "bad cswsig"
+  endif
+endsubroutine
+
+subroutine softreset12
+  seti $cbwcommand2 = 0x02
+  gosub reset12
+endsubroutine
+
+subroutine hardreset12
+  seti $cbwcommand2 = 0x00
+  gosub reset12
+endsubroutine
+
+subroutine reset12
+  seti $cbwtag = $cbwtag + 1
+  gosub setcbwtag
+  seti $cbwdatalen = 0
+  gosub setcbwdatalen
+  seti $cbwflags = $USB_DIR_IN
+  seti $cbwcommandlen = 12
+  seti $cbwcommand1 = 0xa1
+
+  seti $cbwcommand3 = 0
+  seti $cbwcommand4 = 0
+  seti $cbwcommand5 = 0
+  seti $cbwcommand6 = 0
+  seti $cbwcommand7 = 0
+  seti $cbwcommand8 = 0
+  seti $cbwcommand9 = 0
+  seti $cbwcommand10 = 0
+  seti $cbwcommand11 = 0
+  seti $cbwcommand12 = 0
+  seti $cbwcommand13 = 0
+  seti $cbwcommand14 = 0
+  seti $cbwcommand15 = 0
+  seti $cbwcommand16 = 0
+  gosub setcbwbuffer
+
+  gettime
+  echo $date
+  printusbbuffer 0 31
+  usbrawwrite
+  echo "write cbw return=" $usb_return_status
+
+  seti $cswsuccess = 0
+  seti $cswgood = 0
+  gosub getcsw
+  if $cswgood = 0
+    echo "failed to get valid csw"
+  elseif $cswsuccess = 0
+    echo "csw reports error"
+  endif
+
+  gettime
+  echo $date
+endsubroutine
+
+
+subroutine setcbwbuffer
+  usbbuffersize 31
+  setusbbuffer 0
+    $cbwsig1 $cbwsig2 $cbwsig3 $cbwsig4
+    $cbwtag1 $cbwtag2 $cbwtag3 $cbwtag4
+    $cbwdatalen1 $cbwdatalen2 $cbwdatalen3 $cbwdatalen4
+    $cbwflags
+    0
+    $cbwcommandlen
+    $cbwcommand1 $cbwcommand2 $cbwcommand3 $cbwcommand4
+    $cbwcommand5 $cbwcommand6 $cbwcommand7 $cbwcommand8
+    $cbwcommand9 $cbwcommand10 $cbwcommand11 $cbwcommand12
+    $cbwcommand13 $cbwcommand14 $cbwcommand15 $cbwcommand16
+  endusbbuffer
+endsubroutine
+
+
+subroutine requestsense
+  seti $cbwtag = $cbwtag + 1
+  gosub setcbwtag
+  seti $cbwdatalen = 18
+  gosub setcbwdatalen
+  seti $cbwflags = $USB_DIR_IN
+  seti $cbwcommandlen = 6
+  seti $cbwcommand1 = 0x03
+  seti $cbwcommand2 = 0
+  seti $cbwcommand3 = 0
+  seti $cbwcommand4 = 0
+  seti $cbwcommand5 = 18
+  seti $cbwcommand6 = 0
+
+  gosub setcbwbuffer
+  printusbbuffer 0 31
+  usbrawwrite
+  echo "write cbw return=" $usb_return_status
+  usbbuffersize $cbwdatalen
+  usbrawread
+  echo "read data return=" $usb_return_status
+  if $usb_return_status > 0
+    if $usb_return_status > $cbwdatalen
+      echo "error: return is greater than expected size"
+    else
+      printusbbuffer 0 $cbwdatalen
+      seti $cswsuccess = 0
+      seti $cswgood = 0
+      gosub getcsw
+      if $cswgood = 0
+        echo "failed to get valid csw"
+      elseif $cswsuccess = 0
+        echo "csw reports error"
+        seti $badread = 1
+      endif
+    endif
+  endif
+endsubroutine
+
+
+subroutine dousbreset
+  usbreset
+endsubroutine
+
+
+
+
+
+previousscript
+end
+
+
+
+
+
+
+
+
+
+
+
+

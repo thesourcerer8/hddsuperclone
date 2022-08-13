@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Installation and Run</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Table of Contents</a>
+<hr />
+<h1>Installation and Run</h1>
+<p>
+<a href="sysrequire.html">System Requirements</a>
+&nbsp;
+<a href="activation.html">Activation</a>
+&nbsp;
+<a href="inifile.html">Settings</a>
+&nbsp;
+<a href="locales.html">Languages</a>
+
+&nbsp;
+&nbsp;
+<a href="#windows">Windows</a> 
+&nbsp;
+<a href="#linux">Linux</a> 
+&nbsp;
+<a href="#macos">MacOS</a> 
+&nbsp;
+<a href="#dos">DOS</a> 
+&nbsp;
+
+</p>
+<p>
+<span style="color:#ff0000; font-weight: bold;">Attention!</span>
+If a device has physical problems 
+(input-output errors, slow performance, etc.) 
+<strong>it is recommended to address to specialists</strong> - 
+see <a href="badrecovery.html">Working with Failing Devices</a>.
+If the device is not accessible or has incorrect size see also
+<a href="sysrequire.html">System Requirements</a>.
+</p>
+<p>
+<span style="color:#ff0000; font-weight: bold;">Attention!</span>
+Do not write anything to the disk containing lost data.
+<strong>Recover data to a different disk,
+as well load operating system, run the software from a different disk, 
+</strong> otherwise the data may be erased irrevocably.
+</p>
+<p>
+It is highly recommended to work in a system which has minimal disk access 
+(especially in write mode).
+You can create <a href="#dos">a DOS bootable disk</a> 
+(to <a href="copysectors.html">clone disks</a> available in IDE mode),
+or use bootable LiveCD/USB disks based on <b>Linux</b>
+or special environment like WinFE based on <b>Windows</b>, where disk access is minimized.
+</p>
+<p>
+For the most compliance with such environment it is recommended to turn off the "fast boot" option 
+and turn on the "USB legacy" mode in your BIOS/UEFI.
+To boot from the Live disk you may also need to turn off Secure Boot and UEFI mode (switch to Legacy BIOS mode).
+</p>
+
+<p>
+<b>To install</b>/reinstall and run the program just extract the entire software package into a single directory
+(it may be on a removable media) and run <span class="tt">dmde.exe</span> or <span class="tt">dmde</span>. 
+You need Administrator&nbsp;/ Superuser priveleges to access devices in Windows NT+, Linux, macOS.
+To run the software without Administrator rights add the parameter 
+<span class="tt">notadmin=1</span> to the file <span class="tt">dmde.ini</span>.
+Updates are performed in the same way.
+</p>
+<p>
+<b>To uninstall</b> the software just remove the extracted files and directories.
+</p>
+
+<h2>Operating Systems</h2>
+<h3 id="windows"><span id="win7"></span>Windows Vista/7/higher</h3>
+<p>
+In case of SmartScreen request click "More Info" and confirm the software launch.<br />
+To run the program as Administrator use right-click menu on the application icon
+or confirm UAC elevation request.<br />
+<span style="color:#ff0000; font-weight: bold;">Attention!</span>
+To work with drives larger than 2TB 
+the most recent versions of controller drivers must be installed.
+</p>
+
+<h3 id="winxp">Windows 2K/XP</h3>
+<p>
+To use the program you should login as Administrator. <br />
+<span style="color:#ff0000; font-weight: bold;">Attention!</span>
+To work with 128GB and larger drives you need Windows 2K SP4 with LBA48 support manually switched on 
+in the registers or Windows XP SP2 (LBA48 is switched on by default).
+</p>
+
+<h3 id="win98">Windows 98/ME</h3>
+<p>
+<span style="color:#ff0000; font-weight: bold;">Attention!</span>
+Without special patches Windows 9x/ME handles 128GB and larger drives incorrectly.<br />
+To avoid the problem reload computer in MS-DOS mode and use DMDE for DOS  
+to access such drives via BIOS or ATA-interface or load another OS.
+</p>
+
+<h3 id="linux">Linux</h3>
+<p>
+At first go to the Root Terminal or run Terminal emulator (Konsole, Gnome-terminal, etc.). 
+Go to the software directory and type <span class="tt">./dmde</span>. 
+You should run the software as a superuser to access devices. 
+Please, refer to your operating system documentation for this information 
+(e.g., run <span class="tt">sudo ./dmde</span> in Ubuntu, go to root with <span class="tt">su</span> command in Debian at first, etc.). 
+You may also need to set execution permission for the file <span class="tt">dmde</span> (type <span class="tt">chmod 755 ./dmde</span>).
+To run 32-bit software versions on 64-bit operating systems 
+you may have to install additional 32-bit shared libraries 
+(e.g., run <span class="tt">sudo apt-get install libc6-i386</span> in Ubuntu to install <span class="tt">libc6-i386</span> package).
+</p>
+
+<h3 id="macos">MacOS</h3>
+<p>
+Since the modern macOS versions try preventing direct disk access
+and are less suitable to work with failing drives it is recommended to use different OS's.
+If there is no different PC you can try to create and load Ubuntu LiveUSB by the 
+<a href="https://ubuntu.com/tutorials/tutorial-create-a-usb-stick-on-macos" target="_blank">instruction</a>.
+</p>
+<p>
+In macOS you can try to unmount the disk using the system's Disk Utility to gain access.
+
+If macOS prevents disk access you may need to turn off the partition tables in a different OS
+(use commands <span class="ii">MBR Off&nbsp;/ GPT Off</span> in DMDE 
+in the <a href="partitions.html">Partitions</a> window).
+</p>
+<p>
+If macOS blocks the application running you can use Control-Click or go to System Preferences, 
+choose Security&nbsp;& Privacy and click "Open anyway" for the blocked application:
+<a href="https://support.apple.com/en-us/HT202491" target="_blank">Safely open apps on your Mac</a>
+</p>
+<p>
+It is also possible to run the software as a root user from terminal,
+refer to the Linux instructions above.
+</p>
+<p>
+MacOS specially marks applications got from the Internet and runs them from a randomized directory.
+In such case the software cannot run portable 
+and uses the user default application support directory for keeping settings and keys.
+To make application portable run the command in the terminal<br /> 
+<span class="tt">xattr -r -d com.apple.quarantine /&lt;path to the app&gt;/dmde.app</span><br /> 
+or simply move the directory containing the app and <span class="tt">dmde.ini</span> file
+to a media not supporting extended attributes (i.g. to a FAT formatted USB flash drive).
+</p>
+
+<h3 id="dos">DOS</h3>
+<p>
+If there are problems with video ouput 
+you may need to change the value of the parameter <span class="tt">biosoutput=0</span>
+in the file <span class="tt">dmde.ini</span> into:
+<span class="tt">biosoutput=1</span>
+</p>
+<p>
+If an error occurs when starting the software, there may be a problem with an extended memory manager. 
+Try using the old memory manager by running the batch file <span class="tt">dmde_dpo.bat</span>
+however less memory will be available.
+</p>
+<p>
+You may use DMDE on a regular partition supported by DOS or use DOS bootable disk.
+This may be helpful when there are problems using specific disk.
+SATA disks must be switched to IDE-compatible mode in BIOS settings for direct ATA-access.
+SCSI, USB, and other devices may be accessed via special DOS drivers or 
+using BIOS functions if they are supported.
+</p>
+<p>
+Some files for creating DOS boot disks are available on the <a href="about.html">software site</a>
+in the section <a class="extern" href="http://dmde.com/moredownload.html" target="_blank">Additional Downloads</a>.
+</p>
+<h4>Bootable Floppy</h4>
+<p>
+To create bootable floppy download and unpack <b>FDD image</b>.
+You may use the function <a href="copysectors.html">Copy Sectors</a> 
+to write the image to a floppy disk. Use the image as a source file and fdd as a destination device.
+ISO images for bootable CD may also be created on the base of boot FDD images 
+with the help of different software.
+</p>
+<h4>DOS Bootable Disk</h4>
+<p>
+Loading from the specific disk must be supported by BIOS (see BIOS boot menu).
+To create bootable USB/HDD you need a freshly formatted primary FAT16/FAT32 partition on the disk.
+Non-standard disks/partitions are not supported (non-MBR, 3TB+, etc.).
+</p>
+<p>
+<b>0.</b>&nbsp;For the most compatibility optionally first <a href="fillsectors.html">zero out the disk</a>,
+then initialize disk as MBR and create and format a primary FAT partition using standard OS means
+(Windows Disk management).
+<br />
+<b>1.</b>&nbsp;Download the 
+<a class="extern" href="http://dmde.com/moredownload.html" target="_blank">FreeDOS Package</a>
+(the site section "Additional downloads")
+and extract all package files directly to the root directory of the FAT partition.
+<br />
+<b>2.</b>&nbsp;Open the disk as <a href="devices.html">physical device</a> in DMDE
+and use the command <span class="ii">Write Boot Sectors...</span> in the 
+<a href="partitions.html">Partitions</a> menu to make the device bootable
+(specify the root directory on the disk as a source of boot sectors upon the subsequent request).
+Apply changes and close DMDE.
+<br />
+<b>3.</b>&nbsp;<a href="http://dmde.com/download.html" target="_blank">Download DMDE for DOS</a> 
+and unpack into the FAT partition.
+<br />
+<b>4.</b>&nbsp;Use BIOS boot menu&nbsp;/ BIOS setup to boot from the specified disk. 
+On modern UEFI systems you may need to enable BIOS legacy mode, turn off secure boot option,
+switch USB and other devices to legacy modes.
+<br />
+</p>
+</div></div>
+</body>
+</html>

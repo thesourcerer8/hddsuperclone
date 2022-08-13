@@ -1,0 +1,101 @@
+html{
+	height:100%;
+	width:100%;
+}
+body{ 
+	height:100%;
+	margin:0;
+	padding:0;
+	background-color:#AAA;
+	text-align:center;
+	color: #000830;
+	font-family:Verdana,"Microsoft Sans Serif",Tahoma,Arial,Sans-Serif,Serif;
+	font-size:14px;
+	line-height:1.5;		
+}
+#bklayer{
+	min-height:100%;
+	background-color:#FFF;
+	max-width:950px;
+	margin:0 auto;
+	padding:0;
+	box-shadow: 0 0 15px 5px #888;
+}
+#wrapper{
+	min-height:100%;
+	background-color:#FFF;
+	max-width:680px;
+	margin:0 auto;
+	padding:15px 30px 50px 10px;
+	text-align:justify;
+}
+.tt{
+	font-family:monospace;
+	font-weight:bold;
+	white-space:nowrap;
+	color:#006000;
+}
+.ii{
+	font-style:italic;
+	font-weight:bold;
+}
+a,a:link,a.inl,a.inl:link,a.inl:visited{
+	text-decoration:none;
+	border-bottom:0.06em dotted #008;
+	color:#008;
+}
+a.iinl,a.iinl:link,a.iinl:visited{
+	font-style:italic;
+	text-decoration:none;
+	border:none;
+	color:#008;
+}
+a.hdrinl,a.hdrinl:link,a.hdrinl:visited{
+	text-decoration:none;
+	border:none;
+	color:#008;
+}
+a.extern:link,a.extern:visited{
+	text-decoration:none;
+	border-bottom:1px solid #6080E0;
+	color:#0030C0;
+	font-weight:normal;
+}
+a.extern:visited{color:#848;border-color:#A8A}
+a:hover,a:visited:hover,a.extern:hover{
+	color:#ED8039;
+	border-color:#ED8039;
+}
+a:active,a:focus{text-decoration:none;border:0;}
+h1{margin:0.7em 0;font-size:2.0em}
+h2{margin:0.6em 0;font-size:1.8em}
+h3{margin:0.7em 0;font-size:1.4em}
+h4,h5{margin:0.7em 0;font-size:1.2em}
+p{margin:0.7em 0}
+ul{
+	list-style-type: disc;
+	list-style-position: outside;
+	margin-left:0;
+	padding-top:0;
+	padding-bottom:0;
+	padding-left:20px;
+}
+li{line-height:1.7}
+th{text-align:left;vertical-align:top}
+.notes {font-size:0.9em}
+.spec{
+	font-size:0.86em;
+	background:#E8E8E8;
+	padding:0.5em 1em;
+	margin:0.5em 0;
+}
+div.l h4 {padding:0; margin:8px 5px 5px 0;}
+div.l p { 
+	margin-left: 1em;
+ 	padding:0;
+}
+div.l p:first-child {text-indent:0}
+img{border:0}
+a.img,a.img:link,a.img:visited,a.img:active{border:0}
+.img{vertical-align:middle}
+table.pics img {position:absolute}

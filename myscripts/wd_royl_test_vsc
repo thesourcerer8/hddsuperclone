@@ -1,0 +1,437 @@
+# WD ROYL script to test vsc commands
+
+echo ""
+
+#gosub idle_drive
+
+gosub identify_device
+
+gosub read_module_sector
+
+seti $cylinder_start = 20
+seti $sector_start = 1
+seti $head = 0
+#gosub read_chs
+
+seti $cylinder_start = -20
+seti $sector_start = 1
+seti $head = 0
+#gosub read_chs
+
+gosub read_rom_section
+
+gosub read_ram_chunk
+
+end
+
+
+
+subroutine identify_device
+  echo "performing identify device command"
+  # get model and serial using identify device command
+  buffersize 512
+  setreadpio
+  ata28cmd 0 0 0 0 0 0xa0 0xec
+  # check if command failed
+  gosub status_check
+  # extract model and serial and trim leading and trailing spaces
+  sets $model = "null"
+  sets $serial = "null"
+  wordflipbuffer 0 512
+  seti $count = 0
+  seti $start_offset = 54
+  while $count < 40
+    seti $byte = buffer $start_offset
+    if $byte > 0x20
+      break
+    endif
+    seti $start_offset = $start_offset + 1
+    seti $count = $count + 1
+  done
+  seti $count = 0
+  seti $end_offset = 93
+  while $count < 40
+    seti $byte = buffer $end_offset
+    if $byte > 0x20
+      break
+    endif
+    seti $end_offset = $end_offset - 1
+    seti $count = $count + 1
+  done
+  seti $end_offset = $end_offset + 1
+  seti $size = $end_offset - $start_offset
+  if $size > 0
+    sets $model = buffer $start_offset $size
+  endif
+  # find out if it is a WD drive
+  sets $wdcheck = buffer $start_offset 3
+  sets $compare = "WDC"
+  if $wdcheck != $compare
+    echo "Model: " $model
+    echo "Drive is not WD"
+  endif
+
+  seti $count = 0
+  seti $start_offset = 20
+  while $count < 20
+    seti $byte = buffer $start_offset
+    if $byte > 0x20
+      break
+    endif
+    seti $start_offset = $start_offset + 1
+    seti $count = $count + 1
+  done
+  seti $count = 0
+  seti $end_offset = 39
+  while $count < 20
+    seti $byte = buffer $end_offset
+    if $byte > 0x20
+      break
+    endif
+    seti $end_offset = $end_offset - 1
+    seti $count = $count + 1
+  done
+  seti $end_offset = $end_offset + 1
+  seti $size = $end_offset - $start_offset
+  if $size > 0
+    sets $serial = buffer $start_offset $size
+  endif
+
+  echo "Model: " $model
+  echo "Serial: " $serial
+
+  clearbuffer
+endsubroutine
+
+
+
+subroutine read_module_sector
+  gosub enable_vsc
+  # vsc to prepare (command to set for module 01 access)
+  echo "Preparing for module read"
+  buffersize 0x200
+  clearbuffer
+  setbuffer 0
+    08 00 01 00 01
+  endbuffer
+  setwritepio
+  ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+
+  # vsc to get a sector of the module
+  echo "Reading the first sector of the module"
+  setreadpio
+  clearbuffer
+  ata28cmd 0xd5 0x01 0xbf 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+  gosub disable_vsc
+endsubroutine
+
+
+
+subroutine read_rom_section
+  gosub enable_vsc
+  # vsc to prepare for rom read
+  echo "prepare for rom read"
+  buffersize 0x200
+  clearbuffer
+  setbuffer 0
+    24 00 01 00 00 00 00 00 00 00 03 00 00 00 00 00
+  endbuffer
+  setwritepio
+  ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+  gosub status_check
+  # vsc to get a section of the rom
+  # the buffer size is based on the second byte of the command
+  # 0x80 sectors * 0x200 bytes per sector = 0x10000
+  echo "reading rom section"
+  buffersize 0x10000
+  clearbuffer
+  setreadpio
+  ata28cmd 0xd5 0x80 0xbf 0x4f 0xc2 0xa0 0xb0
+  gosub status_check
+  gosub disable_vsc
+endsubroutine
+
+
+
+subroutine read_ram_chunk
+  gosub enable_vsc
+  # vsc to prepare for ram read
+  echo "prepare to read ram"
+  seti $position = 0x8000000
+  seti $read_size = 0x200
+  buffersize 0x200
+  clearbuffer
+  seti $offsetl = $position & 0xff
+  seti $offsetm1 = $position > 8
+  seti $offsetm1 = $offsetm1 & 0xff
+  seti $offsetm2 = $position > 16
+  seti $offsetm2 = $offsetm2 & 0xff
+  seti $offseth = $position > 24
+  seti $offseth = $offseth & 0xff
+  seti $sizel = $read_size & 0xff
+  seti $sizem1 = $read_size > 8
+  seti $sizem1 = $sizem1 & 0xff
+  seti $sizem2 = $read_size > 16
+  seti $sizem2 = $sizem2 & 0xff
+  seti $sizeh = $read_size > 24
+  seti $sizeh = $sizeh & 0xff
+  setbuffer 0
+    13 00 01 00 $offsetl $offsetm1 $offsetm2 $offseth $sizel $sizem1 $sizem2 $sizeh
+  endbuffer
+  setwritepio
+  ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+  # vsc to get the ram
+  seti $sectors = $read_size / 512
+  buffersize $read_size
+  clearbuffer
+  setreadpio
+  echo "reading ram"
+  ata28cmd 0xd5 $sectors 0xbf 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+  gosub disable_vsc
+endsubroutine
+
+
+
+subroutine read_chs
+  gosub enable_vsc
+
+  seti $cylinder = $cylinder_start
+  seti $write_offset = 0
+  seti $read_size = 0x200
+  echo "cylinder=" $cylinder "  sector=" $sector_start
+  # vsc to prepare for chs read
+  echo "prepare to read chs"
+  buffersize 0x200
+  clearbuffer
+  seti $offsetl = $cylinder & 0xff
+  seti $offsetm1 = $cylinder > 8
+  seti $offsetm1 = $offsetm1 & 0xff
+  seti $offsetm2 = $cylinder > 16
+  seti $offsetm2 = $offsetm2 & 0xff
+  seti $offseth = $cylinder > 24
+  seti $offseth = $offseth & 0xff
+
+  seti $sectorl = $sector_start & 0xff
+  seti $sectorh = $sector_start > 8
+  seti $sectorh = $sectorh & 0xff
+
+  seti $sizel = $read_size & 0xff
+  seti $sizem1 = $read_size > 8
+  seti $sizem1 = $sizem1 & 0xff
+  seti $sizem2 = $read_size > 16
+  seti $sizem2 = $sizem2 & 0xff
+  seti $sizeh = $read_size > 24
+  seti $sizeh = $sizeh & 0xff
+  setbuffer 0
+    0c 00  01 00  $offsetl $offsetm1  $offsetm2 $offseth  $head 00  $sectorl $sectorh  $sizel $sizem1 $sizem2 $sizeh
+  endbuffer
+  setwritepio
+  ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+  # vsc to read chs
+  seti $sectors = $read_size / 512
+  buffersize $read_size
+  clearbuffer
+  setreadpio
+  echo "reading chs"
+  ata28cmd 0xd5 $sectors 0xbf 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+  gosub disable_vsc
+endsubroutine
+
+
+
+subroutine start_servo
+  gosub enable_vsc
+
+  # vsc to start servo
+  echo "start servo"
+  buffersize 0x200
+  clearbuffer
+  setbuffer 0
+    17 00  01 00
+  endbuffer
+  setwritepio
+  ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+  usleep 10000000
+  # vsc to init servo
+  echo "init servo"
+  buffersize 0x200
+  clearbuffer
+  setbuffer 0
+    17 00  03 00
+  endbuffer
+  setwritepio
+  ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+
+  gosub disable_vsc
+endsubroutine
+
+
+
+subroutine stop_servo
+  gosub enable_vsc
+
+  # vsc to park servo
+  echo "park servo"
+  buffersize 0x200
+  clearbuffer
+  setbuffer 0
+    17 00  05 00
+  endbuffer
+  setwritepio
+  ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+  usleep 1000000
+  # vsc to stop servo
+  echo "stop servo"
+  buffersize 0x200
+  clearbuffer
+  setbuffer 0
+    17 00  02 00
+  endbuffer
+  setwritepio
+  ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+
+  gosub disable_vsc
+endsubroutine
+
+
+
+subroutine idle_drive
+  echo "attempting to idle drive"
+  seti $idle_tries = 0
+  while $idle_tries < 100
+    seti $idle_tries = $idle_tries + 1
+    echo "idle attempt " $idle_tries
+    gettime
+    seti $startreadtime = $time
+    gosub idle
+    gosub idle
+    gettime
+    seti $endreadtime = $time
+    seti $elapsedtime = $endreadtime - $startreadtime
+    if $elapsedtime < 100000
+      break
+    endif
+  done
+endsubroutine
+
+
+
+subroutine idle
+  buffersize 0
+  setreadpio
+  # set the count to 0
+  seti $count = 0
+  # set the LBA for the unload command
+  seti $LBAlow = 0x4c
+  seti $LBAmid = 0x4e
+  seti $LBAhigh = 0x55
+  # set features to unload
+  seti $features = 0x44
+  # set device bits 7(compatibility) 5(compatibility)
+  seti $device = 0xa0
+  # set the command for idle immediate
+  seti $command = 0xe1
+  # perform the command
+  ata28cmd $features $count $LBAlow $LBAmid $LBAhigh $device $command
+  gosub status_check
+endsubroutine
+
+
+
+subroutine status_check
+  seti $command_failed = 0
+  gosub check_command_status
+  if $command_failed = 1
+    echo "Command failed!"
+    gosub show_sense_data
+    gosub show_passthrough_cmd_status
+    gosub show_ata_return_status
+  endif
+endsubroutine
+
+subroutine show_sense_data
+  if $direct_mode = 0
+    hex
+    echo "sense_key=0x" $io_sense_key " asc=0x" $io_asc " ascq=0x" $io_ascq
+    decimal
+  endif
+endsubroutine
+
+subroutine show_passthrough_cmd_status
+  if $direct_mode = 0
+    echo "status=" $io_status " masked_status=" $io_masked_status " msg_status=" $io_msg_status
+    echo "sb_len_wr=" $io_sb_len_wr " host_status=" $io_host_status " driver_status=" $io_driver_status
+    echo "resid=" $io_resid " duration=" $io_duration " info=" $io_info
+  endif
+endsubroutine
+
+subroutine show_ata_return_status
+  hex
+  echo "error=0x" $ata_return_error " count=0x" $ata_return_count " lba=0x" $ata_return_lba " device=0x" $ata_return_device " status=0x" $ata_return_status " altstatus=0x" $ata_alternate_status
+  echo "command_status= 0x" $command_status
+  echo "data_transferred= 0x" $data_transferred
+  decimal
+endsubroutine
+
+subroutine check_command_status
+  seti $error_bit = $ata_return_status & 1
+  seti $command_failed = 0
+  if $error_bit != 0
+    seti $command_failed = 1
+  elseif $command_status != 0
+    seti $command_failed = 1
+  elseif $io_sense_key > 1
+    seti $command_failed = 1
+    # usb attached ata devices will normally give this code, so don't count it as failed
+    if $io_sense_key = 4
+      if $io_asc = 0
+        if $io_ascq = 0
+          seti $command_failed = 0
+        endif
+      endif
+    endif
+  endif
+endsubroutine
+
+subroutine enable_vsc
+  # enable vendor specific commands
+  echo "enable vsc"
+  buffersize 0
+  setreadpio
+  ata28cmd 0x45 0x0b 0x00 0x44 0x57 0xa0 0x80
+  # check if command failed
+  gosub status_check
+endsubroutine
+
+subroutine disable_vsc
+  # disable vendor specific commands
+  echo "disable vsc"
+  buffersize 0
+  setreadpio
+  ata28cmd 0x44 0x0b 0x00 0x44 0x57 0xa0 0x80
+  # check if command failed
+  gosub status_check
+endsubroutine
+
+
+

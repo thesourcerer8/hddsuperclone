@@ -1,0 +1,50 @@
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'execute device diagnostic.'
+  echo 'Example: hddsupertool -t /dev/sda -f ata_execute_diagnostic'
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+
+include good_subroutines
+
+
+buffersize 0
+setreadpio
+
+# set the count and LBA to to 0
+seti $count = 0
+seti $LBAlow = 0
+seti $LBAmid = 0
+seti $LBAhigh = 0
+
+# set features to 0
+seti $features = 0
+# set device bits 7(compatibility) 5(compatibility)
+seti $device = 0xa0
+# set the command for execute device diagnostic
+seti $command = 0x90
+
+gettime
+echo $date
+# perform the command
+ata28cmd $features $count $LBAlow $LBAmid $LBAhigh $device $command
+gettime
+echo $date
+
+gosub show_sense_data
+gosub show_ata_return_status
+
+echo "Command completed"
+
+previousscript
+end
+
+
+
+

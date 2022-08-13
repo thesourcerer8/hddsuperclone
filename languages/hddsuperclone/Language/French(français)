@@ -1,0 +1,938 @@
+_HDDSuperClone_2.3.1_20220115_
+|__|0000|__|
+Déposer
+|__|0001|__|
+Quitter
+|__|0002|__|
+Projet ouvert
+|__|0003|__|
+Charger le fichier de projet (progression)
+|__|0004|__|
+Erreur!
+|__|0005|__|
+Avertissement
+|__|0006|__|
+Erreur lors du traitement du fichier journal !
+Le fichier journal n'a pas été chargé.
+
+|__|0007|__|
+Le fichier journal contient des erreurs !
+Le fichier journal devra être réparé avant de pouvoir être utilisé.
+Veuillez consulter les messages de la console pour plus d'informations.
+
+|__|0008|__|
+Langue
+|__|0009|__|
+Langue d'exportation
+|__|0010|__|
+Langue d'importation
+|__|0011|__|
+Impossible d'ouvrir le fichier en écriture
+|__|0012|__|
+Impossible d'ouvrir le fichier en lecture
+|__|0013|__|
+Erreur lors du traitement du fichier de langue importé
+|__|0014|__|
+Langue changée avec succès !
+|__|0015|__|
+Succès!
+|__|0016|__|
+Nouveau projet
+|__|0017|__|
+Nouveau fichier de projet (progression)
+|__|0018|__|
+Choix
+|__|0019|__|
+Choisissez le lecteur source
+|__|0020|__|
+Choisissez la destination
+|__|0021|__|
+Erreur lors de la sélection de la source
+|__|0022|__|
+Erreur lors de la sélection de la destination
+|__|0023|__|
+Choisissez l'image de destination
+|__|0024|__|
+AVERTISSEMENT : ce lecteur est également disponible pour le système d'exploitation !
+C'est trop dangereux et cela entraînerait probablement un plantage de l'ordinateur !
+Assurez-vous de suivre les instructions sur la façon de masquer le lecteur !
+
+|__|0025|__|
+ATTENTION : L'appareil sélectionné est un esclave sur le contrôleur !
+Cela ne fonctionne pas toujours comme prévu !
+Cela pourrait être très dangereux et entraîner une perte de données (ou pire) !
+Il est recommandé que l'appareil soit maître sur le contrôleur !
+
+|__|0026|__|
+AVERTISSEMENT : Il existe peut-être un autre lecteur sur le même contrôleur !
+Vous ne devez JAMAIS travailler avec un lecteur lorsqu'un autre lecteur se trouve sur le même contrôleur !
+Cela pourrait être très dangereux et entraîner une perte de données (ou pire) !
+
+|__|0027|__|
+Vous devez d'abord choisir un projet.
+|__|0028|__|
+Conduire
+|__|0029|__|
+Fichier d'image
+|__|0030|__|
+NULL (Pas de destination)
+|__|0031|__|
+Choisissez le fichier image
+|__|0032|__|
+Relier
+|__|0033|__|
+Déconnecter
+|__|0034|__|
+Démarrer
+|__|0035|__|
+Arrêter
+|__|0036|__|
+Vous devez d'abord vous déconnecter.
+|__|0037|__|
+Vous devez d'abord vous connecter.
+|__|0038|__|
+Vous devez choisir un projet, une source et une destination avant de vous connecter.
+|__|0039|__|
+Impossible de connecter les appareils
+|__|0040|__|
+Appareils maintenant connectés
+|__|0041|__|
+Appareils maintenant déconnectés
+|__|0042|__|
+La source et la destination ne peuvent pas être le même appareil
+|__|0043|__|
+Aucun projet choisi
+
+|__|0044|__|
+Aucune source choisie
+
+|__|0045|__|
+Aucune destination choisie
+
+|__|0046|__|
+Disques
+|__|0047|__|
+Mode
+|__|0048|__|
+Détection automatique de passage
+|__|0049|__|
+SCSI de passage
+|__|0050|__|
+Passthrough ATA
+|__|0051|__|
+EDI direct
+|__|0052|__|
+AHCI directe
+|__|0053|__|
+Réglages
+|__|0054|__|
+Réglages avancés
+|__|0055|__|
+Le mode direct dans la version gratuite est uniquement PIO !
+
+|__|0056|__|
+La récupération est également limitée à 10 % !
+
+|__|0057|__|
+Paramètres de clonage
+|__|0058|__|
+La phase 1
+|__|0059|__|
+Phase 2
+|__|0060|__|
+Phase 3
+|__|0061|__|
+Phase 4
+|__|0062|__|
+Diviser
+|__|0063|__|
+Diviser 2
+|__|0064|__|
+Trim (supprime la division)
+|__|0065|__|
+Rayer
+|__|0066|__|
+Marquer la mauvaise tête
+|__|0067|__|
+Lire Bad Head
+|__|0068|__|
+Sens inverse
+|__|0069|__|
+Sauter rapidement
+|__|0070|__|
+Contrôle des phases
+|__|0071|__|
+Nouvelles tentatives
+|__|0072|__|
+Taille du cluster (LBA)
+|__|0073|__|
+Décalage d'entrée (LBA)
+|__|0074|__|
+Taille (LBA)
+|__|0075|__|
+Taille de bloc (LBA)
+|__|0076|__|
+Taille de saut (LBA) phase-1-2-3
+|__|0077|__|
+Taille maximale de saut (LBA) phase-1-2
+|__|0078|__|
+Seuil de saut (ms) phase-1-2
+|__|0079|__|
+Saut de taux (kB/s) phase-3
+|__|0080|__|
+Sortie sur Lente (kB/s) phase-1-2
+|__|0081|__|
+Sortie sur Slow Time (sec) phase-1-2
+|__|0082|__|
+Erreur lors de l'écriture du fichier journal de progression
+|__|0083|__|
+Enregistrer le fichier de projet sous
+|__|0084|__|
+Sauvegarder le projet
+|__|0085|__|
+Enregistrer le projet sous
+|__|0086|__|
+Outils
+|__|0087|__|
+Réinitialiser l'état actuel
+|__|0088|__|
+d'accord
+|__|0089|__|
+Annuler
+|__|0090|__|
+Cela réinitialisera l'état actuel du journal à Phase1,
+et la position actuelle à 0,
+et réinitialiser toutes les données de saut
+|__|0091|__|
+Réinitialiser le journal
+|__|0092|__|
+Cela réinitialisera la position à 0,
+le statut actuel à non essayé,
+et changera tous les blocs inachevés
+dans le journal à un statut de non-essayé.
+Cela réinitialisera également toutes les données ignorées.
+|__|0093|__|
+Journal de réparation
+|__|0094|__|
+Cela réparera le journal de progression actuel en mémoire.
+Il est recommandé de faire une copie de sauvegarde du journal avant de réparer.
+|__|0095|__|
+Remplir zéro
+|__|0096|__|
+Marque de remplissage
+|__|0097|__|
+Charger le fichier de domaine
+|__|0098|__|
+Vous devez démarrer un nouveau projet avant d'importer un fichier journal ddrescue
+|__|0099|__|
+Importer le fichier journal ddrescue (carte)
+|__|0100|__|
+Exporter le fichier journal ddrescue (carte)
+|__|0101|__|
+Erreur lors de l'exportation du fichier journal ddrescue (carte)
+|__|0102|__|
+Projet
+|__|0103|__|
+La source
+|__|0104|__|
+Destination (Toutes les données seront écrasées !)
+|__|0105|__|
+Domaine
+|__|0106|__|
+LBA total
+|__|0107|__|
+LBA à lire
+|__|0108|__|
+Taille du domaine
+|__|0109|__|
+Durée
+|__|0110|__|
+Temps restant
+|__|0111|__|
+Position actuelle
+|__|0112|__|
+Statut actuel
+|__|0113|__|
+Taux actuel
+|__|0114|__|
+Taux récent
+|__|0115|__|
+Tarif global
+|__|0116|__|
+Taille du saut de base
+|__|0117|__|
+Saute
+|__|0118|__|
+Ignorer les courses
+|__|0119|__|
+Ignorer les réinitialisations
+|__|0120|__|
+Taille de la dernière exécution
+|__|0121|__|
+Fini
+|__|0122|__|
+Non essayé
+|__|0123|__|
+Non taillé
+|__|0124|__|
+Non divisé
+|__|0125|__|
+Non gratté
+|__|0126|__|
+Mal
+|__|0127|__|
+Aperçu des données
+|__|0128|__|
+Actuel / Récent / Le plus long
+|__|0129|__|
+Rempli
+|__|0130|__|
+Réessayé
+|__|0131|__|
+Passes de tentative restantes
+|__|0132|__|
+Effacer le domaine
+|__|0133|__|
+Erreur lors de l'écriture du fichier journal de sauvegarde
+|__|0134|__|
+Information
+|__|0135|__|
+Sortie en raison d'une vitesse de lecture lente
+|__|0136|__|
+Erreur de programme interne, position introuvable dans le fichier journal de progression
+|__|0137|__|
+Erreur de programme interne, la vérification du domaine a renvoyé une position hors plage
+|__|0138|__|
+Vérification du domaine de traitement des erreurs de programme internes
+|__|0139|__|
+Erreur : la destination est détectée comme étant le lecteur du système d'exploitation hôte
+|__|0140|__|
+Erreur : Impossible d'ouvrir la destination
+|__|0141|__|
+Erreur : Impossible de rechercher la destination
+|__|0142|__|
+Erreur : Impossible d'obtenir la taille de la destination
+|__|0143|__|
+Erreur : la source est détectée comme étant montée
+|__|0144|__|
+Il est recommandé de démonter toutes les partitions sur la source.
+Vous pouvez utiliser l'option --force pour utiliser la source quand même (non recommandé).
+|__|0145|__|
+Erreur : Impossible d'ouvrir la source
+|__|0146|__|
+Échec de l'exécution de la commande d'identification du périphérique
+|__|0147|__|
+
+Statut/Erreur
+|__|0148|__|
+Erreur d'E/S de l'hôte lors de l'identification
+|__|0149|__|
+Erreur : Échec de la commande de lecture de la capacité avec les données de détection
+|__|0150|__|
+Erreur d'E/S de l'hôte pendant la capacité
+|__|0151|__|
+Erreur : La taille de la source n'est pas valide
+|__|0152|__|
+Erreur : la taille de lecture s'étend au-delà de la fin de l'appareil
+|__|0153|__|
+Erreur : Défaut de périphérique détecté sur la source
+|__|0154|__|
+Erreur d'E/S de l'hôte lors de la lecture de la source
+|__|0155|__|
+La lecture en mode direct de la version gratuite a atteint la limite de 10 %
+|__|0156|__|
+Erreur : impossible d'écrire dans la destination
+|__|0157|__|
+Erreur d'écriture des données vers la destination
+|__|0158|__|
+Échec de la vérification de la taille du périphérique source
+|__|0159|__|
+Impossible de rouvrir l'appareil source
+|__|0160|__|
+Le lecteur source n'a pas répondu correctement à la commande d'identification
+|__|0161|__|
+Le lecteur source a répondu avec une erreur pour identifier la commande
+|__|0162|__|
+Erreur d'E/S de l'hôte lors de l'identification du lecteur source
+|__|0163|__|
+Le lecteur source n'a pas répondu correctement à la commande de capacité de lecture
+|__|0164|__|
+Erreur d'E/S de l'hôte lors de la commande de capacité source
+|__|0165|__|
+Le lecteur source signale une taille incorrecte / la taille a été modifiée
+|__|0166|__|
+Erreur lors de la modification de l'état du bloc, bloc introuvable
+|__|0167|__|
+Erreur lors de la modification de l'état du bloc, n'est pas dans le bloc
+|__|0168|__|
+Le sauvetage est terminé avec les paramètres actuels
+|__|0169|__|
+Erreur d'allocation de mémoire
+|__|0170|__|
+Impossible d'obtenir l'adresse physique du tampon dans la plage 32 bits.
+Veuillez essayer de démarrer le pilote de disque virtuel.
+
+L'alternative est d'essayer de choisir à nouveau le mode (passer à un mode différent et retour), ou de redémarrer le programme.
+|__|0171|__|
+posix_memalign a échoué
+|__|0172|__|
+ERREUR : Taille maximale du bloc-notes dépassée
+|__|0173|__|
+ERREUR : Taille maximale du tampon de détection dépassée
+|__|0174|__|
+Ne pas créer de journal de sauvegarde
+|__|0175|__|
+Forcer l'accès au disque monté (non recommandé)
+|__|0176|__|
+Activer la modification du décalage de sortie (à utiliser avec prudence)
+|__|0177|__|
+Décalage de sortie (la valeur par défaut est -1, suivre le décalage d'entrée)
+|__|0178|__|
+Vous devez rouvrir les paramètres avancés pour que cette modification prenne effet
+|__|0179|__|
+Action à effectuer en cas d'erreur majeure du lecteur :
+|__|0180|__|
+Arrêter le clonage avec message d'erreur
+|__|0181|__|
+Commande d'appel :
+|__|0182|__|
+Le lecteur ne répond toujours pas après l'appel de la commande
+|__|0183|__|
+La commande appelée a échoué avec le signal/état de sortie
+|__|0184|__|
+Commande d'essai
+|__|0185|__|
+La commande s'est terminée normalement
+|__|0186|__|
+Erreur lors du calcul du CHS, valeur hors limites
+|__|0187|__|
+Désactivé (plus sûr en cas de coupure de courant)
+|__|0188|__|
+Activé (plus rapide)
+|__|0189|__|
+Tampon d'écriture du système d'exploitation (doit se déconnecter pour prendre effet)
+|__|0190|__|
+Aider
+|__|0191|__|
+Sur
+|__|0192|__|
+Paramètres de la minuterie
+|__|0193|__|
+Ces paramètres de minuterie ne concernent que les modes Direct IDE et Direct AHCI.
+Ils n'ont aucun effet avec les modes passthrough.
+
+|__|0194|__|
+Temps d'attente occupé initial (ms)
+|__|0195|__|
+Temps d'attente occupé (ms)
+|__|0196|__|
+Temps de réinitialisation logicielle (ms)
+|__|0197|__|
+Temps de réinitialisation matérielle (ms)
+|__|0198|__|
+Délai de réinitialisation (ms)
+|__|0199|__|
+Délai général (ms)
+|__|0200|__|
+Action pour le délai de réinitialisation
+|__|0201|__|
+Ne fais rien
+|__|0202|__|
+La fin n'est pas égale à la taille du lecteur !
+Le fichier journal rapporte une taille de
+|__|0203|__|
+,
+mais la source a une taille de
+|__|0204|__|
+.
+Êtes-vous sûr qu'il s'agit du bon fichier journal de progression pour ce lecteur ?
+
+|__|0205|__|
+Forcer le même contrôleur/esclave (non recommandé)
+|__|0206|__|
+Mode PIO
+|__|0207|__|
+Temporisateurs de phase (temporisateurs à réinitialisation logicielle)
+|__|0208|__|
+Temps de réinitialisation phase 1-2 (ms)
+|__|0209|__|
+Temps de réinitialisation phase 3 (ms)
+|__|0210|__|
+Temps de réinitialisation phase 4 (ms)
+|__|0211|__|
+Temps de réinitialisation Trim/Divide (ms)
+|__|0212|__|
+Diviser 2 temps de réinitialisation (ms)
+|__|0213|__|
+Temps de réinitialisation de grattage (ms)
+|__|0214|__|
+Activer les minuteries de phase
+|__|0215|__|
+Dispositif de bloc générique
+|__|0216|__|
+Appareil source générique
+|__|0217|__|
+Erreur : Impossible de rechercher la source
+|__|0218|__|
+Erreur : Impossible de lire la source
+|__|0219|__|
+Erreur : La taille de la source n'est pas divisible par la taille du secteur,
+la taille de la source est
+|__|0220|__|
+Fichier source générique
+|__|0221|__|
+Décalage d'alignement (LBA)
+|__|0222|__|
+Taille du secteur (octets)
+|__|0223|__|
+Temps de nouvelle tentative de réinitialisation (ms)
+|__|0224|__|
+Activer l'utilisation du retour ATA pour marquer les secteurs défectueux
+|__|0225|__|
+Activer les journaux de phase
+|__|0226|__|
+Cloner
+Mode
+|__|0227|__|
+Virtuel
+Mode 1
+|__|0228|__|
+Mode clone/pilote
+|__|0229|__|
+Cloner
+|__|0230|__|
+Mode 1
+|__|0231|__|
+Erreur lors de l'ouverture du pilote de disque virtuel
+|__|0232|__|
+Erreur lors de l'arrêt du pilote de disque virtuel
+|__|0233|__|
+Erreur lors de la fermeture du pilote de disque virtuel
+|__|0234|__|
+Erreur lors du démarrage du pilote de disque virtuel
+|__|0235|__|
+Erreur : Décalage non autorisé en mode pilote
+|__|0236|__|
+Erreur de tampon de pilote interne
+|__|0237|__|
+Erreur : Impossible de lire à partir de la destination
+|__|0238|__|
+Virtuel
+Mode 2
+|__|0239|__|
+Virtuel
+Mode 3
+|__|0240|__|
+Virtuel
+Mode 4
+|__|0241|__|
+Mode 2
+|__|0242|__|
+Mode 3
+|__|0243|__|
+Mode 4
+|__|0244|__|
+Virtuel
+Mode 5
+|__|0245|__|
+Mode 5
+|__|0246|__|
+Erreur : taille de secteur impaire non autorisée en mode pilote
+|__|0247|__|
+Erreur : délai d'expiration du pilote ou erreur
+|__|0248|__|
+Mou, tendre
+Réinitialiser
+|__|0249|__|
+Dur
+Réinitialiser
+|__|0250|__|
+Avertissement! 
+L'utilisation du mode pilote avec la destination nulle effacera le journal de progression actuel.
+Une fois que vous aurez cliqué sur Démarrer, le journal sera effacé.
+Si vous souhaitez conserver le journal actuel, déconnectez-vous et faites-en une copie.
+|__|0251|__|
+Démarrer le pilote de disque virtuel
+|__|0252|__|
+Arrêter le pilote de disque virtuel
+|__|0253|__|
+sauts lents
+|__|0254|__|
+Taille de la dernière lecture
+|__|0255|__|
+Erreur de programme interne, position introuvable dans le domaine
+|__|0256|__|
+Pilote virtuel uniquement
+|__|0257|__|
+Nouveau fichier de domaine
+|__|0258|__|
+Enregistrer le fichier de domaine
+|__|0259|__|
+Enregistrer le fichier de domaine sous
+|__|0260|__|
+Charger le fichier d'activation
+|__|0261|__|
+Activation echouée
+|__|0262|__|
+Activation réussie.
+Vous devez redémarrer le programme pour que les modifications prennent effet.
+|__|0263|__|
+Confirmer l'opération
+|__|0264|__|
+Souhaitez-vous supprimer l'activation ?
+|__|0265|__|
+Supprimer l'activation
+|__|0266|__|
+L'opération a échoué
+
+|__|0267|__|
+Opération terminée avec succès
+
+|__|0268|__|
+Erreur! 
+Le disque est verrouillé en toute sécurité !
+|__|0269|__|
+Désactiver les ports
+|__|0270|__|
+Erreur : Impossible d'ouvrir le fichier
+|__|0271|__|
+Erreur : aucun fichier de sauvegarde
+|__|0272|__|
+Désactivez les ports pour le mode AHCI afin de masquer un lecteur du système d'exploitation.
+Avertissement! 
+Si vous désactivez le port du lecteur du système d'exploitation,
+le système ne pourra pas démarrer !
+|__|0273|__|
+Entrez les ports que vous souhaitez désactiver sous forme de nombres entiers séparés par des espaces.
+Il est préférable que les numéros de port soient dans l'ordre du plus bas au plus élevé.
+Vous pouvez trouver des informations sur les ports en répertoriant les lecteurs sources en mode AHCI.
+
+|__|0274|__|
+Ports actuellement désactivés (données GRUB)
+|__|0275|__|
+Définir les ports désactivés
+|__|0276|__|
+Mise à jour des ports désactivés (données GRUB)
+|__|0277|__|
+Mettre à jour les ports
+|__|0278|__|
+Erreur : Échec de la copie du fichier
+|__|0279|__|
+Erreur : Échec de la mise à jour de GRUB
+|__|0280|__|
+Voir la sortie de la console du terminal pour plus d'informations
+|__|0281|__|
+Erreur : Impossible de localiser la ligne dans GRUB
+|__|0282|__|
+Vous êtes sur le point de modifier la configuration de démarrage.
+Un redémarrage sera nécessaire pour que les modifications prennent effet.
+|__|0283|__|
+Restaurer la configuration du port de démarrage d'origine
+|__|0284|__|
+Activer l'écriture SCSI vers la destination (pour une taille de secteur impaire)
+|__|0285|__|
+Activer le réglage de la taille du secteur de sortie
+|__|0286|__|
+Ajustement de la taille du secteur de production
+|__|0287|__|
+Options de sortie du pilote de périphérique de disque virtuel pour les erreurs de lecture
+|__|0288|__|
+Retourner l'erreur de lecture (standard)
+|__|0289|__|
+Renvoyer des données remplies de zéros
+|__|0290|__|
+Marque de retour des données remplies
+|__|0291|__|
+Taille de lecture minimale du cluster de disque virtuel (mode 3)
+|__|0292|__|
+Nom du périphérique de disque virtuel
+|__|0293|__|
+Le pilote de périphérique de disque virtuel n'est pas en cours d'exécution
+|__|0294|__|
+Effacer destination
+|__|0295|__|
+Vous êtes sur le point d'effacer toutes les données de la destination !
+Voulez-vous vraiment effacer toutes les données ?
+|__|0296|__|
+Analyser
+|__|0297|__|
+Résultats
+|__|0298|__|
+Total, Bon, Mauvais, Lent
+|__|0299|__|
+Activer l'analyse étendue
+|__|0300|__|
+Inactif
+|__|0301|__|
+Garniture
+|__|0302|__|
+Division 1
+|__|0303|__|
+Division 2
+|__|0304|__|
+Grattage
+|__|0305|__|
+Nouvelle tentative
+|__|0306|__|
+Remplissage
+|__|0307|__|
+Effacement
+|__|0308|__|
+(Mauvaise tête)
+|__|0309|__|
+Lieu de lecture
+|__|0310|__|
+En train de lire:
+|__|0311|__|
+en cours d'analyse
+|__|0312|__|
+Détecter la variance
+|__|0313|__|
+La phase 1
+|__|0314|__|
+Phase 2
+|__|0315|__|
+Phase 3
+|__|0316|__|
+Phase 4
+|__|0317|__|
+Fini
+|__|0318|__|
+(Sens inverse)
+|__|0319|__|
+Le pilote est déjà installé et actif
+
+|__|0320|__|
+La mémoire du pilote est maintenant connectée
+
+|__|0321|__|
+Erreur de connexion à la mémoire du pilote
+
+|__|0322|__|
+Impossible d'ouvrir pour l'écriture
+|__|0323|__|
+Échec de la création, consultez la console pour plus d'informations
+|__|0324|__|
+Échec de l'installation du module de pilote, consultez la console pour plus d'informations
+|__|0325|__|
+Installation réussie du pilote
+
+|__|0326|__|
+Échec de la suppression du module de pilote, consultez la console pour plus d'informations
+|__|0327|__|
+Succès de la suppression du pilote
+
+|__|0328|__|
+Écart temps de lecture bas/haut :
+|__|0329|__|
+Zone
+|__|0330|__|
+Le total
+|__|0331|__|
+Bon
+|__|0332|__|
+Mal
+|__|0333|__|
+Meugler
+|__|0334|__|
+Haut
+|__|0335|__|
+Moyenne
+|__|0336|__|
+Zones
+|__|0337|__|
+Afficher les résultats d'analyse
+|__|0338|__|
+Erreur : Ignorer la réinitialisation détectée. 
+Les paramètres doivent peut-être être modifiés.
+La taille du saut peut être trop faible ou trop élevée.
+Le lecteur peut avoir un problème de lenteur provoquant trop de sauts lents.
+Si vous avez reçu ce message très rapidement, il se peut qu'il ne lise aucune donnée.
+Veuillez consulter le manuel d'instructions pour plus d'informations.
+|__|0339|__|
+Manuel d'instructions HTML
+|__|0340|__|
+Erreur : SMART n'est pas pris en charge sur cet appareil
+|__|0341|__|
+Erreur : SMART n'est pas activé sur cet appareil
+|__|0342|__|
+Erreur : Impossible de lire les données SMART à partir de l'appareil
+|__|0343|__|
+identifiant
+|__|0344|__|
+Drapeaux
+|__|0345|__|
+Courant
+|__|0346|__|
+Pire
+|__|0347|__|
+Seuil
+|__|0348|__|
+Données brutes
+|__|0349|__|
+Nom d'attribut
+|__|0350|__|
+Version de structure de données SMART
+|__|0351|__|
+INTELLIGENT
+|__|0352|__|
+Afficher les résultats SMART
+|__|0353|__|
+Le fichier image existe actuellement.
+Cela poursuivra la récupération à l'aide de ce fichier image.
+|__|0354|__|
+Utiliser la taille du secteur physique comme logique pour le disque virtuel
+|__|0355|__|
+Ralentir
+Chauffeur
+|__|0356|__|
+Utiliser les couleurs des boutons dans la barre d'état inférieure
+|__|0357|__|
+TEXTE du manuel d'instructions
+|__|0358|__|
+Paramètres du relais principal
+|__|0359|__|
+Paramètres de la carte relais primaire
+|__|0360|__|
+Carte relais courant
+|__|0361|__|
+Choisissez la carte relais primaire
+|__|0362|__|
+Conditions d'activation
+|__|0363|__|
+Activer le relais 1
+|__|0364|__|
+Activer le relais 2
+|__|0365|__|
+Activer le relais 3
+|__|0366|__|
+Activer le relais 4
+|__|0367|__|
+Activer le relais 5
+|__|0368|__|
+Activer le relais 6
+|__|0369|__|
+Activer le relais 7
+|__|0370|__|
+Activer le relais 8
+|__|0371|__|
+Condition de désactivation
+|__|0372|__|
+Temps d'activation (sec)
+|__|0373|__|
+Délai de post-activation (sec)
+|__|0374|__|
+Tester le fonctionnement du relais
+|__|0375|__|
+Paramètres de la carte relais
+|__|0376|__|
+Choisissez le relais USB
+|__|0377|__|
+Erreur lors du choix du relais USB
+|__|0378|__|
+Erreur de fonctionnement du relais, voir la console pour plus d'informations
+|__|0379|__|
+Erreur : Aucun relais n'a été choisi
+|__|0380|__|
+Activer le relais primaire
+|__|0381|__|
+Activer le relais primaire
+|__|0382|__|
+Activer (Éteindre)
+|__|0383|__|
+Désactiver (Mise sous tension)
+|__|0384|__|
+Cette taille de secteur n'est pas prise en charge pour le mode sélectionné dans la version gratuite.
+Le mode générique est le seul mode de la version gratuite à autoriser une taille de secteur différente de 512 ou 4096.
+
+|__|0385|__|
+Le sauvetage n'a pas abouti
+|__|0386|__|
+Le sauvetage s'est arrêté avant la fin.
+Code d'arrêt \u003d
+|__|0387|__|
+Afficher les résultats d'identification
+|__|0388|__|
+USB directe
+|__|0389|__|
+Choix de réinitialisation USB
+|__|0390|__|
+Activer la réinitialisation groupée USB
+|__|0391|__|
+Activer la réinitialisation logicielle USB
+|__|0392|__|
+Activer la réinitialisation matérielle USB
+|__|0393|__|
+Activer la réinitialisation du port USB
+|__|0394|__|
+Vous êtes sur le point de désactiver le pilote de stockage de masse USB,
+après quoi aucun périphérique de stockage USB ne sera détecté par le système d'exploitation.
+|__|0395|__|
+Vous êtes sur le point de restaurer le pilote de stockage de masse USB.
+|__|0396|__|
+Désactiver le pilote de stockage de masse USB
+|__|0397|__|
+Restaurer le pilote de stockage de masse USB
+|__|0398|__|
+Avertissement! 
+La destination est plus petite que la source.
+Certaines données peuvent ne pas être copiées.
+|__|0399|__|
+Activer la lecture deux fois à l'expiration du délai
+|__|0400|__|
+ATA USB direct
+|__|0401|__|
+Ajouter au domaine à partir du fichier d'octets DMDE
+|__|0402|__|
+Erreur : le domaine n'est pas actif ou aucun fichier de domaine n'est chargé
+|__|0403|__|
+Attendez toujours la réinitialisation des minuteurs
+|__|0404|__|
+Activer la modification de la position actuelle (peut affecter l'algorithme de saut)
+|__|0405|__|
+Disque virtuel IO SCSI uniquement
+|__|0406|__|
+Ralentir
+|__|0407|__|
+Problème de micrologiciel à réponse lente
+|__|0408|__|
+Problème d'accès partiel
+|__|0409|__|
+Tête mauvaise ou faible
+|__|0410|__|
+Élargi
+Analyser
+|__|0411|__|
+Activer l'assistance à la reconstruction
+|__|0412|__|
+Aide à la reconstruction
+|__|0413|__|
+L'assistance à la reconstruction ne fonctionne qu'en mode ahci direct
+|__|0414|__|
+L'assistance à la reconstruction n'est pas prise en charge sur cet appareil
+|__|0415|__|
+Erreur lors de la désactivation de l'assistance à la reconstruction
+|__|0416|__|
+Erreur lors de l'activation de l'assistance à la reconstruction
+|__|0417|__|
+Sélectionnez l'unité logique
+|__|0418|__|
+Cet appareil a plus d'une unité logique.
+Veuillez choisir l'unité logique.
+|__|0419|__|
+Unités logiques possibles
+|__|0420|__|
+Définir l'unité logique
+|__|0421|__|
+Éteindre
+|__|0422|__|
+Allumer
+|__|0423|__|
+Correction de l'erreur de mémoire du pilote
+|__|0424|__|
+Réessayez de vous connecter en cas d'échec après le cycle d'alimentation du relais
+|__|0425|__|
+Taux de lecture maximal (ko/s)
+|__|0426|__|
+Ne pas effectuer d'identification lors de la liste des appareils sources
+

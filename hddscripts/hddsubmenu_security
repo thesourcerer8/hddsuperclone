@@ -1,0 +1,59 @@
+seti $printhelp = $printhelp
+
+
+while 1 = 1
+  echo " "
+  echo "Security menu"
+  echo "q) Quit"
+  echo "p) Previous menu"
+  echo "h) Toggle script help"
+  echo "1) Security remove password"
+  echo "2) Security set password"
+  echo "3) Security unlock"
+
+  if $printhelp = 1
+    exit 0
+  endif
+
+  echo "Enter your choice:
+  userinput $choicestring
+
+  if $choicestring = q
+    break
+
+  elseif $choicestring = p
+    previousscript
+
+  elseif $choicestring = h
+    if $help = 0
+      seti $help = 1
+      echo "Help is now turned on"
+    else
+      seti $help = 0
+      echo "Help is now turned off"
+    endif
+
+  elseif $choicestring = 1
+    loadscript ata_security_remove_password
+    break
+
+  elseif $choicestring = 2
+    loadscript ata_security_set_password
+    break
+
+  elseif $choicestring = 3
+    loadscript ata_security_unlock
+    break
+
+
+
+
+
+  else
+    echo "bad choice= " $choicestring
+  endif
+
+
+
+done
+end

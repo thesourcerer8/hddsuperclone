@@ -1,0 +1,162 @@
+seti $printhelp = $printhelp
+
+while 1 = 1
+  echo " "
+  echo "Device information menu"
+  echo "q) Quit"
+  echo "p) Previous menu"
+  echo "h) Toggle script help
+  echo "1) WD old find password"
+  echo "2) WD royl find password"
+  echo "3) Image drive DMA advanced"
+  echo "4) Image drive DMA test"
+  echo "5) WD royl dump mod01"
+  echo "6) WD royl dump mod select"
+  echo "7) WD royl dump rom"
+  echo "8) Read log ext"
+  echo "9) WD royl write mod"
+  echo "10) WD royl dump rom v2"
+  echo "11) HGST super smart"
+  echo "12) Rebuild assist read"
+  echo "13) Rebuild assist enable"
+  echo "14) Rebuild assist disable"
+  echo "15) Rebuild assist test"
+  echo "16) Rebuild assist test2"
+  echo "17) Execute device diagnostic"
+  echo "18) Process mod02"
+  echo "19) SCSI read 10"
+  echo "20) SCSI read 12"
+  echo "21) Sense data test
+  echo "22) Write uncorrectable pattern"
+  echo "23) Error Control Timer"
+  echo "99) USB menu
+
+  if $printhelp = 1
+    exit 0
+  endif
+
+  echo "Enter your choice:
+  userinput $choicestring
+
+  if $choicestring = q
+    break
+
+  elseif $choicestring = p
+    previousscript
+
+  elseif $choicestring = h
+    if $help = 0
+      seti $help = 1
+      echo "Help is now turned on"
+    else
+      seti $help = 0
+      echo "Help is now turned off"
+    endif
+
+  elseif $choicestring = 1
+    loadscript wd_old_find_password
+    break
+
+  elseif $choicestring = 2
+    loadscript wd_royl_find_password
+    break
+
+  elseif $choicestring = 3
+    loadscript ata_image_device_advanced_dma
+    break
+
+  elseif $choicestring = 4
+    loadscript ata_image_device_test_dma
+    break
+
+  elseif $choicestring = 5
+    loadscript wd_royl_dump_mod01
+    break
+
+  elseif $choicestring = 6
+    loadscript wd_royl_dump_mod_select
+    break
+
+  elseif $choicestring = 7
+    loadscript wd_royl_dump_rom
+    break
+
+  elseif $choicestring = 8
+    loadscript ata_read_log_ext
+    break
+
+  elseif $choicestring = 9
+    loadscript wd_royl_write_mod
+    break
+
+  elseif $choicestring = 10
+    loadscript wd_royl_dump_rom_v2
+    break
+
+  elseif $choicestring = 11
+    loadscript hgst_smart_data
+    break
+
+  elseif $choicestring = 12
+    loadscript rebuild_assist_read
+    break
+
+  elseif $choicestring = 13
+    loadscript rebuild_assist_enable
+    break
+
+  elseif $choicestring = 14
+    loadscript rebuild_assist_disable
+    break
+
+  elseif $choicestring = 15
+    loadscript rebuild_assist_test
+    break
+
+  elseif $choicestring = 16
+    loadscript rebuild_assist_test2
+    break
+
+  elseif $choicestring = 17
+    loadscript ata_execute_diagnostic
+    break
+
+  elseif $choicestring = 18
+    loadscript process_mod02
+    break
+
+  elseif $choicestring = 19
+    loadscript scsi_read10
+    break
+
+  elseif $choicestring = 20
+    loadscript scsi_read12
+    break
+
+  elseif $choicestring = 21
+    loadscript sense_data_test2
+    break
+
+  elseif $choicestring = 22
+    loadscript ata48_write_uncorrectable_pattern
+    break
+
+  elseif $choicestring = 23
+    loadscript ata_sct_error_control_timer
+    break
+
+  elseif $choicestring = 99
+    loadscript usb_menu
+    break
+
+
+
+
+  else
+    echo "bad choice= " $choicestring
+  endif
+
+
+
+done
+end

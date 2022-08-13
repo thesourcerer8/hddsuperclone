@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Панель файлов</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="filepanel"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Содержание</a> &middot; <a href="howto.html">Работа с программой</a>
+<hr />
+<h2>Панель файлов</h2>
+<p>
+Файловая панель отображает виртуальную структуру директорий
+и позволяет просматривать директории и выбирать объекты для
+<a href="datarecovery.html">восстановления</a>,
+а также открывать их в <a href="diskeditor.html">Дисковом редакторе</a>.
+Для доступа к панели файлов необходимо <a href="openvolume.html">открыть том</a>.
+</p>
+<p>
+Откройте виртуальную папку <span class="ii">[Все найденные / виртуальная ФС]</span>, 
+для <a href="reconstruction.html">виртуальной реконструкции файловой системы</a> 
+и отображения всех найденных и удалённых файлов и директорий.
+Результаты <a href="fullscan.html">полного сканирования</a> используются при реконструкции.
+</p>
+<p>
+Для восстановления файлов, отмеченных как "найденные" или "удалённые" 
+(см. описание иконок ниже),
+в окне диалога <a href="datarecovery.html">восстановления</a>
+должны быть выбраны соответствующие опции.
+</p>
+<p class="spec">
+Структура директорий является виртуальной и может отличаться
+о структуры непосредственно на диске или в обычном проводнике ОС.
+Виртуальные имена заключены в квадратные скобки или начинаются знаком <b>$</b>
+и обычно размещены на самом верхнем уровне структуры директорий тома.
+Виртуальная папка <b>$Root</b> примерно соответствует корневой папке тома
+в обычном проводнике ОС.
+</p>
+
+<table>
+<tr><td>[<span class="ii">F2</span>]/[<span class="ii">Shift+F9</span>]/[<span class="ii">Shift+F10</span>] или клик правой кнопкой на объекте вызывают контекстное меню.</td></tr>
+<tr><td>[<span class="ii">Enter</span>] или двойной клик открывают директорию в панели,
+либо файл в <a href="diskeditor.html">редакторе</a>
+или для <a href="menu_windows.html#preview">предпросмотра</a>.</td></tr>
+<tr><td>[<span class="ii">Ctrl+Enter</span>] открывает объект в <a href="diskeditor.html">дисковом редакторе</a>.</td></tr>
+<tr><td>[<span class="ii">Insert</span>], [<span class="ii">Пробел</span>] отмечают объект для восстановления.</td></tr>
+</table>
+
+<h3>Атрибуты файлов</h3>
+<p>
+<span class="tt">E/C/s</span>: зашифрованный/сжатый/разреженный (NTFS)<br />
+<span class="tt">D</span>: директория<br />
+<span class="tt">R/H/S/A</span>: скрытый/только для чтения/системный/архивный<br />
+<span class="tt">x/f</span>: "удаленный"/"найденный"<br />
+</p>
+<h3>Значки файлов</h3>
+<table class="pics" id="diricons">
+<tr><th>GUI</th><th>Con</th><th>Описание значка</th></tr>
+<tr><td width="32" valign="top"><div style="position:relative">
+<img src="640.png" alt="dir" style="clip:rect(0 31px 16px 16px);left:-4px;" /></div></td>
+<td valign="top"><span class="tt">[.]</span> </td>
+<td>обычная директория, содержащая файлы</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="light dir" style="clip:rect(0 63px 16px 48px);left:-36px;" /></div></td>
+<td valign="top"><span class="tt">[&nbsp;]</span> </td>
+<td>директория, не содержащая файлы</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="dir brown dot" style="clip:rect(0 159px 16px 144px);left:-132px;" /></div></td>
+<td valign="top"><span class="tt">[x]</span> </td>
+<td>директория, содержащая удалённые файлы</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="dir cyan dot" style="clip:rect(0 175px 16px 160px);left:-148px;" /></div></td>
+<td valign="top"><span class="tt">[f]</span> </td>
+<td>директория, содержащая "найденные" файлы</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="dir cyan dot brown dot" style="clip:rect(0 191px 16px 176px);left:-164px;" /></div></td>
+<td valign="top"><span class="tt">[x}</span> </td>
+<td>директория, содержащая удалённые и "найденные" файлы</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="dir trash" style="clip:rect(0 95px 16px 80px);left:-68px;" /></div></td>
+<td valign="top"><span class="tt">(x)</span> </td>
+<td>удалённая директория</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="dir trash cyan dot" style="clip:rect(0 367px 16px 352px);left:-340px;" /></div></td>
+<td valign="top"><span class="tt">(f)</span> </td>
+<td>удалённая директория, содержащая "найденные" файлы</td></tr>
+
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="dir trash brackets" style="clip:rect(0 111px 16px 96px);left:-84px;" /></div></td>
+<td valign="top"><span class="tt">(.]</span> </td>
+<td>удалённая директория, содержащая неудаленные файлы (ошибка ФС)</td></tr>
+
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="cyan dir trash mark" style="clip:rect(0 607px 16px 592px);left:-580px;" /></div></td>
+<td valign="top"><span class="tt">(f]</span> </td>
+<td>удалённая директория, содержащая обычные и "найденные" файлы (ошибка ФС)</td></tr>
+
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="cyan dir" style="clip:rect(0 47px 16px 32px);left:-20px;" /></div></td>
+<td valign="top"><span class="tt">{f}</span> </td>
+<td>"найденная" директория (в квадратных скобках - номер блока ФС)</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="cyan dir yellow dot" style="clip:rect(0 335px 16px 320px);left:-308px;" /></div></td>
+<td valign="top"><span class="tt">{.}</span> </td>
+<td>"найденная" директория, содержащая обычные файлы</td></tr>
+
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="cyan dir brown dot" style="clip:rect(0 207px 16px 192px);left:-180px;" /></div></td>
+<td valign="top"><span class="tt">{x}</span> </td>
+<td>"найденная" директория, содержащая удалённые файлы</td></tr>
+
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="cyan dir yellow dot brown dot" style="clip:rect(0 351px 16px 336px);left:-324px;" /></div></td>
+<td valign="top"><span class="tt">{.)</span> </td>
+<td>"найденная" директория, содержащая обычные и удалённые файлы</td></tr>
+
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="cyan dir trash" style="clip:rect(0 303px 16px 288px);left:-276px;" /></div></td>
+<td valign="top"><span class="tt">(x}</span> </td>
+<td>"найденная" удалённая директория</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="cyan dir trash yellow dot" style="clip:rect(0 383px 16px 368px);left:-356px;" /></div></td>
+<td valign="top"><span class="tt">(r}</span> </td>
+<td>"найденная" удалённая директория, содержащая обычные файлы</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="cyan dir trash mark" style="clip:rect(0 623px 16px 608px);left:-596px;" /></div></td>
+<td valign="top"><span class="tt">(f}</span> </td>
+<td>"найденная" удалённая директория, содержащая неудаленные файлы</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="cyan dir trash mark" style="clip:rect(0 639px 16px 624px);left:-612px;" /></div></td>
+<td valign="top"><span class="tt">(.}</span> </td>
+<td>"найденная" удалённая директория, содержащая неудаленные и обычные файлы</td></tr>
+
+<tr><td valign="top" id="fileicons"><div style="position:relative">
+<img src="640.png" alt="204 green star" style="clip:rect(0 399px 16px 384px);left:-372px;" /></div></td>
+<td valign="top"><span class="tt">&nbsp;.&nbsp;</span> </td>
+<td>обычный файл (неудаленный файл в файловой системе)</td></tr>
+
+
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="file top left green bottom red" style="clip:rect(0 688px 16px 672px);left:-660px;" /></div></td>
+<td valign="top"><span class="tt">+.&nbsp;</span> </td>
+<td>[обычный] файл ФС, также найденный <a href="fullscan.html#raw">по сигнатурам</a></td></tr>
+
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="file top left green bottom red" style="clip:rect(0 752px 16px 736px);left:-724px;" /></div></td>
+<td valign="top"><span class="tt">-.&nbsp;</span> </td>
+<td>[обычный] файл ФС, не найденный по сигнатурам в соответствующем месте диска, 
+<i>возможно</i>, поврежденный файл&nbsp;/ неверный тип&nbsp;/ нераспознанный</td></tr>
+
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="204 green star" style="clip:rect(0 415px 16px 400px);left:-388px;" /></div></td>
+<td valign="top"><span class="tt">&nbsp;f&nbsp;</span> </td>
+<td>"найденный" файл (в дополнительно найденных фрагментах ФС, номер фрагмента - в квадратных скобках,
+[J] означает журнал ФС)</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="204 green star" style="clip:rect(0 431px 16px 416px);left:-404px;" /></div></td>
+<td valign="top"><span class="tt">&nbsp;x&nbsp;</span> </td>
+<td>удалённый файл</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="204 green star" style="clip:rect(0 447px 16px 432px);left:-420px;" /></div></td>
+<td valign="top"><span class="tt">&nbsp;xf</span> </td>
+<td>удалённый "найденный" файл</td></tr>
+
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="file top left green" style="clip:rect(0 527px 16px 512px);left:-500px;" /></div></td>
+<td valign="top"><span class="tt">+.&nbsp;</span> </td>
+<td>файл, найденный <a href="fullscan.html#raw">по сигнатурам</a> (Raw)</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="file top left bottom right green" style="clip:rect(0 543px 16px 528px);left:-516px;" /></div></td>
+<td valign="top"><span class="tt">+.+</span> </td>
+<td>файл, найденный по сигнатурам, найдена сигнатура конца файла (EOF)</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="file top left green bottom right red" style="clip:rect(0 559px 16px 544px);left:-532px;" /></div></td>
+<td valign="top"><span class="tt">+.-</span> </td>
+<td>файл, найденный по сигнатурам, сигнатура конца не найдена</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="file top left green bottom red" style="clip:rect(0 575px 16px 560px);left:-548px;" /></div></td>
+<td valign="top"><span class="tt">+.~</span> </td>
+<td>файл по сигнатурам, определён размер, вероятна фрагментация или частичная перезапись</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="file top left green bottom red" style="clip:rect(0 591px 16px 576px);left:-564px;" /></div></td>
+<td valign="top"><span class="tt">&nbsp;.+</span> </td>
+<td>файл найден по сигнатуре конца</td></tr>
+
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="204 green star" style="clip:rect(0 223px 16px 208px);left:-196px;" /></div></td>
+<td valign="top"><span class="tt">[&gt;]</span> </td>
+<td>директория, содержимое которой раскрыто не полностью</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="204 green star" style="clip:rect(0 479px 16px 464px);left:-452px;" /></div></td>
+<td valign="top"><span class="tt">|.|</span> </td>
+<td>виртуальная директория расширенных MFT-записей файла
+</td></tr>
+
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="blue folder" title="blue folder" style="clip:rect(0 287px 16px 272px);left:-260px;" /></div></td>
+<td valign="top"><span class="tt">[.]</span> </td>
+<td><span class="tt">$MetaData</span> - виртуальная директория, содержащая спец. файлы ФС</td></tr>
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="blue folder" title="blue folder" style="clip:rect(0 287px 16px 272px);left:-260px;" /></div></td>
+<td valign="top"><span class="tt">[.]</span> </td>
+<td><span class="tt">$NonameFiles</span>: содержит файлы, у которых потеряны имена и родители </td></tr>
+
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="cyan dir" style="clip:rect(0 47px 16px 32px);left:-20px;" /></div></td>
+<td valign="top"><span class="tt">{f}</span> </td>
+<td><span class="tt">$Raw</span>: содержит файлы, найденные <a href="fullscan.html#raw">по сигнатурам</a></td></tr>
+
+<tr><td valign="top"><div style="position:relative">
+<img src="640.png" alt="204 green star" style="clip:rect(0 399px 16px 384px);left:-372px;" /></div></td>
+<td valign="top"><span class="tt">&nbsp;.&nbsp;</span> </td>
+<td><span class="tt">ИмяФайла:ИмяПотока</span> -
+альтернативный поток данных NTFS-файла (отображается после <a href="reconstruction.html">реконструкции ФС</a>)
+</td></tr>
+</table>
+
+</div></div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+hddsupertool
+Advanced disk utility.
+
+Usage: hddsuperclone [options]
+
+OPTIONS:
+ -v, --version                 Show version and exit
+ -h, --help                    Show this help and exit
+     --tool                    Start HDDSuperTool instead of clone
+
+The following options are for HDDSuperTool mode only
+ -c, --check                   Check the script but don't execute it
+ -C, --command                 Use a command line instead of a script
+ -d, --direct                  Use direct IO mode (IDE)
+ -a, --ahci                    Use direct IO mode (AHCI) (full version only)
+ -f, --file <file>             Script file to load and run
+ -i, --indent <spaces>         Perform indentation adjustment on the script
+ -t, --target <disk>           Disk to use for passthrough mode
+     --ata                     List drives via ata-passthrough (default)
+     --scsi                    List drives via scsi-passthrough
+ -Q, --quiet                   Surpress some of the output
+
+
+Report bugs to sdcomputingservice@gmail.com
+Please be sure to include "hddsuperclone" in the subject line.
+

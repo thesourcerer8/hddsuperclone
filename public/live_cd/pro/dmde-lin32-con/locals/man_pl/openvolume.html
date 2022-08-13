@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Otwórz wolumin</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Spis treści</a> &middot; <a href="howto.html">Praca z programem</a>
+<hr />
+<h2>Szukanie i otwarcie woluminów</h2> 
+<p>
+Aby przeglądać, przeglądać, edytować i <a href="datarecovery.html">odzyskać pliki i katalogy</a> 
+należy odnaleźć i otworzyć woluminu, zawierający dane.
+Użyj następujących metod w zależności od stopnia uszkodzenia.
+</p>
+<p>
+1. Jeśli woluminu jest w pełni dostępny w literę (<span class="tt">C:</span>, <span class="tt">D:</span>, ...),
+można go otworzyć za pomocą okna dialogowego
+<a href="devices.html">Wybierz&nbsp;urządzenie</a>, 
+wybierając opcję <span class="ii">Dyski&nbsp;logiczne&nbsp;/</span> <span class="ii">woluminy&nbsp;/</span> <span class="ii">DOS&nbsp;Services</span>. 
+Metoda ta jest odpowiednia do odzyskiwania skasowanych plików ze zdrowego woluminu.
+Jeżeli nie jest możliwe, aby otworzyć woluminu lub właściwie odzyskać pliki, spróbować następną metodę.
+</p>
+<p>
+2. Wybierz urządzenie fizyczne zawierające woluminu
+(<a href="devices.html">Wybierz&nbsp;urządzenie</a> &#8211; <span class="ii">Urządzenia&nbsp;fizyczne</span>,
+lub pod DOS &#8211; <span class="ii">ATA&nbsp;Interface</span>, <span class="ii">BIOS&nbsp;Services</span>).
+Następnie wybierz i otwórz woluminu w oknie dialogowym <a href="partitions.html">Partycje</a>.
+
+Jeżeli nie jest możliwe, aby otworzyć woluminu w taki sposób, 
+lub danych nie jest jeszcze odpowiednio odzyskane,
+spróbuj użyć następnej metody w przypadkach najbardziej skomplikowanych.
+</p>
+<p>
+3. Wypełn <a href="fullscan.html">Pełne skanowanie</a>
+i otwórz jeden z znalezionych wariantów woluminow. 
+Czytaj sekcji <a href="fullscan.html">Pełne skanowanie</a>
+dla skuteczniejszego odzyskiwania w tym przypadku.
+</p>
+
+<div class="spec">
+<p>
+Użyj polecenia <span class="ii">Otwórz parametry woluminu</span> w menu kontekstowym, 
+aby ręcznie zmienić niektóre parametry przed otwarciem woluminu.
+</p>
+<p>
+Również wolumin mogą być otwarte od 
+<a href="diskeditor.html">okna edytora</a>, 
+gdy widzenia sektora rozruchowego woluminu lub kopii sektora startowego 
+w trybie <a href="menu_viewas.html#boot">Boot sektor</a>.
+</p>
+</div>
+
+<h3 id="open_sstor">Praca z specjalnymi nośnikami</h3>
+<p>
+Jeśli nośnik danych to RAID&nbsp;/ wolumin rozłożony, 
+najpierw należy <a href="raids.html">skonstruować macierz RAID</a>  
+zamiast otwierania pojedyncze urządzenie fizyczne.
+</p>
+<p>
+Jeśli wolumin jest zawarty w maszynie wirtualnej&nbsp;/ obrazie lub partycji zaszyfrowanego dysku, 
+należy najpierw zamontować&nbsp;/ odszyfrować obraz (lub jego kopię dla bezpieczeństwa) 
+przy użyciu odpowiedniego oprogramowania (wirtualizacji), 
+a następnie pracować z zamontowanym&nbsp;/ odszyfrowanym dyskiem. 
+Można jednak również otworzyć płaski obraz i obraz VHD&nbsp;/ VHDX bezpośrednio, 
+korzystając z opcji <span class="ii">Obraz dysku</span> 
+w oknie <a href="devices.html">Wybór urządzenia</a>.
+</p>
+
+</div></div>
+</body>
+</html>

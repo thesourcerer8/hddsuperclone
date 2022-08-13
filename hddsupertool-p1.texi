@@ -1,0 +1,1773 @@
+\input texinfo   @c -*-texinfo-*-
+@c %**start of header
+@setfilename hddsupertool.info
+@settitle HDDSuperTool Manual
+@c %**end of header
+
+@set UPDATED 29 January 2017
+@set VERSION 1.10-1.8
+
+@copying
+This manual is for HDDSuperTool (version @value{VERSION}, @value{UPDATED}).
+
+Copyright @copyright{} 2015, 2016, 2017 Scott Dwyer.
+
+@quotation
+This manual is free documentation: you have unlimited permission to copy and
+distribute it.
+@end quotation
+@end copying
+
+@dircategory Freeware/Proprietary
+@direntry
+* HDDSuperTool: (hddsupertool).       Advanced disk script tool
+@end direntry
+
+@ifnothtml
+@titlepage
+@title HDDSuperTool
+@subtitle for version @value{VERSION}, @value{UPDATED}
+@author Scott Dwyer (@email{sdcomputingservice@@gmail.com})
+@page
+@vskip 0pt plus 1filll
+@insertcopying
+@end titlepage
+
+@contents
+@end ifnothtml
+
+@node Top
+@top HDDSuperTool
+
+This manual is for HDDSuperTool (version @value{VERSION}, @value{UPDATED}).
+
+@menu
+* Introduction::
+* WARNING::
+* How to Hide a Drive from the OS::
+* USB Drives::
+* Important Notes::
+* Installing::
+* Usage::
+* Tips and Tricks::
+* Reporting Bugs::
+* Default Variables::
+* Script Examples::
+* Script Commands::
+* Scripts::
+* Index::
+@end menu
+
+@node Introduction
+@chapter Introduction
+@cindex introduction
+
+Hddsupertool is an advanced disk tool for Linux. It is used to run a script to
+send SCSI and ATA commands directly to a disk. It performs a pre-check on the
+script before running it. The pre-check is a basic syntax and sanity check. If
+the script fails the pre-check, the program will exit without executing the
+script. To stop the program at any time hit ctrl-c.
+
+
+
+
+@node WARNING
+@chapter WARNING
+@cindex WARNING
+
+DIRECT IO WARNING!
+
+This program has two modes, passthrough and direct IO (either IDE or AHCI).
+Passthrough expects the drive is recognized by the Linux OS. When using
+passthrough you are using the Linux driver, so the driver will be aware of the
+activity and there should be no conflicts. However, if you choose to use direct
+IO mode, you are bypassing all Linux OS drivers! This could lead to conflicts,
+and undesired results if the drive was visible to the OS. HDDSuperTool will not
+let you select a drive from the menu that is visible to the OS. You must follow
+the method described in the section on how to hide a drive from the OS.
+
+In IDE mode it is also possible to work with a drive on the same controller as
+another (possibly a CD/DVD drive you are booting from). This is an extremely
+bad idea! There is a safety warning if this condition is detected. Look at the
+port information in the drive list to see if the drive may be sharing the same
+controller. At this time CD/DVD drives are not listed by model and serial, but
+will show up as patapi device. So if you see another device that has the same
+port info except the last number (device select, either 0 or 1 ), then there is
+another device on the same controller.
+
+Also with IDE, if the device is a slave (device select is 1), there may be
+unexpected results with return status in the event of an error, or other
+unknown issues (safety warning in place for this also). It is highly
+recommended that the device be a master on the controller.
+
+The warnings will make you type the word DANGEROUS to continue for each
+condition. If you do choose to continue, you are on your own for any bad things
+that may happen! If you have to type it more than once for multiple conditions,
+you are really pushing your luck!
+
+It should be noted that if you manually select the device by setting all of the
+port information on the command line, none of the safety checks are performed,
+and you are on your own.
+
+If you do not fully understand these potential issues, then you should not use
+direct IO!
+
+YOU HAVE BEEN WARNED!
+
+
+
+
+@node How to Hide a Drive from the OS
+@chapter How to Hide a Drive from the OS
+@cindex How to Hide a Drive from the OS
+
+When using direct IDE mode (--direct) or direct AHCI mode (--ahci), the drive
+must be hidden from the OS for proper operation. The method below requires the
+Linux kernel to be 3.13 or newer. Ubuntu 14.04 has kernel 3.13, so it or any
+newer version of Ubuntu should work. If you are using a Linux distribution
+other than an Ubuntu flavor, you are responsible for knowing the kernel
+version.
+
+Note that when using direct IDE mode with either actual IDE drives or SATA
+drives with the bios set for IDE, if you boot the OS without the drive plugged
+in / powered up, then Linux will not see it. This is an alternative method that
+seems to work the same, but it is still recommended to hide the drive.
+
+The first thing you need to know is that this is based on the physical port
+that the drive is connected to. So once you disable that port you can plug any
+drive into it and Linux will not see it (this might not be entirely true for
+AHCI, as it would appear that Linux can tell when a device is plugged in and
+sends at least one command to it, likely an identify device command, but after
+that it leaves it alone). This is true for both IDE and AHCI. However, when
+working with SATA drives, switching between IDE and AHCI modes in the BIOS will
+change the port numbers and you would need to adjust accordingly. I have also
+once experienced the port numbers being different on one boot up, but it looked
+like something did not load properly on that boot, and a reboot put things back
+to normal.
+
+The second thing you need is the number related to that port. To get this you
+need to plug in a good drive to that port and run HDDSuperTool with the proper
+option to list the drives. Below is a sample output from hddsupertool --ahci:
+
+@example
+1) ata5.00 sda e02a5000 0 e02a5100 ST3120213AS 5LS3NJ70
+2) ata6.00 sdb e02a5000 1 e02a5180 Hitachi HDS723020BLA642 MN3220F30JKX9E
+3) ata7    --- e02a5000 2 e02a5200 no device
+4) ata8    --- e02a5000 3 e02a5280 no device
+5) ata9.00 sdg e02a5000 4 e02a5300 WDC WD2500BEAS-00URT0 WD-WXHY07017481
+6) ata10    --- e02a5000 5 e02a5380 no device
+@end example
+
+Selection number 5 is the drive/port we wish to hide. You can see that the OS
+sees it as /dev/sdg. What we want is the number after the ata, which is 9.00.
+You must use that number to add a kernel boot option to grub, which in this
+case would be:
+
+@example
+libata.force=9.00:disable
+@end example
+
+IMPORTANT NOTE: Don't disable the primary hard drive you are booting from! If
+you did that to your Linux installation you could very well nuke your OS and
+have to repair it.
+
+To add a boot parameter in an Ubuntu live CD:
+
+To get to the grub menu on an Ubuntu live CD you need to press any key as soon
+as the first small logo appears at the bottom of the screen during boot up. If
+the language selection comes up select your language and hit enter. Then hit F6
+for Other Options, and when the options box pops up hit ESC. Now you should see
+a line on the bottom of the screen, just above the F-key options. Use the right
+arrow key to get a cursor flashing and make sure you are at the end of that
+line. Also make sure that Try Ubuntu without installing is highlighted above
+(up and down arrow keys to change). Add the boot parameter (such as
+libata.force=9.00:disable) to the end of the line, and hit enter. Wait for it
+to boot up.
+
+To temporarily add a boot parameter to a kernel of a Linux installation:
+
+1) Start your system and wait for the GRUB menu to show (if you don't see a
+GRUB menu, press and hold the left Shift key right after starting the system).
+
+2) Now highlight the kernel you want to use, and press the e key. You should be
+able to see and edit the commands associated with the highlighted kernel.
+
+3) Go down to the line starting with linux and add your parameter
+libata.force=9.00:disable to its end.
+
+4) Now press Ctrl + x to boot.
+
+To make this change permanent:
+
+1) From a terminal run: sudo gedit /etc/default/grub and enter your password.
+
+2) Find the line starting with GRUB_CMDLINE_LINUX_DEFAULT and append
+libata.force=9.00:disable to its end. For example:
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash libata.force=9.00:disable"
+
+3) Save the file and close the editor.
+
+4) Finally, start a terminal and run: sudo update-grub to update GRUB's
+configuration file (you probably need to enter your password).
+
+On the next reboot, the kernel should be started with the boot parameter. To
+permanently remove it, simply remove the parameter from
+GRUB_CMDLINE_LINUX_DEFAULT and run sudo update-grub again.
+
+After disabling the drive/port you should get a result like this:
+
+@example
+1) ata5.00 sda e02a5000 0 e02a5100 ST3120213AS 5LS3NJ70
+2) ata6.00 sdb e02a5000 1 e02a5180 Hitachi HDS723020BLA642 MN3220F30JKX9E
+3) ata7    --- e02a5000 2 e02a5200 no device
+4) ata8    --- e02a5000 3 e02a5280 no device
+5) ata9    --- e02a5000 4 e02a5300 WDC WD2500BEAS-00URT0 WD-WXHY07017481
+6) ata10    --- e02a5000 5 e02a5380 no device
+@end example
+
+Notice that there is no longer a decimal place after ata9, and there are dashes
+in place of sdg, but the drive is seen by HDDSuperTool as it is listed with
+model and serial. This drive/port is now hidden from the OS, and you may use
+HDDSuperTool to access it.
+
+
+
+
+
+@node USB Drives
+@chapter USB Drives
+@cindex USB Drives
+
+When in normal passthrough mode, it may be possible to send ATA commands to USB
+attached ATA drives. However, what commands are supported and how the drive
+reacts to certain commands is entirely up to the USB adapter interface that is
+attached to (or built into) the drive. This means that some commands may not be
+supported by the drive, and some commands may give odd results. This is not the
+fault of HDDSuperTool. For instance, there are some scripts for Western Digital
+that use vendor specific commands to read modules. These scripts will not work
+on all USB drives! There is nothing I can do about that. If other commands seem
+to work fine, but the vendor specific commands do not then the USB adapter
+interface likely does not support those commands.
+
+
+
+
+
+@node Important Notes
+@chapter Important Notes
+@cindex Important Notes
+
+@noindent
+This is an advanced utility, and it is very possible to send destructive
+commands to a drive. Please make sure you know what you are doing before using
+this software. I am in no way responsible for any data loss or damage caused by
+using this software. Use it at your own risk!
+
+While I do my best to ensure that this software does what it is supposed to
+without flaw, there is always the possibility of a programming error on my
+part. If an error is found, I will fix it as soon as possible. However, I
+assume no responsibility for any data loss or damage caused by any programming
+error. You are responsible for testing any commands and scripts before using
+them on critical data.
+
+Note that when using passthrough mode that there is normally a buffer limit of
+524288. There is a limit stored at /sys/block/DEVICE/queue/max_sectors_kb,
+where "DEVICE" is the device you are reading (example
+"/sys/block/sda/queue/max_sectors_kb"). The number stored here is referenced in
+KB, and the default for a hard drive is usually 512 (meaning 512KB). This
+number is smaller for a USB connected drive. If you attempt a command with a
+buffer size greater than this you will get an I/O error. This limitation can be
+overcome by using the generic scsi name for the device (example: /dev/sg1).
+This mapping can be found using the command "lsscsi -g".
+
+
+
+
+
+@node Installing
+@chapter Installing
+@cindex Installing
+
+Hddsupertool is supplied as an executable, with separate ones for 32bit and
+64bit. You cannot run the 32bit on a 64 bit system and vice versa (you may get
+an odd file not found error if you try).
+
+Hddsupertool now has DEB (Debian/Ubuntu) and RPM (RedHat/Fedora) installers
+available. If you have downloaded the appropriate installer then you should
+just be able to double click on it to start the installation process. This
+method should even work on many live CDs, but not all. If you are unable to use
+one of the installers, then you will need to follow the instructions below to
+install from the tar.gz file or to run without installing.
+
+If you have downloaded the tar.gz file, then the easiest way to get started is
+to copy the tar.gz file to a flash drive, and then use simple copy and paste to
+put it in the Home folder that can be found on the desktop of the Linux
+install. When you open a terminal it should default to the same Home folder
+that is on the desktop.
+
+To extract hddsupertool, open a terminal and use the following commands
+(replacing the -x.x-x.x.-xxx with proper version number and architecture):
+@example
+gunzip hddsupertool-x.x-x.x.-xxx-free.tar.gz
+tar xf hddsupertool-x.x-x.x.-xxx-free.tar
+@end example
+
+Then navigate to the proper directory:
+@example
+cd hddsupertool-x.x-x.x.-xxx-free
+@end example
+
+The following method to install HDDSuperTool will not only work on a Linux
+installation, but you can use the same method when booting from a live CD. The
+only difference is that every time you use a live CD, you will need to perform
+these steps after each boot.
+
+To install hddsupertool, use the following command:
+@example
+sudo make install
+@end example
+
+The "make install" command needs to be run as root, which is why "sudo" is
+included in this example. Your sysem may use a different command, or you may
+already be root. If it is not ran as root, then you will likely get permission
+errors and the install will not be complete. Note that you can also uninstall
+it with the command "sudo make uninstall". There is now also an uninstaller
+script that can be ran by typing "sudo hddsupertool-uninstall.sh".
+
+You must run hddsupertool as root. For Ubuntu you would use "sudo" in front of
+the command:
+@example
+sudo hddsupertool
+@end example
+Please consult the documentation for your version of Linux for information on
+how to run as root.
+
+
+To run it without installing, you must be in the same directory as
+hddsupertool. Note that some versions of Linux will not allow you to run a
+program from certain external devices (such as a FAT32 USB drive). Example to
+run it from the current directory:
+@example
+sudo ./hddsupertool
+@end example
+
+
+You may need to change the permissions on the file so that you have the rights
+to run it. The following command should do that:
+@example
+sudo chmod a+x hddsupertool
+@end example
+
+
+If you are booted from a live CD that does not allow installing with make
+(maybe make does not exist) and you are trying to run it from a USB drive and
+are getting a permission error, you can copy the executable to the home folder
+and run it from there. Note that if using a live CD the home folder exists in
+ram and will be cleared on a reboot. The following example assumes you are in
+the folder on the USB drive that contains hddsupertool. The first command
+copies it to the home folder, the second command gives permission to execute,
+and the third command runs it:
+@example
+sudo cp hddsupertool /home
+sudo chmod a+x /home/hddsupertool
+sudo /home/hddsupertool
+@end example
+
+
+You may notice that examples did not include a drive or script. As long as the
+hddscripts folder is either in the current working directory, or has been
+copied to /usr/local/bin/hddscripts, hddsupertool will start with a menu driven
+system. You can still run hddsupertool with manual options to declare which
+drive and script with a command such as the following:
+@example
+sudo hddsupertool -t /dev/sdb -f ata_identify_device
+@end example
+
+
+
+
+
+@node Usage
+@chapter Usage
+@cindex Usage
+
+Hddsupertool must be run as root. If no arguments are present on the command
+line, it will start the passthrough menu mode.
+
+If no drive is chosen, then all possible available drives will be listed with
+model and serial numbers. In passthrough mode, the drives will have the form of
+/dev/sdx, followed by model and serial. If the drive is not ATA (did not
+respond to identify device command), then the returned sense code will be shown
+instead of model/serial.
+
+In direct mode, it will show driver and port information. From left to right:
+Driver, PCI bus ID, Registers port, Control port, Bus port, Device select,
+Model, Serial. If there was not a proper response from the identify device
+command, then there will be other information in place of the model and serial.
+"Busy or drq" will be followed by the status and error register values, and
+usually means there are no drives connected to that controller. "No drq" will
+be followed by the status register, lba mid, lba high, and either "no device"
+or "patapi device". Patapi indicates there is a CD/DVD drive attached. At this
+time hddsupertool does not list CD/DVD drives by model and serial.
+
+If you would like to see more information about the ports on your system, try
+the command "lspci -v". Note that for SATA drives, the BIOS must be in IDE mode
+for direct IO to work. AHCI mode is not supported for direct IO.
+
+Note that in direct IO mode, DMA access is not available in the free version.
+
+The format for running hddsupertool is:
+
+@example
+hddsupertool [@var{options}] @var{optional_variables}
+@end example
+
+Where:
+@table @asis
+@item @var{optional_variables}
+Optional variables to be passed to the script from the command line. Both
+number and string variables can be passed, with a total limit of 16 variables
+that can be passed. A number variable is passed using a single equal sign, and
+a string variable is passed using a double equal sign. There must be NO SPACES
+BETWEEN THE VARIABLE NAME, EQUALS SIGN, AND VALUE. In the command line you
+also DO NOT START THE VARIABLE NAME WITH "$" as you would inside the script.
+Number variables will be treated as decimal unless preceeded by 0x in which
+case they will be treated as hex. String variables that contain text with
+spaces must be enclosed in quotes. The following example will set a number
+variable "number" to a value of 255 and a string variable "string" to a line of
+text.
+@example
+hddsupertool -t /dev/sda -f script.txt number=0xff string=="line of text"
+@end example
+
+@end table
+
+Hddsupertool supports the following options:
+
+@table @samp
+@item -h
+@itemx --help
+Print an informative help message describing the options and exit.
+
+@item -v
+@itemx --version
+Print the version number and exit.
+
+@item -V
+@itemx --verbose
+Show additional information. It is multi-level, meaning -V is level 1, -VV is
+level 2 and so on.
+
+@item -c
+@itemx --check
+Perform the normal pre-check on the script, but do not execute it.
+
+@item -C
+@itemx --command
+Use a command prompt to enter commands instead of reading from a script. Note
+that some commands will not work on the command line, and will report a generic
+error with the command (you can't do conditional statements, loops, or
+subroutines). When ran with this option you will get a command prompt of ">".
+To exit the command line mode type "end". The following example performs a
+simple identify device command and displays the raw results.
+@example
+hddsupertool /dev/sda --command
+hddsupertool 1.5-1.4 20160101
+
+> buffersize 512
+> setreadpio
+> ata28cmd 0 0 0 0 0 0xa0 0xec
+> printbuffer 0 0 512
+0: 7a 42 20 08 00 00 10 00 00 00 00 00 3f 00 00 00    zB .........?...
+10: 00 00 00 00 30 30 30 30 30 30 30 30 30 30 30 30    ....000000000000
+20: 30 30 30 30 30 30 31 30 00 00 40 00 00 00 30 30    00000010..@...00
+30: 30 30 30 30 31 30 4d 56 61 77 65 72 56 20 72 69    000010MVawerV ri
+40: 75 74 6c 61 49 20 45 44 48 20 72 61 20 64 72 44    utlaI EDH ra drD
+50: 76 69 20 65 20 20 20 20 20 20 20 20 20 20 40 80    vi e          @.
+60: 00 00 00 2f 00 00 00 02 00 00 07 00 20 08 10 00    .../........ ...
+70: 3f 00 00 fe 1f 00 10 01 00 00 20 00 00 00 07 00    ?......... .....
+80: 03 00 78 00 78 00 a0 00 78 00 00 00 00 00 00 00    ..x.x...x.......
+90: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+a0: 1e 00 17 00 08 40 08 40 00 41 08 40 08 00 00 41    .....@.@.A.@...A
+b0: 07 04 00 00 00 00 fe 40 00 00 00 00 00 00 00 00    .......@........
+c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+d0: 00 00 00 00 00 40 00 00 00 50 90 c2 9e fe 59 18    .....@...P....Y.
+e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+f0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+100: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+110: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+120: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+130: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+140: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+150: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+160: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+170: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+180: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+190: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+1a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+1b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+1c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+1d0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+1e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+1f0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 a5 a4    ................
+> end
+
+Total program run time = 80 seconds
+
+@end example
+
+@item -d
+@itemx --direct
+Enable and use direct IO mode. For SATA drives, the BIOS must be in IDE mode
+for this to work. It will not work in AHCI mode. Note that for some unknown
+reason, on some models of computers Linux may still use the AHCI driver even
+with the BIOS set to IDE. You are stuck using passthrough mode in this case.
+
+@item -f @var{script}
+@itemx --file @var{script}
+The script file that contains the commands to be sent to the drive. If this is
+not set, then it will look for a file named "hddmenu" first in the current
+directory, then in the sub directory "hddscripts/", and then in
+"/usr/local/bin/hddscripts/". All subscripts will be loaded from the directory
+where hddmenu was found. If no script file is found then the program will exit.
+
+@item -i @var{spaces}
+@itemx --indent @var{spaces}
+Performs an indentation cleanup on the script. This will indent certain
+commands by the number of spaces specified.
+@example
+hddsupertool -i 2 -f script.txt
+@end example
+
+@item -t @var{disk}
+@itemx --target @var{disk}
+The drive to which the commands are to be sent. This must be a whole drive and
+not a partition. If you do specify a partition, all commands will still
+reference the drive from the beginning and ignore the partition offset. If this
+is not set, then a list of possible devices will be presented to choose from.
+@example
+hddsupertool -t /dev/sda -f script.txt
+@end example
+
+@item -L @var{serial}
+@item --license @var{serial}
+Enter license number to install license.
+@example
+hddsupertool -L 11111-22222-33333-44444-55555
+@end example
+
+@item --regaddress @var{reg port address}
+Only for direct IO. The address in hex for the registers port. This is set for
+you if the device is chosen from the menu list at startup.
+
+@item --conaddress @var{control port address}
+Only for direct IO. The address in hex for the control port. This is set for
+you if the device is chosen from the menu list at startup.
+
+@item --busaddress @var{bus port address}
+Only for direct IO. The address in hex for the bus port. This is set for you if
+the device is chosen from the menu list at startup.
+
+@item --device @var{device}
+Only for direct IO. This is either 0 or 1, to choose device 0 or 1. The default
+is 0. This is set for you if the device is chosen from the menu list at
+startup. This will set the proper bit in the device field when performing ATA
+commands.
+
+@item s @var{drive serial}
+@item --serial @var{drive serial}
+This will choose the device by serial number. This is useful for repeating a
+script run where the device may have been power cycled and may come back with a
+different listing, or the device was moved to a different port. If the serial
+number cannot be matched, then no device is chosen and the program will exit.
+@example
+hddsupertool -f script.txt -s WD12345678
+@end example
+
+@item Q
+@item --quiet
+Surpress some of the output. This is mostly for my use to be able to extract
+the help from the individual scripts to include in this documentation.
+
+
+@end table
+
+Example usage:
+@example
+hddsupertool -t /dev/sda -f script.txt
+@end example
+
+
+
+
+@node Tips and Tricks
+@chapter Tips and Tricks
+@cindex Tips and Tricks
+
+Here are a few tips and tricks to help you along.
+
+HDDSuperTool needs to be run as root. By doing so any files or folders that it
+creates will be owned by root. This can make it difficult to edit or delete
+files as a user (you will get permission errors). The terminal command "chmod"
+will help you with this. It is recommended that you read up on this command and
+learn how to use it.
+
+
+There may be times when it would be nice to log all screen output to a file.
+Someone just recently pointed me to the "script" function. If you type "script
+--help" on the command line it will show the possible options. By default it
+will save the log to the file "typescript".
+
+The following example would probably be the best way to use the function. This
+will log all screen output for that run of hddsupertool to the file named
+hddsupertool.log, and stop logging when hddsupertool exits. If the file exists
+it will be overwritten.
+@example
+script -c "sudo hddsupertool" hddsupertool.log
+@end example
+
+
+HDDSuperTool can be run from a live CD. When running from a live CD it runs in
+ram, and all data is lost when you reboot! You are responsible for making sure
+that you copy any data you wish to keep to an external drive when running from
+a live CD.
+
+
+
+
+
+
+@node Reporting Bugs
+@chapter Reporting Bugs
+@cindex Reporting Bugs
+
+It is always possible that there are programming errors in this software. It is
+also possible that there are errors and omissions in this documentation. If you
+report them, they will get fixed. If you don't report them, they will just stay
+the way they are and will not get fixed.
+
+Report bugs to (@email{sdcomputingservice@@gmail.com})
+
+Please include the version number of hddsupertool. You can find the version by
+running hddsupertool with the @code{--version} option.
+
+
+
+
+
+@node Default Variables
+@chapter Default Variables
+@cindex Default Variables
+
+There are several variables that are automatically created and used by the
+program. You should not use these variables to store data as they will get
+overwritten by the program during operation.
+@table @samp
+@item error_level
+Some commands will return data in this variable. The data is command specific.
+@item io_sense_key
+sense key - part of the key code qualifier. Only for passthrough.
+@item io_asc
+additional sense code - part of the key code qualifier. Only for passthrough.
+@item io_ascq
+additional sense code qualifier - part of the key code qualifier. Only for
+passthrough.
+@item io_status
+This is the SCSI status byte as defined by the SCSI standard. Only for
+passthrough.
+@item io_masked_status
+Refer to "The Linux SCSI Generic (sg) HOWTO". Only for passthrough.
+@item io_msg_status
+Refer to "The Linux SCSI Generic (sg) HOWTO". Only for passthrough.
+@item io_sb_len_wr
+Number of bytes in the sense buffer. Only for passthrough.
+@item io_host_status
+Refer to "The Linux SCSI Generic (sg) HOWTO". Only for passthrough.
+@item io_driver_status
+Refer to "The Linux SCSI Generic (sg) HOWTO". Only for passthrough.
+@item io_resid
+Refer to "The Linux SCSI Generic (sg) HOWTO". Only for passthrough.
+@item io_duration
+Number of milliseconds the SCSI command took to complete. Only for passthrough.
+@item io_info
+Refer to "The Linux SCSI Generic (sg) HOWTO". Only for passthrough.
+@item ata_return_error
+ATA error register data.
+@item ata_return_count
+ATA count register data.
+@item ata_return_lba
+ATA LBA register data combined into one value.
+@item ata_return_device
+ATA device register data.
+@item ata_return_status
+ATA status register data.
+@item time
+Value returned from GETTIME command.
+@item date
+Value returned from GETTIME command.
+@item data_transferred
+Returns the number of bytes transferred. This can be an indication if data was
+transferred or not, but is not a guarantee that data was actually transferred.
+@item command_status
+Return value from a command. Any value other than 0 indicates the command
+failed to complete at the driver level, and any sense key or register data may
+not be present or useful. 1 is for passthrough only. 0x20 and up are for direct
+IO only. There are major and minor values that are combined to form the full
+value. Values are listed in hex.
+@example
+Major values:
+1 = Passthrough error (ioctl driver reported an error)
+2x = Busy or DRQ timeout while waiting to send the command
+3x = Soft reset timeout, command did not complete in time
+4x = Soft reset timeout, drive is not ready after reset
+5x = General timeout, command did not complete in time
+6x = No DRQ, drq was not set when it was expected
+7x = Wrong device detected, something switched the device
+8x or higher = Something bad went wrong when processing
+Minor values:
+x1 = Exceeded reset timeout
+x2 = Exceeded general timeout
+@end example
+@item bus_master_status
+Bus master status. Only for direct mode when performing DMA commands.
+@item direct_mode
+A way for scripts to tell if using direct(value=1) or passthrough(value=0)
+mode.
+@item ahci_mode
+A way for scripts to tell if using AHCI mode.
+@end table
+
+
+
+
+@node Script Examples
+@chapter Script Examples
+@cindex Script Examples
+
+The scripting can be a bit overwhelming to even those that are used to some
+sort of programming. This section is an attempt to demonstrate the basics.
+
+The following is a commented script to perform a simple identify device command
+and display the raw data.
+@example
+# first we must set the buffer size
+buffersize 512
+
+# now we must specify that this is a PIO read command
+setreadpio
+
+# now we send the command
+ata28cmd 0 0 0 0 0 0xa0 0xec
+
+# show the data on the screen
+printbuffer 0 512
+
+# write the data to the file "indentify.bin"
+writebuffer "indentify.bin" 0 0 512
+
+# the data returned from this command is in words in litte endian format,
+# and can be flipped for easier viewing of the information
+# note that this is optional and not normally used for other commands
+wordflipbuffer 0 512
+
+# show the flipped data on the screen
+printbuffer 0 512
+@end example
+
+MHDD has several scripts available for different things. Here is an example of
+translating a MHDD script to HDDSuperTool. First here is a MHDD script to dump
+2 sectors of module 02 from a WD Marvel drive (popular as the drive passwords
+are usually stored there).
+@example
+;script name: read md
+;reads md 02 on WD marwell drives
+;
+reset
+waitnbsy
+
+regs = $45 $0b $00 $44 $57 $a0 $80
+waitnbsy
+
+regs = $d6 $01 $be $4f $c2 $a0 $b0
+waitnbsy
+checkdrq
+sectorsfrom = cs.bin
+
+regs = $d5 $01 $bf $4f $c2 $a0 $b0
+waitnbsy
+checkdrq
+sectorsto = 21.bin
+
+regs = $d5 $01 $bf $4f $c2 $a0 $b0
+waitnbsy
+checkdrq
+sectorsto = 22.bin
+
+; end
+@end example
+This also requires the 512 byte file cs.bin to have been created by the user
+with the following data. Note that only the first line has data, the rest of
+the file is 0 filled.
+@example
+0x000  08 00 01 00 02 00 00 00 00 00 00 00 00 00 00 00
+......................................................
+0x1f0  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+@end example
+
+Here is the HDDSuperTool version.
+@example
+# the first command is non-data, so set the buffersize to 0
+buffersize 0
+
+# this is a PIO command so this must be set
+setreadpio
+
+# send the first command
+ata28cmd 0x45 0x0b 0x00 0x44 0x57 0xa0 0x80
+
+# optionally show the returned values of the error and status registers
+echo "error=0x" $ata_return_error " status=0x" $ata_return_status
+
+# the next command sends 512 bytes (the file) so set the buffer size
+buffersize 0x200
+
+# clear the buffer to 0s so there is no other data
+clearbuffer
+
+# put data in the buffer
+# note that this is the file data from cs.bin
+# as you can see it can be directly entered with HDDSuperTool
+setbuffer 0
+  08 00 01 00 02
+endbuffer
+
+# this is a write command so set accordingly
+setwritepio
+
+# send the command
+ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+
+# optionally show the returned values of the error and status registers
+echo "error=0x" $ata_return_error " status=0x" $ata_return_status
+
+# the next commands are read commands
+setreadpio
+
+# clear the buffer to 0s so we know the data received is good
+clearbuffer
+
+# send the command
+ata28cmd 0xd5 0x01 0xbf 0x4f 0xc2 0xa0 0xb0
+
+# optionally show the returned values of the error and status registers
+echo "error=0x" $ata_return_error " status=0x" $ata_return_status
+
+# write the sector to a file
+writebuffer "21.bin" 0 0 0x200
+
+# clear the buffer to 0s so we know the data received is good
+clearbuffer
+
+# send the command
+ata28cmd 0xd5 0x01 0xbf 0x4f 0xc2 0xa0 0xb0
+
+# optionally show the returned values of the error and status registers
+echo "error=0x" $ata_return_error " status=0x" $ata_return_status
+
+# write the sector to a file
+writebuffer "22.bin" 0 0 0x200
+
+# this command is not listed in the MHDD script above
+# it is the counterpart to the first command
+# the first command turned on a special VSC mode
+# this command turns it back off, otherwise it would need to be reset
+buffersize 0
+setreadpio
+ata28cmd 0x44 0x0b 0x00 0x44 0x57 0xa0 0x80
+
+# we are done
+end
+@end example
+
+
+
+
+@node Script Commands
+@chapter Script Commands
+@cindex Script Commands
+
+Note that all commands, operators, operands, and variables in the script MUST
+BE SEPARATED BY A SPACE. For example, "SETI $a=1" is not correct and will be
+rejected. The proper command would be "SETI $a = 1". This is the syntax that I
+used as it allows for less complicated programming code. Items can be
+separated by more than one space with no issues, it just has to be a minimum of
+one space.
+
+Note that all numbers written in the script are assumed to be in decimal
+format, unless specified as hex by a proceeding "0x". The exeption is when
+setting the buffer all numbers are assumed in hex format.
+
+All commands are available in all small letters or all capital letters, but
+they cannot be mixed small and capital letters. Commands are in all caps in
+this documentation for viewing purposes.
+
+Most if not all commands will accept variables in place of actual numbers or
+text. If you find a command that does not properly accept variables when you
+think is should, please report it.
+
+The available commands and syntax are as follows:
+
+@table @samp
+@item #
+Comment line. Anything following the # will not be processed. It must be the
+first non-space character in the line. You cannot add a comment to the end of
+a line.
+
+
+@item ECHO
+Print to screen output. Text can be output using quotes, either single or
+double. Quotes of the opposite type inside the original quotes will be output
+to the screen. Both string and number variables can also be output. There must
+be a space between quotes and variables, and variables must be outside the
+quotes. The following is a proper example:
+@example
+ECHO "This will print the variable a=" $a " and then the variable b=" $b
+ECHO "This will print single 'quotes' within the line"
+@end example
+
+
+@item SETI
+Set a number variable. All variables must start with "$". All number variables
+are integers of type long long. That means they can be a value from
+-9,223,372,036,854,775,808 to 9,223,372,036,854,775,807. You can also set it
+to another variable, and also do simple math with two operands and one
+operator.
+
+Available operands are:
+@example
++  addition
+-  subtraction
+*  multiplication
+/  division (no remainder)
+%  division (result is the remainder)
+&  bitwise and
+|  bitwise or
+^  bitwise exclusive or
+<  bitwise shift left
+>  bitwise shift right
+@end example
+
+Usage examples:
+@example
+SETI $a = 3
+SETI $b = $a + 0x10
+SETI $c = $a * $b
+SETI $count = $count + 1
+@end example
+
+There are a couple special cases for the SETI command. The first is the
+ability to extract a number from a string variable. The format is "SETI $number
+= $string location", where $string is the string variable containing the
+number to be extracted, and location is the placement of the number inside the
+string, starting with 0 as the first location. The location is based on spaces
+or tabs between the numbers. The location can be a number variable itself. If
+the number to be extracted starts with 0x it will be processed as hex,
+otherwise it will be processed as decimal unless forced using the "HEX"
+command. The following example will extract the number 3 from the string 1 2 3
+4 5.
+@example
+sets $string = "1 2 3 4 5"
+SETI $number = $string 2
+@end example
+
+The second special case is extracting a number from the buffer or scratchpad
+(or sensebuffer, but words are not supported for sensebuffer). You can only
+extract a byte, word, double word, or quad word. The format is "SETI $number =
+BUFFER location type", where location is the starting byte location in the
+buffer, and type is either b, w, dw, qw. If no type is specified it will assume
+the type is byte. Note that the words are little endian, so a buffer value of
+11 22 33 44 would be double word value 0x44332211. This can be useful for
+extracting information from the identify device results.
+@example
+#extract byte 234 from the buffer
+SETI $number = BUFFER 234
+
+#extract double word from the buffer starting at byte 234
+SETI $number = BUFFER 234 dw
+@end example
+
+
+@item SETS
+Set a string variable. All variables must start with "$". The format is the
+similar to the ECHO command, except instead of screen output the string ends up
+in the variable.
+@example
+SETS $string = "This will put the variable a=" $a " and then the variable b="
+$b " along with this message into a string variable"
+@end example
+
+There is one exception, where a part of the buffer can be extracted into the
+string variable. The format for that is "SETS $string = BUFFER location
+length", where location is the byte position in the buffer and length is the
+number of bytes to copy. The following example will put 40 characters from the
+buffer starting at byte 54 into a string variable:
+@example
+SETS $string = BUFFER 54 40
+@end example
+
+
+@item EXIT
+The script will terminate with an exit code. The format is "EXIT number", where
+number is a value from 0-255. Note that the program already uses some of the
+lower numbers for program error codes, so it is advised you use numbers 16-255.
+
+
+@item END
+The script will terminate with a normal exit code of 0.
+
+
+@item HEX
+This forces many commands to default to processing numbers as hex instead of
+decimal. It will affect the output of the ECHO command and also the SETS
+command. Be very careful using the HEX command, as it can cause undesired
+results if left turned on. It is recommended to only use it before a command
+such as ECHO to get the desired results from the command, and then use the
+DECIMAL command to turn it back off.
+@example
+SETI $number = 0x7f
+ECHO "The number in decimal is " $number
+HEX
+ECHO "The number in hex is 0x" $number
+DECIMAL
+@end example
+
+
+@item DECIMAL
+This turns off the HEX command and puts the default number processing back to
+decimal. It does not force numbers to be processed as decimal, if they are
+proceeded by 0x they are still processed as hex.
+
+
+@item SETBUFFER
+Manually set the buffer contents. The buffer contains the data that is either
+sent to or received from the drive. The format is "SETBUFFER offset", where
+offset is a number (can be a variable) that is the location in the buffer to
+start. The lines following the SETBUFFER command are the actual data, to be
+ended by the ENDBUFFER command. The data must be in the format of
+byte-space-byte-space-byte, and the data is always processed as hex. There is
+no set number of bytes per row, the next row will just pick up where the last
+row left off. A row can start with an additional offset (which will be an
+additional offset to the supplied buffer offset). To use the additional offset
+start the line with a hex number followed by a colon.
+@example
+# start setting the buffer at offset 128(0x80)
+SETBUFFER 0x80
+  0 1 2 3 4 5 6 7
+  8 9 a b c d e f
+  10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f
+  # the next line will jump to buffer offset 256(0x100)
+  80: 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f
+ENDBUFFER
+@end example
+
+
+@item ENDBUFFER
+Required for ending the SETBUFFER command.
+
+
+@item PRINTBUFFER
+Prints the buffer to the screen. The format is "PRINTBUFFER offset size", where
+offset is the starting buffer offset, and size is the number of bytes to be
+printed. You cannot print past the end of the current buffer size.
+@example
+# show the first 256 bytes of the buffer
+PRINTBUFFER 0 256
+@end example
+
+
+@item STRINGTOBUFFER
+Puts a string into the buffer contents. The format is "STRINGTOBUFFER offset
+size $string", where offset is the buffer offset, size is the maximum copy
+size, and $string is the string variable name. If size is greater than the
+length of the string then the whole string will be copied into the buffer, and
+the copy will stop at the end of the string. If size is smaller than the length
+of the string then it will only copy up to the size limit and the rest of the
+string is ignored.
+@example
+SETS $string1 = "this is a string"
+# copy the whole string (up to 64 bytes) to the buffer starting at offset 0x10
+STRINGTOBUFFER 0x10 64 $string1
+# copy only the first two words to the beginning of the buffer
+STRINGTOBUFFER 0 7 $string1
+@end example
+
+
+@item CLEARBUFFER
+Clears (erases) the entire buffer contents to zeros.
+
+
+@item BUFFERSIZE
+Sets a new buffer size. This erases (destroys) the current buffer contents. The
+format is "BUFFERSIZE size", where size is the new size of the buffer in bytes.
+The default starting buffer size is 512. The maximum buffer size is 33554432
+(512 * 65536).
+@example
+# increase the buffer size to 4096
+BUFFERSIZE 4096
+@end example
+
+
+@item WRITEBUFFER
+Write the buffer or part of the buffer to a file. The format is "WRITEBUFFER
+filename bufferoffset fileoffset size", where filename is the name of the file
+to write to, bufferoffset is the byte offset of the starting point in the
+buffer, fileoffset is the byte offset of the write point in the file, and size
+is the size in bytes to be written. If the file does not exist it will be
+created. This will overwrite the designated data in the file, but will not
+erase any other data in the file, meaning you can keep adding data to the file
+at different offsets.
+@example
+# write the first 512 bytes of the buffer to the file named image.bin
+WRITEBUFFER image.bin 0 0 512
+# write 512 bytes to the second sector of the file
+WRITEBUFFER image.bin 0 512 512
+@end example
+
+
+@item READBUFFER
+Read a part of a file to the buffer. The format is "READBUFFER filename
+bufferoffset fileoffset size", where filename is the name of the file to read
+from, bufferoffset is the byte offset of the starting point in the buffer,
+fileoffset is the byte offset of the read point in the file, and size is the
+size in bytes to be read.
+@example
+# read the first 512 bytes of the file named image.bin to the start of the
+buffer
+READBUFFER image.bin 0 0 512
+# read the second 512 bytes of the file to the buffer
+READBUFFER image.bin 0 512 512
+@end example
+
+
+@item DIRECTION
+Set the direction of the data transfer to either NONE, TO, FROM, or TOFROM.
+This is often required for proper processing of both SCSI and ATA passthrough
+commands by the Linux kernel. The proper direction needed for a command can be
+found in the SCSI or ATA documentation respectively. Note that for ATA commands
+this is set by the SETREADPIO, SETREADDMA, SETWRITEPIO, and SETWRITEDMA
+commands respectively, so you do not need to set it directly. You do need to
+set it with SCSI commands.
+@example
+# set the direction to read data from the drive
+DIRECTION FROM
+@end example
+
+
+@item SCSI6CMD
+Perform an scsi 6 command. Format is "SCSI6CMD b0 b1 b2 b3 b4 b5", where b0-b5
+are the actual bytes of the command.
+
+
+@item SCSI10CMD
+Perform an scsi 10 command. Format is "SCSI10CMD b0 b1 b2 b3 b4 b5 b6 b7 b8
+b9", where b0-b9 are the actual bytes of the command.
+@example
+# perform scsi capacity 10 command
+DIRECTION FROM
+SCSI10CMD 0x25 0 0 0 0 0 0 0 0 0
+@end example
+
+
+@item SCSI12CMD
+Perform an scsi 12 command. Format is "SCSI12CMD b0 b1 b2 b3 b4 b5 b6 b7 b8 b9
+b10 b11", where b0-b11 are the actual bytes of the command.
+
+
+@item SCSI16CMD
+Perform an scsi 16 command. Format is "SCSI16CMD b0 b1 b2 b3 b4 b5 b6 b7 b8 b9
+b10 b11 b12 b13 b14 b15", where b0-b15 are the actual bytes of the command.
+@example
+# perform scsi capacity 16 command
+DIRECTION FROM
+SCSI16CMD 0x9e 0x10 0 0 0 0 0 0 0 0 0 0 0 0x12 0 0
+@end example
+
+
+@item PRINTSENSEBUFFER
+Prints the SCSI return sense buffer to the screen so that advanced users can
+decode the results. The format is "PRINTSENSEBUFFER offset size", where offset
+is the sense buffer offset, and size is the number of bytes to be printed. The
+maximum sense buffer size is 256.
+@example
+# display the contents of the sense buffer that was returned, if any
+PRINTSENSEBUFFER 0 $io_sb_len_wr
+@end example
+
+
+@item SETREADPIO
+Prepare for PIO read. Required before performing this type of ATA command. If
+the buffer size is set to zero prior to this command, then it will setup for a
+non-data command. If you wish to perform a non-data command you should set the
+buffer size to zero before performing this command.
+
+
+@item SETWRITEPIO
+Prepare for PIO write. Required before performing this type of ATA command. If
+the buffer size is set to zero prior to this command, then it will setup for a
+non-data command. If you wish to perform a non-data command you should set the
+buffer size to zero before performing this command. The non-data command is the
+same as when performing a non-data SETREADPIO command.
+
+
+@item SETREADDMA
+Prepare for DMA read. Required before performing this type of ATA command.
+
+
+@item SETWRITEDMA
+Prepare for DMA write. Required before performing this type of ATA command.
+
+
+@item ATA28CMD
+ATA 28 bit command. The format is "ATA28CMD b0 b1 b2 b3 b4 b5 b6", where b0-b6
+are the actual bytes of the command according to ATA documentation. Note that
+the device bit of the device field will be set for you according to the device
+being accessed, in either passthrough or direct IO modes.
+b0 = features
+b1 = count
+b2 = lba low
+b3 = lba mid
+b4 = lba high
+b5 = device
+b6 = command
+@example
+# perform ata_identify_device command
+buffersize 512
+setreadpio
+ATA28CMD 0 0 0 0 0 0xa0 0xec
+echo "Raw buffer:"
+printbuffer 0 512
+@end example
+
+
+@item ATA48CMD
+ATA 48 bit command. The format is "ATA48CMD  w0 w1 w2 w3 w4 b5 b6", where w0-w4
+are the actual words of the command according to ATA documentation, and b5-b6
+are the device and commands bytes. The words are in standard format and not
+flipped (not little endian), meaning that 0x0001 has a value of 1. Note that
+the device bit of the device field will be set for you according to the device
+being accessed, in either passthrough or direct IO modes, so it does not matter
+what value you give that bit. Also remember that the LBA order is reversed from
+the 28 bit command.
+w0 = features
+w1 = count
+w2 = lba high
+w3 = lba mid
+w4 = lba low
+b5 = device
+b6 = command
+@example
+# perform ata_identify_device command
+buffersize 512
+setreadpio
+ATA48CMD 0 0 0 0 0 0xa0 0xec
+echo "Raw buffer:"
+printbuffer 0 512
+@end example
+
+
+@item WRITELOG
+Write a string variable to a text file as a line. This will append the string
+to the end of the existing file. The format is "WRITELOG filename string",
+where filename is the name of the file to be written to, and string is the
+variable to be written. If the file does not exist it will be created.
+@example
+# write text lines to the file named logfile.txt
+sets $line1 = "This is the first line"
+sets $line2 = "This is the second line"
+WRITELOG logfile.txt $line1
+WRITELOG logfile.txt $line2
+@end example
+
+
+@item GETTIME
+This gets the current time and date and sets two variables. Number variable
+$time will have the time in microseconds since the Epoch (1970-01-01 00:00:00
++0000 (UTC)). String variable $date will contain the current date and time.
+@example
+# display the time since Epoch and the current date
+GETTIME
+echo "time since Epoch usec: " $time
+echo "todays date: " $date
+
+# display the time elapsed
+GETTIME
+seti $start_time = $time
+# do some program stuff here that takes time
+GETTIME
+seti $elapsed_time = $time - start_time
+echo "time elapsed usec: " $elapsed_time
+@end example
+
+
+@item REOPENDISK
+Only for passthrough, has no effect with direct IO. Closes and reopens the
+current disk. This seems to perform a soft reset on the drive, which can be
+helpful in certain cases where it may not respond properly after performing
+certain commands.
+
+
+@item IF
+Conditional if statement. The format is "IF value1 condition value2", where
+value1 and value2 are number or string variables and condition is the
+comparison to be made. The values can be actual numbers (or strings) or
+variables. If using an actual string (word), do not use quotes, and there
+cannot be spaces in the string. To compare strings with spaces in them you must
+set and compare string variables. Complex statements are not allowed (more than
+one condition). Math is also not allowed within the statement. Multiple IF
+statements can be nested. Each IF statement must be ended with the ENDIF
+command. Everything in between the IF and ENDIF is executed if the condition is
+true.
+
+Available conditions are:
+@example
+<  less than
+>  greater than
+=  equal
+!=  not equal
+<=  less than or equal
+>=  greater than or equal
+Note that only equal and not equal are allowed when comparing strings
+@end example
+
+Example:
+@example
+seti $high = 100
+if $a > 1
+  echo "a is greater than 1"
+  if $a > 10
+    echo "a is greater than 10"
+    if $a > $high
+      echo "a is greater than " $high
+    endif
+  endif
+endif
+@end example
+
+
+@item ENDIF
+Marks the end of an IF statement.
+
+
+@item ELSE
+Statement to be processed when the IF and any ELSEIF statements are false.
+
+Example:
+@example
+if $a > 0
+  echo "a is greater than 0"
+else
+  echo "a is less than or equal to 0"
+endif
+@end example
+
+
+@item ELSEIF
+Conditional statement to be processed when the IF or preceeding ELSEIF
+statements are false. The format is the same as the IF statement.
+
+Example:
+@example
+if $a > 10
+  echo "a is greater than 10"
+elseif $a < 0
+  echo "a is less than 0"
+elseif $a = 5
+  echo "a is equal to 5"
+else
+  echo "a is between 0 and 10 but is not 5"
+endif
+@end example
+
+
+@item SUBROUTINE
+Marks the start of a subroutine. The format is "SUBROUTINE name", where name is
+the name of the subroutine. The subroutine must be ended with the ENDSUBROUTINE
+command.
+@example
+subroutine show_ata_return
+  echo "ATA return data:
+  hex
+  echo "error=0x" $ata_return_error " count=0x" $ata_return_count " lba=0x"
+$ata_return_lba " device=0x" $ata_return_device " status=0x" $ata_return_status
+  decimal
+endsubroutine
+@end example
+
+
+@item ENDSUBROUTINE
+Marks the end of a subroutine.
+
+
+@item GOSUB
+Calls a subroutine. The format is "GOSUB name", where name is the name of the
+subroutine. When the subroutine ends by either the ENDSUBROUTINE or RETURNSUB
+command, program execution will resume on the line followin the GOSUB command.
+@example
+ata28cmd 0 0 0 0 0 0xa0 0xec
+gosub show_ata_return
+printbuffer 0 512
+@end example
+
+
+@item RETURNSUB
+Returns from the current subroutine. This is meant to be used with conditional
+statements, to be able to exit the subroutine before reaching the ENDSUBROUTINE
+command.
+@example
+subroutine do_something
+  if $error_level != 0
+    returnsub
+  endif
+  printbuffer 0 512
+endsubroutine
+@end example
+
+
+@item WHILE
+Conditional loop. The format is the same as the IF command. The WHILE command
+must be ended with the DONE command. If the WHILE condition is true then the
+code between the WHILE and DONE commands is executed. When the DONE command is
+reached, the WHILE condition is checked again to see if it is true or false.
+When the condition is false the code continues on after the DONE command,
+otherwise it loops back to the beginning of the WHILE command.
+
+Example:
+@example
+# count from 1 to 10
+seti $count = 1
+while $count <= 10
+  echo "The count is " $count
+  seti $count = $count + 1
+done
+@end example
+
+
+@item DONE
+Marks the end of the WHILE command.
+
+
+@item BREAK
+Breaks out of the current WHILE command. This is meant to be used with
+conditional statements, to be able to exit the loop without having to get all
+the way to the DONE command, or to exit when the condition is still true.
+Example:
+@example
+# count from 1 to 10
+seti $count = 1
+# this while statement is always true so would loop forever without break
+while 1 = 1
+  echo "The count is " $count
+  seti $count = $count + 1
+  if $count > 10
+    break
+  endif
+done
+@end example
+
+
+@item SETSCRATCHPAD
+Manually set the scratchpad contents. The format and use is the same as the
+SETBUFFER command. The scratchpad is a second buffer that you can use. The
+difference between the buffer and scratchpad is that the scratchpad is not used
+for direct disk command data transfers. It is just for storing and manipulating
+any data you wish.
+
+There is one important difference from the SETBUFFER command. The SETSCRATCHPAD
+command will allow for values greater than 255. When this happens, it sets a
+quad word in the scratchpad, instead of just one byte. This is in place to make
+it easier to write variable values to a file. So be careful with this!
+
+
+@item ENDSCRATCHPAD
+Required for ending the SETSCRATCHPAD command.
+
+
+@item PRINTSCRATCHPAD
+Print the scratchpad to the screen. The format and use is the same as the
+PRINTBUFFER command.
+
+
+@item STRINGTOSCRATCHPAD
+Puts a string into the scratchpad contents. The format and use is the same as
+the STRINGTOBUFFER command.
+
+
+@item CLEARSCRATCHPAD
+Clears (erases) the entire scratchpad contents to zeros.
+
+
+@item SCRATCHPADSIZE
+Sets a new scratchpad size. The format and use is the same as the BUFFERSIZE
+command.
+
+
+@item WRITESCRATCHPAD
+Write the scratchpad to a file. The format is and use is the same as the
+WRITEBUFFER command.
+
+
+@item READSCRATCHPAD
+Read a part of a file to the scratchpad. The format and use is the same as the
+READBUFFER command.
+
+
+@item COPYSCATCHPADTOBUFFER
+Copies a part of the scatchpad to the buffer. The format is
+"COPYSCATCHPADTOBUFFER scratchoffset bufferoffset size", where scratchoffset is
+the starting offset of the scratchpad, bufferoffset is the starting offset of
+the buffer, and size is the number of bytes to copy.
+@example
+# copy 512 bytes from scratchpad to buffer
+copyscratchpadtobuffer 0 0 512
+@end example
+
+
+@item COPYBUFFERTOSCRATCHPAD
+Copies a part of the buffer to the scratchpad. The format is
+"COPYBUFFERTOSCRATCHPAD bufferoffset scratchoffset size", where bufferoffset is
+the starting offset of the buffer, scratchoffset is the starting offset of the
+scratchpad, and size is the number of bytes to copy.
+@example
+# copy 512 bytes from buffer to scratchpad
+copybuffertoscratchpad 0 0 512
+@end example
+
+
+@item VARIABLECHECK
+Check if a variable has been set and what type it is. The format is
+"VARIABLECHECK variable", where variable is the name of the variable to be
+checked. The purpose of this is to check if a varaible was set properly on the
+command line. The result is returned in $error_level. A value of 0 = variable
+not set. A value of 1 = variable is of number type but only set in script. A
+value of 2 = varaible is of string type but only set in script. A value of 17 =
+variable is of number type and is set on the command line. A value of 18 =
+variable is of string type and is set on the command line.
+@example
+# check variable type for $input
+variablecheck $input
+if $error_level = 0
+  echo "variable not set"
+elseif $error_level = 1
+  echo "variable is number but not set on command line"
+elseif $error_level = 2
+  echo "variable is string but not set on command line"
+elseif $error_level = 17
+  echo "variable is number and was set on command line"
+elseif $error_level = 18
+  echo "variable is string and was set on command line"
+endif
+@end example
+
+
+@item GETFILESIZE
+Get the size of a file. The format is "GETFILESIZE filename", where filename is
+the name (with optional path) of the file. Filename can be the raw file name or
+a string that contains the file name. The raw file name cannnot contain spaces.
+If there are spaces, the file name must be in a string. The size of the file in
+bytes is returned in $error_level. If the file does not exist or there is some
+other error then $error_level will contain -1.
+@example
+# get the file size of the file "test.txt"
+getfilesize test.txt
+# get the file size of the file "the test.txt"
+sets $filename = "the test.txt"
+getfilesize $filename
+if error_level = -1
+  echo "File not found"
+endif
+@end example
+
+
+@item DELETEFILE
+Delete a file. The format is "DELETEFILE filename", where filename is the name
+(with optional path) of the file. Filename can be the raw file name or a string
+that contains the file name. The raw file name cannnot contain spaces. If there
+are spaces, the file name must be in a string.
+@example
+# delete the file "test.txt"
+deletefile test.txt
+# delete the file "the test.txt"
+sets $filename = "the test.txt"
+deletefile $filename
+@end example
+
+
+@item CALLCOMMAND
+Perform a command line command. The format is "CALLCOMMAND command", where
+command is the command line command to be performed. The command can be a
+string varaible, or a single word command. For commands that contain multiple
+words, you must use a string variable.
+@example
+# perform the command "ls -a"
+sets $command = "ls -a"
+callcommand $command
+@end example
+
+
+@item USERINPUT
+Get user input from keyboard. The format is "USERINPUT variable", where
+variable is the string variable where the user input is placed. This will pause
+the program waiting for the user to type something and then press enter.
+
+Example:
+@example
+echo "What would you like to do?"
+echo "1) Perform action 1"
+echo "2) Perform action 2"
+echo "3) Perform action 3"
+echo "Enter your choice:
+userinput $choicestring
+# extract the first number from the string
+seti $choice = $choicestring 0
+if $choice = 1
+  echo "your choice was 1"
+elseif $choice = 2
+  echo "your choice was 2"
+elseif $choice = 3
+  echo "your choice was 3"
+else
+  echo "invalid choice"
+endif
+@end example
+
+
+@item WORDFLIPBUFFER
+Flip the bytes within words from little endian to normal. The format is
+"WORDFLIPBUFFER offset size", where offset is the offset in the buffer to start
+the flip and size is how many bytes to flip. If the size is an odd number the
+last byte will not be flipped. This command is useful for getting some proper
+readable information from the identify device command, such as the model and
+serial number.
+@example
+# show the model and serial number of a drive
+buffersize 512
+protocol pio-data-in
+direction from
+ata28cmd 0 0 0 0 0 0xa0 0xec
+wordflipbuffer 0 512
+sets $model = buffer 54 40
+echo "Model= " $model
+sets $serial = buffer 20 20
+echo "Serial= " $serial
+@end example
+
+
+@item WORDFLIPSCRATCHPAD
+Flip the bytes within words from little endian to normal. The format and use is
+the same as the WORDFLIPBUFFER command.
+
+
+@item GETSTATUS
+This will update the status and error registers ($ata_return_error,
+$ata_return_status, and $ata_alternate_status). This only works for direct IO.
+For passthrough it attempts to send the proper protocol, but it would appear
+that Linux does not support that protocol and returns sense data of "invalid
+field in CDB".
+
+
+@item SOFTRESET
+This performs a soft reset of the device. Note that this will reset both
+devices on the controller. This only works for direct IO. For passthrough it
+attempts to send the proper protocol, but it would appear that Linux does not
+support that protocol and returns sense data of "invalid field in CDB". To
+perform a soft reset using passthrough, use the REOPENDISK command.
+
+
+@item USLEEP
+Sleep for x amount of microseconds. The format is "USLEEP microseconds". This
+is a way to make the program sleep without using CPU, perhaps waiting for a
+drive to become ready.
+@example
+echo "Sleeping for 5 seconds"
+USLEEP 5000000
+echo "Done sleeping"
+@end example
+
+
+@item SOFTTIMEOUT
+Only for direct IO, has no effect with passthrough. When performing an ATA
+command, the time to wait before sending a soft reset. The format is
+"SOFTTIMEOUT microseconds". The default is 15000000 (15s). This is used to
+automatically perform a soft reset if a command times out, so that it does not
+have to be done manually. If this happens, the register status will reflect the
+status after the soft reset. The soft reset waits for the drive to be ready up
+to the value of RESETTIMEOUT after performing the reset before returning. If
+you don't want to perform a soft reset when it times out, set the SOFTTIMEOUT
+value greater than the value of GENERALTIMEOUT.
+
+
+@item RESETTIMEOUT
+Only for direct IO, has no effect with passthrough. When performing an ATA
+command, the time to wait for the drive to be ready after a soft reset before
+returning. The format is "RESETTIMEOUT microseconds". The default is 15000000
+(15s).
+
+
+@item BUSYTIMEOUT
+Only for direct IO, has no effect with passthrough. When performing an ATA
+command, the time to wait before giving up if the device is busy prior to
+issuing the command. The format is "BUSYTIMEOUT microseconds". The default is
+15000000 (15s). If you don't want the device to time out for being busy, set
+this value greater than the value of GENERALTIMEOUT.
+
+
+@item GENERALTIMEOUT
+This timer is mostly for direct IO, but can also influence passthrough in some
+circumstances. When performing a command, the time to wait before giving up if
+the command has not finished. The format is "GENERALTIMEOUT microseconds". The
+default is 30000000 (30s).
+
+
+@item LOADSCRIPT
+Loads a different script into memory. The format is "LOADSCRIPT script", where
+script is the script file to be loaded. This is mostly designed for a menu
+driven system. All current variables will be passed on to the new script. The
+new script will start from the beginning.
+
+
+@item PREVIOUSSCRIPT
+Loads the previous script into memory, if there was one. This is designed for a
+menu driven system. When returning to the previous script, the previous script
+will start from the beginning. All current varaibles will be passed on to the
+previous script.
+
+
+@item INCLUDE
+This will append another script file to the end (bottom) the current one in
+memory. The format is "INCLUDE script", where script is the script file to be
+loaded. This is useful for including common subroutines without having to copy
+them into every script.
+
+
+@item UPLINE
+Used for display purposes. Moves the cursor up one line. This is useful for
+repeating data on the screen without scrolling.
+
+
+
+
+
+
+@end table
+
+
+
+
+
+
+@node Scripts
+@chapter Scripts
+@cindex Scripts
+
+This section contains all the help available for the individual scripts.
+

@@ -1,0 +1,174 @@
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'This will read a log from the device.'
+  echo 'This requires the number variable "log" to be set in DECIMAL.'
+  echo 'To enter a hex number preceed it with "0x".'
+  echo 'log is the log number to be read.'
+  echo 'Example: hddsupertool -t /dev/sda -f ata_read_log_ext'
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+
+include good_subroutines
+
+# set a blank string variable to compare with user input
+# make sure not to set this anyplace else
+sets $null = ""
+
+# set this to itself for use with the menu system
+# make sure not to set this anyplace else
+# if it was not previously set it will = 0
+seti $using_menu = $using_menu
+
+seti $ask = 0
+while 1 = 1
+  variablecheck $log
+  if $error_level < 16
+    seti $ask = 1
+  elseif $using_menu = 1
+    seti $ask = 1
+  endif
+  if $ask = 1
+    echo "Enter log number in decimal (0x for hex):"
+    userinput $choicestring
+    if $choicestring != $null
+      seti $log = $choicestring 0
+      if $log < 256
+        break
+      else
+        echo "Value cannot be above 255 (0xff)"
+      endif
+    else
+      echo "Choice cannot be blank!"
+    endif
+  else
+    break
+  endif
+done
+
+# set the buffer size
+buffersize 512
+
+# set the LBAs to 0
+seti $LBAlow = 0
+seti $LBAmid = 0
+seti $LBAhigh = 0
+
+# set some things to read log 0
+setreadpio
+# set features to 0
+seti $features = 0
+# set count to 1
+seti $count = 1
+# set device to 0
+seti $device = 0
+# set lba to log page 0
+seti $LBAlow = 0x0
+# set the command for read log extended
+seti $command = 0x2f
+
+# make sure buffer is clear
+clearbuffer
+
+# perform the command
+ata48cmd $features $count $LBAhigh $LBAmid $LBAlow $device $command
+
+# check if command failed
+seti $command_failed = 0
+gosub check_command_status
+if $command_failed = 1
+  echo "Command failed!"
+  gosub show_sense_data
+  gosub show_ata_return_status
+  previousscript
+endif
+
+#echo "Raw buffer:"
+#printbuffer 0 512
+
+if $log > 0
+  seti $temp = $log * 2
+  seti $logsize = buffer $temp w
+else
+  seti $logsize = 1
+endif
+if $logsize > 0
+  seti $buffersize = $logsize * 512
+  buffersize $buffersize
+  # set lba to log page
+  seti $LBAlow = $log
+  # set count to log size
+  seti $count = $logsize
+  # perform the command
+  ata48cmd $features $count $LBAhigh $LBAmid $LBAlow $device $command
+
+  # check if command failed
+  seti $command_failed = 0
+  gosub check_command_status
+  if $command_failed = 1
+    echo "Command failed!"
+    gosub show_sense_data
+    gosub show_ata_return_status
+    previousscript
+  endif
+  echo "Raw buffer:"
+  printbuffer 0 $buffersize
+endif
+
+if $log = 0
+  seti $log = 1
+  while $log < 256
+    seti $temp = $log * 2
+    seti $logsize = buffer $temp w
+    if $logsize > 0
+      hex
+      echo "log 0x" $log " = 0x" $logsize
+      decimal
+    endif
+  seti $log = $log + 1
+  done
+endif
+
+if $log = 3
+    seti $logpage = 0
+    seti $logerrcount = 1
+    while $logpage < $logsize
+      seti $logposition = $logpage * 512
+      if $logpage = 0
+        seti $logindex = buffer 2 w
+        echo "log index = " $logindex
+      endif
+      seti $errstructcount = 0
+      while $errstructcount < 4
+        seti $errstructoffset = $logposition + 4
+        seti $tempoffset = $errstructcount * 124
+        seti $errstructoffset = $errstructoffset + $tempoffset
+        echo "error structure " $logerrcount
+        seti $datastructcount = 0
+        while $datastructcount < 6
+          seti $tempoffset = $datastructcount * 18
+          seti $datastructoffset = $errstructoffset + $tempoffset
+          printbuffer $datastructoffset 16
+          seti $datastructcount = $datastructcount + 1
+        done
+        seti $errstructcount = $errstructcount + 1
+        seti $logerrcount = $logerrcount + 1
+      done
+      seti $logpage = $logpage + 1
+    done
+  endif
+
+
+
+
+previousscript
+end
+
+
+
+

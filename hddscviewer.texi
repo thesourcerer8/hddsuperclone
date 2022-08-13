@@ -1,0 +1,254 @@
+\input texinfo   @c -*-texinfo-*-
+@c %**start of header
+@setfilename hddscviewer.info
+@settitle HDDSCViewer Manual
+@c %**end of header
+
+@set UPDATED 15 October 2016
+@set VERSION 0.4-alpha
+
+@copying
+This manual is for HDDSCViewer (version @value{VERSION}, @value{UPDATED}).
+
+Copyright @copyright{} 2016 Scott Dwyer.
+
+@quotation
+This manual is free documentation: you have unlimited permission to copy and
+distribute it.
+@end quotation
+@end copying
+
+@dircategory Freeware/Proprietary
+@direntry
+* HDDSCViewer: (hddscviewer).       Disk progress file graphical viewer
+@end direntry
+
+@ifnothtml
+@titlepage
+@title HDDSCViewer
+@subtitle for version @value{VERSION}, @value{UPDATED}
+@author Scott Dwyer (@email{sdcomputingservice@@gmail.com})
+@page
+@vskip 0pt plus 1filll
+@insertcopying
+@end titlepage
+
+@contents
+@end ifnothtml
+
+@node Top
+@top HDDSCViewer
+
+This manual is for HDDSCViewer (version @value{VERSION}, @value{UPDATED}).
+
+Home page: www.sdcomputingservice.com
+
+@menu
+* Introduction::
+* Installing::
+* Usage::
+* Multilanguage Support::
+* Reporting Bugs::
+* Index::
+@end menu
+
+@node Introduction
+@chapter Introduction
+@cindex introduction
+
+HDDSCViewer is a Linux based graphical viewer for inspecting progress log files
+created by HDDSuperClone. It is also capable of opening ddrescue log (map)
+files.
+
+
+
+@node Installing
+@chapter Installing
+@cindex Installing
+
+HDDSCViewer is supplied as an executable, with separate ones for 32bit
+and 64bit.  You CANNOT run the 32bit on a 64 bit system and vice versa
+(you may get an odd file not found error if you try).
+
+HDDSCViewer now has DEB (Debian/Ubuntu) and RPM (RedHat/Fedora)
+installers available.  If you have downloaded the appropriate installer
+then you should just be able to double click on it to start the
+installation process.  This method should even work on many live CDs,
+but not all.  If you are unable to use one of the installers, then you
+will need to follow the instructions below to install from the tar.gz
+file or to run without installing.
+
+If you have downloaded the tar.gz file, then the easiest way to get
+started is to copy the tar.gz file to a flash drive, and then use simple
+copy and paste to put it in the Home folder that can be found on the
+desktop of the Linux install.  When you open a terminal it should
+default to the same Home folder that is on the desktop.
+
+To extract hddscviewer, open a terminal and use the following
+commands (replacing the -x.x.-xxx with proper version number and
+architecture):
+@example
+gunzip hddscviewer-x.x.-xxx.tar.gz
+tar xf hddscviewer-x.x.-xxx.tar
+@end example
+
+Then navigate to the proper directory:
+@example
+cd hddscviewer-x.x.-xxx
+@end example
+
+The following method to install HDDSCViewer will not only work on a
+Linux installation, but you can use the same method when booting from a
+live CD. The only difference is that every time you use a live CD, you
+will need to perform these steps after each boot.
+
+To install hddscviewer, use the following command:
+@example
+sudo make install
+@end example
+
+The "make install" command needs to be run as root, which is why
+"sudo" is included in this example.  Your sysem may use a different
+command, or you may already be root.  If it is not ran as root, then you
+will likely get permission errors and the install will not be complete.
+Note that you can also uninstall it with the command "sudo make
+uninstall".  There is now also an uninstaller script that can be ran by
+typing "sudo hddscviewer-uninstall.sh".
+
+To run HDDSCViewer from the command line:
+@example
+hddscviewer
+@end example
+
+To run it without installing, you must be in the same directory as
+hddscviewer.  Note that some versions of Linux will not allow you to
+run a program from certain external devices (such as a FAT32 USB drive).
+Example to run it from the current directory:
+@example
+./hddscviewer
+@end example
+
+You may need to change the permissions on the file so that you have
+the rights to run it.  The following command should do that:
+@example
+sudo chmod a+x hddscviewer
+@end example
+
+If you are booted from a live CD that does not allow installing with
+make (maybe make does not exist) and you are trying to run it from a USB
+drive and are getting a permission error, you can copy the executable to
+the home folder and run it from there.  Note that if using a live CD the
+home folder exists in ram and will be cleared on a reboot.  The
+following example assumes you are in the folder on the USB drive that
+contains hddscviewer.  The first command copies it to the home folder,
+the second command gives permission to execute, and the third command
+runs it:
+@example
+sudo cp hddscviewer /home
+sudo chmod a+x /home/hddscviewer
+/home/hddscviewer
+@end example
+
+Please see the Installing and Usage sections of the manual for more info.
+
+
+
+@node Usage
+@chapter Usage
+@cindex Usage
+
+This program is still in ALPHA stage, and this section of the manual is not
+completed yet. But there is not that much to it, so just run it and play with
+the options to see what it does.
+
+Since this is a GUI program, it just needs to be started from the command line.
+@example
+hddscviewer
+@end example
+
+
+@node Multilanguage Support
+@chapter Multilanguage Support
+@cindex Multilanguage Support
+
+At startup you will have the option to export the current (English) language to
+a text file. You can then run that that text file through a translator (such as
+Google Translate), and paste the result into a new language text file. Then
+choose to import the new language file at startup and all text should be
+translated. How well it is translated will depend on the translator. While this
+may not be the best method for language translation, it at least gives the end
+user the abilty to see the words in their own language, and by way of context
+likely figure out how to operate the software.
+
+The imported language file must still have the base formatting in place to be
+accepted for import. The example below shows how the formatting should remain
+in place. The lines with numbers surrounded by underscores and pipes must stay
+intact. Some translators (like the example below) may add spaces between those
+characters in the line and that is normally acceptable and can still be
+processed during import. However, any missing or misplaced
+numbers/underscores/pipes will cause the import to fail.
+
+Exported English:
+@example
+_HDDSCViewer_0.3-alpha_20160820_
+___|0|___
+File
+___|1|___
+Quit
+___|2|___
+Open
+___|3|___
+Error!
+___|4|___
+Warning
+@end example
+
+Translated to German:
+@example
+_HDDSCViewer_0.3-Alpha_20160820_
+___ | 0 | ___
+Datei
+___ | 1 | ___
+Verlassen
+___ | 2 | ___
+Öffnen
+___ | 3 | ___
+Fehler!
+___ | 4 | ___
+Warnung
+@end example
+
+Please note that the status key window does not translate for all languages
+(Chinese and Japanese are known). The characters just turn into square blocks.
+This will be worked on in the future. This does not affect the menu.
+
+
+
+@node Reporting Bugs
+@chapter Reporting Bugs
+@cindex Reporting Bugs
+
+It is always possible that there are programming errors in this software. It is
+also possible that there are errors and omissions in this documentation. If you
+report them, they will get fixed. If you don't report them, they will just stay
+the way they are and will not get fixed.
+
+Report bugs to (@email{sdcomputingservice@@gmail.com})
+
+Please include the version number of hddscviewer. You can find the version by
+running hddscviewer with the @code{--version} option.
+
+
+
+
+
+
+@node Index
+@unnumbered Index
+
+@printindex cp
+
+@bye
+
+
+

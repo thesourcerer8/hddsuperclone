@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Languages/Localizations</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="locales"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">TOC</a> &middot; <a href="setup.html">Installation and Run</a>
+<hr />
+<h2>Languages/Localizations</h2>
+<h3>Dialog Box &quot;Select Language&quot;</h3>
+<p><b>Apply Codepages.</b>
+If the option is checked then ANSI and OEM code pages from the selected localization 
+file are used. 
+</p>
+
+<p><b>Translit.</b>
+Transliterate interface if there are problems displaying national symbols.
+</p>
+
+<p><b>RTL dismiss</b> (Linux only).
+Disable string reversal for RTL written languages if terminal emulator already supports it 
+to avoid double reversal (e.g. Konsole).
+</p>
+
+<div class="spec">
+<h3>Code Pages - Interface and Data Recovery</h3>
+<p>
+Unicode interface and Unicode file names are used if it is supported by OS.
+Otherwise
+<strong>ANSI code page</strong> is used in OS Windows 98/ME and
+<strong>OEM code page</strong> is used in DOS,
+whilest symbols outside the selected codepages are transliterated or substituted.
+</p>
+<p>
+<strong>OEM code page</strong> is used also for national short name reading (8.3 format) on FAT volumes. 
+</p>
+<p>
+By default OS code pages are used (if applicable).
+Code pages from <a href="inifile.html">Ini-file</a> (if defined) override them.
+Code pages from the selected lng-file (<span class="tt">*.lng</span>) override everything 
+if <span class="ii">Apply Codepages</span> option is checked in the dialog box 
+<b>&quot;Select Language&quot;</b>.
+Lng-file string <span class="tt">107=</span> is for ANSI, lng-file string <span class="tt">108=</span> is for OEM codepage. 
+</p>
+</div>
+
+<div class="spec">
+<h3>INI-file settings</h3>
+<p>
+<!--b>loadlngfiles=</b><br />
+<b>loadcptables=</b><br /-->
+<b>usecodepage=</b> ANSI code page<br />
+<b>oemcodepage=</b> OEM code page<br />
+<b>translitenable=</b> (<span class="tt">Translit</span>)<br />
+<b>viewtranslit=</b> (<span class="tt">Translit</span>)<br />
+<b>rtldismiss=</b><br />
+</p>
+</div>
+</div></div>
+</body>
+</html>

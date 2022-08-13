@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Okno dialogowe We/Wy urządzeńia</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="deviodlg"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Spis treści</a> &middot; <a href="howto.html">Praca</a>
+<hr />
+<h3>Okno dialogowe We/Wy urządzeńia</h3>
+<a href="devioparams.html">Parametry We/Wy</a>
+&nbsp;
+<a href="deviohsc.html">Skrypt obsługi We/Wy</a>
+<p>
+Jeśli wystąpi błąd podczas We/Wy urządzenia a następnie pojawi się okno dialogowe, 
+w którym można wybrać sposób obsługi błędu.
+<span style="color:#ff0000; font-weight: bold;">Uwaga! </span>
+Przeczytaj <a href="badrecovery.html">informacje o użyciu uszkodzonego urządzenia</a>.
+</p>
+<p class="spec">
+Wyświetlane są następujące informacje: 
+<b>[W]</b> oznacza, że wystąpił błąd podczas zapisywania w urządzeniu,
+<b>LUN</b> - numer dysku w <a href="raids.html">wirtualnym RAID</a>, 
+numery sektorów, w których wystąpił błąd, 
+numer próba, numer błędu i opis błędu. 
+Po kilku próbach (określone przez <a href="devioparams.html">parametry</a>) 
+program czeka na reakcję użytkownika (chyba, że pomijanie błędów trybie w <a href="devioparams.html">parametrach</a> 
+jest zaznaczona), a przycisk <span class="ii">Ponów</span> staje się aktywny.
+Pojawi się okno dialogowe wcześniej blok danych będzie przetwarzany.
+</p>
+
+<p><strong>Przerwij:</strong> przerwij bieżącej operację We/Wy.</p>
+<p class="spec">
+Naciśnięcie Przerwij powoduje sektory błędów nie zostaną skopiowane do miejsca przeznaczenia
+(zachowanie to może ulec zmianie w przyszłych wersjach).
+Przycisk jest nieaktywny, jeśli operacja nie może być przerwana.
+</p>
+
+<p><strong>Ponów:</strong> spróbuj ponownie We/Wy.
+</p>
+<p class="spec">
+W niektórych przypadkach możliwe odczytać sektora 
+i nadal bez zniekształceń danych po kilku próbach. 
+Przycisk jest nieaktywny podczas We/Wy jest w toku.
+</p>
+
+<p><strong>Ignoruj:</strong>
+kontynuacja pracy ignorując błąd.
+</p>
+<p class="spec">
+Obecne działania będą kontynuowane, ale najprawdopodobniej z zniekształcenie danych. 
+Podczas czytania struktur systemu plików może spowodować utratę niektórych plików i uszkodzenie struktury katalogów.
+</p>
+
+<p><strong>Ignoruj wszystkie:</strong>
+kontynuacja pracy ignorowanie wszelkich podobnych błędów.
+</p>
+<p class="spec">
+Po kilku próbach (określone przez <a href="devioparams.html">parametry</a>) 
+program nie czeka na wyborem użytkownika, ale zignorować błąd i kontynuować bieżącą działalność.
+</p>
+
+<p><strong>Aktualizuj:</strong> 
+update the list of devices, and update the device handle.
+Użyj dodatkowego <a href="devioparams.html#deviopar_more">parametrг</a>, 
+aby ponownie otworzyć uchwyt urządzenia przy błędzie w celu automatycznego ponownego otwarcia każdego błędu.
+</p>
+
+<p><b>ATA reset:</b>
+wykonaj ATA soft reset.
+Dostępne tylko, jeśli <a href="devices.html">urządzenie jest otwarte</a> przez 
+<span class="ii">ATA interface</span> w systemie DOS.
+</p>
+
+
+<p><strong>Parametry:</strong>
+<a href="devioparams.html">ustawienia We/Wy urządzenia</a>
+</p>
+
+<p><strong>Potwierdź, Anuluj:</strong>
+służy do zmiennej <span class="tt">%CONFIRM%</span> w 
+<a href="deviohsc.html">Skrypte obsługi We/Wy urządzenia</a>
+</p>
+
+&nbsp;
+</div></div>
+</body>
+</html>

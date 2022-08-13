@@ -1,0 +1,53 @@
+seti $printhelp = $printhelp
+
+
+while 1 = 1
+  echo " "
+  echo "Erase menu"
+  echo "q) Quit"
+  echo "p) Previous menu"
+  echo "h) Toggle script help
+  echo "1) Erase sectors 28 PIO
+  echo "2) Erase sectors 48 PIO
+
+  if $printhelp = 1
+    exit 0
+  endif
+
+  echo "Enter your choice:
+  userinput $choicestring
+
+  if $choicestring = q
+    break
+
+  elseif $choicestring = p
+    previousscript
+
+  elseif $choicestring = h
+    if $help = 0
+      seti $help = 1
+      echo "Help is now turned on"
+    else
+      seti $help = 0
+      echo "Help is now turned off"
+    endif
+
+  elseif $choicestring = 1
+    loadscript ata28_erase_sectors_pio
+    break
+
+  elseif $choicestring = 2
+    loadscript ata48_erase_sectors_pio
+    break
+
+
+
+
+  else
+    echo "bad choice= " $choicestring
+  endif
+
+
+
+done
+end

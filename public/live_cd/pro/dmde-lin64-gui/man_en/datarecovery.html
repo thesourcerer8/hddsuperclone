@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Data Recovery</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="datarecovery"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">TOC</a> &middot; <a href="howto.html">Work</a> &middot; <a href="menu.html">Menu</a> &middot; 
+<a href="menu_tools.html">Tools</a>
+<hr />
+<h2>Data Recovery</h2>
+<a href="badrecovery.html">Damaged Devices</a> 
+&nbsp;
+<a href="removedrecovery.html">Removed Files</a>
+&nbsp;
+<a href="#recoveryevents">Errors in Files</a>
+&nbsp;
+<a href="datarecovery.html#efs">Encrypted Files</a>
+&nbsp;
+<a href="fullscan.html">Complex Scan</a>
+
+<p>
+<span style="color:#ff0000; font-weight: bold;">Attention!</span>
+Make sure the device is not damaged beforehand
+(<a href="badrecovery.html">if device is damaged</a>).
+</p>
+<p>
+<span style="color:#ff0000; font-weight: bold;">Attention!</span>
+Do not write anything to the source disk. Recover data to another disk only.
+It is highly recommended to recover data to another physical device. 
+You may recover to another partition of the same device only 
+if you are sure that the source and destination partitions don't overlap and the device has no physical problems.
+Do not load system or run software from the partition where lost data is located
+(<a href="setup.html">Installation and Run</a>).
+</p>
+<p>
+<span style="color:#ff0000; font-weight: bold;">Attention!</span>
+If files are recovered incorrectly or there are other problems 
+make sure you are using the <a href="about.html">most recent software versions</a> from a trusted source.
+</p>
+<h3>Data Recovery Steps</h3>
+<ul>
+<li><a href="openvolume.html">Find and open a volume</a> containing lost data;</li>
+<li>open/reopen the virtual directory <span class="ii">[All Found / Virtual FS]</span>
+to get more or less found files (see <a href="reconstruction.html">virtual FS Reconstruction</a>);</li>
+<li>mark items for recovery and use the menu <a href="menu_tools.html">Tools</a> &middot; 
+<a href="menu_tools.html">Recover</a> to recover them to another disk.</li>
+</ul>
+<p>
+With <a href="editions.html">Free Edition</a> you may recover up to 4000 files 
+from the opened panel per single command call 
+(you should first open a directory with the necessary files on a panel and then select recovery from the panel).
+</p>
+<p> 
+If you cannot open/play files after recovery you should try different found volume variants&nbsp;-
+return to the <a href="fullscan.html">Full Scan</a> results
+or to <a href="partitions.html">Partitions</a> and open the next found volume.
+</p>            
+
+<div class="l">
+<h3>Dialog Box "Recover"</h3>
+<h4>File Categories</h4>
+<p>
+Select file categories for recovery - 
+see <a href="filepanel.html#fileicons">File Panel icons</a> for categories details.
+Checkboxes for excluded files will be unchecked 
+unless the option "<span class="ii">keep selection marks for excluded items</span>" is used.
+</p>
+<h4>Button "Size"</h4>
+<p>Calculate the size of the data to recover. 
+Global indicator of recovery process is working if the size is calculated.
+You should not calculate the size to avoid unnecessary device load on devices with bad sectors.
+</p>
+<h4 id="drfilelist">Button "List" &middot; File List</h4>
+<p>
+Create a list of selected files with their attributes.
+</p>
+<h4 id="drseclist">Button "List" &middot; Sector List</h4>
+<p>
+Obtain a list of sectors occupied by selected files
+(e.g. it may be used by a different software to create a partial disk clone).
+It is possible to report fragments boundaries in <span class="ii">sectors</span> or in <span class="ii">bytes</span>,
+and to specify <span class="ii">file paths</span> in the list.
+</p>
+<p>
+The option <span class="ii">Sector ranges</span> allows listing 
+only those files fragments which are located in the specified sector ranges.
+E.g. this allows obtaining a list of damaged files located in bad sectors
+when you recover from the image file (or from a healthy cloned disk) 
+which does not report source bad sectors itself.
+If you created an image/clone using the function <a href="copysectors.html">Copy sectors</a> 
+with the log file enabled
+then you can export a list of bad and skipped sectors from the log by using a command in
+<span class="ii">Copy sectors</span> <a href="copysectors.html#devcopymenu">Menu</a>.
+</p>
+<p>
+Data recovery restrictions are applied on a number of files and subdirectory processing
+if <a href="editions.html">Free Edition</a> is used.
+Alternatively, you can use the <a href="clustermap.html#cmapreport">Cluster Map report</a> 
+without restrictions, 
+in this case the lists will also be sorted by the position of the fragments on the disk.
+</p>
+<h4>Checkbox "Include NTFS altstreams" (<a href="editions.html">Professional Edition</a> only)</h4>
+<p>
+Recover NTFS alternate data streams. 
+Alt.&nbsp;streams are displayed in the <a href="filepanel.html#fileicons">File Panel</a> after 
+<a href="reconstruction.html">FS reconstruction</a>,
+an alt.&nbsp;stream name is separated by a colon.
+</p>
+<h4>Filters</h4>
+<p>Filtering by a name mask, size, modification date, ID is supported.
+Checkboxes for excluded files will be unchecked 
+unless the option "<span class="ii">keep selection marks for excluded items</span>" is used.
+Use <span class="tt">0</span> (zero) as a second value for the size/ID 
+if you need not to limit the higher value for the size/ID.
+</p>
+<p>
+Name masks are semicolon separated.
+Wildcards "<span class="tt">*</span>" (any set of chars) and "<span class="tt">?</span>" (any char) are supported.
+Exclusion masks may also be defined by prepending a backslash "<span class="tt">\</span>".
+Masks at the beginning have a priority. 
+E.g. the name <span class="tt">abc.tmp</span> matches <span class="tt">a*;\*.tmp</span> and does not match <span class="tt">\*.tmp;a*</span>.
+</p>
+<p>
+If the option <span class="ii">Process only directories with files</span> is used than
+directories will be recovered which contain files matching filters.
+</p>
+
+<h4>Create Report (<a href="editions.html">Professional Edition</a> only)</h4>
+<p>
+Save recovery report to a file 
+(file name and other parameters are requested on recovery process start). 
+Files and directories are listed, 
+I/O errors for files are reported, checksums CRC-32, MD5, SHA-1, SHA-256 are calculated for a forensic report.
+</p>
+</div>
+
+<h3>Additional Options</h3>
+<h4>Checkbox "Unicode names"</h4>
+<p>
+The option is marked or used by default if an OS supports Unicode names.
+Without Unicode support symbols outside the selected code page will be transliterated or substituted
+(see <a href="locales.html">Locales</a>). Unavailable in DOS.
+</p>
+<h4>Recover to a FAT formatted volume, checkbox "Split large files"</h4>
+<p>
+FAT volumes do not support files greater than 4GB (or sometimes 2GB).
+Larger files may be split during recovery upon a request if OS is properly reporting this
+(which is not always the case) 
+or if the option <span class="ii">Split large files</span> is used (recommended for FAT).
+
+Later you may merge file parts on another disk by using the system utility 
+<span class="tt">copy /b</span>, for example.
+Pure DOS supports only FAT volumes.
+</p>
+
+<h4 id="namesubst">File names in DOS, checkbox "Substitute names"</h4>
+<p>Without special drivers long files names are not supported in DOS. 
+With the option <span class="ii">Substitute names</span> names are substituted during recovery. 
+File <span class="tt">LRENAME.BAT</span> is being created in the destination directory for backward renaming.
+To restore original file names load OS Windows, open the destination directory
+and run the file <span class="tt">LRENAME.BAT</span>. 
+</p>
+<p>
+With the option <span class="ii">utf-8</span> the file <span class="tt">LRENAME.BAT</span> 
+will be created in the utf-8 format fully supporting Unicode.
+Utf-8 format is supported in Windows&nbsp;7 and higher.
+Without the <span class="ii">utf-8</span> option 
+the <a href="locales.html">OEM code page</a> will be used
+and Unicode symbols outside the selected code page will be transliterated or substituted.
+</p>
+<h4>Paths longer than 259 symbols (Windows NT and higher)</h4>
+<p>
+<span class="ii">Support for extra long paths</span> option
+(or manual prepending the prefix <span class="tt">\\?\</span>
+when specifying the destination directory, e.g.: <span class="tt">\\?\D:\</span>)
+allows recovering paths longer than 259 symbols.
+
+Such long paths may be inaccessible using standard OS means such as Explorer ("My Computer").
+</p>
+<h4 id="recoveryevents">Duplicate Names, Errors in Files, and Other Events Handling</h4>
+<p>
+During recovery there may be <b>name duplicates</b> 
+if there are different versions of the same file/directory (or different links), 
+or directories are merged wrongly,
+or the destination file system doesn't distinguish between some names (case insensitivity),
+or there are already files in the destination directory before recovery.
+You need to specify what to do in such case.
+</p>
+<p>
+The options <span class="ii">rename, auto rename, skip/all, merge/all</span> (for directories) are available.
+Additionally you are asked for a threshold (maximum number of duplicates for the same name).
+When the threshold is exceeded you are asked again for a desired action.
+Duplicates are not handled if <span class="ii">name substitution</span> is used in DOS.
+</p>
+<p>
+During recovery there may <a href="deviodlg.html">I/O errors</a> and FS errors
+which obviously result in <b>errors in affected files</b>.
+You can also specify how to handle such files: <br />
+<span class="ii">Skip</span> to skip a file with such errors (the skipped file will remain marked after recovery),<br />
+<span class="ii">Ignore</span> to continue recovery with errors,<br />
+<span class="ii">Ignore and Hide</span> to continue recovery and hide a file
+(set the attribute "Hidden" in Windows&nbsp;/ DOS,
+and set zero <span class="tt">0</span> permissions in Linux&nbsp;/ macOS). <br />
+<span class="ii">Move to $Bad</span> to move the file to the directory 
+<span class="tt">$Bad</span> within the destination directory.
+</p>
+<p>
+You can specify handlers during the recovery or before recovery using the option
+<span class="ii">Event Handler.</span>
+As well you may change the destination, split the file if there is no more space on the destination.
+</p>
+
+<h3 id="efs">NTFS Encrypted Recovery</h3>
+<p>
+DMDE recovers NTFS encrypted files without decryption. 
+An encrypted file contains the encrypted data and encryption key 
+which in its turn is encrypted with a certificate key.
+You need the certificate from the source OS or its backup to be installed 
+on a destination OS to open encrypted files after recovery.
+Please refer to Microsoft documentation on exporting and importing certificates.
+</p>
+<p>To store encrypted files NTFS encryption (EFS) must be supported by both OS and the destination file system 
+(i.e. Windows and NTFS are required).
+In DMDE there are workaround options for EFS recovery when run on a different platform.
+</p>
+<p>
+Recover <span class="ii">to separate streams</span>: recover data streams and keys into separate files 
+(<span class="tt">.efs</span> and <span class="tt">.efk</span> extensions are assigned).
+Further processing of these files is a user task.
+<br />
+Recover <span class="ii">to backup (portable format)</span>: recover file data and key into a backup file
+(<span class="tt">.efb</span>).
+Backup files may later be restored into EFS files 
+using the menu <a href="menu_tools.html">Tools</a> - <span class="ii">Restore EFS from Backup...</span>
+(only when run on a EFS supporting platform).
+<br />
+Recover <span class="ii">to NTFS encrypted file</span>: recover at once into an encrypted NTFS file
+when run on a EFS supporting platform.
+</p>
+</div></div>
+</body>
+</html>

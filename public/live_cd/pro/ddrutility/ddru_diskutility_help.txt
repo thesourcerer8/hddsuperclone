@@ -1,0 +1,28 @@
+ddru_diskutility - Part of the ddrutility tool set
+Multi-purpose tool that uses direct passthrough commands to perform actions on
+the source disk
+
+Usage: ddru_diskutility [options] <source_disk>
+
+OPTIONS:
+ -v, --version                 Show version and exit
+ -h, --help                    Show help and exit
+ -V, --verbose                 Show additional information
+ -b, --sectorsize <bytes>      Sets sector size (default=512)
+ -B, --binary                  output some results in binary
+ -c, --clustersize <sectors>   Number of sectors per block (default=1)
+ -d, --direct                  Use direct I/O
+ -p, --sgpt                    Use SCSI passthrough commands
+ -P, --sgptata                 Use ATA passthrough commands
+ -i, --inputoffset <bytes>     Input read offset in bytes
+ -I, --inquiry                 Show device information
+ -s, --readsize <bytes>        Size to be read in bytes
+ -r, --readsector <sector>     Reads block of sectors starting at <sector>
+ -l, --readlong28 <sector>     Performs old readlong command
+ -L, --readlong48 <sector>     Performs readlong extended command
+ -g, --readlongbest <count>    Peforms multiple readlongs and shows average
+
+Report bugs to maximus57@hotmail.com
+Or better yet, report bugs at the project home page
+Ddrutility homepage: http://sourceforge.net/projects/ddrutility/
+

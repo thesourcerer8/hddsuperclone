@@ -1,0 +1,701 @@
+
+
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'Western Digital ROYL patch module 02 to file using vendor specific commands.'
+  echo 'This patch is meant for drives that suffer from the "slow" issue.'
+  echo 'It should be used along with the module 32 patch.'
+  echo 'This patch is based on data from the following forum thread:'
+  echo '  WD - Fixing the "Slow Issue" manually :'
+  echo '  http://www.hddoracle.com/viewtopic.php?f=86&t=848'
+  echo 'This will dump the sectors to the file "<serial>_mod02orig.bin".'
+  echo 'And it will create the file "<serial>_mod02patched.bin".'
+  echo 'It will also create a folder using the model and serial as the folder name,'
+  echo ' and create a backup dump file with the date and time as part of the name.'
+  echo 'It will create a backup dump every time a read or write is attempted.'
+  echo 'The drive must be power cycled for the changes to take effect.'
+  echo 'You have three options:'
+  echo '1) Read the module to a file and create the patch.'
+  echo '2) Write the patched data back to the disk.'
+  echo '3) Restore the original dump.'
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+
+include good_subroutines
+
+# set the module number
+seti $module_number = 0x02
+
+# set the base filenames
+sets $basefilename = "mod02original.bin"
+sets $basepatchname = "mod02patched.bin"
+
+while 1 = 1
+  echo " "
+  echo "WD ROYL Patch Mod02"
+  echo "This modifies data in the service area of the drive!"
+  echo "Use at your own risk!"
+  echo "These commands can take several minutes and appear to be hung."
+  echo "Please be patient and let it finish on its own."
+  echo "q) Quit"
+  echo "p) Previous menu"
+  echo '1) Read the module to a file and create the patch.'
+  echo '2) Write the patched data back to the disk.'
+  echo '3) Restore the original dump.'
+
+  echo "Enter your choice:
+  userinput $choicestring
+
+  if $choicestring = q
+    exit 0
+
+  elseif $choicestring = p
+    previousscript
+
+  elseif $choicestring = 1
+    gosub read_and_create
+
+  elseif $choicestring = 2
+    gosub write_patch
+
+  elseif $choicestring = 3
+    gosub restore_original
+
+  else
+    echo "bad choice= " $choicestring
+  endif
+
+done
+
+previousscript
+end
+
+
+
+
+
+
+subroutine read_module
+  # get model and serial using identify device command
+  echo "Performing identify device command"
+  buffersize 512
+  setreadpio
+  ata28cmd 0 0 0 0 0 0xa0 0xec
+  # check if command failed
+  gosub status_check
+  # extract model and serial and trim leading and trailing spaces
+  sets $model = "null"
+  sets $serial = "null"
+  wordflipbuffer 0 512
+  seti $count = 0
+  seti $start_offset = 54
+  while $count < 40
+    seti $byte = buffer $start_offset
+    if $byte > 0x20
+      break
+    endif
+    seti $start_offset = $start_offset + 1
+    seti $count = $count + 1
+  done
+  seti $count = 0
+  seti $end_offset = 93
+  while $count < 40
+    seti $byte = buffer $end_offset
+    if $byte > 0x20
+      break
+    endif
+    seti $end_offset = $end_offset - 1
+    seti $count = $count + 1
+  done
+  seti $end_offset = $end_offset + 1
+  seti $size = $end_offset - $start_offset
+  if $size > 0
+    sets $model = buffer $start_offset $size
+  endif
+  # find out if it is a WD drive
+  sets $wdcheck = buffer $start_offset 3
+  sets $compare = "WDC"
+  if $wdcheck != $compare
+    echo "Model: " $model
+    echo "Drive is not WD, exiting
+    previousscript
+  endif
+
+  seti $count = 0
+  seti $start_offset = 20
+  while $count < 20
+    seti $byte = buffer $start_offset
+    if $byte > 0x20
+      break
+    endif
+    seti $start_offset = $start_offset + 1
+    seti $count = $count + 1
+  done
+  seti $count = 0
+  seti $end_offset = 39
+  while $count < 20
+    seti $byte = buffer $end_offset
+    if $byte > 0x20
+      break
+    endif
+    seti $end_offset = $end_offset - 1
+    seti $count = $count + 1
+  done
+  seti $end_offset = $end_offset + 1
+  seti $size = $end_offset - $start_offset
+  if $size > 0
+    sets $serial = buffer $start_offset $size
+  endif
+
+  clearbuffer
+
+  echo "Model: " $model
+  echo "Serial: " $serial
+
+  # create a directory named with model and serial
+  sets $directory = $model "__" $serial
+  sets $command = 'mkdir -p "' $directory '"'
+  callcommand $command
+
+  # set filename for backup dump file
+  gettime
+  sets $backup_filename = $directory "/" $time "__" $basefilename
+  sets $backup_patchname = $directory "/" $time "__" $basepatchname
+
+  # set filenames to start with serial
+  sets $filename = $serial "_" $basefilename
+  sets $patchname = $serial "_" $basepatchname
+
+  echo "Reading the module"
+
+  gosub enable_vsc
+
+  gosub prepare_read_vsc
+
+  # vsc to get a sector of the module
+  setreadpio
+  buffersize 0x200
+  clearbuffer
+  ata28cmd 0xd5 0x01 0xbf 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+
+  # find how many sectors the module contains
+  seti $mod_length_sectors = buffer 0xa
+  seti $tempnum = buffer 0xb
+  seti $tempnum = $tempnum > 8
+  seti $mod_length_sectors = $mod_length_sectors + $tempnum
+  seti $remaining_sectors = $mod_length_sectors - 1
+
+  # copy the sector to the scratchpad
+  seti $scratchpad_size = $mod_length_sectors * 512
+  scratchpadsize $scratchpad_size
+  copybuffertoscratchpad 0 0 0x200
+
+  # vsc to get the remaining sectors
+  # this gets them one at a time
+  # there is a way to get them all at once,
+  # but there was a case where that did not work
+  seti $count = 1
+  while $count < $mod_length_sectors
+    setreadpio
+    buffersize 0x200
+    clearbuffer
+    ata28cmd 0xd5 0x01 0xbf 0x4f 0xc2 0xa0 0xb0
+    # check if command failed
+    gosub status_check
+    # copy the sectors to the scratchpad
+    seti $offset = $count * 0x200
+    copybuffertoscratchpad 0 $offset 0x200
+    seti $count = $count + 1
+  done
+
+  gosub disable_vsc
+
+  # write the sectors to the backup file
+  writescratchpad $backup_filename 0 0 $scratchpad_size
+
+  # process the module
+  echo "Header:"
+  printscratchpad 0 4
+  seti $mod_id = scratchpad 8 w
+  hex
+  echo "Module ID = 0x" $mod_id
+  echo "Size in sectors = 0x" $mod_length_sectors
+  seti $checksum = scratchpad 0xc dw
+  echo "32 bit checksum = 0x" $checksum
+  seti $total_records = scratchpad 0x30 w
+  echo "Total records = 0x" $total_records
+  decimal
+  sets $header = scratchpad 0 4
+  sets $header_check = "ROYL"
+  if $header != $header_check
+    echo "Header is not 'ROYL', exiting"
+    previousscript
+  endif
+
+  # calculate checksum
+  seti $calculated_checksum = 0
+  gosub calculate_checksum_scratchpad
+  hex
+  if $checksum = $calculated_checksum
+    echo "Calculated Checksum = 0x" $calculated_checksum " (good)"
+  else
+    echo "Calculated Checksum = 0x" $calculated_checksum " (BAD)"
+    echo "Checksum of read module is not valid, exiting"
+    previousscript
+  endif
+  decimal
+
+endsubroutine
+
+
+
+
+
+subroutine make_patch
+  # this patch writes 0 to offset 2 of record 27
+
+  seti $count = 26
+  seti $offset = $count * 4
+  seti $count = $count + 1
+  seti $offset = $offset + 0x32
+  seti $record_offset = scratchpad $offset w
+  seti $offset = $offset + 2
+  seti $record_size = scratchpad $offset w
+  echo ""
+  echo "Data record #" $count ":"
+  printscratchpad $record_offset $record_size
+  seti $byte_offset = $record_offset + 2
+  setscratchpad $byte_offset
+    00
+  endscratchpad
+  echo "Data record #" $count " after patch:"
+  printscratchpad $record_offset $record_size
+
+  #copy the scratchpad to the buffer for writing
+  seti $buffer_size = $scratchpad_size
+  buffersize $buffer_size
+  clearbuffer
+  copyscratchpadtobuffer 0 0 $scratchpad_size
+
+  # calculate new checksum and insert it
+  seti $calculated_checksum = 0
+  gosub calculate_checksum_buffer
+  hex
+  echo "Calculated Checksum = 0x" $calculated_checksum
+  decimal
+  seti $b1 = $calculated_checksum & 0xff
+  seti $calculated_checksum = $calculated_checksum > 8
+  seti $b2 = $calculated_checksum & 0xff
+  seti $calculated_checksum = $calculated_checksum > 8
+  seti $b3 = $calculated_checksum & 0xff
+  seti $calculated_checksum = $calculated_checksum > 8
+  seti $b4 = $calculated_checksum & 0xff
+  setbuffer 0x0c
+    $b1 $b2 $b3 $b4
+  endbuffer
+
+  # write the patch to the backup file
+  writebuffer $backup_patchname 0 0 $scratchpad_size
+
+  getfilesize $patchname
+  if $error_level > 0
+    echo ""
+    echo "WARNING! The file " $patchname " already exists!"
+    echo "The patched file was NOT created!"
+    echo "Please rename or delete the original files to be able to run this option again."
+    returnsub
+  endif
+  echo "Writing patched mod to file " $patchname
+  writebuffer $patchname 0 0 $scratchpad_size
+
+endsubroutine
+
+
+
+
+
+
+subroutine status_check
+  seti $command_failed = 0
+  gosub check_command_status
+  if $command_failed = 1
+    echo "Command failed!"
+    gosub show_sense_data
+    gosub show_ata_return_status
+    previousscript
+  endif
+endsubroutine
+
+
+
+
+
+subroutine enable_vsc
+  # enable vendor specific commands
+  buffersize 0
+  setreadpio
+  ata28cmd 0x45 0x0b 0x00 0x44 0x57 0xa0 0x80
+  # check if command failed
+  gosub status_check
+endsubroutine
+
+
+
+
+
+
+subroutine disable_vsc
+  # disable vendor specific commands
+  buffersize 0
+  setreadpio
+  ata28cmd 0x44 0x0b 0x00 0x44 0x57 0xa0 0x80
+  # check if command failed
+  gosub status_check
+endsubroutine
+
+
+
+
+
+subroutine read_and_create
+  gosub read_module
+  # write the sectors to the file, this will overwrite any existing file
+  getfilesize $filename
+  if $error_level > 0
+    echo ""
+    echo "WARNING! The file " $filename " already exists!"
+    echo "The module was NOT read to a file!"
+    echo "The patched file was NOT created!"
+    echo "Please rename or delete the original files to be able to run this option again."
+    returnsub
+  endif
+  echo ""
+  echo "Writing origial dump to file " $filename
+  writescratchpad $filename 0 0 $scratchpad_size
+  gosub make_patch
+endsubroutine
+
+
+
+
+
+subroutine write_patch
+  gosub read_module
+  getfilesize $patchname
+  seti $patch_size = $error_level
+  if $patch_size < 0
+    echo "ERROR! File " $patchname " not found!"
+    echo "The patch has not been written to the drive!"
+    returnsub
+  endif
+  seti $divide_check = $patch_size % 512
+  if $divide_check != 0
+    echo "ERROR! Filesize of " $patchname " is not evenly dividable by sector size!"
+    echo "The patch has not been written to the drive!"
+    returnsub
+  endif
+  seti $size_check = $patch_size / 512
+  if $size_check != $mod_length_sectors
+    echo "ERROR! The size of " $patchname " does not match the value read from the module!"
+    echo "The patch has not been written to the drive!"
+    returnsub
+  endif
+  echo "Reading the patch file"
+  readscratchpad $patchname 0 0 $scratchpad_size
+
+  # check for proper header
+  sets $header = scratchpad 0 4
+  sets $header_check = "ROYL"
+  if $header != $header_check
+    echo "Found header = " $header
+    echo "ERROR! Header is not 'ROYL'!"
+    echo "The patch has not been written to the drive!"
+    returnsub
+  endif
+
+  # verify checksum
+  seti $checksum = scratchpad 0xc dw
+  seti $calculated_checksum = 0
+  gosub calculate_checksum_scratchpad
+  hex
+  if $checksum != $calculated_checksum
+    echo "Checksum in patch file = 0x" $checksum
+    echo "Calculated Checksum = 0x" $calculated_checksum
+    echo "ERROR! Checksum of patch file is not valid!"
+    echo "The patch has not been written to the drive!"
+    returnsub
+  endif
+  decimal
+
+  echo ""
+  echo "Writing the patched module to the drive"
+
+  gosub enable_vsc
+
+  gosub prepare_write_vsc
+
+  # vsc to write the sectors to the disk
+  # this writes them one at a time
+  # there is a way to get them all at once,
+  # but there was a case where that did not work
+  seti $count = 0
+  while $count < $mod_length_sectors
+    setwritepio
+    buffersize 0x200
+    # copy the sector to the buffer
+    seti $offset = $count * 0x200
+    copyscratchpadtobuffer $offset 0 0x200
+    ata28cmd 0xd6 0x01 0xbf 0x4f 0xc2 0xa0 0xb0
+    # check if command failed
+    gosub status_check
+    seti $count = $count + 1
+  done
+
+  gosub disable_vsc
+
+  # read the module again and compare it to what we wrote
+  echo "Verifying data"
+
+  gosub enable_vsc
+
+  gosub prepare_read_vsc
+
+  seti $verify_check = 0
+  gosub read_and_verify
+
+  if $verify_check = 0
+    echo "Data verified!"
+  else
+    echo "WARNING! The data failed verification!"
+    echo "It appears the data write was unsuccessful!"
+  endif
+
+  # write the sectors to the backup file
+  writescratchpad $backup_filename 0 0 $scratchpad_size
+
+  gosub disable_vsc
+
+endsubroutine
+
+
+
+
+
+subroutine restore_original
+  gosub read_module
+  getfilesize $filename
+  seti $file_size = $error_level
+  if $file_size < 0
+    echo "ERROR! File " $filename " not found!"
+    echo "The original has not been written back to the drive!"
+    returnsub
+  endif
+  seti $divide_check = $file_size % 512
+  if $divide_check != 0
+    echo "ERROR! Filesize of " $filename " is not evenly dividable by sector size!"
+    echo "The original has not been written back to the drive!"
+    returnsub
+  endif
+  seti $size_check = $file_size / 512
+  if $size_check != $mod_length_sectors
+    echo "ERROR! The size of " $filename " does not match the value read from the module!"
+    echo "The original has not been written back to the drive!"
+    returnsub
+  endif
+  echo "Reading the origial file"
+  readscratchpad $filename 0 0 $scratchpad_size
+
+  # check for proper header
+  sets $header = scratchpad 0 4
+  sets $header_check = "ROYL"
+  if $header != $header_check
+    echo "Found header = " $header
+    echo "ERROR! Header is not 'ROYL'!"
+    echo "The patch has not been written to the drive!"
+    returnsub
+  endif
+
+  # verify checksum
+  seti $checksum = scratchpad 0xc dw
+  seti $calculated_checksum = 0
+  gosub calculate_checksum_scratchpad
+  hex
+  if $checksum != $calculated_checksum
+    echo "Checksum in patch file = 0x" $checksum
+    echo "Calculated Checksum = 0x" $calculated_checksum
+    echo "ERROR! Checksum of origial file is not valid!"
+    echo "The origial has not been written to the drive!"
+    returnsub
+  endif
+  decimal
+
+  echo ""
+  echo "Writing the origial module to the drive"
+
+  gosub enable_vsc
+
+  gosub prepare_write_vsc
+
+  # vsc to write the sectors to the disk
+  # this writes them one at a time
+  # there is a way to get them all at once,
+  # but there was a case where that did not work
+  seti $count = 0
+  while $count < $mod_length_sectors
+    setwritepio
+    buffersize 0x200
+    # copy the sector to the buffer
+    seti $offset = $count * 0x200
+    copyscratchpadtobuffer $offset 0 0x200
+    ata28cmd 0xd6 0x01 0xbf 0x4f 0xc2 0xa0 0xb0
+    # check if command failed
+    gosub status_check
+    seti $count = $count + 1
+  done
+
+  gosub disable_vsc
+
+  # read the module again and compare it to what we wrote
+  echo "Verifying data"
+
+  gosub enable_vsc
+
+  gosub prepare_read_vsc
+
+  seti $verify_check = 0
+  gosub read_and_verify
+
+  if $verify_check = 0
+    echo "Data verified!"
+  else
+    echo "WARNING! The data failed verification!"
+    echo "It appears the data write was unsuccessful!"
+  endif
+
+  # write the sectors to the backup file
+  writescratchpad $backup_filename 0 0 $scratchpad_size
+
+  gosub disable_vsc
+
+endsubroutine
+
+
+
+
+
+subroutine prepare_read_vsc
+  # vsc to prepare (command to set for module read)
+  buffersize 0x200
+  clearbuffer
+  setbuffer 0
+    08 00 01 00 $module_number
+  endbuffer
+  setwritepio
+  ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+endsubroutine
+
+
+
+
+subroutine prepare_write_vsc
+  # vsc to prepare (command to set for module write)
+  buffersize 0x200
+  clearbuffer
+  setbuffer 0
+    08 00 02 00 $module_number
+  endbuffer
+  setwritepio
+  ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+endsubroutine
+
+
+
+
+subroutine read_and_verify
+  # vsc to get read the sectors
+  # this gets them and verifies one at a time
+  seti $count = 0
+  while $count < $mod_length_sectors
+    buffersize 0x200
+    clearbuffer
+    setreadpio
+    ata28cmd 0xd5 0x01 0xbf 0x4f 0xc2 0xa0 0xb0
+    # check if command failed
+    gosub status_check
+    # compare the data
+    seti $offset = $count * 0x200
+    seti $byte_count = 0
+    while $byte_count < 256
+      seti $b = buffer $byte_count
+      seti $s = scratchpad $offset
+      if $b != $s
+        seti $verify_check = 1
+        break
+      endif
+      seti $offset = $offset + 1
+      seti $byte_count = $byte_count + 1
+    done
+    if $verify_check != 0
+      break
+    endif
+    seti $count = $count + 1
+  done
+endsubroutine
+
+
+
+
+subroutine calculate_checksum_scratchpad
+seti $calculated_checksum = 0
+  seti $count = 0
+  while $count < $scratchpad_size
+    seti $dword = scratchpad $count dw
+    seti $calculated_checksum = $calculated_checksum + $dword
+    seti $count = $count + 4
+    # skip the actual checksum bytes
+    if $count = 0xc
+      seti $count = $count + 4
+    endif
+  done
+  seti $calculated_checksum = $calculated_checksum & 0xffffffff
+  seti $calculated_checksum = 0xffffffff - $calculated_checksum
+  seti $calculated_checksum = $calculated_checksum + 1
+endsubroutine
+
+
+
+
+
+subroutine calculate_checksum_buffer
+seti $calculated_checksum = 0
+  seti $count = 0
+  while $count < $buffer_size
+    seti $dword = buffer $count dw
+    seti $calculated_checksum = $calculated_checksum + $dword
+    seti $count = $count + 4
+    # skip the actual checksum bytes
+    if $count = 0xc
+      seti $count = $count + 4
+    endif
+  done
+  seti $calculated_checksum = $calculated_checksum & 0xffffffff
+  seti $calculated_checksum = 0xffffffff - $calculated_checksum
+  seti $calculated_checksum = $calculated_checksum + 1
+endsubroutine
+
+
+
+
+

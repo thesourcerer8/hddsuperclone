@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Partition Management</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="partitions"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">TOC</a> &middot; <a href="howto.html">Work</a> &middot; <a href="menu.html">Menu</a> &middot; 
+<a href="menu_disk.html">Disk</a>
+<hr />
+<h2>Partition Management</h2>
+<p>
+A tool to view, quick search, and <a href="openvolume.html">open volumes</a>, 
+as well as to perform basic operations on partitions on MBR- and GPT-style disks.
+Other styles (e.g., hybrid, dynamic) are unsupported whilst partitions may be shown as found.
+</p>
+<p>
+<b><span style="color:red">Warning!</span> Any disk modifications may cause further data loss</b>
+(<a href="changes.html">read more</a>)
+</p>
+<p>
+To enable modifications the option <span class="ii">Advanced</span> must be turned on.
+All changes remain virtual until you apply them using the button <span class="ii">Apply</span>
+or the context menu command <span class="ii">Apply Partitioning</span>.
+Write operations must be confirmed or enabled through the option <span class="ii">Allow Write</span>
+in the <a href="devioparams.html">device parameters</a>.
+See also the section <a href="changes.html">Manage Changes</a>.
+</p>
+<p>
+Partition management supports modifications that change only partition tables and boot sectors 
+without touching partitions contents.
+These include partition removal and <a href="#addpartition">undeleting</a>, 
+<a href="#bootrestore">restoration of a boot sector</a> from its copy, and other basic operations.
+</p>
+
+<h3 id="partman">Dialog Box "Partitions"</h3>
+<p>
+The checkbox "<span class="ii">found</span>" is to display lost and removed partitions (an express search is performed).
+For a complex and deeper search there is <a href="fullscan.html">Full Scan</a> option.
+</p>
+<div class="spec">
+<p>
+To prevent the default express search uncheck the box <span class="ii">Show partitions</span> 
+when <a href="devices.html">open a device</a> or <a href="raids.html">construct a RAID</a>.
+</p>
+<p>
+When volume is opened from the <a href="fullscan.html">Full Scan</a> results
+it is also added to the list of found partitions and can be restored (inserted) if not corrupted.
+</p>
+<p>
+Other info mode checkboxes:
+</p>
+<ul style="margin-top:0;margin-bottom:0">
+<li><span class="ii">tables</span>:
+display AMBR and GPT partition tables</li>
+<li><span class="ii">GiB</span>:
+display sizes in binary units</li>
+<li><span class="ii">detailed</span>: 
+display multiple lines per partition in accordance with the source of information</li>
+</ul>
+<p>
+<b>(A)</b> - bootable (active) partition status (<b>Partition</b> column).
+</p>
+<p>
+<b>Indicators</b> indicate the presence of structures:
+</p>
+<ul style="margin-top:0;margin-bottom:0">
+<li><b>T</b> &#8211; partition table</li>
+<li><b>E</b> &#8211; table entry</li>
+<li><b>B</b> &#8211; volume boot sector</li>
+<li><b>C</b> &#8211; boot sector/GPT copy</li>
+<li><b>F</b> &#8211; basic FS structures (e.g., first MFT file record for NTFS)</li>
+<li><b>f</b> &#8211; MFTMirr for NTFS</li>
+<li><b>x</b> &#8211; structure is absent or damaged</li>
+</ul>
+<p>
+Found errors are colored in red.
+For incorrect/non-standard partitioning correct displaying is not guaranteed.
+Some partitioning errors may be fixed by removing and inserting back the partitions.
+Prior to DMDE 3.8 FAT basic FS structures (F indicator) were being tested only on opening a volume.
+</p>
+</div>
+
+<p>
+The <span class="ii">Menu</span> button displays the operations available on the selected partition or the entire disk.
+</p>
+
+<div class="l">
+<h4>Open Volume</h4>
+<p><a href="openvolume.html">Open the selected volume</a> to view and <a href="datarecovery.html">recover files</a>.</p>
+
+<h4>Open Volume Parameters</h4>
+<p>View and manually edit volume parameters before <a href="openvolume.html">opening the volume</a>.</p>
+
+<h4>Show Volume Letters</h4>
+<p>Display volume letters currently assigned to partitions by OS.</p>
+<h4>Full Scan within the Partition</h4>
+<p>Run <a href="fullscan.html">Full Scan</a> or load full scan results from a file.</p>
+
+<h4>Create Image/Clone</h4>
+<p>Call the dialog box <a href="copysectors.html">Copy Sectors</a> to create partition image or clone the partition.</p>
+
+<h4 id="addpartition">Insert the Partition (Undelete)</h4>
+<p>Insert lost or removed volume into the partition table. 
+Invalid partitions may prevent insertion so they must be removed before insertion.
+Completely damaged partitioning may be resetted using the command 
+<a href="#togglembr">Toggle MBR Signature On/Off</a> applied to the topmost item. 
+You should add partitions from the beginning to the end of the disk. 
+</p>
+
+<h4>Remove the Partition</h4>
+<p>Remove the existing partition or a partition table.</p>
+
+<h4>Create RAW Partition</h4>
+<p>Create unformatted (RAW) partition within the unallocated space. 
+If there are no partitioning errors it is highly recommended to use 
+only standard system tools for creating and removing partitions.</p>
+
+<h4 id="bootrestore">Restore Boot Sector from the Copy</h4>
+<p>Replace damaged boot sector with a backup copy.</p>
+
+<h4>Toggle Bootable (Active) Partition Status</h4>
+<p>Set or reset active <b>(A)</b> status of a bootable partition.</p>
+
+<h4 id="togglembr">Toggle MBR/Boot Signature On/Off (MBR On/Off)</h4>
+<p>Set or reset boot sector signature (<span class="tt">0xAA55</span>).</p>
+
+<h4>Reset GPT+MBR Signatures (GPT Off)</h4>
+<p>Reset boot sector signature (<span class="tt">0xAA55</span>) and signatures of GPT tables (<span class="tt">EFI PART</span>).</p>
+
+<h4>Set GPT+MBR Signatures (GPT On)</h4>
+<p>Set GPT and boot signatures. Available only on GPT disks after resetting.</p>
+
+<h4>Write Boot Sectors</h4>
+<p>Make <a href="setup.html#dos">DOS bootable disk</a>.</p>
+
+<h4>Undo Action</h4>
+<p>Undo the last action.</p>
+
+<h4>Redo Action</h4>
+<p>Redo the last undone action.</p>
+
+<h4>Undo Partitioning Changes</h4>
+<p>Undo all partitioing changes.</p>
+
+<h4>Reset All Changes</h4>
+<p>Reset all unapplied changes.</p>
+
+<h4 id="partbkupopen">Load from File</h4>
+<p>Load disk partitioning or rollback data from a file.
+See <a href="changes.html">Changes</a> for details.
+</p>
+
+<h4 id="partbkup">Save Current Partitioning to File</h4>
+<p>Save current partitioning to a file for a backup purposes.
+Available only if the device is partitioned and there are no unapplied changes.
+</p>
+
+<h4 id="partapply">Apply Partitioning</h4>
+<p>Write changes to the disk. See <a href="changes.html">Applying Changes</a> for details.
+</p>
+</div>
+
+</div></div>
+</body>
+</html>

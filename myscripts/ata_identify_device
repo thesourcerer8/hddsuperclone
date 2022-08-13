@@ -1,0 +1,141 @@
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'This will send the identify device command to the drive and display the raw results.'
+  echo 'It will also display some of the drive capabilities and status.'
+  echo 'A value of 0 = not supported or not enabled.'
+  echo 'A value of 1 = supported or enabled.'
+  echo 'Example: hddsupertool -t /dev/sda -f ata_identify_device'
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+
+include good_subroutines
+
+
+buffersize 512
+setreadpio
+gettime
+seti $starttime = $time
+ata28cmd 0 0 0 0 0 0xa0 0xec
+gettime
+seti $endtime = $time
+
+# check if command failed
+seti $command_failed = 0
+gosub check_command_status
+if $command_failed = 1
+  echo "Command failed!"
+  gosub show_sense_data
+  gosub show_ata_return_status
+  previousscript
+endif
+
+seti $commandtime = $endtime - $starttime
+echo "Command time: " $commandtime
+
+echo "Raw buffer:"
+printbuffer 0 512
+
+# show model and serial
+wordflipbuffer 0 512
+sets $model = buffer 54 40
+echo "Model= " $model
+sets $serial = buffer 20 20
+echo "Serial= " $serial
+sets $firmware = buffer 46 8
+echo "Firmware revision= " $firmware
+wordflipbuffer 0 512
+
+# show if drive supports extended commands
+seti $tempnum = buffer 167
+seti $extended = $tempnum & 4
+seti $extended = $extended > 2
+echo "supports 48 bit commands = " $extended
+
+# total addressable sectors
+if $extended = 1
+  seti $addressable = buffer 200 qw
+  echo "total addressable sectors= " $addressable
+else
+  seti $addressable = buffer 120 dw
+  echo "total addressable sectors= " $addressable
+endif
+
+# words per logical sector
+seti $wordsps = buffer 234 w
+echo "words per logical sector= " $wordsps
+
+# size
+if $wordsps = 0
+  seti $sectorsize = 512
+else
+  seti $sectorsize = $wordsps * 2
+endif
+seti $sizeb = $addressable * $sectorsize
+seti $sizemb = $sizeb / 1048576
+echo "Size in bytes= " $sizeb
+echo "Size in MiB= " $sizemb
+
+# logical sectors per physical sector
+seti $tempnum = buffer 212
+seti $logical = $tempnum & 8
+echo "logical sectors per physical sector(2^x)= " $tempnum
+
+# show drive security status
+seti $tempnum = buffer 257
+seti $security_level = $tempnum & 1
+seti $tempnum = buffer 256
+seti $enhanced_security_erase_supported = $tempnum & 32
+seti $enhanced_security_erase_supported = $enhanced_security_erase_supported > 5
+seti $security_count_expired = $tempnum & 16
+seti $security_count_expired = $security_count_expired > 4
+seti $security_frozen = $tempnum & 8
+seti $security_frozen = $security_frozen > 3
+seti $security_locked = $tempnum & 4
+seti $security_locked = $security_locked > 2
+seti $security_enabled = $tempnum & 2
+seti $security_enabled = $security_enabled > 1
+seti $security_supported = $tempnum & 1
+echo "enhanced_security_erase_supported= " $enhanced_security_erase_supported
+echo "security_count_expired= " $security_count_expired
+echo "security_frozen= " $security_frozen
+echo "security_locked= " $security_locked
+echo "security_enabled= " $security_enabled
+echo "security_supported= " $security_supported
+
+# show a couple extended SCT capabilities
+seti $tempnum = buffer 412
+seti $error_recovery_control = $tempnum & 8
+seti $error_recovery_control = $error_recovery_control > 3
+seti $long_sector_access = $tempnum & 2
+seti $long_sector_access = $long_sector_access > 1
+echo "error_recovery_control= " $error_recovery_control
+echo "long_sector_access =" $long_sector_access
+
+# show read ahead status
+seti $tempnum = buffer 164
+seti $look_ahead_supported = $tempnum & 0x40
+seti $look_ahead_supported = $look_ahead_supported > 6
+seti $tempnum = buffer 170
+seti $look_ahead_status = $tempnum & 0x40
+seti $look_ahead_status = $look_ahead_status > 6
+echo "drive look ahead supported= " $look_ahead_supported
+echo "drive look ahead status= " $look_ahead_status
+
+# show other abilities
+seti $tempnum = buffer 240
+seti $write_uncorrectable = $tempnum & 4
+seti $write_uncorrectable = $write_uncorrectable > 2
+echo "write_uncorrectable supported= " $write_uncorrectable
+
+previousscript
+end
+
+
+
+

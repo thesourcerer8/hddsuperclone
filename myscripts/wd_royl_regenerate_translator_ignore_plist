@@ -1,0 +1,68 @@
+
+
+include good_subroutines
+gosub regenerate_translator
+previousscript
+end
+
+subroutine regenerate_translator
+  gosub enable_vsc
+  buffersize 0x200
+  clearbuffer
+  setbuffer 0
+    0x18 0x0 0x02 0x0 0x13 0x0
+  endbuffer
+  setwritepio
+  echo "regenerating translator"
+  ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+  gosub status_check
+  clearbuffer
+  setreadpio
+  echo "read afterwards"
+  ata28cmd 0xd5 0x01 0xbf 0x4f 0xc2 0xa0 0xb0
+  gosub status_check
+  printbuffer 0 0x200
+  gosub disable_vsc
+
+endsubroutine
+
+
+
+subroutine status_check
+  seti $command_failed = 0
+  gosub check_command_status
+  if $command_failed = 1
+    echo "Command failed!"
+    gosub show_sense_data
+    gosub show_ata_return_status
+    previousscript
+  endif
+endsubroutine
+
+
+
+
+subroutine enable_vsc
+  # enable vendor specific commands
+  echo "enable vsc"
+  buffersize 0
+  setreadpio
+  ata28cmd 0x45 0x0b 0x00 0x44 0x57 0xa0 0x80
+  # check if command failed
+  gosub status_check
+endsubroutine
+
+
+
+subroutine disable_vsc
+  # disable vendor specific commands
+  echo "disable vsc"
+  buffersize 0
+  setreadpio
+  ata28cmd 0x44 0x0b 0x00 0x44 0x57 0xa0 0x80
+  # check if command failed
+  gosub status_check
+endsubroutine
+
+
+

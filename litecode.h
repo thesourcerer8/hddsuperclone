@@ -1,0 +1,2 @@
+#define LITEVERSION
+#define NOTFREE

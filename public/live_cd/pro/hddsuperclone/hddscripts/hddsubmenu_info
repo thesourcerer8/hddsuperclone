@@ -1,0 +1,51 @@
+seti $printhelp = $printhelp
+
+while 1 = 1
+  echo " "
+  echo "Device information menu"
+  echo "q) Quit"
+  echo "p) Previous menu"
+  echo "h) Toggle script help
+  echo "1) Identify device"
+  echo "2) Smart info"
+
+  if $printhelp = 1
+    exit 0
+  endif
+
+  echo "Enter your choice:
+  userinput $choicestring
+
+  if $choicestring = q
+    break
+
+  elseif $choicestring = p
+    previousscript
+
+  elseif $choicestring = h
+    if $help = 0
+      seti $help = 1
+      echo "Help is now turned on"
+    else
+      seti $help = 0
+      echo "Help is now turned off"
+    endif
+
+  elseif $choicestring = 1
+    loadscript ata_identify_device
+    break
+
+  elseif $choicestring = 2
+    loadscript ata_smart_data
+    break
+
+
+
+  else
+    echo "bad choice= " $choicestring
+  endif
+
+
+
+done
+end

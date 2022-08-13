@@ -1,0 +1,62 @@
+-- Device I/O handler script
+--
+-- Variables (all are zero based):
+-- %CONFIRM%  - 1 if Confirm pressed, 0 if Cancel pressed
+-- %DISKNUM%  - disk number in RAID array
+-- %TRYNUM%   - i/o retry number
+-- %LBA%      - first i/o sector number
+-- %SECNUM%   - number of i/o sectors
+-- %ERROR%    - i/o error
+-- %ATASTATUS% - DOS ATA only ATA status register value (defined if not busy)
+-- %ATAERROR%  - DOS ATA only ATA error register (defined if ERR bit set in %ATASTATUS%)
+-- %LINE%     - current line number in script
+-- %SERVICE%  - i/o service number:
+--   0-ATA      1-ATAPI    3-BIOSINT13OLD 4-BIOSINT13
+--   5-DOSINT25 6-DOSINT73 8-DOSMSCDEX    9-DOSFILE 
+--  11-WINFILE 12-WINSCSI 14-WIN9XINT13  20-LINUXFILE
+
+-- %LASTRES%  - result of the previous command
+-- %LASTERR%  - error of the previous command
+--
+-- After a colon there may be a format specifier for output:
+-- x = hexadecimal
+-- %LBA:10x%
+-- 
+-- Commands:
+-- SHOWDLG          - force device i/o dialog box
+-- WAIT             - wait for user choice
+-- DELAY N          - delay for N msec
+-- EXECCMD CMDLINE  - execute external command CMDLINE using Command interpreter 
+                    -- (equals "cmd CMDLINE" in Windows)
+-- EXECCMDQ CMDLINE - execute without creating new console window (quiet)
+-- EXEC "FILENAME" CMDLINE  - call external programm FILENAME with parameter CMDLINE
+-- EXECQ "FILENAME" CMDLINE - call without creating new console window (quiet)
+-- MSDOS            - call Command processor (not supported in Linux)
+-- GOTO LABELNAME   - jump to label LABELNAME in script (to the string ":LABELNAME")
+-- RETURN           - break script, handle error according to device I/O params
+-- RETRETRY         - break script as Retry button pressed 
+-- RETIGNORE        - break script as Ignore button pressed 
+-- RETABORT         - break script as Abort button pressed 
+-- ADDLOG "FILENAME" LOGLINE - write LOGLINE to file FILENAME (LOGLINE may contain variables)
+-- CANCELIO         - Call CancelIO (WinNT+ only)
+                    -- (available if a device is opened with "overlapped" option)
+-- OVLRESLT N       - Check Overlapped result (N=1 wait; 0:not wait) (WinNT+ only)
+                    -- (must be used if a device is opened with "overlapped" option)
+-- RESETHANDLE      - Reopen disk (WinNT+ only)
+-- ATARESET         - DOS ATA only software reset
+-- ATARESETDET      - DOS ATA only software reset followed by ATA device detection
+
+-- Script example:
+IF %ERROR%=0 RETURN  -- return if no error on last i/o
+IF %ERROR%=128 GOTO LABEL1
+IF %ERROR%=5 GOTO LABEL1
+RETURN
+
+:LABEL1
+IF %CONFIRM%=0 RETRETRY -- retry if Cancel button is pressed 
+                        -- continue script execution if Confirm is pressed
+EXECCMD /K ECHO error %ERROR% at LBA: %LBA% (%SECNUM%) try: %TRYNUM%. Type EXIT to return.
+IF %TRYNUM%<2 RETRETRY
+DELAY 500
+ADDLOG "C:\ERRORS.LOG" error %ERROR% at LBA: %LBA:10% (%SECNUM%) try: %TRYNUM%
+RETIGNORE

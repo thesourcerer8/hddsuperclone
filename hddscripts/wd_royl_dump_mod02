@@ -1,0 +1,260 @@
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'Western Digital ROYL dump module 02 to file using vendor specific commands.'
+  echo 'By default this will dump the sectors of the module to the file "mod02.bin".'
+  echo 'It will also display the data on the screen.'
+  echo 'Note that some USB drives do not support these vendor specific commands.'
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+
+include good_subroutines
+
+# set the filename to be written to
+sets $filename = "mod02.bin"
+# delete existing file so there is no confusion
+deletefile $filename
+
+# get model and serial using identify device command
+echo "identify"
+buffersize 512
+setreadpio
+ata28cmd 0 0 0 0 0 0xa0 0xec
+# check if command failed
+gosub status_check
+wordflipbuffer 0 512
+
+# extract model and serial and trim leading and trailing spaces
+sets $model = "null"
+sets $serial = "null"
+seti $count = 0
+seti $start_offset = 54
+while $count < 40
+  seti $byte = buffer $start_offset
+  if $byte > 0x20
+    break
+  endif
+  seti $start_offset = $start_offset + 1
+  seti $count = $count + 1
+done
+seti $count = 0
+seti $end_offset = 93
+while $count < 40
+  seti $byte = buffer $end_offset
+  if $byte > 0x20
+    break
+  endif
+  seti $end_offset = $end_offset - 1
+  seti $count = $count + 1
+done
+seti $end_offset = $end_offset + 1
+seti $size = $end_offset - $start_offset
+if $size > 0
+  sets $model = buffer $start_offset $size
+endif
+# find out if it is a WD drive
+sets $wdcheck = buffer $start_offset 3
+sets $compare = "WDC"
+if $wdcheck != $compare
+  echo "Model: " $model
+  echo "Drive is not WD, exiting
+  previousscript
+endif
+
+seti $count = 0
+seti $start_offset = 20
+while $count < 20
+  seti $byte = buffer $start_offset
+  if $byte > 0x20
+    break
+  endif
+  seti $start_offset = $start_offset + 1
+  seti $count = $count + 1
+done
+seti $count = 0
+seti $end_offset = 39
+while $count < 20
+  seti $byte = buffer $end_offset
+  if $byte > 0x20
+    break
+  endif
+  seti $end_offset = $end_offset - 1
+  seti $count = $count + 1
+done
+seti $end_offset = $end_offset + 1
+seti $size = $end_offset - $start_offset
+if $size > 0
+  sets $serial = buffer $start_offset $size
+endif
+
+echo "Model: " $model
+echo "Serial: " $serial
+
+clearbuffer
+
+
+# enable vendor specific commands
+echo "enable vsc"
+buffersize 0
+setreadpio
+ata28cmd 0x45 0x0b 0x00 0x44 0x57 0xa0 0x80
+# check if command failed
+gosub status_check
+
+# vsc to prepare (command to set for module 02 access)
+echo "prepare access"
+buffersize 0x200
+clearbuffer
+setbuffer 0
+  08 00 01 00 02
+endbuffer
+setwritepio
+ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+# check if command failed
+gosub status_check
+# send again
+ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+# check if command failed
+gosub status_check
+
+# vsc to get a sector of the module
+echo "read sector"
+setreadpio
+clearbuffer
+ata28cmd 0xd5 0x01 0xbf 0x4f 0xc2 0xa0 0xb0
+# check if command failed
+gosub status_check
+
+# show how many sectors the module contains
+seti $mod_length_sectors = buffer 0xa
+seti $tempnum = buffer 0xb
+seti $tempnum = $tempnum > 8
+seti $mod_length_sectors = $mod_length_sectors + $tempnum
+echo "module length in sectors= " $mod_length_sectors
+seti $remaining_sectors = $mod_length_sectors - 1
+
+# copy the sector to the scratchpad
+seti $scratchpad_size = $mod_length_sectors * 512
+scratchpadsize $scratchpad_size
+copybuffertoscratchpad 0 0 0x200
+
+# vsc to get the remaining sectors
+# this gets them one at a time
+# there is a way to get them all at once,
+# but there was a case where that did not work
+echo "read sectors"
+seti $count = 1
+while $count < $mod_length_sectors
+  buffersize 0x200
+  clearbuffer
+  ata28cmd 0xd5 0x01 0xbf 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+  # copy the sectors to the scratchpad
+  seti $offset = $count * 0x200
+  copybuffertoscratchpad 0 $offset 0x200
+  seti $count = $count + 1
+done
+
+# write the sectors to the file
+writescratchpad $filename 0 0 $scratchpad_size
+# show it on the screen
+printscratchpad 0 $scratchpad_size
+
+# disable vendor specific commands
+echo "disable vsc"
+buffersize 0
+setreadpio
+ata28cmd 0x44 0x0b 0x00 0x44 0x57 0xa0 0x80
+# check if command failed
+gosub status_check
+
+
+# process the module
+echo "Header:"
+printscratchpad 0 4
+seti $mod_id = scratchpad 8 w
+echo "Module ID = " $mod_id
+echo "Size in sectors = " $mod_length_sectors
+seti $checksum = scratchpad 0xc dw
+hex
+echo "32 bit checksum = 0x" $checksum
+decimal
+echo "Mod version:"
+printscratchpad 0x10 8
+seti $total_records = scratchpad 0x30 w
+echo "Total records = " $total_records
+
+# process the data records
+seti $count = 0
+while $count < $total_records
+  seti $offset = $count * 4
+  seti $count = $count + 1
+  seti $offset = $offset + 0x32
+  seti $record_offset = scratchpad $offset w
+  seti $offset = $offset + 2
+  seti $record_size = scratchpad $offset w
+  echo ""
+  echo "Data record #" $count ":"
+  printscratchpad $record_offset $record_size
+done
+
+# show the user and master passwords
+seti $offset = 18 * 4
+seti $offset = $offset + 0x32
+seti $record_offset = scratchpad $offset w
+seti $record_offset = $record_offset + 4
+echo ""
+echo "User password:"
+printscratchpad $record_offset 32
+seti $record_offset = $record_offset + 32
+echo "Master password:"
+printscratchpad $record_offset 32
+
+# calculate checksum
+seti $calculated_checksum = 0
+seti $count = 0
+while $count < $scratchpad_size
+  seti $dword = scratchpad $count dw
+  seti $calculated_checksum = $calculated_checksum + $dword
+  seti $count = $count + 4
+  # skip the actual checksum bytes
+  if $count = 0xc
+    seti $count = $count + 4
+  endif
+done
+seti $calculated_checksum = $calculated_checksum & 0xffffffff
+seti $calculated_checksum = 0xffffffff - $calculated_checksum
+seti $calculated_checksum = $calculated_checksum + 1
+if $checksum = $calculated_checksum
+  sets $message = " (good)"
+else
+  sets $message = " (BAD)"
+endif
+hex
+echo
+echo "Calculated Checksum = 0x" $calculated_checksum $message
+decimal
+
+
+
+previousscript
+end
+
+
+
+subroutine status_check
+  seti $command_failed = 0
+  gosub check_command_status
+  if $command_failed = 1
+    echo "Command failed!"
+    gosub show_sense_data
+    gosub show_ata_return_status
+    previousscript
+  endif
+endsubroutine

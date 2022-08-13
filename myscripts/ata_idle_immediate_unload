@@ -1,0 +1,55 @@
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'idle immediate with unload.'
+  echo 'Example: hddsupertool -t /dev/sda -f ata_idle_immediate_unload'
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+
+include good_subroutines
+
+
+buffersize 0
+setreadpio
+
+# set the count to 0
+seti $count = 0
+
+# set the LBA for the unload command
+seti $LBAlow = 0x4c
+seti $LBAmid = 0x4e
+seti $LBAhigh = 0x55
+
+# set features to unload
+seti $features = 0x44
+# set device bits 7(compatibility) 5(compatibility)
+seti $device = 0xa0
+# set the command for idle immediate
+seti $command = 0xe1
+
+# perform the command
+ata28cmd $features $count $LBAlow $LBAmid $LBAhigh $device $command
+
+# check if command failed
+seti $command_failed = 0
+gosub check_command_status
+if $command_failed = 1
+  echo "Command failed!"
+  gosub show_sense_data
+  gosub show_ata_return_status
+  previousscript
+endif
+
+echo "Command completed"
+
+previousscript
+end
+
+
+
+

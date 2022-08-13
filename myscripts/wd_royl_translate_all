@@ -1,0 +1,83 @@
+
+
+include good_subroutines
+gosub translate_lba_to_chs
+previousscript
+end
+
+subroutine translate_lba_to_chs
+  gosub enable_vsc
+  buffersize 0x200
+  seti $lba = 0
+  while $lba < 100000
+    seti $lba1 = $lba & 0xff
+    seti $lba2 = $lba > 8
+    seti $lba2 = $lba2 & 0xff
+    seti $lba3 = $lba > 16
+    seti $lba3 = $lba3 & 0xff
+    seti $lba4 = $lba > 24
+    seti $lba4 = $lba4 & 0xff
+    seti $lba5 = $lba > 32
+    seti $lba5 = $lba5 & 0xff
+    seti $lba6 = $lba > 40
+    seti $lba6 = $lba6 & 0xff
+    clearbuffer
+    setbuffer 0
+      15 00  $lba1 $lba2 $lba3 $lba4 $lba5 $lba6
+    endbuffer
+    setwritepio
+    ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+    gosub status_check
+    clearbuffer
+    setreadpio
+    ata28cmd 0xd5 0x01 0xbf 0x4f 0xc2 0xa0 0xb0
+    gosub status_check
+    seti $head = buffer 8 w
+    echo "lba = " $lba " head = " $head
+    seti $lba = $lba + 1
+  done
+
+  gosub disable_vsc
+
+endsubroutine
+
+
+
+subroutine status_check
+  seti $command_failed = 0
+  gosub check_command_status
+  if $command_failed = 1
+    echo "Command failed!"
+    gosub show_sense_data
+    gosub show_ata_return_status
+    previousscript
+  endif
+endsubroutine
+
+
+
+
+subroutine enable_vsc
+  # enable vendor specific commands
+  echo "enable vsc"
+  buffersize 0
+  setreadpio
+  ata28cmd 0x45 0x0b 0x00 0x44 0x57 0xa0 0x80
+  # check if command failed
+  gosub status_check
+endsubroutine
+
+
+
+subroutine disable_vsc
+  # disable vendor specific commands
+  echo "disable vsc"
+  buffersize 0
+  setreadpio
+  ata28cmd 0x44 0x0b 0x00 0x44 0x57 0xa0 0x80
+  # check if command failed
+  gosub status_check
+endsubroutine
+
+
+

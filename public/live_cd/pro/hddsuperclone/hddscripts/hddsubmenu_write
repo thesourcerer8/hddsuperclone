@@ -1,0 +1,61 @@
+seti $printhelp = $printhelp
+
+
+while 1 = 1
+  echo " "
+  echo "Write sectors menu"
+  echo "q) Quit"
+  echo "p) Previous menu"
+  echo "h) Toggle script help
+  echo "1) Write sectors PIO 28"
+  echo "2) Write sectors PIO 48"
+  echo "3) Write sectors DMA 28"
+  echo "4) Write sectors DMA 48"
+
+  if $printhelp = 1
+    exit 0
+  endif
+
+  echo "Enter your choice:
+  userinput $choicestring
+
+  if $choicestring = q
+    break
+
+  elseif $choicestring = p
+    previousscript
+
+  elseif $choicestring = h
+    if $help = 0
+      seti $help = 1
+      echo "Help is now turned on"
+    else
+      seti $help = 0
+      echo "Help is now turned off"
+    endif
+
+  elseif $choicestring = 1
+    loadscript ata28_write_sectors_pio
+    break
+
+  elseif $choicestring = 2
+    loadscript ata48_write_sectors_pio
+    break
+
+  elseif $choicestring = 3
+    loadscript ata28_write_sectors_dma
+    break
+
+  elseif $choicestring = 4
+    loadscript ata48_write_sectors_dma
+    break
+
+
+  else
+    echo "bad choice= " $choicestring
+  endif
+
+
+
+done
+end

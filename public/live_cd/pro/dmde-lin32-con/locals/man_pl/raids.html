@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Macierze RAID</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="raids"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Spis treści</a> &middot; <a href="howto.html">Praca</a> &middot; 
+<a href="menu.html">Menu</a> &middot; <a href="menu_disk.html">Dysk</a>
+<hr />
+<h2>Macierze RAID</h2>
+<h3>Okno dialogowe "Konstruuj RAID"</h3>
+<p>Menu - Dysk - <b>Wybierz dysk</b> - Konstruuj RAID<p>
+<p>
+Narzędzie do budowy wirtualnych macierzy RAID z indywidualnych pojedynczych dysków (lub partycji i obrazy), 
+gdy nie jest możliwe zastosowanie standardowych narzędzi kontrolera (RAID) lub systemu operacyjnego (sprzętowe RAID).
+</p>
+<p>
+Jeśli konieczne, dyski muszą być odłączone od kontrolera RAID 
+i podłączone do komputera jako pojedynczych dysków.
+</p>
+<p>
+Nieprawidłowy wybór typu RAID lub rotacji danych 
+prowadzi do niewłaściwego <a href="datarecovery.html">odzyskiwania danych</a> 
+(mimo, że struktura katalogów może być zrekonstruowana poprawnie).
+</p>
+
+<h3>Typy RAID</h3>
+
+<p><b>RAID-0.</b>
+Zwykle zawiera dwa dyski, na których informacje są zapisywane na przemian bloki (stripe). 
+Jeśli jeden dysk jest nieobecny tylko niewielkie pliki, które pasują do jednego bloku mogą być odzyskane. 
+</p>
+
+<p><b>RAID-1.</b>
+Zwykle składa się z dwóch dysków, dane są duplikowane. Rozmiar paska nie jest używany. 
+Obsługiwane w trybie tylko do odczytu. 
+Jeden healphy dysku może być <a href="devices.html">otwarty</a> jako pojedyncze urządzenie bez utraty danych.
+</p>
+
+<p><b>RAID-4.</b>
+Zwykle składa się z trzech dysków. Jeden dysk jest na parzystości. 
+Dane są na przemian dyski odpoczynku. 
+Możliwe jest odzyskiwanie wszystkich danych, bez jednego z dysków. 
+Użyj <span class="ii">Pusty dysk</span> zamiast nieobecnego urządzenia. 
+</p>
+
+<p><b>RAID-5.</b>
+Zwykle zawiera trzy dyski (lub więcej). 
+Dane są na przemian wszystkie dyski niniejszym jeden blok parzystości na bloki pozostałych danych. 
+Istnieją cztery rodzaje obrotu danych na RAID-5. 
+Niektóre RAID (uzwykle sprzętu) może opóźnić parzystości (delayed parity). 
+Możliwe jest odzyskiwanie wszystkich danych bez jednego z dysków 
+(które powinny być zastąpić z <span class="ii">Pustym dyskiem</span>). 
+</p>
+
+<p><b>RAID-6.</b>
+Zazwyczaj składa się z czterech dysków (lub więcej). 
+Jest ona podobna do <b>RAID-5</b> z wyjątkiem tego, że dwa bloki parzystości (różne typy) są stosowane. 
+Jedynym rodzajem parzystości jest obsługiwane tak, tylko jeden dysk może być zastąpione <span class="ii">pustym dysk</span>. 
+Obsługiwane w trybie tylko do odczytu.
+</p>
+
+<p><b>RAID: Custom rotation.</b>
+Striping na zamówienie może zostać określony (<span class="ii">Menu</span> - <span class="ii">Striping...</span>). 
+Używaj liczb całkowitych od <span class="tt">0</span> do określenia bloków danych zgodnie z ich kolejnością na dyskach, 
+<span class="tt">-1</span> określić XOR-parzystości blok i 
+<span class="tt">-2</span> określić nieużywany blok.
+</p>
+
+<table>
+<tr><td colspan="4">Na przykład:</td>
+  <td rowspan="6" style="vertical-align:middle">=&gt;</td><td>Specify striping as:</td></tr>
+<tr><td>Dysk#0</td><td>Dysk#1</td><td>Dysk#2</td><td>Dysk#3</td><td></td></tr>
+
+<tr><td>A1</td><td>A2</td><td>Ap</td><td>Aq</td>
+  <td class="tt">&nbsp;0 &nbsp;1       -1      -2 </td></tr>
+
+<tr><td>B1</td><td>Bp</td><td>Bq</td><td>B2</td>
+  <td class="tt">&nbsp;2      -1       -2 &nbsp;3 </td></tr>
+
+<tr><td>Cp</td><td>Cq</td><td>C1</td><td>C2</td>
+  <td class="tt">     -1      -2  &nbsp;4 &nbsp;5 </td></tr>
+
+<tr><td>Dq</td><td>D1</td><td>D2</td><td>Dp</td>
+  <td class="tt">-2 &nbsp;6  &nbsp;7      -1 </td></tr>
+</table>
+
+<p><b>JBOD/Spanned.</b> 
+Just związane dysków, które są wykorzystywane jako jeden ciągły dysku. 
+Nie ma przemian danych, rozmiar paska nie jest używany. 
+Danych znajdujących się na dowolnym dysku zostaną utracone jeżeli dysk jest nieobecny. 
+JBOD jest obsługiwana w trybie odczytu/zapisu.
+</p>
+
+<h3>Parametry RAID</h3>
+
+<p>
+<b>Rozmiar Stripe:</b> rozmiar bloku danych obrótu wielkości. Nie używany w <b>RAID-1</b>, <b>JBOD</b>
+<br />
+<b>Delay:</b> stosowane w <b>RAID-5/6</b> z opóźnionym parzystości tylko
+<br />
+<b>Offset:</b> przesunięcie rozpoczęcia danych na dysku (zazwyczaj stosowanych w programach RAID)
+<br />
+<b>Offset i Rozmiar:</b> przesunięcie partycji i rozmiar
+<br />
+<b>Pusty disk:</b> jest używana zamiast dysku nieobecny lub uszkodzony
+<br />
+<b>Striping...:</b> ręcznie określić striping do <b>Custom RAID</b>
+<br />
+<b>Zapisz/Załaduj:</b> zapisz / załaduj konfigurację RAID
+<br />
+<b>Czytaj dalej:</b> poprawić wydajność macierzy RAID o małym rozmiarze paska (niezalecane na dyskach ze złymi sektorami).
+</p>
+
+</div></div>
+</body>
+</html>

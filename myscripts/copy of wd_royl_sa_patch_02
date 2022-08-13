@@ -1,0 +1,826 @@
+
+
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'WD find and read module'
+
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+echo ""
+
+include good_subroutines
+
+# set a blank string variable to compare with user input
+# make sure not to set this anyplace else
+sets $null = ""
+
+# set this to itself for use with the menu system
+# make sure not to set this anyplace else
+# if it was not previously set it will = 0
+seti $using_menu = $using_menu
+
+
+sets $base_file_name = "mod02_original"
+sets $patched_file_name = "mod02_patched"
+
+seti $module_to_find = 2
+
+while 1 = 1
+  echo "Enter head in decimal (0x for hex):"
+  userinput $choicestring
+  if $choicestring != $null
+    seti $head_start = $choicestring 0
+    break
+  else
+    echo "Choice cannot be blank!"
+  endif
+done
+
+
+
+scratchpadsize 0x1000000
+clearscratchpad
+seti $scratchpad_highmem = 0x10000
+seti $read_block_size = 512 * 128
+seti $initial_read_size = 512 * 16
+
+
+
+seti $negative_cylinders = 0
+seti $sectors_per_cylinder = 0
+gosub find_sectors_per_track
+seti $total_aba = $negative_cylinders * $sectors_per_cylinder
+hex
+sets $lstring = "0x" $total_aba
+decimal
+echo "Total ABA = " $total_aba " (" $lstring ")"
+
+seti $aba_start = 0
+seti $aba_to_translate = $aba_start
+gosub translate_aba_to_chs
+seti $cylinder_start = $cylinder
+seti $sector_start = $sector
+seti $sector_count_to_read = $total_aba
+
+gosub search_for_module
+
+
+previousscript
+end
+
+
+
+
+
+subroutine find_sectors_per_track
+  seti $command_failed = 0
+  seti $total_heads = 0
+  seti $head_bitmap = 0
+  seti $negative_cylinders = 0
+  gosub read_data_table
+  if $head_start >= $total_heads
+    echo "Head chosen is greater than available heads"
+    previousscript
+  endif
+
+  seti $bitmap = $head_bitmap > $head_start
+  seti $bitmap = $bitmap & 1
+  if $bitmap < 1
+    echo "Head chosen is not active"
+    previousscript
+  endif
+
+  seti $cylinder_start = 0 - $negative_cylinders
+  seti $cylinder_start = $cylinder_start + 1
+  seti $found_aba = 0
+
+  seti $cylinder = $cylinder_start
+  seti $head = $head_start
+  seti $sector = 1
+  gosub translate_chs_to_lba
+  echo "Sectors per cylinder = " $found_aba
+  seti $sectors_per_cylinder = $found_aba
+endsubroutine
+
+
+
+
+
+subroutine translate_chs_to_lba
+
+  gosub enable_vsc
+
+  # vsc to prepare for translate
+  echo "prepare to translate chs to lba"
+  buffersize 0x200
+  clearbuffer
+  seti $offsetl = $cylinder & 0xff
+  seti $offsetm1 = $cylinder > 8
+  seti $offsetm1 = $offsetm1 & 0xff
+  seti $offsetm2 = $cylinder > 16
+  seti $offsetm2 = $offsetm2 & 0xff
+  seti $offseth = $cylinder > 24
+  seti $offseth = $offseth & 0xff
+
+  seti $sectorl = $sector & 0xff
+  seti $sectorh = $sector > 8
+  seti $sectorh = $sectorh & 0xff
+
+  seti $head = $head & 0xff
+  setbuffer 0
+    16 00  $offsetl $offsetm1  $offsetm2 $offseth  $head 00  $sectorl $sectorh
+  endbuffer
+  hex
+  #echo "keysector= 16 00  " $offsetl " " $offsetm1 "  "  $offsetm2  " " $offseth "  " $head " 0  "  $sectorl " " $sectorh
+  setwritepio
+  ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+  #echo "command= d6 01 be 4f c2 a0 b0"
+  decimal
+  # check if command failed
+  gosub status_check
+  # vsc to read result
+  buffersize 0x200
+  clearbuffer
+  setreadpio
+  echo "reading result"
+  ata28cmd 0xd5 0x01 0xbf 0x4f 0xc2 0xa0 0xb0
+  hex
+  #echo "command= d5 01 bf 4f c2 a0 b0"
+  decimal
+  # check if command failed
+  gosub status_check
+
+  seti $lba = buffer 2 qw
+  seti $lba = $lba & 0xffffffffffff
+  hex
+  sets $lstring = "0x" $lba
+  decimal
+  #echo "lba = " $lba " (" $lstring ")"
+  seti $found_aba = $lba
+
+  gosub disable_vsc
+
+endsubroutine
+
+
+
+
+
+subroutine translate_aba_to_chs
+  seti $cylinder = $aba_to_translate / $sectors_per_cylinder
+  seti $cylinder = $cylinder - $negative_cylinders
+  seti $sector = $aba_to_translate % $sectors_per_cylinder
+  seti $sector = $sector + 1
+  echo "cylinder=" $cylinder
+  echo "sector=" $sector
+  echo "head=" $head_start
+
+  # verify result
+  gosub translate_chs_to_lba
+  echo "translated back to aba = " $found_aba
+  if $found_aba != $aba_to_translate
+    echo "Reverse translation did not match!"
+    echo "ABA requested = " $aba_to_translate
+    echo "Translated back = " $found_aba
+    previousscript
+  endif
+endsubroutine
+
+
+
+
+
+subroutine search_for_module
+  seti $cylinder = $cylinder_start
+  seti $sector = $sector_start
+  seti $data_count = 0
+  echo ""
+  while $data_count < $sector_count_to_read
+    seti $data_remaining = $sector_count_to_read - $data_count
+    seti $blocks = $read_block_size / 512
+    if $blocks > $data_remaining
+      seti $blocks = $data_remaining
+    endif
+    seti $remaining_sectors_in_track = $sectors_per_cylinder - $sector
+    seti $remaining_sectors_in_track = $remaining_sectors_in_track + 1
+    if $blocks > $remaining_sectors_in_track
+      seti $blocks = $remaining_sectors_in_track
+    endif
+    seti $read_size = $blocks * 512
+    seti $write_to_file = 0
+    seti $write_offset = 0
+    seti $copy_to_scratchpad = 1
+    seti $scratchpad_offset = 0
+    gosub read_chs
+
+    gosub find_module
+
+    seti $sector = $sector + $blocks
+    if $sector > $sectors_per_cylinder
+      seti $sector = 1
+      seti $cylinder = $cylinder + 1
+    endif
+    seti $data_count = $data_count + $blocks
+  done
+endsubroutine
+
+
+
+
+
+subroutine find_module
+  # search for the module
+  sets $header_check = "ROYL"
+  seti $position = 0
+  seti $search_end = $read_size - 4
+  while $position < $search_end
+    sets $header = scratchpad $position 4
+    if $header = $header_check
+      # process the module
+      seti $working_offset = $position
+      seti $working_offset = $position + 8
+      seti $mod_id = scratchpad $working_offset w
+      if $mod_id = $module_to_find
+        seti $module_location = $position
+        seti $module_block_location = $position / 512
+        seti $cylinder_bak = $cylinder
+        seti $sector_bak = $sector
+        seti $sector = $sector + $module_block_location
+        gosub translate_chs_to_lba
+        echo "found module " $module_to_find " at aba " $found_aba
+        seti $module_aba = $found_aba
+        sets $modfilename = $base_file_name "_M" $module_to_find "_H" $head "_C" $cylinder "_S" $sector "_A" $found_aba
+        sets $patchfilename = $patched_file_name "_M" $module_to_find "_H" $head "_C" $cylinder "_S" $sector "_A" $found_aba
+        getfilesize $modfilename
+        if $error_level > 0
+          echo "WARNING! The file " $modfilename " already exists!"
+          echo "The module was NOT read to a file!"
+          echo "The patched file was NOT created!"
+          echo "Please rename or delete the original files to be able to run this again."
+        else
+          deletefile $modfilename
+          gosub process_module
+        endif
+
+        seti $cylinder = $cylinder_bak
+        seti $sector = $sector_bak
+        echo ""
+      endif
+    endif
+    seti $position = $position + 512
+  done
+endsubroutine
+
+
+
+
+
+subroutine process_module
+
+  # find how many sectors the module contains
+  seti $working_offset = $module_location + 0xa
+  seti $mod_length_sectors = scratchpad $working_offset
+  seti $working_offset = $module_location + 0xb
+  seti $tempnum = scratchpad $working_offset
+  seti $tempnum = $tempnum > 8
+  seti $mod_length_sectors = $mod_length_sectors + $tempnum
+
+  seti $aba_to_translate = $module_aba
+  gosub translate_aba_to_chs
+  gosub read_aba_section
+
+  # process the module
+      seti $working_offset = $scratchpad_highmem
+      #echo "Header:"
+      #printscratchpad $working_offset 4
+      seti $working_offset = $scratchpad_highmem + 8
+      seti $mod_id = scratchpad $working_offset w
+      hex
+      #echo "Module ID = 0x" $mod_id
+
+      # find how many sectors the module contains
+      seti $working_offset = $scratchpad_highmem + 0xa
+      seti $mod_length_sectors = scratchpad $working_offset
+      seti $working_offset = $scratchpad_highmem + 0xb
+      seti $tempnum = scratchpad $working_offset
+      seti $tempnum = $tempnum > 8
+      seti $mod_length_sectors = $mod_length_sectors + $tempnum
+
+      #echo "Size in sectors = 0x" $mod_length_sectors
+      seti $working_offset = $scratchpad_highmem + 0xc
+      seti $checksum = scratchpad $working_offset dw
+      #echo "32 bit checksum = 0x" $checksum
+      seti $working_offset = $scratchpad_highmem + 0x10
+      #echo "Mod version:"
+      #printscratchpad $working_offset 8
+      decimal
+
+      seti $module_size = $mod_length_sectors * 512
+      seti $calculated_checksum = 0
+      seti $count = 0
+      while $count < $module_size
+        seti $working_offset = $scratchpad_highmem + $count
+        seti $dword = scratchpad $working_offset dw
+        seti $calculated_checksum = $calculated_checksum + $dword
+        seti $count = $count + 4
+        # skip the actual checksum bytes
+        if $count = 0xc
+          seti $count = $count + 4
+        endif
+      done
+      seti $calculated_checksum = $calculated_checksum & 0xffffffff
+      seti $calculated_checksum = 0xffffffff - $calculated_checksum
+      seti $calculated_checksum = $calculated_checksum + 1
+
+      hex
+      if $checksum = $calculated_checksum
+        sets $checkstring = " calulated=0x" $calculated_checksum " (good)"
+        seti $module_good = 1
+      else
+        sets $checkstring = " calulated=0x" $calculated_checksum " (bad)"
+        seti $module_good = 0
+      endif
+      echo "ModID=0x" $mod_id " size=0x" $module_size $checkstring
+      decimal
+      if $module_good = 1
+        gosub make_patch
+        seti $aba_to_translate = $module_aba
+        gosub translate_aba_to_chs
+        gosub write_aba_section
+      endif
+
+endsubroutine
+
+
+
+
+
+subroutine make_patch
+  # this patch writes 0 to offset 2 of record 27
+
+  seti $count = 26
+  seti $offset = $count * 4
+  seti $offset = $offset + $scratchpad_highmem
+  seti $count = $count + 1
+  seti $offset = $offset + 0x32
+  seti $record_offset = scratchpad $offset w
+  seti $record_offset = $record_offset + $scratchpad_highmem
+  seti $offset = $offset + 2
+  seti $record_size = scratchpad $offset w
+  echo ""
+  echo "Data record #" $count ":"
+  printscratchpad $record_offset $record_size
+  seti $byte_offset = $record_offset + 2
+  setscratchpad $byte_offset
+    00
+  endscratchpad
+  echo "Data record #" $count " after patch:"
+  printscratchpad $record_offset $record_size
+
+
+  # calculate new checksum and insert it
+  seti $calculated_checksum = 0
+      seti $count = 0
+      while $count < $module_size
+        seti $working_offset = $scratchpad_highmem + $count
+        seti $dword = scratchpad $working_offset dw
+        seti $calculated_checksum = $calculated_checksum + $dword
+        seti $count = $count + 4
+        # skip the actual checksum bytes
+        if $count = 0xc
+          seti $count = $count + 4
+        endif
+      done
+      seti $calculated_checksum = $calculated_checksum & 0xffffffff
+      seti $calculated_checksum = 0xffffffff - $calculated_checksum
+      seti $calculated_checksum = $calculated_checksum + 1
+  hex
+  echo "Calculated Checksum = 0x" $calculated_checksum
+  decimal
+  seti $b1 = $calculated_checksum & 0xff
+  seti $calculated_checksum = $calculated_checksum > 8
+  seti $b2 = $calculated_checksum & 0xff
+  seti $calculated_checksum = $calculated_checksum > 8
+  seti $b3 = $calculated_checksum & 0xff
+  seti $calculated_checksum = $calculated_checksum > 8
+  seti $b4 = $calculated_checksum & 0xff
+  seti $offset = 0x0c + $scratchpad_highmem
+  setscratchpad $offset
+    $b1 $b2 $b3 $b4
+  endscratchpad
+
+
+  getfilesize $patchfilename
+  if $error_level > 0
+    echo "WARNING! The file " $patchfilename " already exists!"
+    echo "The patched file was NOT created!"
+    echo "Please rename or delete the original files to be able to run this option again."
+  else
+    echo "Writing patched mod to file " $patchfilename
+    writescratchpad $patchfilename $scratchpad_highmem 0 $module_size
+  endif
+
+endsubroutine
+
+
+
+
+
+subroutine read_aba_section
+  echo ""
+  seti $mdata_count = 0
+  while $mdata_count < $mod_length_sectors
+    seti $mdata_remaining = $mod_length_sectors - $mdata_count
+    seti $mblocks = $read_block_size / 512
+    if $mblocks > $mdata_remaining
+      seti $mblocks = $mdata_remaining
+    endif
+    seti $mremaining_sectors_in_track = $sectors_per_cylinder - $sector
+    seti $mremaining_sectors_in_track = $mremaining_sectors_in_track + 1
+    if $mblocks > $mremaining_sectors_in_track
+      seti $mblocks = $mremaining_sectors_in_track
+    endif
+    seti $read_size = $mblocks * 512
+    seti $write_offset = $mdata_count * 512
+    seti $write_to_file = 1
+    seti $copy_to_scratchpad = 1
+    seti $scratchpad_offset = $write_offset + $scratchpad_highmem
+    sets $file = $modfilename
+    gosub read_chs
+
+    seti $sector = $sector + $mblocks
+    if $sector > $sectors_per_cylinder
+      seti $sector = 1
+      seti $cylinder = $cylinder + 1
+    endif
+
+    seti $mdata_count = $mdata_count + $mblocks
+  done
+endsubroutine
+
+
+
+
+
+subroutine write_aba_section
+  echo ""
+  seti $mdata_count = 0
+  while $mdata_count < $mod_length_sectors
+    seti $mdata_remaining = $mod_length_sectors - $mdata_count
+    seti $mblocks = $read_block_size / 512
+    if $mblocks > $mdata_remaining
+      seti $mblocks = $mdata_remaining
+    endif
+    seti $mremaining_sectors_in_track = $sectors_per_cylinder - $sector
+    seti $mremaining_sectors_in_track = $mremaining_sectors_in_track + 1
+    if $mblocks > $mremaining_sectors_in_track
+      seti $mblocks = $mremaining_sectors_in_track
+    endif
+    seti $read_size = $mblocks * 512
+    seti $read_offset = $mdata_count * 512
+    seti $read_from_file = 0
+    seti $copy_from_scratchpad = 1
+    seti $scratchpad_offset = $read_offset + $scratchpad_highmem
+    sets $file = $patched_file_name
+    gosub write_chs
+
+    seti $sector = $sector + $mblocks
+    if $sector > $sectors_per_cylinder
+      seti $sector = 1
+      seti $cylinder = $cylinder + 1
+    endif
+
+    seti $mdata_count = $mdata_count + $mblocks
+  done
+endsubroutine
+
+
+
+
+
+subroutine read_chs
+  gosub enable_vsc
+  seti $command_failed = 0
+  seti $read_failed = 0
+  seti $sectors = $read_size / 512
+
+    upline
+    echo "head=" $head "  cylinder=" $cylinder "  sector=" $sector "  size=" $sectors "        "
+    # vsc to prepare for chs read
+    #echo "prepare to read chs"
+    buffersize 0x200
+    clearbuffer
+    seti $offsetl = $cylinder & 0xff
+    seti $offsetm1 = $cylinder > 8
+    seti $offsetm1 = $offsetm1 & 0xff
+    seti $offsetm2 = $cylinder > 16
+    seti $offsetm2 = $offsetm2 & 0xff
+    seti $offseth = $cylinder > 24
+    seti $offseth = $offseth & 0xff
+
+    seti $sectorl = $sector & 0xff
+    seti $sectorh = $sector > 8
+    seti $sectorh = $sectorh & 0xff
+
+    seti $sizel = $sectors & 0xff
+    seti $sizem1 = $sectors > 8
+    seti $sizem1 = $sizem1 & 0xff
+    seti $sizem2 = $sectors > 16
+    seti $sizem2 = $sizem2 & 0xff
+    seti $sizeh = $sectors > 24
+    seti $sizeh = $sizeh & 0xff
+
+    setbuffer 0
+      0c 00  01 00  $offsetl $offsetm1  $offsetm2 $offseth  $head 00  $sectorl $sectorh  $sizel $sizem1 $sizem2 $sizeh
+    endbuffer
+    hex
+    #echo "keysector= 0c 00  01 00  " $offsetl " " $offsetm1 " " $offsetm2 " " $offseth "  " $head " 00  " $sectorl " " $sectorh "  " $sizel " " $sizem1 " " $sizem2 " " $sizeh
+    setwritepio
+    ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+    #echo "command= d6 01 be 4f c2 a0 b0"
+    decimal
+    # check if command failed
+    gosub status_check_no_stop_quiet
+    if $command_failed != 0
+      seti $read_failed = 1
+    endif
+
+    # vsc to read chs
+    seti $sectors = $read_size / 512
+    buffersize $read_size
+    clearbuffer
+    setreadpio
+    #echo "reading chs"
+    ata28cmd 0xd5 $sectors 0xbf 0x4f 0xc2 0xa0 0xb0
+    hex
+    #echo "command= d5 " $sectors " bf 4f c2 a0 b0"
+    decimal
+    # check if command failed
+    gosub status_check_no_stop_quiet
+    if $command_failed != 0
+      seti $read_failed = 1
+    endif
+    if $read_failed != 0
+      echo "read failed"
+    endif
+
+    if $write_to_file = 1
+      writebuffer $file 0 $write_offset $read_size
+    endif
+    if $copy_to_scratchpad = 1
+      copybuffertoscratchpad 0 $scratchpad_offset $read_size
+    endif
+
+  gosub disable_vsc
+endsubroutine
+
+
+
+
+
+subroutine write_chs
+  gosub enable_vsc
+  seti $command_failed = 0
+  seti $write_failed = 0
+  seti $sectors = $read_size / 512
+
+    #upline
+    echo "head=" $head "  cylinder=" $cylinder "  sector=" $sector "  size=" $sectors "        "
+    # vsc to prepare for chs write
+    echo "prepare to write chs"
+    buffersize 0x200
+    clearbuffer
+    seti $offsetl = $cylinder & 0xff
+    seti $offsetm1 = $cylinder > 8
+    seti $offsetm1 = $offsetm1 & 0xff
+    seti $offsetm2 = $cylinder > 16
+    seti $offsetm2 = $offsetm2 & 0xff
+    seti $offseth = $cylinder > 24
+    seti $offseth = $offseth & 0xff
+
+    seti $sectorl = $sector & 0xff
+    seti $sectorh = $sector > 8
+    seti $sectorh = $sectorh & 0xff
+
+    seti $sizel = $sectors & 0xff
+    seti $sizem1 = $sectors > 8
+    seti $sizem1 = $sizem1 & 0xff
+    seti $sizem2 = $sectors > 16
+    seti $sizem2 = $sizem2 & 0xff
+    seti $sizeh = $sectors > 24
+    seti $sizeh = $sizeh & 0xff
+
+    setbuffer 0
+      0c 00  02 00  $offsetl $offsetm1  $offsetm2 $offseth  $head 00  $sectorl $sectorh  $sizel $sizem1 $sizem2 $sizeh
+    endbuffer
+    hex
+    #echo "keysector= 0c 00  02 00  " $offsetl " " $offsetm1 " " $offsetm2 " " $offseth "  " $head " 00  " $sectorl " " $sectorh "  " $sizel " " $sizem1 " " $sizem2 " " $sizeh
+    setwritepio
+    ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+    #echo "command= d6 01 be 4f c2 a0 b0"
+    decimal
+    # check if command failed
+    gosub status_check_no_stop
+    if $command_failed != 0
+      seti $write_failed = 1
+    endif
+
+    if $write_failed = 0
+    # vsc to write chs
+    seti $sectors = $read_size / 512
+    buffersize $read_size
+    clearbuffer
+    if $read_from_file = 1
+      readbuffer $file 0 $read_offset $read_size
+    endif
+    if $copy_from_scratchpad = 1
+      copyscratchpadtobuffer $scratchpad_offset 0 $read_size
+    endif
+
+    #printbuffer 0 $read_size
+
+    setwritepio
+    echo "writing chs"
+    ata28cmd 0xd6 $sectors 0xbf 0x4f 0xc2 0xa0 0xb0
+    hex
+    #echo "command= d6 " $sectors " bf 4f c2 a0 b0"
+    decimal
+    # check if command failed
+    gosub status_check_no_stop
+    if $command_failed != 0
+      seti $write_failed = 1
+    endif
+    endif
+
+    if $write_failed != 0
+      echo "write failed"
+    endif
+
+    if 1 = 0
+    # re-read data back and show it
+    buffersize 0x200
+    clearbuffer
+    setbuffer 0
+      0c 00  01 00  $offsetl $offsetm1  $offsetm2 $offseth  $head 00  $sectorl $sectorh  $sizel $sizem1 $sizem2 $sizeh
+    endbuffer
+    setwritepio
+    ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+    gosub status_check_no_stop
+    buffersize $read_size
+    clearbuffer
+    setreadpio
+    #echo "reading chs"
+    ata28cmd 0xd5 $sectors 0xbf 0x4f 0xc2 0xa0 0xb0
+    printbuffer 0 $read_size
+    endif
+
+
+  gosub disable_vsc
+endsubroutine
+
+
+
+
+
+subroutine read_data_table
+  gosub enable_vsc
+
+  # vsc to prepare to get drive data table
+  echo "prepare to get data table"
+  buffersize 0x200
+  clearbuffer
+  setbuffer 0
+    0d 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00
+  endbuffer
+  setwritepio
+  ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+
+  # vsc to get to get drive data table
+  echo "getting data table"
+  buffersize 0x200
+  clearbuffer
+  setreadpio
+  ata28cmd 0xd5 0x01 0xbf 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+  copybuffertoscratchpad 0 0 512
+
+  gosub disable_vsc
+
+  echo "data table read done"
+
+  #printscratchpad 0 512
+  seti $value = 0
+
+  seti $offset = 29
+  seti $bytes = 1
+  gosub process_offset
+  seti $total_heads = $value
+
+  seti $offset = 31
+  seti $bytes = 1
+  gosub process_offset
+  seti $head_bitmap = $value
+
+  seti $offset = 36
+  seti $bytes = 2
+  gosub process_offset
+  seti $negative_cylinders = $value
+
+endsubroutine
+
+
+
+
+
+subroutine process_offset
+  if $bytes = 1
+    seti $value = scratchpad $offset b
+  elseif $bytes = 2
+    seti $value = scratchpad $offset w
+  elseif $bytes = 4
+    seti $value = scratchpad $offset dw
+  elseif $bytes = 8
+    seti $value = scratchpad $offset qw
+  else
+    seti $value = 0
+    echo "BYTE COUNT OUT OF RANGE"
+  endif
+  hex
+  sets $offset_string = "0x" $offset
+  sets $value_string = "0x" $value
+  sets $bytes_string = "0x" $bytes
+  decimal
+  #echo "offset=" $offset " (" $offset_string ")  value=" $value " (" $value_string ")(" $bytes " bytes)"
+endsubroutine
+
+
+
+
+
+
+
+subroutine status_check
+  seti $command_failed = 0
+  gosub check_command_status
+  if $command_failed = 1
+    echo "Command failed!"
+    gosub show_sense_data
+    gosub show_ata_return_status
+    previousscript
+  endif
+endsubroutine
+
+
+
+subroutine status_check_no_stop
+  seti $command_failed = 0
+  gosub check_command_status
+  if $command_failed = 1
+    echo "Command failed!"
+    gosub show_sense_data
+    gosub show_ata_return_status
+  endif
+endsubroutine
+
+
+
+subroutine status_check_no_stop_quiet
+  seti $command_failed = 0
+  gosub check_command_status
+endsubroutine
+
+
+
+subroutine enable_vsc
+  # enable vendor specific commands
+  #echo "enable vsc"
+  buffersize 0
+  setreadpio
+  ata28cmd 0x45 0x0b 0x00 0x44 0x57 0xa0 0x80
+  # check if command failed
+  gosub status_check
+endsubroutine
+
+
+
+subroutine disable_vsc
+  # disable vendor specific commands
+  #echo "disable vsc"
+  buffersize 0
+  setreadpio
+  ata28cmd 0x44 0x0b 0x00 0x44 0x57 0xa0 0x80
+  # check if command failed
+  gosub status_check
+endsubroutine
+
+
+

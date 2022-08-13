@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Menu "Mode"</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+<style type="text/css">/*<![CDATA[*/
+td,th{vertical-align:top}
+/*]]>*/</style>
+</head>
+<body>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">TOC</a> &middot; <a href="howto.html">Work</a> &middot; <a href="menu.html">Menu</a>
+<hr />
+<h2>Menu &quot;Mode&quot;</h2>
+<p>
+Toggle <a href="diskeditor.html">Disk Editor</a> view mode.
+</p>
+<table>
+<tr><th class="ii">Custom Templates</th><td>Select <a href="templates.html">custom template</a> </td></tr>
+<tr><th class="ii" id="hex"><span id="text"></span>Hexadecimal, Text</th><td>
+Use menu item
+<span class="ii">Encoding</span> to change view code table.
+</td></tr>
+<tr><th class="ii" id="fatdir">FAT Directory</th><td>
+Press [<span class="ii">Enter</span>] key to open file data or directory in the Editor window
+(if FAT volume is <a href="openvolume.html">opened</a>).
+</td></tr>
+<tr><th class="ii" id="fat">FAT12/FAT16/FAT32</th><td>
+FAT cluster table.
+<!--FAT12 not editable.<br/-->
+Press [<span class="ii">Enter</span>] key to jump to the corresponding volume cluster.
+</td></tr>
+<tr><th class="ii" id="part">Partition Table MBR/GPT</th><td>
+Use the command again or press [<span class="ii">F6</span>] to switch between MBR&nbsp;/ GPT&nbsp;/ Copy view.
+Press [<span class="ii">Enter</span>] key to jump to the corresponding sector.
+</td></tr>
+<tr><th class="ii" id="boot">FAT/FAT32/NTFS Boot Record</th><td>
+Volume boot sector.
+Use the command again or press [<span class="ii">F7</span>] to select the next file system.
+Press [<span class="ii">Enter</span>] to <a href="openvolume.html">open volume</a>.
+</td></tr>
+<tr><th class="ii" id="ntfsdir">NTFS Directory</th><td>
+NTFS directory INDX-record.
+Press [<span class="ii">Enter</span>] to open file or directory in the Editor window
+(if NTFS volume is <a href="openvolume.html">opened</a>).
+</td></tr>
+<tr><th class="ii" id="mft">MFT Record</th><td>
+Press [<span class="ii">Enter</span>] key to open selected attribute or directory in
+the Editor window.
+Press [<span class="ii">Space bar</span>] to view attribute details.
+</td></tr>
+<tr><th class="ii" id="rawdata">NTFS File RAW Sectors</th><td>
+Switch between decoded file data and RAW sector data (as on drive).
+</td></tr>
+<tr><th class="ii" id="encode">Encoding...</th><td>
+Select code table to translate text in
+<span class="ii">Hexadecimal</span>/<span class="ii">Text</span> mode.
+</td></tr>
+</table>
+</div></div>
+</body>
+</html>

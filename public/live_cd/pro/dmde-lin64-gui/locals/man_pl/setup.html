@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Instalacja i uruchamianie</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Spis treści</a>
+<hr />
+<h1>Instalacja i uruchamianie</h1>
+<p>
+<a href="sysrequire.html">Wymagania systemowe</a>
+&nbsp;
+<a href="activation.html">Aktywacja</a>
+&nbsp;
+<a href="inifile.html">Ustawienia</a>
+&nbsp;
+<a href="locales.html">Jezyki</a>
+&nbsp;
+&nbsp;
+<a href="#windows">Windows</a> 
+&nbsp;
+<a href="#linux">Linux</a> 
+&nbsp;
+<a href="#macos">MacOS</a> 
+&nbsp;
+<a href="#dos">DOS</a> 
+&nbsp;
+</p>
+<p>
+<span style="color:#ff0000; font-weight: bold;">Uwaga!</span>
+W przypadku wątpliwości, co do stanu fizycznego dysku 
+(błędy wejścia-wyjścia, spadek wydajność, itd.) 
+<strong>zaleca się zgłoszenie do specjalistów</strong> -
+zobacz sekcję <a href="badrecovery.html">Praca z wadliwymi urządzeniami</a>.
+Jeśli urządzenie nie jest dostępne lub ma nieprawidłowy rozmiar, zobacz
+<a href="sysrequire.html">Wymagania systemowe</a>.
+</p>
+<p>
+<span style="color:#ff0000; font-weight: bold;">Uwaga!</span>
+Nie pisz nic do źródła dysku, gdzie utracone dane są położone.
+<strong>Użyj innego dysku, aby załadować system operacyjny, zainstalować lub uruchomić oprogramowanie 
+oraz odzyskać dane,</strong> 
+w przeciwnym razie może zostać usunięte bezpowrotnie.
+</p>
+<p>
+Zdecydowanie zaleca się pracę w systemie, który nie próbuje więcej uzyskać dostępu do dysków 
+(szczególnie w trybie zapisu). 
+Możesz utworzyć <a href="#dos">dysk rozruchowy DOS</a> 
+(aby <a href="copysectors.html">sklonować</a> dyski dostępne w trybie IDE) 
+lub użyć rozruchowych dysków LiveCD / USB opartych na systemie <b>Linux</b> 
+lub specjalnym środowisku, takim jak WinFE opartym na systemie <b>Windows</b>, 
+w którym dostęp do dysku jest zminimalizowany.
+</p>
+<p>
+W celu zapewnienia jak największej zgodności z takim środowiskiem zaleca się wyłączenie opcji 
+"szybkiego rozruchu" i włączenie opcji "USB legacy mode" w BIOS&nbsp;/ UEFI.
+Aby uruchomić komputer z dysku Live, może być konieczne 
+wyłączenie trybu Secure Boot i trybu UEFI (przełączenie na tryb Legacy BIOS).
+</p>
+<p>
+<b>Aby zainstalować</b>/przeinstalować i uruchomić program po prostu rozpakuj wszystkie pliki i katalogi 
+do oddzielnego folderu (zachowując strukturę katalogów, również na nośniku wymiennym) 
+i uruchom plik <span class="tt">dmde.exe</span> lub <span class="tt">dmde</span>, 
+w zależności od systemu operacyjnego.
+
+Musisz posiadać uprawnienia Aministratora/Superusera do pracy z urządzeniami w systemie Windows NT+, Linux, macOS.
+Aby uruchomić oprogramowanie bez praw administratora należy dodać parametr 
+<span class="tt">notadmin=1</span> do pliku <span class="tt">dmde.ini</span>.
+
+<b>Aby  odinstalować</b> oprogramowanie po prostu usuń rozpakowane pliki i katalogi.
+</p>
+
+<h2>Systemy operacyjne</h2>
+<h3 id="windows">Windows Vista/7/wyżej</h3>
+<p>
+W przypadku żądania SmartScreen kliknij "Szczegóły" i potwierdź uruchomienie oprogramowania.
+Aby uruchomić program jako administrator kliknij prawym przyciskiem myszy ikonę programu 
+i użyć odpowiedniego komendy w menu kontekstowym lub potwierdzić zgłoszenie UAC.<br />
+<strong style="color:#ff0000;">Uwaga!</strong>
+Aby pracować z dyskami o pojemności przekraczającej 2&nbsp;TB 
+muszą być zainstalowane najnowsze wersje sterowników kontrolera.
+</p>
+
+<h3>Windows 2K/XP</h3>
+<p>
+Aby skorzystać z programu należy zalogować się jako Administrator. <br />
+<span style="color:#ff0000; font-weight: bold;">Uwaga!</span>
+Aby pracować z dyskami o pojemności powyżej 128&nbsp;GB trzeba Windows 2K SP4
+i ręcznie włączyć w rejestrze wsparcie dla LBA48
+lub Windows XP SP2 (wsparcie dla LBA48 jest włączone domyślnie).
+</p>
+
+<h3>Windows 98/ME</h3>
+<p>
+<span style="color:#ff0000; font-weight: bold;">Uwaga!</span>
+Bez specjalnych łatek Windows&nbsp;9x/ME obsługuje nieprawidłowo dyski powyżej 128&nbsp;GB.<br />
+Aby uniknąć tego problemu uruchom komputer w trybie MS-DOS i użyj DMDE dla DOS 
+by mieć dostęp do takich dysków przez BIOS lub interfejs ATA lub uruchom inny OS.
+</p>
+
+<h3 id="linux">Linux</h3>
+<p>
+Należy przejść do terminala lub uruchomić emulator terminala (Konsole, gnome2-terminal, itp.).
+Następnie przejdź do katalogu programu i wpisz <span class="tt">./dmde</span>.
+Aby mieć dostęp do urządzeń należy uruchomić program jako administrator (superuser).
+Należy zapoznać się z dokumentacją systemu operacyjnego, 
+aby uzyskać informacje jak to zrobić (np. w Ubuntu uruchomić <span class="tt">sudo ./dmde</span>,
+w systemie Debian należy użyć komendy <span class="tt">su</span> aby uzyskać uprawnienia root itp.).
+Być może trzeba ustawić uprawnienia wykonywania dla pliku <span class="tt">dmde</span> (<span class="tt">chmod 755 ./dmde</span>).
+Aby uruchomić 32-bitowe wersje oprogramowania w 64-bitowych systemach Linux 
+może trzeba zainstalować dodatkowy biblioteki
+(na przykład, aby zainstalować wymagany pakiet <span class="tt">libc6-i386</span> w Ubuntu, 
+użyj komendy <span class="tt">sudo apt-get install libc6-i386</span>).
+</p>
+
+<h3 id="macos">MacOS</h3>
+<p>
+Ponieważ współczesne wersje macOS próbują uniemożliwić bezpośredni dostęp do dysku 
+i są mniej odpowiednie do pracy z uszkodzonymi dyskami, 
+zaleca się używanie różnych systemów operacyjnych. 
+Jeśli nie ma innego komputera, możesz spróbować utworzyć i załadować Ubuntu LiveUSB zgodnie z 
+<a href="https://ubuntu.com/tutorials/tutorial-create-a-usb-stick-on-macos" target="_blank">instrukcją</a>.
+</p>
+<p>
+W systemie macOS możesz spróbować odmontować dysk za pomocą Systemowego Narzędzia dyskowego, aby uzyskać dostęp. 
+
+Jeśli macOS uniemożliwia dostęp do dysku, 
+może być konieczne wyłączenie tablic partycji w innym systemie operacyjnym 
+(użyj poleceń <span class="ii">MBR Off&nbsp;/ GPT Off</span> w DMDE w oknie 
+<a href="partitions.html">Partycje</a>).
+</p>
+<p>
+Jeśli macOS blokuje uruchomioną aplikację, możesz użyć Control-Kliknij 
+lub przejść do Preferencji systemowych, 
+wybierz Bezpieczeństwo i prywatność i kliknij „Otwórz mimo to” 
+dla zablokowanej aplikacji: 
+<a href="https://support.apple.com/en-us/HT202491" target="_blank">Safely open apps on your Mac</a>
+</p>
+<p>
+Możliwe jest również uruchomienie oprogramowania jako użytkownik root z terminala, 
+zapoznaj się z powyższymi instrukcjami dotyczącymi systemu Linux.
+</p>
+<p>
+MacOS specjalnie oznacza aplikacje pobrane z Internetu i uruchamia je z losowego katalogu. 
+W takim przypadku oprogramowanie nie może działać jako przenośne i używa domyślnego katalogu 
+obsługi aplikacji użytkownika do przechowywania ustawień i kluczy. 
+Aby aplikacja była przenośna, uruchom polecenie w terminalu<br />
+<span class="tt">xattr -r -d com.apple.quarantine /&lt;ścieżka do aplikacji&gt;/dmde.app</span><br />
+lub po prostu przenieś&nbsp;/ skopiuj katalog zawierający aplikację i plik <span class="tt">dmde.ini</span>
+na nośnik nieobsługujący rozszerzonych atrybutów (np. na dysk flash USB w formacie FAT).
+</p>
+
+<h3 id="dos">DOS</h3>
+<p>
+W przypadku problemów z wyjściem wideo może być konieczna zmiana wartości parametru 
+<span class="tt">biosoutput=0</span> w pliku 
+<span class="tt">dmde.ini</span> na: 
+<span class="tt">biosoutput=1</span>
+</p>
+<p>
+Jeśli podczas uruchamiania oprogramowania wystąpi błąd, 
+może to oznaczać problem z menedżerem rozszerzonej pamięci. 
+Spróbuj użyć starego menedżera pamięci, uruchamiając plik wsadowy <span class="tt">dmde_dpo.bat</span>, 
+jednak będzie mniej dostępnej pamięci.
+</p>
+<p>
+Możesz użyć dmde w regularnie partycji obsługiwanej przez system DOS lub użyć DOS dysku startowego. 
+Może to być pomocne w przypadku wystąpienia problemów z wykorzystaniem konkretnego dysku. 
+Dyski SATA musi być przełączony w tryb IDE kompatybilny w ustawieniach BIOS dla bezpośredniego dostępu ATA. 
+SCSI, USB i inne urządzenia mogą być dostępne za pośrednictwem specjalnych sterowników DOS 
+lub korzystania z funkcji BIOS-u, jeżeli są one obsługiwane.
+</p>
+<p>
+Niektóre pliki do tworzenia dysków startowych DOS są dostępne na <a href="about.html">stronie programu</a> 
+w sekcji <a class="extern" href="http://dmde.com/moredownload.html" target="_blank">Additional Downloads</a>.
+</p>
+<h4>Startowy dyskietki</h4>
+<p>
+Aby utworzyć dyskietkę startową ściąganie i rozpakować <b>FDD image</b>. 
+Można użyć funkcji <a href="copysectors.html">kopiowania sektorów</a> pisać obraz na dyskietkę. 
+Użyj obrazu jako pliku źródłowego i FDD jako urządzenia docelowego. 
+Obrazy ISO bootowalnej płyty CD mogą być również tworzone na bazie startowych obrazów FDD 
+z pomocą innego oprogramowania.
+</p>
+<h4>Dysk startowy DOS</h4>
+<p>
+Ładowanie od konkretnego dysku musi być obsługiwany przez BIOS 
+(patrz menu rozruchu systemu BIOS). 
+Aby utworzyć bootowalną USB/HDD trzeba świeżo sformatowanej partycji podstawowej FAT16/FAT32 na dysku. 
+Niestandardowe dysków/partycji nie są obsługiwane (nie MBR, 3TB +, itp.). 
+Aby uzyskać największą zgodność, opcjonalnie najpierw <a href="fillsectors.html">wyzeruj dysk</a>, 
+a następnie zainicjuj dysk jako MBR i utwórz i sformatuj główną partycję FAT, 
+używając standardowych środków systemu operacyjnego.
+</p>
+<p>
+<b>1.</b>&nbsp;Pobierz <a class="extern" href="http://dmde.com/moredownload.html" target="_blank">FreeDOS Package</a> 
+i wyodrębnij pliki bezpośrednio do katalogu głównego partycji FAT.
+<br />
+<b>2.</b>&nbsp;Otwórz dysk jako <a href="devices.html">urządzenie fizyczne</a> w DMDE 
+i użyj polecenia <span class="ii">zapis sektorów startowych</span> 
+w menu <a href="partitions.html">partycji</a>, aby utworzyć startowy urządzenia 
+(określić lokalizację plików rozpakowanych jako źródło sektorów startowych). 
+Zastosuj zmiany i zamknij dmde.
+<br />
+<b>3.</b>&nbsp;Pobierz DMDE dla DOS i rozpakuj na partycji FAT.
+</p>
+
+</div></div>
+</body>
+</html>

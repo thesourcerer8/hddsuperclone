@@ -1,0 +1,5 @@
+# UDEV Rules to change the permission of USB disks and NTFS disks
+# Copy this file to /etc/udev/rules.d
+#
+
+ENV{ID_FS_USAGE}=="filesystem|other|crypto", ENV{UDISKS_FILESYSTEM_SHARED}="1", ENV{UDISKS_AUTO}="0"

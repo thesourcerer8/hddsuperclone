@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Cluster Map</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="clustermap"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">TOC</a> &middot; <a href="howto.html">Work</a> &middot; <a href="menu.html">Menu</a> &middot; <a href="menu_tools.html">Tools</a>
+<hr />
+<h2>Cluster Map (File Allocation)</h2>
+<a href="#cmapreport">Cluster Map Report</a> 
+
+<p>
+The cluster map shows which clusters of the volume are in use and which files they belong to.
+Use the menu command <span class="ii">Windows</span> &middot; <span class="ii">Cluster Map</span>
+to view&nbsp;/ close the cluster map and <span class="ii">Cluster Map Compact Mode</span>
+to switch between viewing individual clusters and the whole file fragments.
+</p>
+<p>
+To use cluster map first <a href="openvolume.html">open volume</a> and 
+then <span class="ii">Update Cluster Map</span> (menu <span class="ii">Tools</span>)
+specifying the necessary parameters.
+You can specify to process only marked files,
+to process additionally FS structures and alternate data streams (the support depends on a file system),
+select <a href="filepanel.html#fileicons">File Categories</a>.
+</p>
+<p>
+The option <span class="ii">Use FS reconstruction</span> requires
+preliminary <a href="reconstruction.html">FS reconsruction</a> in a memory
+and provides more possibilities
+(support for found and removed files, full file paths, 
+and allows opening a corresponding file in the <a href="filepanel.html">File Panel</a> 
+by double clicking the cluster (or hitting [<span class="ii">Enter</span>]) in the Cluster map).
+If [<span class="ii">Ctrl</span>] key is additionally pressed then
+file is opened in the <a href="diskeditor.html">Disk Editor</a> instead.
+
+You can move the cluster map <a href="menu_windows.html#tonewtab">to a new tab</a>
+to pin it and open files in a different panel.
+</p>
+
+<p>
+The cluster map status line provides information for a selected cluster&nbsp;/ file fragment:<br />
+<b>[current cluster/clusters number] "file (stream) name" vcn: cluster number per file</b>
+</p>
+
+<p>
+To navigate between clusters you can use the <a href="menu.html">Menu</a> commands:<br />
+<span class="ii">Editor</span>&nbsp;&middot; <span class="ii">Volume Cluster</span> [<span class="ii">Alt+C</span>] to go to a specific volume cluster<br />
+<span class="ii">Editor</span>&nbsp;&middot; <span class="ii">Volume Sector</span> [<span class="ii">Alt+S</span>] to go to a specific volume sector<br />
+<span class="ii">Editor</span>&nbsp;&middot; <span class="ii">Physical Sector</span> [<span class="ii">Alt+P</span>] to go to a specific device sector.
+</p>
+
+<p>
+Then the <a href="menu.html">Menu</a> command<br />
+<span class="ii">Editor</span>&nbsp;&middot; <span class="ii">Cluster Map</span> [<span class="ii">Ctrl+M</span>] opens the cluster map at the given position,<br />
+<span class="ii">Editor</span>&nbsp;&middot; <span class="ii">File Data</span> [<span class="ii">Ctrl+Alt+F</span>] opens a file located at the given disk position.
+</p>
+
+<h3 id="cmapreport">Cluster Map Report</h3>
+<p>
+The cluster map report allows obtaining a list of files located at specified sectors
+as well as obtaining a list of clusters occupied by specified files.
+To create a list of clusters occupied by specified files 
+you should mark the necessary files in the directory tree
+and then use menu <span class="ii">Tools</span> &middot; <span class="ii">Update Cluster Map</span> 
+to rebuild the map with the option <span class="ii">marked only</span> and then run a report.
+</p>
+<p>
+You can specify to report
+<span class="ii">only files</span>,
+to report file
+<span class="ii">paths</span>,
+and to report fragments boundaries 
+<span class="ii">in bytes from the disk start</span>
+to use the report with different software.
+</p>
+<p>
+It is also possible to obtain information about file allocation
+without building a cluster map 
+by using the option <span class="ii">List</span> in the dialog box 
+"<a href="datarecovery.html#drseclist">Recover</a>".
+</p>
+</div></div>
+</body>
+</html>

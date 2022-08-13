@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Заполнить секторы</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="fillsectors"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Содержание</a> &middot; <a href="howto.html">Работа</a> &middot; 
+<a href="menu.html">Меню</a> &middot; <a href="menu_tools.html">Сервис</a>
+<hr />
+<h3>Заполнить секторы</h3>
+<p>
+Запись шестандцатеричного шаблона или шаблона из файла в секторы <a href="devices.html">диска</a>.
+Шаблон записывается многократно, покрывая все указанные секторы.
+</p>
+<p>
+<b><a href="changes.html">Ознакомьтесь с <span style="color:red">предупреждением по ссылке</span></a></b> 
+перед изменением содержимого диска.
+Все данные будут перезаписаны, запись производится непосредственно на диск, отмена невозможна.
+</p>
+<p>
+Максимальный размер hex-шаблона - 8 байт. Для использования
+шаблонов большего размера необходимо использовать файл.
+</p>
+<p>
+<span class="ii">Выравнивание&nbsp;по&nbsp;секторам</span>:
+если опция выбрана и очередная копия шаблона не умещается целиком
+в текущий сектор, то остаток сектора заполняется нулями, 
+а следующая копия шаблона записывается в начало нового сектора.
+Иначе копии шаблона записываются подряд без учёта границ секторов.
+</p>
+
+</div></div>
+</body>
+</html>

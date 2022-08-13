@@ -1,0 +1,2240 @@
+; DMDE dil dosyası sürüm 3.7 (Türkçe)
+;
+; By SALiH DRD tarafından çevrildi
+;
+; Herhangi bir hata bulursanız veya başka bir çeviri yapmak isterseniz
+; ile iletişime geçebilirsiniz http://dmde.com/contact.html
+;
+;
+
+098=0      ;=1:hata ayıklama modunda dil dosyasını yükle =0:sessiz mod
+099=03000000
+100=03070000
+101=tr
+;102=Windows-1254      ;dosya karakter kümesi (utf8 varsayılan olarak)
+103=Turkish (Türkçe)
+104=31     ;Windows LANGID; =:user default  =0:NEUTRAL  =1:DEFAULT
+105=162    ;Windows FONT CHARSET: 0=ANSI_CHARSET 238=EASTEUROPE_CHARSET ? 1=DEFAULT_CHARSET
+107=1254   ;ANSI Kod Sayfası; =:sistem varsayılanı
+108=857    ;OEM Kod sayfası; =:sistem varsayılanı
+;109=850   ;DOS Çıktı Kodu Sayfası
+110=4      ;Flags: &1=RTL-language &2=RTL-UI &4=Step-by-step Hints by Default
+
+112=Windows-1254 (Turkish)\n\x01\
+\u20ac\ufffe\u201a\u0192\u201e\u2026\u2020\u2021\u02c6\u2030\u0160\u2039\u0152\ufffe\ufffe\ufffe\
+\ufffe\u2018\u2019\u201c\u201d\u2022\u2013\u2014\u02dc\u2122\u0161\u203a\u0153\ufffe\u0ffe\u0178\
+\u00a0\u00a1\u00a2\u00a3\u00a4\u00a5\u00a6\u00a7\u00a8\u00a9\u00aa\u00ab\u00ac\u00ad\u00ae\u00af\
+\u00b0\u00b1\u00b2\u00b3\u00b4\u00b5\u00b6\u00b7\u00b8\u00b9\u00ba\u00bb\u00bc\u00bd\u00be\u00bf\
+\u00c0\u00c1\u00c2\u00c3\u00c4\u00c5\u00c6\u00c7\u00c8\u00c9\u00ca\u00cb\u00cc\u00cd\u00ce\u00cf\
+\u011e\u00d1\u00d2\u00d3\u00d4\u00d5\u00d6\u00d7\u00d8\u00d9\u00da\u00db\u00dc\u0130\u015e\u00df\
+\u00e0\u00e1\u00e2\u00e3\u00e4\u00e5\u00e6\u00e7\u00e8\u00e9\u00ea\u00eb\u00ec\u00ed\u00ee\u00ef\
+\u011f\u00f1\u00f2\u00f3\u00f4\u00f5\u00f6\u00f7\u00f8\u00f9\u00fa\u00fb\u00fc\u0131\u015f\u00ff
+114=Windows-1254 (Turkish) -> Translit\n\x00\
+\x45\x00\x2C\x66\x00\x2E\x2B\x2B\x5E\x00\x53\x3C\x4F\x00\x5A\x00\
+\x00\x27\x27\x22\x22\x2D\x2D\x2D\x7E\x00\x73\x3E\x6F\x00\x7A\x59\
+\x20\x69\x63\x66\x6F\x59\x7C\x73\x22\x63\x61\x3C\x2D\x00\x72\x2D\
+\x2D\x00\x32\x33\x27\x6D\x00\x2D\x2C\x31\x27\x3E\x00\x00\x00\x00\
+\x41\x41\x41\x41\x41\x41\x41\x43\x45\x45\x45\x45\x49\x49\x49\x49\
+\x47\x4E\x4F\x4F\x4F\x4F\x4F\x78\x4F\x55\x55\x55\x55\x49\x53\x62\
+\x61\x61\x61\x61\x61\x61\x61\x63\x65\x65\x65\x65\x69\x69\x69\x69\
+\x67\x6E\x6F\x6F\x6F\x6F\x6F\x3A\x6F\x75\x75\x75\x75\x69\x73\x79
+115=CP857 (DOS Turkish)\n\x01\
+\u00C7\u00FC\u00E9\u00E2\u00E4\u00E0\u00E5\u00E7\u00EA\u00EB\u00E8\u00EF\u00EE\u0131\u00C4\u00C5\
+\u00C9\u00E6\u00C6\u00F4\u00F6\u00F2\u00FB\u00F9\u0130\u00D6\u00DC\u00F8\u00A3\u00D8\u015E\u015F\
+\u00E1\u00ED\u00F3\u00FA\u00F1\u00D1\u011E\u011F\u00BF\u00AE\u00AC\u00BD\u00BC\u00A1\u00AB\u00BB\
+\u2591\u2592\u2593\u2502\u2524\u00C1\u00C2\u00C0\u00A9\u2563\u2551\u2557\u255D\u00A2\u00A5\u2510\
+\u2514\u2534\u252C\u251C\u2500\u253C\u00E3\u00C3\u255A\u2554\u2569\u2566\u2560\u2550\u256C\u00A4\
+\u00BA\u00AA\u00CA\u00CB\u00C8\u20AC\u00CD\u00CE\u00CF\u2518\u250C\u2588\u2584\u00A6\u00CC\u2580\
+\u00D3\u00DF\u00D4\u00D2\u00F5\u00D5\u00B5\u00FE\u00D7\u00DA\u00DB\u00D9\u00EC\u00FF\u00AF\u00B4\
+\u00AD\u00B1\u2017\u00BE\u00B6\u00A7\u00F7\u00B8\u00B0\u00A8\u00B7\u00B9\u00B3\u00B2\u25A0\u00A0
+;116=DOS için translit tablosu
+;117=DOS Çıkış Kodu Sayfa Tablosu
+
+;128= ;VGA yazı tipi dosyası (yalnızca DOS)
+;129=dmde_tr.chm
+;130=
+;131=man_tr
+
+202=\
+\xb4\x1f\xb6\xfc\xf5\x78\x47\xcc\x87\x75\xe3\xc6\xc9\xee\x9f\xdb\
+\xcc\x36\x29\xc8\x4d\xfd\x5e\xcb\xb2\xb3\xa1\x0c\x50\xc8\x14\x71\
+\xe4\x17\x9f\xc3\x3e\x00\x78\x32\x39\xc9\xc3\x5a\xe0\x2b\x19\x88\
+\x3f\xdc\x56\x9b\x57\xac\xdf\xd3\x64\x24\xeb\x9b\x35\x72\x68\x3c\
+\x88\xdd\xf3\xc5\xd0\xe9\xd6\x98\xa1\x02\x17\xd0\x43\xa0\xc7\x55\
+\xdb\xb2\xcd\x50\x7f\x00\xf4\x39\x74\x29\x91\xbc\x01\x0a\x35\x8f\
+\x0a\xf5\xac\x48\xc6\x71\x9b\xbc\x17\x99\xca\x7a\x4d\x27\x64\xb2\
+\xfc\xf7\xf7\x3c\xf1\xfd\x5e\xff\x98\xda\x10\x06\x71\x0d\xe6\x0d
+203=\
+\x7a\x24\x61\x9e\x98\x61\xa3\x6b\x63\x87\xc3\xb2\xb6\x2e\x8c\xa1\
+\x08\xdd\x28\x2d\xf3\x65\xc1\xca\xc7\x89\x10\xb4\x1a\x8c\xcf\xe2\
+\x55\xda\x95\x76\xaa\x00\x2a\xff\xaf\xab\x16\x81\xe3\xf6\x79\x7e\
+\x07\x25\xa6\x6d\x6a\x8f\x55\xd8\xf3\x58\x37\xd3\xc6\x1a\xbd\xce\
+\xba\x70\x53\xf6\x7a\x81\x6c\x88\x45\xb1\xa4\x81\xcb\x6c\xb0\x32\
+\x72\x86\x8b\x48\x0d\x71\xd5\xe0\xc1\x07\x35\x5e\xae\xc9\x52\xa8\
+\x24\x8f\xc6\xf3\xe9\xd3\x23\x6b\x57\x34\x7c\x27\xa3\x91\xac\x7e\
+\x95\x6a\x16\x72\x8d\xda\xa4\x92\x16\x2a\x52\xfa\x72\x9a\xa9\x4b
+
+205=\x03\x8f\xb0\xbe
+256=Türkçe çeviri: Çevirmen By SALiH DRD
+
+;NEW 3.7:
+997=Gerçek ve yasal bir yazılım sürümünün kullanıldığından emin olun.\n\
+	Lütfen geliştiriciye tam ekran görüntüsü vererek bilgi verin \n\
+	ve hatayı yeniden oluşturma adımlarını açıklamak.\n\
+	Gerekli verileri kaydedin ve programdan çıkın.
+998=&Devam et
+999=&Durdur
+;CHANGED 3.7:
+1000=İstisna %s at 0x%08p.
+
+1001=İşlev henüz desteklenmiyor.\n\
+	Yazılım sitesinde güncelleme olup olmadığını kontrol edin.
+;CHANGED 3.6:
+1002=Disk Görüntüsünü / Günlük Dosyasını Aç
+1003=Hiçbir cihaz bulunamadı.\n\n\
+	Muhtemelen uygunsuz yazılım sürümü kullanılıyor. \
+	Lütfen sistem gereksinimlerinin yanı sıra kurulum ve çalıştırma sorunlarına bakın.
+;CHANGED 3.4:
+1004=Cihaz kapasitesi
+1005=Dikkat!\n\
+	ATA Arayüzü üzerinden doğrudan erişim, sürücüler ve işletim sistemi ile çakışabilir.\n\
+	Yine de devam etmek istiyor musun?
+1006=Bilgisayarı MS-DOS modunda yeniden yüklemek için.\n\
+	Yine de Windows altında devam edilsin mi?
+1007=Dikkat!\n\
+	Windows 9x/ME altında mantıksal disklere erişim durmaya neden oluyor.\n\
+	Bilgisayarı MS-DOS modunda yeniden yükleyin ve programı çalıştırın.\n\
+	Yine de Windows altında devam edilsin mi?
+1008=Bekleyin... Cihaza erişiliyor %s
+;CHANGED 3.6:
+1010=Disk / Görev Seçin
+1012=ATA Arayüzü
+1013=BIOS Hizmetleri
+1014=DOS Hizmetleri
+1015=DOS ASPI
+1016=Fiziksel Cihazlar
+1017=Mantıksal Diskler
+1019=Cihazlar
+1020=Disk Görüntüleri / Günlükleri
+1021=&Araştır..
+1023=ATA arayüzü
+1024=ATA&PI arayüzü
+1025=&Eski BIOS Hizmeti
+1026=&Ext BIOS Hizmeti
+1027=DOS Int &25/26
+1028=Win&9x-FAT32 Aramalar
+1029=&MSCDEX Hizmetleri
+1030=&DMA kullan
+1031=kullan LBA&48
+1032=&raw CD erişimi
+1034=&Bölümleri Göster
+1035=Disk
+1036=Farkı
+1037=Boyut
+1038=RAID Oluştur
+1039=Şerit boyutu:
+1040=En azından ekleyin 2~diskler.
+1041=Disk Ekle...
+1042=BOŞ Disk Ekle
+1043=Diski Kaldır
+1044=Yukarı Taşı
+1045=Aşağı Taşı
+;CHANGED 3.4.3:
+1046=Bölüm / Fark / Segment
+1047=Bu sektör boyutu için geçersiz şerit boyutu.
+;CHANGED 3.6:
+1049=Daha fazla diske ihtiyaç var
+;CHANGED 3.6:
+1050=RAID-0/1 konfigürasyondan daha fazlası 2~diskler inşa edildi
+1051=Toplam boyut: %~I~LBA (%IV)
+1052=Farklı sektör boyutlarına sahip cihazlar eklenemez.
+1053=Uzaklığı ayarla
+1055=Geçersiz parametreler
+1056=Sektör başına geçersiz Bayt değeri.
+1057=LBA Boyutu üründen küçük olmamalıdır\n\
+	(Cylinders~number * Heads~Number * Sectors~per~Track).\n\
+	LBA Boyutu artırılsın mı?
+1058=Silindir sayısı şuna eşit olmalıdır \n\
+	LBA~Boyut / (Heads~Number * Sectors~per~Track).\n\
+	Silindir sayısı değeri artırılsın mı?
+1059=Disk erişimi...
+;NEW 3.4.3:
+1060=Diske erişilemiyor (Yardıma bakın)
+;CHANGED 3.4::
+1061=Bölümler: ;[boşluk]
+1062=Mevcut disk boyutu:
+1063=Disk bölümleme hataları olabilir veya tüm kapasiteye erişilemiyor.
+1064=Önce uygun kapasite erişimine dönmelisiniz (Yardıma bakın)
+;::CHANGED 3.4
+1065=Mevcut cihazla çalışmayı bırakmak istiyor musunuz?
+1066=Cihazlara erişmek için Yönetici/Süper kullanıcı ayrıcalıklarına ihtiyacınız var.\n\
+	Yönetici olarak oturum açın ve programı Yönetici olarak çalıştırın \
+	(yazılım belgelerini okuyun).
+1067=Sektör başına bayt (Bps) değeri geçerli değil.\n\
+	Yine de devam etmek istiyor musun?
+1068=&Yeniden Dene
+1069=&Yoksay
+1070=Tümünü yoksay
+1071=&İptal
+1072=&Değiştir
+1073=&Uygula
+1074=Aldırma I/O hatalar
+1075=Cihaz hazır değilse beklemeyin
+1076=her zaman
+1077=şimdi
+1078=CRC Hatasında numarayı otomatik olarak yeniden dener
+1079=Numarayı Arama Hatasında otomatik olarak yeniden dener
+;CHANGED 3.0:
+1080=LBA: %~I (try %l):~
+;CHANGED 3.0:
+1081=LBA: %~I - %~I (try %l):~
+1082=Cihaz yanıtı bekleniyor
+1083=Başarılı
+1084=Cihaz I/O parametreleri
+1085=Hatadan sonra sektörler üzerinden atla
+1086=Atlamadan sonra tekrar oku
+1087=I/O sektörlerdeki arabellek boyutu
+1088=Zaman aşımı, msec
+1089=SCSI Zaman aşımı, s
+1090=&Senaryo...
+1091=Onayla
+1092=&Parametreler
+1093=Cihazı Kaydet I/O İşleyici Komut Dosyası
+1094=Cihazı Yükle I/O İşleyici Komut Dosyası
+1095=Cihaz I/O İşleyici
+;CHANGED 3.7:
+1096=Atlanan sektörleri temsil etme modeli (hex)
+;CHANGED 3.4:
+1097=Güncelle
+1098=&Senaryo...
+;CHANGED 3.7:
+1099=Kötü sektörleri temsil etme modeli (hex)
+1100=LBA Boyutu
+1101=Silindirler
+1102=Başkanlar
+1103=Sn.
+1104=Bps
+
+;CHANGED 3.10:
+1105=Hata durumunda cihaz tutamacını güncelle, gecikme, ms
+;NEW 3.4::
+1106=Yeniden dene I/O cihaz bağlantısında
+1107=Daha fazla çalışmanın risklerini bildiğinizden emin olun (Yardıma bakın)
+;::NEW 3.4
+;NEW 3.7:
+1108=Cihaz listesini hata durumunda güncelle
+;NEW 3.7:
+1109=İzin ver &Yaz
+
+1110=&Disk
+;CHANGED 3.6:
+1111=Disk Seçin / &Görev...
+;CHANGED 3.6:
+1112=Aç &Görüntü / Günlük...
+1113=İnşaat &RAID...
+1114=&Bölümler...
+1115=&Birimleri Kilitle...
+1116=&Çıkış
+1117=Cihaz I/O Parametreler...
+1118=NTFS Araması (DMDE 2.10)...
+1119=FAT Araması (DMDE 2.10)...
+1120=Wi&ndows
+1121=Dizin &Tree
+1122=&Dosya Paneli
+1123=&Arama Paneli
+1124=Düzenleyici
+;CHANGED 3.2:
+1125=Pencere Düzeni
+1126=Düzeltilmedi
+;CHANGED 3.2:
+1127=Yeni Bir Sekmeye Taşı
+1128=Hepsi Dikey Olarak
+1129=Hepsi Yatay Olarak
+1130=Tam Yükseklikte Ağaç
+1131=Düzenleyici Tam Genişlikte
+1132=Düzenleyici Tam Yükseklikte
+1133=&Düzenle
+1134=&Mod
+1135=&Onaltılık/Metin
+1137=FAT &Dizin
+1138=FA&T12/FAT16/FAT32
+1139=&Bölüm Tablosu MBR/GPT
+1140=FAT/FAT32/NTFS &Önyükleme Kaydı
+1141=&NTFS Dizini
+1142=&MFT Kaydı
+1143=NTFS File Raw Sektörleri
+1144=&Kodlama...
+1145=Özel &Şablonlar...
+1146=Şablonları güncelleyin
+1147=Doldur &Sıfır Blok
+1148=&Kopyala
+1149=&Yapıştır
+1150=Yapıştır &Dosyala...
+1151=&Blok Seç
+1152=&Tümünü Seç
+1153=&Metin Dosyasına Aktar...
+1154=&Bloğu Yeniden Oku
+;CHANGED 3.7:
+1155=&Düzenleme Modu
+1156=&Editör
+1157=&Bölüm Tablosu
+1158=&Önyükleme Sektörü
+1159=Önyükleme Sektörü Kopyası
+1160=&Kök Dizini
+;CHANGED 3.6:
+1161=Ana FS &Tablo (FAT/MFT/...)
+;CHANGED 3.6:
+1162=İkincil FS Tablosu (Kopyala/...)
+;CHANGED 3.4:
+1163=&Dosya Kaydı...
+1164=Hacim &Küme...
+1165=Hacim &Sektör...
+1166=Fiziksel &Sektörler...
+1167=Küme &Harita
+1168=&Goto
+1169=&Dosya Verileri
+1170=&Dizin Girişi
+;CHANGED 3.6:
+1171=FS &Giriş (FAT/MFT/...)
+1172=Küme Haritası
+1173=Goto &Farkı...
+1174=&Araçlar
+;CHANGED 3.6:
+1175=&Dosya Listesini Kurtar / Oluştur...
+1176=Bulunanlarda Ara (Ada Göre)...
+;CHANGED 3.4.3:
+1177=Bulunan Tüm / Sanal Dosya Sistemi...
+1178=Küme Haritasını Güncelle
+;CHANGED 3.7:
+1179=Hacim Parametrelerini Yeniden Aç...
+1180=&Araçlar
+1181=&Nesnede Dizgiyi Ara...
+1182=Özel Sektör Ara...
+;NEW 3.0:
+1183=&Tam Tarama...
+;NEW 3.7:
+1184=Bağlam &Menü...
+;NEW 3.7:
+1185=Önizleme
+1191=Ara &Tekrar
+;CHANGED 3.7:
+1192=Sektörleri Doldur (yazma modu)...
+1193=&Sektörleri Kopyala...
+;CHANGED 3.7:
+1194=NTFS Araçları (yazma modu)
+1195=Dosyayı Kopyala...
+1196=Dizin Oluştur...
+1197=Dosyayı Kaldır/Dizini Boşalt...
+1198=Dizin INDX kayıtlarını onar...
+1199=&Dil Seçimi/Language...
+1200=&Yardım
+1201=Hakkında &DMDE...
+1202=&Aktivasyon...
+1204=&Aktivasyon (demo)...
+;NEW 3.0:
+1205=&Lisans Kodunu Giriniz...
+;NEW 3.10:
+1206=Hata Ayıklama Özelliklerini Etkinleştir
+;NEW 3.7::
+1207=Legacy Liste Modu
+1208=Yeni Liste Modu
+1209=Global Salt Okunur Modu
+;::NEW 3.7
+1210=Geri Alma Verilerini/Dosyadan Dökümü Yükle...
+1211=Değişiklikleri Dosyaya Dök...
+1212=Değişiklikleri Geri Al
+1213=Değişiklikleri Yeniden Yap
+1214=Tüm Değişiklikleri Sıfırla...
+1215=Değişiklikleri Uygula...
+1220=Öznitelik Listesi Oluştur
+1230=Değişiklikleri Gizle/Göster
+1231=Geri Al
+1232=Yinele
+1240=Gecikmeli Yazma (%l)
+1241=Bölümleme (%l)
+1242=Editör (%l)
+1243=Dosyadan Geri Alma/Döküm (%l)
+1244=Nesne~#%l (%l)
+1245=Düzenle %l (%l)
+;NEW 3.6:
+1246=Önceki Nesne
+;NEW 3.6:
+1247=Sonraki Nesne
+;NEW 3.7:
+1278=Varsayılan
+;NEW 3.6:
+1279=Ekle...
+1280=Mevcut işlemi tamamlama...
+1281=İptal etmek istiyor musunuz?
+1282=&İptal
+1283=&Devam et
+1284=&Aç
+1285=&Araştır..
+1286=Seçiniz
+1287=&Yeniden dene
+1288=&Atla
+;CHANGED 3.0:
+1289=Herhangi bir Dosya
+1290=Hat
+1291=Komut
+1292=Yorum Yap
+1293=Yükleme...
+1294=Kaydet...
+1295=Ins.
+1296=Del.
+1297=Düzenle
+1298=&Kapat
+1299=&Yardım
+1300=Yardım
+1301=Yardım dosyaları desteklenmiyorsa veya yoksa, yazılım sitelerinden indirebilirsiniz.
+1302=DMDE tüm iletişim kutuları kapatılana kadar sona eremez.
+1303=[Esc]: menüden çık
+1304=&Tamam
+1305=&İptal
+1306=&Evet
+1307=&Hayır
+1308=&İptal
+1309=Bağlantı adresine git
+1310=Bağlantıyı panoya kopyala
+1311=Adresi panoya kopyala
+1312=Dosya adı:
+1313=Dosya türü:
+1314=&Aç
+1315=&Kaydet
+1316=&İptal
+1317=Dosya bulunamadı.
+1318=Dosya zaten var.\n\
+	Üzerine yazmak ister misiniz?
+1319=Dizini seçin
+1320=Seçmek için Ctrl+Enter veya TAMAM'a basın
+1321=Lütfen bekleyin...
+1322=[Ctrl+D]: cihaz seç~ [F10]: Menü
+1324=[Ctrl+P]: bölümler~ [F10]: Menü
+1325=[Alt+B]: önyükleme sektörü~ [F10]: Menü
+1326=Doğrudan Erişim için Birimleri Kilitleme
+1327=Doğrudan birim sektörlerine yazmadan önce dosya sistemi kilitlenmelidir.\n\
+	İşaretli birimler kilitlenir ve bunlara doğrudan yazmaya izin verilir.
+1328=İşaretlenmemiş birimler kilitlenemedi.\n\
+	DİKKAT! Göz ardı etmek dosya sistemine zarar verebilir veya yazma erişimi reddedilebilir. \
+	Zorla sökme kullanılan tüm birim tanımlayıcılarının kaybolmasına neden olur.
+1329=Kilitlenemedi. Hacim kullanılabilir veya erişim reddedilir.\n\
+	Zorla sökme kullanılan tüm birim tanımlayıcılarının kaybolmasına neden olur.
+1330=Mevcut birimin kilidi açılamaz.
+1332=&Yeniden Dene
+1333=&İptal
+1334=&Kuvvet
+1335=&Yoksay
+1336=&İptal
+1337=Seçilen aralık cihaz sınırlarının ötesine uzanıyor.\n\
+	Geçerli cihaz sektörleri: %~I - %~I.\n\
+	Yine de devam etmek istiyor musun?
+;CHANGED 3.6:
+1338=Göreli Konum (Bayt):
+1339=Geçerli konum
+1340=Sektörleri seçin
+1341=Silindir
+1342=Kafa
+1343=Saniye
+1344=Odak Sektörü:
+1345=Birinci Sektör:
+1346=Son Sektör:
+1347=Sektör Sayısı:
+1348=&Aralık
+1349=He&x
+1350=Cihaz sektörleri:
+1351=Bölüm arama...~ #%l~ LBA: %~I
+1352=Birim veya önyükleme sektörü kopyası bulunamadı.
+1353=Sektör başka bir cilt veya tablo tarafından kullanılıyor.
+1354=Dosya sistemi desteklenmediği için doğrulanamıyor.\n\
+	Yine de devam etmek istiyor musun?
+1355=Bölüm cihaz sektörlerine göre kaydırılır.
+1356=Dosya sistemi doğrulanmadı.\n\
+	Birimi açmanız ve doğrulamanız önerilir.\n\
+	Doğrulamadan devam etmek istiyor musunuz?
+1357=Dosya sistemi zarar görmüş.\n\
+	Yine de devam etmek istiyor musun?
+1358=Geçerli bir önyükleme sektörü zaten var.\n\
+	Yine de devam etmek istiyor musun?
+1359=Önyükleme sektörü kopyadan geri yüklensin mi?
+1360=Hacim harfleri tespit edilsin mi?\n\
+	Programın durmasına neden olabilir.
+1361=Disk
+1362=tablo
+1363=Genişletilmiş
+1364=Genişletilmiş
+1365=bulundu
+1366=bulundu
+1367=bulunan tablo
+1368=bulunan tablo
+1369=ayrılmamış
+1370=fazla sektörler
+1371=Bilinmeyen
+1372=Birincil
+1373=Pri.
+1374=Logic. disk
+1375=Günlük.
+1376=Bölümler
+1377=\tVolume\tPart.\tFSystem\tSize\tInd.\tStart~LBA\tEnd~LBA
+1378=Hacim
+1379=Bölüm
+1380=F.Sistemi
+1381=Boyut
+1382=Göstergeler
+1383=Birinci sektör
+1384=Son sektör
+
+;NEW 3.10:
+1385=Gelişmiş
+;CHANGED 3.10:
+1386=Düzenle
+;CHANGED 3.10:
+1387=Düzenle
+;CHANGED 3.10:
+1388=Güncelle
+
+1389=&Tablolar
+1390=&Bulunanlar
+1391=&Ayrıntılı
+1392=&Ekle
+1393=&Kaldır
+;CHANGED 3.0:
+1394=&Tam Tarama
+1395=&Bölüm İçinde Tam Tarama...
+1396=Görüntü/Klon
+1397=&Hacmi Aç
+1398=&Menü
+1399=Cilt Harflerini Göster
+1400=Bölümleme Değişikliklerini İptal Et
+1401=&Dosyadan Yükle...
+1402=&Mevcut Bölümü Dosyaya Kaydet...
+1403=&Bölümlemeyi Uygula...
+1404=Tüm Sürücüyü Seç
+1405=&Bölümü Ekle (Silmeyi Geri Al)...
+1406=&Bölümü Kaldır...
+;CHANGED 3.0:
+1407=Alakasız/geçmiş hataları kırmızı ile vurgulayın
+;NEW 3.10:
+1408=Disk Düzenleyiciyi Göster
+1409=Görüntü/Klon Oluştur...
+;CHANGED 3.4.3:
+1410=FS hataları varsa sistem kullanıcı verilerini yok edebilir (Yardıma bakın).\n\
+	Mevcut sistem veya önyükleme diskindeki bölümlemeyi değiştirmeyin.\n\
+	Geri alma verilerini başka bir cihaza kaydedin.
+;NEW 3.0::
+1411=Birim henüz açılmadı.\n\
+	Bölümün açık olduğundan emin olmak için birimi açmanız ve bazı dosyaları kurtarmayı ve açmayı denemeniz önerilir düzgün seçilmiş.
+;CHANGED 3.4.3:
+1412=FS hataları varsa sistem kullanıcı verilerini yok edebilir (Yardıma bakın)
+;::NEW 3.0
+
+;NEW 3.4::
+1413=Daha fazla bölüm bul
+1414=Tüm diski tara
+1415=Seçili bölümü tara
+;::NEW 3.4
+
+1416=Kaydedilmiş disk bölümlemesini aç
+1417=Silindi
+1418=Sil.
+1419=MBR 2TiB'ye kadar ve 4'e kadar birincil bölümü destekler veya \n\
+	3~birincil ve 1~mantıksal diskler içeren genişletilmiş bölüm.
+1420=Bölüm türünü seçin
+1422=Genişletilmiş bölüm oluşturulacak.\n\
+	Yalnızca ilk sektörün daha büyük değerine sahip mantıksal diskler daha sonra genişletilmiş bölüme eklenebilir.\n\
+	Devam etmek istiyor musun?
+1423=Önyükleme sektörü bulunamadı veya yanlış/uyumsuz.\n\
+	Bölüm biçimlendirilmemiş olarak algılanacak.\n\
+	Yine de devam etmek istiyor musun?
+1424=Dosya sistemi bilinmiyor.\n\
+	Yine de devam etmek istiyor musun?
+1425=Zaten aynı başlangıç ​​LBA'sına sahip bölüm var.\n\
+	Mevcut bölümü değiştirmek istiyor musunuz?
+1426=Genişletilmiş bölüm mantıksal disklerle birlikte kaldırılacaktır.\n\
+	Devam etmek istiyor musun?
+1427=Bölümü kaldırmak istiyor musunuz?
+1430=Bölüm eklemek için yeterli alan yok.
+1431=Çakışan mevcut bölüm.\n\
+	Çakışan bölümleri kaldırmalı ve tekrar etmelisiniz.
+1432=Bölüm ve genişletilmiş bölüm çakışıyor.
+1433=Sektör okuma hatası %~I.
+1434=Bölüm tablosunda ücretsiz giriş yok.
+1435=Sektör yazma hatası %~I.
+1436=Genişletilmiş bölüme uyulamadı.
+1437=Bölüm tablosu için yer yok.
+1438=Bölümleme hatası bulundu.
+1439=Bu bölüm eklenemiyor.
+1440=Dosya sistemi desteklenmiyor.
+1441=Bu bölüm kaldırılamaz.
+1442=Dikkat! Standart olmayan bölümleme tablosu.
+1443=Raw Bölüm Oluştur...
+1444=Önyükleme Sektörünü Kopyadan Geri Yükle...
+1445=Önyüklenebilir (Aktif) Bölüm Durumunu Değiştir...
+1446=MBR/Önyükleme İmzasını Değiştir (Açık/Kapalı)...
+1447=Yardım Talimatları
+1448=&Oluştur
+1449=&Geri Yükle
+1450=M&BR Açık/Kapalı
+;NEW 3.10:
+1451=Gelişmiş mod
+1452=Uygulanacak bölümlemede tespit edilen hatalar var.\n\
+	Yine de devam etmek istiyor musun?
+1453=Bölümlemeden önce çok küçük bir boşluk tespit edildi.\n\
+	Diğer araçları kullanarak bölümlemeyi değiştirirseniz bu daha sonra sorunlara neden olabilir.\n\
+	Yine de devam etmek istiyor musun?
+1454=Bölüm çok büyük.
+1458=Biçimlendirilmemiş (Raw) bölüm oluşturun.
+1459=Beklenmeyen bölümleme.
+1460=Sektör: %~I (%l%%)
+;NEW 3.6::
+1461=Kopyalanacak yeni / atlanmış sektör yok
+1462=Kopyalamaya yeniden denenecek kötü sektör yok
+1463=Günlükten bozuk ve atlanan aralıkları dışa aktar...
+;::NEW 3.6
+1464=%IV desenle doldurulacak.\n\
+	Tüm verilerin üzerine geri alınamayacak şekilde yazılacaktır.\n\
+	Devam etmek istediğinizden emin misiniz?
+1465=Aranıyor...
+1466=Sektör bulunamadı.
+1467=Başlangıç ​​Bölümü:
+1468=Son Sektör:
+1469=Sektör Sayısı:
+1470=Geçersiz giriş.
+1471=Geçersiz Giriş.\n\
+	Geçerli disk sektörleri: %~I - %~I.
+1472=Kaynak hedefe uymuyor.\n\
+	Yalnızca kısmi bilgileri mi kopyalamak istiyorsunuz?
+1473=Sektörleri doldur
+1474=Desen
+1475=&Hex:
+1476=&Dosya:
+1477=Sektörleri doldur:
+1478=sektör &hizalama
+1479=Dosya boş.
+1480=Dosya çok büyük. Büyük dosyalar yazmak için "sektörleri kopyala" işlevini kullanın.
+1481=Tamamlanamadı. Yazım hatası.
+1482=Dosya okuma hatası.
+1483=Doldurulmuş LBA: %~I (%IV) %l%%
+1484=Sektörleri Kopyala
+1485=Kaynak
+1486=Hedef
+1487=Cihaz...
+1488=Dosya...
+1489=Düzenleyici
+1490=Seçim
+;NEW 3.6::
+1491=Günlük İstatistikleri
+1492=Günlük istatistikleri...
+1493=Yeni Sıralanmış Günlüğe Aktar
+1494=Yeni sıralanmış günlüğe aktar...
+1495=Aralıkları Kaydet
+;::NEW 3.6
+1496=Hedefi seçin.
+1497=Dosyaya Yaz
+1499=Hedef dosya boyutu kaynak boyutundan daha büyük.\n\
+	Hedef dosyayı kesmek istiyor musunuz?
+;CHANGED 3.2:
+1502=Mevcut LBA Farkı: %~I (%IV) %l%% / %l%%\n\
+	İyi: %~I~ Kötü: %~I~ Atlandı: %~I~ Yazma hataları: %~I
+1503=Bayt Başlatma:
+1504=Bitiş Bayt:
+1505=Bayt Cinsinden Boyut:
+1506=~diskte~
+
+;NEW 3.4::
+1507=&Üzerine yazmayı onaylayın %IV
+1508=Kaynak ve hedef örtüştüğünde yanlış kopyalama yönü.
+1509=Bir günlük dosyası oluşturmak istiyor musunuz?
+1510=Bazı kapsamlar kaynak sınırlarının ötesindedir ve atlanacaktır.\n\
+	Muhtemelen farklı bir kaynak seçilmiştir.\n\
+	Kaynak sınırlarının ötesindeki uzantıları yüklemek ister misiniz?
+;CHANGED 3.6:
+1511=Kaynağın doğru seçildiğinden emin olun
+1512=Günlüğü ddrescue harita dosyasına aktar
+1513=Günlüğü ddrescue harita dosyasına aktar...
+1514=Tamamlandı
+
+1515=Rapor
+1516=Raporu bir dosyaya kaydet
+;::NEW 3.4
+;NEW 3.6:
+1517=Kaynak ve hedefin desteklenmeyen çakışması
+;NEW 3.6:
+1518=Dinlenme (LBA)
+
+1519=Değişiklikleri Dosyaya Dök
+1520=Küme: [0..%I]:
+1521=Git Küme
+1522=Hacim Sektörü [0..%~I]:
+1523=Hacim sektörüne git
+1524=Nesne uzaklığına git
+;CHANGED 3.0:
+1525=Sektör
+;CHANGED 3.0:
+1526=Sektör Farkı
+;CHANGED 3.0:
+1527=Fark
+1528=Dosya tahsis bilgisi yüklenmedi.\n\
+	Dosya ayırma bilgilerini yüklemek istiyor musunuz?
+1529=Aç Hacim
+;NEW 3.4.3:
+1530=Dosya tahsis bilgilerini güncellemek istiyor musunuz?
+
+1531=Nereden &Başlangıç/Bitiş
+1532=Nereden &Güncel
+
+;NEW 3.4::
+1533=Kayıt
+1534=Kayıt ofset
+;::NEW 3.4
+;CHANGED 3.6:
+1535=X &arka arkaya zamanlar:
+;CHANGED 3.6:
+1536=Sonunu ara &tekrarlar
+
+1537=Dosyayı aç
+1538=Dizgi Ara
+1539=Dize:
+1540=Büyük/küçük harfe &duyarlı
+1541=Sektör &ofset:
+1542=&Unicode
+1543=&Yönlendir
+1544=&Geri
+1545=&imleçten
+1546=&Tüm nesne
+1547=Çok fazla kapsam.
+1548=Geri Alma Verilerini Kaydet
+1549=Sektör okuma hatası %~I.\n\
+	Yine de devam etmek istiyor musun?
+1550=Tümünü yoksay
+1551=Cihaz içeriği dışarıdan değiştirildi.
+1552=Bu RAID türü için yazma desteklenmiyor.
+1553=Doğrudan diske yazmayı onaylayın
+1554=Geri dönme verilerini yazmadan önce bir dosyaya kaydet
+1555=Yazma
+1556=Sil
+1557=Geri Al
+1558=Beklet
+1559=Birleştir
+1560=Diske değişiklik yazmak istiyor musunuz?
+1561=Uygulanmamış değişiklikler var.\n\
+	Uygulanmamış değişiklikleri yazmak mı yoksa silmek mi istiyorsunuz?
+1562=Diske yaz veya önceki değişiklikleri sil.
+1563=Blok düzenlenen nesnenin sonunu aşıyor.
+1564=Blok çok büyük. Büyük bloklar için "Sektörleri kopyala" veya "Sektörleri doldur" işlevlerini kullanın.
+1565=Arabellek dolu.
+1566=Uygulanmamış değişiklikler var.\n\
+	Uygulanmamış değişiklikleri yazmak mı yoksa silmek mi istiyorsunuz?\n\
+	Ayrıca daha sonra başvurmak için değişiklikleri saklayabilirsiniz.
+1567=Uygulanmamış önceki değişiklikler var.\n\
+	Önceki değişiklikleri yazmak mı yoksa silmek mi istiyorsunuz?
+1568=Uygulanmamış önceki değişiklikler var.\n\
+	Önceki değişiklikleri yazmak mı yoksa silmek mi istiyorsunuz?\n\
+	Ayrıca tüm değişiklikleri daha sonra uygulamak için birleştirebilirsiniz..
+1569=Tüm değişiklikleri sıfırlamak istiyor musunuz?
+1570=Yine de devam etmek istiyor musunuz?
+1571=FS parametrelerini otomatik algıla
+1572=Bu parametrelerle devam et
+1573=Birim aygıta sığmıyor.
+1574=bu sanal birim boyutunu kullan
+1575=azaltılmış birim boyutunu kullan
+1576=Geçersiz Bps değeri kullanılmayacak.
+1577=Geçersiz FAT sayı değeri kullanılmayacak.
+1578=Kök Küme değeri FAT12/FAT16'da kullanılmıyor.
+1579=Kök Dizin Girişleri FAT32'de kullanılmıyor.
+1580=Kök Dizin Girişleri numarası, FAT12/FAT16 için sıfır olmamalıdır.
+1581=Beklenmeyen Kök Yön Giriş Sayısı değeri artırıldı.
+1582=Küme değerleri başına geçerli sektörler: 1,2,4,8,16,32,64,128.
+1583=Başlangıç ​​sektörü aralık içinde olmalıdır 0..%~I.
+1584=(res.secs+fatsnum*fatsize+entriesnum*32/512) çok geniş.
+1585=Toplam sektör değeri çok büyük veya geçersiz parametreler.
+1586=Toplam sektör değeri çok küçük veya geçersiz parametreler.
+1587=Geçersiz kök küme numarası varsayılan değerle değiştirildi.
+1588=Sadece bir Fat var.
+1589=Kök dizin açılırken bulunan hatalar var.
+1591=Dosya Sistemi:
+1592=FAT tabloları:
+1593=FAT1 kullan
+1594=FAT2 kullan
+1595=kullan
+1596=test et ve seç
+1597=otomatik seçim
+1598=FAT tablolarının test edilmesi %l%%
+1599=FAT Tabloları Ayarları Kullan
+1600=Bayt cinsinden FAT tablosu boyutu: %l
+1601=FAT%l: %l-%l vardır %l%% geçerli; %l iyi, %l kötü, %l bilinmeyen
+1602=FAT tablolarını kullanma
+1603=kontrol (bozuk kesimler kullanmayın)
+;CHANGED 3.4.3:
+1604=Okuma: FAT Küme %~lu (%l%%)\nDizin Parçalanma: %~l
+;NEW 3.0::
+1605=FAT başına Geçersiz Sektörler
+1606=Toplam Sektör Sayısı çok küçük
+1607=Toplam Sektör Sayısı FAT büyüklüğüne göre azaltıldı
+;::NEW 3.0
+;NEW 3.6::
+1616=%l%%\ndizinler: %~l, dosyalar: %~I, parçalanma: %~I
+1617=FS yapıları
+1618=Alt. veri akışları
+1619=FS rekonstrüksiyonunu kullan
+;::NEW 3.6
+
+1623=Geçersiz küme boyutu.
+1624=MFT Kaydı Değeri başına Geçersiz Bayt varsayılana değiştirildi.
+1625=Dizin Kaydı Değeri başına Geçersiz Bayt varsayılana değiştirildi.
+1627=MFT Küme Değeri çok büyük.
+1628=MFTMirr Küme Değeri çok büyük.
+1629=Geçerli bir MFT Başlatma Kümesi yok.
+1630=MFT Hatası. MFTMirr kullanılacaktır.
+1631=MFT Hatası.
+;NEW 3.7:
+1648=Sanal Sayfa/Nesne Numarası
+1649=&Parametreler
+1650=Bellek yetersiz
+1651=Oluşturulamadı
+1652=Yazılamadı
+1653=Dosya okuma hatası
+;NEW 3.6::
+1654=Açılamadı
+1657=Seçilen dosyalar sıfır boyutta.\nYine de devam etmek istiyor musunuz?
+1658=Küme Haritası Oluştur
+1659=Küme Haritası Sıkıştırma Modu
+1660=En İyi Küme: %~I
+;=Küme Başlatma
+1661=Küme Haritası Raporu...
+1662=Küme Haritası Raporu
+1664=yalnızca işaretli dosyalar
+1665=yalnızca dosyalar
+1666=disk başlangıcından itibaren bayt cinsinden
+1667=Min, maksimum küme:
+;::NEW 3.6
+;NEW 3.4.3::
+1668=Sanal FS Oluşturuluyor...
+1669=FS Küme Haritası Oluşturuluyor...
+;::NEW 3.4.3
+1670=Dosyaları Ara
+1671=Arama Paneli
+1672=Dizin Ağacı
+;CHANGED 3.0:
+1673=Arama... (%l/%l) %.60s
+1674=Tamamlandı (%l)
+1675=Dizin kaydı: %l (%l%%)
+1676=MFT kaydı: %l (%l%%)
+1677=Durduruldu (%l)
+1678=Aramayı durdurmak istiyor musunuz?
+;NEW 3.6::
+1679=mevcut dizinden
+1680=Özel dizinleri dahil et
+1681=Bir paneldeki eşleşen öğeleri listele
+1682=Eşleşen öğeleri işaretle
+1683=Eşleşen öğelerin işaretini kaldır
+1684=Ayrı bir iş parçacığı başlat
+1685=Dosya Kategorilerini Seçin
+;::NEW 3.6
+;NEW 3.4.3::
+1686=Kurtarılacak dosya yok.\nGerekli dosya kategorilerinin seçildiğinden emin olun.
+1687=hariç tutulan öğeler için seçim işaretlerini koru
+1688=İzinleri geri yükle
+1689=Sahip kimliğini geri yükle
+1690=Dosya Kategorileri:
+;::NEW 3.4.3
+;NEW 3.4::
+1691=değiştirilmiş:
+1692=&sadece bulundu
+;::NEW 3.4
+;CHANGED 3.7::
+1693=Belirtilen hedef dizin farklı bir diskte mi yer alıyor?
+1694=Aynı diskteki dizine geri dönemeyebilirsiniz.
+1695=Hedef kontrolünü atlamak istediğinizden emin misiniz?\n\
+	Kayıp verilerin üzerine yazılabilir.
+;::CHANGED 3.7
+1696=Açma hatası
+1697=NTFS alt akışlarını dahil et
+1698=Eylemi seçin.
+1699=Eşiği yeniden adlandır
+1700=Kurtarma
+1701=Dosyaları seçin
+1702=ad filtresi:
+1703=genel
+1704=odaklanmış öğe
+1705=geçerli panel dosyaları
+1706=Seçenekler
+;CHANGED 3.4.3:
+1707=Dosyaları böl, blok boyutu:
+1708=utf-8
+1710=sadece işaretli
+1711=silinmiş hariç tut
+1712=sadece silindi
+1713=silinenleri dahil et
+1714=&Unicode adları
+1715=Yedek isimler
+1716=Boyut
+1717=Kurtar:
+1718=Taranıyor...~ dosyalar: %l (%IV)\n\
+	%.64s
+1719=%~l%c Okunuyor %.60s
+1720=dosya boyutu:
+1721=Kurtar
+1722=Hacim
+1723=Dizin
+1724=~(sadece işaretlendi)
+1725=Tüm işaretlenenler
+;CHANGED 3.6:
+1726=Geçerli paneldeki dosyalar
+1727=Dosya
+1728=Tümü
+;NEW 3.7:
+1729=Kayıp verilerin üzerine yazmaktan kaçınmak için \
+	hedef dizin ve kayıp veriler farklı sürücülerde.
+;CHANGED 3.7:
+1730=Uzun adlar özel sürücüler olmadan DOS altında desteklenmez. \
+	DOS altında uzun isimlerin kullanılması tavsiye edilir \
+	(isimleri daha sonra geri yüklemek için "lrename.bat" komutunu çalıştırmalısınız \
+	OS Windows'ta hedef dizinde).
+1731=%~l%c Okunuyor %-.30s%-.30s %l%%\n\
+	Yazılıyor %-.30s%-.30s
+1732=%~l%c Okunuyor %-.60s\n\
+	Oluşturuluyor %-.30s%-.30s
+1733=Hedefi/seçenekleri değiştir
+1734=Dosyayı böl
+1735=Tüm dosyaları böl
+1736=Yeniden adlandır
+1737=Tümünü otomatik olarak yeniden adlandır
+1738=Atla
+1739=Tümünü atla
+1740=Yeniden dene
+1741=Dosya hatalarını göz ardı et
+1742=Tüm hataları göz ardı et
+1743=Hepsini yok say, attr ayarla. "gizli"
+1744=Atla
+1745=Tümünü atla
+1746=İzin verilen maksimum dizin otomatik yeniden adlandırma sayısı
+1747=İzin verilen maksimum dosya otomatik yeniden adlandırma sayısı
+1748=Dizin yaratılamadı
+1749=Dizini yeniden adlandır
+1750=Dosyayı yeniden adlandır
+1751=Daha fazla yazamıyorum.\n\
+	Yeterli alan olmayabilir.
+1752=Kurtarmaya devam et:
+1753=Daha fazla yazamıyorum. Sonraki dosyaya yazmaya devam edin:
+1754=İptal edildi
+1755=Dosya zaten mevcut
+1756=Oluşturulamadı
+1757=Daha fazla yazamıyorum
+1758=Yazılamadı
+1759=Okuma hatası
+1760=Dizin zaten mevcut
+1761=Hedefi/seçenekleri değiştir
+1762=Birleştir
+1763=Tümünü birleştir
+1764=Yeniden adlandır
+1765=Tümünü otomatik olarak yeniden adlandır
+1766=Atla
+1767=Tümünü atla
+1768=Dosya listesini kaydet
+1769=Kurtarma raporu parametreleri
+1770=Kurtarma raporunu dosyaya yaz:
+1771=Kurtarma raporunu dosyaya kaydet
+1772=&I/O hata pozisyonları
+1773=Hesaplama C&RC32
+1774=Oluşturma &rapor
+1775=Liste...
+1776=Kurtarmayı iptal et
+1777=Dizin kurtarmayı iptal et
+1778=Yalnızca dosyayı atla
+1780=NTFS sürümü uyumsuz olabilir.\n\
+	Yazma işlemlerine yine de izin verilsin mi?
+1781=Dir hatasını okuyun. Hata 0x%04hx.
+1782=Bu dizin için işlem desteklenmiyor.
+1783=NTFS dir sürümü uyumsuz olabilir.\n\
+	Yine de devam etmek istiyor musun?
+1784=Özel sistem dizininde yaratmak istediğinizden emin misiniz?
+1785=Açık kaynak dosyası
+1786=Dosyayı kopyala
+1787=Veriyi dosyadan oku:
+;CHANGED 3.10:
+1789=Dosyayı dizine kopyalayın.\n\
+	Oluşturmak/üzerine yazmak için yeni dosya adını girin
+;CHANGED 3.10:
+1790=Devam etmeden önce belgeleri okuyun! (Yardıma bakın)
+1791=Dosya yolu çok uzun.
+1792=Başlatılamadı.
+1793=Dizin başlatılırken hata oluştu 0x%lx.
+1794=Dizin taranamadı. Hata 0x%04hx.
+1795=Dosya zaten var.\n\
+	Üzerine yazmak ister misiniz?
+1796=Dosyanın sonuna yeni veriler eklensin mi?
+1797=Dosya açılamadı. Hata 0x%04hx.
+1798=Dosya tahsis edilemedi. Hata 0x%04hx.
+1799=Çalıştırmalar güncellenemedi. Hata 0x%04hx.
+1800=Dosya oluşturulduktan sonra INDX güncellenemedi. Hata 0x%04hx.
+1801=Dosya veri özniteliği bulunamadı. Hata 0x%04hx.
+1802=Dosya yeniden boyutlandırılamadı. Hata 0x%04hx.
+1803=Dosya yeniden boyutlandırıldıktan sonra güncellenemedi. Hata 0x%04hx.
+1804=INDX güncellenemedi. Hata 0x%04hx.
+1805=Dosya okuma hatası. Hata 0x%04hx.
+1806=Dosya yazılırken hata oluştu. Hata 0x%04hx.
+1807=Veriler yazıldıktan sonra dosya güncellenemedi. Hata 0x%04hx.
+;CHANGED 3.10:
+1808=Oluşturulacak yeni dizin adını girin
+1809=Dizin oluştur
+1810=İsim mevcut
+1811=Dizin oluşturulamadı. Hata 0x%04hx.
+1812=Dizini onarmak istiyor musunuz?\n\
+	Önce belgeleri okuyun!
+1813=Hata 0x%hx
+1814=Yıkanamadı.
+1815=Özel sistem dizininden silmek istediğinizden emin misiniz?
+1816=Sistem dosyasını silmek istediğinizden emin misiniz?\n\
+	Bu dosya sistemini bozabilir.\n\
+	Devam et?
+1817=Silinemiyor $MFT.
+1818=Dosyayı veya dizini silmek istiyor musunuz?\n\
+	Önce yazılım belgelerini okuyun!
+1819=Uyarı: beklenmeyen MFT verileri.\n\
+	Yine de devam etmek istiyor musun?
+1820=Kaldırılamıyor. Dizin boş değil.
+1821=Hata %04hx. Dizin boş olamaz.\n\
+	Yine de devam etmek istiyor musun?
+1822=Hata %04hx
+1823=Dosya adı dizine eklenemedi INDX\n\
+	İşlem yine de devam edilsin mi?
+1824=Mft kayıt: %l (%l%%)
+;NEW 3.6:
+1825=%l öğeler
+;NEW 3.7::
+1830=Yedek isimler (önerilir)
+1831=İsim değiştirmeden devam et
+;::NEW 3.7
+1840=[Esc]: geri
+;CHANGED 3.6:
+1841=[Enter]: dosya verilerini aç
+;CHANGED 3.6:
+1842=[Enter]: dizine git
+1844=[Enter]: girişe git
+;CHANGED 3.6:
+1845=[Enter]: aç hacim~ [F7]: önyükleme kesimi türü
+;CHANGED 3.6:
+1846=[F7]: önyükleme kesimi türü
+;CHANGED 3.6:
+1847=[Enter]: aç hacim
+1849=[Enter]: git~ [Ctrl+P]: bölümler
+;CHANGED 3.6:
+1854=[Enter]: aç özellik
+;CHANGED 3.6:
+1857=[Enter]: üst dizine
+1859=[Enter]: kümeye git
+1860=[Enter]: git
+1861=[Space]: detaylar
+;NEW 3.7:
+1869=[F2]: bağlam menüsü
+1870=Hiçbir nesne seçilmedi
+1871=[Ctrl+U]: kurtar
+1872=[Enter]: aç~ [Ctrl+U]: kurtar
+1873=[Enter]: aç (Editör)~ [Ctrl+U]: kurtar
+1874=[Enter]: Üstün.~ [Ctrl+U]: kurtar
+;NEW 3.0:
+1875=[Enter]: Tam Tarama
+1876=Aç (Hex Editör)
+;CHANGED 3.2:
+1877=Panel - Bir Seviye Yukarı
+;CHANGED 3.6:
+1878=Dosya Listesini Kurtar / Oluştur...
+;NEW 3.10:
+1880=Giriş Aç (Hex Editör)
+1881=MFT Okunuyor...~#%~l (%l%%)
+;CHANGED 3.2:
+1883=(Örneğin) FAT arama sonuçlarını kullan
+1884=Mevcut dosya sistemini yeniden tara
+1885=Kesilen işleme devam et
+1887=FAT%l: %l-%l: %l%% TAMAM; %l%% TAMAM, %l%% kötü, %l%% boş, %l%% bilinmeyen
+;NEW 3.0:
+1888=İsme Göre Sırala
+;NEW 3.0:
+1889=Boyuta Göre Sırala
+;CHANGED 3.4.3:
+1890=Kurtar
+1891=Öğeyi İşaretle/İşaretini Kaldır
+1892=Panel Öğelerini İşaretle/İşaretini Kaldır
+;CHANGED 3.2:
+1893=Hacim - Tümünü İşaretle
+;CHANGED 3.2:
+1894=Hacim - Tümünün İşaretini Kaldır
+;CHANGED 3.4.3:
+1895=Sanal Dosya Sistemi Oluştur...
+1896=Dosya Aramayı Durdur
+1897=Şubeyi Genişlet
+1898=Şubeyi Daralt
+;CHANGED 3.2:
+1899=Hacim - Yalnızca Panel Dosyalarını İşaretle
+;CHANGED 3.0:
+1900=Tarama Parametreleri
+1901=Blok boyutu:
+1902=&Bölüm...
+1903=Lütfen daha verimli kurtarma için belgeleri okuyun
+1904=Açılan cilt kapatılacak.\n\
+	Devam et?
+1905=Cilt bulunamadı.
+1906=Listeden hacmi seçin.
+1907=Günlük muhtemelen başka bir cihazda oluşturulmuş.\n\
+	Arama sonuçları yanlış uygulanabilir.
+1908=Tarama günlüğünü kaydetmek istiyor musunuz?
+1909=Yükleniyor...
+1910=Tarama Günlüğünü Yükle...
+1911=Tarama Günlüğünü Kaydet...
+1912=Numaraya göre sırala
+1913=Kaliteye göre sırala
+1914=Başlangıç ​​konumuna göre sırala
+1917=Hacim Parametrelerini Aç...
+1918=!!Değiştirildi:
+1919=&Başlat
+1920=&Durdur
+1921=&Ara
+1922=NTFS Araması
+1924=Hacim
+1925=Küme
+1926=DOSYA
+1927=INDX
+1928=Mod
+;CORRECTED 3.6:
+1929=LBA'yı Başlat
+1930=Kontrol
+1931=Min. Boyut
+1932=Hacim min. boyut: %IV
+1933=Başlamak: %IV
+1934=Cilt. dosyalar: %l (%l) of %l, MFT parçalanma: %l (%l)
+1935=&Cilt#
+1936=CLUS
+1937=DOSYA
+1938=INDX
+1939=Mod
+;CORRECTED 3.6:
+1940=&LBA Başlat
+1941=&Kontrol
+1942=Min. Boyut
+1944=&Birimi Aç
+1945=&Kaydet...
+1946=&Yükle...
+;CHANGED 3.0::
+1947=Tarama Günlüğünü Kaydet
+1948=Tarama Günlüğünü Yükle
+1949=Taranıyor...
+1950=LBA'yı Tara: %~I - %~I (%IV)
+1951=Tarandı:
+;::CHANGED 3.0
+1952=Dosyalar: %l (%l) of %l, MFT parçalanma: %l (%l). INDX: %l (%l)
+1953=&Başlat/Durdur
+1954=&Aralık...
+;NEW 3.0:
+1955=Inode Tablosunu Okuma... %l
+1956=Başlangıç ​​sektörü değeri kontrol ediliyor #%l:#%l~ %l%%
+1957=MFT parçalanma okunuyor #%l: %l
+1958=MFT parçalanma bulunamadı #%l: %~I
+1959=Dizin kontrolü #%l (%l%%)
+1960=Bekle...
+1961=İşlem hacimleri...
+1962=Bazı parametreler henüz tespit edilmedi.\n\
+	Taramaya devam etmeniz önerilir\n\
+	aksi takdirde tahsis edilen veriler kullanılamayacaktır.\n\n\
+	Taramaya devam edilsin mi?
+;NEW 3.0:
+1963=önceki tarama sonuçlarını temizle
+1964=Hacim MFT parçaları...
+1965=Tüm MFT parçaları...
+1966=Tarama &aralığı seçin...
+;NEW 3.0::
+1967=Tam Tarama
+1968=Raw Tarama NTFS, exFAT, HFS sonuçlarını iyileştirebilir ancak daha fazla zaman ve hafıza gerektirir
+1969=Raw Tarama ayrıca FS desteklenmiyorsa veya ciddi şekilde hasar görmüşse dosyaların kurtarılmasına da izin veriyor
+;::NEW 3.0
+;CHANGED 3.0:
+1971=FAT Araması
+1972=Hacim
+1973=Küme
+1974=Veri başlangıcı
+1975=FS
+1976=Önyükleme
+1977=FAT1
+1978=FAT2
+1979=Kök
+1980=Bulundu
+1981=FAT tablosu arama... %l
+1984=&Cilt#
+1985=Kulak
+1986=&Başlat
+1987=FS
+1988=Boot
+1989=FAT1
+1990=FAT2
+1991=Root
+1992=&Bulundu
+;NEW 3.0::
+1993=Dosyalar
+1994=LBA Sonu
+1995=Göstergeler
+;::NEW 3.0
+1998=(Değiştirildi)
+1999=(Gizli Değişiklikler)
+2000=Sektör: %~I (%l%%)
+2001=Dizin bulunamadı.
+2002=Sektörler %~I~-~%~I
+;CHANGED 3.2:
+2003=Hacim sektörleri
+2004=Dosya
+2005=Dizin
+2006=Sektörler
+2010=[Kayıtların sonu]
+2011=[PgDn: sonraki kayıt]
+2014=Küme Haritası
+
+2086=[..][+bulundu]
+;CHANGED 3.4.3:
+2087=[Tüm Bulunan / Sanal FS]
+2088=[Ext.attr]
+2089=[klasör]
+;CHANGED 3.6:
+2090=Okuma: %s (%l%%)\n\
+	dizinler: %~l, dosyalar: %~I
+2091=Operasyonu bozmak istiyor musunuz?\n\
+	Bu eksik yapı kurtarmaya neden olur.
+2093=Ad
+2094=Boyut
+2095=Değiştirildi
+2096=MFT numarası
+2097=Yol
+2099=Ad
+2100=Boyut
+2101=Değiştirildi
+2102=Küme
+2103=Yol
+2104=%l%% işlenmiş %l bulundu
+2105=%l bulundu
+;CHANGED 3.4:
+2111=Dosya kaydı [0..%l]:
+;CHANGED 3.4:
+2112=Dosya Kaydına Git
+;NEW 3.0::
+2113=Inode Girişine Git
+2114=Inode [1..%l]
+;::NEW 3.0
+
+;NEW 3.4::
+2115=Düğüm Kaydına Git
+2116=Düğüm [0..%l]:
+
+;NEW 3.6:
+2121=Kaldırılan Öğeler Listenin Sonuna Kadar
+2122=Alt düzeylerin sayısını genişlet:
+2123=Düzeyleri genişlet...
+2124=Yazma Tarihine Göre Sırala
+2125=Kimliğe göre sırala
+2126=Geçersiz FS/parametreler
+;::NEW 3.4
+
+;NEW 3.0::
+2127=Dosya Sistemi
+2128=Bulunan Sonuçlar
+;::NEW 3.0
+;NEW 3.6:
+2129=FS + Bulunan Sonuçlar
+2130=Bu mesajı tekrar gösterme
+2131=MFT
+2132=MFT parçaları bulundu
+2133=kalan MFT parçalanma
+2134=MFT okuma Hatası~#%l-%l
+2138=MFT...
+2139=MFT numaraları:
+2140=Ekstra Bulundu
+2141=Teknik. Kayıtlar
+2142=Değiştirildi
+;CHANGED 3.4.3:
+2143=Sanal Dosya Sistemi Oluşturun (Salt okunur)
+
+;NEW 3.0::
+2170=Yeniden yapılandırmaya devam et
+2171=Saf FS rekonstrüksiyonu
+2172=Varsayılan yeniden yapılandırma
+2173=Yeniden yapılandırma başına daha az sonuç
+2174=Yeniden yapılandırma başına daha fazla sonuç
+2175=Bölüm içinde tam tarama
+;CHANGED 3.6:
+2176=Özel mod
+2177=Yükle...
+2178=Diğer Sonuçlar + Tam Tarama...
+2180=[Diğer Sonuçlar + Tam Tarama]
+;::NEW 3.0
+2191=~LUN#%l LBA:%-10I
+2192=blok: %~I
+;NEW 3.0::
+2195=Geçerli panelde işaretlenmiş dosya yok.
+;CHANGED 3.7:
+2196=Yalnızca mevcut paneldeki dosyaları mı işlemek istiyorsunuz?
+;CHANGED 3.7:
+2197=Paneldeki dizini açıp dosyaları işlemek ister misiniz?
+;CHANGED 3.7:
+2198=Etkinleştirme olmadan yalnızca 4000 dosyaya kadar işleyebilirsiniz.
+;CHANGED 3.7:
+2199=Ücretsiz versiyon ile yalnızca 4000 dosyaya kadar işleyebilirsiniz.
+;::NEW 3.0
+;CHANGED 3.7:
+2200=Ücretsiz versiyon ile, dosyaları yalnızca mevcut panelde işleyebilirsiniz \
+	(önce mevcut panelde bir alt dizin açmalısınız).
+2201=Lisans sözleşmesi
+2202=Lisans sözleşmesini kabul ediyorum
+2203=&Kabul Et
+2204=\n\
+	~Lisans sözleşmesi dosyası (EULA)\n\
+	~%s\n\
+	~bulunamadı veya bozuk.\n\n\
+	~Yazılım sitesinden tam paketi edinin.\n\
+	~Tüm dosyaları tek bir dizine çıkarın.
+2205=&Hakkında
+2206=DMDE Hakkında
+2207=&Lisans
+2209=Kopya Sayısı:
+;CHANGED 3.2:
+2210=Bitiş tarihi
+;CHANGED 3.7:
+2211=Lisans #%s için:
+;CHANGED 3.2:
+2212=Süresi doldu
+2213=Muhtemelen eski bir yazılım sürümünü kullanıyorsunuz.\n\
+	Lütfen yazılım sitesindeki güncellemeleri kontrol edin.
+2214=Geçersiz lisans dosyası
+2215=Etkinleştirme olmadan sadece mevcut paneldeki dosyaları kurtarabilirsiniz.
+2216=Yönetici
+;NEW 3.4.3:
+2217=Kök kullanıcı GUI erişimine izin ver
+2220=Demo
+2221=Etkinleştirildi
+2222=Etkinleştirilmedi
+2223=NA
+;NEW 3.0:
+2224=license.key yok
+2225=Web sitesi:
+2226=Satın Alma:
+2227=İletişim:
+2228=Destek:
+2229=İşlevin modası geçmiş.\n\
+	Devam etmek istediğinizden emin misiniz?
+;CHANGED 3.4:
+2230=Manuel aktivasyon
+2234=&Kaydet...
+2235=1. Dosyayı kaydet "dmdeinst.dat" (veya Üretim Kimliğinizi ve Kurulum Kimliğinizi yazın)
+;CHANGED 3.6:
+2236=2. Gönder (yükle) "dmdeinst.dat" (veya Prod.ID ve Inst.ID girin) herhangi bir bilgisayardaki aktivasyon sitesinde
+2237=Aktivasyon siteleri:
+2238=3. Aktivasyon kodu:
+2239=&Aç...
+2240=Aktivasyon (Sadece Gösteri)
+2241=Aktivasyon
+2242=&Çevrimiçi Aktivasyon
+;CHANGED 3.4:
+2243=Çevrimiçi etkinleştirilemedi.\n\
+	Manuel aktivasyonu kullan.
+;CHANGED 3.4:
+2244=&Manuel Aktivasyon...
+2245=Cihazın geçerli bir seri numarası yok veya geçerli değil.
+2246=Aktivasyon Kodunu Girin (veya "acode.txt").
+2249=&Çıkış
+2250=&Hakkında
+2251=Bazı özellikler aktivasyon yapılmadan devre dışı bırakılır.\n\
+	Yine de devam etmek istiyor musun?
+2252=Pano verileri geçerli bir Aktivasyon Kodu değil.
+2253=Dosya geçerli bir Aktivasyon Dosyası değil.
+2255=Etkinleştirme Kodunu dosyadan yükle
+2256=Kurulum Kimliğini dosyaya kaydet
+2257=Aktivasyon Kodunu Kaydet
+2258=Ana bilgisayar adresi alınıyor...
+;CHANGED 3.6:
+2259=Etki alanı adı çözülemedi
+2260=Soket yaratılamadı
+2261=Bağlanıyor...
+;CHANGED 3.0:
+2262=Sunucuya bağlanılamadı
+2264=Sunucuya istek gönderiliyor...
+;CHANGED 3.7:
+2265=İstek sunucuya gönderilemedi
+2266=Sunucu yanıtı bekleniyor...
+2267=Bağlantı kapatılıyor...
+2268=İnternet üzerinden etkinleştir
+2269=Proxy ayarları
+2270=Proxy kullan
+2271=Adres:
+2272=Bağlantı Noktası:
+;CHANGED 3.0:
+2273=Yüklenemedi
+;CHANGED 3.0:
+2274=Fonksiyon bulunamadı
+2275=WSA başlatılamadı.
+2280=Cihazı kullanarak etkinleştir...
+2281=&Sıfırla
+2282=Etkinleştirme için yanlış cihaz seçildi
+2283=Bakım sona erdi %02h/%h.\n\
+	Aynı ortamda kullanmaya devam edebilirsiniz.\n\
+	Yazılımın anahtarlar dahil yedek kopyasını yaptığınızdan emin olun \n\
+	(çalışma dizinindeki tüm dosyalar).
+2290=Sabit: bu bilgisayar
+2291=Taşınabilir: seçili cihaz
+2292=Taşınabilir:
+2293=Taşınabilir etkinleştirmeyi sıfırla
+2294=Tek seferlik aktivasyon
+2297=Aktivasyon Kodu dosyaya kaydedildi
+2298=Geçici olarak etkinleştirilen istemci sürümü
+2299=Geçici olarak etkinleştirildi. Ama Kodu kaydedemedim
+2300=Bir kerelik Parola İsteği
+2301=Bir kerelik şifre girin:
+2302=Kod İsteğini Koru
+2303=Koruma Kodunu Girin:
+;NEW 3.6::
+2304=Bu makinede İnternet yoksa Manuel etkinleştirmeyi kullanın \
+	(Siteden aktivasyon kodunuzu almanız için talimatlar verilecektir).\n\n\
+	Çevrimiçi aktivasyon otomatiktir (İnternet bağlantısı kullanılır).
+2305=Çevrimiçi (Otomatik)
+2306=Manuel
+;::NEW 3.6
+;NEW 3.7:
+2307=Metin dizesi olarak yalnızca lisans anahtarınız varsa, Manuel aktivasyonu seçin.
+2310=Başlangıç ​​Şifresi Gerekli
+2311=Başlangıç ​​şifresini girin:
+2312=Başlangıç ​​şifresini ayarla
+2313=Başlangıç ​​Parolasını Ayarla
+2314=Başlangıç ​​şifresini ayarlayın:
+2315=Lisans anahtarınızı korumak için parola belirleyebilirsiniz.\n\
+	Geçerli karakterler:~
+2316=Geçersiz karakterler
+2317=Şifre yeterince güçlü değil.\n\
+	Basit şifre kullanmak istediğinizden emin misiniz?
+2318=Yanlış şifre
+2330=Geçersiz lisans dosyası veya yanlış şifre
+2331=Lisans anahtarı kaydedildi
+2332=Lisans Anahtarını Yükle
+;NEW 3.0::
+2333=Lisans Anahtarını Girin
+2334=DMDE için lisans anahtarınızı girin:
+2335=Lisanslı Kullanıcı:
+2336=Tek Kullanımlık Parola:
+2337=&Satın Al...
+2338=&Yükle...
+;CHANGED 3.10:
+2339=Eğer size bir "license.key" dosyası verilmişse, önce "Yükle" düğmesini kullanın
+2340=Kısıtlama olmaksızın kurtarmak için aktivasyon gerekli
+2341=Ücretsiz Sürüme Devam Et
+2342=Etkinleştirmeden devam et
+2343=Lisans Anahtarını Girin...
+2344=Etkinleştir...
+2345=Lisans Anahtarı...
+2346=Yanlış lisans anahtarı
+2347=Geçersiz/boş kullanıcı adı
+;::NEW 3.0
+;NEW 3.4::
+2348=Uygun olmayan lisans anahtarı (yanlış sürüm)
+2349=Bir kerelik şifreler kişisel site bölümünüzde sağlanmıştır (Yardıma bakın)
+2350=Çevrimiçi Aktivasyon
+2351=Manuel Aktivasyon
+2352=Lisans Anahtarı
+2353=Proxy...
+;::NEW 3.4
+;NEW 3.4.3::
+2354=Lisans Anahtarı dosyası gerekli
+2355=license.key dosyanızı buraya sürükleyin veya Yükle düğmesini kullanarak bulun
+2356=Gizli kodunuzu girin:
+2357=Gizli kod kişisel site bölümünüzde sağlanmıştır (Yardıma bakın)
+;::NEW 3.4.3
+;NEW 3.7::
+2358=Lisans Anahtarını Değiştir...
+2359=Yeni bir lisans anahtarı ile yazılımı yeniden başlatmanız ve yeniden etkinleştirmeniz gerekiyor.\n\
+	Devam etmek istiyor musun?
+2360=Var olanı değiştirmek için yeni bir lisans anahtarı belirtin
+2361=Lisans anahtarı verisi gerekli
+2362=Aynı lisans anahtarı uygulandı
+;::NEW 3.7
+;NEW 3.7::
+2396=Önceki günlük dosyasını saklayın (.\~)
+2397=Kaydettikten sonra günlüğü doğrula
+2398=Günlük dosyası
+2399=Otomatik kaydetme frekansı
+;::NEW 3.7
+2400=Varsayılan Seçim
+2401=Tam kopyaların işaretini kaldır
+2402=Kavşakların işaretini kaldır
+2403=Temel MFT işaretini kaldır
+2404=Tümünü işaretle
+2405=Tümünün işaretini kaldır
+2406=İşaretlenmemişleri gizle
+2407=İşaretlenmemişleri göster
+2408=Filtrele...
+;CHANGED 3.0:
+2409=Dosya numarasına göre sırala
+2410=Uzunluğa göre sırala
+2411=Disk konumuna göre sırala
+2412=Birim disk konumuna göre sırala
+2413=Kaliteye göre sırala
+2414=Numaraya göre sırala
+2415=Yükle...
+2416=Kaydet...
+;NEW 3.0::
+2417=Maksimum dosya sayısına göre sırala
+2418=Referans numarasına göre sırala
+2419=Maksimum kümeye göre sırala
+2423=Daha fazla öğe göster
+2424=LBA
+2425=Parametre
+2426=MaxFiles
+2427=MaxClust
+2428=Referanslar
+2429=En iyisi
+;::NEW 3.0
+2430=Doğru
+2431=İlgili
+2432=Bilinmeyen
+2433=Yabancı
+2434=Küçük
+2435=Devre Dışı
+2436=Filtrele
+2440=Yükleniyor...
+2441=mft çalıştırmalarını yükle
+2442=MFT Çalışmalarını Kaydet
+2443=MFT Parçalanma
+2444=Menü
+2445=Varsayılan
+2446=Hacim parametreleri farklı.\n\
+	Garip MFT parçalanma kullanmak istediğinizden emin misiniz?
+2447=Hacim:~
+2448=CLUS:%l DOSYA:%l INDX:%l Mod:%l Başlat: %~I
+2450=Min. uzunluk:
+;CORRECTED 3.0:
+2451=Minimum sektör:
+;CORRECTED 3.0:
+2452=Maksimum sektör:
+2453=Düşük sayı:
+2454=Yüksek sayı:
+;NEW 3.0:
+2455=Küme boyutu:
+;NEW 3.6::
+2456=üst
+2457=dinlenme
+2458=diğer üst
+2459=diğer dinlenme
+;::NEW 3.6
+2460=DOSYA#
+2461=Uzunluk
+2462=MFT~Başlat
+2463=Küme
+2464=DOSYA
+2465=INDX
+2466=Mod
+2467=Cilt.~Başlat~#1
+2468=Check
+2469=Cilt.~Başlat~#2
+2470=&DOSYA#
+2471=&Uzunluk
+2472=MFT~&Başlat
+2473=CLUS
+2474=DOSYA
+2475=INDX
+2476=Mod
+2477=&Cilt.Başlat#1
+2478=&Kontrol
+2479=Cilt.Başlat#2
+;NEW 3.0::
+2480=Parametreler
+2481=İlave
+2482=Tarama sırasında hacimleri hesapla
+2483=FS yapılarını kullanarak hacimleri hesapla
+2484=Raw dosya imzalarını kullanarak hacimleri hesapla
+2485=Yeni bir tarama başlatmak istiyor musunuz?
+2486=FS Parçaları
+2487=&Parametreler..
+2489=Birim FS Parçalanma...
+2490=Tüm FS Parçalanma...
+2491=Ayrıntılı Görünüm
+2492=FS Birimlerini Yeniden Hesapla...
+2493=Hacmi Yeniden Hesapla...
+2494=Hesaplamayı İptal Et
+2495=Sonraki Parçalanma Hesaplaması
+2496=İmzalara Göre Dosya Türleri
+2497=Dosya Türleri - Bulunamadı
+2498=Ana Sonuçlar
+2499=Ek Sonuçlar
+2500=Dinlenme Sonuçları
+;::NEW 3.0
+2501=Cihaz I/O işleyici komut dosyası kaydedilmedi.\n\
+	Devam etmek istediğinizden emin misiniz?
+2502=Yükle I/O Parametreler
+2503=Kaydet I/O Parametreler
+2504=Arayüz
+2505=I/O Hatalar
+2506=İlave
+2510=&Yükle...
+2511=&Kaydet...
+2520=ATA Sıfırlama
+;CHANGED 3.10:
+2522=Meşgulse ATA yazılımı sıfırlandı, zaman aşımı, ms
+;NEW 3.10:
+2523=Cihazın yeniden bağlanıp bağlanmadığını kontrol edin, gecikme, ms
+2550=Özel Sektör Ara
+2557=MFT Kaydı
+2558=INDX Kaydı
+2559=FAT16 Tablosu
+2560=FAT32 Tablosu
+2561=FAT Dizini
+2562=exFAT Dizini
+2563=ExtFS Grp Tanımlayıcıları
+2564=ExtFS Dizini Girişleri
+2565=Farklı Sektör
+
+;NEW 3.6::
+2586=Uyumlu Günlük dosyasına kaydedin...
+2587=Otomatik kaydet:
+;::NEW 3.6
+;NEW 3.4::
+2588=Orijinal sektör boyutu farklı [%l].
+2589=Otomatik kaydet günlük yolu
+;::NEW 3.4
+
+;NEW 3.0::
+2590=Günlük kaydedildi veya yanlış yüklendi.\n\
+	Bazı sonuçlar kaybolabilir.
+2591=Günlük eski sürümde oluşturuldu.\n\
+	Sonuçlar yeni versiyondan daha kötü olabilir.
+2592=Günlük daha yeni sürümde oluşturuldu.\n\
+	Bazı sonuçlar atlanabilir veya yanlış uygulanabilir.
+2593=Taramayı tamamlamak için yeterli bellek olmayabilir.\n\
+	Yine de devam etmek istiyor musun?
+2594=Uzun hesaplama
+2595=Hesaplanıyor
+2596=Yükleniyor
+2597=Boyuta göre sırala
+2598=Dosya numarasına göre sırala
+2599=Çek numarasına göre sırala
+2600=Son sektöre göre sırala
+;::NEW 3.0
+2607=Bu tablo kaldırılamaz.
+2608=Fazla tablo kaldırılsın mı?
+2609=GPTable tüm bölümlerle kaldırılsın mı?
+2610=Birincil/temel bölüm değil.
+2611=Önyüklenebilir (etkin) bölüm durumunu ayarla?
+2612=Önyüklenebilir (aktif) bölüm durumu sıfırlansın mı?
+2613=Önyükleme imzasını ayarla (MBR/VBR/EBR Açık)?
+2614=Önyükleme imzasını sıfırla (MBR/VBR/EBR Kapalı)?
+2615=GPT+MBR imzalarını ayarla (GPT Açık)?
+2616=GPT+MBR imzaları sıfırlansın mı (GPT Kapalı)?
+2618=Bölümlemeyi Dosyaya Kaydet
+2619=&Uygula
+2620=Birincil bölüm (MBR)
+2621=Mantıksal disk (MBR)
+2622=Genişletilmiş bölüm (MBR)
+2623=GUID bölümü (GPT)
+2630=Sektör okuma hatası %~I.\n\
+	Yine de devam etmek istiyor musun?
+2631=Mevcut bölümleri kaldırmak istiyor musunuz?
+2632=Bölme kesişimi.
+2633=Bölüm yaratılamıyor.
+2634=MBR bölümü 2TiB'nin ötesine geçer.\n\
+	Devam etmek istediğinizden emin misiniz?
+;CORRECTED 3.4.3:
+2635=Bölümleme hatası bulundu.
+2636=Uyumsuz bölüm türü.
+2637=Bölüm MBR düzeni için çok büyük.
+2638=Karma bölümleme desteklenmiyor.
+2639=Seçilen konumda bölüm oluşturulamaz.
+;CHANGED 3.6:
+2641=Sektör başka bir bölüm tarafından kullanılıyor.\n\
+	Çakışan bölüm girişlerini kaldırmalısınız.
+2642=MBR yalnızca 2TiB'ye kadar destekler.
+2643=Desteklenmeyen GPT sürümü.
+2644=Standart FAT/FAT32 bölümü gerekli
+2645=Standart disket gerekli
+2646=Önyükleme Görüntü Dosyalarını Aç
+2647=Mevcut MBR önyükleme kodunun üzerine yazmak istiyor musunuz?
+2660=Eylemi geri al
+2661=Eylemi yeniden yap
+2662=Bölümleme Değişikliklerini Geri Al
+2663=Dosyadan Yükle...
+2664=Metin Dosyasına Ekran Görüntüsü...
+2665=GPT+MBR İmzalarını Sıfırla (GPT Kapalı)...
+2666=GPT+MBR İmzalarını Ayarla (GPT Açık)...
+2667=GPT Kapalı
+2668=GPT Açık
+2669=Önyükleme Sektörlerini Yaz...
+;NEW 3.0:
+2670=Metin Dosyasına Kaydet
+2671=V&BR Açık/Kapalı
+;NEW 3.7::
+2680=Yalnızca genel okuma modu ayarlandı (Sürücü menüsü)
+2681=Global salt okunur modu kapatılacak
+2682=Cihazlara yazmak mümkün olacak
+2683="RW Erişimi" etkinleştirilmelidir
+2684=Aygıt Parametrelerinde (Arayüz) Yazmaya izin verilmelidir
+2685=Aygıt için doğrudan yazmaya izin verilecek
+2686=Riskleri anlıyorum
+2687=Herhangi bir değişiklik daha fazla veri kaybına neden olabilir (Yardıma bakın)
+2688=Mevcut cihaz sadece kısmen yazılabilir.\n\
+	Yine de devam etmek istiyor musun?
+2689=Yazılamayan sanal değişikliklere devam etmek istiyor musunuz?
+;::NEW 3.7
+2700=Cihaz
+2701=Bölüm
+2702=Dosya
+2703=Düzenleyici
+2704=Seçim
+2708=Bölüm...
+2710=Kaynak ve Hedef
+2711=Parametreler
+2720=Ters kopya
+2721=Çift dişli
+2722=Kopyalama için kaynağı kilitle
+2723=kopyalamaya devam etmek için günlük kullan
+2724=günlükten bozuk sektörleri kopyalamayı yeniden dene
+2725=Günlük Dosyası:
+;CORRECTED 3.6:
+2726=Sektör sayısını kopyaladıktan sonra günlüğü güncelle
+2727=&Parametreler
+2728=Kaynak cihaz I/O parametreler
+2729=Sektörden devam et
+2730=Bayttan devam et
+2731=min
+2732=max
+2740=&Menü
+2741=&Yükle...
+2742=&Kaydet...
+2750=Geçersiz kaynak parametreleri.
+2751=Geçersiz hedef parametreleri.
+2752=Devam etmek için geçersiz ofset.
+2753=Kaynak ve hedef sektör boyutları farklıdır.\n\
+	Kaynak mantıksal yapısı hedefte kullanılamayacak.\n\
+	Devam etmek istediğinizden emin misiniz?
+2760=Kaynak nesne saklanamadı
+2761=Hedef nesne saklanamadı
+2762=Kaynak nesne yüklenemedi
+2763=Hedef nesne yüklenemedi
+2764=Kopyalama parametrelerini kaydet
+2765=Kopyalama parametrelerini yükle
+2769=Günlük Dosyası
+2770=Kopyalama günlüğü okunuyor...
+2771=Kopyalanan aralıklar yüklenemedi
+2772=Yazma desteklenmiyor
+2773=Hedefe yazma hatası
+2774=Dosya için yer ayrılıyor...
+2780=Bayt yazmak ister misin\n\
+	%~I~- %~I kaynağın
+2781=Kaynağı yazmak ister misiniz
+2782=Kaynak dosyayı yazmak ister misiniz
+2783=dosyaya (devamı)?
+2784=dosyaya?
+2785=hedefe (üzerine yazılacak, devamı)?
+2786=hedefe (üzerine yazılacak)?
+2787=Kopyalama sırasında değişikliğin önlenmesi için tüm kaynak birimlerinin kilitlenmesi önerilir. \
+	Kilitlemeyi göz ardı edebilirsiniz ancak veri bütünlüğü tehlikeye girebilir.\n\
+	İşaretlenmemiş ciltler henüz kilitlenmedi.
+2790=Son
+2791=Başarıyla okundu:
+2792=Okuma hataları:
+2793=Atlandı:
+2794=Yazma hataları:
+2795=Toplam
+2796=Sol:
+2797=Kaynak boyutu:
+2900=İşlem anormal şekilde iptal edildi
+2901=İşlem kullanıcı tarafından durduruldu
+;CHANGED 3.0:
+2902=Toplam dizinler:
+;CHANGED 3.0:
+2903=Toplam dosya:
+;CHANGED 3.0:
+2904=Toplam hacim:
+2910=Durduruldu
+;CHANGED 3.0::
+2920=Eksik dizinler:
+2921=Atlanan dizinler:
+2922=Atlanan dosyalar:
+2923=Bozuk dosyalar atlandı:
+;::CHANGED 3.0
+;CHANGED 3.6::
+2924=Bozuk dosyalar kurtarıldı:
+2925=Kurtarılan toplam dosya:
+2926=Kurtarılan toplam hacim:
+;::CHANGED 3.6
+;NEW 3.4.3::
+2927=Hariç tutulan dizinler/dosyalar:
+2928=Dizinler/dosyalar açılamadı:
+;::NEW 3.4.3
+;NEW 3.7:
+2929=Dosyalar + Alt. Veri Akışları
+2930=CSV-dosya
+2931=Günlük dizinleri
+2932=İşlemleri günlüğe kaydet
+2940=Üretici/Model:
+2941=Revizyon:
+2942=Seri:
+2943=Kaynak
+2944=Şerit boyutu: %l
+2945=Parite gecikmesi: %l
+2946=LUN#%l LBA_Farkı: %I~ LBA_Boyut: %I
+2947=Kaynak hacmi
+2948=LBA Başlat: %I~ LBA Boyut: %I
+2949=Etiket:
+2950=Hedef:
+2960=Toplam kaynak dizinler:
+2961=Toplam kaynak dosyalar:
+2962=Toplam kaynak hacmi:
+2963=Eksik dizinler:
+2964=Atlanan dizinler:
+2965=Atlanan dosyalar:
+2966=Bozuk dosyalar atlandı:
+2967=Bozuk dosyalar kurtarıldı:
+2968=Kurtarılan toplam dosya:
+2969=Kurtarılan toplam hacim:
+2970=I/O parametreleri...
+2971=Olay işleyicisi...
+2972=Olaylar %l
+2973=Olay işleyicisi
+2974=Talep
+2975=Yoksay
+2976=Yoksay ve Gizle
+2977=Atla
+2978=Yeniden adlandır
+2979=Birleştir
+2980=Böl
+;NEW 3.6:
+2981=Taşınma $Kötü
+;NEW 3.6:
+2982=Tümünü şuraya taşı $Kötü
+2983=Dosyayı açamamak:
+2984=Hata okuma dosyası:
+2985=Dizin oluşturmamak:
+2986=Başka bir ad oluşturamamak:
+2987=Dizin zaten var:
+2988=Yeniden adlandırma eşiğine ulaşıldı:
+2989=Dosya yı oluşturamamak:
+2990=Başka bir ad oluşturamamak:
+2991=Dosya zaten var:
+2992=Yeniden adlandırma eşiğine ulaşıldı:
+2993=Dosyayı yazamamak:
+2994=Daha fazla yazamamak:
+2995=Maks. dizin varsa yeniden adlandırın:
+2996=Maks. dosya varsa yeniden adlandırın:
+3001=Muhtemelen birimin tamamına erişilemiyor.
+3002=Sorunları ele almak mümkündür.
+;CHANGED 3.4:
+3003=Yine de devam etmek istiyor musun? (Yardıma bakın)
+;CHANGED 3.4:
+3004=Her zaman aynı USB adaptörü kullanılıyorsa sorun değil.
+;CHANGED 3.6:
+3005=Görüntü / Günlüğü Aç...
+3006=Taşınabilir Aktivasyon
+3007=&Aktivasyon
+;NEW 3.4::
+;İlk/Kullanılabilir/Seçilen cihaz kapasitesi
+3008=İlk:
+3009=Mevcut:
+3010=Seçildi:
+;::NEW 3.4
+;NEW 3.6:
+3011=İleri okuyun
+3030=RAID parametrelerini yükle
+3031=RAID parametrelerini kaydet
+3032=Gecikme:
+3033=Menü
+3034=Yükle...
+3035=Kaydet...
+3036=Yükle...
+3037=Kaydet...
+3038=Şeritleme...
+3040=Şerit oluşturma
+;NEW 3.0::
+3041=Birden fazla resim ekle...
+3042=Farkı Ayarla, Herkes İçin Boyut...
+;::NEW 3.0
+
+;NEW 3.2::
+3043=Yeni Resim Dosyası Oluştur...
+3044=Tüm disklere uygula
+3045=Disk Boyutunu Ayarla
+3046=Disk Boyutu:
+;CHANGED 3.6::
+3050=RAID: Otomatik Hesapla (Tara)...
+
+3060=RAID - Hesaplama
+3062=[Enter]: RAID hesaplaması (tara)...
+3064=RAID Hesaplama
+;::CHANGED 3.6
+
+3070=Ana parametreler
+3072=Disk sayısı
+3073=RAID seviyeleri
+;CHANGED 3.6:
+3074=Min-max şerit boyutu
+;CHANGED 3.6:
+3076=Min-maks gecikme
+3078=LBA fark adımı
+
+3080=Sabit disk sırası
+3081=Şerit boyutuna göre ayır
+3082=Ek algoritmalar
+3083=Örnek boyutu
+
+3086=Çok fazla sayıda olası yapılandırma, bellek eksikliğine veya çok yavaş işlemeye neden olabilir.\n\n\
+	Yine de devam etmek istiyor musun?
+;NEW 3.4:
+3087=Çok fazla olası yapılandırma.\n\
+	Parametreleri daha kesin olarak belirtin.
+;CHANGED 3.6:
+3090=RAID Hesaplaması için Parametreler...
+3092=RAID Yapılandırmaları
+
+3093=Şerit
+3094=Tarama tamamlanmadan sonuçları açmayı deneyebilirsiniz
+;NEW 3.6::
+3095=Aç RAID
+3096=RAID Parametrelerini Aç...
+3097=Yapılandırmalar
+3098=Konf.
+3099=Seçili RAID yapılandırmasını aç
+3100=LBA Farkı
+;::NEW 3.6
+
+3120=&Sonraki Sekme
+;CHANGED 3.4.3:
+3122=Pencere Parametrelerini Kaydet
+;NEW 3.4.3::
+3123=Yazı Boyutu --
+3124=Yazı Boyutu ++
+3125=Pencere Boyutu --
+3126=Pencere Boyutu ++
+;::NEW 3.4.3
+
+3130=Çıkmak ister misin?
+
+;Ana/Ek/Gelişmiş Parametreler:
+3140=Ana Menü
+3141=İlave
+3142=Gelişmiş
+3144=Seçenekler
+
+3160=Eşikler
+3161=SMART Değerleri
+
+3220=Kayıtlar
+
+3230=Cihaz için yazma desteklenmiyor.
+
+3240=Döküm muhtemelen farklı bir cihaz için oluşturuldu.\n\
+	Devam etmek istediğinizden emin misiniz?
+3241=Döküm farklı bir cihaz kapasitesi için oluşturuldu.\n\
+	Devam etmek istediğinizden emin misiniz?
+
+3260=Eylem
+3262=Eylemi seçin
+3264=&İptal
+3265=Cihaz I/O parametreleri...
+
+3280=Böl...
+3281=Bölünmüş Görüntü Oluştur
+3282=Görüntüyü boyuttaki dosyalara böl:
+
+3300=Tarama Taraması
+3301=Taramayı yeniden başlat
+3302=Önceki sonuçları temizle
+3303=Daha sonra yüklemek ve yeniden taramayı önlemek için tarama günlüğünü kaydet
+
+3310=işaret belirtildi
+3311=işaret kaldırıldı
+3312=güncelleme işaretleri
+
+3313=Belirtildi olarak işaretle...
+3314=Belirtilen işareti kaldır...
+3315=Sütuna göre sırala
+3316=Maks. uzunluk:
+
+3330=Tara
+3332=&Raw: Dosya İmzaları...
+;CHANGED 3.4:
+;3334=Yalnızca Raw sonuçlarla devam etmek istiyor musunuz?
+3334=Yalnızca Raw sonuçları aç
+;CHANGED 3.4:
+3335=Raw sonuçlar orijinal adları ve yolları olmayan yalnızca belirli dosya türlerini içerir.\n\
+	Daha iyi sonuçlar için üstü açık bulunan FS hacimleri (NTFS, FAT, etc.)
+3336=Tarama tamamlandığında bazı Ham dosya boyutları hesaplanacaktır.
+;NEW 3.4:
+3337=Yalnızca Raw sonuçları açmak için sağ tıklama / Menü kullanın
+
+3350=Dosya Türleri & İmzalar
+3352=Tür
+3353=Bayraklar
+
+3354=Ekle...
+3355=Sil
+3356=Düzenle...
+
+3360=Dosya Türü
+3362=Başlık
+3363=Sonrasına ekle
+3364=Uzantılar
+3365=İmza
+3366=hex char: \\x00-\\xFF, any char: ?
+;CHANGED 3.4:
+3367=Min - max farkı:
+
+3370=Seçenekler
+3371=güvenilir (EOF olarak kullanın)
+3372=yoğun veri w/o boşluklar
+3374=dosya-kapsayıcı
+3376=FS hesaplaması için kullan
+
+3380=EOF İmzası
+;CHANGED 3.4:
+3382=Min - max farkı (EOF):
+;NEW 3.4::
+3384=Dosya türü için bulunan sonuçları kaldırmak istiyor musunuz?
+3385=Başlık/Grup:
+;CHANGED 3.4.3:
+3386=Daha fazla koşul...
+;CHANGED 3.4.3:
+3387=Otomatik tespit...
+3388=Sonraki imzayı ekle
+3389=Koşul:
+3390=[VEYA]: isteğe bağlı imza
+3391=[VE]: gerekli imza
+3392=[VE NOT]: yasak imza
+3393=[KALDIR]
+;::NEW 3.4
+;NEW 3.7::
+3394=İmzaları Kaydet
+3395=İmzaları Yükle
+;::NEW 3.7
+
+;normal/kaldırıldı/bulundu/imza dosyası ile bulundu:
+;CHANGED 3.4.3:
+3400=normal
+3401=kaldırıldı
+3402=bulundu
+3403=kaldırılmış olarak bulundu
+3410=imza ile
+3411=imza ile (+EOF)
+3412=imza ile (-EOF)
+3413=imza ile (kesilmiş)
+3414=EOF imzasıyla
+;NEW 3.6::
+3415=imzalarla (Raw)
+3416=FS olur
+3417=imzalarla doğrulanmadı
+3418=imzalarla da bulundu
+3419=imzalarla bulunamadı
+;::NEW 3.6
+
+;boş dizin/kaldırılmış/bulunan dosyalarla:
+3420=boş
+3421=kaldırılmış
+3422=bulundu
+
+3440=Tüm hacim panelleri ve nesneler kapatılacak.\n\
+	Devam etmek istiyor musun?
+3441=Aramayı kapatmak istiyor musunuz?
+
+3444=Dosyaları Bul...
+3446=Öznitellikler
+
+;bulunan sonuçlar:
+3450=bulundu
+3452=Tam Taramaya Devam Et
+
+3454=yanlış birleştirmeyi önle
+;CHANGED 3.7:
+3455=otomatik INDX işleme
+;CHANGED 3.7:
+3456=tam INDX işleme
+;NEW 3.6:
+3457=Eski dizin işle. düğümler
+;NEW 3.6:
+3458=Tüm eski dosya girişlerini dahil et
+
+3500=yalnızca dosya içeren dizinleri işle
+;CHANGED 3.6:
+3501=dizin adlarını içer
+3502=Ekstra uzun yollar için destek
+3504=Eylem...
+
+3506=Filtreler
+3508=Şifreli NTFS dosyasını kurtar:
+3509=ayrı akışlara
+3510=taşınabilir biçime (Yedekle)
+3511=NTFS şifreli dosyaya
+;NEW 3.4.3::
+3512=EFS dosyasını taşınabilir formatta kurtar (Yedekleme)
+3513=Tüm EFS dosyalarını taşınabilir formatta kurtar (Yedekleme)
+3514=Şifreli dosya (EFS) yaratılamadı
+3515=Yedekle
+;::NEW 3.4.3
+
+3522=İsimler:
+3523=Boyutlar:
+;NEW 3.4:
+3524=Değiştirilmiş:
+;NEW 3.7:
+3525=Hariç tutulan kategoriler:
+;CORRECTED 3.4.3:
+3560=EFS'yi Yedekten Geri Yükle ...
+3562=Mesajları gösterme
+3563=EFS desteği bulunamadı
+3564=NTFS Şifreli Dosyaları Yedeklemeden Geri Yükle
+3565=Dosya/Maske:
+3566=Kaynak Dizini:
+3567=Alt dizinleri işle
+3568=Hedef:
+;::NEW 3.2
+
+;NEW 3.4::
+3570=Dosya listesi...
+;CHANGED 3.4.3:
+3571=Sektör listesi...
+;CHANGED 3.7:
+3573=Sektör Listesi
+;CHANGED 3.4.3:
+3574=Kaydet:
+3575=Seçenekler:
+;CHANGED 3.6:
+3576=yollar
+3577=sanal kümeler
+3578=satır içi veri
+3579=sektörler
+3580=bayt
+;NEW 3.4.3::
+3581=LBA Başlat
+3582=BA Uzunluk
+3583=Sektör Aralıkları
+3584=Sektör Aralığı
+3585=Yalnızca belirtilen aralıklar:
+3586=Sektör aralıkları...
+3587=Yükleme sektörü aralıkları
+;::NEW 3.4.3
+;NEW 3.6::
+3588=Değiştir...
+3589=Sektör Değerlerini Değiştirin
+3590=Shift (+/-):
+;::NEW 3.6
+
+3600=Maksimum %l of %l test edilen dosyalar aynı imzalara sahip olabilir.\n\
+	Muhtemelen farklı dosya türleri veya çok az sayıda örnek dosya vardır.\n\
+	Yine de devam etmek istiyor musun?
+3601=Analiz için çalışan örnek dosyaları içeren bir dizin belirtin
+
+3602=Algıla
+3603=Ekle...
+3604=%l farklı dosya(lar) yüklendi (maksimum %l).\n\
+	Ne kadar fazla örnek dosya sağlanırsa o kadar iyi.
+3605=İmza bulunamadı
+3606=%l of %l test edilen dosyalar yalnızca bulunan imzalara sahiptir.\n\
+	İmza bulamayan dosyalar:
+
+3607=Test...
+3608=Dosya imzalarını test edin
+3609=İmzalar bulundu: %I
+3610=Dosya tipi:~
+3611=Eşleşme yok
+3612=Dosya boyutu: %~I~
+3613=(eşleşme)
+3614=(orijinal boyut: %~I)
+3615=(EOF işareti bulundu)
+3616=(EOF işareti bulunamadı)
+3617=(kesilmiş)
+3618=Bulunan diğer imzalar:
+;NEW 3.6::
+3630=Ham Sonuçları Filtrele
+3631=Ham Sonuçları Filtrele (FS Verilerine göre)
+3632=Tüm (filtrelenmemiş) Raw sonuçları göster
+3633=Minimum Ham sonuçlar (FS sonuçlarını hariç tutun)
+3634=Özel parametreler
+3635=* Mevcut küme haritası FS sonuçlarını hariç tutmak için kullanılır
+3636=Yalnızca küme hizalı sonuçlar
+3637=Min. küme
+3638=Maks. küme
+3639=Kullanılan FS kümelerini hariç tut
+3640=Kullanılan FS kümesi karşılanırsa kes
+;::NEW 3.6
+
+;CHANGED 3.7:
+3700=Popup İpuçları (Fareyle Üzerine Gelme)
+;NEW 3.6:
+3701=Adım Adım Kalıcı İpuçları
+;CHANGED 3.7:
+3704=sonraki ipucu için tıklayın
+;CHANGED 3.7:
+3705=Tüm ipuçlarını daraltın
+;NEW 3.7:
+3706=İpucunu daraltın
+;NEW 3.7:
+3707=İpuçları menüsü için sağ tıklayın
+
+3710=Kaynak cihazı seçin
+;CHANGED 3.6:
+3711=Hesaplanan RAID yapılandırmaları
+3712=Bölümleri görüntüle
+3713=Bölümlere dön, başka bir birim aç
+3714=Dizin ağacını görüntüle
+
+;CHANGED 3.4.3:
+3720=Dosya panelinde bir dizin açmak için genişletin ve tıklayın
+;CHANGED 3.4.3:
+3721=Kayıp ve kaldırılmış nesneleri görüntüleyin (sanal FS)
+;CHANGED 3.6:
+3722=Daha fazla / daha az / diğer sonuçlar alın (sanal FS)
+;CHANGED 3.4.3:
+3723=Verileri kurtar (dosyaları ve dizinleri önceden işaretleyin)
+;NEW 3.4.3:
+3724=Ada göre ara (e.g. dizin yapısı hasar görmüşse)
+
+3731=Kaldırılan dosyaları kurtarmak ve sanal diskler için mantıksal diskleri seçin.\n\
+	Diğer durumlarda (bölüm kaybı, biçim, hasar, etc.) fiziksel cihazları seçin.
+3732=Kayıp verileri içeren diski seçin
+3733=Diski açmak için TAMAM
+
+3740="Bulundu": gerekli bölüm yoksa bölümleri hızlı arama
+3741=Tanınırsa gerekli bölümü seçin.\n\
+	Aksi takdirde Tam Taramayı çalıştırın.
+3742=Seçili birimi açmak için tıklayın
+3743=Bölüm bulunamazsa Tam Taramayı Çalıştır
+
+3750=Yalnızca seçilen aralık taranacak
+3751=Arama için olası dosya sistemlerini işaretle (Raw da önerilir)
+3752=Taramayı başlat
+3753=Önceden kaydedilmişse tarama sonuçlarını yükle
+
+3754=Taramaya devam et/duraklat
+3755=FS birimi bulunmazsa Raw sonuçları deneyin
+;CHANGED 3.4.3:
+3756=Bekleyin ve uygun bir FS birimi seçin \
+	(dosya numarasına, boyutuna, kalitesine bakın %, ve "+" göstergeler).\n\
+	Aynı FS hacmi için ek varyantlar mümkündür \
+	(yalnızca en karmaşık durumlarda kullanmak için, Yardım'a bakın)
+
+3757=Seçili birimi aç
+;NEW 3.4.3:
+3758=Raw arama belirli dosya türlerini aramak için isteğe bağlı bir yoldur.\n\
+	FS kurtarma mümkün olmadığında gereklidir (Yardıma bakın).
+
+3770=Sanal yeniden yapılandırmayı işlemek için TAMAM (yalnızca bellekte)
+3771=Pure rekonstrüksiyonu ilk kez kullanabilirsiniz.\n\
+	Daha fazla sonuç gerekirse daha sonra yeniden tarayabilirsiniz.
+3772=Varsayılan rekonstrüksiyonu ilk kez kullanabilirsiniz.\n\
+	Bazı sonuçları eklemeyi veya kaldırmayı daha sonra yeniden deneyebilirsiniz.
+3773=Daha fazla kayıp sonuç bulmak için Tam Taramayı Çalıştır
+3774=Mevcut sonuçlar hiç uygun değilse diğer ciltleri deneyebilirsiniz \
+	veya iyileşmeden sonra bozulmuş
+3775=Sonuç sayısını azaltabilir (--) veya artırabilirsiniz (++) \
+	mevcut rekonstrüksiyonda
+
+3790=Veri kurtarma kaynağı
+; Ücretsiz Versiyon ile dosya panelinde listelenen dosyaları kurtarabilirsiniz \
+; (gerekli dosyaları içeren dizini açmalısınız).
+3791=İsteğe bağlı olarak toplam kurtarma hacmini hesapla (ve genel ilerlemeyi etkinleştir)
+3792=Hedef dizini seçin (başka bir diskte)
+3793=Kurtarmayı başlat
+;NEW 3.4.3:
+3794=Dosya kategorilerini seçin
+
+3800=Yeni dosya türü/imzası ekle
+3801=Belirtilen bir dosyayı test edin (dosya imzasının önceden eklenip eklenmediğini kontrol edin)
+3802=Yeni imzayı, çalışan örnek dosyalar temelinde otomatik olarak hesapla (deneysel özellik)
+3803=Yeni türü eklemeyi tamamlamak için Tamam
+;::NEW 3.4

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Скрипт обработки ввода-вывода</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="deviohsc"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Содержание</a> &middot; <a href="menu.html">Меню</a> &middot; 
+<a href="menu_disk.html">Диск</a>
+<hr />
+<h3>Скрипт обработки ввода-вывода</h3>
+<a href="devioparams.html">Параметры ввода-вывода</a>
+&nbsp;
+<a href="deviodlg.html">Диалог ввода-вывода</a>
+<p>
+Скрипт может использоваться для журналирования ошибок ввода-вывода, а также для расширенной
+обработки ошибок (включая вызовы внешних программ).
+Функция доступна только в <a href="editions.html">Professional Edition</a>.
+</p>
+<p>
+Скрипт можно загрузить или изменить через окно <a href="devioparams.html">Параметров ввода-вывода</a> (кнопка <span class="ii">Скрипт</span>).
+</p>
+<p>
+Файл <span class="tt">ondevhsc.txt</span> содержит краткое описание доступных команд и некоторые примеры. 
+</p>
+<p>
+Допустимые строки команд имеют вид:<br />
+<span class="tt">IF УСЛОВИЕ КОМАНДА</span><br />
+или<br />
+<span class="tt">КОМАНДА</span><br />
+или<br />
+<span class="tt">:МЕТКА</span><br />
+<br />
+где <span class="tt">УСЛОВИЕ</span> задаётся равенством или неравенством
+  (<span class="tt">!=</span>, <span class="tt">&gt;</span>, <span class="tt">&lt;</span>, <span class="tt">&gt;=</span>, <span class="tt">&lt;=</span>, <span class="tt">=</span>) двух величин,<br />
+величинам могут быть целые числа (<span class="tt">0</span>, <span class="tt">1</span>, ...) 
+  или переменные (список ниже)
+  или простые математические выражения (операторы <span class="tt">+</span>, <span class="tt">-</span>, <span class="tt">*</span>, <span class="tt">%</span>, <span class="tt">/</span>, 
+  без скобок, математический порядок операций игнорируется),
+например, <span class="tt">%ERROR%=0</span><br />
+<br />
+Комментарии предваряются двумя минусами (<span class="tt">--</span>)
+</p>
+<h4>Переменные</h4>
+<p>
+Целые, включая ноль
+</p>
+<table>
+<tr><th class="tt">%CONFIRM%</th><td> 
+	=1, если нажата кнопка <span class="ii">Подтвердить</span>, =0, если <span class="ii">Отменить</span> <br />
+                (выводится окно диалога и ожидается выбор пользователя)</td></tr>
+<tr><td><span class="tt">%DISKNUM%</span>  </td><td> номер диска в RAID-массиве</td></tr>
+<tr><td><span class="tt">%TRYNUM%</span>  </td><td> номер попытки ввода-вывода</td></tr>
+<tr><td><span class="tt">%LBA%</span>  </td><td> первый сектор в операции ввода-вывода</td></tr>
+<tr><td><span class="tt">%SECNUM%</span>  </td><td> число секторов</td></tr>
+<tr><td><span class="tt">%ERROR%</span>  </td><td> номер ошибки</td></tr>
+<tr><td><span class="tt">%ATASTATUS%</span>  </td><td> значение регистра ATA Status (если снят бит BSY, только DOS ATA)</td></tr>
+<tr><td><span class="tt">%ATAERROR%</span>  </td><td> значение регистра ATA Error (если установлен бит ERR в <span class="tt">%ATASTATUS%</span>)</td></tr>
+<tr><td><span class="tt">%LINE%</span>  </td><td> текущий номер строки в скрипте</td></tr>
+<tr><th class="tt">%SERVICE%</th><td> тип ввода-вывода:<br />
+  <b>0</b>-ATA 
+  <b>1</b>-ATAPI
+  <b>3</b>-BIOSINT13OLD 
+  <b>4</b>-BIOSINT13<br />
+  <b>5</b>-DOSINT25 
+  <b>6</b>-DOSINT73 
+  <b>7</b>-DOSASPI
+  <b>8</b>-DOSMSCDEX
+  <b>9</b>-DOSFILE  <br />
+  <b>11</b>-WINFILE 
+  <b>12</b>-WINSCSI 
+  <b>13</b>-WIN9XINT13  
+  <b>14</b>-WINATA  <br />
+  <b>20</b>-LINUXFILE
+  <b>21</b>-LINUXSCSI
+</td></tr>
+<tr><td><span class="tt">%LASTRES%</span>  </td><td> результат предыдущей команды</td></tr>
+<tr><td><span class="tt">%LASTERR%</span>  </td><td> ошибка предыдущей команды</td></tr>
+</table>
+
+<h4>Команды</h4>
+SHOWDLG          -- принудительно показать окно диалога ввода-вывода<br />
+WAIT             -- ожидать выбор пользователя<br />
+DELAY N          -- ожидать N мсек.<br />
+EXECCMD CMDLINE  -- выполнить внешнюю команду CMDLINE используя командый процессор <br />
+                      (эквивалентно "cmd CMDLINE" в Windows)<br />
+EXECCMDQ CMDLINE -- выполнить без создания нового консольного окна<br />
+EXEC "FILENAME" CMDLINE  -- вызвать внешнюю программу FILENAME с параметрамии CMDLINE<br />
+EXECQ "FILENAME" CMDLINE -- вызвать без создания нового консольного окна<br />
+MSDOS            -- вызвать командный процессор (OS Windows, DOS)<br />
+GOTO LABELNAME   -- перейти к метке LABELNAME в скрипте (к строке <span class="tt">:LABELNAME</span>)<br />
+RETURN           -- прервать выполнение скрипта, обработать ошибку согласно <a href="devioparams.html">параметрам ввода-вывода</a><br />
+RETRETRY         -- прервать выполнение скрипта как при нажатии на кнопку <span class="ii">Retry</span> <br />
+RETIGNORE        -- прервать выполнение скрипта как при нажатии на кнопку <span class="ii">Ignore</span> <br />
+RETABORT         -- прервать выполнение скрипта как при нажатии на кнопку <span class="ii">Abort</span> <br />
+ADDLOG "FILENAME" LOGLINE -- записать строку LOGLINE в файл FILENAME<br />
+                      (строка LOGLINE может содержать переменные)<br />
+CANCELIO         -- вызов <span class="tt">CancelIO</span> (только WinNT+)<br />
+                      (доступно, если устройство открыто с опцией <span class="ii">overlapped</span>)<br />
+OVLRESLT N       -- ожидать результат <span class="tt">Overlapped</span>-операции (N=1: ожидать; N=0: не ожидать) (только WinNT+)<br />
+                      (должно использоваться, если устройство открыто с опцией <span class="ii">overlapped</span>)<br />
+RESETHANDLE      -- заново открыть дескриптор диска<br />
+RESETDEVLIST     -- обновить список устройств, заново открыть дескриптор диска</td></tr>
+ATARESET         -- выполнить сброс ATA Soft Reset (только DOS ATA)<br />
+ATARESETDET      -- выполнить сброс ATA Soft reset и ATA Identify (только DOS ATA)<br />
+
+<h4>Спецификаторы формата</h4>
+<p>
+Для форматирования числа после имени переменной через двоеточие может быть добавлен специфиактор by, например,<br />
+%LBA:8x%         -- ширина: 8, шестнадцатеричный вывод
+</p>
+<h4>Пример</h4>
+<p style="font-family:monospace">
+IF %ERROR%=0 RETURN  -- выйти, если нет ошибки<br />
+IF %ERROR%=128 GOTO LABEL1<br />
+IF %ERROR%=5 GOTO LABEL1<br />
+RETURN<br />
+<br />
+:LABEL1<br />
+IF %CONFIRM%=0 RETRETRY -- повтор, если нажата кнопка Отмена<br />
+                        -- продолжить выполнение скрипта, если нажата кнопка Подтвердить<br />
+EXECCMD /K ECHO error %ERROR% at LBA: %LBA% (%SECNUM%) try: %TRYNUM%. Type EXIT to return.<br />
+IF %TRYNUM%&lt;2 RETRETRY<br />
+DELAY 500<br />
+ADDLOG "C:\ERRORS.LOG" error %ERROR:x% at LBA: %LBA:10% (%SECNUM%) try: %TRYNUM%<br />
+RETIGNORE<br />
+</p>
+
+</div>
+</div>
+</body>
+</html>

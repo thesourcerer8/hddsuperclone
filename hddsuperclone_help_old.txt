@@ -1,0 +1,64 @@
+hddsupertool
+Advanced disk utility.
+
+Usage: hddsuperclone [options]
+
+OPTIONS:
+ -v, --version                 Show version and exit
+ -h, --help                    Show help and exit
+ -D, --debug                   Turn on debugging and create a debug file
+ -V, --verbose                 Show additional information
+ -Q, --quiet                   Surpress some of the output
+ -f, --progressfile <file>     Progress log file (REQUIRED)
+     --importdd <file>         Import ddrescue mapfile (logfile)
+     --exportdd <file>         Export ddrescue mapfile (logfile)
+     --repair-log              Repair the progress log file
+     --no-log-backup           Don't make a backup of the progress log
+     --domain <file>           Use a domain file
+     --domaindd <file>         Use a ddrescue domain file
+     --fill-zero               Zero fill all non-finished areas on target
+     --fill-mark               Mark fill all non-finished areas on target
+ -s, --source <disk>           Source disk to use for passthrough mode
+ -t, --target <disk / file>    Target disk or image file for recovery
+     --reset-status            Reset the current progress status
+     --no-phase1               Skip copy phase 1
+     --no-phase2               Skip copy phase 2
+     --no-phase3               Skip copy phase 3
+     --no-phase4               Skip copy phase 4
+     --no-trim                 Skip trimming phase
+     --no-divide               Skip dividing phase
+     --do-divide2              Perform 2 dividing phases
+     --no-scrape               Skip scraping phase
+     --reverse                 All operations in opposite direction
+ -c, --cluster-size <LBA>      Number of sectors (LBA) per read block (128)
+     --retries <number>        Number of retries on bad sectors
+ -i, --input-offset <LBA>      LBA offet to start reading from (0)
+ -o, --output-offset <LBA>     LBA offset of target (input-offset)
+ -z, --size <LBA>              LBA to read (until end of drive)
+ -j, --rate-skip <B/s>         Rate for rate skipping pass (50000)
+ -k, --skip-size <LBA>         Starting skip size in LBA (4096)
+ -K, --max-skip-size <LBA>     Maximum skip size in LBA (calculated)
+     --scsi                    SCSI passthrough mode (default)
+****** OPTIONS BELOW THIS LINE ARE NOT AVAILABLE IN THE FREE VERSION ******
+ -L, --license <license#>      Enter license number to install license
+     --ata                     ATA passthrough mode (LITE & PRO only)
+     --serial <serial>         Choose source drive by serial (LITE & PRO only)
+     --no-bad-pass             Don't process bad head (LITE & PRO only)
+     --no-bad-head             Don't mark bad head (LITE & PRO only)
+     --skip-fast               Agressive skipping algorithm (LITE & PRO only)
+     --skip-threshold <ms>     Skip trigger time (LITE & PRO only)
+     --direct                  Use direct IO mode (IDE) (PRO only)
+     --ahci                    Use direct IO mode (AHCI) (PRO only)
+     --softtimeout <ms>        Soft reset time in milliseconds (PRO only)
+     --regaddress <address>    Register address for direct mode (PRO only)
+     --conaddress <address>    Control address for direct mode (PRO only)
+     --busaddress <address>    Bus address for direct mode (PRO only)
+     --device <device>         Select device 0 or 1 for direct mode (PRO only)
+     --hbaaddress <address>    HBA address for AHCI mode (PRO only)
+     --portnumber <number>     Port number for AHCI mode (PRO only)
+     --portaddress <address>   Port address for AHCI mode (PRO only)
+
+
+Report bugs to sdcomputingservice@gmail.com
+Please be sure to include "hddsuperclone" in the subject line.
+

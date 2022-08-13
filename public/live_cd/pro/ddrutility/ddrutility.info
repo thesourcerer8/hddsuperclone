@@ -1,0 +1,1221 @@
+This is ddrutility.info, produced by makeinfo version 5.2 from
+ddrutility.texinfo.
+
+This manual is for ddrutility (version 2.8, 23 December 2016).
+
+   Copyright (C) 2012, 2013, 2014, 2015, 2016 Scott Dwyer.
+
+     This manual is free documentation: you have unlimited permission to
+     copy, distribute and modify it.
+INFO-DIR-SECTION GNU Packages
+START-INFO-DIR-ENTRY
+* Ddrutility: (ddrutility).       Data recovery utility set
+END-INFO-DIR-ENTRY
+
+
+File: ddrutility.info,  Node: Top,  Next: Introduction,  Up: (dir)
+
+ddrutility
+**********
+
+This manual is for ddrutility (version 2.8, 23 December 2016).
+
+   This documentation was created and is maintained as a texinfo file,
+and translated to markdown for use on the ddrutiltiy Sourceforge Wiki
+page.  The navigation does not work on the Wiki page.  You can download
+help.html from the files section and open it with a web browser and the
+navigation will work.
+
+* Menu:
+
+* Introduction::
+* ddru_findbad::
+* ddru_ntfsbitmap::
+* ddru_ntfsfindbad::
+* ddru_diskutility::
+* Important Notes::
+* Reporting Bugs::
+* Index::
+
+
+File: ddrutility.info,  Node: Introduction,  Next: ddru_findbad,  Prev: Top,  Up: Top
+
+1 Introduction
+**************
+
+Ddrutility is a linux based set of utilities designed to assist with
+data recovery, specifically as a supplement to GNU ddrescue.  Each
+utility has its own version number followed by the date last updated.
+Note that most if not all of these utilities need to be ran as root.  It
+contains the following programs:
+
+   'ddru_findbad'
+
+   'ddru_ntfsbitmap'
+
+   'ddru_ntfsfindbad'
+
+   'ddru_diskutility'
+
+   'ddru_findbad' is actually the original ddrutility version 1.6.  None
+of its functionality has changed; only the name and documentation have
+been changed, and some bug fixes and improvements have been done.  It is
+a bash script that will try to find which files are related to bad
+sectors in a ddrescue log file.  It relies on 3rd party utilities for
+its functions.  It may not work on all systems.  It can be slow, and can
+be very slow if not unusable if there are a lot of bad sectors in the
+list (it does not work well with a large error size).  While I will fix
+any bugs found in it, I do not plan on performing any major updates or
+improvements of its functionality.  It is possible (hopeful) that I may
+create new utilities to replace it (or parts of it) in the future.
+These utilities would not rely on 3rd party functions, and would be
+faster.
+
+   'ddru_ntfsbitmap' is a utility to extract the bitmap file from a NTFS
+partition, and then process it and create a domain file to be used with
+ddrescue.  This would allow for only recovering the used portion of the
+partition, and not spending time reading unused and unneeded data.
+
+   'ddru_ntfsfindbad' is a utility for NTFS partitions to find which
+files are related to bad sectors in a ddrescue log file.  You should use
+this for NTFS partitions in place of the original ddru_findbad, as it is
+MUCH faster than the original ddru_findbad, gives more useful output,
+and does NOT require any 3rd party utilities.  It will also do the best
+it can to work with a damaged file system (and even give you an idea of
+how damaged).
+
+   'ddru_diskutility' is an advanced LINUX ONLY utility that can perform
+several different functions on a disk, using some direct pass-through
+disk commands.  Current functions include device inquiry, sector reads,
+and read long commands.  It is meant for advanced users.
+
+
+File: ddrutility.info,  Node: ddru_findbad,  Next: ddru_ntfsbitmap,  Prev: Introduction,  Up: Top
+
+2 ddru_findbad
+**************
+
+'ddru_findbad' is meant to be a compliment to gnuddrescue.  It finds
+which files are related to the bad sectors.  It will also work with a
+home made file of a bad sector list (see LOGFILE below).  Note that
+ddru_findbad may not work on a mounted drive or image.
+
+   If you performed a rescue that had some leftover bad sectors, but the
+file system seems ok and you are wondering what might still be damaged
+by the unrecovered sectors, then this program is for you.  The
+filesystem of the target must be intact enough for ddru_findbad to work.
+If you are unable to mount the target and view its directory, then
+ddrutility probably won't work and will just give errors.  In this case
+you may have to run some sort of repair tools on the target first and
+hope that the filesystem can be repaired to a working state.  Note that
+any repair tool ran on the target could possibly cause ddru_findbad to
+have inaccurate results.  It is recommended that you always make an
+extra copy of the recovered copy and work with that copy.
+
+   'ddru_findbad' is not meant to be run on the drive that actually has
+the bad sectors.  It is meant to be ran against a recovered copy of the
+drive.  FAT and HFS+ will fail if ran against the actual drive, as ifind
+seems to feel the need to actually read the sectors in question.  NTFS
+and EXT seem to be processed without trying to read the sectors in
+question, however understand that they still will be trying to read the
+file table (which could have bad sectors) to get results.
+
+   'ddru_findbad' must be run as root (sudo).
+
+   'ddru_findbad' works on NTFS, EXT2/3/4, FAT16/32, and HFS+ file
+systems (note that EXT4 will report as EXT3).
+
+   'ddru_findbad' requires sleuthkit to be installed for normal
+operation.  Sleuthkit is not included as standard in current Ubuntu
+versions.  (sudo apt-get install sleuthkit)
+
+   'ddru_findbad' requires ntfs-3g to be installed for NTFS support.  If
+it is not available then NTFS partitions will not be able to be
+processed, and errors may be produced if trying to do so.  Ntfs-3g seems
+to be included in current Ubuntu versions.  (sudo apt-get install
+ntfs-3g)
+
+   'ddru_findbad' requires GNU fdisk to be installed to be able to
+process GPT partitioned disks.  If GNU fdisk is not available, then it
+will use fdisk, but it will not be able to process GPT partitions and
+may produce errors if trying to do so.  GNU fdisk is not included as
+standard in current Ubuntu versions.  (sudo apt-get install gnu-fdisk)
+
+   Ubuntu Rescue Remix contains the above requirements, so it should run
+on the live cd.
+
+   'ddru_findbad' will work on a whole drive recovery, or a single
+partition recovery.  It will work with a target device or image file.
+
+   Results are left in 4 main output files.  Results_summary is a
+condensed sorted summary file, and is probably the most useful output.
+Results_list is the main output file.  It contains information about
+every sector processed with one line per sector.  It is designed to be
+easily processed to obtain desired final results (such as the summary
+file).  Results_info contains information about the partition table and
+file system(s) and can be expanded with the moreinfo option.
+Results_debug is mostly for troubleshooting purposes and most error
+messages are sent to it.  If you request help for any problems with
+ddru_findbad I may ask for these 4 files.
+
+   'ddru_findbad' makes several temporary files in the directory that it
+is run from.  It deletes them when finished.  Do not mount the target
+and run ddru_findbad from within the target, as that would cause writing
+to the target and you probably don't want that!
+
+   'ddru_findbad' does not knowingly write or alter any data on the
+target drive and does not require the file system of the target to be
+mounted.  However, it makes calls to different 3rd party tools which
+SHOULDN'T do any writing for what they are, but this has not been
+verified.
+
+   Some errors or warnings may appear on screen when running.  Don't
+panic, some errors can be normal, as long as there is a good output.  I
+have tried to eliminate all the errors that I have found, but I cannot
+test all possibilities.  Most error messages are sent to results_debug.
+If you question the error, please feel to email or post on the homepage
+so that I can determine if it is something I should work on.
+
+   The format for running ddru_findbad is:
+
+     ddru_findbad TARGET LOGFILE [OPTIONS]
+
+   Where:
+TARGET
+     The drive or partition if using a device (/dev/hda), or the name
+     (and full path if not in the current directory) of the image file
+     (/media/mydrive/image.dd).  The target should be a copy or image of
+     the original drive with bad sectors.  It should not be the actual
+     drive with bad sectors!  If you should so choose to run it on the
+     actual drive for some reason, note that FAT and HFS+ will not
+     process with actual bad sectors.
+
+LOGFILE
+     The logfile from ddrescue.  It can alternatively be a file
+     containing a list of the bad sectors, one sector number per line
+     with no other text in the file.  The sector file can also contain
+     bad sector ranges, with two sector numbers per line separated by a
+     space, being the first and last sector of the range.  Note that the
+     sectors are in relation to either the whole disk or a single
+     partition, which depends on what the target is.
+
+   ddru_findbad supports the following options:
+
+'-h'
+'--help'
+     Print an informative help message describing the options and exit.
+
+'-v'
+'--version'
+     Print the version number and exit.
+
+'-o FILE'
+'--output FILE'
+     The base name that will be at the beginning of the multiple results
+     files.  The default is "results".  The different output files will
+     have extensions added to them, for example results_summary,
+     results_list, etc...
+
+'-w SECONDS'
+'--loopwait SECONDS'
+     The number of seconds to wait before doing loop commands.  You
+     shouldn't have to change this.  It is only used with image files.
+     The default is 2.  Increase this if you get loop errors such as
+     device busy.
+
+'-s BYTES'
+'--sectorsize BYTES'
+     The sector size in bytes of the target drive or image.  The default
+     is 512.  Note that only a sector size of 512 has been tested, as I
+     don't have any drives of a different sector size to test.
+
+'-a'
+'--autooff'
+     Turns off automatic finding of partition types, and allows the user
+     to manually select what type the partition is for every partition.
+     It also gives the option to skip partitions.  This could be useful
+     if for some reason the program is unable to properly find the
+     partition type, or you have multiple partitions and only want to
+     process one of them.  The user will be prompted for every partition
+     on what to do.  This choice will follow the processing of the
+     logfile, and if you choose to process a partition and there are
+     more after it, you will be prompted again after the current
+     partition is done processing.
+
+'-m'
+'--moreinfo'
+     Will add what could be considered an insane amount of (mostly)
+     useless data from fsstat and fls to the results_info file.  Note
+     that at this time fls does not work right on EXT4 (sleuthkit
+     currently only supports ext2/3).  If the file system is large,
+     moreinfo could cause the results_info file to get very big, and
+     could add a considerable (or insane) amount of processing time.
+     Only for advanced users, use this if you understand what output
+     fsstat and fls give.
+
+'-e'
+'--extraoutput'
+     Will produce more types of output files.  The processing for this
+     is not very efficient at this time (it is actually horrible).  If
+     there are a lot of bad sectors, this could take a considerable (or
+     insane) amount of processing time.  If the quick or quickntfs
+     option is enabled then extraout will process much faster.
+     Currently available with the EXTRAOUT option: Results_bysector
+     lists the bad sector groups with the files in each group.
+
+'-q'
+'--quick'
+     Only processes the first and last sector of each group.  This
+     allows for a much faster first run so you can get an idea of what
+     files are involved.  May provide more useful output with the
+     EXTRAOUT option to get the results_bysector output.  If the first
+     and last sector of a group show the same file then it could be
+     assumed that all the sectors in between are the same (assume at
+     your own risk).  This is most efficient if there are large sized
+     groups of bad sectors.  If most of the bad sectors are in very
+     small groups or individual sectors then this is not efficient and
+     will take nearly as long as a normal run.
+
+'-Q'
+'--quickntfs'
+     The same as quick, except it processes NTFS partitions extra
+     special.  It uses the ability of ntfscluster to rapidly check
+     groups of sectors at once.  This can very quickly produce a FULL
+     list of files related to bad sectors for NTFS partitions, instead
+     of of just checking the first and last sector of a group.  As with
+     quick, it is still most efficient with large sector groups.
+     Results for NTFS partitions will not end up in the results_list
+     file, only in results_summary (and in results_bysector if the extra
+     option is used).
+
+EXAMPLES:
+
+If your ddrescue command was:
+     ddrescue /dev/sda1 rescued_image rescued_logfile
+
+Then the ddru_findbad command would be:
+     ddru_findbad rescued_image rescued_logfile
+
+If your ddrescue command was:
+     ddrescue /dev/sda /dev/sdb rescued_logfile
+
+Then the ddru_findbad command would be:
+     ddru_findbad /dev/sdb rescued_logfile
+
+NOTE: It is important that the source for ddru_findbad is the same as
+the ddrescue outfile.  Do not use /dev/sdb in the ddrescue command and
+then /dev/sdb1 in the ddru_findbad command.  This would cause very
+inaccurate results.
+
+It does not matter if the source for ddru_findbad is a disk or image, a
+partition or a whole disk, as ddru_findbad will automatically process it
+as long as it matches the format used to describe the ddrescue outfile.
+
+
+File: ddrutility.info,  Node: ddru_ntfsbitmap,  Next: ddru_ntfsfindbad,  Prev: ddru_findbad,  Up: Top
+
+3 ddru_ntfsbitmap
+*****************
+
+Ddru_ntfsbitmap is a utility that will extract the bitmap file from an
+NTFS partition, and then create a rescue domain file to use with
+ddrescue.  This will allow recovering only the used portion of an NTFS
+partition.  Other normal cloning utilities (such as clonezilla, or at
+least I think clonezilla uses something similar) use a similar method to
+speed up the cloning process.
+
+   Ddru_ntfsbitmap requires that a version of ddrescue that includes
+ddrescuelog is installed (ddrescue version 1.15 and up).  It does not
+make any other calls to 3rd party utilities.
+
+   The bitmap file is just a map of what clusters are used and free on
+the partition.  Consider the map as 0's and 1's, the 0's mean unused
+clusters and the 1's mean used clusters.  If any sectors of the bitmap
+file are not readable by ddrescue (or were not tried), then they will be
+filled with ones (FF) in the recovered bitmap output file.  A section
+that is all ones (FF) is considered as used clusters, and therefore the
+corresponding data will be copied.  Ddru_ntfsbitmap fills all bad (or
+untried) bitmap sector(s) in the output file with ones to insure that no
+needed data is missed during the recovery process, although it could
+cause extra data to be copied (better safe than sorry).
+
+   Since the domain logfile that is created relies on the bitmap file
+from the NFTS partition, it would be affected by any sort of corruption
+that could have happened to the bitmap file caused when the filesystem
+was running.  So I can offer no guarantee that the results will be
+accurate.  All I can say is that the idea works, and the results SHOULD
+be good.  The safest way to make sure of the best possible data recovery
+would be to continue on without the domain file after you got as far as
+you could with it.
+
+   However, in addition to saving time, there COULD be another benefit
+to not continuing on without the domain file in certain cases.  If you
+zero fill all the bad and untried areas of the target, then that could
+possibly get rid of "garbage" data in the free space.  This could
+possibly make file recovery easier for programs that scan the whole disk
+looking for files (such as photorec).
+
+   Ddru_ntfsbitmap will show the percentage of used vs free space of the
+partition after processing the bitmap file, so you can get an idea of
+how much time and effort you may be saving.  You can also get this
+number again later on by running ddrecuelog against the domain_logfile.
+     ddrescuelog -t domain_logfile
+   In the results, "rescued" will = used space that you are trying to
+recover, and "non-tried" will = free space that you are ignoring.  When
+your rescue percentage reaches the percentage of used space, then you
+should have recovered the needed data, except for any errors of course.
+But you must have used the domain_logfile in all of the ddrescue
+commands up to this point for this percentage match to be accurate.
+After you reach this point and ddrescue exits, and you have done all the
+rescuing of the used portion that you can or wish to (retries, no-split,
+ect...), you could leave out the domain_logfile from the command and
+continue to recover all of the remaining partition/drive if desired.
+
+   Ddru_ntfsbitmap uses ddrescue for all the reads and also creates
+logfiles, so that you can run it as many times as you wish/need with
+different ddrescue options on the same recovery attempt without unneeded
+disk reads.  However, you may need to use the -restart option to delete
+all of the important files at the beginning of a new run so that there
+are no issues caused by leftover files.  If you used an incorrect
+option, or there are leftover files from a previous rescue that you do
+not realize, either case can cause weird results or errors, and this
+option should clear that up and give you a fresh start without having to
+manually delete the files.  If you are getting an error or result that
+doesn't make sense, try the -restart option.
+
+   While ddru_ntfsbitmap will only try to read any area once while
+reading the bitmap file, the downside is that when you start the actual
+rescue attempt, those areas will be read again.  But this should be a
+fairly small portion of the disk.  For instance, at a standard 4k
+cluster size, a 500GB drive bitmap file would be approximately 16MB
+(0.003%).
+
+   Ddru_ntfsbitmap will create several output files in the directory
+where it is ran.  They are required if you need to run ddru_ntfsbitmap
+again on the same drive with different ddrescue options to get the best
+bitmap file recovery.  They can be deleted if you aquired a successful
+domain_logfile (but don't delete the domain_logfile until you have your
+successful data recovery).  They NEED TO BE DELETED OR SWITCHED TO A
+DIFFERENT DIRECTORY if you are attempting a new rescue of a different
+partition or a different disk.  Also, if you do a command with the wrong
+options that causes some error, you may want to also delete these files
+and start over.  The output files are as follows:
+
+__BOOTSEC
+     This is the recovered partition boot sector (512 bytes).  It is
+     needed to find the location of the MFT, along with the sector and
+     cluster size.
+
+__BOOTSEC.LOG
+     This is the ddrescue logfile for the __bootsec file.
+
+__MFTSHORT
+     This is the first 16 entries of the MFT (16KB). It is needed to
+     find where the bitmap file is located on the disk.
+
+__MFTSHORT.LOG
+     This is the ddrescue logfile for the __mftshort file.
+
+__BITMAPFILE
+     This is the recovered NTFS bitmap file.
+
+_PARTX__BITMAPFILE.LOG
+     This is the ddrescue logfile for the NTFS bitmap file.  There could
+     be multiple logfiles, each with its own part# (part0, part1...).
+     Normally there should only be one logfile, but if for some reason
+     the NTFS bitmap file is fragmented on the disk, there will be a
+     separate logfile for every fragment.
+
+NTFSBITMAP_RESCUE_REPORT.LOG
+     This file contains all the results from ddrescuelog -show-status
+     for all the ddrescue reads used by ddru_ntfsbitmap, and also for
+     the domain logfile(s).
+
+   The format for running ddru_ntfsbitmap is:
+
+     ddru_ntfsbitmap SOURCE_DISK LOGFILE [OPTIONS]
+
+   Where:
+SOURCE_DISK
+     The drive or partition that you are trying to recover.  This needs
+     to be the EXACT same source as the ddrescue input file that you
+     will be using for the recovery.
+
+LOGFILE
+     The name of the domain logfile that you wish to create to use with
+     ddrescue.
+
+   ddru_ntfsbitmap supports the following options:
+
+'-h'
+'--help'
+     Print an informative help message describing the options and exit.
+
+'-v'
+'--version'
+     Print the version number and exit.
+
+'-D'
+'--debug'
+     Turn on debugging and create a debug file.  The name of this file
+     is 'ntfsbitmap_debug.log'.  It is mostly for my use in
+     troubleshooting bugs.  I may ask for this file if someone reports a
+     problem that I am unable to identify from their description.
+
+'-V'
+'--verbose'
+     Show additional information.  Right now all this shows is the
+     commands sent to ddrescue.  This could help if you are trying to
+     pass options to ddrescue and it is not working correctly.
+
+'-g CLUSTERS'
+'--mingap CLUSTERS'
+     The minimum number of unused NTFS clusters between the used
+     clusters.  The default is 0 (allow all gaps), and the maximum
+     allowed value is 4096.  Any number higher than the maximum will be
+     lowered to the maximum.  The purpose of this option is to bridge
+     small gaps of unused space, which will make the output domain
+     logfile smaller, and possibly speed up reads a little bit, although
+     the speed increase may not be significant (if at all).  This will,
+     however, add some extra reported used space, and cause more data to
+     be read than needed.  How much data will depend on how many gaps
+     there are of the size chosen.  The benefit of using this option
+     would vary for every situation, and is not yet proven.  A typical
+     NTFS cluster is 8 sectors (but can vary), so with a sector size of
+     512, a value of 16 would be 64KiB. A value of 256 would be 1MiB. A
+     value of 4096 would be 16MiB. The idea is to use the lowest number
+     that may give some benefit.
+
+     If you are considering using this option, I would recommend running
+     it with different output domain logfile names to see how it is
+     going to affect it.  Once ddru_ntfsbitmap has completed the first
+     time, and you have not deleted any of the output files, you can run
+     it multiple times afterwards and it will not perform any additional
+     reads (unless you specify retries in the ddrescue options).  For
+     instance:
+
+          ddru_ntfsbitmap /dev/sda1 domain_logfile
+          ddru_ntfsbitmap /dev/sda1 -g 16 domain_logfile16
+          ddru_ntfsbitmap /dev/sda1 -g 256 domain_logfile256
+          ddru_ntfsbitmap /dev/sda1 -g 4096 domain_logfile4096
+
+     You can then examine the output files to see the differences, and
+     most notably see the size difference of the files.  You can also
+     use the 3rd party tool ddrescueview to view the output domain
+     logfiles to help see a visual difference.  Also, PAY ATTENTION to
+     the used percentage reported at the end of each run.  If the used
+     percentage jumps up too much, then any benefit is completely lost
+     and you should use a lower value.  I would like to restate that any
+     benefit of using this option is not yet proven, and using a number
+     too high will have the opposite effect.
+
+'-i BYTES'
+'--inputoffset BYTES'
+     Set input offset (partition offset).  This is needed if doing a
+     whole drive recovery, to specify the offset of the NTFS partition.
+     You need to specify this offset if you will be using an input such
+     as "/dev/sda".  You can get this offset by doing a little math on
+     an "fdisk -lu" command (the "u" gives the results in sectors, which
+     is needed for this to work).  Let's look at the following results
+     from "fdisk -lu /dev/sda", where /dev/sda is the source disk you
+     wish to recover.
+
+          Disk /dev/sda: 5 GB, 5362882560 bytes
+          255 heads, 63 sectors/track, 652 cylinders, total 10474380 sectors
+          Units = sectors of 1 * 512 = 512 bytes
+
+             Device Boot      Start         End      Blocks   Id  System
+          /dev/sda1            2048    10485759     5245191    7  HPFS/NTFS
+          Warning: Partition 1 does not end on cylinder boundary.
+
+     This tells us that the NTFS partition /dev/sda1 starts at sector
+     2048.  The units tells the sector size, which is 512 bytes.  So
+     multiply the unit size (512) by the start (2048), which gives us
+     1048576.  This number is the offset in bytes, which is what you
+     supply to this option.  So your ddru_ntfsbitmap command would look
+     something like this:
+
+          ddru_ntfsbitmap /dev/sda -i 1048576 domain_logfile
+
+     If you do not supply the correct offset, you will get an error
+     stating the boot sector ID is not NTFS, and the program will exit.
+     The boot sector file and the corresponding logfile will also be
+     deleted (files will not be deleted if using the -debug option).
+
+'-o "OPTIONS"'
+'--options "OPTIONS"'
+     Ddrescue options to pass directly to ddrescue.  Use quotes around
+     the whole string of options.  For example:
+
+          ddru_ntfsbitmap /dev/sda1 domainfile --options "--direct --no-split"
+
+     These options will be passed to all calls to ddrescue.  Note that
+     you cannot use the options '--input-position', '--output-position',
+     or '--size', as these are used by ddru_ntfsbitmap for control.  If
+     you try to pass one of these options, you will likely get an error
+     message from ddrescue.
+
+'-m FILE'
+'--mftdomain FILE'
+     Creates a separate additional domain file for the MFT (master file
+     table).  This mft_domain_file can be used the same way as the
+     examples below, just insert mft_domain_file in place of the regular
+     domain_logfile.  The purpose of the mft_domain_file is to allow
+     recovering of the most important part of the filesystem.  You can
+     use this before using the regular domain_logfile to attempt to
+     recover the MFT first, and then use the regular domain_logfile to
+     then recover the rest of the data.  You could also use it later on
+     to just focus on the MFT. It could also be useful to see if the
+     filesystem has errors, and how many, which could help with your
+     decision on how to proceed.
+
+     To create both a regular domain and also a MFT domain file:
+
+          ddru_ntfsbitmap /dev/sda1 domain_logfile -m mft_logfile
+
+     Then to focus on the MFT your ddrescue command would be:
+          ddrescue -m mft_logfile /dev/sda1 recovered_ntfs_image rescue_logfile
+
+'-r'
+'--restart'
+     Delete all output files and start over.  The default is for
+     ddru_ntfsbitmap to resume an attempt where one or more of the
+     ddrescue reads had errors and you wish to continue trying to get
+     the most data (possibly using different ddrescue options).  However
+     if you did a wrong option once, or had something left over from a
+     previous rescue you could get weird results or errors.  This allows
+     you to start over without having to manually delete the previous
+     files.
+
+
+
+EXAMPLES:
+
+PARTITION TO IMAGE-
+
+The simplest example is if recovering only the partition to an image
+file.
+
+Let's start with the following fdisk -lu result:
+
+     Disk /dev/sda: 5 GB, 5362882560 bytes
+     255 heads, 63 sectors/track, 652 cylinders, total 10474380 sectors
+     Units = sectors of 1 * 512 = 512 bytes
+
+        Device Boot      Start         End      Blocks   Id  System
+     /dev/sda1            2048    10485759     5245191    7  HPFS/NTFS
+     Warning: Partition 1 does not end on cylinder boundary.
+
+The ddru_ntfsbitmap command would be something like:
+
+     ddru_ntfsbitmap /dev/sda1 domain_logfile
+
+Your ddrescue command would be something like:
+
+     ddrescue -m domain_logfile /dev/sda1 recovered_ntfs_image rescue_logfile
+
+
+
+WHOLE DISK TO DISK OR IMAGE SIMPLE-
+
+Let's start with the following fdisk -lu result:
+
+     Disk /dev/sda: 5 GB, 5362882560 bytes
+     255 heads, 63 sectors/track, 652 cylinders, total 10474380 sectors
+     Units = sectors of 1 * 512 = 512 bytes
+
+        Device Boot      Start         End      Blocks   Id  System
+     /dev/sda1            2048    10485759     5245191    7  HPFS/NTFS
+     Warning: Partition 1 does not end on cylinder boundary.
+
+You will need to use the -i (-inputoffset) option, and you will need to
+do some math (see the inputoffset option description for more detail).
+Multiply the sector size (512) by the partition Start (2048) to get
+1048576, which is the input offset for the NTFS partition.
+
+Your ddru_ntfsbitmap command would be something like:
+
+     ddru_ntfsbitmap /dev/sda -i 1048576 domain_logfile
+
+Your ddrescue command would be something like this respectively:
+     ddrescue -f -m domain_logfile /dev/sda /dev/sdb rescue_logfile
+   Or:
+     ddrescue -m domain_logfile /dev/sda recovered_disk_image rescue_logfile
+
+   If there is more than one NTFS partition on the drive, you would just
+repeat the above process for each of them, with the proper input offset
+for each.  You would use the same rescue_logfile in the ddrescue
+command, but you would use a separate domain_logfile for each separate
+NTFS partition accordingly.
+
+Important Note: When using the -i (-inputoffset) option, the first
+"track" (32256 bytes or 63 * 512 byte sectors) of the disk is
+automatically included in the created domain file.  This first "track"
+contains the MBR, partition table, and possibly more needed boot code.
+The reason this is included automatically is so you shouldn't have to
+worry about making a rescue copy that won't boot due to missing
+important stuff.
+
+
+
+WHOLE DISK TO DISK OR IMAGE WITH EXTRA PARTITIONS-
+
+If you are planning on recovering the entire disk structure including
+other partitions, it starts to get a bit more tricky.  But you may need
+to do this with some Windows installations, as there may also be a
+smaller active boot partition that contains the boot information for
+Windows, and this partition would need to be copied for the OS to boot.
+
+   Let's start with the following fdisk -lu result:
+
+     Disk /dev/sda: 120 GB, 120031511040 bytes
+     255 heads, 63 sectors/track, 14593 cylinders, total 234436545 sectors
+     Units = sectors of 1 * 512 = 512 bytes
+
+        Device Boot      Start         End      Blocks   Id  System
+     /dev/sda1              63    20466809    10233373    b  FAT32
+     /dev/sda2   *    20466810   143331929    61424527    7  HPFS/NTFS
+     /dev/sda3       143331930   225247364    40949685   83  Linux
+     /dev/sda4       225247365   234436544     4586557    f  Extended LBA
+     /dev/sda5       225247428   234436544     4586557   82  Linux swap
+     Warning: Partition 5 does not end on cylinder boundary.
+
+The first step is to get the NTFS partition (sda2) offset, multiplying
+the Start by the sector size (20466810 * 512 = 10479006720).  So then
+your ddru_ntfsbitmap command would be something like:
+
+     ddru_ntfsbitmap /dev/sda -i 10479006720 domain_logfile
+
+Your ddrescue command would be something like this:
+     ddrescue -f -m domain_logfile /dev/sda /dev/sdb rescue_logfile
+
+Now you want to also recover the FAT32 and Linux partitions.  You need
+to do some math again.  For the FAT32 partition (sda1) multiply the
+start by the sector size (63 * 512 = 32256).  This is the input position
+you provide ddrescue.  Next subtract the start from the end, and then
+multiply that by the sector size (20466809 - 63 = 20466746, * 512 =
+10478973952).  This is the size you provide ddrescue.
+
+So now your next ddrescue command would be something like this:
+     ddrescue -f -i 32256 -s 10478973952 /dev/sda /dev/sdb rescue_logfile
+
+And we do the same for the Linux partition.  Input position = (143331930
+* 512) = 73385948160, and size = ( (225247364 - 143331930) * 512) =
+41940702208.
+
+Ddrescue command:
+     ddrescue -f -i 73385948160 -s 41940702208 /dev/sda /dev/sdb rescue_logfile
+
+I am not going to get into the Extended partition, except to say that I
+am pretty sure that you must copy the first part of it (starting at sda4
+in this case).  I have probably covered what the average person will
+ever do with this already.
+
+
+File: ddrutility.info,  Node: ddru_ntfsfindbad,  Next: ddru_diskutility,  Prev: ddru_ntfsbitmap,  Up: Top
+
+4 ddru_ntfsfindbad
+******************
+
+Ddru_ntfsfindbad is a utility for NTFS partitions to find which files
+are related to bad sectors in a ddrescue log file.  While it only works
+for NTFS partitions, it is MUCH faster then the original ddru_findbad.
+It also gives more useful output.  And it does NOT require any 3rd party
+utilities.  It will also do the best it can to work with a damaged file
+system (and even give you an idea of how damaged).  While it may keep
+going if physical read errors are encountered, it is designed to work
+using the recovered disk or image file, NOT the original failing drive.
+
+   While ddru_ntfsfindbad will process a damaged filesystem, it does
+require a few things.  It needs to know where the ntfs partition starts
+(not needed for partition only image, as the location will be 0).  It
+needs to be able to read the partition boot sector (512 bytes).  It
+needs to be able to read the first entry of the MFT, or the first entry
+of the MFTMIRROR (1024 bytes).  If it has that information, then it will
+proceed as best it can.  If there are no errors in the MFT, the output
+results should be accurate.  If there are errors in the MFT, you may be
+in for a rough recovery as the MFT is very important to recovering
+files.
+
+   Ddru_ntfsfindbad does not process deleted MFT entries, as its purpose
+is not to find deleted files.  It will however process entries in the
+recycle bin, as they are not truly deleted, although you will clearly
+see in the name that they are in the recycle bin.
+
+   The output file will tell you if the error was in a file or folder.
+If it was a file, then most likely that means actual file damage.  If
+the error was in a folder, that is a bit different.  That means that the
+folder is damaged and likely has lost some of the files/folders that
+were in it, and by that I mean it lost the link to them, not the files
+themselves.  That means that when exploring the filesystem they will not
+show up.  As an example of what this could mean, I have found that the
+recovery tool testdisk appears to need the folders to be intact to find
+and recover files, while more advanced (and likely not free) tools such
+as R-Studio will find them.  Ddru_ntfsfindbad acts more like R-Studio,
+as it doesn't even look at the data contained in the folders.  It builds
+the folder paths from the inodes themselves (every inode has the number
+of it's parent inode, so a map can be built without needing any extra
+data from the folder except the parent inode number listed in the actual
+MFT entry).  Please note that I am not endorsing or condemning any
+particular software here, only making reference to examples that I have
+personally observed.
+
+   As the output file shows what files have errors, any errors to the
+file $MFT means that your filesystem is damaged (this will be at the
+very top of the list if it has errors).  As the MFT is critical in
+recovering the files, there is no guarantee for recovery if it is
+damaged.  Errors mean missing inode entries, and if the entry was in use
+then you are missing something important.  If the entry was a file, then
+how to find the file on the disk is lost.  The only way to recover from
+a missing file entry is to scan the whole disk with a recovery utility
+such as photorec, and these utilities can be hindered by file
+fragmentation and by the fact that there could be error sections in the
+files themselves (good luck).  If the entry was a small file (about 800
+bytes or less), then the file was likely contained within the inode
+record itself, and will be lost.  If the missing entry was a folder,
+then the files and sub folders may still exist, but they will be
+orphaned, and will not show up when normally exploring the filesystem,
+although they may still be able to be recovered (and the windows
+checkdisk utility might be able to fix the links).  Errors in the MFT
+can mean an uncertain recovery, and you will have to work for it to get
+all you can.
+
+   The normal output file is:
+
+NTFSFINDBAD.LOG
+     This is a list of the files/folders that are found to have errors.
+     Inode= the NTFS inode number of the file/folder.  Errors= how many
+     separate contiguous error sections there are.  Errorsize= the total
+     size of all the combined errors in bytes.  Note that while this
+     number would normally be a multiple of the sector size, if an error
+     was in the last sector and the file did not fill the whole sector,
+     only the used portion would be included in the errorsize.  FILE or
+     FOLDER tells if it is a file or a directory.  Name= the full path
+     file/folder name.  It should normally start with "./" which
+     indicates the path makes it to the top level.  If it does not start
+     with "./", then it is considered to be orphaned, meaning that the
+     path does not make it to the top level directory.  Errors in the
+     MFT can cause this.
+
+   The format for running ddru_ntfsfindbad is:
+
+     ddru_ntfsbitmap SOURCE LOGFILE [OPTIONS]
+
+   Where:
+SOURCE
+     The drive, partition, or image file that you have recovered.  This
+     needs to be the EXACT SAME DESTINATION as the ddrescue output file
+     that you used for the recovery.  If you copied /dev/sda to
+     /dev/sdb, then use /dev/sdb as the source, DO NOT USE a partition
+     (/dev/sdb1)!  If you do not use the exact same destination, then it
+     will not match the logfile and your results will be totally
+     inaccurate.  If you only recovered the partition (/dev/sda1) to an
+     image, then you can simply supply that image file with no partition
+     offset.  If you are supplying a drive or an image created from a
+     whole drive, then you must supply the correct partition offset (see
+     -inputoffset for more info).
+
+LOGFILE
+     The name of the logfile from ddrescue.
+
+   ddru_ntfsfindbad supports the following options:
+
+'-h'
+'--help'
+     Print an informative help message describing the options and exit.
+
+'-v'
+'--version'
+     Print the version number and exit.
+
+'-D'
+'--debug'
+     Turn on debugging and create a debug file.  The name of this file
+     is 'ntfsfindbad_debug.log'.  It is multi-level, meaning -D is level
+     1, -DD is level 2 and so on.  Please note that anything higher than
+     level 2 can produce a stupidly large debug file that you probably
+     won't know what to do with.  This file would normally be for my use
+     in troubleshooting bugs.  However, I have made level 1 to provide
+     some useful output to an advanced end user.  Inode= the NTFS inode
+     number of the file/folder.  Part= is the number of the file
+     fragment, starting with 0.  If the file is not fragmented then
+     there will only be a part0.  Offset= is the fragment start offset
+     in bytes in relation to the start of the partition.  Fulloffset= is
+     the fragment start offset in bytes as seen from the beginning of
+     the disk (will be the same as offset if only a partition recovery).
+     Size= is the length of the fragment in bytes.  Type= is the data
+     type for the fragment (we are most interested in type=0x80, as this
+     means actual file data.  If you want to know about the other types,
+     I suggest you do a search for "ntfs mft entry attribute types").
+     Errors= how many separate contiguous error sections there are in
+     the fragment.  Errorsize= the total size of all the combined errors
+     in bytes for the fragment.  There is no file name in this output,
+     as that would be listed in the main output file, you can reference
+     that inode number.  Any inodes that were not able to be processed
+     (hard errors) will also be listed here with a warning message.
+     Fulloffset= and size= are what you would use to compare the
+     fragment location to the rescue logfile, so that you could
+     customize a ddrescue command to make further attempts at recovering
+     specific data.
+
+'-V'
+'--verbose'
+     Show additional information.  It is multi-level, meaning -V is
+     level 1, -VV is level 2 and so on.  At this time I am only going to
+     provide some info for level 1, as higher levels are more for my
+     personal use, and anything above level 2 will probably not be
+     useful to you.  Most of the level 1 verbose info is self
+     explanatory, except for "MFT hard errors".  This is the number of
+     MFT entries that are corrupt in some way, and were not able to be
+     processed (likely due to bad sectors, but could be for other
+     reasons beyond my control or knowledge).  This could give an idea
+     of how damaged the filesystem is.  If you use level 2, then you
+     will see a soft error count (they will also show as warnings in
+     level 2 of debug).  All I can say about soft errors is that it
+     means the inode entry passed the normal sanity checks for
+     corruption, but then something stupid happened while processing.
+     This could be something wrong with the entry, or my lack of
+     knowledge on how to process it (ask Bill Gates).
+
+'-e TYPE'
+'--encoding TYPE'
+     Set the character encoding type for the file name output.  The
+     default is UTF-8 which should be good for most if not all
+     circumstances.  This allows the user to change the character
+     encoding for the file names, as they are in the format of UTF-16 in
+     NTFS and need to be converted to something more text friendly.  It
+     uses iconv.  To find what types are supported, please visit
+     "http://www.gnu.org/software/libiconv/", or do a search for "iconv
+     encoding types".  If the conversion has characters that are unable
+     to convert to the type selected, then a message will be shown on
+     the screen for every inode stating how many characters were
+     skipped.  There are a couple options that can be added to the
+     encoding type, "//IGNORE" and "//TRANSLIT". IGNORE means it will
+     ignore all unconvertible characters by skipping them in the output.
+     This basically is the same as the default except it will not
+     produce any messages when unconvertible characters are encountered.
+     TRANSLIT means iconv will try to convert the unconvertible
+     characters into the closest thing it knows how, or a default
+     character (likely the "?"  character).  It will show on the screen
+     how many characters were converted for every inode.  For example,
+     to convert to ASCII with attempted translation, you would use the
+     option:
+          --encoding ASCII//TRANSLIT
+
+'-n'
+'--noconvert'
+     Turns off the iconv file name conversion and uses the old method of
+     using every other character.  This option has been added in case of
+     odd program crashes due to iconv being buggy with a memory leak.
+     This old method will only work proper with normal printable ASCII
+     characters.
+
+'-i BYTES'
+'--inputoffset BYTES'
+     Set input offset (partition offset).  This is needed if you did a
+     whole drive recovery, to specify the offset of the NTFS partition.
+     You need to specify this offset if you used an input such as
+     "/dev/sda".  You can get this offset by doing a little math on an
+     "fdisk -lu" command (the "u" gives the results in sectors, which is
+     needed for this to work).  Note that you can use this fdisk command
+     on an image file, all you have to do is replace the "/dev/sdb" in
+     this example with the name of the image file.  Let's look at the
+     following results from "fdisk -lu /dev/sdb", where /dev/sdb is the
+     destination disk or image you recovered.
+
+          root# fdisk -lu /dev/sdb
+
+          Disk /dev/sdb: 5 GB, 5362882560 bytes
+          255 heads, 63 sectors/track, 652 cylinders, total 10474380 sectors
+          Units = sectors of 1 * 512 = 512 bytes
+
+             Device Boot      Start         End      Blocks   Id  System
+          /dev/sdb1            2048    10485759     5245191    7  HPFS/NTFS
+          Warning: Partition 1 does not end on cylinder boundary.
+
+     This tells us that the NTFS partition /dev/sdb1 starts at sector
+     2048.  The units tells the sector size, which is 512 bytes.  So
+     multiply the unit size (512) by the start (2048), which gives us
+     1048576.  This number is the offset in bytes, which is what you
+     supply to this option.  So your ddru_ntfsfindbad command would look
+     something like this:
+
+          ddru_ntfsfindbad /dev/sdb logfile -i 1048576
+
+     Let's look at an example from an image file:
+          root# fdisk -lu alice.dd
+
+          Disk /media/data/alice.dd: 160 GB, 160039272960 bytes
+          255 heads, 63 sectors/track, 19457 cylinders, total 312576705 sectors
+          Units = sectors of 1 * 512 = 512 bytes
+
+                         Device Boot      Start         End      Blocks   Id  System
+          /media/data/alice.dd1            2048    20482047    10241406   27  (null)
+          Warning: Partition 1 does not end on cylinder boundary.
+          /media/data/alice.dd2   *    20482048   312578047   146054947    7  HPFS/NTFS
+          Warning: Partition 2 does not end on cylinder boundary.
+
+     This tells us that the NTFS partition alice.dd2 starts at sector
+     20482048.  The units tells the sector size, which is 512 bytes.  So
+     multiply the unit size (512) by the start (20482048), which gives
+     us 10486808576.  This number is the offset in bytes, which is what
+     you supply to this option.  So your ddru_ntfsfindbad command would
+     look something like this:
+
+          ddru_ntfsfindbad alice.dd logfile -i 10486808576
+
+     If you do not supply the correct offset, you will get an error
+     stating the boot sector ID is not NTFS, and the program will exit.
+
+EXAMPLES:
+
+PARTITION ONLY TO IMAGE RESCUE - If your ddrescue command was:
+     ddrescue /dev/sda1 rescued_image rescued_logfile
+
+Then the ddru_ntfsfindbad command would be:
+     ddru_ntfsfindbad rescued_image rescued_logfile
+
+WHOLE DISK TO DISK RESCUE - If your ddrescue command was:
+     ddrescue /dev/sda /dev/sdb rescued_logfile
+
+Then you would have to use the -inputoffset option (see the option
+details above for how to get the offset), so the ddru_ntfsfindbad
+command would be something like:
+     ddru_ntfsfindbad /dev/sdb rescued_logfile --inputoffset 1048576
+
+WHOLE DISK TO IMAGE RESCUE - If your ddrescue command was:
+     ddrescue /dev/sda rescued_image rescued_logfile
+
+Then you would have to use the -inputoffset option (see the option
+details above for how to get the offset), so the ddru_ntfsfindbad
+command would be something like:
+     ddru_ntfsfindbad rescued_image rescued_logfile --inputoffset 1048576
+
+
+File: ddrutility.info,  Node: ddru_diskutility,  Next: Important Notes,  Prev: ddru_ntfsfindbad,  Up: Top
+
+5 ddru_diskutility
+******************
+
+Ddru_diskutility is an advanced LINUX ONLY utility that can perform
+several different functions on a disk, using some direct pass-through
+disk commands.  It can read sectors to the screen (reading to a file is
+not supported yet).  It can read using 4 different methods: normal,
+direct, scsi-passthrough, and ata-passthrough.  It can perform a device
+inquiry to get things such as model and serial number.  If supported, it
+can perform readlong commands, both 28 bit and extended, with the option
+to get the best average of a set of reads.
+
+   Ddru_diskutility is for advanced users, so I am not going into great
+detail in this documentation.  If you don't understand what it does,
+then don't use it!
+
+   The format for running ddru_diskutility is:
+
+     ddru_diskutility SOURCE_DISK  [OPTIONS]
+
+   Where:
+SOURCE_DISK
+     The drive that you wish to work with.  This NEEDS to be a reference
+     to the WHOLE DISK, and NOT a partition.  All of the direct
+     passthrough commands will react as if the whole disk was selected,
+     so it is very important to use reference the whole disk so you get
+     accurate results!
+
+   ddru_diskutility supports the following options:
+
+'-h'
+'--help'
+     Print an informative help message describing the options and exit.
+
+'-v'
+'--version'
+     Print the version number and exit.
+
+'-V'
+'--verbose'
+     Show additional information.  There are currently 3 levels of
+     verbose.  The levels of verbose can be achieved by multiple
+     instances of the option ("-VVV" for level 3).
+
+'-b BYTES'
+'--sectorsize BYTES'
+     Sector size in bytes (default = 512).
+
+'-B'
+'--binary'
+     Show some results output in binary.  This was mostly created for
+     alternative viewing for the readlong commands, but can also be
+     useful for viewing the advanced (using verbose level 3) ata inquiry
+     results.
+
+'-c'
+'--clustersize'
+     This is the number of sectors to be processed, also known as a
+     "block" (default = 1, maximum = 256).  Cannot be used with
+     -readsize.
+
+'-d'
+'--direct'
+     Use direct I/O (O_DIRECT). Only applies to the readsector command.
+     It does not have any noticable effect if used with passthrough
+     commands.
+
+'-p'
+'--sgpt'
+     Use SCSI passthrough commands.  Only applies to the readsector
+     command.
+
+'-P'
+'--sgptata'
+     Use ATA passthrough commands.  Only applies to the readsector
+     command.  This command will override the -sgpt option.
+
+'-i BYTES'
+'--inputoffset BYTES'
+     Set the input offset in bytes for the command.  This is in addition
+     to any sector number provided in a command.  Meaning that "-
+     inputoffset 1024 -readsector 5" and and "-inputoffset 2560
+     -readsector 2" will both actually read sector 7.  This option has
+     been included to make working with partitions a bit easier to
+     manage (use inputoffset for the partition offset, and then the
+     sector number will be referenced to that partition).
+
+'-I'
+'--inquiry'
+     Show the device information.  This will show the basic SCSI inquiry
+     results, and if the drive is reported to be ATA then it will also
+     show the ATA inquiry results.  To get the entire results, run with
+     a verbose level of 3.  Please note that the table(s) provided with
+     verbose have decimal references on the left that are based on
+     words, instead of hex based on bytes.  This is to help with
+     matching up with the table provided in any standard ATA
+     documentation.
+
+'-s BYTES'
+'--readsize BYTES'
+     Alternative method of selecting the number of sectors to be
+     processed.  You cannot use this option and the -clustersize option
+     at the same time.
+
+'-r SECTOR'
+'--readsector SECTOR'
+     Reads a block of sectors starting at SECTOR.  Also influenced by
+     -inputoffset.
+
+'-l SECTOR'
+'-readlong28 SECTOR'
+     Performs an ATA 28 bit readlong command on the specified sector.
+     Also influenced by -inputoffset.  Note that this command has been
+     made obsolete many years ago, but some drives still supported it.
+     There are two parts of the output: 512 bytes of data and then 52
+     bytes of ecc.  The first 8 bytes (4 words) usually contains the 4
+     actual ecc bytes.  Your results may vary.
+
+'-L SECTOR'
+'-readlong48 SECTOR'
+     Performs an ATA SCT Read Long command on the specified sector.
+     Also influenced by -inputoffset.  Note that this command was made
+     obsolete years ago, but some drives still support it.  Also note
+     that in the ATA specification it states that the data returned may
+     be encoded.  To test it, read a known good sector with a regular or
+     passthrough read, and then again with readlong.  If the results are
+     different, then the data is encoded and the readlong command on
+     that drive is totally useless to you.  There are two parts of the
+     output: 512 bytes of data and then likely 52 bytes of ecc.  Your
+     results may vary.
+
+'-g COUNT'
+'--readlongbest COUNT'
+     Used with either the -readlong28 or -readlong48 command.  Performs
+     the readlong command COUNT number of times and displays the best
+     average of the data.  The average is based on individual bits.  The
+     maximum count is 256.  The theory of this is supposed to be that if
+     the sector is read several times, the average data could be closer
+     to the desired recovered data then any single read.  This is
+     unproven, and in what limited testing I could do, it is still very
+     much unproven if not totally unlikely.  The purpose of this option
+     is to let others test to see if it is possible or not.  Use with
+     the -binary option to watch the bits change per read.
+
+
+File: ddrutility.info,  Node: Important Notes,  Next: Reporting Bugs,  Prev: ddru_diskutility,  Up: Top
+
+6 Important Notes
+*****************
+
+Here are a few things to consider about data rescue and using this
+software.
+
+I would like to point something out that relates to both an "unfinished"
+image, and using a utililty as ddru_ntfsbitmap.  In any event, anything
+less than a 100% recovery will leave portions on the target image/drive
+that have not been written to by ddrescue.  If copying to a brand new
+hard drive, those areas are (hopefully) likely to be zeros.  But in any
+other case, those areas will contain whatever data was there previously.
+For someone that uses their system for data recovery on a regular basis,
+and is using image files or reusing hard drives, those areas could
+contain data from a previous recovery!  This could be a privacy issue in
+some cases, but also could cause an issue with running any other sort of
+repair/file recovery tools on the recovered image/drive.  The
+unrecovered parts could contain "garbage" data that could affect
+accurate file recovery.  In these cases I would recommend using the fill
+mode of ddrescue to fill any unfinished/untried areas with zeros.
+Example command:
+
+     ddrescue --fill-mode=?/*- /dev/zero recovered_image logfile
+
+This would write zeros to any portion of the recovery that was not
+successfully read from the source.
+
+
+File: ddrutility.info,  Node: Reporting Bugs,  Next: Index,  Prev: Important Notes,  Up: Top
+
+7 Reporting Bugs
+****************
+
+There are likely bugs in the programs of ddrutility.  There are almost
+definitely errors and omissions in this documentation, and perhaps also
+in the individual programs' help and manual files.  If you report them,
+they will get fixed.  If you don't report them, they will just stay the
+way they are and will not get fixed.
+
+   Report bugs to (<maximus57@hotmail.com>) Or better yet, report bugs
+at the Ddrutility homepage:
+<http://sourceforge.net/projects/ddrutility/>
+
+   Please include the version number of ddrutility, and the version of
+the individual program.  You can find the version by running ddrutility
+or the program with the '--version' option.
+
+
+File: ddrutility.info,  Node: Index,  Prev: Reporting Bugs,  Up: Top
+
+Index
+*****
+
+ [index ]
+* Menu:
+
+* bugs:                                  Reporting Bugs.        (line 6)
+* ddru_diskutility:                      ddru_diskutility.      (line 6)
+* ddru_findbad:                          ddru_findbad.          (line 6)
+* ddru_ntfsbitmap:                       ddru_ntfsbitmap.       (line 6)
+* ddru_ntfsfindbad:                      ddru_ntfsfindbad.      (line 6)
+* important notes:                       Important Notes.       (line 6)
+* introduction:                          Introduction.          (line 6)
+
+
+
+Tag Table:
+Node: Top449
+Node: Introduction1069
+Node: ddru_findbad3447
+Node: ddru_ntfsbitmap13694
+Node: ddru_ntfsfindbad32152
+Node: ddru_diskutility46743
+Node: Important Notes52511
+Node: Reporting Bugs53904
+Node: Index54694
+
+End Tag Table

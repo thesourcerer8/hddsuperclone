@@ -1,0 +1,113 @@
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'Western Digital (older) dump module 42 to file using vendor specific commands.'
+  echo 'This will dump the first 3 sectors of the module to the file "mod42.bin".'
+  echo 'It will also show it on the screen.'
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+
+include good_subroutines
+# set needed commands so they exist to pass checks
+seti $command_failed = $command_failed
+
+# set the filename to be written to
+sets $filename = "mod42.bin"
+# delete existing file so there is no confusion
+deletefile $filename
+
+
+# perform identify device command to get some info
+echo "Performing identify device command"
+buffersize 512
+setreadpio
+ata28cmd 0 0 0 0 0 0xa0 0xec
+# check if command failed
+seti $command_failed = 0
+gosub check_command_status
+if $command_failed = 1
+  echo "Command failed!"
+  gosub show_sense_data
+  gosub show_ata_return_status
+  previousscript
+endif
+wordflipbuffer 0 512
+sets $model = buffer 54 40
+echo "Model= " $model
+
+
+# Put the drive is a special mode (super on)
+buffersize 0
+clearbuffer
+setreadpio
+ata28cmd 0x57 0x44 0x43 0x00 0x00 0xa0 0x8a
+# check if command failed
+seti $command_failed = 0
+gosub check_command_status
+if $command_failed = 1
+  echo "Command failed!"
+  gosub show_sense_data
+  gosub show_ata_return_status
+  previousscript
+endif
+
+# read sectors of the module
+seti $count = 3
+seti $buffer_size = $count * 512
+buffersize $buffer_size
+clearbuffer
+setreadpio
+ata28cmd 0x00 $count 0x00 0x00 0x0F 0xE0 0x21
+# check if command failed
+seti $command_failed = 0
+gosub check_command_status
+if $command_failed = 1
+  echo "Command failed!"
+  gosub show_sense_data
+  gosub show_ata_return_status
+  previousscript
+endif
+
+# perform a reset since I don't know the super off command
+gosub reset_device
+
+# write the sector to a file
+writebuffer $filename 0 0 $buffer_size
+# show it on the screen
+printbuffer 0 $buffer_size
+
+
+# find the user and master passwords
+# they seem to always be just before the model number
+seti $count = 0
+seti $count_max = $buffer_size - 40
+seti $found_password = 0
+while $count < $count_max
+  sets $model_check = buffer $count 40
+  if $model = $model_check
+    seti $found_password = 1
+    break
+  endif
+  seti $count = $count + 1
+done
+if $found_password = 1
+  echo ""
+  seti $user_offset = $count - 32
+  seti $master_offset = $count - 64
+  echo "Possible Master password:"
+  printbuffer $master_offset 32
+  echo "Possible User password:"
+  printbuffer $user_offset 32
+else
+  echo "Unable to locate passwords"
+endif
+
+
+
+previousscript
+end

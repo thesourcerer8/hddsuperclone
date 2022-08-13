@@ -1,0 +1,23 @@
+echo 'This contains common subroutines that are used by other scripts.'
+echo 'This file is required by most usb scripts.'
+exit 0
+
+
+subroutine set_usb_definitions
+  # requesttype
+  seti $USB_DIR_OUT = 0
+  seti $USB_ENDPOINT_OUT = 0
+  seti $USB_DIR_IN = 0x80
+  seti $USB_ENDPOINT_IN = 0x80
+  seti $USB_TYPE_CLASS = 0x20
+  seti $USB_RECIP_DEVICE = 0
+
+  # request
+  seti $USBRQ_HID_GET_REPORT = 0x01
+  seti $USBRQ_HID_SET_REPORT = 0x09
+
+  # value
+  seti $USB_HID_REPORT_TYPE_FEATURE = 3
+endsubroutine
+
+

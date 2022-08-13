@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Narzędzia NTFS</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="ntfstools"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Spis treści</a> &middot; <a href="howto.html">Praca</a> &middot; 
+<a href="menu.html">Menu</a> &middot; <a href="menu_tools.html">Narzędzia</a>
+<hr />
+<h3>Narzędzia NTFS</h3>
+<p>
+<strong style="color:#ff0000;">Uwaga!</strong>
+Korzystanie z narzędzia NTFS niezgodne woluminu NTFS może spowodować uszkodzenie systemu plików. 
+Nie należy używać narzędzi, jeśli program nie rozpoznaje systemu plików poprawnie lub nie jesteś pewien, czy to jest. 
+<br/> 
+Nigdy nie wykonywać komendy systemowego woluminu 
+(gdzie pliki operacyjnego systemu znajdują się),
+w przeciwnym przypadku zostanie uszkodzony. <br />
+<a href="lockvolumes.html">Blokowanie woluminów</a> odbywa się po piśmie do woluminów. 
+Po wykonaniu komend należy sprawdzić wolumnu za pomocą narzędzia systemowego <span class="tt">chkdsk</span>.<br /> 
+Nie zaleca tworzenie nazw plików ze specjalnymi symbolami.
+</p>
+<p>
+<a href="openvolume.html">Otwórz wolumin NTFS</a> 
+i wprowadzić niezbędne katalogu w <a href="filepanel.html">panelu plików</a> 
+przed użyciem narzędzia.
+</p>
+<div class="l">
+<h4 id="createfile">Kopiuj plik</h4>
+<p>
+Kopiowanie, zastąpić lub dołączyć pliku do <a href="openvolume.html">otwarcia partycji NTFS</a> 
+z pominięciem sterownika NTFS systemu.
+</p>
+<p>
+ Otwórz docelowy katalog w <a href="filepanel.html">panelu plików</a> do skopiować plik.<br />
+ Wezwać komendy z menu.<br />
+ Wybierz plik źródłowy.<br />
+ Wprowadź nazwę pliku docelowego.<br/>
+ Wybierz opcję, aby zastąpić lub dołączyć pliku, jeśli plik docelowy istnieje.
+</p>
+<p>
+Ciągłego wolnego miejsca na woluminie jest wymagany do zapisania pliku.
+</p>
+<h4 id="createdir">Utwórz katalog</h4>
+<p>
+Utwórz katalog na <a href="openvolume.html">otwarciu partycji NTFS</a> z pominięciem sterownika NTFS systemu.
+</p>
+<p>
+Katalog jest tworzony w bieżącym folderze w <a href="filepanel.html">panelu plików</a>.
+</p>
+
+<h4 id="removedir">Usuń plik/pusty katalog</h4>
+<p>
+Usuń wybrany plik lub pusty katalog z <a href="openvolume.html">otwarcia partycji NTFS</a> z pominięciem sterownika NTFS systemu.
+</p>
+
+<h4 id="repairdir">Napraw INDX-records katalogu</h4>
+<p>
+Naprawa NTFS katalogu aktualnie otwartego w <a href="filepanel.html">panelu plików</a>.
+</p>
+</div>
+
+</div></div>
+</body>
+</html>

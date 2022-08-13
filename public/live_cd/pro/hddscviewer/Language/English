@@ -1,0 +1,135 @@
+_HDDSCViewer_1.0_20220212_
+|_|0|_|
+File
+|_|1|_|
+Quit
+|_|2|_|
+Open
+|_|3|_|
+Error!
+|_|4|_|
+Warning
+|_|5|_|
+Language
+|_|6|_|
+Export language
+|_|7|_|
+Import language
+|_|8|_|
+Cannot open file for writing
+|_|9|_|
+Cannot open file for reading
+|_|10|_|
+Error processing imported language file
+|_|11|_|
+Language successfully changed!
+|_|12|_|
+Success!
+|_|13|_|
+Options
+|_|14|_|
+Left panel resolution
+|_|15|_|
+Main panel resolution
+|_|16|_|
+Main grid size
+|_|17|_|
+Auto update
+|_|18|_|
+Show bad head
+|_|19|_|
+Non-trimmed
+|_|20|_|
+Non-divided
+|_|21|_|
+Non-scraped
+|_|22|_|
+Bad
+|_|23|_|
+Non-tried
+|_|24|_|
+Finished
+|_|25|_|
+Current
+|_|26|_|
+Bad-head
+|_|27|_|
+1 pt
+|_|28|_|
+2 pt
+|_|29|_|
+3 pt
+|_|30|_|
+4 pt
+|_|31|_|
+6 pt
+|_|32|_|
+8 pt
+|_|33|_|
+10 pt
+|_|34|_|
+12 pt
+|_|35|_|
+14 pt
+|_|36|_|
+16 pt
+|_|37|_|
+4K
+|_|38|_|
+8K
+|_|39|_|
+16K
+|_|40|_|
+32K
+|_|41|_|
+64K
+|_|42|_|
+128K
+|_|43|_|
+256K
+|_|44|_|
+512K
+|_|45|_|
+1M
+|_|46|_|
+Off
+|_|47|_|
+5 seconds
+|_|48|_|
+10 seconds
+|_|49|_|
+30 seconds
+|_|50|_|
+1 minute
+|_|51|_|
+2 minutes
+|_|52|_|
+5 minutes
+|_|53|_|
+Highlight good data
+|_|54|_|
+Good data
+|_|55|_|
+2M
+|_|56|_|
+4M
+|_|57|_|
+8M
+|_|58|_|
+16M
+|_|59|_|
+Show high time
+|_|60|_|
+Timing
+|_|61|_|
+Domain
+|_|62|_|
+Show domain
+|_|63|_|
+Domain block not found
+|_|64|_|
+Domain from DMDE bytes file
+|_|65|_|
+Areas
+|_|66|_|
+dummy always put at bottom of language list

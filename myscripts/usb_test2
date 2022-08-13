@@ -1,0 +1,134 @@
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'usb test 2.'
+  echo 'Example: hddsupertool -f usb_test2'
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+
+include usb_subroutines
+
+gosub set_usb_definitions
+
+# set a blank string variable to compare with user input
+# make sure not to set this anyplace else
+sets $null = ""
+
+seti $usbrequesttype = 0x21
+seti $usbrequest = 9
+seti $usbvalue = 0x0200
+seti $usbindex = 0
+usbbuffersize 8
+
+# initialize the ports (A & B) as input
+setusbbuffer 0
+  0 0 0 0 0 0 0
+endusbbuffer
+gosub sendcommand
+
+# set port b as output
+setusbbuffer 0
+  0x0a 0xff 0xff 0 0 0 0 0
+endusbbuffer
+gosub sendcommand
+
+
+while 1 = 1
+  echo " "
+  echo "U571 usb relay control"
+  echo "q) Quit"
+  echo "p) Previous menu"
+  echo "h) Toggle script help
+  echo "1) energize 1"
+  echo "2) energize 2"
+  echo "3) energize 1 2"
+  echo "4) de-energize 1 2"
+
+  if $printhelp = 1
+    exit 0
+  endif
+
+  echo "Enter your choice:
+  userinput $choicestring
+
+  if $choicestring = q
+    break
+
+  elseif $choicestring = p
+    previousscript
+
+  elseif $choicestring = h
+    if $help = 0
+      seti $help = 1
+      echo "Help is now turned on"
+    else
+      seti $help = 0
+      echo "Help is now turned off"
+    endif
+
+  elseif $choicestring = 1
+    gosub energize1
+
+  elseif $choicestring = 2
+    gosub energize2
+
+  elseif $choicestring = 3
+    gosub energize12
+
+  elseif $choicestring = 4
+    gosub denergize12
+
+
+  else
+    echo "bad choice= " $choicestring
+  endif
+
+done
+end
+
+
+subroutine sendcommand
+  hex
+  echo "usbcommand " $usbrequesttype " " $usbrequest " " $usbvalue " " $usbindex
+  printusbbuffer 0 8
+  decimal
+  sendusbcontrolmsg $usbrequesttype $usbrequest $usbvalue $usbindex
+endsubroutine
+
+subroutine energize1
+  setusbbuffer 0
+    2 1 0 0 0 0 0 0
+  endusbbuffer
+  gosub sendcommand
+endsubroutine
+
+subroutine energize2
+  setusbbuffer 0
+    2 2 0 0 0 0 0 0
+  endusbbuffer
+  gosub sendcommand
+endsubroutine
+
+subroutine energize12
+  setusbbuffer 0
+    2 3 0 0 0 0 0 0
+  endusbbuffer
+  gosub sendcommand
+endsubroutine
+
+subroutine denergize12
+  setusbbuffer 0
+    2 0 0 0 0 0 0 0
+  endusbbuffer
+  gosub sendcommand
+endsubroutine
+
+
+
+previousscript
+end

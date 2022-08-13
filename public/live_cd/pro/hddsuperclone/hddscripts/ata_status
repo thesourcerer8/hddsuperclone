@@ -1,0 +1,19 @@
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'This will get the current drive status registers if direct IO.'
+  echo 'This does not work with passthrough.'
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+
+include good_subroutines
+
+gosub refresh_status
+
+previousscript
+end

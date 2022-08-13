@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Menu "Editor"</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">TOC</a> &middot; <a href="howto.html">Work</a> &middot; <a href="menu.html">Menu</a>
+<hr />
+<h2>Menu "Editor"</h2>
+<p>
+Select object to open in <a href="diskeditor.html">Disk Editor</a>.
+</p>
+<table>
+<tr><th class="ii">Partition Table</th><td>
+Open all disk sectors. Go to the MBR sector (the first disk sector).
+</td></tr>
+<tr><th class="ii">Boot Sector</th><td>
+Open all volume sectors. <br />
+Go to the volume boot sector (the first sector of the volume opened).
+</td></tr>
+<tr><th class="ii">Boot Sector Copy</th><td>
+Open all volume sectors. Go to the volume boot sector copy.
+</td></tr>
+<tr><th class="ii">Root Directory</th><td>
+Open volume root directory.
+</td></tr>
+<tr><th class="ii">FAT/MFT</th><td>
+Open FAT1 (main cluster table) for FAT volume, MFT for NTFS.
+</td></tr>
+<tr><th class="ii">FAT Copy/MFT Mirror</th><td>
+Open FAT2 (cluster table copy) for FAT, MFTMirr for NTFS.
+</td></tr>
+<tr><th class="ii">MFT Record...</th><td>
+Open MFT. Go to the specified MFT file.
+</td></tr>
+<tr><th class="ii">Volume Cluster...</th><td>
+Open all volume sectors. Go to the specified volume cluster.
+</td></tr>
+<tr><th class="ii">Volume Sector...</th><td>
+Open all volume sectors. Go to the specified volume sector.
+</td></tr>
+<tr><th class="ii">Physical Sectors...</th><td>
+Open specified drive sectors. Go to the specified drive sector.
+</td></tr>
+<tr><th class="ii">File Data</th><td>
+Open file located at the current cluster.
+</td></tr>
+<tr><th class="ii">Directory Entry</th><td>
+Open directory containing current file. Go to the file entry.
+</td></tr>
+<tr><th class="ii">FAT Cluster/MFT Record</th><td>
+For FAT: open FAT1; <br />go to the FAT1 cluster corresponding the current volume cluster.<br />
+For NTFS: open MFT; <br />go to the MFT record corresponding the current file or volume cluster.
+</td></tr>
+<tr><th class="ii">Cluster Map</th><td>
+Open <a href="clustermap.html">Cluster Map</a>. 
+Go to the map cluster corresponding the current volume cluster.
+</td></tr>
+<tr><th class="ii">Goto Object Offset...</th><td>
+Go to the specified position of the opened object.
+</td></tr>
+</table>
+
+<p>
+Except for commands <span class="ii">Partition Table</span> and <span class="ii">Physical Sectors</span>
+you should <a href="openvolume.html">open a volume</a> at first.
+</p>                 
+
+</div></div>
+</body>
+</html>

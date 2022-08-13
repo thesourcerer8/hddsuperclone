@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Manage Changes</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">TOC</a> &middot; <a href="howto.html">Work</a> &middot; <a href="menu.html">Menu</a> &middot;
+<a href="menu_disk.html">Disk</a>
+<hr />
+<h3>Manage Changes</h3>
+<p>
+<b><span style="color:red">Warning!</span></b>
+Direct modifying disk contents may have further consequences 
+including data loss or inability to load and run the system.
+</p>
+<p>
+When an OS discovers new FS errors (as well gains access to FS with old errors) 
+it can run a disk checking utility to remove errors and this may also cause the removal of user data. 
+The OS can run the checking utility online or at boot time.</p>
+<p>
+Partitioning modification may also cause impossibility to boot from the disk 
+or inaccessibility of some partitions. 
+Never modify partitioning on your current boot or system disk. 
+Run another system from different bootable disk or connect your disk as slave to another computer. 
+Do not run the software from the disk which will be modified.
+</p>
+<p>
+Direct disk changes take effect to the system after restarting the computer, updating disk configuration, or 
+reconnecting the pluggable device.
+OS Windows may disallow direct writing to some disk areas being in use - 
+see <a href="lockvolumes.html">Volume locking</a> for details.
+Some antiviruses may also block direct writing to a disk.
+Under Windows you may also try the <a href="devioparams.html">interface option</a> <span class="ii">IO SCSI</span>
+to circumvent the restrictions.
+</p>
+<p>Changes made with commands 
+<a href="copysectors.html">Copy Sectors</a> and 
+<a href="fillsectors.html">Fill Sectors</a>
+are written to the disk immediately.
+</p>
+<p>Changes made in <a href="diskeditor.html">Disk Editor</a> and <a href="partitions.html">Partition Manager</a>
+remains virtual until you explicitly apply them to the disk. 
+You can use the following <span class="ii">Disk</span> menu commands to manage virtual changes.
+</p>
+
+<h4>Global read-only mode</h4>
+Globally disable all write operations (for all devices and device images).<br />
+See also a device specific <a href="devioparams.html">option</a> <span class="ii">Allow Write</span>.
+
+<h4>Load Rollback Data/Dump from File...</h4>
+<p>
+You can load rollback data (if it was saved when applying previous changes) and thus revert the previous changes. 
+Also you can use the command to load virtual changes dumped to a file. 
+</p>
+<h4>Dump Changes to File...</h4>
+<p>
+You can dump virtual changes to a file instead of applying them directly to the disk.
+Later you can reopen the disk and load all unapplied changes from the file.
+</p>
+<h4>Undo Changes</h4>
+<p>
+Undo the group of recent changes. To undo individual actions use the corresponding commands
+in <a href="diskeditor.html">Disk Editor</a> (menu <a href="menu_edit.html">Edit</a>)
+or <a href="partitions.html">Partition Manager</a>.
+</p>
+<h4>Redo Changes</h4>
+<p>
+Redo the group of virtual changes.
+</p>
+<h4>Reset All Changes</h4>
+<p>Discard all unapplied changes.</p>
+<h4 id="apply">Apply Changes [<span class="ii">Ctrl+W</span>]</h4>
+<p>Write all changes directly to the disk.</p>
+</div></div>
+</body>
+</html>

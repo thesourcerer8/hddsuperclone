@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Wirtualna rekonstrukcja systemu plikуw</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="reconstruction"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Spis treści</a> &middot; <a href="howto.html">Praca</a> &middot; 
+<a href="menu.html">Menu</a> &middot; <a href="menu_tools.html">Narzędzia</a>
+<hr />
+<h3>Wirtualna rekonstrukcja systemu plików</h3>
+<p>
+Otwórz wirtualny katalog <span class="ii">[Wszystkie znalezione / wirtualny FS]</span> w <a href="filepanel.html">Panelu plików</a>,
+aby wirtualnie zrekonstruować strukturę katalogów i przygotować znaleźć i usunąć pliki i katalogi do 
+<a href="datarecovery.html">odzysku</a>.
+</p>
+<p>
+Wyniki <a href="fullscan.html">pełnego skanowania</a> może być używany.
+</p>
+<p>
+Możesz poprawić wyniki za pomocą przycisku <b>Parametry</b> i próbując różnych opcji.
+</p>
+
+<h4>FAT/exFAT</h4>
+<div class="l">
+<b>Użyj wynik wyszukiwania (ex)FAT tylko</b>
+<p>
+Skorzystaj tylko wyników <a href="fullscan.html">Pełnego skanowania</a> 
+bez skanowania całego woluminu ponownie.
+</p>
+<b>Przeskanuj cały wolumen</b>
+<p>
+Dodatkowo przeskannuj wolumen, jeśli nie jest skanowany w całości podczas 
+<a href="fullscan.html">Pełnego skanowania</a>. 
+</p>
+<b>FAT Tabele Opcje (przycisk "Parametry")</b>
+<p>
+Tablice FAT zawiera klastra łańcuchy gromadzących pofragmentowane pliki i katalogi.
+Oprogramowanie automatycznie wybiera użycie tabeli na podstawie oceny. 
+Jednak możesz wypróbować różne opcje, aby osiągnąć lepsze wyniki rekonstrukcji i odzysku danych w całości 
+lub dla konkretnych plików.
+</p>
+<p>
+Możesz wybrać stół egzemplarz użyć (<b>FAT1</b> lub <b>FAT2</b>) 
+lub potępiać wykorzystanie tabeli (<b>nie używaj tabele FAT</b>), jeśli tabele są poważnie uszkodzone, 
+lub użyj sprawdzenie opcji (<b>nie używać bad sektorów</b>), aby uniknąć niewłaściwych łańcuchów, 
+czy jest jakaś uszkodzenia w tabelach.
+</p>
+</div>
+
+<h4>Non-FAT</h4>
+<div class="l">
+<b>Czysta rekonstrukcja systemu plików</b>
+<p>Opcja zapewnia najbardziej dokładne rekonstrukcja gdy system plików nie jest uszkodzony.</p>
+
+<b>Domyślnie rekonstrukcja, Mniej/więcej wyników</b>
+<p>
+Wykorzystanie wyników <a href="fullscan.html">pełnego skanowania</a>. 
+Możesz zmniejszyć/zwiększyć liczbę wyników rekonstrukcji.
+Możesz ręcznie wybrać fragmentów za pomocą przycisku <span class="ii">MFT/Parametry</span>.
+</p>
+
+<b>Numery MFT</b>
+<p>
+Filtr plików według numerów do częściowego rekonstrukcję 
+(może być użyteczne, jeżeli nie ma wystarczająco dużo RAM dla całego rekonstrukcji).
+</p>
+<b>Przesunięte</b>
+<p>
+Dołącz przesunięty MFT zapisy do rekonstrukcji 
+(<a href="fullscan.html">Pełne skanowanie</a> muszą być wykonane).
+</p>
+<b>Dodatkowe znaleziono</b>
+<p>
+Dołącz dodatkowe znalezione pliki do rekonstrukcji
+(może zawierać śmieci, ale może pomóc w przypadku niektórych plików nie można odzyskać inne sposoby).
+</p>
+<b>Tech. rekordy</b>
+<p>
+Dołącz specjalne MFT zapisy do rekonstrukcji do analizy przez specjalistów NTFS.
+</p>
+</div>
+
+</div></div>
+</body>
+</html>

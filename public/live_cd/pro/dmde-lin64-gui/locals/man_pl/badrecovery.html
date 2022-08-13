@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Praca z uszkodzonymi urządzeniami</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Spis treści</a> &middot; <a href="howto.html">Praca</a> &middot; 
+<a href="datarecovery.html">Odzyskiwanie danych</a>
+<hr />
+<h3>Praca z uszkodzonymi urządzeniami</h3>
+<p>
+Jeśli istnieją problemy fizyczne (błędy wejścia-wyjścia, obce dźwięki, spadek wydajność, itd.) 
+zaleca się zgłoszenie do specjalistów posiadających specjalistyczny sprzęt. 
+Dalsze prace z dyskiem (nawet przy uruchamianiu) mogą pogorszyć problem 
+i spowodować całkowitą niezdolność odzyskiwania danych. 
+Więc wszelkie dalsze próby są na własne ryzyko. 
+W każdym razie jest to możliwe tylko wtedy, gdy oprogramowanie ma dostęp do urządzenia 
+(zawartość jest czytelna), a rozmiar urządzenia jest prawidłowo wykrywany 
+(patrz <a href="sysrequire.html">Wymagania systemowe</a>).
+</p>
+<h4>Błędy logiczne</h4>
+<p>
+Niektóre błędy mogą wynikać z przyczyn zewnętrznych: złe styki, nieoczekiwana utrata lub rozłączenie zasilania, itp. Jeśli sektor nie jest całkowicie lub nieprawidłowo zapisany, urządzenie zgłasza błąd podczas odczytu tego sektora, nawet jeśli nie ma fizycznego uszkodzenia (złe oprogramowanie). Urządzenie działa normalnie z wyjątkiem błędów podczas odczytu kilku sektorów. W takim przypadku należy naprawić źródło problemu (sprawdzić, czy styki płytki drukowanej nie są utlenione, wymienić przewody itp.) I kontynuować bezpieczny dostęp do urządzenia, jeśli sytuacja się nie pogorszy (niektóre błędy oprogramowania mogą nadal pozostać). Oczywiście nie dotyczy to przypadków, w których nastąpiło trafienie, urządzenie reaguje wolno itp. W każdym razie bezpieczniej byłoby wykonać kopię całego urządzenia przed kontynuowaniem odzyskiwania.
+</p>
+<h4>Klonowanie urządzeń</h4>
+<p>
+Zdecydowanie zaleca się najpierw sklonować uszkodzone urządzenie i kontynuować pracę z kopią.
+</p>
+<p>
+Podczas odzyskiwania danych może wystąpić wiele prób dostępu do dysku: oprogramowanie zwykle skanuje całe urządzenie, następnie ponownie analizuje niektóre struktury na dysku, a następnie ponownie odczytuje dane podczas rzeczywistego odzyskiwania; można również wypróbować inne ustawienia i oprogramowanie. Powoduje to ciągłe odczytywanie urządzenia i coraz bardziej uszkadza problematyczne urządzenie. Wykonanie kopii sektorowej (klon) eliminuje ten problem, uszkodzone urządzenie jest odczytywane tylko raz.
+</p>
+<p>
+W DMDE możesz użyć narzędzia <a href="copysectors.html">Kopiuj sektory</a>, aby sklonować urządzenie.
+</p>
+<h4 id="disksetup">Specjalne środowisko i ustawienia</h4>
+<p>
+Zwykle system operacyjny może również aktywnie współpracować z urządzeniem, uszkadzając je bardziej, zakłócać pracę z nim, a także może niechciane zapisywać na dysku źródłowym (patrz także sekcja „Instalacja”). Powinieneś więc wybrać bardziej odpowiedni system operacyjny, przygotować urządzenie, skonfigurować parametry.
+Zalecenia dotyczące wyboru systemu operacyjnego znajdują się w sekcji <a href="setup.html">Instalacja i uruchomienie</a>.
+</p>
+<p>
+Zalecane jest również używanie trybu <a href="devioparams.html">the mode</a> <span class="ii">IO SCSI</span> 
+(w Windows / Linux lub <span class="ii">ATA Interface</span> w DOS), ponieważ jest on szybszy i mniej agresywny.
+</p>
+<p>
+Aby całkowicie uniemożliwić systemowi pracę z partycjami urządzeń można chwilowo "wyłączyć" tablicę partycji. 
+W DMDE możesz użyć poleceń <span class="ii">MBR Off / GPT Off</span> w oknie <a href="partition.html">Partycje</a>, 
+następnie Zastosuj i zrestartuj system operacyjny lub ponownie podłącz dysk. 
+Później możesz w podobny sposób „włączyć” tablicę partycji na dysku
+(<span class="ii">MBR On&nbsp;/ GPT On</span>).
+</p>
+
+<h4>Jeśli klonowanie jest niemożliwe</h4>
+<p>
+Czasami stan urządzenia nie pozwala na pełne klonowanie. Pełna kopia może zająć nieracjonalnie dużo czasu, ale musisz odzyskać tylko niektóre ważne pliki. W takim przypadku możesz spróbować odzyskać dane bez wykonywania pełnego skanowania.
+</p>
+
+<p>
+DMDE umożliwia otwieranie woluminów i znajdowanie niektórych plików bez wstępnego pełnego skanowania. 
+Możesz spróbować otworzyć wolumin, jeśli jest widoczny w oknie <a href="partitions.html">Partycje</a> 
+zaraz po wybraniu <a href="devices.html">urządzenia</a>. 
+Możesz także spróbować otworzyć woluminy, gdy tylko pojawią się w wynikach 
+<a href="fullscan.html">pełnego skanowania</a>, bez czekania na jego zakończenie. 
+Pamiętaj, aby <span class="ii">zapisać</span> wyniki skanowania, 
+aby uniknąć ponownego skanowania w przyszłości w przypadku awarii. 
+Otwórz wolumin i najpierw odzyskaj najważniejsze pliki i sprawdź, czy można je otworzyć / odtworzyć.
+</p>
+
+</div></div>
+</body>
+</html>

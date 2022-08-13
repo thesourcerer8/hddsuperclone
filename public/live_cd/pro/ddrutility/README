@@ -1,0 +1,151 @@
+REQUIREMENTS:
+For installation, a C compiler is required. GCC is the recommended compiler. Please do a search for how to install the GCC compiler on your system if there is not already a working C compiler.
+
+The program ddru_findbad requires the following:
+sleuthkit (required)
+ntfs-3g (required to process NTFS partitions)
+gnu-fdisk (required to process GPT partitioned disks)
+
+The program ddru_ntfsbitmap requires the following:
+gnuddrescue (version 1.15 or newer)
+
+README:
+Welcome to ddrutility. Ddrutility is a set of tools designed for use with gnuddrescue to aid in data recovery.
+
+Ddrutility is free software. Please see the file COPYING for details.
+
+For documentation, please see the source files in the main source directory. The file "ddrutility.txt" contains the full documentation. It is also available in HTML format in the file "ddrutility.html".
+
+To extract ddrutility, use the following commands (replacing the x.xx with proper version number):
+gunzip ddrutility-x.xx.tar.gz
+tar xf ddrutility-x.xx.tar
+
+Then navigate to the proper directory:
+cd ddrutility-x.xx
+
+To install ddrutility, use the following commands:
+make
+sudo make install
+
+The "make install" command needs to be run as root, which is why "sudo" is included in this example. Your sysem may use a different command, or you may already be root. If it is not ran as root, then you will likely get permission errors and the install will not be complete.
+
+
+
+NEWS:
+Changes in version 2.8
+No longer uses automake to compile, now uses a regular make file. No program files were updated or changed.
+
+
+
+Changes in version 2.7
+Ddru_ntfsfindbad & ddru_ntfsbitmap - Fixed a bug where if the partition boot sector reported 0 bytes per sector, the program would crash due to a divide by 0 error. This only happened if the boot sector was corrupt, or more likely if the offset was wrong and it read the wrong data.
+
+Ddru_ntfsfindbad & ddru_ntfsbitmap - Improved the error output to the screen for partition boot sector errors.
+
+
+
+Changes in version 2.6
+Some unneeded items were removed from configure.ac for compatibility (LF_CONFIGURE_CC, LF_CONFIGURE_CXX, LF_HOST_TYPE, LF_SET_WARNINGS, AC_PROG_RANLIB, AC_PROG_CC).
+
+Added "AC_CHECK_LIB([iconv], [libiconv_open])" to configure.ac for compatibility.
+
+Ddru_findbad - A patch made by Christian Franke has been used on ddru_findbad so it no longer relies on the BASH shell, which makes it more compatible on different systems.
+
+Ddru_findbad - Fixed a bug when ntfscluster does not return good results. It now will inform the user and close, instead of giving a script error. This can happen when the disk is mounted.
+
+Ddru_findbad - Losetup now opens images with the read only option.
+
+Added examples to the --mftdomain option of ntfs_bitmap in the documentation.
+
+Updated the documentation about ddru_findbad being slow.
+
+Fixed a bug in ddru_ntfscommon where size of allocated memory was incorrect for variables used in name conversion.
+
+Fixed an issue where libiconv on some systems defaults to BE instead of LE, default conversions are now UTF-16LE.
+
+Ddru_ntfsfindbad - Fixed a bug where some data runs in the mft would report they exceeded the size limit when they were really ok.
+
+Ddru_ntfsfindbad - Fixed an issue where the current position line of the logfile had to be within the first 5 lines or it would give an error.
+
+Add the new utility ddru_diskutility. This is an advanced disk utility for use with linux only.
+
+
+
+Changes in version 2.5
+Some of the code has been restructured to allow for sharing of functions.
+
+Ddru_ntfsbitmap & ddru_ntfsfindbad - Both are now able to properly process non 512 byte sectors. They both can also now handle partial MFT errors, meaning if the second sector of the record is bad and the record size fits in the first sector it will now process it instead of totally rejecting it.
+
+Ddru_ntfsbitmap - Fixed a bug where the MFT domain output file would end up with an error (same error that was fixed in domain output file previously).
+
+Ddru_ntfsbitmap & ddru_findbad - Both are now able to process the older NTFS filesystem from Windows NT and 2000.
+
+
+Changes in version 2.4
+Ddru_ntfsbitmap - Added option --restart to delete all important files from the previous run before starting. This is used to help prevent any issues from old files causing bad results.
+
+Ddru_ntfsbitmap - Fixed a bug where the domain output file would end up with an error when using the --inputoffset option and the partition start position was equal or less than what was considered the "first track" (63 sectors).
+
+Ddru_ntfsfindbad - Fixed a bug where files were falsely reported as having errors if the start or finish was right next to an error sector. They would be listed but with a 0 byte error size.
+
+Ddru_ntfsfindbad - Fixed a bug in the debug output where the offset and full offset were not correct.
+
+
+Changes in version 2.3
+Ddru_ntfsfindbad - Fixed a bug where some file or folder names were in DOS 8.3 instead of Win32 format in the output.
+
+Ddru_ntfsfindbad now properly converts NTFS file names from UTF-16 to UTF-8, as opposed to just processing every other byte. This should allow for multi-language support in the output. Added the option "--encoding" to be able to choose the filename output encoding, if needed to be different from the default of UTF-8.
+
+Ddru_ntfsfindbad - Added option --noconvert to turn off the new encoding option. This has been added in case of strange program crashes caused by the very buggy iconv. When used, this option uses the old method of every other character for the file names, which will work for ASCII.
+
+
+Changes in version 2.2
+A new option "--autooff" was added to ddru_findbad to allow for manually choosing the partion type, and whether or not to process a partion.
+
+A new option "--mingap" was added to ddru_ntfsbitmap that will allow the bridging of small gaps of unused space, and turn them into used space. This has the advantage of creating a smaller domain file, and possibly speeding up read speed a little bit. However, be aware that it also creates a disadvantage of reading extra unneeded data from the disk.
+
+When running ddru_ntfsbitmap, if the boot sector does not have the correct NTFS signature, the boot sector file and logfile are now deleted. This was done to allow retrying with a different input offset or partition, as otherwise you would have to manually delete the files before every retry.
+
+There was a bit of code improvement in handling the return codes of ddresue. Unfortunately on some systems, ddru_ntfsbitmap is still not able to tell if ddrescue was terminated by the user by ctrl-c.
+
+
+Changes in version 2.1
+Ddru_findbad no longer requires gfdisk to run. If gfdisk is not installed then fdisk will be used. However, if gfdisk is not installed then it will not be able to process GPT partitions. This was done to allow for running on systems where gfdisk is not available for installation.
+
+New utility ddru_ntfsfindbad released! This is meant to replace the original ddru_findbad for use with NTFS partitions. It is much faster, has more useful results, does not require 3rd party utilities, and has a better capability to process a damaged filesystem.
+
+
+Changes in version 2.0
+Decided to bring it out of beta and call it a normal stable version. Hopefully it lives up to that.
+
+The requirements were added to the top of the readme file.
+
+A bug was fixed in ddru_findbad that, under certain conditions, would cause a script error when processing the logfile from ddrescue, causing no output. It also now displays the lines of logfile on the screen as it processes them so it doesn't look "hung" during that stage of the processing.
+
+Some code changes were made to ddru_ntfsbitmap to allow for better portability. It will now compile on MAC OS X (assuming the GCC compiler has been installed). Please note that it has not at all been tested on a MAC, only compiled.
+
+Note that I use XUbuntu for my testing. Although I may try to keep the C programs portable and able to compile and (hopefully) run on other linux/unix based systems such as a MAC, the bash script program ddru_findbad will most likely NEVER run on a MAC, as it makes calls to third party software that I do not believe are available for OS X.
+
+
+Changes in version 1.99-beta2
+
+There were improvements to the main documentation, and also a new section added called Important Notes.
+
+A new option "--mftdomain" has been added to ddru_ntfsbitmap, to allow recovering the MFT separate.
+
+A change was made to ddru_ntfsbitmap: the output file __mftbitmap has been renamed to __mftshort, and now contains the first 16 MFT entries (16KB) instead of just 1KB for the bitmap entry.
+
+A change was made to ddru_ntfsbitmap: the output file nftsbitmap_rescue_report.log now also contains ddrescuelog output from the domain file, and from the mft domain file.
+
+A change was made to ddru_ntfsbitmap to fix a potential bug: when using the --inputoffset option the domain file did not include any disk space after the NTFS partion if there was any. This has been fixed.
+
+
+Changes in version 1.99-beta1
+
+The packaging is completely changed, it now uses "make" for installation.
+
+It has evolved into a multi-tool program, instead of just a single utility program.
+
+The original ddrutility has been renamed to ddru_findbad. It has also had some documentation changes and improvements. There were also a few program improvements.  It no longer includes non-tried (?) areas as bad. If it does not find any bad/non-split/non-trimimed areas in the logfile, it will now exit instead of producing file not found errors.
+
+A new tool "ddru_ntfsbitmap" has been added. It is used to extrat an NTFS bitmap file, and then create a domain file to be used with ddrescue, so that only the used portion of the partition is copied.

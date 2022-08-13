@@ -1,0 +1,36 @@
+Known bugs:
+
+  * There are compatabilty issues with newer versions of Linux. The program currently will not work in Ubuntu 22.04, it will give a libusb error. Also, the virtual driver of the pro version will not work on Linux kernels newer than 5.11, 5.13 may work, but 5.15 will not. It is unclear when or if these issues will be resolved.
+
+  * Direct USB mode does not work with card readers. It is unclear when or if this will be resolved.
+
+  * There may still be some text that is not translated when choosing a different language. Some of it will stay that way due to the nature of the program. If any important text is not translated, it will be taken care of when it is found.
+
+  * The language translation uses Google Translate, so the translation will always have flaws and never be perfect.
+
+
+
+Known issues (not considered program bugs):
+
+  * In version 1.8.1 there was a small change in the installer name (the "-" dash was changed to a "." dot.) When trying to install a newer version using the deb package, it will fail if a version with the older name is installed. The solution is to remove the old version first with the following command:
+
+  sudo dpkg --remove hddsuperclone-free
+
+  After that, you should be able to install the new version. There may be a similar issue with the rpm installer, but I am not familiar with that family of Linux. The uninstall command would obviously be different.
+
+  * It has been reported that in regular Ubuntu with the Unity desktop, the program menu bar may not show up. This has been reported for the LTS versions 14.04 and 16.04. I have not been able to reproduce this using a live CD, so it may be limited to OS installation. A quick Google search finds issues with the menu bar in those versions, and possibly others. Just another reason for me to hate the Unity desktop. My suggestion is to switch to the Gnome desktop, or better yet, just use one of the other flavors of ubuntu (lubuntu, xubuntu, kubuntu). Unity desktop sucks!
+
+  * The RPM installers had a bug in that they will likely give an error with "conflicts with file from package filesystem". This is something created from the program (FPM) that is used to create the RPM installer file. The solution is to add the --replacefiles option to the RPM command when installing. An example is below. Make sure to change the file name as needed.
+
+  sudo rpm -ivh hddsuperclone-2.1.8-1.x86_64 --replacefiles
+
+  This issue has been resolved, and the 2.1.8 version installers have been updated. Future versions should not have this issue.
+
+
+
+I cannot reproduce all results, so when reporting an issue please report all exit codes and messages so that I can better understand what may be happening so that improvements can be made. If you just say that it isn't working right, that is not very helpful.
+
+You can report bugs to:
+sdcomputingservice@gmail.com
+
+Please provide as much information as possible.

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - NTFS Tools</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="ntfstools"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">TOC</a> &middot; <a href="howto.html">Work</a> &middot; <a href="menu.html">Menu</a> &middot; 
+<a href="menu_tools.html">Tools</a>
+<hr />
+<h3>NTFS Tools</h3>
+<p>
+<strong style="color:#ff0000;">Warning!</strong>
+The use of NTFS Tools on incompatible NTFS volume may damage the file system.
+Do not use the tools if the program does not recognize file system properly or you are not sure if it is.
+<br/> 
+Never execute the commands on the system volume 
+(where operating system files are located)
+otherwise it will be damaged.<br/>
+<a href="lockvolumes.html">Volume locking</a> is performed when writing to volumes. 
+After executing the commands you should check the volume with the system utility <span class="tt">chkdsk</span>.<br/>
+It is not recommended to create file names with special symbols.<br/>
+</p>
+<p>
+<a href="openvolume.html">Open NTFS volume</a>
+and enter the necessary directory in the <a href="filepanel.html">file panel</a>
+before using tools.
+</p>
+<div class="l">
+<h4 id="createfile">Copy File</h4>
+<p>
+Copy, overwrite, or append file to the <a href="openvolume.html">opened NTFS volume</a> bypassing NTFS system driver.
+</p>
+<p>
+ Open destination directory in the <a href="filepanel.html">file panel</a> to copy file to.<br />
+ Call the command from menu.<br />
+ Select the source file.<br />
+ Enter destination file name.<br/>
+ Choose either to overwrite or append file if the destination file exists.
+</p>
+<p>
+A continuous free space on the volume is required for writing the file.
+</p>
+
+<h4 id="createdir">Create Directory</h4>
+<p>
+Create a directory on the <a href="openvolume.html">opened NTFS volume</a> bypassing NTFS system driver.
+</p>
+<p>
+Directory is being created in the current folder
+of the <a href="filepanel.html">file panel</a>.
+</p>
+
+<h4 id="removedir">Remove File/Empty Directory</h4>
+<p>
+Remove selected file or empty directory from <a href="openvolume.html">opened NTFS volume</a> bypassing NTFS system driver.
+</p>
+
+<h4 id="repairdir">Repair Directory INDX-records</h4>
+<p>
+Repair NTFS directory currently opened in the <a href="filepanel.html">file panel</a>.
+</p>
+</div>
+</div></div>
+</body>
+</html>

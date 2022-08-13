@@ -1,0 +1,993 @@
+\input texinfo   @c -*-texinfo-*-
+@c %**start of header
+@setfilename hddsuperclone.info
+@settitle HDDSuperClone Manual
+@c %**end of header
+
+@set UPDATED 5 March 2017
+@set VERSION 1.8
+
+@copying
+This manual is for HDDSuperClone (version @value{VERSION}, @value{UPDATED}).
+
+Copyright @copyright{} 2016, 2017 Scott Dwyer.
+
+@quotation
+This manual is free documentation: you have unlimited permission to copy and
+distribute it.
+@end quotation
+@end copying
+
+@dircategory Freeware/Proprietary
+@direntry
+* HDDSuperClone: (hddsuperclone).       Advanced disk cloning tool
+@end direntry
+
+@ifnothtml
+@titlepage
+@title HDDSuperClone
+@subtitle for version @value{VERSION}, @value{UPDATED}
+@author Scott Dwyer (@email{sdcomputingservice@@gmail.com})
+@page
+@vskip 0pt plus 1filll
+@insertcopying
+@end titlepage
+
+@contents
+@end ifnothtml
+
+@node Top
+@top HDDSuperClone
+
+This manual is for HDDSuperClone (version @value{VERSION}, @value{UPDATED}).
+
+Home page: www.sdcomputingservice.com
+
+@menu
+* Introduction::
+* Important Notes::
+* Installing::
+* Theory of Operation::
+* Usage::
+* Exit Codes::
+* Understanding the Display::
+* Progress Log Structure::
+* Tips and Tricks::
+* WARNING::
+* How to Hide a Drive from the OS::
+* Reporting Bugs::
+* Index::
+@end menu
+
+@node Introduction
+@chapter Introduction
+@cindex introduction
+
+HDDSuperClone is an advanced disk cloning tool for Linux. It is used to clone a
+disk to another disk or image file. It uses multiple copy phases to achive the
+best possible results. It uses a prgresss log file to log the progress of the
+recovery, and can be stopped and resumed at any time. It has an advanced
+skipping algorithm that is designed to self adjust to skip out of a bad head as
+efficiently as possible. It has many advanced command line options, but most
+average users should not need to use those options in most cases.
+
+
+
+
+
+
+@node Important Notes
+@chapter Important Notes
+@cindex Important Notes
+
+@noindent
+This is an advanced utility, and it is very possible to send destructive
+commands to a drive. Please make sure you know what you are doing before using
+this software. I am in no way responsible for any data loss or damage caused by
+using this software. Use it at your own risk!
+
+While I do my best to ensure that this software does what it is supposed to
+without flaw, there is always the possibility of a programming error on my
+part. If an error is found, I will fix it as soon as possible. However, I
+assume no responsibility for any data loss or damage caused by any programming
+error. You are responsible for testing any commands and scripts before using
+them on critical data.
+
+Note that when using passthrough mode that there is normally a buffer limit of
+524288. There is a limit stored at /sys/block/DEVICE/queue/max_sectors_kb,
+where "DEVICE" is the device you are reading (example
+"/sys/block/sda/queue/max_sectors_kb"). The number stored here is referenced in
+KB, and the default for a hard drive is usually 512 (meaning 512KB). This
+number is smaller for a USB connected drive. If you attempt a command with a
+buffer size greater than this you will get an error message that you exceeded
+the cluster size limit, and the cluster size will be reduced to the allowed
+limit.
+
+SPECIAL NOTE FOR USB ATTACHED DRIVES:
+
+USB attached drives are not always predictable. This is dependent on the USB
+bridge/adapter. The USB bridge/adapter may not send the proper response when
+there are errors or faults on the device. This could mean that the program will
+continue when it should exit, and all reads will be bad (or worse, all reads
+could be considered good when there is not actually data being read!). It is
+possible that it will not report any errors at all even for bad sectors, making
+it look like all the data is being recovered when it is not. It may also be
+possible that it may send a respone indicating a fault when there isn't one,
+causing the program to exit. While I have done my best to properly detect the
+condition of the device, there is nothing I can do about adapters that respond
+in odd ways. If possible, it is always recommended to attach the drive directly
+to the computer via IDE/SATA connection. Use USB adapters at your own risk!
+
+
+
+
+
+@node Installing
+@chapter Installing
+@cindex Installing
+
+HDDSuperClone is supplied as an executable, with separate ones for 32bit and
+64bit. You CANNOT run the 32bit on a 64 bit system and vice versa (you may get
+an odd file not found error if you try).
+
+HDDSuperClone now has DEB (Debian/Ubuntu) and RPM (RedHat/Fedora) installers
+available. If you have downloaded the appropriate installer then you should
+just be able to double click on it to start the installation process. This
+method should even work on many live CDs, but not all. If you are unable to use
+one of the installers, then you will need to follow the instructions below to
+install from the tar.gz file or to run without installing.
+
+If you have downloaded the tar.gz file, then the easiest way to get started is
+to copy the tar.gz file to a flash drive, and then use simple copy and paste to
+put it in the Home folder that can be found on the desktop of the Linux
+install. When you open a terminal it should default to the same Home folder
+that is on the desktop.
+
+To extract hddsuperclone, open a terminal and use the following commands
+(replacing the -x.x-x.x.-xxx with proper version number and architecture):
+@example
+gunzip hddsuperclone-x.x-x.x.-xxx-free.tar.gz
+tar xf hddsuperclone-x.x-x.x.-xxx-free.tar
+@end example
+
+Then navigate to the proper directory:
+@example
+cd hddsuperclone-x.x-x.x.-xxx-free
+@end example
+
+The following method to install HDDSuperClone will not only work on a Linux
+installation, but you can use the same method when booting from a live CD. The
+only difference is that every time you use a live CD, you will need to perform
+these steps after each boot.
+
+To install hddsuperclone, use the following command:
+@example
+sudo make install
+@end example
+
+The "make install" command needs to be run as root, which is why "sudo" is
+included in this example. Your sysem may use a different command, or you may
+already be root. If it is not ran as root, then you will likely get permission
+errors and the install will not be complete. Note that you can also uninstall
+it with the command "sudo make uninstall". There is now also an uninstaller
+script that can be ran by typing "sudo hddsuperclone-uninstall.sh".
+
+You must run hddsuperclone as root. For Ubuntu you would use "sudo" in front of
+the command:
+@example
+sudo hddsuperclone
+@end example
+Please consult the documentation for your version of Linux for information on
+how to run as root.
+
+
+To run it without installing, you must be in the same directory as
+hddsuperclone. Note that some versions of Linux will not allow you to run a
+program from certain external devices (such as a FAT32 USB drive). Example to
+run it from the current directory:
+@example
+sudo ./hddsuperclone
+@end example
+
+
+You may need to change the permissions on the file so that you have the rights
+to run it. The following command should do that:
+@example
+sudo chmod a+x hddsuperclone
+@end example
+
+
+If you are booted from a live CD that does not allow installing with make
+(maybe make does not exist) and you are trying to run it from a USB drive and
+are getting a permission error, you can copy the executable to the home folder
+and run it from there. Note that if using a live CD the home folder exists in
+ram and will be cleared on a reboot. The following example assumes you are in
+the folder on the USB drive that contains hddsuperclone. The first command
+copies it to the home folder, the second command gives permission to execute,
+and the third command runs it:
+@example
+sudo cp hddsuperclone /home
+sudo chmod a+x /home/hddsuperclone
+sudo /home/hddsuperclone
+@end example
+
+
+
+
+@node Theory of Operation
+@chapter Theory of Operation
+@cindex Theory of Operation
+
+HDDSuperClone uses multiple copy phases to achive the best possible results. To
+stop the program at any time hit ctrl-c. A progress log file is used to keep
+track of recovery progress, and when resumed will pick up where it left off,
+unless you reset the status, or in some cases if you change the command line
+options you may alter how it resumes.
+
+Phase 1 is a copy pass forward with skipping. Phase 2 is a copy pass backward
+with skipping. Together they offer the best attempt to get the most good data
+first and fast from the good areas of the drive. The skipping is based on read
+errors and will skip when a read error is encountered, and self adjusts to try
+to skip out of a bad head in about 7 read errors. A read that takes longer then
+the --skip-threshold value will also trigger a skip event. The skipping starts
+out at --skip-size, and increases as needed per the algorithm, unless it hits
+--max-skip-size in which case it is reset back to --skip-size. These two passes
+are the money passes. If after these two passes you don't have a percentage
+complete in the upper 90's then you likely have a weak/damaged head, and the
+next phases could take a long time to complete.
+
+Phase 3 is a copy pass forward with skipping. But the skipping size for this
+pass does not self adjust, and skipping is based on the read rate instead of
+read errors. If the read rate is below the value of --rate-skip for two
+consecutive reads, it skips ahead the amount of --skip-size.
+
+Phase 4 is a copy pass forward without skipping. This gets all the remaining
+non-tried areas.
+
+All failed blocks larger than one sector (LBA) in size are marked as
+non-trimmed by the first 4 phases. Failed blocks that are one sector in size
+are always marked as bad.
+
+Trimming reads each non-trimmed one sector at a time forward until a read
+error, and then backward until a read error. Any trimmed blocks larger than one
+sector are marked as non-scraped.
+
+If trimming is turned off, then 1 or 2 dividing copy passes are done instead.
+The default is for only one dividing pass, to activate the second pass use the
+--do-divide2 option. If there is only one dividing pass, then it reads the
+non-trimmed blocks with the cluster size / 8, and marks the failed blocks as
+non-scraped. If the --do-divide2 option is used, then the first dividing pass
+reads non-trimmed blocks with the cluster size / 4. The second dividing pass
+reads non-divided blocks with the cluster size / 16. The first dividing pass
+marks failed blocks larger than one sector as non-divided, the second pass
+marks them as non-scraped. Trimming has been found to be more efficient than
+dividing with scsi-passthrough mode. Dividing can be more efficient with
+ata-passthrough mode (not in the free version as the marking of reported bad
+sectors is disabled) and the direct modes (more so with direct mode when using
+timers), but how efficient depends on how the drive is reacting.
+
+Scraping reads the non-scraped blocks one sectors one at a time forwards.
+Failed sectors are marked as bad.
+
+
+
+
+
+@node Usage
+@chapter Usage
+@cindex Usage
+
+HDDSuperClone must be run as root.
+
+If no drive is chosen, then all possible available drives will be listed. In
+passthrough mode, the drives will have the form of /dev/sdx, followed by model
+and serial. Note that in SCSI passthrough mode (default), the model and serial
+will not be the same as from an ATA identify device command, as they will be
+what is returned from the scsi inquiry command. If the drive did not respond to
+identify device / inquiry command, then the returned sense code will be shown
+instead of model/serial.
+
+The format for running hddsuperclone is:
+
+@example
+hddsuperclone [@var{options}]
+@end example
+
+
+HDDSuperClone supports the following options:
+
+@table @samp
+@item -h
+@itemx --help
+Print an informative help message describing the options and exit.
+
+@item -v
+@itemx --version
+Print the version number and exit.
+
+@item -V
+@itemx --verbose
+Show some additional information when running. There are multiple levels of
+verbose, -VV would be level 2. Level 1 will add a message with the highest
+recent read time above the display. Note that higher levels of verbose are
+mostly for my troubleshooting purposes.
+
+@item -D
+@itemx --debug
+Creates a file named "hddsuperclone.log" in the current directory and writes
+some information to it. This is mostly for my troubleshooting purposes. This
+log can grow to large size very quickly, so it is not recommended to use it
+unless you are directed to do so for troubleshooting.
+
+@item -Q
+@item --quiet
+Surpresses some of the output. Not sure if this is really useful at this time,
+as it is more of a carry over from hddsupertool.
+
+@item -f  <file>
+@itemx --progressfile  <file>
+This is the progress log file used for resuming the recovery. This file is
+written every 30 seconds during the recovery. If you do not set this then you
+will be asked to set it.
+
+@item --importdd <file>
+This will import a ddrescue mapfile (logfile) and convert and save it as the
+progress log file, and then exit. It is possible for the blocks in the ddrescue
+mapfile to not be aligned with the sector size, and if this is the case then
+adjustments are made during the import. Any area that is adjusted and cannot be
+sure which type it should be is marked as non-tried. This should only be small
+1 or 2 sector sized areas where the block misalignments occur. Example:
+@example
+hddsuperclone -f progress.log --importdd mapfile.logfile
+@end example
+
+@item --exportdd <file>
+This will export a ddrescue mapfile (logfile) every time the progress log file
+is written. Both the progress logfile and the mapfile export are written. The
+exported mapfile can be used with ddrescueview in real time to see a visual
+representation of the recovery progress.
+
+@item --repair-log
+This will attempt to repair the progress log file in the event that it is
+incomplete, damaged, or otherwise corrupt, and then exit. A source drive must
+be selected as the log end is compared to the size of the drive. Any repaired
+areas where the status cannot be known for sure are marked as non-tried. You
+should not normally need to use this option.
+
+@item --reset-log
+This will reset the position to 0, the current status to non-tried, and will
+change all unfinished blocks in the log to a status of non-tried. This will
+also reset all skipping data. This option is useful if you need to make major
+changes to the settings and need to start over, but don't want loose the status
+of any finished blocks.
+
+@item --no-log-backup
+By default every time the progress log file is written, the current file is
+renamed with a ".bak" extension, and then the new file is written. This is to
+help prevent the possible loss of the progress log file due to unforeseen
+circumstances. Using this option will turn off the creation of the backup file.
+
+@item --domain <file>
+Use a domain file to limit the recovery area to a domain. The domain file must
+be in the same format as the standard progress log file. Areas marked as
+finished in the domain will be recovered. Areas marked as anything else will
+not be tried. The domain can be loose, meaning that there can be gaps and the
+start and end positions are not limited.
+
+@item --domaindd <file>
+Use a ddrescue style domain file to limit the recovery area to a domain. The
+domain file must be in the same format as the standard ddrescue map (log) file.
+Areas marked as finished in the domain will be recovered. Areas marked as
+anything else will not be tried. The domain can be loose, meaning that there
+can be gaps and the start and end positions are not limited. The use of a
+ddrescue style domain allows utilization of such programs as ddru_ntfsbitmap
+and Partclone to produce a domain file to allow recovering only the used
+portion of a disk.
+
+@item --fill-zero
+Fill all non-finished areas of the destination drive or image with zeros, and
+then exit. Any area that is not marked as FINISHED will be filled. You must
+supply the progress log file, but the source is not required for this command.
+This command will ignore any domain file (the domain file will have no effect).
+The options --input-offset, --output-offset, and --size do affect this command,
+as it will only fill areas that are within the limits set by those options if
+they are set. Please note that this is not a resumable command. If you stop it,
+when started again it will start from the beginning. To resume where you left
+off would require manually setting the --input-offset.
+
+@item --fill-mark
+Fill all non-finished areas of the destination drive or image with a marking
+pattern, and then exit. Any area that is not marked as FINISHED will be filled.
+You must supply the progress log file, but the source is not required for this
+command. This command will ignore any domain file (the domain file will have no
+effect). The options --input-offset, --output-offset, and --size do affect this
+command, as it will only fill areas that are within the limits set by those
+options if they are set. Please note that this is not a resumable command. If
+you stop it, when started again it will start from the beginning. To resume
+where you left off would require manually setting the --input-offset. The
+format for the fill pattern is as follows: At the start of every LBA will be
+the text "HDDSUPERFILLMARK", followed by a space, and then the status of the
+block according the progress log (NON-TRIED, NON-TRIMMED, NON-SCRAPED,
+NON-DIVIDED, BAD). There will be another space and then the number of the LBA
+as text proceeded by "0x" to indicate the number is in hex (example 0x1a2b3c).
+There will be a few more spaces, and then the rest of the LBA block will be
+filled with a repeating hex pattern of dd ee aa dd bb ee ee ff.
+
+@item -s <disk>
+@itemx --source <disk>
+For passthrough mode, the source disk to recover. If you do not set this, you
+will be presented a list of drives to choose from.
+
+@item -t <disk / file>
+@itemx --target <disk / file>
+The target disk or image file where the recovery is to be copied to. If you do
+not set this, you will be presented a list of drives to choose from. Only
+drives that are available to the operating system are available. If you wish to
+use an image file, you must set it with this option.
+
+@item --reset-status
+Resets the current status and position back to the default starting point of
+non-tried. This can be helpful if your settings cause runaway skipping and
+there have been skip reset events.
+
+@item --no-phase1
+Skip copy phase 1.
+
+@item --no-phase2
+Skip copy phase 2.
+
+@item --no-phase3
+Skip copy phase 3.
+
+@item --no-phase4
+Skip copy phase 4.
+
+@item --no-trim
+Skip trimming phase.
+
+@item --no-divide
+Skip dividing phase.
+
+@item --do-divide2
+Perform two dividing phases instead of just one. This option has no effect if
+trimming is left enabled. See the section on theory of operation for more
+information.
+
+@item --no-scrape
+Skip scraping phase.
+
+@item --reverse
+All operations are done in the opposite direction. This means that most of the
+operations are done in reverse, but since phase 2 is normally in reverse, when
+this option is used phase 2 is a forward pass. If you only want to read in
+reverse then also use the --no-phase2 option. While trimming it done opposite,
+it still reads in both directions, so if you REALLY only want to read in
+reverse then also use the --no-trim option.
+
+@item -c <LBA>
+@itemx --cluster-size <LBA>
+Number of sectors (LBA) per read block in copy phases 1-4, default 128.
+
+@item --retries <number>
+Number of retries on bad sectors.
+
+@item -i <LBA>
+@itemx --input-offset <LBA>
+LBA offet to start reading from, default 0.
+
+@item -o <LBA>
+@itemx --output-offset <LBA>
+LBA offset of target, default is input-offset. This is considered an advanced
+option. Under normal circumstances you should not use this option. Do not use
+this option unless you know what you are doing! Using this option improperly
+could cause total corruption of data on the destination!
+
+@item -z <LBA>
+@itemx --size <LBA>
+LBA to read, default is until the end of the drive.
+
+@item -x <B/s>
+@itemx --exit-on-slow <B/s>
+Rate in bytes per second for exiting on slow reads, the default is -1
+(disabled). This option only applies for copy phases 1 and 2. If the
+--exit-slow-time has not been set, and the read rate is below this setting for
+two consecutive rate updates, then the program will exit. If the
+--exit-slow-time has been set, and the read rate is below this setting for
+longer than the slow timer value, the program will exit. The program will exit
+with the exit code specified for the exit on slow condition (see the section on
+exit codes). This option also increases the skip-threshold to a very high
+setting so that it will not induce skipping, unless the skip-threshold setting
+is set manually on the command line. This option is meant for drives that
+suffer from a slow responding issue, where power cylcing the drive when it
+becomes slow will seem to bring it back up to speed for a short time.
+
+@item -X <sec>
+@itemx --exit-slow-time <sec>
+This is an optional timer setting in seconds to complement the --exit-on-slow
+option, the default is -1 (disabled). If set, this is the number of seconds of
+slow reading before the program will exit.
+
+@item -j <B/s>
+@itemx --rate-skip <B/s>
+Rate for rate skipping pass in bytes per second, the default is 50000 bytes per
+second. This option only applies to copy phase 3. If the rate is below this
+setting for two consecutive rate updates, then the position skips ahead by the
+starting skip size.
+
+@item -k <LBA>
+@itemx --skip-size <LBA>
+Starting skip size in LBA, the default is 4096 LBA. This option only applies to
+copy phases 1, 2, and 3. In copy phases 1 and 2 this number can grow to adjust
+to the head skipping algorithm. In copy phase 3 this number stays fixed.
+
+@item -K <LBA>
+@itemx --max-skip-size <LBA>
+Maximum skip size in LBA. The default is calculated as drive size divided by
+1000, or 1 GB, which ever is smaller. This option only applies to copy phases 1
+and 2. If the actual current skipping size grows to this number, then the
+starting skip size is reset to the original. This is an attempt to help prevent
+runaway skipping. If you start to see the skip reset count grow, then you will
+need to further analyze the situation and figure out the best settings to use.
+
+@item --skip-threshold <ms>
+The time in milliseconds for a read that will trigger a skip event, the default
+is 2000 (2 seconds). This option only applies to copy phases 1 and 2. This is
+meant for drives that have very slow reading areas but not enough if any errors
+in those areas to trigger the skipping algorithm. Any read that takes longer
+than the value of the setting will trigger a skip event. Note that for drives
+that have a "slow responding" issue this will cause runaway skipping and you
+will see the skip reset count increase. If this happens you may need to use the
+--reset-status option and start over with adjusted options. To disable this
+threshold just set it to a high number such as 60000 (60 seconds).
+
+@item --scsi
+Use SCSI passthrough mode. This is the default setting for the FREE version.
+This is also the ONLY mode that can work with a USB attached device.
+
+@item --ata
+Use ATA passthrough mode. This can have a benefit of bypassing some of the
+kernel driver retries that may be performed in scsi mode. While this may list a
+USB attached drive, a USB attached drive cannot be cloned in ata mode.
+
+
+
+
+
+
+@end table
+
+Example usage:
+@example
+hddsuperclone -s /dev/sda -t image.dd -f progress.log
+@end example
+
+
+
+
+
+@node Exit Codes
+@chapter Exit Codes
+@cindex Exit Codes
+
+HDDSuperClone can produce specific exit codes for certain conditions. There
+should also be an exit message that may explain the error more specifically.
+The exit codes are as follows:
+
+An exit value of 0 indicates a normal exit with no errors.
+
+An exit value of 1 indicates a general error.
+
+An exit value of 2 indicates an error with the logfile.
+
+An exit value of 3 indicates an error with the output device / file.
+
+An exit value of 4 indicates a general error with the input device.
+
+An exit value of 15 indicates an unknown internal program error.
+
+An exit value of 16 indicates the progam exited because of slow reading based
+on the value of the exit-on-slow option.
+
+An exit value of 32 indicates a device fault has been detected, and the input
+device requires a power cycle.
+
+An exit value of 64 or greater indicates some sort of major IO error with the
+input device, likely requiring a power cycle.
+
+As a gerneral rule, an exit value of 32 or greater means that there is some
+sort of fault or error with the device which likely requires the device to be
+power cycled before it can be accessed again.
+
+
+
+
+@node Understanding the Display
+@chapter Understanding the Display
+@cindex Understanding the Display
+
+Below is a typical display output:
+
+@example
+
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+     Source:   /dev/sdb        Destination: /dev/null
+  Total LBA:    2097152        LBA to read:    2097152
+   Run time: 0:00:00:07        Remaining:   0:00:00:00
+       Rate:          0 B/s    Recent: 0 B/s   Total: 153 MB/s
+  Skip size:          0  Skips: 0  Runs: 0  Resets: 0  Run size: 0
+   Position:          0        Status:   Finished
+   Finished:    2097152 (1 areas 100.000000%)
+  Non-tried:          0 (0 areas 0.000000%)
+Non-trimmed:          0 (0 areas 0.000000%)
+Non-divided:          0 (0 areas 0.000000%)
+Non-scraped:          0 (0 areas 0.000000%)
+        Bad:          0 (0 areas 0.000000%)
+exitcode= 0  othercode= 0
+The rescue is finished using the current settings
+
+@end example
+
+The top 3 lines are a sample of data from the last good read since the last
+display update. If there was not a successful read since the last display
+update, then this will be all zeros.
+
+Source is the source drive to be recovered. Destination is the destination
+drive or file where the data is to be recovered to.
+
+Total LBA is the reported size of the device in LBA. LBA to read is the
+selected read size. By default it will be the same as the total size, unless
+you selected a different size on the command line. When using a domain file
+there will be a second number in parentheses next to the LBA to read. This is
+the LBA to read as adjusted by the domain. Any data that is not in the domain
+will stay marked as non-tried in the display.
+
+Run time format is days:hours:minutes:seconds. Remaining is the estimated time
+remaining and has the same format as the run time. This estimate is based on
+about the last 5 minutes of run time. There is no way to get this totally
+accurate, it is a calculated best guess. If there are a lot of errors or a
+large bad area then this does not start to get accurate until it is several
+minutes into the trimming phase.
+
+Rate is the successful read rate since the last display update. Recent is the
+average rate of about the last 5 minutes. Total is the average rate since the
+program was started.
+
+Skip size is the current base skip size. This can grow if the head skipping
+algorithm is triggered. Skips is the total number of times the program has
+skipped since the program was started. Runs is how many skip runs have happened
+since the program was started. If you see the run count growing, it likely
+means there is a weak/damaged head. Resets is the number of times the skip size
+had to be reset. Under normal circumstances the reset count should remain at
+zero. If it is greater than zero it is an indication of a problem with either
+too large of an initial skip size, too small of a max skip size, or it is not
+reading much if any data, and you may need to adjust the skip size and max skip
+size to handle a special condition. Run size is the size of the last skip run,
+which can be useful in estimating the read size of the head.
+
+Position is the current position in LBA. Status shows the current copy phase
+operation.
+
+Finished, non-tried, non-trimmed, non-divided, non-scraped, and bad show the
+number of LBA that exist for each status type. It also shows the number of
+separate areas for each, and the percentage of each based on the LBA to read.
+
+Exitcode is the exit code the the progam exited with. Othercode is more for my
+troubleshooting purposes.
+
+Display changes for fill mode:
+In fill mode the LBA to read will be named instead "LBA to fill:". This is the
+total number of LBA that is to be filled. Also, the line with the skipping data
+will be replaced with "Filled:" which is the current number of LBA that have
+been filled. It will be followed by a percentage which is the percent that has
+been filled as compared to the LBA to be filled.
+
+Display changes for retries:
+When performing retries, the line with the skipping data will be replaced with
+"Retried:" which is the number of LBA that have been retried in the current
+retry pass, followed by "Remaining retry passes:" which is the number of
+remaining retry passes including the current one.
+
+
+
+
+
+
+@node Progress Log Structure
+@chapter Progress Log Structure
+@cindex Progress Log Structure
+
+All of the lines that begin with the character "#" are comment lines. Any line
+that does not start with "#" is a data line. The data in the data lines is in
+hexadecimal format.
+
+The first data line contains the current position in LBA, and current status.
+The possible status types are as follows: @*
+0x0 = Copy phase 1 @*
+0x2 = Copy phase 2 @*
+0x6 = Copy phase 3 @*
+0x8 = Copy phase 4 @*
+0x10 = Trimming @*
+0x20 = Dividing 1 @*
+0x22 = Dividing 2 @*
+0x30 = Scraping @*
+0x40 = Retrying @*
+0x7f = Finished @*
+
+The rest of the data lines contain the current progress status of the recovery.
+There are three basic columns, and two additional status information columns.
+Each line contains information for a block.
+
+The first column is the starting LBA of the block, and the second column is the
+size in LBA of the block. The third column is the status of the block. The
+possible status types are as follows: @*
+0x0 = Non-tried @*
+0x10 = Non-trimmed @*
+0x20 = Non-divided @*
+0x30 = Non-scraped @*
+0x40 = Bad @*
+0x7f = Finished @*
+
+The fourth column may contain some additional information about two separate
+items, and is three bytes wide (1 word and 1 byte). The low order byte contains
+skipping information used by the program during the first two copy phases to
+adjust the head skipping algorithm. The high order word contains information
+about other errors or conditions. With passthrough a value other than 0
+indicates that some other error happened such as a device fault or a host
+adapter error.
+
+The fifth column will contain the return status of a bad read. In SCSI
+passthrough mode this will be 3 bytes. In order from left to right (high to
+low) those bytes are the sense-key, asc, and ascq. For the other ATA modes this
+will be 2 bytes. In order from left to right (high to low) those bytes are the
+status register, and the error register. With passthrough if the value in this
+column is a large number such as 0xffffffffffffffff, it is an indication that
+there was an error and no sense data was present. In ATA passthrough mode there
+may not always be valid ATA return data. In this case the sense data will be
+used instead.
+
+
+
+
+
+
+@node Tips and Tricks
+@chapter Tips and Tricks
+@cindex Tips and Tricks
+
+Here are a few tips and tricks to help you along.
+
+HDDSuperClone needs to be run as root. By doing so any files or folders that it
+creates will be owned by root. This can make it difficult to edit or delete
+files as a user (you will get permission errors). The terminal command "chmod"
+will help you with this. It is recommended that you read up on this command and
+learn how to use it.
+
+
+There may be times when it would be nice to log all screen output to a file.
+Someone just recently pointed me to the "script" function. If you type "script
+--help" on the command line it will show the possible options. By default it
+will save the log to the file "typescript".
+
+The following example would probably be the best way to use the function. This
+will log all screen output for that run of hddsuperclone to the file named
+hddsuperclone.log, and stop logging when hddsuperclone exits. If the file
+exists it will be overwritten.
+@example
+script -c "sudo hddsuperclone" hddsuperclone.log
+@end example
+
+
+HDDSuperClone can be run from a live CD. When running from a live CD it runs in
+ram, and all data is lost when you reboot! You are responsible for making sure
+that you copy any data you wish to keep to an external drive when running from
+a live CD.
+
+
+
+
+
+@node WARNING
+@chapter WARNING
+@cindex WARNING
+
+DIRECT IO WARNING!
+
+******
+Note that direct IO is only available in the PRO version.
+******
+
+This program has two
+modes, passthrough and direct IO (either IDE or AHCI). Passthrough expects the
+drive is recognized by the Linux OS. When using passthrough you are using the
+Linux driver, so the driver will be aware of the activity and there should be
+no conflicts. However, if you choose to use direct IO mode, you are bypassing
+all Linux OS drivers! This could lead to conflicts, and undesired results if
+the drive was visible to the OS. HDDSuperClone will not let you select a drive
+from the menu that is visible to the OS. You must follow the method described
+in the section on how to hide a drive from the OS.
+
+In IDE mode it is also possible to work with a drive on the same controller as
+another (possibly a CD/DVD drive you are booting from). This is an extremely
+bad idea! There is a safety warning if this condition is detected. Look at the
+port information in the drive list to see if the drive may be sharing the same
+controller. At this time CD/DVD drives are not listed by model and serial, but
+will show up as patapi device. So if you see another device that has the same
+port info except the last number (device select, either 0 or 1 ), then there is
+another device on the same controller.
+
+Also with IDE, if the device is a slave (device select is 1), there may be
+unexpected results with return status in the event of an error, or other
+unknown issues (safety warning in place for this also). It is highly
+recommended that the device be a master on the controller.
+
+The warnings will make you type the word DANGEROUS to continue for each
+condition. If you do choose to continue, you are on your own for any bad things
+that may happen! If you have to type it more than once for multiple conditions,
+you are really pushing your luck!
+
+It should be noted that if you manually select the device by setting all of the
+port information on the command line, none of the safety checks are performed,
+and you are on your own.
+
+If you do not fully understand these potential issues, then you should not use
+direct IO!
+
+YOU HAVE BEEN WARNED!
+
+
+
+
+
+@node How to Hide a Drive from the OS
+@chapter How to Hide a Drive from the OS
+@cindex How to Hide a Drive from the OS
+
+******
+Note that hiding a drive only applies to the PRO version, as the other versions
+do not have direct IO access.
+******
+
+When using direct IDE mode (--direct) or direct AHCI mode (--ahci), the drive
+must be hidden from the OS for proper operation. The method below requires the
+Linux kernel to be 3.13 or newer. Ubuntu 14.04 has kernel 3.13, so it or any
+newer version of Ubuntu should work. If you are using a Linux distribution
+other than an Ubuntu flavor, you are responsible for knowing the kernel
+version.
+
+Note that when using direct IDE mode with either actual IDE drives or SATA
+drives with the bios set for IDE, if boot the OS without the drive plugged in /
+powered up, then Linux will not see it. This is an alternative method that
+seems to work the same, but it is still recommended to hide the drive.
+
+The first thing you need to know is that this is based on the physical port
+that the drive is connected to. So once you disable that port you can plug any
+drive into it and Linux will not see it (this might not be entirely true for
+AHCI, as it would appear that Linux can tell when a device is plugged in and
+sends at least one command to it, likely an identify device command, but after
+that it leaves it alone). This is true for both IDE and AHCI. However, when
+working with SATA drives, switching between IDE and AHCI modes in the BIOS will
+change the port numbers and you would need to adjust accordingly. I have also
+once experienced the port numbers being different on one boot up, but it looked
+like something did not load properly on that boot, and a reboot put things back
+to normal.
+
+The second thing you need is the number related to that port. To get this you
+need to plug in a good drive to that port and run HDDSuperClone with the proper
+option to list the drives. Below is a sample output from hddsuperclone --ahci:
+
+@example
+1) ata5.00 sda e02a5000 0 e02a5100 ST3120213AS 5LS3NJ70
+2) ata6.00 sdb e02a5000 1 e02a5180 Hitachi HDS723020BLA642 MN3220F30JKX9E
+3) ata7    --- e02a5000 2 e02a5200 no device
+4) ata8    --- e02a5000 3 e02a5280 no device
+5) ata9.00 sdg e02a5000 4 e02a5300 WDC WD2500BEAS-00URT0 WD-WXHY07017481
+6) ata10    --- e02a5000 5 e02a5380 no device
+@end example
+
+Selection number 5 is the drive/port we wish to hide. You can see that the OS
+sees it as /dev/sdg. What we want is the number after the ata, which is 9.00.
+You must use that number to add a kernel boot option to grub, which in this
+case would be:
+
+@example
+libata.force=9.00:disable
+@end example
+
+IMPORTANT NOTE: Don't disable the primary hard drive you are booting from! If
+you did that to your Linux installation you could very well nuke your OS and
+have to repair it.
+
+To add a boot parameter in an Ubuntu live CD:
+
+To get to the grub menu on an Ubuntu live CD you need to press any key as soon
+as the first small logo appears at the bottom of the screen during boot up. If
+the language selection comes up select your language and hit enter. Then hit F6
+for Other Options, and when the options box pops up hit ESC. Now you should see
+a line on the bottom of the screen, just above the F-key options. Use the right
+arrow key to get a cursor flashing and make sure you are at the end of that
+line. Also make sure that Try Ubuntu without installing is highlighted above
+(up and down arrow keys to change). Add the boot parameter (such as
+libata.force=9.00:disable) to the end of the line, and hit enter. Wait for it
+to boot up.
+
+To temporarily add a boot parameter to a kernel of a Linux installation:
+
+1) Start your system and wait for the GRUB menu to show (if you don't see a
+GRUB menu, press and hold the left Shift key right after starting the system).
+
+2) Now highlight the kernel you want to use, and press the e key. You should be
+able to see and edit the commands associated with the highlighted kernel.
+
+3) Go down to the line starting with linux and add your parameter
+libata.force=9.00:disable to its end.
+
+4) Now press Ctrl + x to boot.
+
+To make this change permanent:
+
+1) From a terminal run: sudo gedit /etc/default/grub and enter your password.
+
+2) Find the line starting with GRUB_CMDLINE_LINUX_DEFAULT and append
+libata.force=9.00:disable to its end. For example:
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash libata.force=9.00:disable"
+
+3) Save the file and close the editor.
+
+4) Finally, start a terminal and run: sudo update-grub to update GRUB's
+configuration file (you probably need to enter your password).
+
+On the next reboot, the kernel should be started with the boot parameter. To
+permanently remove it, simply remove the parameter from
+GRUB_CMDLINE_LINUX_DEFAULT and run sudo update-grub again.
+
+After disabling the drive/port you should get a result like this:
+
+@example
+1) ata5.00 sda e02a5000 0 e02a5100 ST3120213AS 5LS3NJ70
+2) ata6.00 sdb e02a5000 1 e02a5180 Hitachi HDS723020BLA642 MN3220F30JKX9E
+3) ata7    --- e02a5000 2 e02a5200 no device
+4) ata8    --- e02a5000 3 e02a5280 no device
+5) ata9    --- e02a5000 4 e02a5300 WDC WD2500BEAS-00URT0 WD-WXHY07017481
+6) ata10    --- e02a5000 5 e02a5380 no device
+@end example
+
+Notice that there is no longer a decimal place after ata9, and there are dashes
+in place of sdg, but the drive is seen by HDDSuperClone as it is listed with
+model and serial. This drive/port is now hidden from the OS, and you may use
+HDDSuperClone to access it.
+
+
+
+
+
+
+@node Reporting Bugs
+@chapter Reporting Bugs
+@cindex Reporting Bugs
+
+It is always possible that there are programming errors in this software. It is
+also possible that there are errors and omissions in this documentation. If you
+report them, they will get fixed. If you don't report them, they will just stay
+the way they are and will not get fixed.
+
+Report bugs to (@email{sdcomputingservice@@gmail.com})
+
+Please include the version number of hddsuperclone. You can find the version by
+running hddsuperclone with the @code{--version} option.
+
+
+
+
+
+
+@node Index
+@unnumbered Index
+
+@printindex cp
+
+@bye
+
+
+

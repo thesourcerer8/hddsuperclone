@@ -1,0 +1,589 @@
+
+
+echo 'Western Digital ROYL fast patch module 0x02 in RAM.'
+echo 'This is to resolve a common WD slow issue, where the drive reads slow.'
+echo 'Definition of the "slow responding issue":'
+echo ' - The drive is reading very slow, but all reads are GOOD.'
+echo 'This may not help any if the reads are bad due to a weak or bad head.'
+echo 'WARNING: THIS IS DANGEROUS AND COULD KILL THE DRIVE!!!'
+echo 'USE AT YOUR OWN RISK!!!'
+echo 'Since this is a RAM patch, it SHOULD be safe, but nothing is guaranteed.'
+echo 'This patch only lasts until the drive is power cycled.'
+
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'WD patch module 02 in ram for temporary instant slow fix'
+  echo 'This patch erases a section of module 0x02 in RAM.'
+  echo 'It may or may not work. It could possibly lock up the drive.'
+  echo 'Note that this only lasts until the drive is power cycled'
+  echo 'If you power cycle the drive, you will need to apply this patch again.'
+
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+echo ""
+
+include good_subroutines
+
+# set a blank string variable to compare with user input
+# make sure not to set this anyplace else
+sets $null = ""
+
+# set this to itself for use with the menu system
+# make sure not to set this anyplace else
+# if it was not previously set it will = 0
+seti $using_menu = $using_menu
+
+
+echo "You are about to write to the RAM of the drive."
+echo "This should be safe, but there is no guarantee."
+echo 'Type "YES" to continue:'
+userinput $choicestring
+sets $safety = "YES"
+if $choicestring != $safety
+  echo "You chose not to continue"
+  previousscript
+endif
+
+
+# set these for later, and to make it easy to change if needed
+seti $ram_read_block_size = 65536
+
+seti $ram_start = 0x8000000
+seti $ram_size = 0x40000
+seti $max_ram_size = 0x2000000
+
+if $ram_size < $ram_read_block_size
+  seti $ram_read_block_size = $ram_size
+endif
+seti $divide_check = $ram_read_block_size % 512
+if $divide_check != 0
+  echo "ram_read_block_size is not dividable by 512"
+  previousscript
+endif
+
+seti $patch_successful = 0
+
+gosub idle_drive
+
+gosub find_ram_size
+
+gosub dump_ram
+
+#gosub process_ram
+
+
+previousscript
+end
+
+
+
+
+
+subroutine find_ram_size
+  gosub enable_vsc
+
+  seti $find_ram_read_size = 0x200
+  scratchpadsize $find_ram_read_size
+  seti $position = $ram_start
+  seti $remainder = $find_ram_read_size
+  if $remainder != 0
+    seti $write_offset = 0
+    seti $read_size = $remainder
+    hex
+    echo "position=0x" $position "  rsize=0x" $read_size
+    decimal
+    # vsc to prepare for ram read
+    #echo "prepare to read ram"
+    buffersize 0x200
+    clearbuffer
+    seti $offsetl = $position & 0xff
+    seti $offsetm1 = $position > 8
+    seti $offsetm1 = $offsetm1 & 0xff
+    seti $offsetm2 = $position > 16
+    seti $offsetm2 = $offsetm2 & 0xff
+    seti $offseth = $position > 24
+    seti $offseth = $offseth & 0xff
+    seti $sizel = $read_size & 0xff
+    seti $sizem1 = $read_size > 8
+    seti $sizem1 = $sizem1 & 0xff
+    seti $sizem2 = $read_size > 16
+    seti $sizem2 = $sizem2 & 0xff
+    seti $sizeh = $read_size > 24
+    seti $sizeh = $sizeh & 0xff
+    setbuffer 0
+      13 00 01 00 $offsetl $offsetm1 $offsetm2 $offseth $sizel $sizem1 $sizem2 $sizeh
+    endbuffer
+    setwritepio
+    ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+    # check if command failed
+    gosub status_check
+    # vsc to get the ram
+    seti $sectors = $read_size / 512
+    buffersize $read_size
+    clearbuffer
+    setreadpio
+    #echo "reading ram"
+    ata28cmd 0xd5 $sectors 0xbf 0x4f 0xc2 0xa0 0xb0
+    # check if command failed
+    gosub status_check
+    # copy the buffer to the scratchpad
+    copybuffertoscratchpad 0 $write_offset $read_size
+  endif
+
+  #printscratchpad 0 512
+
+  seti $read_size = $find_ram_read_size
+  while 1 = 1
+    seti $position = $ram_start + $ram_size
+    hex
+    echo "position=0x" $position "  size=0x" $read_size
+    decimal
+    # vsc to prepare for ram read
+    #echo "prepare to read ram"
+    buffersize 0x200
+    clearbuffer
+    seti $offsetl = $position & 0xff
+    seti $offsetm1 = $position > 8
+    seti $offsetm1 = $offsetm1 & 0xff
+    seti $offsetm2 = $position > 16
+    seti $offsetm2 = $offsetm2 & 0xff
+    seti $offseth = $position > 24
+    seti $offseth = $offseth & 0xff
+    seti $sizel = $read_size & 0xff
+    seti $sizem1 = $read_size > 8
+    seti $sizem1 = $sizem1 & 0xff
+    seti $sizem2 = $read_size > 16
+    seti $sizem2 = $sizem2 & 0xff
+    seti $sizeh = $read_size > 24
+    seti $sizeh = $sizeh & 0xff
+    setbuffer 0
+      13 00 01 00 $offsetl $offsetm1 $offsetm2 $offseth $sizel $sizem1 $sizem2 $sizeh
+    endbuffer
+    hex
+    #echo "keysector= 13 00 01 00 " $offsetl " " $offsetm1 " " $offsetm2 " " $offseth " " $sizel " " $sizem1 " " $sizem2 " " $sizeh
+    setwritepio
+    ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+    # check if command failed
+    gosub status_check
+
+    # vsc to get the ram
+    seti $sectors = $read_size / 512
+    buffersize $read_size
+    clearbuffer
+    setreadpio
+    #echo "reading ram"
+    ata28cmd 0xd5 $sectors 0xbf 0x4f 0xc2 0xa0 0xb0
+    hex
+    #echo "command= d5 " $sectors " bf 4f c2 a0 b0"
+    decimal
+    # check if command failed
+    gosub status_check
+
+    seti $comparedata = 0
+    seti $found_match = 1
+    while $comparedata < 512
+      seti $cmp = buffer $comparedata qw
+      seti $check = scratchpad $comparedata qw
+      if $cmp != $check
+        seti $found_match = 0
+        break
+      endif
+      seti $comparedata = $comparedata + 8
+    done
+    if $found_match = 1
+      hex
+      echo "ram size is 0x" $ram_size
+      decimal
+      break
+    endif
+
+    seti $ram_size = $ram_size * 2
+    if $ram_size > $max_ram_size
+      hex
+      echo "ram size not found, using default maximum size of 0x" $max_ram_size
+      decimal
+      seti $ram_size = $max_ram_size
+      break
+    endif
+  done
+
+  gosub disable_vsc
+endsubroutine
+
+
+
+
+
+subroutine dump_ram
+  gosub enable_vsc
+
+  scratchpadsize $ram_size
+  seti $position = $ram_start
+  seti $read_size = $ram_read_block_size
+  seti $block_count = $ram_size / $ram_read_block_size
+  seti $search_position = 0
+  seti $count = 0
+  while $count < $block_count
+    hex
+    echo "position=0x" $position "  size=0x" $read_size
+    decimal
+    # vsc to prepare for ram read
+    #echo "prepare to read ram"
+    buffersize 0x200
+    clearbuffer
+    seti $offsetl = $position & 0xff
+    seti $offsetm1 = $position > 8
+    seti $offsetm1 = $offsetm1 & 0xff
+    seti $offsetm2 = $position > 16
+    seti $offsetm2 = $offsetm2 & 0xff
+    seti $offseth = $position > 24
+    seti $offseth = $offseth & 0xff
+    seti $sizel = $read_size & 0xff
+    seti $sizem1 = $read_size > 8
+    seti $sizem1 = $sizem1 & 0xff
+    seti $sizem2 = $read_size > 16
+    seti $sizem2 = $sizem2 & 0xff
+    seti $sizeh = $read_size > 24
+    seti $sizeh = $sizeh & 0xff
+    setbuffer 0
+      13 00 01 00 $offsetl $offsetm1 $offsetm2 $offseth $sizel $sizem1 $sizem2 $sizeh
+    endbuffer
+    setwritepio
+    ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+    # check if command failed
+    gosub status_check
+    # send again
+    ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+    # check if command failed
+    gosub status_check
+
+    # vsc to get the ram
+    seti $sectors = $read_size / 512
+    buffersize $read_size
+    clearbuffer
+    setreadpio
+    #echo "reading ram"
+    ata28cmd 0xd5 $sectors 0xbf 0x4f 0xc2 0xa0 0xb0
+    # check if command failed
+    gosub status_check
+    seti $write_offset = $count * $read_size
+    # copy the buffer to the scratchpad
+    copybuffertoscratchpad 0 $write_offset $read_size
+
+    gosub process_ram
+
+    seti $count = $count + 1
+    seti $position = $position + $ram_read_block_size
+  done
+
+  gosub disable_vsc
+  echo "ram processing finished"
+  if $patch_successful = 1
+    echo "ram patch successful"
+  else
+    echo "ram patch failed"
+  endif
+endsubroutine
+
+
+
+
+
+subroutine process_ram
+  #echo "processing ram"
+  sets $header_check = "ROYL"
+  seti $search_end = $search_position + $ram_read_block_size
+  seti $search_end = $search_end - 4096
+  while $search_position < $search_end
+    sets $header = scratchpad $search_position 4
+    if $header = $header_check
+      # process the module
+      seti $working_offset = $search_position
+      #echo "Header:"
+      #printscratchpad $working_offset 4
+      seti $working_offset = $search_position + 8
+      seti $mod_id = scratchpad $working_offset w
+      hex
+      #echo "Module ID = 0x" $mod_id
+
+      if $mod_id = 2
+        # find how many sectors the module contains
+        seti $working_offset = $search_position + 0xa
+        seti $mod_length_sectors = scratchpad $working_offset
+        seti $working_offset = $search_position + 0xb
+        seti $tempnum = scratchpad $working_offset
+        seti $tempnum = $tempnum > 8
+        seti $mod_length_sectors = $mod_length_sectors + $tempnum
+
+        #echo "Size in sectors = 0x" $mod_length_sectors
+        seti $working_offset = $search_position + 0xc
+        seti $checksum = scratchpad $working_offset dw
+        #echo "32 bit checksum = 0x" $checksum
+        seti $working_offset = $search_position + 0x10
+        #echo "Mod version:"
+        #printscratchpad $working_offset 8
+        decimal
+
+        seti $module_size = $mod_length_sectors * 512
+        seti $calculated_checksum = 0
+        seti $check_count = 0
+        while $check_count < $module_size
+          seti $working_offset = $search_position + $check_count
+          if $working_offset > $search_end
+            echo "end of module is past end of rom"
+            break
+          endif
+          seti $dword = scratchpad $working_offset dw
+          seti $calculated_checksum = $calculated_checksum + $dword
+          seti $check_count = $check_count + 4
+          # skip the actual checksum bytes
+          if $check_count = 0xc
+            seti $check_count = $check_count + 4
+          endif
+        done
+        seti $calculated_checksum = $calculated_checksum & 0xffffffff
+        seti $calculated_checksum = 0xffffffff - $calculated_checksum
+        seti $calculated_checksum = $calculated_checksum + 1
+
+        hex
+        if $checksum = $calculated_checksum
+          sets $checkstring = " calulated=0x" $calculated_checksum " (good)"
+          echo "pos=0x" $search_position " ModID=0x" $mod_id " size=0x" $mod_length_sectors $checkstring
+          seti $module_position = $search_position
+          seti $module_length = $mod_length_sectors * 512
+          gosub patch_module
+        else
+          sets $checkstring = " calulated=0x" $calculated_checksum " (bad)"
+        endif
+        decimal
+      endif
+    endif
+    seti $search_position = $search_position + 512
+  done
+endsubroutine
+
+
+
+
+
+subroutine patch_module
+  seti $wposition = $module_position
+  seti $wposition = $wposition + 0x8000000
+  seti $write_size = $module_length
+  hex
+  echo "wposition=0x" $wposition "  wsize=0x" $write_size
+  decimal
+  # vsc to prepare for ram write
+  echo "prepare to write ram"
+  buffersize 0x200
+  clearbuffer
+  seti $offsetl = $wposition & 0xff
+  seti $offsetm1 = $wposition > 8
+  seti $offsetm1 = $offsetm1 & 0xff
+  seti $offsetm2 = $wposition > 16
+  seti $offsetm2 = $offsetm2 & 0xff
+  seti $offseth = $wposition > 24
+  seti $offseth = $offseth & 0xff
+  seti $sizel = $write_size & 0xff
+  seti $sizem1 = $write_size > 8
+  seti $sizem1 = $sizem1 & 0xff
+  seti $sizem2 = $write_size > 16
+  seti $sizem2 = $sizem2 & 0xff
+  seti $sizeh = $write_size > 24
+  seti $sizeh = $sizeh & 0xff
+  setbuffer 0
+    13 00 02 00 $offsetl $offsetm1 $offsetm2 $offseth $sizel $sizem1 $sizem2 $sizeh
+  endbuffer
+  hex
+  #echo $offsetl " " $offsetm1 " " $offsetm2 " " $offseth "  " $sizel " " $sizem1 " " $sizem2 " " $sizeh
+  decimal
+  setwritepio
+  ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+  # vsc to get the ram
+  seti $sectors = $read_size / 512
+  buffersize $module_length
+  clearbuffer
+  copyscratchpadtobuffer $module_position 0 $module_length
+  #printbuffer 0 $module_length
+
+  gosub process_mod02
+
+  # calculate new checksum and insert it
+  seti $calculated_checksum = 0
+  gosub calculate_checksum_buffer
+  hex
+  echo "Calculated Checksum = 0x" $calculated_checksum
+  decimal
+  seti $b1 = $calculated_checksum & 0xff
+  seti $calculated_checksum = $calculated_checksum > 8
+  seti $b2 = $calculated_checksum & 0xff
+  seti $calculated_checksum = $calculated_checksum > 8
+  seti $b3 = $calculated_checksum & 0xff
+  seti $calculated_checksum = $calculated_checksum > 8
+  seti $b4 = $calculated_checksum & 0xff
+  setbuffer 0x0c
+    $b1 $b2 $b3 $b4
+  endbuffer
+
+  setwritepio
+  echo "writing ram"
+  ata28cmd 0xd6 $mod_length_sectors 0xbf 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+
+endsubroutine
+
+
+
+
+
+subroutine process_mod02
+  # process the module
+  seti $total_records = buffer 0x30 w
+  echo "Total records = " $total_records
+
+  # process the data records
+  seti $rcount = 0
+  while $rcount < $total_records
+    seti $offset = $rcount * 4
+    seti $rcount = $rcount + 1
+    seti $offset = $offset + 0x32
+    seti $record_offset = buffer $offset w
+    seti $offset = $offset + 2
+    seti $record_size = buffer $offset w
+
+    # process record 27 (slow fix)
+    if $rcount = 27
+      echo "Data record #" $rcount ":"
+      printbuffer $record_offset $record_size
+      seti $erase = 0
+      while $erase < $record_size
+        seti $erase_offset = $record_offset + $erase
+        setbuffer $erase_offset
+          00
+        endbuffer
+      seti $erase = $erase + 1
+      done
+      echo "Data record #" $rcount " after patch:"
+      printbuffer $record_offset $record_size
+      seti $patch_successful = 1
+    endif
+
+  done
+endsubroutine
+
+
+
+
+
+subroutine calculate_checksum_buffer
+  seti $calculated_checksum = 0
+  seti $ccount = 0
+  while $ccount < $module_length
+    seti $dword = buffer $ccount dw
+    seti $calculated_checksum = $calculated_checksum + $dword
+    seti $ccount = $ccount + 4
+    # skip the actual checksum bytes
+    if $ccount = 0xc
+      seti $ccount = $ccount + 4
+    endif
+  done
+  seti $calculated_checksum = $calculated_checksum & 0xffffffff
+  seti $calculated_checksum = 0xffffffff - $calculated_checksum
+  seti $calculated_checksum = $calculated_checksum + 1
+endsubroutine
+
+
+
+
+
+subroutine idle_drive
+  echo "attempting to idle drive"
+  seti $idle_tries = 0
+  while $idle_tries < 100
+    seti $idle_tries = $idle_tries + 1
+    echo "idle attempt " $idle_tries
+    gettime
+    seti $startreadtime = $time
+    gosub idle
+    gosub idle
+    gettime
+    seti $endreadtime = $time
+    seti $elapsedtime = $endreadtime - $startreadtime
+    if $elapsedtime < 100000
+      break
+    endif
+  done
+endsubroutine
+
+
+
+subroutine idle
+  buffersize 0
+  setreadpio
+  # set the count to 0
+  seti $count = 0
+  # set the LBA for the unload command
+  seti $LBAlow = 0x4c
+  seti $LBAmid = 0x4e
+  seti $LBAhigh = 0x55
+  # set features to unload
+  seti $features = 0x44
+  # set device bits 7(compatibility) 5(compatibility)
+  seti $device = 0xa0
+  # set the command for idle immediate
+  seti $atacommand = 0xe1
+  # perform the command
+  ata28cmd $features $count $LBAlow $LBAmid $LBAhigh $device $atacommand
+  gosub status_check
+endsubroutine
+
+
+
+
+
+subroutine status_check
+  seti $command_failed = 0
+  gosub check_command_status
+  if $command_failed = 1
+    echo "Command failed!"
+    gosub show_sense_data
+    gosub show_ata_return_status
+    previousscript
+  endif
+endsubroutine
+
+
+
+subroutine enable_vsc
+  # enable vendor specific commands
+  echo "enable vsc"
+  buffersize 0
+  setreadpio
+  ata28cmd 0x45 0x0b 0x00 0x44 0x57 0xa0 0x80
+  # check if command failed
+  gosub status_check
+endsubroutine
+
+
+
+subroutine disable_vsc
+  # disable vendor specific commands
+  echo "disable vsc"
+  buffersize 0
+  setreadpio
+  ata28cmd 0x44 0x0b 0x00 0x44 0x57 0xa0 0x80
+  # check if command failed
+  gosub status_check
+endsubroutine
+
+
+

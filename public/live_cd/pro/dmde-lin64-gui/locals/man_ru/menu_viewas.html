@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Меню Режим</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+<style type="text/css">/*<![CDATA[*/
+td,th{vertical-align:top}
+/*]]>*/</style>
+</head>
+<body>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Содержание</a> &middot; <a href="howto.html">Работа</a> &middot; <a href="menu.html">Меню</a>
+<hr />
+<h2>Меню &quot;Режим&quot;</h2>
+<p>
+Выбор режима просмотра в <a href="diskeditor.html">дисковом редакторе</a>.
+</p>
+<table>
+<tr><th class="ii">Пользовательские шаблоны</th><td>Выбор <a href="templates.html">шаблона</a> </td></tr>
+<tr><th class="ii" id="hex"><span id="text"></span>Шестнадцатеричный/текст</th><td>
+Для изменения кодовой таблицы используется команда <span class="ii">Кодировка</span>
+</td></tr>
+<tr><th class="ii" id="fatdir">Директория FAT</th><td>
+При нажатии [<span class="ii">Enter</span>] в окне редактора открывается файл или директория
+(если <a href="openvolume.html">открыт том FAT</a>)
+</td></tr>
+<tr><th class="ii" id="fat">FAT12/FAT16/FAT32</th><td>
+Таблица кластеров FAT.
+Клавиша [<span class="ii">Enter</span>] - переход к соответствующему кластеру тома.
+</td></tr>
+<tr><th class="ii" id="part">Таблица разделов MBR/GPT</th><td>
+Повторный вызов команды или нажатие [<span class="ii">F6</span>] - переключение MBR/GPT/GPT-копия.
+Клавиша [<span class="ii">Enter</span>] - переход к соответствующему сектору.
+</td></tr>
+<tr><th class="ii" id="boot">Загрузочный FAT/FAT32/NTFS</th><td>
+Boot-сектор.
+Повторный вызов команды или нажатие [<span class="ii">F7</span>] переключает файловую систему.
+[<span class="ii">Enter</span>] - <a href="openvolume.html">открыть том</a>.
+</td></tr>
+<tr><th class="ii" id="ntfsdir">Директория NTFS</th><td>
+INDX-запись директории NTFS.
+[<span class="ii">Enter</span>] - открыть файл или директориюв окне редактора
+(если <a href="openvolume.html">открыт том NTFS</a>).
+</td></tr>
+<tr><th class="ii" id="mft">Файл MFT</th><td>
+[<span class="ii">Enter</span>] - открыть выделенный атрибут или директорию в окне рекдактора.
+[<span class="ii">Пробел</span>] - просмотр подробностей атрибута.
+</td></tr>
+<tr><th class="ii" id="rawdata">RAW секторы NTFS-файла</th><td>
+Переключение между просмотром декодированных данных файла и 
+просмотром RAW-данных сектора (содержащихся на диске).
+</td></tr>
+<tr><th class="ii" id="encode">Кодировка...</th><td>
+Выбор кодовой страницы для преобразования текста в режимах
+<span class="ii">Шестнадцатеричный</span>, <span class="ii">Текст</span>.
+</td></tr>
+</table>
+
+</div></div>
+</body>
+</html>

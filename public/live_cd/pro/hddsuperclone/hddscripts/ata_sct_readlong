@@ -1,0 +1,192 @@
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'Perform an SCT read long command if supported.'
+  echo 'This command requires the number variable "sector" to be set on the command line.'
+  echo 'This also requires the string variable "file" to be set.'
+  echo '"file" is the name of the file the data will be written to.'
+  echo 'Note that even if this command is supported, it may still be of no value.'
+  echo 'The ATA documentation states that the data returned may be encoded.'
+  echo 'And my experience so far is that the data is usually encoded and totally useless.'
+  echo "So don't get your hopes up about using this command to get any worthwhile data."
+  echo 'It is mainly a demonstration of using the SCT commands.'
+  echo 'Example: hddsupertool -t /dev/sdb -f ata48_sct_readlong sector=100 file=="sector100.bin'
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+
+include good_subroutines
+
+# set a blank string variable to compare with user input
+# make sure not to set this anyplace else
+sets $null = ""
+
+
+# set this to itself for use with the menu system
+# make sure not to set this anyplace else
+# if it was not previously set it will = 0
+seti $using_menu = $using_menu
+
+
+# find out if using menus or if variables were set on the command line, and ask for input if they were not set
+
+seti $ask = 0
+while 1 = 1
+  variablecheck $sector
+  if $error_level < 16
+    seti $ask = 1
+  elseif $using_menu = 1
+    seti $ask = 1
+  endif
+  if $ask = 1
+    echo "Enter starting sector:"
+    userinput $choicestring
+    if $choicestring != $null
+      seti $sector = $choicestring 0
+      break
+    else
+      echo "Choice cannot be blank!"
+    endif
+  else
+    break
+  endif
+done
+
+seti $ask = 0
+variablecheck $file
+if $error_level < 16
+  seti $ask = 1
+elseif $using_menu = 1
+  seti $ask = 1
+endif
+if $ask = 1
+  echo "Enter file name, or leave blank to show data on screen:"
+  userinput $choicestring
+  sets $file = $choicestring
+endif
+
+
+# set the sector bytes for use in the sct command
+seti $lba0 = $sector & 0xff
+seti $lba1 = $sector > 8
+seti $lba1 = $lba1 & 0xff
+seti $lba2 = $sector > 16
+seti $lba2 = $lba2 & 0xff
+seti $lba3 = $sector > 24
+seti $lba3 = $lba3 & 0xff
+seti $lba4 = $sector > 32
+seti $lba4 = $lba4 & 0xff
+seti $lba5 = $sector > 40
+seti $lba5 = $lba5 & 0xff
+seti $lba6 = $sector > 48
+seti $lba6 = $lba6 & 0xff
+seti $lba7 = $sector > 56
+seti $lba7 = $lba7 & 0xff
+
+# set the buffer size
+buffersize 512
+
+# set the LBAs to 0
+seti $LBAlow = 0
+seti $LBAmid = 0
+seti $LBAhigh = 0
+
+# set some things for the ata command
+setwritepio
+# set features to d6 write smart log
+seti $features = 0xd6
+# set count to 1
+seti $count = 1
+# set device to a0
+seti $device = 0xa0
+# set lba to log page e0
+seti $LBAlow = 0x4fe0
+seti $LBAmid = 0xc2
+# set the command for write log extended
+seti $command = 0xb0
+
+# make sure buffer is clear
+clearbuffer
+
+# data to set to get ready for read long
+# set action code to read/write long
+seti $actionlow = 0x01
+seti $actionhigh = 0x00
+# set function code to read long
+seti $functionlow = 0x01
+seti $functionhigh = 0x00
+
+# set the buffer data
+setbuffer 0
+  $actionlow $actionhigh $functionlow $functionhigh $lba0 $lba1 $lba2 $lba3 $lba4 $lba5 $lba6 $lba7
+endbuffer
+
+# perform the command
+ata48cmd $features $count $LBAhigh $LBAmid $LBAlow $device $command
+
+# check if command failed
+seti $command_failed = 0
+gosub check_command_status
+if $command_failed = 1
+  echo "Command failed!"
+  gosub show_sense_data
+  gosub show_ata_return_status
+  previousscript
+endif
+
+
+# now we have to perform a second command to read the data returned
+buffersize 1024
+clearbuffer
+setreadpio
+# set the count to 2 pages (1024 bytes)
+seti $count = 2
+# set lba to log page e1
+seti $LBAlow = 0x4fe1
+# set the features d5 smart read log
+seti $features = 0xd5
+
+
+# perform the command
+ata48cmd $features $count $LBAhigh $LBAmid $LBAlow $device $command
+
+# check if command failed
+seti $command_failed = 0
+gosub check_command_status
+if $command_failed = 1
+  echo "Command failed!"
+  gosub show_sense_data
+  gosub show_ata_return_status
+  previousscript
+endif
+
+
+seti $ecc_length = $ata_return_count & 0xff
+seti $temp = $ata_return_lba < 8
+seti $temp = $temp & 0xff00
+seti $ecc_length = $ecc_length + $temp
+
+
+# show the actual data on the screen or write the data to the file
+if $file = $null
+  echo "raw sector:"
+  printbuffer 0 512
+  hex
+  echo "reported ecc length = 0x" $ecc_length
+  decimal
+  echo "ecc data:"
+  printbuffer 512 512
+else
+  writebuffer $file 0 0 $data_transferred
+  echo "Data written to file: " $file
+endif
+
+
+previousscript
+end
+
+

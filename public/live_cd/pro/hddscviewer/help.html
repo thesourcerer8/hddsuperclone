@@ -1,0 +1,411 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<title>HDDSuperClone Manual</title>
+	<meta name="generator" content="LibreOffice 4.2.8.2 (Linux)">
+	<meta name="author" content="Windows User">
+	<meta name="created" content="20170723;141300000000000">
+	<meta name="changed" content="20220212;142850971352503">
+	<meta name="AppVersion" content="12.0000">
+	<meta name="Company" content="Grizli777">
+	<meta name="DocSecurity" content="4">
+	<meta name="HyperlinksChanged" content="false">
+	<meta name="LinksUpToDate" content="false">
+	<meta name="ScaleCrop" content="false">
+	<meta name="ShareDoc" content="false">
+	<style type="text/css">
+	<!--
+		@page { margin: 1in }
+		p { margin-bottom: 0.1in; direction: ltr; color: #000000; line-height: 120%; text-align: left; widows: 2; orphans: 2 }
+		p.western { font-size: 12pt }
+		p.cjk { font-family: "Times New Roman"; font-size: 12pt }
+		p.ctl { font-size: 12pt }
+		h1 { margin-top: 0.03in; margin-bottom: 0.03in; direction: ltr; color: #000000; text-align: left; widows: 2; orphans: 2; page-break-after: auto }
+		h1.western { font-family: "Times New Roman", serif }
+		h1.cjk { font-family: "Times New Roman"; font-size: 24pt }
+		h1.ctl { font-size: 24pt }
+		h2 { margin-top: 0.03in; margin-bottom: 0.03in; direction: ltr; color: #000000; text-align: left; widows: 2; orphans: 2; page-break-after: auto }
+		h2.western { font-family: "Times New Roman", serif }
+		h2.cjk { font-family: "Times New Roman" }
+		h2.ctl { font-family: "Times New Roman" }
+		a:link { color: #0000ff }
+	-->
+	</style>
+</head>
+<body lang="en-US" text="#000000" link="#0000ff" dir="ltr">
+<h1 class="western" align="left"><a name="Top"></a><font size="7" style="font-size: 32pt">HDDSCViewer</font></h1>
+<h1 class="western" align="left"><br><br>
+</h1>
+<p align="left" style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+This manual is for HDDSCViewer version 1.0 12 February 2022</p>
+<p align="left" style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+Home page: <a href="http://www.hddsuperclone.com/">http://www.hddsuperclone.com/</a></p>
+<p align="left" style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+A PDF version of this manual is available in the downloads section</p>
+<p align="left" style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<br><br>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<font size="5" style="font-size: 20pt"><b>Chapters:</b></font></p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<a href="#1 Introduction|outline">Introduction</a></p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><a href="#Installing">Installing</a></p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><a href="#Usage">Usage</a></p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><a href="#Understanding-the-Display">Understanding
+the Display</a></p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><a href="#Reporting Bugs">Reporting
+Bugs</a></p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%"><a name="Introduction"></a>
+Next: <a href="#Installing">Installing</a>, Previous: <a href="#Top">Top</a>,
+Up: <a href="#Top">Top</a></p>
+<h2 class="western"><font size="5" style="font-size: 20pt">Introduction</font></h2>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+HDDSCViewer is a Linux based graphical viewer for inspecting progress
+log files</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+created by HDDSuperClone. It is also capable of opening ddrescue log
+(map) files.</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><img src="data:" hspace="12"></p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><img src="data:" hspace="12"></p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%"><a name="Installing"></a>
+Next: <a href="#Usage">Usage</a>, Previous: <a href="#Introduction">Introduction</a>,
+Up: <a href="#Top">Top</a></p>
+<h2 class="western"><font size="5" style="font-size: 20pt">Installing</font></h2>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<font size="3" style="font-size: 12pt">HDDSCViewer is supplied as an
+executable, with separate ones for 32bit and 64bit. You CANNOT run
+the 32bit on a 64 bit system and vice versa (you may get an odd file
+not found error if you try). </font>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<br><br>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<font size="3" style="font-size: 12pt">HDDSCViewer now has DEB
+(Debian/Ubuntu) and RPM (RedHat/Fedora) installers available. If you
+have downloaded the appropriate installer then you should just be
+able to double click on it to start the installation process. This
+method should even work on many live CDs, but not all. If you are
+unable to use one of the installers, then you will need to follow the
+instructions below to install from the tar.gz file or to run without
+installing. </font>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<br><br>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<font size="3" style="font-size: 12pt">If you have downloaded the
+tar.gz file, then the easiest way to get started is to copy the
+tar.gz file to a flash drive, and then use simple copy and paste to
+put it in the Home folder that can be found on the desktop of the
+Linux install. When you open a terminal it should default to the same
+Home folder that is on the desktop. </font>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<br><br>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<font size="3" style="font-size: 12pt">To extract hddscviewer, open a
+terminal and use the following commands (replacing the -x.x-x.x.-xxx
+with proper version number and architecture): </font>
+</p>
+<p style="margin-bottom: 0in; line-height: 100%"><font face="Courier New, serif"><font size="3" style="font-size: 12pt">gunzip
+hddscviewer-x.x-x.x.-xxx.tar.gz</font></font></p>
+<p style="margin-bottom: 0in; line-height: 100%"><font face="Courier New, serif"><font size="3" style="font-size: 12pt">tar
+xf hddscviewer-x.x-x.x.-xxx.tar</font></font></p>
+<p style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<font size="3" style="font-size: 12pt">Then navigate to the proper
+directory: </font>
+</p>
+<p style="margin-bottom: 0in; line-height: 100%"><font face="Courier New, serif"><font size="3" style="font-size: 12pt">cd
+hddscviewer-x.x-x.x.-xxx</font></font></p>
+<p style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<font size="3" style="font-size: 12pt">The following method to
+install HDDSCViewer will not only work on a Linux installation, but
+you can use the same method when booting from a live CD. The only
+difference is that every time you use a live CD, you will need to
+perform these steps after each boot. </font>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<br><br>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<font size="3" style="font-size: 12pt">To install hddscviewer, use
+the following command: </font>
+</p>
+<p style="margin-bottom: 0in; line-height: 100%"><font face="Courier New, serif"><font size="3" style="font-size: 12pt">sudo
+make install</font></font></p>
+<p style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<font size="3" style="font-size: 12pt">The &quot;make install&quot;
+command needs to be run as root, which is why &quot;sudo&quot; is
+included in this example. Your sysem may use a different command, or
+you may already be root. If it is not ran as root, then you will
+likely get permission errors and the install will not be complete.
+Note that you can also uninstall it with the command &quot;sudo make
+uninstall&quot;. There is now also an uninstaller script that can be
+ran by typing &quot;sudo hddscviewer-uninstall.sh&quot;. </font>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<br><br>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<font size="3" style="font-size: 12pt">After installation use the
+following command to run it: </font>
+</p>
+<p style="margin-bottom: 0in; line-height: 100%"><font face="Courier New, serif"><font size="3" style="font-size: 12pt">hddscviewer</font></font></p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<br><br>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<font size="3" style="font-size: 12pt">To run it without installing,
+you must be in the same directory as hddscviewer. Note that some
+versions of Linux will not allow you to run a program from certain
+external devices (such as a FAT32 USB drive). Example to run it from
+the current directory: </font>
+</p>
+<p style="margin-bottom: 0in; line-height: 100%"><font face="Courier New, serif"><font size="3" style="font-size: 12pt">./hddscviewer</font></font></p>
+<p style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<font size="3" style="font-size: 12pt">You may need to change the
+permissions on the file so that you have the rights to run it. The
+following command should do that: </font>
+</p>
+<p style="margin-bottom: 0in; line-height: 100%"><font face="Courier New, serif"><font size="3" style="font-size: 12pt">sudo
+chmod a+x hddscviewer</font></font></p>
+<p style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<font size="3" style="font-size: 12pt">If you are booted from a live
+CD that does not allow installing with make (maybe make does not
+exist) and you are trying to run it from a USB drive and are getting
+a permission error, you can copy the executable to the home folder
+and run it from there. Note that if using a live CD the home folder
+exists in ram and will be cleared on a reboot. The following example
+assumes you are in the folder on the USB drive that contains
+hddscviewer. The first command copies it to the home folder, the
+second command gives permission to execute, and the third command
+runs it: </font>
+</p>
+<p style="margin-bottom: 0in; line-height: 100%"><font face="Courier New, serif"><font size="3" style="font-size: 12pt">sudo
+cp hddscviewer /home</font></font></p>
+<p style="margin-bottom: 0in; line-height: 100%"><font face="Courier New, serif"><font size="3" style="font-size: 12pt">sudo
+chmod a+x /home/hddscviewer</font></font></p>
+<p style="margin-bottom: 0in; line-height: 100%"><font face="Courier New, serif"><font size="3" style="font-size: 12pt">sudo
+/home/hddscviewer</font></font></p>
+<p style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><img src="data:" hspace="12"></p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%"><a name="Usage"></a>
+Next: <a href="#Understanding-the-Display">Understanding-the-Display</a>,
+Previous: <a href="#Installing">Installing</a>, Up: <a href="#Top">Top</a></p>
+<h2 class="western"><font size="5" style="font-size: 20pt">Usage</font></h2>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+The format for running HDDSCViewer is: 
+</p>
+<p style="margin-bottom: 0in; line-height: 100%"><font face="Courier New, serif"><font size="2" style="font-size: 10pt"><font size="3" style="font-size: 12pt">hddscviewer
+[</font><i><font size="3" style="font-size: 12pt">options</font></i><font size="3" style="font-size: 12pt">]</font></font></font></p>
+<p style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+HDDSCViewer supports the following options: 
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">‘<font face="Courier New, serif">-h</font>’</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">‘<font face="Courier New, serif">--help</font>’</p>
+<p style="margin-left: 0.5in; margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+Print an informative help message describing the options and exit. 
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">‘<font face="Courier New, serif">-v</font>’</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">‘<font face="Courier New, serif">--version</font>’</p>
+<p style="margin-left: 0.5in; margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+Print the version number and exit. 
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<br><br>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<font size="4" style="font-size: 14pt"><b>Language Selection</b></font></p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+When HDDSCViewer is first started in GUI mode, there will be a box
+with two buttons. The top button is to Continue to open HDDSCViewer,
+the bottom button is to change the language. When you click on Change
+Language, a file menu will open to a location where the language
+files are located. Choose the one that matches your desired language
+and then click Open. You should see a popup message that the language
+was changed successfully, click OK and then Continue.</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<br><br>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+The language files are created using Google Translate. Because of
+this, there will possibly, if not likely, be some translation issues.
+However, I believe that it should be good enough to be able to
+operate the program.</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<br><br>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+Update: I am now adding additional translation versions of language
+files that have been provided by others. They will have a dash “-”
+after the language name, and either a number or some other
+identifying method, depending on information provided by the author.
+If for some reason one of these additional language files does not
+work, it would likely be my fault for not getting it updated to match
+any updates I make in the program.</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<br><br>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+If you wish to submit a language translation pack, it must be in the
+format that HDDSCViewer can open. And hopefully you are willing to
+help with updates as changes and additions to the program are made.</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<br><br>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<br><br>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; font-style: normal; line-height: 100%">
+<font size="4" style="font-size: 14pt"><b>The main window of
+HDDSCViewer has the following menu items at the top:</b></font></p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<br><br>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<b>File--&gt;Open </b><b>–</b> This opens a project log file, or
+optionally a ddrescue map/log file.</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<b>File--&gt;</b><b>Domain</b><b> </b><b>–</b> This opens a domain
+log, which can be in the format of HDDSuperClone or ddrescue.</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<b>File--&gt;</b><b>Domain from DMDE bytes file</b><b> </b><b>–</b>
+This imports a DMDE bytes file as a domain. The format must be the
+same as used with HDDSuperClone.</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<b>File--&gt;</b><b>Quit</b><b> </b><b>–</b> This closes and exits
+the program.</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<br><br>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<b>Options-→Left panel resolution</b><b> </b><b>–</b> This allows
+changing the resolution of the left panel.</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<b>Options-→Main panel resolution</b><b> </b><b>–</b> This allows
+changing the resolution of the main panel. This can be useful when
+trying to analyze a pattern.</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<b>Options-→Main grid size</b><b> </b><b>–</b> This allows
+changing the overall number of blocks that represent the log file. A
+larger number allows greater detail to be seen. This can be useful
+when trying to analyze a pattern.</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<b>Options-→Auto update</b><b> </b><b>–</b> This is how often the
+log file will be reloaded and the display updated to reflect any
+changes, if any. You can use this to keep the program updating the
+display as the recovery progresses.</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<b>Options-→Highlight good data</b><b> </b><b>–</b> This will
+turn on a small green dot in the middle of any block that is not
+finished, to show if there was any good data read within the block.
+This can be useful for detecting if a head is totally dead, or just
+weak and still reading some data.</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<b>Options-→</b><b>Show bad head</b><b> </b><b>–</b> This only
+works if the “Mark bad head” option was used in HDDSuperClone for
+the recovery. It will put a small purple dot in the middle of any
+block that was determined to be part of a bad head or bad area.</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<b>Options-→</b><b>Show </b><b>high time</b><b> </b><b>–</b> This
+ will turn on a small white dot in the middle of any block that has a
+read time exceeding the number of seconds selected. This can be
+useful for finding slow reading areas, or getting an understanding if
+there is a slow reading firmware issue.</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<b>Options-→</b><b>Show </b><b>domain</b><b> </b><b>–</b> This
+turn on a small yellow dot in the middle of any block that is in the
+domain, if a domain file is loaded.</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<br><br>
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><img src="data:" hspace="12"></p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%"><a name="Understanding-the-Display"></a>
+Next: <a href="#Reporting Bugs">Reporting-Bugs</a>, Previous: <a href="#Usage">Usage</a>,
+Up: <a href="#Top">Top</a></p>
+<h2 class="western"><font size="5" style="font-size: 20pt">Understanding
+the Display</font></h2>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+The left panel is an overall view of the whole recovery. The main
+panel is a scroll-able window that shows the part of the recovery in
+the window. The block color descriptions for both panels are in the
+top panel. The log and domain file names are listed at the top of the
+display.</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<br><br>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+To be able to see a pattern such as a bad head, you can adjust both
+the main panel resolution and main panel size, along with altering
+the width of the display window. Changing the width by dragging the
+edge of the window can help make patterns line up. If you can’t get
+the pattern to line up by changing the width, then change one of the
+other settings and try again.</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<br><br>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+When clicking on a block in the main panel, the information about
+that block will be displayed in the area left of the color
+descriptions. The first line is the range of the block in hex, with
+the range in decimal in parenthesis. The next lines contain the
+status counts for the block. The last lines are the log lines that
+represent the block.</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<br><br>
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><img src="data:" hspace="12"></p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%"><a name="Reporting Bugs"></a>
+Previous: <a href="#Understanding-the-Display">Understanding-the-Display</a>,
+Up: <a href="#Top">Top</a></p>
+<h2 class="western"><font size="5" style="font-size: 20pt">Reporting
+Bugs</font></h2>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+It is always possible that there are programming errors in this
+software. It is also possible that there are errors and omissions in
+this documentation. If you report them, they will get fixed. If you
+don’t report them, they will just stay the way they are and will
+not get fixed. 
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<br><br>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+Report bugs to (<a href="mailto:sdcomputingservice@gmail.com">sdcomputingservice@gmail.com</a>)
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<br><br>
+</p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+Please include the version number of hddscviewer. You can find the
+version by running hddscviewer with the <font face="Courier New, serif"><font size="2" style="font-size: 10pt">--version</font></font>
+option. 
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><img src="data:" hspace="12"></p>
+<p style="margin-top: 0.03in; margin-bottom: 0.03in; line-height: 100%">
+<br><br>
+</p>
+</body>
+</html>

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=DMDE
+Comment=DMDE
+Exec=x-terminal-emulator -e "bash -c 'sudo dmde;$SHELL'"
+Icon=utilities-terminal
+Terminal=false
+Type=Application
+Categories=Application;
+Name[en_US]=DMDE

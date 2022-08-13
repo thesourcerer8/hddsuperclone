@@ -1,0 +1,200 @@
+
+
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'Western Digital ROYL read ROM to file using vendor specific commands.'
+  echo 'Note that some USB drives do not support these vendor specific commands.'
+  echo 'This requires the text variable "file" to be set.'
+  echo '"file" is the name of the file to dump the ROM.'
+
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+
+include good_subroutines
+
+# set a blank string variable to compare with user input
+# make sure not to set this anyplace else
+sets $null = ""
+
+# set this to itself for use with the menu system
+# make sure not to set this anyplace else
+# if it was not previously set it will = 0
+seti $using_menu = $using_menu
+
+# set the file name to be written
+while 1 = 1
+  variablecheck $file
+  if $error_level < 16
+    seti $ask = 1
+  elseif $using_menu = 1
+    seti $ask = 1
+  endif
+  if $ask = 1
+    echo "Enter file name:"
+    userinput $choicestring
+    if $choicestring != $null
+      sets $file = $choicestring
+      break
+    else
+      echo "Choice cannot be blank!"
+    endif
+  else
+    break
+  endif
+done
+
+# delete existing file so there is no corruption
+deletefile $file
+
+
+# set these for later, and to make it easy to change if needed
+# make sure they are evenly dividable by 512
+# in the case of a stubborn USB drive try setting them to 512
+seti $main_read_block_size = 65536
+seti $alt_read_block_size = 16384
+
+gosub enable_vsc
+
+seti $divide_check = $main_read_block_size % 512
+if $divide_check != 0
+  echo "main_read_block_size is not dividable by 512"
+  previousscript
+endif
+seti $divide_check = $alt_read_block_size % 512
+if $divide_check != 0
+  echo "alt_read_block_size is not dividable by 512"
+  previousscript
+endif
+
+# vsc to prepare to get drive data table
+echo "prepare to get data table"
+buffersize 0x200
+clearbuffer
+setbuffer 0
+  0d 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00
+endbuffer
+setwritepio
+ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+# check if command failed
+gosub status_check
+
+# vsc to get to get drive data table
+echo "getting data table"
+buffersize 0x200
+clearbuffer
+setreadpio
+ata28cmd 0xd5 0x01 0xbf 0x4f 0xc2 0xa0 0xb0
+# check if command failed
+gosub status_check
+
+#printbuffer 0 256
+# get the number of 16K rom blocks
+seti $rom_blocks = buffer 164
+
+# vsc to prepare for rom read
+echo "prepare to read rom"
+buffersize 0x200
+clearbuffer
+setbuffer 0
+  24 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00
+endbuffer
+setwritepio
+ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+# check if command failed
+gosub status_check
+# send again
+ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+# check if command failed
+gosub status_check
+
+# vsc to get the rom
+# the rom block size is 16K, or 32 sectors (0x20)
+# 32 sectors * 512 bytes per sector = 16384
+seti $rom_size = $rom_blocks * 16384
+hex
+sets $string = "0x" $rom_size
+decimal
+echo "rom size = " $rom_size " (" $string ")"
+echo "reading rom"
+scratchpadsize $rom_size
+seti $divide_check = $rom_size % $main_read_block_size
+if $divide_check = 0
+  seti $buffer_size = $main_read_block_size
+  seti $sectors = $main_read_block_size / 512
+  seti $block_count = $rom_size / $main_read_block_size
+else
+  seti $buffer_size = $alt_read_block_size
+  seti $sectors = $alt_read_block_size / 512
+  seti $block_count = $rom_size / $alt_read_block_size
+endif
+buffersize $buffer_size
+clearbuffer
+setreadpio
+seti $count = 0
+while $count < $block_count
+  ata28cmd 0xd5 $sectors 0xbf 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+  # copy the buffer to the scratchpad
+  seti $offset = $count * $buffer_size
+  copybuffertoscratchpad 0 $offset $buffer_size
+  # write the buffer to file
+  writebuffer $file 0 $offset $buffer_size
+  seti $count = $count + 1
+  seti $transferred = $count * $buffer_size
+  echo $transferred
+done
+
+gosub disable_vsc
+
+echo "rom dump successful"
+
+
+previousscript
+end
+
+
+
+subroutine status_check
+  seti $command_failed = 0
+  gosub check_command_status
+  if $command_failed = 1
+    echo "Command failed!"
+    gosub show_sense_data
+    gosub show_ata_return_status
+    previousscript
+  endif
+endsubroutine
+
+
+
+subroutine enable_vsc
+  # enable vendor specific commands
+  echo "enable vsc"
+  buffersize 0
+  setreadpio
+  ata28cmd 0x45 0x0b 0x00 0x44 0x57 0xa0 0x80
+  # check if command failed
+  gosub status_check
+endsubroutine
+
+
+
+subroutine disable_vsc
+  # disable vendor specific commands
+  echo "disable vsc"
+  buffersize 0
+  setreadpio
+  ata28cmd 0x44 0x0b 0x00 0x44 0x57 0xa0 0x80
+  # check if command failed
+  gosub status_check
+endsubroutine
+
+
+

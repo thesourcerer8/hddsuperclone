@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Szablony edytora dysku</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="templates"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Spis treści</a> &middot; <a href="howto.html">Praca</a> &middot; <a href="menu.html">Menu</a>
+&middot; <a href="menu_viewas.html">Tryb</a>
+<hr />
+<h2>Szablony edytora dysku</h2>
+<p>
+Oprócz <a href="menu_viewas.html">wbudowanych szablonów</a>, 
+<a href="diskeditor.html">edytor dysku</a> obsługuje niestandardowe szablony, 
+aby przeglądać i edytować różne struktury dysku. 
+Warunki, przejścia, proste arytmetyce można stosować do analizy złożonych struktur disku, 
+takich jak rekordy MFT.
+</p>
+<p>Standardowo szablony są ładowane z pliku <span class="tt">template.txt</span>. 
+Aby korzystać z innych plików, <a href="inifile.html">ini-parametr</a> mogą być stosowane
+<span class="tt">editortemplates=</span>,
+symbole wieloznaczne są dozwolone (na przykład, <span class="tt">editortemplates=template*</span>).
+</p>
+
+<h3>Struktura pliku szablonu</h3>
+<p>Każdy szablon zaczyna się od nazwy w nawiasach kwadratowych <span class="tt">[Template Name]</span>, 
+i dalsze parametry szablonu i instrukcji (jeden na linię).
+</p>
+
+<h3>Parametry szablonu</h3>
+<p>
+<span class="tt">flow:0</span> - wyświetlić jeden rekord na raz. <span class="tt">flow:1</span> - wyświetlić rekordy jeden po drugim.<br />
+<span class="tt">big-endian:1</span> - use big-endian byte order.<br />
+<span class="tt">h:Header</span> - statyczny nagłówek <span class="tt">Header</span>.
+</p>
+
+<h3>Stałe</h3>
+<p>Stałe są określone jako dziesiętnych i szesnastkowym (z prefiksu <span class="tt">0x</span>).
+</p>
+
+<h3>Zmienne</h3>
+<p>
+<span class="tt">$RECSIZE</span> - rozmiar rekordu<br/>
+<span class="tt">$RECDEVOFS</span> - pozycja aktualnego rekordu na dysku (w bajtach od początku dysku)<br/>
+<span class="tt">$NEXTOFS</span> - ... na <b>blokach danych</b><br/>
+<span class="tt">$OFFSET</span> - dodatkowe względne przesunięcia stosowany jest na <b>blokach danych</b><br/>
+<span class="tt">$XOFS</span> - dodatkowe przesunięcie kolumny dla wyjścia (patrz poniżej <span class="tt">x:X</span>)<br/>
+<span class="tt">$1</span> ... <span class="tt">$4</span> - globalne zmienne użytkownika (64-bitowa liczb całkowitych)<br />
+<span class="tt">$varname</span> - a local variable (64-bit signed integer), where 
+<span class="tt">varname</span> is case-sensitive and may contain digits, latin letters, and underscores.
+A local variable must be initialized with the assignment operator <span class="tt">:=</span>
+and is valid only within the block of instructions where it is initialized.
+</p>
+
+<h3>Bloki danych</h3>
+<p><b>Data block</b> is usually a single byte/word/dword at a fixed position but
+it also may be any range(s) of record bytes/bits which are processed as a single variable.
+Data block is specified in braces <span class="tt">{...}</span>.
+</p>
+<p>
+<span class="tt">{Z}</span> defines range of <span class="tt">Z</span> bytes starting at offset 
+	<span class="tt">$NEXTOFS</span>
+	(and <span class="tt">$NEXTOFS</span> is increased by <span class="tt">Z</span> then); <br />
+<span class="tt">{X,Z}</span> defines range of <span class="tt">Z</span> bytes starting at offset <span class="tt">X</span>, <br />
+<span class="tt">{X:Y,Z}</span> defines range of <span class="tt">Z</span> bits starting at offset <span class="tt">X</span> byte and <span class="tt">Y</span> bits,<br />
+where <span class="tt">X</span>, <span class="tt">Y</span>, and <span class="tt">Z</span> may be any variables or constants,<br />
+several ranges may be separated by a semicolon, e.g. <span class="tt">{0x00,4;$1:$2,4}</span>.
+</p>
+
+<h3>Formaty bloku danych</h3>
+<p>Format defines how data block is represented and edited (e.g. as integer / char / string, etc.).</p>
+<p>The following formats are supported:<br />
+<span class="tt">%u</span> - unsigned integer (up to 64bit)<br/>
+<span class="tt">%d</span> - signed integer (up to 64bit)<br/>
+<span class="tt">%X / %x</span> - hexadecimal (up to 64bit)<br/>
+<span class="tt">%c</span> - ANSI character (8bit)<br/>
+<span class="tt">C</span> - array of ANSI characters<br/>
+<span class="tt">U</span> - array of Unicode characters (UTF-16)<br/>
+<span class="tt">u</span> - Łańcuch zakodowany w utf-8<br/>
+<span class="tt">T</span> - array of text characters (depending on <a href="menu_viewas.html">encoding table</a>)<br/>
+<span class="tt">CXm</span> - byte-by-byte hex output in multiple lines<br/>
+<span class="tt">UNIXDATE</span> - Unix date (seconds since epox)<br/>
+<span class="tt">FILETIME</span> - Windows file time (nanoseconds since 1601)<br/>
+<span class="tt">F:ABCD..</span> - Flags (where <span class="tt">A</span> is displayed if bit 0 set, and <span class="tt">B</span> if bit 0 clear, etc.)
+</p>
+
+<h3>Wyjściowe</h3>
+<p>Output instruction defines the position on the screen and format for a data block or variable 
+or simply outputs text.</p>
+<p>
+<span class="tt">{...},x:X,w:W,c:C,Format</span> outputs data block <span class="tt">{...}</span> at column <span class="tt">X</span> with the max. width&nbsp;<span class="tt">W</span>
+using the format <span class="tt">Format</span>.
+<br />
+<span class="tt">x:X,w:W,c:C,Text</span> outputs <span class="tt">Text</span> at column <span class="tt">X</span> with the maximum width&nbsp;<span class="tt">W</span>
+in color <span class="tt">C</span>.
+The <span class="tt">Text</span> can be enclosed in quotation marks (<span class="tt">"Text"</span>).
+</p>
+<p>
+<span class="tt">w:W</span>, <span class="tt">c:C</span> jest opcjonalny
+(<span class="tt">0</span> - kolor domyślne, <span class="tt">1</span> - tytuł,
+<span class="tt">8</span> - czerwony, <span class="tt">10</span> - szary).
+<br />
+<span class="tt">=</span> (equal sign) specifies end of line (line feed).
+</p>
+
+<h3>Operatory i wyrażenia</h3>
+<p>
+Expression is a combination of variables, constants, data blocks, and operators
+(<span class="tt">~</span>,
+<span class="tt">NOT</span>;
+<span class="tt">*</span>,
+<span class="tt">/</span>,
+<span class="tt">%</span>;
+<span class="tt">+</span>, 
+<span class="tt">-</span>; 
+<span class="tt">&lt;&lt;</span>,
+<span class="tt">&gt;&gt;</span>;
+<span class="tt">&lt;</span>, 
+<span class="tt">&lt;=</span>,
+<span class="tt">&gt;</span>,
+<span class="tt">&gt;=</span>;
+<span class="tt">=</span>,
+<span class="tt">!=</span>; 
+<span class="tt">&</span>; 
+<span class="tt">^</span>;
+<span class="tt">|</span>;
+<span class="tt">AND</span>;
+<span class="tt">OR</span>), e.g. <br />
+<span class="tt">$2+{0x08:$1,5}</span>
+</p>
+<p>Assignment operator <span class="tt">:=</span> is used to copy the result of the expression to the variable, 
+e.g.<br/>
+<span class="tt">$1:=$2+{0x08:$1,5}</span><br/>
+<span class="tt">$2:=$OFFSET & 8</span>
+</p>
+
+<h3>Warunki, cykle i przejścia</h3>
+<h4>Warunki</h4>
+<div>
+<span class="tt">IF Expression1</span><br />
+<span class="tt">&nbsp;&nbsp;</span>...
+  (instructions for performing if <span class="tt">Expression1</span> result is true/non-zero) <br />
+<span class="tt">ELSEIF Expression2</span><br />
+<span class="tt">&nbsp;&nbsp;</span>...
+  (else instructions for performing if <span class="tt">Expression2</span> result is true/non-zero, optional) <br />
+<span class="tt">ELSE</span><br />
+<span class="tt">&nbsp;&nbsp;</span>...
+  (else instructions for performing in other cases, optional)<br />
+<span class="tt">ENDIF</span>
+</div>
+
+<h4>Cykle</h4>
+<div>
+<span class="tt">WHILE Expression3</span><br />
+<span class="tt">&nbsp;&nbsp;</span>... 
+  (instructions for performing while <span class="tt">Expression3</span> result is true/non-zero) <br />
+<span class="tt">&nbsp;&nbsp;</span>go to the start of cycle:<br />
+<span class="tt">&nbsp;&nbsp;CONTINUE</span><br />
+<span class="tt">&nbsp;&nbsp;</span>break loop:<br />
+<span class="tt">&nbsp;&nbsp;BREAK</span><br />
+<span class="tt">ENDWHILE</span>
+</div>
+
+<h4>Przejścia</h4>
+<p>Line <span class="tt">LABEL:N</span> defines a label, 
+and instruction <span class="tt">GOTO:N</span> is a jump to line <span class="tt">LABEL:N</span>,
+where <span class="tt">N</span> is any constant. Inaccurate use of <span class="tt">GOTO</span> may cause infinite loop.
+</p>
+
+<h3>Przełączniki i gorące linki</h3>
+<p>The switch instruction <span class="tt">$1:=TOGGLE:N,x:X</span> outputs a toggle box
+<span class="tt">[+]</span> (<span class="tt">[-]</span>) at the column <span class="tt">X</span> of the current output line,
+where <span class="tt">N</span> is a unique switch number (a variable or constant);
+and the variable <span class="tt">$1</span> takes value <span class="tt">0</span> or <span class="tt">1</span> 
+depending on the switch state 
+(toggling is by clicking the box or by pressing [<span class="ii">Spacebar</span>] when focused). 
+This allows changing the template output on the fly (e.g. to expand&nbsp;/ collapse structures,
+where switch number <span class="tt">N</span> is convenient to set equal to the structure offset).
+</p>
+<p>The hot link instruction <span class="tt">$VAR=Param</span> makes a current output line a hot link, i.e.
+allows jumping to an object offset&nbsp;/ record&nbsp;/ or to open another linked object in the editor window
+by double clicking a line (or by hitting [<span class="ii">Enter</span>] key when the line of focused).
+
+<span class="tt">Param</span> is an expression value used by a link (an offset, record, file number, sector, etc.) and
+<span class="tt">$VAR</span> can be one of the following:<br/>
+
+<span class="tt">$GOTOREC, $GOTORECOFS</span> - go to the specified record number and record offset of the object<br />
+<span class="tt">$GOTOOFS</span> - go to the specified object offset<br />
+
+<span class="tt">$OPENLBA</span> - open the specified disk sector<br />
+<span class="tt">$OPENDEVOFS</span> - open the specified disk byte<br />
+<span class="tt">$OPENVOLSEC</span> - open the specified 
+<a href="openvolume.html">volume</a> sector<br />
+<span class="tt">$OPENCLUSTER</span> - open the specified 
+<a href="openvolume.html">volume</a> cluster<br />
+<span class="tt">$OPENVOLPAGE</span> - open the specified 
+<a href="openvolume.html">volume</a> page / object id<br />
+<span class="tt">$OPENFILENUM</span> - open a file record by the specified number<br />
+<span class="tt">$OPENFILENUMDATA</span> - open file contents by the specified number<br />
+<span class="tt">$OPENFILERECOFS</span> - open a file by FS entry offset in the object<br />
+<span class="tt">$OPENATTROFS</span> - open a data stream by FS attribute entry offset in the object.<br />
+Optionally specify a template to apply to the opened object by the instruction: <br />
+<span class="tt">$OPENTEMPLATE='{GUID}'</span>;
+specify a template record offset:
+<span class="tt">$OPENTEMPLOFS=Param</span>.
+</p>
+
+
+<h3>Dodatkowe sekcje szablonu</h3>
+<p><b>Record size calculation</b>: instructions between lines <span class="tt">CALCSIZESTART</span> and <span class="tt">CALCSIZEEND</span>.
+It is used when record size may be greater than the sector size and may depend on disk data.
+Variable <span class="tt">$RECSIZE</span> may be assigned in this section only.
+</p>
+<p><b>Data preprocessing</b>: instructions between lines <span class="tt">LOADSTART</span> and <span class="tt">LOADEND</span>.
+It is used e.g. for MFT USN processing (restoration of last two bytes of each sector). 
+Data blocks may be assigned in this section: 
+e.g., use <span class="tt">{U,Y}:={X,Y}</span> to copy <span class="tt">Y</span> bytes at offset <span class="tt">X</span> to offset <span class="tt">U</span>.
+</p>
+<p><b>Data postprocessing</b>: instructions between lines <span class="tt">FLUSHSTART</span> and <span class="tt">FLUSHEND</span>.
+It is used for reverse operation when writing modified data to disk (data blocks may be assigned).
+</p>
+
+<h3>Defines</h3>
+<p>
+Defines are used to replace repetitive blocks of instructions.
+The define can be declared in any template in the following way
+</p>
+
+<p>
+<span class="tt">DEFINE DefineTitle(%1%,%2%,...)</span><br />
+<span class="tt">&nbsp;&nbsp;</span>... (the define instructions where substitution variables 
+<span class="tt">%1%,%2%,...</span> can be used) <br />
+<span class="tt">ENDDEFINE</span><br />
+</p>
+
+<p>It may be used later in any template. 
+On processing it will be replaced with the corresponding instructions 
+and substituted variables:<br />
+<span class="tt">DefineTitle($varname1,$varname2,...)</span><br />
+</p>
+
+</div></div>
+</body>
+</html>

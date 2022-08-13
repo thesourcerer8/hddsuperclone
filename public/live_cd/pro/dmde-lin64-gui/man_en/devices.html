@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Device Selection</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="devices"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">TOC</a> &middot; <a href="howto.html">Work</a> &middot; <a href="menu.html">Menu</a> &middot; <a href="menu_disk.html">Disk</a> &middot; 
+Select Disk&nbsp;/ Task
+<hr />
+<h2>Disk / Task Selection</h2>
+<p>Select disk / image / log-file for further <a href="howto.html">work</a>, or choose another task.
+</p>
+<p><b>If a device is not accessible or has incorrect size</b> see
+<a href="sysrequire.html">System Requirements</a>.
+</p>
+
+<p>
+For the choice between options <span class="ii">physical disks</span> and 
+<span class="ii">logical volumes</span> see <a href="openvolume.html">Volume Opening</a>.
+</p>
+<p>
+The button <span class="ii">Parameters</span> allows to setup the interface and other
+<a href="devioparams.html">Device I/O Parameters</a>
+when <a href="badrecovery.html">working with problem devices</a>.
+</p>
+
+<p>
+In <b>Linux</b> you may use the option 
+<span class="ii">Disk Images&nbsp;/ Logs</span> to manually specify some device&nbsp;/ virtual volume paths
+if they are not listed, e.g.
+<span class="tt">/dev/mapper/truecrypt1</span> or
+<span class="tt">/dev/mmcblk0</span>.
+</p>
+
+<p>The option <span class="ii" id="vhd">Disk Images&nbsp;/ Logs</span> allows opening disk image files
+and loading logs.
+Click or <span class="ii">Enter</span> the topmost list item to add a new image for further work.
+Besides standard sector-wise images, VHD&nbsp;/ VHDX and VMDK formats are supported 
+(without compression&nbsp;/ encryption&nbsp;/ write support);
+<a href="editions.html">Professional Edition</a> also supports E01&nbsp;/ Smart images (with compression).
+</p>
+<p>
+If you need to open an image file with a non-standard/absent extention 
+you need to change a filter option in the open file box.
+On <strong>macOS</strong> you may also need to click <span class="ii">Details/Parameters</span>.
+</p>
+
+<p>The option <span class="ii">Show partitions</span> enables 
+<a href="partitions.html">partitions</a> express search and displaying 
+just after opening a device.</p>
+
+<h3>Other Tasks</h4>
+<p>
+You may additionally load a saved <a href="raids.html">RAID</a> configuration&nbsp;/ RAID calculation log
+or <a href="fullscan.html">Full Scan</a> log by using the option 
+<span class="ii">Disk Images&nbsp;/ Logs</span>.
+</p>
+<p>The options <span class="ii"><a href="raids.html">Construct RAID</a></span> and 
+<span class="ii"><a href="copysectors.html">Copy Sectors</a></span>
+redirect to corresponding tasks.</p>
+
+</div></div>
+</body>
+</html>

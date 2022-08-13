@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Fill Sectors</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="fillsectors"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">TOC</a> &middot; <a href="howto.html">Work</a> &middot; <a href="menu.html">Menu</a> &middot; 
+<a href="menu_tools.html">Tools</a>
+<hr />
+<h3>Fill Sectors</h3>
+<p>
+Write a hex or a file pattern to a range of <a href="devices.html">device</a> sectors.
+Pattern is being written multiple times, covering all specified sectors.
+</p>
+<p>
+<b><a href="changes.html">Read <span style="color:red">the warning on this link</span></a></b> 
+before modifying disk contents. Write is performed directly to the disk, 
+all data will be overwritten, the operation cannot be undone.
+</p>
+<p>
+The maximum size of the hex pattern is 8 bytes. 
+For a larger pattern use a file.
+</p>
+<p>
+<span class="ii">Sector&nbsp;alignment.</span>
+If a successive pattern copy does not fit in the current sector write it partially 
+and write the next copy from the beggining of the next sector. 
+Otherwise write the pattern copies successively ignoring sector boundaries.
+</p>
+
+<p>
+<span class="ii">Report</span> (<a href="editions.html">Professional Edition only</a>).
+Write a report to a text file.
+To create a formatted report put a pattern file <span class="tt">fillreport.html</span> to the software directory
+and add the parameter <span class="tt">fillsecreport=fillreport.html</span> to the <a href="inifile.html">ini-file</a>.
+You may download the default <span class="tt">fillreport.html</span> file by right-clicking <a href="http://dmde.com/docs/fillreport.html">the link</a>.
+</p>
+
+</div></div>
+</body>
+</html>

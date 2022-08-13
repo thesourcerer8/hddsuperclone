@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Special Sector Search</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">TOC</a> &middot; <a href="howto.html">Work</a> &middot; 
+<a href="menu.html">Menu</a> &middot; <a href="menu_tools.html">Tools</a>
+<hr />
+<h3 id="struct">Special Sector Search</h3>
+<p class="descr">
+Search for a special disk or file system structure.
+Search is performed over disk sectors starting next to the current sector.
+</p>
+<h3 id="string">Search String in Object...</h3>
+<p>
+Search for a string in the <a href="diskeditor.html">Editor</a> object.
+</p>
+<h4>Settings for searching a repeating pattern</h4>
+<p>
+<span class="ii">X times in a row</span>: search for a pattern that repeats in a row the specified number of times<br />
+<span class="ii">Seek for end of repetitions</span>: 
+if the pattern starts repeating in a row then seek just for the end of repetitions 
+(instead of seeking every repetition)
+</p>
+<p>
+These settings, for example, can be used to find the beginning and end of arrays of zeros or other values.
+</p>
+
+<h3>Search Again</h3>
+<p>
+Continue <a href="searchssector.html#string">searching the string</a> over the current object
+or <a href="searchssector.html#struct">specific sector</a> over the disk
+starting from the current position in the <a href="diskeditor.html">Disk Editor</a>.
+</p>
+
+</div></div>
+</body>
+</html>

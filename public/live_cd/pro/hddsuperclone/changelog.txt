@@ -1,0 +1,409 @@
+HDDSuperClone Changelog
+
+version 2.3.3.pro
+  * The PRO features are now free
+
+version 2.3.3 20220430
+  * Fixed an issue with the virtual driver only mode
+
+version 2.3.2 20220123
+  * Fixed a bug with Direct USB mode with the Virtual Driver
+  * Change made to attempt to work with sleeping ports
+
+version 2.3.1 20220115
+  * Internal programming changes mostly for debugging
+  * Fixed a bug when using the virtual driver with some languages
+  Added the option Do not perform identify when listing source devices
+
+version 2.3.0 20210912
+  * Virtual Driver now works with Linux Kernel 5.6+
+
+version 2.2.24 20210801
+  * Added the option Fix Driver Memory Error
+  * Added the option Retry connecting on failure after relay power cycle
+  * Added the option Max read rate (kB/s)
+  * The free version now allows a sector size of 4096
+
+version 2.2.23 20210320
+  * Fixed a bug with the min skip size when updating clone settings
+  * Updated the main window relay button labels to power on/off
+  * Log resets now create a time stamped backup
+
+version 2.2.22 20210207
+  * Added direct relay support for YEPKIT YKUSH series USB switchable hubs
+
+version 2.2.21 20210117
+  * Fixed a bug with SCSI and unsupported read 16 command
+  * Added relay activation buttons to the main window
+
+version 2.2.20 20201206
+  * Fixed a bug with the log when out of disk space
+  * Fixed a bug with USB direct mode when working with card readers
+
+version 2.2.19 20201115
+  * Added the advanced option Enable Rebuild Assist
+  * Added the phase Rebuild Assist
+  * The identify results now show if rebuild assist is supported
+  * Added documentation info not to run in a virtual machine
+  * Fixed an issue with the GUI in desktop UI dark mode
+  * Fixed an issue with some settings not being accessible in some desktop UI
+  * Fixed a bug with the skip run count with skip fast enabled
+
+version 2.2.18 20201004
+  * Fixed a bug where the license would not install on some systems
+  * Fixed a bug in the log output that caused an error with HDDSCViewer
+  * SMART is now allowed in free version
+  * Added the Extended Analyze button to the main window
+  * Removed the Extended Analyze option from Advanced settings
+  * The regular analyze is now allowed in the free version
+
+version 2.2.17 20200623
+  * Added warnings in the SMART results
+  * Added the slow count to the display during analyze
+
+version 2.2.16 20200620
+  * Made the analyze results window scrolled
+  * Added diagnostic information to the analyze results
+  * Added Current read time to the display
+  * The Recent read time is now recent instead of current
+
+version 2.2.15 20200502
+  * Added the advanced option Virtual Disk IO SCSI only
+  * Added Power On and off descriptions to the relay buttons
+
+version 2.2.14 20200425
+  * Fixed a bug with the virtual disk locking up on some hardware
+
+version 2.2.13 20200229
+  * Internal timeout change in the virtual driver
+  * Added an advanced option to change the current position
+  * Improved the virtual disk driver stability
+  * Added SCSI I/O capability to the virtual driver
+
+version 2.2.12 20200216
+  * Fixed an error message when when opening an existing project
+  * Improved the virtual driver zero fill and marking
+  * Virtual Driver now works with Linux Kernel 5.3+
+  * Fixed a program crash when switching modes
+  * The Erase Destination mode can now be stoped and resumed
+  * Added information to the manual about the Erase Destination mode
+  * Added info to the manual about kernel versions with virtual disk driver
+
+version 2.2.11 20200206
+  * Added the timer option Always wait for reset timers
+  * Improved Direct AHCI mode to wait for drive ready DRDY
+
+version 2.2.10 20200202
+  * Fixed a bug with the log repair taking too long with a big file
+  * Improved Direct AHCI mode soft/hard reset post processing
+
+version 2.2.9 20200126
+  * Fixed an out of range bug when using a domain
+  * Added the new option Add to Domain from DMDE bytes file
+
+version 2.2.8 20200121
+  * Improvement for USB Direct mode flash drive compatibility
+  * Fixed a timeout bug with virtual disk and direct mode
+  * Direct AHCI mode now sets the DMA mode
+  * Updated the documentation to reflect use of DMDE for data extraction
+
+version 2.2.7 20200101
+  * Fixed a bug with manual soft and hard reset timers
+  * Removed some ATA commands from normal USB Direct mode
+  * Added USB Direct ATA mode for conventional drives
+  * Additional compatibility improvements for USB Direct mode
+  * Other minor bug fixes and improvements
+
+version 2.2.6 20191223
+  * Added a warning if the destination is smaller than source
+  * Improved the variance time test of the Analyze feature
+  * Added the advanced option Enable read twice on timeout
+  * Fixed a bug with the virtual driver on some systems
+  * Fixed analyze and smart data in the log so hddscviewer can read the log
+  * Fixed a timer issue with USB Direct mode
+
+version 2.2.5 20191124
+  * Fixed a bug with resetting the log and the last sector(s)
+  * Fixed a bug with reverse cloning and the last sector(s)
+
+version 2.2.4 20191117
+  * Fixed a bug when using generic source device mode
+
+version 2.2.3 20191110
+  * Virtual Driver now works with Linux Kernel 5.0+
+
+version 2.2.2 20191027
+  * Skip resets will not stop if max skip size set low
+  * Fixed a bug with SMART where it would crash
+  * Internal program activation improvement
+  * Improved Direct AHCI and IDE motherboard support
+
+version 2.2.1 20190908
+  * Added extra info to direct USB source listing
+  * Increased the max cluster size for direct IDE and AHCI
+
+version 2.2.0 20190824
+  * Fixed a bug with SCSI write
+  * Fixed a bug with Direct USB inquiry
+  * Other fixes for SCSI passthrough for inquiry and read capacity
+
+version 2.1.14 20190818
+  * Improved USB ATA locked up drive detection
+  * Fixed a bug with the driver minimum cluster size
+  * Made the minimum driver cluster size also affect domain reads
+  * Enabling SCSI write now uses /dev/sgX devices
+  * Added the new Direct USB mode
+
+version 2.1.13 20190804
+  * Fixed a bug with the timing byte
+  * Fixed a bug with some USB drives bad reads reporting as good
+  * Fixed a bug where SCSI passthrough would not work on old drives
+  * Fixed the generic source device mode
+  * Fixed a bug with the model name in generic source device mode
+  * Changed some of the default timeouts to a higher value
+
+version 2.1.12 20190427
+  * Fixed a bug with AHCI where drives listed with no data
+  * Fixed a bug where SMART data would fail after stopping
+
+version 2.1.11 20190423
+  * Fixed a bug with drives visable to the OS in direct mode
+  * Added a program script that can install program dependencies
+
+version 2.1.10 20190419
+  * Improved SCSI write error detection
+  * Changed the direct SCSI write timeout to 2 seconds
+  * Fixed a bug with direct AHCI for some motherboards
+  * Updated some info in the WD VSC scripts
+  * Added the script wd_royl_write_mod
+
+version 2.1.9 20190328
+  * Added a section in the user manual for relay operation
+  * Improved the SCSI read mode support detection
+  * Added a 1 second timeout for direct SCSI writes
+  * Added extra info about direct SCSI writes in the manual
+  * Added a translated Russian language pack
+
+version 2.1.8 20190203
+  * Improved how trimming handles major errors
+  * Added 0.5 sec to the first read soft reset time
+  * Fixed a bug where phase logs were disabled if no log backup
+  * Fixed a bug where the phase logs setting was not saved
+  * Added an additional message when cloning stops for any reason
+  * Fixed a bug where SCSI mode would still use ATA identify data
+  * Added the Tools menu option Display Identify Results
+  * Enable using ATA return is now on by default in pro version
+
+version 2.1.7 20190116
+  * Fixed a missing error message when chosing the source
+  * Improved how the progress log is written to help avoid corruption
+  * The domain file is no longer written if it is not being used
+  * Fixed a bug with direct AHCI mode
+
+version 2.1.6 20190102
+  * Now shows message for unsupported sector size in the free version
+  * Fixed a bug where SCSI passthrough could report drive sized changed
+
+version 2.1.5 20181222
+  * Fixed a bug where using a relay caused fill mode to fail
+  * Added an initial reset in direct mode when choosing the source
+  * Disabled the main window while processing the source
+  * The driver will now start automatically on 32 bit memory error
+
+version 2.1.4 20181204
+  * Added read time info to the progress log
+
+version 2.1.3 20181117
+  * Fixed a bug where the base skip size was not saved
+  * Updated the user manual section for hiding a drive
+
+version 2.1.2 20181029
+  * Updated the virtual driver section in the manual
+  * Made changes to some internal debugging code
+  * Removed the command line option to set the virtual disk name
+  * Fixed an internal GTK label error
+  * Fixed a bug with generic mode where all reads would fail
+
+version 2.1.1 20181021
+  * Fixed an issue with choosing a relay
+
+version 2.1.0 20181020
+  * Added the ability to control a relay in the Pro version
+
+version 2.0.3 20181013
+  * Removed some alpha USB code that could cause a library error
+  * Made changes to the help option to show the manual
+  * Fixed a couple typos in the program
+  * Fixed a bug with autopassthrough on some usb drives
+
+version 2.0.2 20180909
+  * Improved the virtual driver stability
+  * Added the Slow Driver checkbutton
+  * Removed the button colors from the bottom status bar by default
+  * Added an advanced option to enable button colors in the status bar
+
+version 2.0.1 20180908
+  * Fixed a bug with installing the pro version activation file
+  * Fixed a bug with the virtual mode buttons in the free version
+  * Added info in the manual about the domain with virtual mode buttons
+
+version 2.0 20180826
+  * Changed the message when choosing an existing image file
+  * Added option to use physical sector size as logigal for virtual disk
+  * Updated the EULA
+  * Reduced the number of translated languages
+
+version 1.99.3.beta 20180714
+  * Added a SMART data function (pro version)
+  * Improved the auto passthrough identify results
+  * New section in the manual for 520 byte per sectors drives
+  * Installer now puts links in the application menu
+  * HDDSuperTool now lists modes if target not chosen
+
+version 1.99.2.beta 20180705
+  * Fixed the exit message when not run as root
+  * Fixed a bug with the slow skips count
+  * Fixed a bug with the last run size value
+  * Improved the skipping algorithm to help extend the range
+  * It will now stop when a skip reset happens
+  * New section in the manual to explain skip resets
+  * Most GUI messages now included in language translate
+  * The instruction manual is now available from the help menu
+  * Added an analyze function (pro version)
+
+version 1.99.1.beta 20180618
+  * Changed how skip resets are triggered
+  * Added Slow skips to the display
+  * Security lock is now detected
+  * HDDSuperTool is now part of HDDSuperClone
+  * Other improvements for the future pro version
+  * BETA release of the PRO capable version
+
+version 1.12 20171119
+  * Fixed a bug with changing the clustersize
+  * Fixed a bug in the advanced settings
+  * Added size in GB to display output (GUI)
+  * Added timer settings (direct mode)
+  * Added generic modes
+  * Many tweaks for direct mode
+  * Many other program tweaks for improved operation
+
+version 1.11.gui.beta 20170902
+  * Removed some code that was causing a library error
+
+version 1.10.gui.beta 20170806
+  * Added a device check before commiting to device error
+  * Added advanced options to the GUI version
+  * Added the ability to process CHS
+  * Added the option to enable/disable the OS write buffer
+  * Removed the 10% limit on direct IDE PIO
+
+version 1.9.gui.beta 20170629
+  * Added language packs
+  * Will start in GUI if no command line options are set
+  * Added the option --command-line to override auto GUI
+  * Removed the exit box popup
+
+version 1.8.1 20170529
+  * Fixed a bug where read only devices would not open
+
+version 1.8 20170529
+  * Added the option --reset-log
+  * Added the option --gui
+
+version 1.7 20170304
+  * Fixed the display percent and time remaining when using a domain file
+  * Fixed the time remaining when performing retries
+  * Improved the display when performing retries
+  * Progress logfile is automatically repaired if same status found
+
+version 1.6.1 20170208
+  * Fixed a bug with the progress logfile output
+
+version 1.6 20170129
+  * Fixed a bug with ata return data
+  * Fixed a bug with error output not displaying
+  * Improved some error output
+  * Added the option --exit-slow-time
+
+version 1.5.2 20170121
+  * Fixed possible exit code and message issues
+
+version 1.5.1 20170112
+  * Fixed a bug with the fill options
+
+version 1.5 20170110
+  * Added the option --exit-on-slow
+
+version 1.4 20161125
+  * Fixed the long option --progressfile
+  * Extra information has been added to the progess file
+  * It will now reload skip info from the progress file
+  * Fixed a bug with reverse in phase1
+  * Changed the recent skip to run size
+
+version 1.3 20161015
+  * More internal code changes
+  * If log has errors it now mentions the repair option
+  * Fixed bug with exiting on device fault
+  * Fixed bug that produced log lines of same status
+  * Improved skipping algorithm
+  * Fixed a bug where imported ddrescue log was not repaired
+
+version 1.2 20160731
+  * Added support for importing new style ddrescue log
+  * Now asks for progress file if not provided
+  * Image file is now an option for target choice
+  * ATA mode is now allowed in free version
+  * Skip threshold is now allowed in free version
+  * Removed options not available in free version
+  * Internal code changes to allow for GUI
+  * Fixed a bug where all reads were bad in direct mode
+  * Fixed bad head marking
+
+version 1.1 20160605
+  * Fixed a bug with the resuming position
+
+version 1.0 20160514
+  * No actual program changes
+  * Updated from beta to stable
+  * Now also includes an uninstaller (hddsuperclone-uninstall.sh)
+  * Added DEB and RPM installers for download
+
+version 0.9-beta 20160508
+  * Added the options --fill-zero and --fill-mark
+
+version 0.8-beta 20160424
+  * Added the options --domain and --domaindd
+  * Now checks if the source is mounted
+  * Added the option --force
+
+version 0.7-beta 20160417
+  * Drive list now shows size in MB
+  * Added source and destination to the output
+  * Fixed a bug with USB exit
+
+version 0.6-beta 20160416
+  * Updated status to BETA
+  * Fixed a logfile bug with ata mode
+
+version 0.5-alpha 20160411
+  * Fixed the short "s" option for --source
+  * Fixed a bug with dividing in reverse
+  * Changed some of the exit codes
+
+version 0.4-alpha 20160409
+  * Reverse is now implemented
+  * Improved some exit messages
+
+version 0.3-alpha 20160403
+  * Now marks a fault as bad in the progress log
+  * Improved ability to detect a faulted device
+  * Exit codes improved
+  * Display output improved
+
+version 0.2-alpha 20160327
+  * Exit codes updated
+
+version 0.1-alpha 20160326
+  * Initial alpha release

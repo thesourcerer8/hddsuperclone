@@ -1,0 +1,56 @@
+seti $printhelp = $printhelp
+
+while 1 = 1
+  echo " "
+  echo "Custom menu"
+  echo "q) Quit"
+  echo "p) Previous menu"
+  echo "h) Toggle script help
+  echo "1) Custom message"
+  echo "8) my scripts tech
+  echo "9) my scripts test
+
+  if $printhelp = 1
+    exit 0
+  endif
+
+  echo "Enter your choice:
+  userinput $choicestring
+
+  if $choicestring = q
+    break
+
+  elseif $choicestring = p
+    previousscript
+
+  elseif $choicestring = h
+    if $help = 0
+      seti $help = 1
+      echo "Help is now turned on"
+    else
+      seti $help = 0
+      echo "Help is now turned off"
+    endif
+
+  elseif $choicestring = 1
+    echo "Add your own scripts here"
+
+
+
+
+
+  elseif $choicestring = 8
+    loadscript /home/tech/hddsupertool/myscripts/hddsubmenu_custom
+
+  elseif $choicestring = 9
+    loadscript /home/test/hddsupertool/myscripts/hddsubmenu_custom
+
+
+  else
+    echo "bad choice= " $choicestring
+  endif
+
+
+
+done
+end

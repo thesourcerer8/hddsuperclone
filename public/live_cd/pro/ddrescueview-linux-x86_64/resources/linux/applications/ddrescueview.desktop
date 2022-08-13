@@ -1,0 +1,17 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=ddrescueview
+Icon=ddrescueview
+Comment=Graphical viewer for GNU ddrescue map files
+Keywords=ddrescue;gddrescue;rescue;recovery;log;logfile;mapfile;
+Categories=Utility;DataVisualization;GTK;
+Exec=ddrescueview %f
+
+
+
+
+
+
+
+

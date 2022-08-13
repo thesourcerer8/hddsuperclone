@@ -1,0 +1,145 @@
+
+
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'Western Digital ROYL check ram.'
+  echo 'This requires the text variable "file" to be set.'
+  echo '"file" is the name of the ram file.'
+
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+
+include good_subroutines
+
+# set a blank string variable to compare with user input
+# make sure not to set this anyplace else
+sets $null = ""
+
+# set this to itself for use with the menu system
+# make sure not to set this anyplace else
+# if it was not previously set it will = 0
+seti $using_menu = $using_menu
+
+# set the file name to be read
+while 1 = 1
+  variablecheck $file
+  if $error_level < 16
+    seti $ask = 1
+  elseif $using_menu = 1
+    seti $ask = 1
+  endif
+  if $ask = 1
+    echo "Enter file name:"
+    userinput $choicestring
+    if $choicestring != $null
+      sets $file = $choicestring
+      break
+    else
+      echo "Choice cannot be blank!"
+    endif
+  else
+    break
+  endif
+done
+
+getfilesize $file
+seti $file_size = $error_level
+if $file_size < 0
+  echo "ERROR! File " $file " not found!"
+  previousscript
+endif
+echo "Reading the ram file"
+seti $ram_size = $file_size
+scratchpadsize $ram_size
+clearscratchpad
+readscratchpad $file 0 0 $ram_size
+
+gosub process_ram
+
+
+previousscript
+end
+
+
+
+
+subroutine process_ram
+  echo "processing ram"
+
+  # search for modules and check them
+  echo "Searching for modules."
+  sets $header_check = "ROYL"
+  seti $position = 0
+  seti $search_end = $ram_size - 4
+  while $position < $search_end
+    sets $header = scratchpad $position 4
+    if $header = $header_check
+      # process the module
+      seti $working_offset = $position
+      #echo "Header:"
+      #printscratchpad $working_offset 4
+      seti $working_offset = $position + 8
+      seti $mod_id = scratchpad $working_offset w
+      hex
+      #echo "Module ID = 0x" $mod_id
+
+      # find how many sectors the module contains
+      seti $working_offset = $position + 0xa
+      seti $mod_length_sectors = scratchpad $working_offset
+      seti $working_offset = $position + 0xb
+      seti $tempnum = scratchpad $working_offset
+      seti $tempnum = $tempnum > 8
+      seti $mod_length_sectors = $mod_length_sectors + $tempnum
+
+      #echo "Size in sectors = 0x" $mod_length_sectors
+      seti $working_offset = $position + 0xc
+      seti $checksum = scratchpad $working_offset dw
+      #echo "32 bit checksum = 0x" $checksum
+      seti $working_offset = $position + 0x10
+      #echo "Mod version:"
+      #printscratchpad $working_offset 8
+      decimal
+
+      seti $module_size = $mod_length_sectors * 512
+      seti $calculated_checksum = 0
+      seti $count = 0
+      while $count < $module_size
+        seti $working_offset = $position + $count
+        if $working_offset > $search_end
+          echo "end of module is past end of rom"
+          break
+        endif
+        seti $dword = scratchpad $working_offset dw
+        seti $calculated_checksum = $calculated_checksum + $dword
+        seti $count = $count + 4
+        # skip the actual checksum bytes
+        if $count = 0xc
+          seti $count = $count + 4
+        endif
+      done
+      seti $calculated_checksum = $calculated_checksum & 0xffffffff
+      seti $calculated_checksum = 0xffffffff - $calculated_checksum
+      seti $calculated_checksum = $calculated_checksum + 1
+
+      hex
+      if $checksum = $calculated_checksum
+        sets $checkstring = " calulated=0x" $calculated_checksum " (good)"
+      else
+        sets $checkstring = " calulated=0x" $calculated_checksum " (bad)"
+      endif
+      echo "pos=0x" $position " ModID=0x" $mod_id " size=0x" $module_size $checkstring
+      decimal
+    endif
+    seti $position = $position + 512
+  done
+endsubroutine
+
+
+
+

@@ -1,0 +1,253 @@
+
+
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'Western Digital ROYL check rom.'
+  echo 'This requires the text variable "file" to be set.'
+  echo '"file" is the name of the file to dump the rom.'
+
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+
+include good_subroutines
+
+# set a blank string variable to compare with user input
+# make sure not to set this anyplace else
+sets $null = ""
+
+# set this to itself for use with the menu system
+# make sure not to set this anyplace else
+# if it was not previously set it will = 0
+seti $using_menu = $using_menu
+
+# set the file name to be written
+while 1 = 1
+  variablecheck $file
+  if $error_level < 16
+    seti $ask = 1
+  elseif $using_menu = 1
+    seti $ask = 1
+  endif
+  if $ask = 1
+    echo "Enter file name:"
+    userinput $choicestring
+    if $choicestring != $null
+      sets $file = $choicestring
+      break
+    else
+      echo "Choice cannot be blank!"
+    endif
+  else
+    break
+  endif
+done
+
+getfilesize $file
+seti $file_size = $error_level
+if $file_size < 0
+  echo "ERROR! File " $file " not found!"
+  previousscript
+endif
+echo "Reading the rom file"
+seti $rom_size = $file_size
+scratchpadsize $rom_size
+clearscratchpad
+readscratchpad $file 0 0 $rom_size
+
+gosub process_ram
+
+
+previousscript
+end
+
+
+
+
+subroutine process_ram
+  echo "processing ram"
+  printscratchpad 0 512
+  seti $pmcblock_number = 0
+  seti $error = 0
+  while 1 = 1
+    seti $table_offset = $pmcblock_number * 32
+    seti $working_offset = $table_offset
+    seti $block_number = scratchpad $table_offset
+    if $pmcblock_number = 0
+      if $block_number != 0x5a
+        hex
+        echo "ERROR: expecting first byte of 0x5a but found 0x" $block_number
+        decimal
+        seti $error = $error + 1
+        break
+      endif
+    elseif $pmcblock_number != $block_number
+      hex
+      echo "ERROR: expecting block number 0x" $pmcblock_number " but found 0x" $block_number
+      decimal
+      seti $error = $error + 1
+      break
+    endif
+
+    seti $working_offset = $table_offset + 4
+    seti $checksum_location = scratchpad $working_offset dw
+    seti $working_offset = $table_offset + 8
+    seti $block_size = scratchpad $working_offset dw
+    seti $checksum_length = $checksum_location - $block_size
+    seti $working_offset = $table_offset + 0x0c
+    seti $block_start = scratchpad $working_offset dw
+    seti $block_end = $block_start + $checksum_location
+    seti $working_offset = $table_offset + 0x0e
+    seti $last_entry = scratchpad $working_offset
+    seti $working_offset = $table_offset + 0x1f
+    seti $table_checksum = scratchpad $working_offset
+    seti $working_offset = $table_offset + 0x10
+    seti $load_pos1 = scratchpad $working_offset dw
+    seti $working_offset = $table_offset + 0x14
+    seti $load_pos2 = scratchpad $working_offset dw
+
+    seti $calulated_tablechk = 0
+    seti $count = 0
+    while $count < 31
+      seti $position = $table_offset + $count
+      seti $byte = scratchpad $position
+      seti $calulated_tablechk = $calulated_tablechk + $byte
+      seti $count = $count + 1
+    done
+    seti $calulated_tablechk = $calulated_tablechk & 0xff
+    if $table_checksum != $calulated_tablechk
+      echo "ERROR: bad table checksum"
+    endif
+
+    hex
+    sets $name = "n0x" $pmcblock_number "_a0x" $load_pos1 "_b0x" $load_pos2 "_s0x" $block_size
+    decimal
+    deletefile $name
+    writescratchpad $name $block_start 0 $block_size
+
+    if $checksum_length = 1
+      seti $position = $block_start + $block_size
+      seti $checksum = scratchpad $position
+      seti $calculated_checksum = 0
+      seti $count = 0
+      while $count < $block_size
+        seti $position = $block_start + $count
+        seti $byte = scratchpad $position
+        seti $calculated_checksum = $calculated_checksum + $byte
+        seti $count = $count + 1
+      done
+      seti $calculated_checksum = $calculated_checksum & 0xff
+    elseif $checksum_length = 2
+      seti $position = $block_start + $block_size
+      seti $checksum = scratchpad $position w
+      seti $calculated_checksum = 0
+      seti $count = 0
+      while $count < $block_size
+        seti $position = $block_start + $count
+        seti $word = scratchpad $position w
+        seti $calculated_checksum = $calculated_checksum + $word
+        seti $count = $count + 2
+      done
+      seti $calculated_checksum = $calculated_checksum & 0xffff
+      #seti $calculated_checksum = 0xffff - $calculated_checksum
+      #seti $calculated_checksum = $calculated_checksum + 1
+    else
+      echo "ERROR: bad checksum length of " $checksum_length
+      seti $checkerr = 1
+    endif
+
+
+    hex
+    if $checksum = $calculated_checksum
+      sets $checkstring = " calulated=0x" $calculated_checksum " (good)"
+    else
+      sets $checkstring = " calulated=0x" $calculated_checksum " (BAD)"
+    endif
+    echo "block=0x" $pmcblock_number " start=0x" $block_start " size=0x" $block_size " checksum=0x" $checksum $checkstring
+    decimal
+
+    if $last_entry != 0
+      echo "finished processing blocks"
+      break
+    endif
+    seti $pmcblock_number = $pmcblock_number + 1
+  done
+
+  # search for modules and check them, starting from the end of the last rom entry
+  echo "Searching for modules."
+  echo "Note that it is normal for some module checksums to be bad,"
+  echo "as they are not full size in the ROM."
+  sets $header_check = "ROYL"
+  seti $position = $block_end
+  seti $search_end = $rom_size - 4
+  while $position < $search_end
+    sets $header = scratchpad $position 4
+    if $header = $header_check
+      # process the module
+      seti $working_offset = $position
+      #echo "Header:"
+      #printscratchpad $working_offset 4
+      seti $working_offset = $position + 8
+      seti $mod_id = scratchpad $working_offset w
+      hex
+      #echo "Module ID = 0x" $mod_id
+
+      # find how many sectors the module contains
+      seti $working_offset = $position + 0xa
+      seti $mod_length_sectors = scratchpad $working_offset
+      seti $working_offset = $position + 0xb
+      seti $tempnum = scratchpad $working_offset
+      seti $tempnum = $tempnum > 8
+      seti $mod_length_sectors = $mod_length_sectors + $tempnum
+
+      #echo "Size in sectors = 0x" $mod_length_sectors
+      seti $working_offset = $position + 0xc
+      seti $checksum = scratchpad $working_offset dw
+      #echo "32 bit checksum = 0x" $checksum
+      seti $working_offset = $position + 0x10
+      #echo "Mod version:"
+      #printscratchpad $working_offset 8
+      decimal
+
+      seti $module_size = $mod_length_sectors * 512
+      seti $calculated_checksum = 0
+      seti $count = 0
+      while $count < $module_size
+        seti $working_offset = $position + $count
+        if $working_offset > $search_end
+          echo "end of module is past end of rom"
+          break
+        endif
+        seti $dword = scratchpad $working_offset dw
+        seti $calculated_checksum = $calculated_checksum + $dword
+        seti $count = $count + 4
+        # skip the actual checksum bytes
+        if $count = 0xc
+          seti $count = $count + 4
+        endif
+      done
+      seti $calculated_checksum = $calculated_checksum & 0xffffffff
+      seti $calculated_checksum = 0xffffffff - $calculated_checksum
+      seti $calculated_checksum = $calculated_checksum + 1
+
+      hex
+      if $checksum = $calculated_checksum
+        sets $checkstring = " calulated=0x" $calculated_checksum " (good)"
+      else
+        sets $checkstring = " calulated=0x" $calculated_checksum " (bad)"
+      endif
+      echo "pos=0x" $position " ModID=0x" $mod_id " size=0x" $mod_length_sectors $checkstring
+      decimal
+    endif
+    seti $position = $position + 1
+  done
+endsubroutine
+
+
+
+

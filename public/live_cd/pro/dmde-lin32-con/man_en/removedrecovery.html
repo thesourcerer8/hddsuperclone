@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Removed Data Recovery</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">TOC</a> &middot; <a href="howto.html">Work</a> &middot; 
+<a href="datarecovery.html">Data Recovery</a>
+<hr />
+<h3>Removed Data Recovery</h3>
+<p>
+Removed recovery is generally performed the same way as other <a href="datarecovery.html">data recovery</a>.
+However the possibility to recover removed files depends strongly 
+on a file system, device type, and operating system activity.
+</p>
+<h4>Overwritten Is Not Recoverable</h4>
+<p>
+Really <strong>overwritten data cannot be recovered</strong> using any modern means.
+For modern HDD's there are no technologies to recover data even after single cycle of overwritting.
+But it depends on an OS activity and a fortuity how fast the data is overwritten after removal.
+Removed files on a system disk may be overwritten during several seconds on a modern OS.
+It may even worth to immediately unplug the PC power instead of regular shutting it down
+if you wish to prevent overwriting of accidentally removed data.
+</p>
+<p>
+Another obstacle to recover removed data is a <strong>trim technology used on SSD disks</strong>
+(as well on modern <strong>SMR</strong> HDD disks).
+It is used to mark removed blocks as empty so these blocks are not readable after the removal.
+Theoretically it is possible to read memory banks directly using special equipment 
+but there is constant rotation as well as another transformation of data on SSD disks 
+which make such recovery job unreliable (however some random fragments of data still can be found).
+</p>
+<p>
+Anyway it is not possible to surely predict if the data is already overwritten 
+so you should try data recovery anyway.
+Regarding recovery of super valued data it also worths to contact specialists 
+having special equipment and knowledge.
+</p>
+
+<h4>Removed Data Recovery Based on a File System</h4>
+<p>
+Unlike <a href="fullscan.html#raw">Raw recovery</a> (signature based), FS based recovery allows recovering files with their original names and paths, 
+and accounting the fragmentation (see <a href="fullscan.html#raw">Full Scan</a>).
+</p>
+<p>
+However if the data is lost due to removal then FS based recovery ability depends strongly on a file system type.
+Some file systems destroy FS structures immediatelly while others only mark files as removed keeping them available 
+until not overwritten. File systems may also support journaling however a journal keeps a small amount 
+of the most recent operations only. <a href="fullscan.html#raw">Raw recovery</a> 
+is a last resort when FS based recovery is not possible.
+</p>
+<table>
+<tr style="vertical-align:top"><td>File System</td><td>Availability&nbsp;<br />by FS</td><td>Remarks</td></tr>
+<tr style="vertical-align:top"><td>NTFS</td><td>high</td>
+<td>Large files (&gt;2GB) may be truncated to a zero size by Windows NTFS driver</td></tr>
+<tr style="vertical-align:top"><td>ReFS, APFS, Btrfs</td><td>high</td>
+<td>Copy-on-write strategy leaves old structures on the disk until they are overwritten (unless <strong>trim</strong> is used)</td></tr>
+<tr style="vertical-align:top"><td>FAT,<br/>ExFAT</td><td>medium</td>
+<td>Only the first file fragment address is known after removal,
+on FAT32 even the first fragment address may be partially unknown, no journal
+</td></tr>
+<tr style="vertical-align:top"><td>HFS+/X,<br/>Ext3/4</td><td>low</td>
+<td>On Ext FS file names may retain but file location information is wiped out</td>
+</tr>
+
+</table>
+
+<h4>Data Recovery after Format</h4>
+<p>
+Full format in Windows, starting with Windows Vista, overwrites the partition with zeros. 
+Still, only not rewritten data can be recovered
+(for example, formatting was interrupted, previously there was a different partition size, etc.).
+</p>
+<p>
+Fast formatting usually causes only some loss of the original FS structure, some files. 
+However, the initial fragmentation of FS structures, changing formatting parameters, 
+the presence of garbage, and interspersions of other FSs (for example, from disk images) 
+can significantly worsen the result of FS reconstruction.
+</p>
+<p>
+When FAT&nbsp;/ exFAT is formatted cluster tables containing information for restoring fragmented files are cleared.
+</p>
+
+<h4>Previous File Versions and Copies</h4>
+<p>
+You should take into account there may be previous file versions or temporary copies or copies on other disks.
+</p>
+<p>
+Windows restore points is enabled may keep previous file versions before removal.
+Right click the file/directory and check their properties. There may be previous versions available for recovery.
+</p>
+
+</div></div>
+</body>
+</html>

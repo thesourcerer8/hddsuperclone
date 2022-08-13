@@ -1,0 +1,2 @@
+#define DEBUG
+#define GODMODE

@@ -1,0 +1,150 @@
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'Western Digital ROYL dump all modules using vendor specific commands.'
+  echo 'This will dump the sectors of the modules to the files "modulexxxx.bin".'
+  echo 'Note that some USB drives do not support these vendor specific commands.'
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+
+include good_subroutines
+
+# set a blank string variable to compare with user input
+# make sure not to set this anyplace else
+sets $null = ""
+
+# set this to itself for use with the menu system
+# make sure not to set this anyplace else
+# if it was not previously set it will = 0
+seti $using_menu = $using_menu
+
+# set the file name to be read
+while 1 = 1
+  variablecheck $file
+  if $error_level < 16
+    seti $ask = 1
+  elseif $using_menu = 1
+    seti $ask = 1
+  endif
+  if $ask = 1
+    echo "Enter file name:"
+    userinput $choicestring
+    if $choicestring != $null
+      sets $file = $choicestring
+      break
+    else
+      echo "Choice cannot be blank!"
+    endif
+  else
+    break
+  endif
+done
+
+getfilesize $file
+seti $file_size = $error_level
+if $file_size < 0
+  echo "ERROR! File " $file " not found!"
+  previousscript
+endif
+echo "Reading the file"
+seti $scratchpad_size = $file_size
+scratchpadsize $scratchpad_size
+clearscratchpad
+readscratchpad $file 0 0 $scratchpad_size
+
+# show it on the screen
+#printscratchpad 0 $scratchpad_size
+
+
+# process the module
+echo "Header:"
+printscratchpad 0 4
+seti $mod_id = scratchpad 8 w
+hex
+echo "Module ID = 0x" $mod_id
+# find how many sectors the module contains
+seti $mod_length_sectors = scratchpad 0xa
+seti $tempnum = scratchpad 0xb
+seti $tempnum = $tempnum > 8
+seti $mod_length_sectors = $mod_length_sectors + $tempnum
+echo "Size in sectors = 0x" $mod_length_sectors
+seti $checksum = scratchpad 0xc dw
+echo "32 bit checksum = 0x" $checksum
+seti $total_records = scratchpad 0x30 w
+echo "Total records = 0x" $total_records
+decimal
+sets $header = scratchpad 0 4
+sets $header_check = "ROYL"
+if $header != $header_check
+  echo "Header is not 'ROYL', exiting"
+  previousscript
+endif
+
+# calculate checksum
+seti $calculated_checksum = 0
+seti $count = 0
+while $count < $scratchpad_size
+  seti $dword = scratchpad $count dw
+  seti $calculated_checksum = $calculated_checksum + $dword
+  seti $count = $count + 4
+  # skip the actual checksum bytes
+  if $count = 0xc
+    seti $count = $count + 4
+  endif
+done
+seti $calculated_checksum = $calculated_checksum & 0xffffffff
+seti $calculated_checksum = 0xffffffff - $calculated_checksum
+seti $calculated_checksum = $calculated_checksum + 1
+if $checksum = $calculated_checksum
+  sets $message = " (good)"
+else
+  sets $message = " (BAD)"
+endif
+hex
+echo "Calculated Checksum = 0x" $calculated_checksum $message
+decimal
+if $checksum != $calculated_checksum
+  echo "Calculated checksum does not match actual, exiting"
+  previousscript
+endif
+
+# process the data records
+seti $record_count = 0
+seti $offset = 0x32
+echo ""
+while $record_count < $total_records
+  seti $record_count = $record_count + 1
+  seti $record_length = scratchpad $offset b
+  #printscratchpad $offset $record_length
+  seti $working_offset = $offset + 1
+  seti $module_copies = scratchpad $working_offset b
+  seti $working_offset = $offset + 2
+  seti $module_id = scratchpad $working_offset w
+  seti $working_offset = $offset + 4
+  seti $module_size = scratchpad $working_offset w
+  seti $working_offset = $offset + 0xa
+  seti $module_location1 = scratchpad $working_offset dw
+  seti $working_offset = $offset + 0xe
+  seti $module_location2 = scratchpad $working_offset dw
+  hex
+  echo "ID=0x" $module_id " sectors=0x" $module_size " copies=0x" $module_copies " copy1=0x" $module_location1 " copy2=0x" $module_location2
+  decimal
+  seti $offset = $offset + $record_length
+
+done
+
+
+
+
+previousscript
+end
+
+
+
+
+

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Odzyskiwanie danych</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="datarecovery"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Spis treści</a> &middot; <a href="howto.html">Praca</a> &middot; 
+<a href="menu.html">Menu</a> &middot; <a href="menu_tools.html">Narzędzia</a>
+<hr />
+<h2>Odzyskiwanie danych</h2>
+<a href="badrecovery.html">Problemy z urządzeniem</a> 
+&nbsp;
+<a href="#recoveryevents">Błędy w plikach</a>
+&nbsp;
+<a href="datarecovery.html#efs">Szyfrowane pliki</a>
+&nbsp;
+<a href="fullscan.html">Pełne skanowanie</a>
+<p>
+<span style="color:#ff0000; font-weight: bold;">Uwaga!</span>
+Eżeli pliki zostaną odzyskane nieprawidłowo lub występują inne problemy, 
+upewnij się, że korzystasz z <a href="about.html">najnowszej wersji oprogramowania</a> z zaufanego źródła.
+</p>
+<p>
+<span style="color:#ff0000; font-weight: bold;">Uwaga!</span>
+Nie pisz nic na źródłowego dysku/partycji. Należy odzyskać dane tylko na inny dysku.
+Zalecane jest, aby odzyskać dane na inne urządzenie fizyczne.
+Możesz odzyskać do innej partycji tego samego urządzenia tylko jeśli jesteś pewien, 
+że partycje źródłowy i docelowy nie pokrywają się, a urządzenie nie ma problemów fizycznych.
+Nie należy ładować system lub uruchamiać oprogramowanie z partycji gdzie dane do odzyskania znajduje.
+</p>
+
+<h3>Kroki odzyskiwania danych</h3>
+<ul>
+<li><a href="openvolume.html">Znajdź i otwórz wolumin</a> zawierający utracone dane;</li>
+<li>otwórz (ponownie) katalog wirtualny <span class="ii">[Wszystkie znalezione / wirtualny FS]</span>,
+aby uzyskać więcej lub mniej znalezionych plików (zobacz <a href="reconstruction.html">Wirtualna rekonstrukcja</a>);</li>
+<li>zaznacz elementy do odzyskania i użyj menu <a href="menu_tools.html">Narzędzia</a> &middot; 
+<a href="menu_tools.html">Odzyskaj</a>, aby odzyskać je na inny dysk.</li>
+</ul>
+<p>
+<a href="editions.html">Free Edition</a> 
+obsługuje odzyskiwanie maksymalnie 4000 plików z bieżącego panelu tylko
+(najpierw otwórz katalog z niezbędnymi plikami na panelu, a następnie wybierz odzyskiwanie z panelu).
+</p>
+<p> 
+Jeśli nie możesz otworzyć / odtworzyć plików po odzyskaniu, wypróbuj różne znalezione warianty woluminów&nbsp;- 
+wróć do wyników <a href="fullscan.html">pełnego skanowania</a> 
+lub <a href="partitions.html">partycji</a> i otwórz następny znaleziony wolumin.
+</p>            
+
+<div class="l">
+<h3>Okno dialogowe "Odzyskaj"</h3>
+<h4>Kategorie plików</h4>
+<p>
+Wybierz kategorie plików do odzyskania&nbsp;- 
+patrz <a href="filepanel.html#fileicons">ikony panelu plików</a>, 
+aby zobaczyć szczegóły kategorii. 
+Podczas przejścia pola wyboru dla plików wyłączonych zostaną usunięte, 
+chyba że zaznaczona jest opcja "<span class="ii">zachowaj znaczniki wyboru dla wykluczonych elementów</span>".
+</p>
+<h4>Przycisk "Rozmiar"</h4>
+<p>
+Oblicz rozmiar danych do odzyskania. 
+Globalny wskaźnik procesie odzysku jest roboczych, jeśli rozmiar jest obliczana. 
+Nie należy obliczyć rozmiar uniknąć niepotrzebnego obciążenia urządzenie na urządzeniach z uszkodzonych sektorów.
+</p>
+
+<h4 id="drfilelist">Przycisk "Lista" &middot; Lista plików</h4>
+<p>
+Utwórz listę wybranych plików wraz z ich atrybutami.
+</p>
+<h4 id="drseclist">Przycisk "Lista" &middot; Lista sektorów</h4>
+<p>
+Uzyskaj listę sektorów zajmowanych przez wybrane pliki 
+(np. może być ona wykorzystana przez inne oprogramowanie do utworzenia częściowego klonu dysku). 
+Możliwe jest raportowanie granic fragmentów w <span class="ii">sektorach</span> lub w <span class="ii">bajtach</span>, 
+oraz określanie <span class="ii">ścieżek plików</span> na liście.
+</p>
+<p>
+Opcja <span class="ii">Zakresy sektorów</span> umożliwia wyświetlenie tylko tych fragmentów plików, 
+które znajdują się w określonych zakresach sektorów. 
+Na przykład umożliwia to uzyskanie listy uszkodzonych plików znajdujących się 
+w uszkodzonych sektorach podczas odzyskiwania z pliku obrazu 
+(lub ze zdrowego sklonowanego dysku), który sam nie zgłasza uszkodzonych sektorów źródłowych. 
+Jeśli utworzyłeś obraz / klon za pomocą funkcji <a href="copysectors.html">Kopiuj sektory</a> 
+z włączonym plikiem dziennika, 
+możesz wyeksportować listę uszkodzonych i pominiętych sektorów z dziennika za pomocą polecenia 
+w <a href="copysectors.html#devcopymenu">Menu</a> w okne dialogowym <span class="ii">Kopiuj sektory</span>.
+</p>
+<p>
+Ograniczenia dotyczące odzyskiwania danych są stosowane do wielu plików i przetwarzania podkatalogów, 
+jeśli używana jest wersja <a href="editions.html">Free Edition</a>. 
+Alternatywnie możesz użyć <a href="clustermap.html#cmapreport">raportu mapy klastrów</a> bez ograniczeń, 
+w tym przypadku listy będą również sortowane według pozycji fragmentów na dysku.
+</p>
+
+<h4>"Uwzględnij alt.strumieni NTFS" (<a href="editions.html">Professional Edition</a> tylko)</h4>
+<p>
+Odzyskiwanie NTFS alternatywne strumienie danych (nazwa strumienia i nazwa pliku są oddzielone dwukropkiem, 
+np. <span class="tt">nazwa_pliku:streamName</span>).
+</p>
+<h4>Filtry plików</h4>
+<p>
+Nazwa, rozmiar i data modyfikacji filtrów są obsługiwane. 
+Podczas zaznaczania pól przejścia dla plików wykluczonych nie będzie zaznaczone, 
+chyba że zaznaczona jest opcja "<span class="ii">zachowaj znaczniki wyboru dla wykluczonych elementów</span>".
+Użyj <span class="tt">0</span> (zero) jako drugą wartość dla rozmiaru, jeśli chcesz ustawić tylko mniejszy rozmiar.
+</p>
+<p>
+Definiowanie maski nazwy (oddzielone średnikiem), aby odzyskać tylko pasujące pliki.
+Symbole wieloznaczne "<span class="tt">*</span>" (dowolny zestaw znaków)
+i "<span class="tt">?</span>" (dowolny znak) mogą być użyte.
+Maski wykluczeń może być również określona przez poprzedzenie odwrotny ukośnik "<span class="tt">\</span>".
+Maski na początku mają pierwszeństwo.
+Na przykład nazwa <span class="tt">abc.tmp</span> pasuje do <span class="tt">a*;\*.tmp</span> i nie pasuje do <span class="tt">\*tmp;a*</span>.
+</p>
+<h4>Utwórz raport (<a href="editions.html">Professional Edition</a> tylko)</h4>
+<p>
+Zapisz raport odzyskiwania do pliku. Wszystkie pliki i katalogi, 
+dziennika błędów We/Wy, obliczenia sum kontrolnych CRC-32, MD5, SHA-1, SHA-256.
+Log file name and other parameters are requested just before starting the recovery process.
+</p>
+</div>
+
+<h3>Dodatkowe problemy</h3>
+
+<h4>Unicode nazwy</h4>
+<p>
+Opcja jest zaznaczona, jeśli system operacyjny obsługuje standard Unicode,
+inaczej symbole poza wybranym kodzie strony należy transliteracji lub podstawione 
+(patrz <a href="locales.html">Lokalizacja</a>). Niedostępny w DOS.
+</p>
+
+<h4>Odzyskiwanie do woluminu FAT, pole "Podziel dużych plików"</h4>
+<p>
+Woluminy FAT nie obsługuje plików większych niż 4&nbsp;GB (lub czasem 2&nbsp;GB). 
+Większe pliki mogą być podzielony podczas odzyskiwania na żądanie, 
+jeśli OS prawidłowo informuje (które nie zawsze tak jest), 
+lub opcja <b>Podziel dużych plików</b> jest używany (zalecane). 
+Później można połączyć części plików na inny dysk za pomocą narzędzia systemowe 
+<span class="tt">copy / b part1 + part2 part3 + wynik</span>, na przykład.
+Czysta DOS obsługuje tylko woluminy FAT.
+</p>
+
+<h4 id="namesubst">Długie i krajowych nazw plików w systemie DOS, pole "Zastępuj nazwy"</h4>
+<p>
+Bez specjalnych sterowników długich nazw plików nie są obsługiwane w systemie DOS. 
+Opcja <span class="ii">Zastępuj nazwy</span> umożliwia zastąpienie nazwy w okresie odzyskiwania. 
+Plik <span class="tt">LRENAME.BAT</span> jest tworzony w folderze docelowym dla wstecznej zmiany nazwy. 
+Aby przywrócić oryginalne nazwy załadować pliku system operacyjny Windows, przejdź do folderu docelowego 
+i uruchomić pliku <span class="tt">LRENAME.BAT</span>. 
+Odpowiednie <a href="locales.html">kodowej strony OEM</a> musi być wybrany 
+podczas pracy w DOS, aby przywrócić symbole narodowe poprawnie. 
+Unicode symboli poza wybraną kodowej stronę będzie transliteracji lub podstawiony.
+</p>
+<p>
+Możesz dodać <a href="inifile.html">parametr</a> <span class="tt">substnamesutf8=1</span>
+lub użyć opcji <span class="ii">utf-8</span> aby utworzyć <span class="tt">LRENAME.BAT</span> w formacie utf-8, 
+który obsługuje wszystkie symbole Unicode niezależnie wybrana strona kodowa. 
+Format utf-8 jest obsługiwany w systemie Windows&nbsp;7 i wyższych.
+</p>
+<h4>Ścieżki dłuższe niż 259 znaków (Windows NT i wyżej)</h4>
+<p>
+Opcja <span class="ii">Wsparcie dla bardzo długich ścieżek</span>
+(lub ręczna zmiana prefiksu <span class="tt">\\?\</span> przy określaniu katalogu docelowego, 
+np.: <span class="tt">\\?\D:\</span>) 
+pozwala odzyskać ścieżki dłuższe niż 259 znaków. 
+Takie długie ścieżki mogą być niedostępne przy użyciu standardowych środków systemu operacyjnego, 
+takich jak Explorer ("Mój komputer").
+</p>
+<h4 id="recoveryevents">Zduplikowane nazwy, błędy w plikach i obsługa innych zdarzeń</h4>
+<p>
+Podczas odzyskiwania mogą się powtarzać nazwę ze względu na znalezienie różnych wersji tego samego pliku, 
+różne linki do tego samego pliku, lub z powodu błędnego połączenia katalogów.
+</p>
+<p>
+Jeśli plik lub katalog z tej samej nazwie jest odzyskiwane jest kwerendę, z której można wybrać, 
+jak radzić sobie duplikatów. Jest możliwe zmienić nazwę obiektu ręcznie (wpisując nazwę) 
+lub wybrać zmianę nazwy auto lub pomijania wszystkich kolejnych obiektów. 
+Możliwe jest także do łączenia katalogów z tymi samymi nazwami.
+</p>
+<p>
+Istnieje próg zmiany nazwy dla pojedynczego obiektu, po którym drugie zapytanie zostanie
+do pożądanego działania w przypadku osiągnięcia progu. 
+Parametry <span class="tt">maxfilerenames</span> i <span class="tt">maxdirrenames</span> z <a href="inifile.html">pliku ini</a> 
+są wykorzystywane jako numery progu domyślnie.
+</p>
+<p>
+Określenie duplikatów nazw działa na bazie systemu plików docelowego. 
+Obsługa nazw nie działa w przypadku <span class="ii">zastąpienia nazw</span> jest używana w systemie DOS.
+</p>
+<p>
+<span class="ii">Obsługa zdarzeń...</span>:
+wstępnie ustawione programy obsługi zdarzeń odzyskiwania (zbieżność nazw, I/O błędy, i inne).
+</p>
+
+<h3 id="efs">NTFS Encrypted Recovery</h3>
+<p>
+NTFS encrypted files are recovered without decryption. 
+You need the certificate from the source system or backup to be installed on a destination system to open encrypted files after recovery.
+Please refer to Microsoft documentation on exporting and importing certificates.
+</p>
+<p>Encryption (EFS) is NTFS feature, encrypted file contains the encrypted data and encryption key 
+which in its turn is encrypted with a certificate key.
+Since the feature may be unsupported in OS or for destination FS there are recovery options to workaround this.
+</p>
+<p>
+Recover <span class="ii">to separate streams</span>: recover data and key into separate files/streams.
+Further processing of these streams is a user task.
+<br />
+Recover <span class="ii">to backup (portable format)</span>: recover data and key into a single backup file.
+The backup file may be stored on any FS, no OS support is required also.
+The backup file may later be restored into EFS encrypted file 
+using the menu <a href="menu_tools.html">Tools</a> - <span class="ii">Przywróć EFS z backupu...</span>
+(then both OS and FS must support EFS there).
+<br />
+Recover <span class="ii">to NTFS encrypted file</span>: recover at once into an encrypted NTFS file.
+EFS support from both destination file system and operating system is necessary (e.g. NTFS, Windows).
+</p>
+
+</div></div>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Copy Sectors</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="copysectors"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">TOC</a> &middot; <a href="howto.html">Work</a> &middot; <a href="menu.html">Menu</a> &middot; <a href="menu_tools.html">Tools</a>
+<hr />
+<h3>Copy Sectors</h3>
+<a href="badrecovery.html">Working with Failing Devices</a>
+&nbsp;
+<a href="devices.html">Opening Disk Image Files</a>
+
+<p>
+A tool for creating and restoring disk images, cloning entire disks, making dumps.
+</p>
+<p>
+When you select a file as a destination an image file will be created.
+</p>
+<p>
+When you instead select a disk/partition as a destination, the write is performed directly to a disk,
+<strong>all data on the destination disk will be overwritten</strong>, 
+the destination file system will be erased.
+</p>
+<p>
+If you write something to a disk containing lost data (e.g. applying a patch) 
+<strong><a href="changes.html">this may cause further data loss</a></strong>.
+</p>
+
+
+<h4>Source and Destination</h4>
+<table>
+<tr><th class="ii">Device</th><td><a href="devices.html">Select Device</a>, Logical disk (volume), Image,
+<a href="raids.html">virtual RAID</a> as a source/destination</td></tr>
+<tr><th class="ii">Partition</th><td>Select Partition as a source/destination (use <span class="ii">Device</span> button to change the device),</td></tr>
+<tr><th>&nbsp;</th><td>to select the entire disk double click the topmost item in the partitions list</td></tr>
+<tr><th class="ii">File</th><td>Use file as a source/destination (<span class="ii">Device</span> &middot; <span class="ii">Disk Images</span> can also be used)</td></tr>
+<tr><th class="ii">Editor</th><td>Use the object opened in the <a href="diskeditor.html">Disk Editor</a> window as a source</td></tr>
+<tr><th class="ii">Selected</th><td>Use the selected block in the Disk Editor as a source</td></tr>
+</table>
+<p>
+Fields <span class="ii">Start Sector/Byte</span>, 
+<span class="ii">End Sector/Byte</span>, 
+<span class="ii">Number of Sectors/Size in Bytes</span>
+are filled in automatically when the source/destination is set by a button. 
+If a <span class="ii">File</span> or <span class="ii">Editor</span> is used as a source 
+then fields are specified <b>in bytes</b> (otherwise they are <b>in sectors</b>).
+</p>
+<p>
+You can manually specify a range within the source object for copying 
+and the starting offset for the destination.
+<span class="ii">Start Sector/Byte</span> of the <b>source</b> will be copied to the 
+<span class="ii">Start Sector/Byte</span> of the <b>destination</b>
+regardless the direction of copying.
+For a partition, <span class="ii">Start Sector</span> 
+is relative to the partition beginning (not to the device beginning).
+</p>
+<p>
+The button <b>Split</b> allows splitting the destination file into parts.
+A RAID configuration <span class="tt">raidinfo.ini</span> is also created to open later the splitted image
+or to continue writing the splitted image (to specify/open using <a href="devices.html">Device</a> -
+<span class="ii">Disk Images / Logs</span>).
+</p>
+
+<div class="spec">
+<p>
+Using the <span class="ii">Device</span> button you may select a file (disk image) 
+as a source or a destination. Then you may specify parameters available for a disk only.
+</p>
+<p>
+If <span class="ii">Editor</span> or <span class="ii">Selected</span> is used as a source
+then some logical errors (such as invalid cluster or sector numbers) 
+are silently ignored.
+</p>
+</div>
+
+<h4>Parameters</h4>
+<p><span class="ii">Log file</span> contains a report on the copied sectors and errors. 
+If a <span class="ii">partition</span> is selected as a source 
+then sector numbers in the log are relative to the beginning of the disk 
+(not the partition).
+</p>
+
+<p>The option "<span class="ii">use log to continue copying</span>" allows skipping already copied sectors
+(the option is available in <a href="editions.html">Professional Edition</a> only).
+In particular if copy settings and <b>parameters</b> are not changed then
+copying will continue from the last position when started.
+The option may also be used for multi-pass copying with decreasing jumps on bad sectors,
+preliminary copying of important areas, copying in different directions.
+</p>
+
+<div class="l">
+<p>
+Changing some <a href="devioparams.html">device I/O parameters</a> 
+(decreasing <span class="ii">jump over sectors</span>, 
+increasing <span class="ii">auto retries number</span> from <span class="tt">0</span>, 
+decreasing <span class="ii">I/O buffer size</span> if there are <span class="tt">0</span> retries)
+on a new pass will cause copying sectors previously skipped due to jumps after bad sectors.
+</p>
+<p>The option "<span class="ii">Retry copying bad sectors from log</span>" is to copy bad sectors again
+when all skipped sectors are already copied (<a href="editions.html">Professional Edition</a> only).
+On each pass bad sectors are being copied from the beginning, continuation is not possible.</p>
+</div>
+
+<p><span class="ii">Flush log when number of sectors copied</span>:
+flush buffer log to disk (update log-file) regularly when number of sectors is copied.
+</p>
+
+<p>The button "<span class="ii">Parameters</span>" allows setting 
+<a href="devioparams.html">device I/O parameters</a> to handle errors
+(such as retries, jumps through bads, etc.)
+</p>
+
+<p><span class="ii">Reverse copy:</span> copy backward (from the end to the beginning) to create an image of a disk with problems.</p>
+
+<p><span class="ii">Double thread:</span>
+perform read and write operations in parallel threads to increase the speed.
+Do not use the option for copying disks with errors.
+</p>
+
+<p>The field <span class="ii">Continue from sector/byte</span> specifies the position to continue copying.
+The position is relative to the source beginning.
+Copying in <span class="ii">reverse</span> direction starts previos to the specified position and goes backward 
+(e.g., if set to <span class="tt">10</span> then sector <b>9</b> is copied first and copying goes to the beginning).
+</p>
+
+<p>The option <span class="ii">Lock the source for copy</span> is for locking the volumes 
+located over the source area to prevent modification of the source during copying (Windows only).
+</p>
+
+<h5 id="devcopymenu">Menu</h5>
+<p><span class="ii">Save/Load</span>: save/load settings to a file/from a file.
+</p>
+
+<p><span class="ii">Export log to ddrescue mapfile</span>:
+convert log-file to a ddrescue mapfile format.
+</p>
+
+<p><span class="ii">Export bad and skipped ranges from log</span>:
+get a list of bad and skipped sectors. 
+The list may be then used to get information about damaged files located in bad sectors
+(see <a href="datarecovery.html#drseclist">Data Recovery</a>).
+</p>
+
+</div></div>
+</body>
+</html>

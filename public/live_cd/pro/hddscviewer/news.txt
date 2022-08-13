@@ -1,0 +1,53 @@
+12 February 2022
+Version 1.0 released.
+* Added the option to load a domain file, and also to load a domain from a DMDE bytes file.
+* The log file name and the domain file name are shown at the top of the display.
+* When clicking on a block the details of that block are shown in the display.
+
+
+3 November 2021
+Version 0.9.beta released.
+* Added the option Show high time.
+
+
+1 September 2019
+Version 0.8.beta released.
+* Fixed a memory leak that could cause the program or system to crash if the auto update was left on for an extended period of time.
+* Finally added some information about the program to the user manual.
+
+
+4 December 2018
+Version 0.7.alpha released.
+* Reduced the number of available translated languages to the most common ones.
+* Improved the processing speed when scrolling.
+* Added some additional main grid sizes to increase the possible resolution.
+* Fixed a bug where some blocks would not be the correct status color. This also affected the show good data option.
+
+
+14 July 2018
+Version 0.6.1.alpha released.
+The installer now puts a link in the application menu.
+
+2 September 2017
+Version 0.6-alpha released.
+Removed some code from the public release version that was causing a library error on some systems. The code was for performing language translation, which is not needed by anyone but me when building it. I am not planning on updating the live cd as it does not have the error.
+
+29 June 2017
+Version 0.5-alpha released
+Added language packs. You can now pick a language at startup. These language packs are created using Google Translate. While Google Translate is usually good at translating, it is almost certain that some translations will have errors. Hopefully none of the errors are major enough to cause issues with use.
+
+15 October 2016
+Version 0.4-alpha released
+Fixed a console error message from GTK when closing the language window.
+
+5 September 2016
+Version 0.3-alpha released
+Changed the name from HDDViewer to HDDSCViewer, so as not to get it confused with other software. Added support for changing the language. At program startup the end user can export the default (English) language as a text file, translate it with Google Traslate, paste the translation into a new text file, and then import it. Added the option Highlight good data. This will put a small marker in each block that has any good reads in it. This is to help visualize if the bad areas are reading any good data or not.
+
+31 July 2016
+Version 0.2-alpha released
+Added support for importing ddrescue map files that were created with ddrescue 1.22 or newer, as there is an extra field (current copy pass number) in the newer map file.
+
+7 July 2016
+Version 0.1-alpha released
+Initial release

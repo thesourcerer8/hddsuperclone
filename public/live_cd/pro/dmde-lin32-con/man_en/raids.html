@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - RAID Arrays</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="raids"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">TOC</a> &middot; <a href="howto.html">Work</a> &middot; <a href="menu.html">Menu</a> &middot;
+<a href="menu_disk.html">Disk</a>
+<hr />
+<h2>RAID Arrays</h2>
+<h3>Dialog box "Construct RAID"</h3>
+<p>Use Menu - Drive - <b>Select Drive</b> - Construct RAID</p>
+<p>
+A tool to construct a virtual RAID using individual disks (or partitions and images) when 
+it is not possible by the means of the controller (hardware RAID)
+or the operating system (software RAID), as well as to detect RAID layout automatically 
+when some RAID parameters are unknown.
+</p>
+<p>
+If it is necessary to detach disks from the RAID controller
+and attach to a computer as individual disks.
+</p>
+<p>
+Incorrect selection of a RAID type, data rotation (striping), or disk order
+causes incorrect <a href="datarecovery.html">data recovery</a>
+(despite possible correct directory structure recovery).
+</p>
+<p>
+<span class="ii">RAID: Auto Calculate (Scan)</span> option allows calculating unknown parameters and&nbsp;/ or disk order 
+for arrays with striping. 
+Some disks may be absent (however the initial number of disks must be specified exactly).
+Most probable RAID layouts are being calculated statistically.
+The more precise possible RAID parameters are specified for calculation, the faster and more exact results are being obtained.
+E.g., RAID-5 software implementation in Windows OS uses backward dynamic rotation and a stripe size of 64K
+and these known parameters can be specified beforehand.
+</p>
+<p>
+The most of software RAID implementation use containers so an <b>LBA Offset Step</b> is used to try different container offsets.
+Modern OS's use 1MiB alignment so 2048 LBAs (1MiB) is the default option.
+Old OS's may use 63&nbsp;LBA alignment. 
+For a completely unknown offset a step of <span class="tt">1</span> LBA can be specified.
+</p>
+<h3>RAID types</h3>
+<p><b>RAID-0.</b>
+Usually contains two disks on which information is written alternately by blocks (stripes).
+If one disk is absent only small files which fit into single block may be recovered. 
+</p>
+<p><b>RAID-1.</b>
+Usually contains two disks, data is duplicated. Stripe size is not used.
+Supported in read-only mode.
+One healthy disk may be <a href="devices.html">opened</a> as a single device without loss of data.
+</p>
+<p><b>RAID-4.</b> 
+Usually contains three disks. One disk is for parity. 
+Data is alternated between the rest disks. 
+It is possible to recover all data without any one of the disks. 
+Use <span class="ii">NULL device</span> instead of the absent device. 
+</p>
+
+<p><b>RAID-5.</b> 
+Usually contains three disks (or more). 
+Data is alternated between all disks herewith one block of parity per the rest blocks of data. 
+There are four types of data rotation on a RAID-5. 
+Some RAIDs (usually hardware) may have delayed parity.
+It is possible to recover all data without any one of the disks
+(which should be replace with <span class="ii">NULL device</span>). 
+</p>
+
+<p><b>RAID-6.</b> 
+Usually contains four disks (or more). It is similar to <b>RAID-5</b> with exception that two blocks 
+of parity (different types) are used.
+Only type of parity is supported so only one disk may be replaced with <span class="ii">NULL device</span>.
+Supported in read-only mode.
+</p>
+
+<p><b>RAID: <span class="ii">Custom rotation</span>.</b> 
+You may define your own <b>striping</b> (use <span class="ii">Menu</span> - <span class="ii">Striping...</span>).
+Use integer numbers from <span class="tt">0</span> to specify data blocks according to their order on disks, 
+<span class="tt">-1</span> to specify <b>XOR</b>-parity block, and
+<span class="tt">-2</span> to specify unused block.
+</p>
+<table>
+<tr><td colspan="4">E.g. for the diagram:</td>
+  <td rowspan="6" style="vertical-align:middle">=&gt;</td><td>Specify striping as:</td></tr>
+<tr><td>Disk#0</td><td>Disk#1</td><td>Disk#2</td><td>Disk#3</td><td></td></tr>
+
+<tr><td>A1</td><td>A2</td><td>Ap</td><td>Aq</td>
+  <td class="tt">&nbsp;0 &nbsp;1       -1      -2 </td></tr>
+
+<tr><td>B1</td><td>Bp</td><td>Bq</td><td>B2</td>
+  <td class="tt">&nbsp;2      -1       -2 &nbsp;3 </td></tr>
+
+<tr><td>Cp</td><td>Cq</td><td>C1</td><td>C2</td>
+  <td class="tt">     -1      -2  &nbsp;4 &nbsp;5 </td></tr>
+
+<tr><td>Dq</td><td>D1</td><td>D2</td><td>Dp</td>
+  <td class="tt">-2 &nbsp;6  &nbsp;7      -1 </td></tr>
+</table>
+
+<p><b>JBOD/Spanned.</b> 
+Just a bound of disks which are used as one continuous disk. 
+There is no data alternation, stripe size is not used. 
+Data located on any disk will be lost if the disk is absent.
+JBOD is supported in read/write mode.
+</p>
+
+<h3>RAID parameters</h3>
+<p>
+<span class="ii">Stripe Size</span>: data rotation block size. Not used in <b>RAID-1</b>, <b>JBOD</b>
+<br />
+<span class="ii">Delay</span>: rotation delay (special <b>RAID-5</b> and <b>RAID-6</b> implementations)
+<br />
+<span class="ii">Offset</span>: data start offset on disk (usually used on software RAIDs)
+<br />
+<span class="ii">Offset and Size</span>: RAID logical unit offset and size on an individual disk
+<br />
+<span class="ii">Null disk</span>: used instead of absent or damaged disk
+<br />
+<span class="ii">Striping...</span>: manually specify striping for <b>Custom RAID</b>
+<br />
+<span class="ii">Save/Load</span>: save/load RAID configuration
+<br />
+<span class="ii">Read ahead</span>: improve performance on RAIDs with a small stripe size
+(not recommended on disks with bad sectors).
+</p>
+
+</div></div>
+</body>
+</html>

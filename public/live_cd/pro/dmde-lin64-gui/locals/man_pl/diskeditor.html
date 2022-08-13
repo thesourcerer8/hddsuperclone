@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Edytor dysku</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="diskeditor"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Spis treści</a> &middot; <a href="howto.html">Praca</a>
+<hr />
+<h2>Edytor dysku</h2>
+<p>
+Edytor dysku umożliwia przeglądanie i edytowanie obiektów na dysku, 
+takich jak sektory, pliki i inne struktury systemu plików i dysków 
+w trybach szesnastkowym i sformatowanych (strukturalnych),
+w tym stosowania <a href="templates.html">niestandardowych szablonów</a> do analizowania danych.
+</p>
+<p>
+<b><a href="changes.html">Przeczytaj <span style="color:red">ostrzeżenie na tym łączu</span></a></b> 
+przed zastosowaniem zmian na dysku.
+</p>
+<b>Wybierz obiekt do edycji</b>
+<ul>
+<li>za pomocą menu <a href="menu_editor.html">Edytor</a>, aby wybrać obiekt dysku lub systemu plików
+lub przejść do określonej pozycji</li>
+<li>używać <a href="filepanel.html">Panel plików</a>, aby wybrać plik lub katalog 
+        (prawy przycisk myszy na menu kontekstowym lub naciśnij [<span class="ii">Ctrl+Enter</span>])</li>
+</ul>
+<p>
+<b>Wybierz tryb wyświetlania (szablony):</b> menu <a href="menu_viewas.html">Tryb</a>.
+</p>
+<p>
+<b>Włącz tryb edycji:</b> menu <a href="menu_edit.html">Edycja</a> - <span class="ii">Tryb edycji</span> [<span class="ii">Ctrl+E</span>]<br />
+Edycja plików NTFS jest obsługiwany tylko w <a href="menu_viewas.html#rawdata">trybie RAW</a>.
+</p>
+<p>
+<b>Zastosuj zmiany:</b> menu <span class="ii">Dysk</span> - <a href="changes.html#apply">Zapisz zmiany</a> [<span class="ii">Ctrl+W</span>].
+</p>
+<p>
+Używać menu <a href="menu_tools.html">Narzędzia</a> dla dodatkowych funkcji: <br />
+&nbsp; &bull; <a href="copysectors.html">Kopiuj sektory...</a> do
+napisać wybranego bloku lub całego obiektu do pliku.<br />
+&nbsp; &bull; <a href="fillsectors.html">Wypełnij sectory...</a> do
+wypełnić sektory o wzór.<br />
+&nbsp; &bull; <a href="searchssector.html#string">Wyszukaj ciąg znaków w obiekcie</a>,
+aby wyszukać ciąg znaków w wybranym obiekcie. <br />
+&nbsp; &bull; <a href="searchssector.html#struct">Szukaj szczególnego sektora</a>,
+aby wyszukać struktury danych na dysku.<br />
+</p>
+<p class="spec">
+Żółty kolor tekstu w edytorze dysku wskazuje zmodyfikowany i nie zapisanych danych. <br />
+Szary kolor tekstu wskazuje nieużywane dane (niewykorzystanej części klastra, niewykorzystane wejścia, itp.). <br />
+Zielony kolor danych wskazuje błędy We/Wy podczas odczytu odpowiedniego sektora. <br />
+Red kolor tekstu wskazuje błędów logicznych w danych.<br />
+</p>                                                                      
+
+</div></div>
+</body>
+</html>

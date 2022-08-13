@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Terminal
+Comment=HDDSuperTool
+Exec=x-terminal-emulator -e "bash -c 'echo Opening default terminal emulator;$SHELL'"
+Icon=utilities-terminal
+Terminal=false
+Type=Application
+Categories=Application;
+Name[en_US]=Terminal

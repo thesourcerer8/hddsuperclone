@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Wymagania systemowe</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Spis treści</a> &middot; <a href="setup.html">Instalacja i uruchamianie</a>
+<hr />
+<h2>Wymagania systemowe</h2>
+<a href="#windows">Windows</a> 
+&nbsp;
+<a href="#linux">Linux</a> 
+&nbsp;
+<a href="#macos">MacOS</a> 
+&nbsp;
+<a href="#dos">DOS</a> 
+
+<h3>Wymagania wspólne</h3>
+<ul>
+<li>Dyski: bez znaczących problemów sprzętu/firmware
+<br />
+<strong style="color:#ff0000;">Uwaga!</strong>
+Jeśli istnieją problemy fizyczne (obce dźwięki, komunikaty o błędach, spadek wydajność, itd.) 
+zaleca się zgłoszenie do specjalistów -
+zobacz sekcję <a href="badrecovery.html">Praca z wadliwymi urządzeniami</a>
+</li>
+<li>Zobacz sekcję <a href="setup.html">Instalacja i uruchamianie</a>, 
+aby uzyskać informacje o zalecanym środowisku systemu operacyjnego
+</li>
+<li>Procesor: Intel kompatybilny (i486 i wyższe)</li>
+<li>Aby zapisać/wykorzystać wyniki, raporty i ustawień, wymagana jest sprawna partycja, 
+które jest obsługiwana przez system operacyjny 
+(w szczególności partycja FAT jest wymagana do pracy w DOS/Win9x/ME)</li>
+<li>Zobacz też <a href="issues.html">Problemy i ograniczenia</a></li>
+</ul>
+
+<h4 id="size">Niewłaściwy rozmiar urządzenia</h4>
+<p>
+Nie pracuj z dyskiem, którego rozmiar został nieprawidłowo wykryty. 
+Możliwe jest samodzielne rozwiązanie niektórych problemów związanych z rozmiarem - 
+zapoznaj się z przewodnikiem z 
+<a href="http://blog.atola.com/restoring-factory-hard-drive-capacity/" target="_blank">zewnętrznego źródła</a>. 
+</p>
+<ul>
+<li><b>Pojemność Ograniczenie Jumper</b> jest niesłuszna 
+	(rozmiar urządzenia jest ograniczona do <b>32&nbsp;GB</b>)</li>
+<li><b>HPA</b> jest błędnie applyed. 
+Rozmiar zwykle staje się mniej niż <b>1&nbsp;TB</b> lub podobne 
+(typowe dla niektórych płyt głównych GIGABYTE). 
+Spróbuj oprogramowania: HDD&nbsp;Capacity&nbsp;Restore Tool (Windows), 
+hdparm (Linux), HDAT2, MHDD, Victoria (DOS)</li>
+<li>Brak obsługi dużych dysków na <b>OS</b> - zobacz poniżej</li>
+<li><b>Nieprawidłowe sterowniki</b> dla kontrolera SATA/USB (nie poprawne wsparcia 3&nbsp;TB+). 
+Urządzenie jest wyświetlane tipically 2.2&nbsp;TB mniej. Aktualizuj sterowniki</li>
+<li>Obudowa USB / adapter ma inną poprawną obsługę 3&nbsp;TB+. 
+Zmień adapter lub podłącz urządzenie bezpośrednio</li>
+</ul>
+
+<h3 id="windows">Windows 2K+ (2K/XP/Vista/7/wyżej)</h3>
+<ul>
+<li>Zalecane: Windows XP + SP2 i wyżej</li>
+<li>32-bitowe wersje działa w systemie Windows, zarówno 32-bitowych i 64-bitowych</li>
+<li>Uprawnienia administratora</li>
+<li>Urządzenia: obsługiwane przez OS<br />
+<strong style="color:#ff0000;">Uwaga!</strong>
+Aby pracować z dyskami o pojemności przekraczającej 2&nbsp;TB 
+pod Windows Vista/7/wyżej najnowsze wersje sterowników kontrolera musi być zainstalowana.
+
+Aby pracować z dyskami o pojemności powyżej 128&nbsp;GB w Windows 2K/XP 
+należy mieć zainstalowane poprawki Service Packs 
+oraz trzeba ręcznie włączyć w rejestrze wsparcie dla LBA48
+</li>
+</ul>
+
+<h3>Windows 98/ME</h3>
+<ul>
+<li>Urządzenia: obsługiwane przez OS<br />
+<strong style="color:#ff0000;">Uwaga!</strong>
+Windows 9x/ME obsługuje dyski o pojemności większej niż 128&nbsp;GB nieprawidłowo, 
+chyba że specjalne łatki są zainstalowane.
+<br />
+Aby uniknąć tego problemu uruchom komputer w trybie MS-DOS i użyj DMDE dla DOS, 
+by mieć dostęp do takich dysków przez BIOS lub interfejs ATA.
+</li>
+</ul>
+
+<h3 id="linux">Linux</h3>
+<ul>
+<li>OS: Nowoczesne dystrybucje Linux z biblioteką <span class="tt">libc</span></li>
+<li>Biblioteki, aby uruchomić 32-bitowe wersje w 64-bitowych systemach Linux 
+(np., pakiet <span class="tt">libc6-i386</span>)</li>
+<li>Urządzenia: obsługiwane przez OS</li>
+<li>Praw superużytkownika</li>
+<li>Terminal (z praw Root) lub emulator (xterm, Konsole, Gnome-Terminal, itp.) dla
+wersji konsolowej lub biblioteka <span class="tt">gtk2.0</span> dla wersji GUI
+</li>
+</ul>
+
+<h3 id="macos">MacOS</h3>
+<ul>
+<li>OS: macOS 10.12+</li>
+<li>Praw superużytkownika</li>
+<li>Urządzenia: obsługiwane przez OS, patrz <a href="setup.html#macos">Instalacja i uruchamianie</a></li>
+</ul>
+
+<h3 id="dos">DOS</h3>
+<ul>
+<li>OS: MS-DOS 5.0+ zgodny</li>
+<li>Urządzenia: obsługiwane przez BIOS lub obsługiwane przez DOS (przy użyciu sterowników ASPI) 
+lub wspierające interfejs ATA (IDE lub SATA). 
+Dyski SATA mogą być przełączane w tryb zgodny z IDE w ustawieniach BIOS 
+dla bezpośredniego dostępu ATA</li>
+<li>DOS Extender (np., plik CWSDPMI.EXE &copy; 2000 CW Sandmann w katalogu programu)</li>
+<li>Co najmniej 200 kB wolnej niskiej pamięci</li>
+<li>Co najmniej 64 MB pamięci rozszerzonej</li>
+<li>Dla długich nazw plików lub by zapobiegać występowaniu duplikatów nazw w trakcie odzyskiwania niezbędny 
+jest sterownik długich nazw (np. DOSLFN.COM &copy; Haftman software)</li> 
+<li>Do sterowania myszą konieczne jest załadowanie odpowiedniego sterownika dla DOS</li>
+</ul>
+
+</div></div>
+</body>
+</html>

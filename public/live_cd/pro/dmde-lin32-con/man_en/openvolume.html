@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Open Volume</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">TOC</a> &middot; <a href="howto.html">How to use</a>
+<hr />
+<h2>Find and Open Volume</h2> 
+<p>
+To browse, view, edit, and <a href="datarecovery.html">recover files and directories</a> 
+you should find and open a volume containing data.
+Use the following methods depending on the availability.
+</p>
+<p>
+<strong>1.</strong> If the volume is fully available by its letter 
+(<span class="tt">C:</span>, <span class="tt">D:</span>, ...),
+you may open it through the option <span class="ii">Logical&nbsp;Disks</span> (Volumes&nbsp;/ DOS&nbsp;Services)
+in the dialog box <a href="devices.html">Select&nbsp;Drive</a>.
+This method is suitable to recover deleted files from a healthy volume.
+If you cannot open this way or files are being recovered incorrectly try the next methods.
+</p>
+<p>
+<strong>2.</strong> Select a <span class="ii">Physical&nbsp;Device</span> containing the volume 
+in the dialog box <a href="devices.html">Select&nbsp;drive</a>.
+The window "<a href="partitions.html">Partitions</a>" will pop up.
+Select and open your volume if it is available there.
+If it is not available or data cannot be properly recovered 
+then try the next method for the most complicated cases.
+</p>
+<p>
+<strong>3.</strong> Run <a href="fullscan.html">Full Scan</a> and open one of the found volume variants. 
+Read the section <a href="fullscan.html">Full Scan</a> for more efficient recovery in this case.
+</p>
+
+<div class="spec">
+<p>
+The context menu command <span class="ii">Open volume parameters</span> allows
+manually changing some parameters before opening the volume.
+</p>
+<p>
+Also, the volume may be opened from
+the <a href="diskeditor.html">Editor Window</a> 
+when view the volume boot sector or boot sector copy
+in a <a href="menu_viewas.html#boot">Boot sector</a> mode.
+</p>
+</div>
+
+<h3 id="open_sstor">Work with Special Storages</h3> 
+<p>
+If the data storage is a RAID array&nbsp;/ striped volume 
+you should first <a href="raids.html">Construct a RAID</a> instead of opening 
+a single physical device.
+</p>
+<p>
+If the volume is contained inside a virtual machine&nbsp;/ encrypted disk image or partition
+you should first mount&nbsp;/ decrypt the image (or its copy, for safety) using the corresponding (virtualization) software
+and then work with the mounted&nbsp;/ decrypted disk.
+However you may also open a flat image and VHD/VHDX image directly 
+using the option <span class="ii">Disk Images</span> of the <a href="devices.html">Device Selection</a> box.
+</p>
+
+</div></div>
+</body>
+</html>

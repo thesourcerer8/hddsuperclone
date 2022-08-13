@@ -1,0 +1,547 @@
+seti $printhelp = $printhelp
+seti $help = $help
+if $help != 0
+  echo 'This will scan the drive using the read verify command.'
+  echo 'Reads are done in blocks (clusters) of 256 sectors.'
+  echo 'This means that all warnings and errors show the position'
+  echo ' of the first sector of the block, NOT the actual problem sector.'
+  echo 'If the required variables below are not set on the command line,'
+  echo ' then you will be propted to enter them.'
+  echo 'This requires the number variable startsector to be set.'
+  echo 'This requires the number variable endsector to be set.'
+  echo 'If endsector is set to 0, it will default to the last addressable sector.'
+  echo 'This uses the identify device command to determine the last sector.'
+  echo 'This requires the number variable threshold to be set.'
+  echo 'Threshold is time in milliseconds.'
+  echo 'If a read exceeds the threshold, a warning will be given.'
+  echo 'If threshold is set to 0, it will default to 150ms.'
+  echo 'This requires the number variable softtimeout to be set.'
+  echo 'Softtimeout is the time in milliseconds to wait before giving up on a command.'
+  echo 'If softtimeout is set to 0, it will default to 10000ms.'
+  echo 'This requires the number variable hardtimeout to be set.'
+  echo 'Hardtimeout is the time to wait after a softreset before doing a hardreset.'
+  echo 'If hardtimeout is set to 0, it will default to 10000ms.'
+  echo 'This requires the string variable logfile to be set.'
+  echo 'Logfile will capture all the warnings and errors.'
+  echo 'This requires the string variable rateslog to be set.'
+  echo 'Rateslog will capture timing info that can be ploted.'
+  echo 'Rateslog captures the low, high, and average over 256 block reads.'
+  echo 'If logfile and/or ratesfile are blank no log will be produced.'
+
+  echo 'Example using defaults:'
+  echo 'hddsupertool -t /dev/sda -f ata_scan_device threshold=0 softtimeout=0 startsector=0 endsector=0 logfile=="" rateslog==""'
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+
+include good_subroutines
+
+sets $null = ""
+seti $using_menu = $using_menu
+
+
+seti $ask = 0
+while 1 = 1
+  variablecheck $startsector
+  if $error_level < 16
+    seti $ask = 1
+  elseif $using_menu = 1
+    seti $ask = 1
+  endif
+  if $ask = 1
+    echo "Enter start sector, or leave blank for first:"
+    userinput $choicestring
+    if $choicestring != $null
+      seti $startsector = $choicestring 0
+      break
+    else
+      seti $startsector = 0
+      break
+    endif
+  else
+    break
+  endif
+done
+
+seti $ask = 0
+while 1 = 1
+  variablecheck $endsector
+  if $error_level < 16
+    seti $ask = 1
+  elseif $using_menu = 1
+    seti $ask = 1
+  endif
+  if $ask = 1
+    echo "Enter end sector, or leave blank for last:"
+    userinput $choicestring
+    if $choicestring != $null
+      seti $endsector = $choicestring 0
+      break
+    else
+      seti $endsector = 0
+      break
+    endif
+  else
+    break
+  endif
+done
+
+seti $ask = 0
+while 1 = 1
+  variablecheck $threshold
+  if $error_level < 16
+    seti $ask = 1
+  elseif $using_menu = 1
+    seti $ask = 1
+  endif
+  if $ask = 1
+    echo "Enter warning threshold in ms, or leave blank for default(150):"
+    userinput $choicestring
+    if $choicestring != $null
+      seti $threshold = $choicestring 0
+      break
+    else
+      seti $threshold = 150
+      break
+    endif
+  else
+    break
+  endif
+done
+if $threshold = 0
+  seti $threshold = 150
+endif
+seti $threshold = $threshold * 1000
+
+seti $ask = 0
+while 1 = 1
+  variablecheck $softtimeout
+  if $error_level < 16
+    seti $ask = 1
+  elseif $using_menu = 1
+    seti $ask = 1
+  endif
+  if $ask = 1
+    echo "Enter softtimeout in ms, or leave blank for default(10000ms):"
+    userinput $choicestring
+    if $choicestring != $null
+      seti $softtimeout = $choicestring 0
+      break
+    else
+      seti $softtimeout = 10000
+      break
+    endif
+  else
+    break
+  endif
+done
+if $softtimeout = 0
+  seti $softtimeout = 10000
+endif
+seti $softtimeout = $softtimeout * 1000
+softtimeout $softtimeout
+
+seti $ask = 0
+while 1 = 1
+  variablecheck $hardtimeout
+  if $error_level < 16
+    seti $ask = 1
+  elseif $using_menu = 1
+    seti $ask = 1
+  endif
+  if $ask = 1
+    echo "Enter hardtimeout in ms, or leave blank for default(10000ms):"
+    userinput $choicestring
+    if $choicestring != $null
+      seti $hardtimeout = $choicestring 0
+      break
+    else
+      seti $hardtimeout = 10000
+      break
+    endif
+  else
+    break
+  endif
+done
+if $hardtimeout = 0
+  seti $hardtimeout = 10000
+endif
+seti $hardtimeout = $hardtimeout * 1000
+hardtimeout $hardtimeout
+
+seti $ask = 0
+variablecheck $logfile
+if $error_level < 16
+  seti $ask = 1
+elseif $using_menu = 1
+  seti $ask = 1
+endif
+if $ask = 1
+  echo "Enter logfile name, or leave blank for no log:"
+  userinput $choicestring
+  sets $logfile = $choicestring
+endif
+
+seti $ask = 0
+variablecheck $rateslog
+if $error_level < 16
+  seti $ask = 1
+elseif $using_menu = 1
+  seti $ask = 1
+endif
+if $ask = 1
+  echo "Enter optional rates logfile name, or leave blank for no log:"
+  userinput $choicestring
+  sets $rateslog = $choicestring
+endif
+
+# get the size of the drive using identify device command
+buffersize 512
+setreadpio
+ata28cmd 0 0 0 0 0 0xa0 0xec
+# check if command failed
+seti $command_failed = 0
+gosub check_command_status
+if $command_failed = 1
+  echo "Identify device command failed!"
+  gosub show_sense_data
+  gosub show_ata_return_status
+  previousscript
+endif
+# check if drive supports extended commands
+seti $tempnum = buffer 167
+seti $extended = $tempnum & 4
+# total addressable sectors
+if $extended > 0
+  seti $addressable = buffer 200 qw
+else
+  seti $addressable = buffer 120 dw
+endif
+
+if $endsector = 0
+  seti $endsector = $addressable
+endif
+
+
+buffersize 0
+setreadpio
+seti $blocksize = 256
+seti $logchunk = 256
+seti $currentposition = $startsector
+seti $previousposition = $currentposition
+seti $blockposition = $currentposition
+seti $processedsectors = 0
+seti $totalsectors = $endsector - $startsector
+seti $logcounter = 0
+seti $accumulatedtime = 0
+seti $1ms = 0
+seti $3ms = 0
+seti $10ms = 0
+seti $30ms = 0
+seti $100ms = 0
+seti $300ms = 0
+seti $over300ms = 0
+seti $errorcount = 0
+seti $highvalue = 0
+seti $lowvalue = 1000000000
+
+if $logfile != $null
+  deletefile $logfile
+  sets $line = "# warning log " $date
+  writelog $logfile $line
+  sets $line = "# cluster size is " $blocksize
+  writelog $logfile $line
+endif
+
+if $rateslog != $null
+  deletefile $rateslog
+  sets $line = "# position  low  high  avg"
+  writelog $rateslog $line
+endif
+
+gettime
+seti $displaytime = $time
+seti $redodisplay = 1
+echo " "
+echo " "
+echo " "
+echo " "
+echo " "
+echo " "
+echo " "
+echo " "
+echo " "
+echo " "
+echo " "
+echo " "
+echo " "
+echo " "
+gettime
+seti $programstart = $time
+while $currentposition < $endsector
+  seti $sector = $currentposition
+
+  if $extended > 0
+    seti $features = 0
+    seti $count = $blocksize
+    seti $LBAlow = $sector & 0xffff
+    seti $temp = $sector > 16
+    seti $LBAmid = $temp & 0xffff
+    seti $temp = $sector > 32
+    seti $LBAhigh = $temp & 0xffff
+    seti $device = 0xe0
+    seti $command = 0x42
+    gettime
+    seti $startreadtime = $time
+    ata48cmd $features $count $LBAhigh $LBAmid $LBAlow $device $command
+    gettime
+    seti $endreadtime = $time
+
+  else
+    seti $features = 0
+    seti $count = $blocksize & 0xff
+    seti $LBAlow = $sector & 0xff
+    seti $temp = $sector > 8
+    seti $LBAmid = $temp & 0xff
+    seti $temp = $sector > 16
+    seti $LBAhigh = $temp & 0xff
+    seti $temp = $sector > 24
+    seti $LBAdevice = $temp & 0x0f
+    seti $device = 0xe0
+    seti $device = $device | $LBAdevice
+    seti $command = 0x40
+    gettime
+    seti $startreadtime = $time
+    ata28cmd $features $count $LBAlow $LBAmid $LBAhigh $device $command
+    gettime
+    seti $endreadtime = $time
+  endif
+
+  # check if command failed
+  seti $command_failed = 0
+  gosub check_command_status
+  if $command_failed = 1
+    seti $devicefault = $ata_return_status & 0x20
+  endif
+
+  seti $readtime = $endreadtime - $startreadtime
+  if $command_failed = 1
+    seti $errorcount = $errorcount + 1
+  elseif $readtime > 300000
+    seti $over300ms = $over300ms + 1
+  elseif $readtime > 100000
+    seti $300ms = $300ms + 1
+  elseif $readtime > 30000
+    seti $100ms = $100ms + 1
+  elseif $readtime > 10000
+    seti $30ms = $30ms + 1
+  elseif $readtime > 3000
+    seti $10ms = $10ms + 1
+  elseif $readtime > 1000
+    seti $3ms = $3ms + 1
+  else
+    seti $1ms = $1ms + 1
+  endif
+
+
+  if $readtime < $lowvalue
+    seti $lowvalue = $readtime
+  endif
+  if $readtime > $highvalue
+    seti $highvalue = $readtime
+  endif
+
+  seti $showerror = 0
+  if $command_failed = 1
+    seti $showerror = 1
+  elseif $readtime > $threshold
+    seti $showerror = 1
+  endif
+
+  if $showerror > 0
+    upline
+    upline
+    upline
+    upline
+    upline
+    upline
+    upline
+    upline
+    upline
+    upline
+    upline
+    upline
+    upline
+    seti $adjustedtime = $readtime / 1000
+    if $command_failed = 1
+      hex
+      sets $errorstring = "e=0x" $ata_return_error " s=0x" $ata_return_status
+      decimal
+      if $direct_mode = 1
+        seti $command_status = $command_status & 0xfff0
+        if $command_status = 0x20
+          sets $status = "BUSY"
+        elseif $command_status = 0x30
+          sets $status = "TIMEOUT/RESET"
+        elseif $command_status = 0x40
+          sets $status = "TIMEOUT/RESET/BUSY"
+        elseif $command_status = 0x50
+          sets $status = "TIMEOUT"
+        elseif $command_status = 0x60
+          sets $status = "NO DRQ"
+        elseif $command_status = 0x70
+          sets $status = "WRONG DEVICE"
+        elseif $command_status > 0x7f
+          hex
+          sets $status = "OTHER/0x" $command_status
+          decimal
+        else
+          sets $status = ""
+        endif
+      else
+        sets $status = ""
+      endif
+      sets $outputline = "ERROR " $status " " $currentposition "  " $adjustedtime "ms " $errorstring
+    else
+      sets $outputline = "WARNING " $currentposition "  " $adjustedtime "ms "
+    endif
+    echo $outputline
+    echo $null
+    echo $null
+    echo $null
+    echo $null
+    echo $null
+    echo $null
+    echo $null
+    echo $null
+    echo $null
+    echo $null
+    echo $null
+    echo $null
+    echo $null
+    seti $redodisplay = 1
+    if $logfile != $null
+      writelog $logfile $outputline
+    endif
+  endif
+
+
+  seti $elapsedtime = $endreadtime - $displaytime
+  if $elapsedtime > 1000000
+    seti $redodisplay = 1
+  endif
+  if $redodisplay = 1
+    seti $sectorstransferred = $currentposition - $previousposition
+    seti $previousposition = $currentposition
+    seti $bytestransferred = $sectorstransferred * 512
+    seti $adjustedbytes = $bytestransferred * 1000000
+    seti $currentspeed = $adjustedbytes / $elapsedtime
+    seti $currentspeed = $currentspeed / 1000
+    gosub displayoutput
+    seti $displaytime = $endreadtime
+  endif
+  seti $redodisplay = 0
+
+
+  seti $accumulatedtime = $accumulatedtime + $readtime
+  seti $logcounter = $logcounter + 1
+  if $logcounter = $logchunk
+    seti $average = $accumulatedtime / $logchunk
+
+    if $rateslog != $null
+      sets $line = $blockposition "  " $lowvalue "  " $highvalue "  "  $average
+      writelog $rateslog $line
+    else
+      #echo "low=" $lowvalue "  high=" $highvalue "  average="  $average
+    endif
+
+    seti $highvalue = 0
+    seti $lowvalue = 1000000000
+    seti $accumulatedtime = 0
+    seti $logcounter = 0
+    seti $blockposition = $currentposition + $blocksize
+  endif
+
+  if $devicefault > 0
+    echo "Device fault detected!"
+    echo "Current position= " $currentposition
+    gosub show_ata_return_status
+    seti $devicefault = 0
+    echo "Power cycle the drive and hit enter to continue"
+    userinput $dummy
+    # do a hard reset to set the drive back up for access
+    hardreset
+  endif
+
+  seti $currentposition = $currentposition + $blocksize
+  seti $processedsectors = $processedsectors + $blocksize
+  # check if last read is less than blocksize
+  seti $partial = $currentposition + $blocksize
+  if $partial > $endsector
+    if $currentposition < $endsector
+      seti $blocksize = $endsector - $currentposition
+    endif
+  endif
+done
+
+if $devicefault = 0
+  gosub displayoutput
+endif
+
+
+previousscript
+end
+
+
+
+subroutine displayoutput
+    upline
+    upline
+    upline
+    upline
+    upline
+    upline
+    upline
+    upline
+    upline
+    upline
+    upline
+    upline
+    upline
+    echo "                                                  "
+    gettime
+    seti $totaltime = $time - $programstart
+    seti $totalseconds = $totaltime / 1000000
+    seti $remainder = $totaltime % 1000000
+    seti $totalminutes = $totalseconds / 60
+    seti $seconds = $totalseconds % 60
+    seti $hours = $totalminutes / 60
+    seti $minutes = $totalminutes % 60
+    echo "scantime h:m:s = " $hours ":" $minutes ":" $seconds "." $remainder
+    seti $positionpercent = $processedsectors * 100
+    seti $percentcomplete = $positionpercent / $totalsectors
+    seti $remainder = $positionpercent % $totalsectors
+    seti $remainder = $remainder * 100
+    seti $percentremainder = $remainder / $totalsectors
+    if $percentremainder < 10
+      echo $percentcomplete ".0" $percentremainder "%  complete    "
+    else
+      echo $percentcomplete "." $percentremainder "%  complete    "
+    endif
+    echo "position= " $currentposition "                           "
+    echo "speed= " $currentspeed " kB/s                           "
+    echo "<1ms=" $1ms "                           "
+    echo "1-3ms=" $3ms "                           "
+    echo "3-10ms=" $10ms "                          "
+    echo "10-30ms=" $30ms "                           "
+    echo "30-100ms=" $100ms "                           "
+    echo "100-300ms=" $300ms "                           "
+    echo ">300ms=" $over300ms "                           "
+    echo "errors=" $errorcount "                           "
+endsubroutine
+
+

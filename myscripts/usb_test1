@@ -1,0 +1,212 @@
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'usb test 1.'
+  echo 'Example: hddsupertool -f usb_test1'
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+
+include usb_subroutines
+
+gosub set_usb_definitions
+
+# set a blank string variable to compare with user input
+# make sure not to set this anyplace else
+sets $null = ""
+
+seti $usbrequesttype = $USB_DIR_OUT
+seti $usbrequesttype = $usbrequesttype | $USB_TYPE_CLASS
+seti $usbrequesttype = $usbrequesttype | $USB_RECIP_DEVICE
+seti $usbrequest = $USBRQ_HID_SET_REPORT
+seti $usbvalue = $USB_HID_REPORT_TYPE_FEATURE < 8
+seti $usbindex = 0
+usbbuffersize 8
+
+while 1 = 1
+  echo " "
+  echo "cheap usb relay control"
+  echo "q) Quit"
+  echo "p) Previous menu"
+  echo "h) Toggle script help
+  echo "1) energize 1"
+  echo "2) de-energize 1"
+  echo "3) energize 2"
+  echo "4) de-energize 2"
+  echo "5) energize 3"
+  echo "6) de-energize 3"
+  echo "7) energize 4"
+  echo "8) de-energize 4"
+  echo "9) energize 1 2 3 4"
+  echo "10) de-energize 1 2 3 4"
+
+  if $printhelp = 1
+    exit 0
+  endif
+
+  echo "Enter your choice:
+  userinput $choicestring
+
+  if $choicestring = q
+    break
+
+  elseif $choicestring = p
+    previousscript
+
+  elseif $choicestring = h
+    if $help = 0
+      seti $help = 1
+      echo "Help is now turned on"
+    else
+      seti $help = 0
+      echo "Help is now turned off"
+    endif
+
+  elseif $choicestring = 1
+    gosub energize1
+
+  elseif $choicestring = 2
+    gosub denergize1
+
+  elseif $choicestring = 3
+    gosub energize2
+
+  elseif $choicestring = 4
+    gosub denergize2
+
+  elseif $choicestring = 5
+    gosub energize3
+
+  elseif $choicestring = 6
+    gosub denergize3
+
+  elseif $choicestring = 7
+    gosub energize4
+
+  elseif $choicestring = 8
+    gosub denergize4
+
+  elseif $choicestring = 9
+    gosub energize1234
+
+  elseif $choicestring = 10
+    gosub denergize1234
+
+  else
+    echo "bad choice= " $choicestring
+  endif
+
+done
+end
+
+
+subroutine sendcommand
+  hex
+  echo "usbcommand " $usbrequesttype " " $usbrequest " " $usbvalue " " $usbindex
+  printusbbuffer 0 8
+  decimal
+  sendusbcontrolmsg $usbrequesttype $usbrequest $usbvalue $usbindex
+endsubroutine
+
+subroutine energize1
+  setusbbuffer 0
+    0xff 1 0 0 0 0 0 0
+  endusbbuffer
+  gosub sendcommand
+endsubroutine
+
+subroutine denergize1
+  setusbbuffer 0
+    0xfd 1 0 0 0 0 0 0
+  endusbbuffer
+  gosub sendcommand
+endsubroutine
+
+subroutine energize2
+  setusbbuffer 0
+    0xff 2 0 0 0 0 0 0
+  endusbbuffer
+  gosub sendcommand
+endsubroutine
+
+subroutine denergize2
+  setusbbuffer 0
+    0xfd 2 0 0 0 0 0 0
+  endusbbuffer
+  gosub sendcommand
+endsubroutine
+
+subroutine energize3
+  setusbbuffer 0
+    0xff 3 0 0 0 0 0 0
+  endusbbuffer
+  gosub sendcommand
+endsubroutine
+
+subroutine denergize3
+  setusbbuffer 0
+    0xfd 3 0 0 0 0 0 0
+  endusbbuffer
+  gosub sendcommand
+endsubroutine
+
+subroutine energize4
+  setusbbuffer 0
+    0xff 4 0 0 0 0 0 0
+  endusbbuffer
+  gosub sendcommand
+endsubroutine
+
+subroutine denergize4
+  setusbbuffer 0
+    0xfd 4 0 0 0 0 0 0
+  endusbbuffer
+  gosub sendcommand
+endsubroutine
+
+subroutine energize1234
+  setusbbuffer 0
+    0xff 1 0 0 0 0 0 0
+  endusbbuffer
+  gosub sendcommand
+  setusbbuffer 0
+    0xff 2 0 0 0 0 0 0
+  endusbbuffer
+  gosub sendcommand
+  setusbbuffer 0
+    0xff 3 0 0 0 0 0 0
+  endusbbuffer
+  gosub sendcommand
+  setusbbuffer 0
+    0xff 4 0 0 0 0 0 0
+  endusbbuffer
+  gosub sendcommand
+endsubroutine
+
+subroutine denergize1234
+  setusbbuffer 0
+    0xfd 1 0 0 0 0 0 0
+  endusbbuffer
+  gosub sendcommand
+  setusbbuffer 0
+    0xfd 2 0 0 0 0 0 0
+  endusbbuffer
+  gosub sendcommand
+  setusbbuffer 0
+    0xfd 3 0 0 0 0 0 0
+  endusbbuffer
+  gosub sendcommand
+  setusbbuffer 0
+    0xfd 4 0 0 0 0 0 0
+  endusbbuffer
+  gosub sendcommand
+endsubroutine
+
+
+
+previousscript
+end

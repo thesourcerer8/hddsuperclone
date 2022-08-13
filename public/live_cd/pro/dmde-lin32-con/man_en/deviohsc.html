@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Device I/O Handler Script</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="deviohsc"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">TOC</a> &middot; <a href="howto.html">Work</a> &middot; <a href="menu.html">Menu</a> &middot; 
+<a href="menu_disk.html">Disk</a>
+<hr />
+<h3>Device I/O Handler Script</h3>
+<a href="devioparams.html">Device I/O Parameters</a>
+&nbsp;
+<a href="deviodlg.html">Device I/O Dialog Box</a> 
+
+<p>
+The script can be used for I/O error logging and for extended processing of errors (include external program calls).
+The feature is available in the <a href="editions.html">Professional Edition</a> only.
+</p>
+<p>
+Script can be loaded or modified via <a href="devioparams.html">Device I/O Parameters</a> (button <span class="ii">Script</span>).
+</p>
+<p>
+The file <span class="tt">ondevhsc.txt</span> contains a brief description of available commands 
+and some script examples.
+</p>
+<p>
+Possible script lines are of the form:<br />
+<span class="tt">IF CONDITION COMMAND</span><br />
+or<br />
+<span class="tt">COMMAND</span><br />
+or<br />
+<span class="tt">:LABEL</span><br />
+where <span class="tt">CONDITION</span> is an inequality or equality
+  (<span class="tt">!=</span>, <span class="tt">&gt;</span>, <span class="tt">&lt;</span>, <span class="tt">&gt;=</span>, <span class="tt">&lt;=</span>, <span class="tt">=</span>) of two quantities,<br />
+and quantity is either an integer constant (<span class="tt">0</span>, <span class="tt">1</span>, ...)
+  or a variable (the list is below)
+  or a simple mathematical expression (operators <span class="tt">+</span>, <span class="tt">-</span>, <span class="tt">*</span>, <span class="tt">%</span>, <span class="tt">/</span>, 
+  without parentheses, ignoring the mathematical order of operators),
+e.g. <span class="tt">%ERROR%=0</span></p>
+<p>
+Comments are preceded by two minuses (<span class="tt">--</span>)
+</p>
+
+<h4>Variables</h4>
+Zero based
+<table>
+<tr><th class="tt">%CONFIRM%</th>
+	<td> =<b>1</b> if <span class="ii">Confirm</span> pressed, =<b>0</b> if <span class="ii">Cancel</span> pressed 
+                (confirmation dialog box appears)</td></tr>
+<tr><td><span class="tt">%DISKNUM%</span>  </td><td> disk number in RAID array</td></tr>
+<tr><td><span class="tt">%TRYNUM%</span>   </td><td> i/o retry number</td></tr>
+<tr><td><span class="tt">%LBA%</span>      </td><td> first i/o sector number</td></tr>
+<tr><td><span class="tt">%SECNUM%</span>   </td><td> number of i/o sectors</td></tr>
+<tr><td><span class="tt">%ERROR%</span>    </td><td> i/o error</td></tr>
+<tr><td><span class="tt">%ATASTATUS%</span></td><td> ATA Status Register value (defined if BSY bit is cleared, DOS ATA only)</td></tr>
+<tr><td><span class="tt">%ATAERROR%</span> </td><td> ATA Error Register (defined if ERR bit of <span class="tt">%ATASTATUS%</span> is set)</td></tr>
+<tr><td><span class="tt">%LINE%</span>     </td><td> current line number in script</td></tr>
+<tr><th class="tt">%SERVICE%</th><td> i/o service: <br />
+  <b>0</b>-ATA 
+  <b>1</b>-ATAPI
+  <b>3</b>-BIOSINT13OLD 
+  <b>4</b>-BIOSINT13<br />
+  <b>5</b>-DOSINT25 
+  <b>6</b>-DOSINT73 
+  <b>7</b>-DOSASPI
+  <b>8</b>-DOSMSCDEX
+  <b>9</b>-DOSFILE  <br />
+  <b>11</b>-WINFILE 
+  <b>12</b>-WINSCSI 
+  <b>13</b>-WIN9XINT13  
+  <b>14</b>-WINATA  <br />
+  <b>20</b>-LINUXFILE
+  <b>21</b>-LINUXSCSI
+</td></tr>
+<tr><td><span class="tt">%LASTRES%</span>  </td><td> result of the previous command</td></tr>
+<tr><td><span class="tt">%LASTERR%</span>  </td><td> error of the previous command</td></tr>
+</table>
+
+<h4>Commands</h4>
+<table>
+<tr><td><span class="tt">SHOWDLG</span>          - force device i/o dialog box popping up</td></tr>
+<tr><td><span class="tt">WAIT</span>             - wait for user choice</td></tr>
+<tr><td><span class="tt">DELAY N</span>          - delay for N msec</td></tr>
+<tr><td><span class="tt">EXECCMD CMDLINE</span>  - execute external command CMDLINE using Command interpreter <br />
+                    (equals "cmd CMDLINE" in Windows)</td></tr>
+<tr><td><span class="tt">EXECCMDQ CMDLINE</span> - execute without creating new console window (quiet)</td></tr>
+<tr><td><span class="tt">EXEC "FILENAME" CMDLINE</span>  - call external programm FILENAME with parameter CMDLINE</td></tr>
+<tr><td><span class="tt">EXECQ "FILENAME" CMDLINE</span> - call without creating new console window (quiet)</td></tr>
+<tr><td><span class="tt">MSDOS</span>            - call Command processor (OS Windows and DOS)</td></tr>
+<tr><td><span class="tt">GOTO LABELNAME</span>   - jump to label LABELNAME in script (to the string <span class="tt">:LABELNAME</span>)</td></tr>
+<tr><td><span class="tt">RETURN</span>           - break script execution, handle error according to <a href="devioparams.html">device I/O params</a></td></tr>
+<tr><td><span class="tt">RETRETRY</span>         - break script as <span class="ii">Retry</span> button pressed</td></tr>
+<tr><td><span class="tt">RETIGNORE</span>        - break script as <span class="ii">Ignore</span> button pressed</td></tr>
+<tr><td><span class="tt">RETABORT</span>         - break script as <span class="ii">Abort</span> button pressed</td></tr>
+<tr><td><span class="tt">ADDLOG "FILENAME" LOGLINE</span> - write LOGLINE to file FILENAME<br />
+                   (string LOGLINE may contain variables)</td></tr>
+<tr><td><span class="tt">CANCELIO</span>         - Call <b>CancelIO</b> (WinNT+ only)<br />
+                      (available if a device is opened with <span class="ii">overlapped</span> option)</td></tr>
+<tr><td><span class="tt">OVLRESLT N</span>       - Check <b>Overlapped</b> result (N=1: wait; N=0: not wait) (WinNT+ only)<br />
+                      (must be used if a device is opened with <span class="ii">overlapped</span> option)</td></tr>
+<tr><td><span class="tt">RESETHANDLE</span>      - Reopen disk handle</td></tr>
+<tr><td><span class="tt">RESETDEVLIST</span>     - Update the list of devices, reopen disk handle</td></tr>
+<tr><td><span class="tt">ATARESET</span>         - ATA Soft Reset (DOS ATA only)</td></tr>
+<tr><td><span class="tt">ATARESETDET</span>      - ATA Soft Reset followed by ATA Identify (DOS ATA only)</td></tr>
+</table>
+<p></p>
+<h4>Format specifiers</h4>
+<p>
+To format output integer a variable name may be followed by a format specifier after a colon, e.g.<br />
+<span class="tt">%LBA:8x%</span>         -- width: 8, hexadecimal<br />
+</p>
+<h4>Sample</h4>
+<p style="font-family:monospace" class="tt">
+IF %ERROR%=0 RETURN  <span style="color:#000"> -- return if no error on last i/o</span><br />
+IF %ERROR%=128 GOTO LABEL1<br />
+IF %ERROR%=5 GOTO LABEL1<br />
+RETURN<br />
+<br />
+:LABEL1<br />
+IF %CONFIRM%=0 RETRETRY  <br />
+<span style="color:#000"> -- retry if Cancel button is pressed</span><br />
+<span style="color:#000"> -- continue script execution if Confirm is pressed</span><br />
+EXECCMD /K ECHO error %ERROR% at LBA: %LBA% (%SECNUM%) try: %TRYNUM%. Type EXIT to return.<br />
+IF %TRYNUM%&lt;2 RETRETRY<br />
+DELAY 500<br />
+ADDLOG "C:\ERRORS.LOG" error %ERROR:x% at LBA: %LBA:10% (%SECNUM%) try: %TRYNUM%<br />
+RETIGNORE<br />
+</p>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Volume Locking</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="lockvolumes"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">TOC</a> &middot; <a href="howto.html">Work</a> &middot; <a href="menu.html">Menu</a> &middot; 
+<a href="menu_disk.html">Disk</a>
+<hr />
+<h3>Volume Locking</h3>
+<p>
+Volume locking is used under Windows NT+ for direct write access
+to prevent simultaneous OS access to a volume at the same time.
+</p>
+<p>
+DMDE tries locking volumes automatically when it is required.
+However, locking may fail if the volume is being used by system or other applications.
+In this case, DMDE requests to retry or dismount not locked volumes.
+Close all applications which may use the volume and retry.
+</p>
+<table>
+<tr><th>Retry</th><td>Retry volume locking</td></tr>
+<tr><th>Force</th><td>Dismount the volume. <span style="color:red;"><b>Warning!</b></span> 
+All used volume handles will be lost, e.g. unsaved data in opened files will be lost</td></tr>
+<tr><th>Ignore</th><td>Try direct writing without locking the volume. <span style="color:red;"><b>Warning!</b></span>
+File system may be damaged or direct write access may be denied by operating system</td></tr>
+<tr><th>Cancel</th><td>Cancel the operation</td></tr>
+</table>
+<p><span style="color:red;"><b>Warning!</b></span>  
+You should not lock or dismount the volume from where DMDE software runs from.
+You may not lock or dismount system volume. 
+</p>
+<p>DMDE unlocks volumes when closing the device currently used.
+</p>
+<p>Additionally you may manually manage volume locking
+using menu <span class="ii">Disk</span> &middot; <span class="ii">Lock Volumes for Write</span>.
+</p>
+</div></div>
+</body>
+</html>

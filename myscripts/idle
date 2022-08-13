@@ -1,0 +1,86 @@
+
+# number is the number of times the idle command will be sent
+# it can be set on the command line as number=x
+seti $number = $number
+if $number < 1
+  seti $number = 1
+endif
+echo "idles=" $number
+
+buffersize 0
+setreadpio
+
+# set the count to 0
+seti $count = 0
+
+# set the LBA for the unload command
+seti $LBAlow = 0x4c
+seti $LBAmid = 0x4e
+seti $LBAhigh = 0x55
+
+# set features to unload
+seti $features = 0x44
+# set device bits 7(compatibility) 5(compatibility)
+seti $device = 0xa0
+# set the command for idle immediate
+seti $command = 0xe1
+
+# perform the command
+while $number > 0
+  ata28cmd $features $count $LBAlow $LBAmid $LBAhigh $device $command
+  seti $number = $number - 1
+done
+
+# check if command failed
+seti $command_failed = 0
+gosub check_command_status
+if $command_failed = 1
+  echo "Command failed!"
+  gosub show_sense_data
+  gosub show_ata_return_status
+endif
+
+echo "Idle command completed"
+
+previousscript
+end
+
+
+subroutine check_command_status
+  seti $error_bit = $ata_return_status & 1
+  seti $command_failed = 0
+  if $error_bit != 0
+    seti $command_failed = 1
+  elseif $command_status != 0
+    seti $command_failed = 1
+  elseif $io_sense_key > 1
+    seti $command_failed = 1
+    # usb attached ata devices will normally give this code, so don't count it as failed
+    if $io_sense_key = 4
+      if $io_asc = 0
+        if $io_ascq = 0
+          seti $command_failed = 0
+        endif
+      endif
+    endif
+  endif
+endsubroutine
+
+
+subroutine show_sense_data
+  if $direct_mode = 0
+    hex
+    echo "sense_key=0x" $io_sense_key " asc=0x" $io_asc " ascq=0x" $io_ascq
+    decimal
+  endif
+endsubroutine
+
+
+subroutine show_ata_return_status
+  hex
+  echo "error=0x" $ata_return_error " count=0x" $ata_return_count " lba=0x" $ata_return_lba " device=0x" $ata_return_device " status=0x" $ata_return_status " altstatus=0x" $ata_alternate_status
+  echo "command_status= 0x" $command_status
+  echo "data_transferred= 0x" $data_transferred
+  decimal
+endsubroutine
+

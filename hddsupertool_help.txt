@@ -1,0 +1,33 @@
+hddsupertool
+Advanced disk utility.
+
+Usage: hddsupertool [options]
+
+OPTIONS:
+ -v, --version                 Show version and exit
+ -h, --help                    Show help and exit
+ -D, --debug                   Turn on debugging and create a debug file
+ -V, --verbose                 Show additional information
+ -c, --check                   Check the script but don't execute it
+ -C, --command                 Use a command line instead of a script
+ -d, --direct                  Use direct IO mode (IDE)
+ -a, --ahci                    Use direct IO mode (AHCI) (full version only)
+ -f, --file <file>             Script file to load and run
+ -i, --indent <spaces>         Perform indentation adjustment on the script
+ -t, --target <disk>           Disk to use for passthrough mode
+ -L, --license <license#>      Install license  (full version only)
+     --regaddress <address>    Register address for IDE mode
+     --conaddress <address>    Control address for IDE mode
+     --busaddress <address>    Bus address for IDE mode
+     --device <device>         Select device 0 or 1 for IDE mode
+     --hbaaddress <address>    HBA address for AHCI mode (full version only)
+     --portnumber <number>     Port number for AHCI mode (full version only)
+     --portaddress <address>   Port address for AHCI mode (full version only)
+     --ata                     List drives via ata-passthrough (default)
+     --scsi                    List drives via scsi-passthrough
+ -s, --serial <serial>         Choose drive by serial number
+ -Q, --quiet                   Surpress some of the output
+
+Report bugs to sdcomputingservice@gmail.com
+Please be sure to include "hddsupertool" in the subject line.
+

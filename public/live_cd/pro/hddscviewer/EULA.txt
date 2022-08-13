@@ -1,0 +1,39 @@
+LICENSE AGREEMENT
+
+This is a legal agreement between you, the "END USER", and SCOTT DWYER. Use of
+this software (HDDSCVIEWER) written by SCOTT DWYER indicates your acceptance
+of these terms.
+
+2. GRANT OF LICENSE. SCOTT DWYER hereby grants you the right to use HDDSCVIEWER
+on multiple computers without limitation. HDDSCVIEWER is considered in use on a
+computer when it is loaded into temporary memory or installed into permanent
+memory. HDDSCVIEWER may be redistributed freely as long as all documentation,
+including this license agreement, is included.
+
+4. PROPRIETARY RIGHTS. HDDSCVIEWER is owned exclusively by SCOTT DWYER, and
+this license does not transfer any ownership of HDDSCVIEWER to you.
+
+5. NON PERMITTED USES. You may not translate, reverse program, disassemble,
+decompile or otherwise reverse engineer HDDSCVIEWER.
+
+6. NO WARRANTY. THIS SOFTWARE IS LICENSED TO YOU "AS IS," AND WITHOUT ANY
+WARRANTY OF ANY KIND, WHETHER ORAL, WRITTEN, EXPRESS, IMPLIED OR STATUTORY,
+INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+PARTICULAR PURPOSE.
+
+7. LIMITATION OF LIABILITY. SCOTT DWYER grants the license to HDDSCVIEWER
+hereunder and the END USER accepts the use hereof on an "AS IS" and "WITH ALL 
+FAULTS" basis.  Furthermore, the END USER understands and agrees that IN NO
+EVENT WILL SCOTT DWYER BE LIABLE TO LICENSEE FOR SPECIAL OR CONSEQUENTIAL
+DAMAGES which might arise out of or in connection with the performance or
+non-performance of this Agreement or of HDDSCVIEWER hereunder, even if SCOTT
+DWYER has been advised of the possibility of such damages, INCLUDING, BUT NOT
+LIMITED TO, LOST DATA due to errors, inaccuracies, omissions, incompleteness or
+insufficiency of HDDSCVIEWER, nor for the usefulness of HDDSCVIEWER to the
+END USER.  In no event shall SCOTT DWYER'S liability related to any of
+HDDSCVIEWER exceed the license fees, if any, actually paid by you for
+HDDSCVIEWER. SCOTT DWYER shall not be liable for any damages whatsoever
+arising out of or related to the use of or inability to use HDDSCVIEWER,
+including but not limited to direct, indirect, special, incidental, or
+consequential damages.
+

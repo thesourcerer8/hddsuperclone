@@ -1,0 +1,2406 @@
+; DMDE language file version 3.7
+;
+; Translated by Anonymous
+;
+; If you find any mistake or wish to make another translation
+; you may contact at http://dmde.com/contact.html
+;
+;
+
+098=0      ;=1:load language file in debug mode =0:silent mode
+099=03000000
+100=03070000
+101=de
+;102=Windows-1252      ;the file charset (utf8 is by default)
+103=German (Deutsch)
+104=7      ;Windows LANGID; =:user default  =0:NEUTRAL  =1:DEFAULT
+105=0      ;Windows FONT CHARSET: 0=ANSI_CHARSET 238=EASTEUROPE_CHARSET ? 1=DEFAULT_CHARSET
+107=1252   ;ANSI Code Page; =:system default
+108=850    ;OEM Code page; =:system default
+110=4      ;&4=Step-by-step Hints by Default
+
+112=Windows-1252 (Western European)\n\x01\
+\u20ac\ufffe\u201a\u0192\u201e\u2026\u2020\u2021\u02c6\u2030\u0160\u2039\u0152\ufffe\u017d\ufffe\
+\ufffe\u2018\u2019\u201c\u201d\u2022\u2013\u2014\u02dc\u2122\u0161\u203a\u0153\ufffe\u017e\u0178\
+\u00a0\u00a1\u00a2\u00a3\u00a4\u00a5\u00a6\u00a7\u00a8\u00a9\u00aa\u00ab\u00ac\u00ad\u00ae\u00af\
+\u00b0\u00b1\u00b2\u00b3\u00b4\u00b5\u00b6\u00b7\u00b8\u00b9\u00ba\u00bb\u00bc\u00bd\u00be\u00bf\
+\u00c0\u00c1\u00c2\u00c3\u00c4\u00c5\u00c6\u00c7\u00c8\u00c9\u00ca\u00cb\u00cc\u00cd\u00ce\u00cf\
+\u00d0\u00d1\u00d2\u00d3\u00d4\u00d5\u00d6\u00d7\u00d8\u00d9\u00da\u00db\u00dc\u00dd\u00de\u00df\
+\u00e0\u00e1\u00e2\u00e3\u00e4\u00e5\u00e6\u00e7\u00e8\u00e9\u00ea\u00eb\u00ec\u00ed\u00ee\u00ef\
+\u00f0\u00f1\u00f2\u00f3\u00f4\u00f5\u00f6\u00f7\u00f8\u00f9\u00fa\u00fb\u00fc\u00fd\u00fe\u00ff
+;\u0080\u0081\u0082\u0083\u0084\u0085\u0086\u0087\u0088\u0089\u008a\u008b\u008c\u008d\u008e\u008f
+;\u0090\u0091\u0092\u0093\u0094\u0095\u0096\u0097\u0098\u0099\u009a\u009b\u009c\u009d\u009e\u009f
+114=Windows-1252 (Western European) -> Translit\n\x00\
+\x45\x00\x2C\x66\x00\x2E\x2B\x2B\x5E\x00\x53\x3C\x4F\x00\x5A\x00\
+\x00\x27\x27\x22\x22\x2D\x2D\x2D\x7E\x00\x73\x3E\x6F\x00\x7A\x59\
+\x20\x69\x63\x66\x6F\x59\x7C\x73\x22\x63\x61\x3C\x2D\x00\x72\x2D\
+\x2D\x00\x32\x33\x27\x6D\x00\x2D\x2C\x31\x27\x3E\x00\x00\x00\x00\
+\x41\x41\x41\x41\x41\x41\x41\x43\x45\x45\x45\x45\x49\x49\x49\x49\
+\x44\x4E\x4F\x4F\x4F\x4F\x4F\x78\x4F\x55\x55\x55\x55\x59\x50\x62\
+\x61\x61\x61\x61\x61\x61\x61\x63\x65\x65\x65\x65\x69\x69\x69\x69\
+\x64\x6E\x6F\x6F\x6F\x6F\x6F\x3A\x6F\x75\x75\x75\x75\x79\x70\x79
+115=CP850 (DOS Western European)\n\x01\
+\u00C7\u00FC\u00E9\u00E2\u00E4\u00E0\u00E5\u00E7\u00EA\u00EB\u00E8\u00EF\u00EE\u00EC\u00C4\u00C5\
+\u00C9\u00E6\u00C6\u00F4\u00F6\u00F2\u00FB\u00F9\u00FF\u00D6\u00DC\u00F8\u00A3\u00D8\u00D7\u0192\
+\u00E1\u00ED\u00F3\u00FA\u00F1\u00D1\u00AA\u00BA\u00BF\u00AE\u00AC\u00BD\u00BC\u00A1\u00AB\u00BB\
+\u2591\u2592\u2593\u2502\u2524\u00C1\u00C2\u00C0\u00A9\u2563\u2551\u2557\u255D\u00A2\u00A5\u2510\
+\u2514\u2534\u252C\u251C\u2500\u253C\u00E3\u00C3\u255A\u2554\u2569\u2566\u2560\u2550\u256C\u00A4\
+\u00F0\u00D0\u00CA\u00CB\u00C8\u0131\u00CD\u00CE\u00CF\u2518\u250C\u2588\u2584\u00A6\u00CC\u2580\
+\u00D3\u00DF\u00D4\u00D2\u00F5\u00D5\u00B5\u00FE\u00DE\u00DA\u00DB\u00D9\u00FD\u00DD\u00AF\u00B4\
+\u00AD\u00B1\u2017\u00BE\u00B6\u00A7\u00F7\u00B8\u00B0\u00A8\u00B7\u00B9\u00B3\u00B2\u25A0\u00A0
+;\u00F0\u00D0\u00CA\u00CB\u00C8\u20AC\u00CD\u00CE\u00CF\u2518\u250C\u2588\u2584\u00A6\u00CC\u2580\
+
+;128= ;VGA font file (DOS only)
+;129=dmde_en.chm
+;130=
+;131=man_en
+
+202=\
+\x8d\xfe\x2a\xee\x1a\xf9\x6c\x0c\xf7\xca\xd2\xb8\x60\x9c\x3b\x77\
+\xff\x23\x27\xa9\xb7\x3d\x11\xe4\x3a\xcf\xd5\x3b\x78\x74\x89\xaa\
+\xe6\xb2\x10\x1d\xfb\x92\x1d\x8e\xcf\xb2\x05\x7f\x8c\xcc\x01\x11\
+\xb0\x1d\x2e\x6d\x47\xa0\xf3\xdf\xaa\x8a\xcc\xfb\xfc\x66\xd7\x19\
+\x51\xba\xd1\x0e\xd8\x7a\x22\x85\x1b\x8a\x4e\x0c\xbb\x6b\x2f\xd6\
+\xba\x91\xbc\xe3\xc7\x68\x04\x7d\x1f\xea\x9c\x9d\xb1\xbf\xb6\x5c\
+\xc5\x6a\x93\x16\x11\xd2\x5e\x3f\x71\xcf\xc6\x51\xcf\x68\xd5\x91\
+\x81\x2c\xb7\xb6\x20\xdd\x01\x4d\xfb\x57\xca\x4b\x03\xcb\x01\x6a
+203=\
+\xac\x43\x09\x67\x8f\x22\xdf\x47\xb1\x69\xed\x5f\x6b\xd1\x86\x50\
+\xdb\x35\xf5\xbd\x1a\x61\x04\x3c\xe5\x66\xdd\xfc\x7c\x2e\x0b\xd6\
+\x5a\xd6\x05\x13\xc4\xcf\x57\x0b\xe4\x20\x11\xb7\xa0\x09\x33\x69\
+\x1f\x01\x59\xb2\xe9\x68\x50\xa4\x98\xe8\xc7\x3e\x28\x16\x76\x98\
+\x16\x37\x1d\xf0\xc5\xa0\x8a\x90\x12\xf8\xa5\xaf\x7a\xe9\x58\x12\
+\x5e\x06\x38\xfc\xea\xf1\xbb\x01\x27\xff\x3c\x14\x7b\x3f\xbe\xcc\
+\x66\x91\xd2\x08\x9d\x9e\xa0\xaa\xa3\xc7\x10\xf0\x40\xcc\xce\xc0\
+\x82\xef\xc2\x67\xf0\xcb\xf8\xf8\x26\xef\x42\x43\xb9\x4a\xab\x55
+
+;NEW 3.7:
+997=Stellen Sie sicher, dass eine aktuelle und legale Software-Version verwendet wird.\n\
+	Bitte informieren Sie den Developer, stellen Sie ihm einen vollständigen Screenshot \n\
+	zur Verfügung und beschreiben Sie die Schritte, um den Bug zu reproduzieren.\n\
+	Speichern Sie notwendige Daten und beenden Sie das Programm.
+998=&Weiter
+999=&Stopp
+;CHANGED 3.7:
+1000=Exception %s bei 0x%08p.
+1001=Die Funktion wird noch nicht unterstützt.\n\
+	Prüfen Sie, ob es auf der Software-Site Updates gibt.
+;CHANGED 3.6:
+1002=Disk-Image / Logdatei öffnen
+1003=Keine Geräte gefunden.\n\n\
+	Wahrscheinlich wird eine ungeeignete Software-Version verwendet. \
+	Bitte beachten Sie die Systemanforderungen sowie Installations- und Ausführungsprobleme.
+;CHANGED 3.4:
+1004=Gerätekapazität
+1005=Achtung!\n\
+	Der direkte Zzugriff über die ATA-Schnittstelle kann zu Konflikten mit Treibern und Betriebssystem führen.\n\
+	Möchten Sie trotzdem fortfahren?
+1006=Um Zugriff zu erhalten, laden Sie den Computer im MS-DOS-Modus neu.\n\
+	Trotzdem unter Windows fortfahren?
+1007=Achtung!\n\
+	Der Zugriff auf logische Datenträger unter Windows 9x/ME führt zum Stillstand.\n\
+	Laden Sie den Computer im MS-DOS-Modus neu und führen Sie das Programm aus.\n\
+	Trotzdem unter Windows fortfahren?
+1008=Warten~... Zugriff auf Gerät %s
+
+;******************* diskdlg **************************
+;CHANGED 3.6:
+1010=Festplatte / Task auswählen
+1012=ATA-Schnittstelle
+1013=BIOS-Services
+1014=DOS-Services
+1015=DOS-ASPI
+1016=Physikalische Geräte
+1017=Logische Datenträger
+1019=Geräte
+1020=Disk-Images / Logs
+1021=Durch&suchen ...
+1023=ATA-Schnittstelle
+1024=ATA&PI-Schnittstelle
+1025=O&ld BIOS Service
+1026=Ext BIOS Service
+1027=DOS Int &25/26
+1028=Win9x-FAT32 Calls
+1029=&MSCDEX Services
+1030=DMA &verwenden
+1031=LBA&48 verwenden
+1032=&raw CD access
+1034=Partitionen &zeigen
+1035=Festplatte
+1036=Offset
+1037=Größe
+1038=RAID konstruieren
+1039=Stripe-Größe:
+1040=Fügen Sie mindestens 2~Festplatten hinzu.
+1041=Festplatte hinzufügen ...
+1042=NULL-Festplatte hinzufügen
+1043=Festplatte entfernen
+1044=Nach oben verschieben
+1045=Nach unten verschieben
+;CHANGED 3.4.3:
+1046=Partition / Offset / Segment
+1047=Ungültige Stripe-Größe für diese Sektorgröße.
+;CHANGED 3.6:
+1049=Mehr Festplatten sind erforderlich
+;CHANGED 3.6:
+1050=RAID-0/1-Konfiguration mit mehr als 2~Festplatten wird konstruiert
+1051=Gesamtgröße: %~I~LBA (%IV)
+1052=Geräte mit verschiedenen Sektorgrößen können nicht hinzugefügt werden.
+1053=Offset festlegen
+1055=Ungültige Parameter
+1056=Ungültiger Bytes-pro-Sektor-Wert.
+1057=LBA~Größe darf nicht weniger als das Produkt sein\n\
+	(Cylinders~Number * Heads~Number * Sectors~per~Track).\n\
+	LBA~Größe erhöhen?
+1058=Cylinders-Number sollte gleich der \n\
+	LBA~Size sein / (Heads~Number * Sectors~per~Track).\n\
+	Cylinders-Number-Wert erhöhen?
+1059=Festplattenzugriff ...
+;NEW 3.4.3:
+1060=Die Festplatte ist nicht zugänglich (siehe Hilfe)
+
+;CHANGED 3.4::
+1061=Partitionen belegen: ;[space]
+1062=Aktuelle Festplattengröße:
+1063=Es gibt möglicherweise Festplattenpartitionierungsfehler oder die Gesamtkapazität ist nicht zugänglich.
+1064=Sie sollten zuerst den korrekten Kapazitätszugriff zurückgeben (siehe Hilfe)
+;::CHANGED 3.4
+1065=Möchten Sie das Arbeiten mit dem aktuellen Gerät beenden?
+1066=Sie benötigen Administrator-/Superuser-Rechte, um auf Geräte zuzugreifen.\n\
+	Melden Sie sich als Administrator im System an und führen das Programm als Administrator aus \
+	(lesen Sie die Software-Dokumentation).
+1067=Bytes-pro-Sektor (Bps)-Wert ist nicht gültig.\n\
+	Möchten Sie trotzdem fortfahren?
+
+;********************** DiskI/O ************************
+1068=&Wiederholen
+1069=&Ignorieren
+1070=Alles ignorieren
+1071=&Abbruch
+1072=&Modifizieren
+1073=An&wenden
+1074=I/O-Fehler ignorieren
+1075=Nicht warten, wenn Gerät nicht bereit ist
+1076=Immer
+1077=Jetzt
+1078=Anzahl autom. Wiederholungsversuche bei CRC-Fehler
+1079=Anzahl autom. Wiederholungsversuche bei Seek-Fehler
+
+;CHANGED 3.0:
+1080=LBA: %~I (%l versuchen):~
+;CHANGED 3.0:
+1081=LBA: %~I - %~I (%l versuchen):~
+1082=Auf Antwort des Gerätes warten
+1083=Erfolgreich
+1084=Geräte-I/O-Parameter
+1085=Über Sektoren springen nach Fehler
+1086=Zurück lesen nach Sprung
+1087=I/O-Puffer-Größe in Sektoren
+1088=Timeout, ms
+1089=SCSI-Timeout, s
+1090=Script~...
+1091=Bestätigen
+1092=&Parameter
+1093=Geräte-I/O-Handler-Script speichern
+1094=Geräte-I/O-Handler-Script laden
+1095=Geräte-I/O-Handler
+;CHANGED 3.7:
+1096=Muster zur Darstellung übersprungener Sektoren (hex)
+;CHANGED 3.4:
+1097=Aktualisieren
+1098=Script~...
+;CHANGED 3.7:
+1099=Muster zur Darstellung fehlerhafter Sektoren (hex)
+1100=LBA-Größe
+1101=Zylinder
+1102=Köpfe
+1103=Sek.
+1104=Bps
+
+;CHANGED 3.10:
+1105=Das Geräte-Handle bei einem Fehler aktualisieren, Verzögerung, ms
+;NEW 3.4::
+1106=I/O bei Gerätenanschluss wiederholen
+1107=Stellen Sie sicher, über die Risiken weiterer Arbeit Bescheid zu wissen (siehe Hilfe)
+;::NEW 3.4
+;NEW 3.7:
+1108=Liste der Geräte bei einem Fehler aktualisieren
+;NEW 3.7:
+1109=&Schreiben erlauben
+
+;****************** mainmenu ************************
+1110=&Festplatte
+;CHANGED 3.6:
+1111=Festplatte / &Task auswählen ...
+;CHANGED 3.6:
+1112=&Image / Log öffnen ...
+1113=&RAID konstruieren~...
+1114=&Partitionen ...
+1115=&Volumes sperren ...
+1116=B&eenden
+1117=Geräte-I/O-Parameter~...
+1118=NTFS-Suche (DMDE 2.10)~...
+1119=FAT-Suche (DMDE 2.10)~...
+1120=&Fenster
+1121=Verzeichnis&baum
+1122=&Datei-Panel
+1123=&Such-Panel
+1124=Editor
+;CHANGED 3.2:
+1125=Fensterlayout
+1126=Nicht festgelegt
+;CHANGED 3.2:
+1127=Verschieben in ein neues Tab
+1128=Alles vertikal
+1129=Alles horizontal
+1130=Baum in voller Höhe
+1131=Editor in voller Breite
+1132=Editor in voller Höhe
+1133=&Bearbeiten
+1134=&Modus
+1135=&Hexadezimal/Text
+1137=FAT-&Verzeichnis
+1138=&FAT12/FAT16/FAT32
+1139=P&artitionstabelle MBR/GPT
+1140=&Boot-Datensatz FAT/FAT32/NTFS
+1141=&NTFS-Verzeichnis
+1142=&MFT-Datensatz
+1143=Raw-Sektoren einer NTFS-Datei
+1144=&Encoding ...
+;NEW:
+1145=Benutzerdef. Tem&plates ...
+;NEW:
+1146=Templates aktualisieren
+1147=Block mit &Nullen füllen
+1148=&Kopieren
+1149=&Einfügen
+1150=&Datei einfügen~...
+1151=&Block auswählen
+1152=&Alles auswählen
+;NEW:
+1153=Exportieren in &Textdatei~...
+1154=Block e&rneut lesen
+;CHANGED 3.7:
+1155=&Bearbeitungsmodus
+1156=&Editor
+1157=P&artitionstabelle
+1158=&Bootsektor
+1159=Bootsektor-Kopie
+1160=&Root-Verzeichnis
+
+;CHANGED 3.6:
+1161=Haupt-FS-&Tabelle (FAT/MFT/~...)
+;CHANGED 3.4:
+;CHANGED 3.6:
+1162=Sekundäre FS-Tabelle (Kopie/ ...)
+;CHANGED 3.4:
+1163=&Dateidatensatz ...
+1164=Volume-&Cluster ...
+1165=Volume-&Sektor ...
+1166=&Physikalische Sektoren ...
+1167=&Cluster-Map
+1168=&Goto
+1169=&Dateidaten
+1170=&Verzeichniseintrag
+;CHANGED 3.6:
+1171=FS-&Eintrag (FAT/MFT/ ...)
+1172=Cluster-Map
+1173=Goto &Offset ...
+
+1174=&Tools
+;CHANGED 3.6:
+1175=Dateiliste &wiederherstellen / erstellen~...
+1176=Suche in Gefundenen (nach Name)~...
+
+;CHANGED 3.4.3:
+1177=Alle gefundenen / virtuelles Dateisystem~...
+1178=Cluster-Map aktualisieren
+;CHANGED 3.7:
+1179=Volume-Parameter wieder öffnen~...
+
+1180=&Tools
+1181=&Suche nach String in Objekt~...
+1182=Suche nach speziellem Sektor~...
+;NEW 3.0:
+1183=&Vollständiger Scan~...
+;NEW 3.7:
+1184=Kontext&menü~...
+;NEW 3.7:
+1185=Vorschau
+1191=E&rneut suchen
+;CHANGED 3.7:
+1192=Sektoren füllen (Schreibmodus)~...
+1193=Sektoren &kopieren~...
+;CHANGED 3.7:
+1194=NTFS-Tools (Schreibmodus)
+1195=Datei kopieren~...
+1196=Verzeichnis erstellen~...
+1197=Datei/leeres Verzeichnis entfernen~...
+1198=INDX-Listen des Verzeichnisses korrigieren~...
+1199=&Sprache (Language)~...
+1200=&Hilfe
+1201=Über &DMDE~...
+1202=&Aktivierung~...
+1204=&Aktivierung (Demo)~...
+;NEW 3.0:
+1205=Lizenzschlüssel &eingeben~...
+;NEW 3.10:
+1206=Debug-Funktionen aktivieren
+;NEW 3.7::
+1207=Legacy-Liste-Modus
+1208=Neuer Listenmodus
+1209=Globaler Nur-Lese-Modus
+;::NEW 3.7
+1210=Rollback-Daten/Dump aus Datei laden ...
+1211=Änderungen des Speicherinhalts in Datei ausgeben ...
+1212=Änderungen rückgängig machen
+1213=Änderungen wiederherstellen
+1214=Alle Änderungen zurücksetzen ...
+1215=Änderungen anwenden ...
+1220=Attributliste erstellen
+1230=Änderungen aus-/einblenden
+1231=Rückgängig (Undo)
+1232=Wiederherstellen (Redo)
+1240=Verzögert schreiben (%l)
+1241=Partitionierung (%l)
+1242=Editor (%l)
+1243=Rollback/Dump aus Datei (%l)
+1244=Objekt~#%l (%l)
+1245=Bearbeiten %l (%l)
+
+
+;******************** common *************************
+;NEW 3.6:
+1246=Das vorherige Objekt
+;NEW 3.6:
+1247=Das nächste Objekt
+;NEW 3.7:
+1278=Default
+;NEW 3.6:
+1279=Hinzufügen ...
+1280=Aktuelle Operation wird beendet ...
+1281=Möchten Sie abbrechen?
+1282=&Abbruch
+1283=&Fortfahren
+1284=Ö&ffnen
+1285=Durch&suchen ...
+1286=Auswählen
+1287=&Wiederholen
+1288=&Überspringen
+;CHANGED 3.0:
+1289=Jede Datei
+1290=Zeile
+1291=Befehl
+1292=Kommentar
+1293=Laden~...
+1294=Speichern~...
+1295=Einfg.
+1296=Entf.
+1297=Bearbeiten
+1298=&Schließen
+1299=&Hilfe
+1300=Hilfe
+1301=Wenn Hilfedateien nicht unterstützt werden oder fehlen, können Sie diese von den Software-Sites herunterladen.
+1302=DMDE kann erst beendet werden, wenn alle Dialogfenster geschlossen sind.
+1303=[Esc]: Menü beenden
+1304=&OK
+1305=&Abbrechen
+1306=&Ja
+1307=&Nein
+1308=&Abbrechen
+1309=Goto Link-Adresse
+1310=Link in Zwischenablage kopieren
+1311=Adresse in Zwischenablage kopieren
+1312=Dateiname:
+1313=Dateityp:
+1314=&Öffnen
+1315=&Speichern
+1316=&Abbrechen
+1317=Datei nicht gefunden.
+1318=Datei bereits vorhanden.\n\
+	Möchten Sie diese überschreiben?
+1319=Das Verzeichnis auswählen
+1320=Zum Auswählen Ctrl+Enter drücken oder OK
+1321=Bitte warten Sie...
+1322=[Ctrl+D]: Gerät auswählen~ [F10]: Menü
+1324=[Ctrl+P]: Partitionen~ [F10]: Menü
+1325=[Alt+B]: Bootsektor~ [F10]: Menü
+
+;*********************** NTLockVolumes *********************
+
+1326=Volumes für Direktzugriff sperren
+
+1327=Dateisystem muss vor dem direkten Schreiben auf Volume-Sektoren gesperrt werden.\n\
+	Markierte Volumes sind gesperrt und direktes Schreiben auf diese ist erlaubt.
+
+1328=Nicht markierte Volumes konnten nicht gesperrt werden.\n\
+	ACHTUNG! Ignorieren kann dazu führen, dass das Dateisystem beschädigt oder der Schreibzugriff verweigert wird. \
+	Zwangsabschaltung führt zum Verlust aller verwendeten Volume-Deskriptoren.
+
+1329=Es konnte nicht gesperrt werden. Volume wird möglicherweise verwendet oder Zugriff wird verweigert.\n\
+	Zwangsabschaltung führt zum Verlust aller verwendeten Volume-Deskriptoren.
+
+1330=Aktuelles Volume kann nicht freigegeben werden.
+1332=&Wiederholen
+1333=&Abbrechen
+1334=&Erzwingen
+1335=&Ignorieren
+1336=&Abbrechen
+
+;********************** PartView ***************************
+;********************** PartMan ****************************
+
+1337=Der ausgewählte Bereich erweitert sich über die Grenzen des Geräts.\n\
+	Gültige Grätesektoren: %~I - %~I.\n\
+	Möchten Sie trotzdem fortfahren?
+
+;CHANGED 3.6:
+1338=Offset (Bytes):
+1339=Aktuelle Position
+1340=Sektoren auswählen
+1341=Zylinder
+1342=Kopf
+1343=Sek.
+1344=Fokus-Sektor:
+1345=Erster Sektor:
+1346=Letzter Sektor:
+1347=Anzahl der Sektoren:
+1348=&Dec
+1349=He&x
+1350=Gerätesektoren:
+1351=Partitionssuche~...~ #%l~ LBA: %~I
+1352=Volume oder Bootsektor nicht gefunden.
+1353=Sektor wird von einem anderen Volume oder einer Tabelle verwendet.
+1354=Dateisystem wird nicht unterstützt und kann somit nicht verifiziert werden.\n\
+	Möchten Sie trotzdem fortfahren?
+1355=Partition ist relativ zu Gerätesektoren verschoben.
+1356=Dateisystem ist nicht verifiziert.\n\
+	Es wird empfohlen, das Volume zu öffnen Sie und es zu verifizieren.\n\
+	Möchten Sie ohne Verifizierung fortfahren?
+1357=Das Dateisystem ist beschädigt.\n\
+	Möchten Sie trotzdem fortfahren?
+1358=Ein gültiger Bootsektor ist bereits vorhanden.\n\
+	Möchten Sie trotzdem fortfahren?
+1359=Bootsektor aus der Kopie wiederherstellen?
+1360=Volume-Buchstaben erkennen?\n\
+	Es kann zum Stopp des Programms führen.
+1361=Festplatte
+1362=Tabelle
+1363=Erweitert
+1364=Erweitert
+1365=Gefunden
+1366=Gefunden
+1367=Gefundene Tabelle
+1368=Gefundene Tabelle
+1369=Nicht zugeordnet
+1370=Überschüssige Sektoren
+1371=Unbekannt
+1372=Primär
+1373=Prim.
+1374=Logischer Datenträger
+1375=Log.
+1376=Partitionen
+1377=\tVolume\tPart.\tDateisyst.\tGröße\tInd.\tStart~LBA\tEnde~LBA
+1378=Volume
+1379=Partition
+1380=Dateisystem
+1381=Größe
+1382=Indikatoren
+1383=Erster Sektor
+1384=Letzter Sektor
+
+;NEW 3.10:
+1385=Erweitert
+;CHANGED 3.10:
+1386=Bearbeiten
+;CHANGED 3.10:
+1387=Bearbeiten
+;CHANGED 3.10:
+1388=Aktualisieren
+
+1389=&Tabellen
+1390=G&efunden
+1391=&Detalliert
+1392=Einfügen
+1393=&Entfernen
+;CHANGED 3.0:
+1394=Vollständiger &Scan
+1395=Vollständiger Scan innerhalb der Partition~...
+1396=Image/Klon
+1397=&Volume öffnen
+1398=&Menü
+1399=Volume-Buchstaben zeigen
+1400=Partitionierungsänderungen verwerfen
+1401=Aus Datei &laden ...
+1402=Aktuelle Partitionierung in Datei &speichern ...
+1403=Partitionierung &anwenden ...
+1404=Gesamtes Laufwerk auswählen
+1405=Die Partition einfügen (Undelete) ...
+1406=Die Partition entfernen ...
+;CHANGED 3.0:
+1407=Irrelevante/vergangene Fehler in rot hervorheben
+;NEW 3.10:
+1408=Disk-Editor anzeigen
+1409=Image/Klon erstellen~...
+;CHANGED 3.4.3:CORRECTME:
+1410=Ein System kann Benutzerdaten zerstören, wenn es FS-Fehler gibt (siehe Hilfe).\n\
+	Modifizieren Sie nicht die Partitionierung auf dem aktuellen System oder der Bootfestplatte.\n\
+	Speichern Sie Rollback-Daten auf einem anderen Gerät.
+;NEW 3.0::
+1411=Das Volume wurde noch nicht geöffnet.\n\
+	Es wird empfohlen, das Volume zu öffnen und zu versuchen, einige Dateien zu öffnen und wiederherzustellen, um sicherzustellen, dass die Partition ordnungsgemäß ausgewählt ist.
+;CHANGED 3.4.3:
+1412=Ein System kann Benutzerdaten zerstören, wenn es FS-Fehler gibt (siehe Hilfe)
+;::NEW 3.0
+
+;NEW 3.4::
+1413=Weitere Partitionen suchen
+1414=Die gesamte Festplatte scannen
+1415=Die ausgewählte Partition scannen
+;::NEW 3.4
+
+1416=Gespeicherte Festplattenpartitionierung öffnen
+1417=Gelöscht
+1418=Entf.
+
+1419=MBR unterstützt bis zu 2~ТiB und bis zu 4~primäre Partitionen oder \n\
+	3~primäre und 1~erweiterte Partition, die logische Datenträger enthalten.
+
+1420=Partitionstyp auswählen.
+
+1422=Erweiterte Partition wird erstellt.\n\
+	Nur logische Datenträger mit größerem Wert als der erste Sektor können später der erweiterten Partition hinzugefügt werden.\n\
+	Möchten Sie fortfahrn?
+
+1423=Bootsektor nicht gefunden oder ungültig/inkompatibel.\n\
+	Partition wird als nicht formatiert erkannt.\n\
+	Möchten Sie trotzdem fortfahren?
+1424=Das Dateisystem ist unbekannt.\n\
+	Möchten Sie trotzdem fortfahren?
+
+1425=Es gibt bereits eine Partition, die denselben Start-LBA hat.\n\
+	Möchten Sie die bestehende Partition ersetzen?
+
+1426=Die erweiterte Partition wird zusammen mit den logischen Datenträgern entfernt.\n\
+	Möchten Sie fortfahren?
+
+1427=Möchten Sie die Partition entfernen?
+
+1430=Nicht genügend Platz um Partition einzufügen.
+
+1431=Überschneidung bestehender Partition.\n\
+	Sie sollten überschnittene Partitionen entfernen und wiederholen.
+1432=Die Partition und die erweiterte Partition überschneiden sich.
+1433=Fehler beim Lesen von Sektor %~I.
+1434=Keine freien Einträge in der Partitionstabelle.
+1435=Fehler beim Schreiben von Sektor %~I.
+1436=Erweiterte Partition konnte nicht angepasst werden.
+1437=Kein Platz für Partitionstabelle.
+1438=Partitionierungsfehler gefunden.
+
+1439=Diese Partition kann nicht eingefügt werden.
+1440=Dateisystem nicht unterstützt.
+1441=Diese Partition kann nicht entfernt werden.
+1442=Achtung! Nicht standardmäßige Partitionstabelle.
+1443=Raw-Partition erstellen~...
+
+1444=Bootsektor aus der Kopie wiederherstellen~...
+1445=Bootfähigen (aktiv) Partitionsstatus schalten~...
+1446=MBR-/Bootsignatur (On/Off) schalten~...
+1447=Hilfeinstruktionen
+
+1448=Erstellen
+1449=Wiederherstellen
+1450=MBR On/Off
+;NEW 3.10:
+1451=Erweitert Modus
+
+1452=Es sind Fehler in der Partitionierung zum Anwenden erkannt worden.\n\
+	Möchten Sie trotzdem fortfahren?
+1453=Eine vor der Partition erkannte Lücke ist viel zu klein.\n\
+	Es kann später zu Problemen führen, wennn Sie die Partitionierung unter \
+	Verwendung anderer Tools ändern.\n\
+	Möchten Sie trotzdem fortfahren?
+1454=Partition ist zu groß.
+1458=Nicht formatierte (Raw) Partition erstellen.
+1459=Unerwartete Partitionierung.
+;******************** FillSectors ************************
+1460=Sektor: %~I (%l%%)
+;NEW 3.6::
+1461=Keine neuen / übersprungenen Sektoren zum Kopieren
+1462=Keine fehlerhaften Sektoren zum erneuten Kopieren
+1463=Fehlerhafte und übersprungene Bereiche aus Log exportieren~...
+;::NEW 3.6
+
+1464=%IV werden mit Mustern gefüllt.\n\
+	Alle Daten werden unwiderruflich überschrieben.\n\
+	Sind Sie sicher, dass Sie fortfahren möchten?
+
+;******************* SearchSector ************************
+1465=Suche~...
+1466=Sektor nicht gefunden.
+
+;******************** CopySectors ************************
+1467=Startsektor:
+1468=Endsektor:
+1469=Anzahl der Sektoren:
+1470=Ungültige Eingabe.
+1471=Ungültige Eingabe.\n\
+	Gültige Festplattensektoren: %~I - %~I.
+
+1472=Die Quelle passt nicht in das Ziel.\n\
+	Möchten Sie Informationen nur partiell kopieren?
+1473=Sektoren füllen
+1474=Muster
+1475=&Hex:
+1476=&Datei:
+1477=Sektoren füllen:
+
+1478=Sektor-Alignment
+1479=Datei ist leer.
+1480=Datei ist zu groß. Verwenden Sie die Funktion "Sektoren kopieren" zum Schreiben großer Dateien.
+1481=Beenden nicht möglich. Schreibfehler.
+1482=Fehler beim Lesen der Datei.
+1483=Gefüllt LBA: %~I (%IV) %l%%
+1484=Sektoren kopieren
+1485=Quelle
+1486=Ziel
+1487=Gerät~...
+1488=Datei~...
+1489=Editor
+1490=Auswahl
+;NEW 3.6::
+1491=Log-Statistik
+1492=Log-Statistiken~...
+1493=In neues sortiertes Log exportieren
+1494=In neues sortiertes Log exportieren~...
+1495=Bereiche speichern
+;::NEW 3.6
+1496=Ziel auswählen.
+1497=Schreiben in Datei
+1499=Zieldateigröße ist größer als die Quellgröße.\n\
+	Möchten Sie die Zieldatei verkürzen?
+;CHANGED 3.2:
+1502=Aktuelles LBA-Offset: %~I (%IV) %l%% / %l%%\n\
+	Gut: %~I~ Fehlerhaft: %~I~ Übersprungen: %~I~ Schreibfehler: %~I
+1503=Start-Byte:
+1504=End-Byte:
+1505=Größe in Bytes:
+1506=~auf Festplatte~
+
+;NEW 3.4::
+1507=&Überschreiben %IV bestätigen
+1508=Falsche Kopierrichtung, wenn Quelle und Ziel sich überschneiden.
+1509=Möchten Sie eine Log-Datei erstellen?
+1510=Einige Bereiche liegen außerhalb der Quellgrenzen und werden ausgelassen.\n\
+	Wahrscheinlich ist eine andere Quelle ausgewählt.\n\
+	Möchten Sie die Bereiche außerhalb der Quellgrenzen laden?
+;CHANGED 3.6:
+1511=Stellen Sie sicher, dass die Quelle ordnungsgemäß ausgewählt ist
+1512=Log in ddrescue Mapfile exportieren
+1513=Log in ddrescue Mapfile exportieren~...
+1514=Abgeschlossen
+
+1515=Bericht
+1516=Bericht in eine Datei speichern
+;::NEW 3.4
+;NEW 3.6:
+1517=Nicht unterstützte Überlappung von Quelle und Ziel
+;NEW 3.6:
+1518=Rest (LBA)
+1519=Änderungen des Speicherinhalts in Datei ausgeben
+
+;********************* EditorCommands *********************
+1520=Cluster: [0..%I]:
+1521=Goto Cluster
+1522=Volume-Sektor [0..%~I]:
+1523=Goto Volume-Sektor
+1524=Goto Objekt-Offset
+
+;CHANGED 3.0:
+1525=Sektor
+;CHANGED 3.0:
+1526=Sektor-Offset
+;CHANGED 3.0:
+1527=Offset
+1528=Dateizuordnungsinformationen sind nicht geladen worden.\n\
+	Möchten Sie die Dateizuordnunginformationen laden?
+1529=Volume öffnen
+;NEW 3.4.3:
+1530=Möchten Sie die Dateizuordnungsinformation aktualisieren?
+
+1531=Ab &Start/Ende
+1532=Ab ak&tuell
+
+;NEW 3.4::
+1533=Datensatz
+1534=Datensatz-Offset
+;::NEW 3.4
+;CHANGED 3.6:
+1535=X-&mal in einer Reihe:
+;CHANGED 3.6:
+1536=Suche für Ende der &Wiederholungen
+
+1537=Datei öffnen
+1538=Suche nach String
+1539=String:
+1540=Groß-/Kleinschreibung beachten
+1541=Sektor-O&ffset:
+1542=&Unicode
+1543=Vorwärt&s
+1544=&Rückwärts
+1545=Ab Cu&rsor
+1546=&Gesamtobjekt
+
+;*********************** devobj **********************************
+
+1547=Zu viele Bereichen.
+1548=Rollback-Daten speichern
+1549=Fehler beim Lesen von Sektor %~I.\n\
+	Möchten Sie trotzdem fortfahren?
+1550=Alles ignorieren
+1551=Geräte-Content ist von außerhalb geändert worden.
+1552=Schreiben wird für diesen RAID-Typ nicht unterstützt.
+1553=Direktes Schreiben auf Festplatte bestätigen
+1554=Rollback-Daten vor dem Schreiben in eine Datei speichern
+1555=Schreiben
+1556=Verwerfen
+1557=Rückgängig
+1558=Halten
+1559=Zusammenführen
+1560=Möchten Sie Änderungen auf die Festplatte schreiben?
+1561=Es gibt nicht angewandte Änderungen.\n\
+	Möchten Sie schreiben oder nicht angewandte Änderungen verwerfen?
+1562=Auf Festplatte schreiben oder vorherige Änderungen verwerfen.
+1563=Block geht über das Ende des bearbeiteten Objekts.
+1564=Block ist zu groß. Für große Blocks nutzen Sie die Funktionen "Sektoren kopieren" oder "Sektoren füllen".
+1565=Puffer ist voll.
+1566=Es gibt nicht angewandte Änderungen.\n\
+	Möchten Sie schreiben oder nicht angewandte Änderungen verwerfen?\n\
+	Ebenso können Sie Änderungen zur späteren Anwendung behalten.
+1567=Es gibt nicht angewandte, vorherige Änderungen.\n\
+	Möchten Sie schreiben oder vorherige Änderungen verwerfen?
+1568=Es gibt nicht angewandte, vorherige Änderungen.\n\
+	Möchten Sie schreiben oder vorherige Änderungen verwerfen?\n\
+	Ebenso können Sie alle Änderungen zur späteren Anwendung zusammenführen.
+1569=Möchten Sie alle Änderungen zurücksetzen?
+
+;********************** MountFAT *********************************
+1570=Möchten Sie trotzdem fortfahren?
+1571=FS-Parameter autom. erkennen
+1572=Mit diesen Parametern fortfahren
+1573=Volume passt nicht in Gerät.
+1574=Diese virtuelle Volume-Größe verwenden
+1575=Verkleinerte Volume-Größe verwenden
+1576=Ungültiger Bps-Wert wird nicht verwendet.
+1577=Ungültiger FATs-Number-Wert wird nicht verwendet.
+1578=Root Cluster Wert nicht verwendet in FAT12/FAT16.
+1579=Root-Verz.-einträge nicht verwendet in FAT32.
+1580=Root-Verz.-einträge können in FAT12/FAT16 nicht Null sein.
+1581=Unerwarteter Root-Verz.-einträge-Wert wurde erhöht.
+1582=Gültige Sektoren-pro-Cluster-Werte: 1,2,4,8,16,32,64,128.
+1583=Start sector muss im Bereich 0..%~I sein.
+1584=Wert ist zu hoch (res.secs+fatsnum*fatsize+entriesnum*32/512).
+1585=Wert für Total sectors ist zu hoch oder ungültige Parameter.
+1586=Wert für Total sectors ist zu niedrig oder ungültige Parameter.
+1587=Ungültige Root Cluster Number wurde mit Defaultwert ersetzt.
+1588=Es gibt nur eine Fat.
+1589=Es wurden Fehler bei Öffnung des Wurzelverzeichnisses gefunden.
+
+1591=Dateisystem:
+1592=FAT-Tabellen:
+1593=FAT1 verwenden
+1594=FAT2 verwenden
+1595=Nicht verwenden
+1596=Testen und Auswählen
+1597=Autom. auswählen
+1598=Testen der FAT-Tabellen %l%%
+1599=Einstellungen für Nutzung von FAT-Tabellen
+1600=Größe der FAT-Tabelle in Bytes: %l
+1601=FAT%l: %l-%l sind %l%% gültig; %l gut, %l fehlerhaft, %l unbekannt
+1602=FAT-Tabellen nicht verwenden
+1603=Überprüfen (fehlerhafte Sektoren nicht verwenden)
+;CHANGED 3.4.3:
+1604=Lesen: Cluster FAT %~lu (%l%%)\nVerzeichnis-Fragmente: %~l
+;NEW 3.0::
+1605=Ungültige Sectors per FAT
+1606=Wert "Total sectors number" ist zu klein
+1607="Total Sectors Number" wurde herabgesetzt entsprechend der FAT-Größe
+;::NEW 3.0
+;NEW 3.6::
+1616=%l%%\nVerzeichnisse: %~l, Dateien: %~I, Fragmente: %~I
+1617=FS-Strukturen
+1618=Alt. Datenströme
+1619=FS-Rekonstruktion verwenden
+;::NEW 3.6
+
+1623=Ungültige Cluster-Größe.
+1624=Ungültiger Wert für Bytes pro MFT-Datensatz wurde auf Defaultwert geändert.
+1625=Ungültiger Wert für Bytes pro Index-Datensatz wurde auf Defaultwert geändert.
+1627=MFT-Cluster-Wert ist zu groß.
+1628=MFTMirr Cluster Wert ist zu groß.
+1629=Es gibt keine gültigen MFT Start Cluster.
+1630=MFT-Fehler. MFTMirr wird verwendet.
+1631=MFT-Fehler.
+
+;NEW 3.7:
+1648=Virtuelle Seite / Objektnummer
+1649=&Parameter
+;********************** comerrmsg ****************************
+1650=Platz im Hauptspeicher reicht nicht aus
+1651=Erstellen nicht möglich
+1652=Schreiben nicht möglich in
+1653=Fehler beim Lesen der Datei
+;NEW 3.6::
+1654=Öffnen nicht möglich
+1657=Die ausgewählten Dateien haben die Größe Null.\nTrotzdem fortfahren?
+1658=Cluster-Map erstellen
+1659=Cluster-Map-Kompaktmodus
+1660=Cluster starten: %~I
+1661=Cluster-Map-Bericht~...
+1662=Cluster-Map-Bericht
+1664=Nur markierte Dateien
+1665=Nur Dateien
+1666=In Bytes aus dem Festplattenstart
+1667=Min., Max. Cluster:
+;::NEW 3.6
+
+;********************** volserv ******************************
+;NEW 3.4.3::
+1668=Virtuelles FS wird gebildet ...
+1669=FS-Cluster-Map wird gebildet ...
+;::NEW 3.4.3
+1670=Suche nach Dateien
+1671=Such-Panel
+1672=Verzeichnisbaum
+;CHANGED 3.0:
+1673=Suche ... (%l/%l) %.60s
+1674=Abgeschlossen (%l)
+1675=Index-Datensatz: %l (%l%%)
+1676=MFT-Datensatz: %l (%l%%)
+1677=Abgebrochen (%l)
+1678=Möchten Sie die Suche stoppen?
+;NEW 3.6::
+1679=Aus aktuellem Verzeichnis
+1680=Spezielle Verzeichnisse einbeziehen
+1681=Übereinstimmende Items in einem Panel listen
+1682=Übereinstimmende Items markieren
+1683=Markierung übereinstimmender Items aufheben
+1684=Einen separaten Thread starten
+1685=Dateikategorien wählen
+;::NEW 3.6
+
+;********************** Recovery *****************************
+;NEW 3.4.3::
+1686=Keine Dateien zum Wiederherstellen.\nStellen Sie sicher, dass die erforderlichen Dateikategorien ausgewählt sind.
+1687=Auswahlmarkierungen für ausgeschlossene Items behalten
+;Ausgeschlossene Items markiert halten
+1688=Berechtigungen wiederherstellen
+1689=Besitzer-ID wiederherstellen
+1690=Dateikategorien:
+;::NEW 3.4.3
+;NEW 3.4::
+1691=Modifizert:
+1692=Nur &gefunden
+;::NEW 3.4
+;CHANGED 3.7::
+1693=Befindet sich das angegebene Zielverzeichnis auf einer anderen Festplatte?
+1694=Sie können nicht in das Verzeichnis auf derselben Festplatte wiederherstellen.
+1695=Möchten Sie die Zielprüfung wirklich überspringen?\n\
+	Verlorene Daten werden möglicherweise überschrieben.
+;::CHANGED 3.7
+1696=Fehler bei Öffnung
+1697=NTFS-Altstreams einbeziehen
+1698=Die Aktion wählen.
+1699=Umbenennungsschwellenwert
+1700=Recovery
+1701=Dateien wählen
+1702=Filter benennen:
+1703=Überall
+1704=Fokussiertes Item
+1705=Aktuelle Panel-Dateien
+;NEW:
+1706=Optionen
+;NEW:
+;CHANGED 3.4.3:
+1707=Dateien splitten, Blockgröße:
+;NEW:
+1708=utf-8
+1710=Nur markiert
+1711=Gelöscht ausschließen
+1712=Nur gelöscht
+1713=Gelöscht einbeziehen
+1714=&Unicode-Namen
+1715=Namen substituieren
+1716=Größe
+1717=Wiederherstellen in:
+1718=Scanning~...~ Dateien: %l (%IV)\n%.64s
+1719=%~l%c Lesen %.60s
+;NEW:
+1720=Dateigröße:
+1721=Wiederherstellen
+1722=Volume
+1723=Verzeichnis
+1724=~(nur markiert)
+1725=Alle markierten aus
+;CHANGED 3.6:
+1726=Dateien in dem aktuellen Panel
+1727=Datei
+1728=Alles aus
+;NEW 3.7:
+1729=Stellen Sie sicher, dass sich das Zielverzeichnis und die verlorenen Daten auf verschiedenen Laufwerken befinden, \
+	um ein Überschreiben der verlorenen Daten zu vermeiden.
+;CHANGED 3.7:
+1730=Lange Namen werden unter DOS ohne spezielle Treiber nicht unterstützt. \
+	Es wird empfohlen, lange Namen unter DOS zu substituieren \
+	(um Namen später wiederherzustellen, sollten Sie "lrename.bat" \
+	im Zielverzeichnis unter OS Windows ausführen).
+
+1731=%~l%c Lesen %-.30s%-.30s %l%%\n\
+	Schreiben %-.30s%-.30s
+1732=%~l%c Lesen %-.60s\n\
+	Erstellen %-.30s%-.30s
+
+1733=Ziel/Optionen ändern
+1734=Die Datei splitten
+1735=Alle Dateien splitten
+1736=Umbenennen
+1737=Alles autom. umbenennen
+1738=Überspringen
+1739=Alles überspringen
+1740=Wiederholen
+1741=Die Dateifehler ignorieren
+1742=Alle Fehler ignorieren
+1743=Alles ignorieren, Attr. auf "hidden" setzen
+1744=Überspringen
+1745=Alles überspringen
+1746=Max. erlaubte Anzahl für Umbenennungen von Verzeichnis
+1747=Max. erlaubte Anzahl für Umbenennungen von Datei
+1748=Verzeichnis konnte nicht erstellt werden
+1749=Verzeichnis umbenennen
+1750=Datei umbenennen
+1751=Es kann nicht weiter geschrieben werden.\n\
+	Möglicherweise nicht genügend Platz.
+1752=Mit Recovery fortfahren in:
+1753=Es kann nicht mehr geschrieben werden. Weiter in die nächste Datei schreibne:
+1754=Abgebrochen
+1755=Datei bereits vorhanden
+1756=Es konnte nicht erstellt werden
+1757=Es kann nicht mehr geschrieben werden
+1758=Es kann nicht geschrieben werden
+1759=Fehler beim Lesen
+
+1760=Verzeichnis bereits vorhanden
+1761=Ziel/Optionen ändern
+1762=Zusammenführen
+1763=Alles zusammenführen
+1764=Umbenennen
+1765=Alles autom. umbenennen
+1766=Überspringen
+1767=Alles überspringen
+1768=Dateiliste speichern
+1769=Recovery-Berichtsparameter
+1770=Recovery-Bericht in Datei schreiben:
+1771=Recovery-Bericht in Datei speichern
+1772=&I/O-Fehler-Positionen
+1773=C&RC32 berechnen
+1774=Bericht e&rstellen
+1775=Liste ...
+1776=Recovery abbrechen
+1777=Abbruch des Verzeichnis-Recovery
+1778=Nur die Datei überspringen
+
+;***************** NTFSWrite ***********************
+1780=NTFS-Version ist möglicherweise inkompatibel.\n\
+	Schreiboperationen trotzdem erlauben?
+1781=Lese-Verz.-Fehler. Fehler 0x%04hx.
+1782=Operation für dieses Verzeichnis nicht unterstützt.
+1783=NTFS-Verz.-version ist möglicherweise inkompatibel.\n\
+	Trotzdem fortfahren?
+1784=Sind Sie sicher, dass Sie in dem speziellen Systemverzeichnis erstellen wollen?
+1785=Quelldatei öffnen
+1786=Datei kopieren
+1787=Daten aus Datei lesen:
+
+;CHANGED 3.10:
+1789=Kopieren Sie die Datei in das Verzeichnis.\n\
+	Neuen Dateinamen zum Erstellen/Überschreiben eingeben
+
+;CHANGED 3.10:
+1790=Bevor Sie fortfahren die Dokumentation lesen! (siehe Hilfe)
+1791=Dateipfad ist zu lang.
+1792=Initialisieren nicht möglich.
+
+1793=Fehler bei der Initialisierung des Verzeichnisses 0x%lx.
+1794=Verzeichnis konnte nicht gelesen werden. Fehler 0x%04hx.
+1795=Datei ist bereits vorhanden.\n\
+	Möchten Sie diese überschreiben?
+1796=Neue Daten am Ende der Datei hinzufügen?
+1797=Datei konnte nicht geöffnet werden. Fehler 0x%04hx.
+1798=Datei konnte nicht zugeordnet werden. Fehler 0x%04hx.
+1799=runs konnte nicht aktualisiert werden. Fehler 0x%04hx.
+1800=INDX konnte nach der Dateierstellung nicht aktualisiert werden.\nFehler 0x%04hx.
+1801=Dateidatenattribut nicht gefunden. Fehler 0x%04hx.
+1802=Dateigröße konnte nicht geändert werden. Fehler 0x%04hx.
+1803=Die Datei konnte nach der Größenänderung nicht aktualisiert werden.\nFehler 0x%04hx.
+1804=INDX konnte nicht aktualisiert werden. Fehler 0x%04hx.
+1805=Fehler beim Lesen der Datei. Fehler 0x%04hx.
+1806=Fehler beim Schreiben der Datei. Fehler 0x%04hx.
+1807=Datei konnte nach dem Schreiben der Daten nicht aktualisiert werden. Fehler 0x%04hx.
+;CHANGED 3.10:
+1808=Neuen Verzeichnisname eingeben zum Erstellen in
+1809=Verzeichnis erstellen
+1810=Name ist vorhanden
+1811=Verzeichnis konnte nicht erstellt werden. Fehler 0x%04hx.
+1812=Möchten Sie das Verzeichnis reparieren?\n\
+	Lesen Sie zuerst die Dokumentation!
+1813=Fehler 0x%hx
+1814=Leeren nicht möglich.
+1815=Sind Sie sicher, dass Sie aus dem speziellen Systemverzeichnis löschen wollen?
+1816=Sind Sie sicher, dass Sie die Systemdatei löschen wollen?\n\
+	Dies kann das Dateisystem zerstören.\n\
+	Fortfahren?
+1817=$MFT kann nicht gelöscht werden.
+1818=Möchten Sie die Datei oder das Verzeichnis löschen?\n\
+	Lesen Sie zuvor die Software-Dokumentation!
+1819=Warnung: Unerwartete MFT-Daten.\n\
+	Möchten Sie trotzdem fortfahren?
+1820=Entfernen nicht möglich. Das Verzeichnis ist nicht leer.
+1821=Fehler %04hx. Das Verzeichnis darf nicht leer sein.\n\
+	Möchten Sie trotzdem fortfahren?
+1822=Fehler %04hx
+1823=Der Dateiname konnte nicht in den Verzeichnisindex eingefügt werden.\n\
+	Trotzdem mit Operation fortfahren?
+1824=MFT-Datei: %l (%l%%)
+;NEW 3.6:
+1825=%l Items
+;NEW 3.7::
+1830=Namen substituieren (empfohlen)
+1831=Ohne Namenssubstitution fortfahren
+;::NEW 3.7
+
+;************* EditorStatuses *************************
+1840=[Esc]: Zurück
+;CHANGED 3.6:
+1841=[Enter]: Dateidaten öffnen
+;CHANGED 3.6:
+1842=[Enter]: Goto Verzeichnis
+1844=[Enter]: Goto Verz.-eintrag
+;CHANGED 3.6:
+1845=[Enter]: Volume öffnen~ [F7]: Bootsektor-Typ
+;CHANGED 3.6:
+1846=[F7]: Bootsektor-Typ
+;CHANGED 3.6:
+1847=[Enter]: Volume öffnen
+1849=[Enter]: Goto~ [Ctrl+P]: Partitionen
+;CHANGED 3.6:
+1854=[Enter]: Attribut öffnen
+;CHANGED 3.6:
+1857=[Enter]: Zu oberem Verzeichnis
+1859=[Enter]: Goto Cluster
+1860=[Enter]: Goto
+1861=[Leertaste]: Details
+
+;************** PanelStatuses *************************
+;NEW 3.7:
+1869=[F2]: Kontextmenü
+1870=Kein Objekt ausgewählt
+1871=[Ctrl+U]: Wiederherstellen
+1872=[Enter]: Öffnen~ [Ctrl+U]: Wiederherstellen
+1873=[Enter]: Öffnen (Editor)~ [Ctrl+U]: Wiederherstellen
+1874=[Enter]: Oberes Verz.~ [Ctrl+U]: Wiederherstellen
+;NEW 3.0:
+1875=[Enter]: Vollständiger Scan
+
+;************** PanelCommands *************************
+
+1876=Öffnen (Hex-Editor)
+;CHANGED 3.2:
+1877=Panel - Eine Ebene nach oben
+
+;CHANGED 3.6:
+1878=Dateiliste wiederherstellen / erstellen~...
+;NEW 3.10:
+1880=Eintrag öffnen (Hex-Editor)
+
+;******************* PanelNt **************************
+1881=MFT wird gelesen~...~#%~l (%l%%)
+
+;******************* PanelFat *************************
+;CHANGED 3.2:
+1883=(ex)FAT-Suchresultate verwenden
+1884=Aktuelles Dateisystem erneut scannen
+1885=Mit dem unterbrochenen Prozess fortfahren
+1887=FAT%l: %l-%l: %l%% OK; %l%% OK, %l%% fehlerhaft, %l%% leer, %l%% unbekannt
+
+;******************************************************
+;NEW 3.0::
+1888=Nach Name sortieren
+1889=Nach Größe sortieren
+;::NEW 3.0
+
+;CHANGED 3.4.3:
+1890=Wiederherstellen
+1891=Item markieren/Markierung aufheben
+1892=Panel-Items markieren/Markierung aufheben
+;CHANGED 3.2:
+1893=Volume - Alles markieren
+;CHANGED 3.2:
+1894=Volume - Markierung komplett aufheben
+;CHANGED 3.4.3:
+1895=Virtuelles Dateisystem bilden ...
+1896=Dateisuche stoppen
+1897=Die Verzweigung erweitern
+1898=Den Verzweigung reduzieren
+;CHANGED 3.2:
+1899=Volume - Nur Panel-Dateien markieren
+
+;******************* ScanRangeBox *********************
+;CHANGED 3.0:
+1900=Scan-Parameter
+1901=Blockgröße:
+1902=&Partition ...
+1903=Bitte lesen Sie die Dokumentation zum effektiveren Recovery
+1904=Geöffnetes Volume wird geschlossen.\n\
+	Fortfahren?
+1905=Kein Volume gefunden.
+1906=Volume in der Liste auswählen.
+1907=Das Log wurde wahrscheinlich auf einem anderen Gerät produziert.\n\
+	Suchresultate werden möglicherweise nicht korrekt angewandt.
+1908=Möchten Sie das Scan-Log speichern?
+1909=Wird geladen ...
+1910=Scan-Log laden ...
+1911=Scan-Log speichern ...
+1912=Nach Nummer sortieren
+1913=Nach Qualität sortieren
+1914=Nach Startposition sortieren
+1917=Volume-Parameter öffnen ...
+1918=!!Geändert:
+;NEW:
+1919=&Start
+;NEW:
+1920=&Stopp
+
+;************************* NTFSSearch **************************
+1921=&Suche
+1922=NTFS-Suche
+1924=Volume
+1925=Cluster
+1926=FILE
+1927=INDX
+1928=Mod
+;CORRECTED 3.6:
+1929=LBA Start
+1930=Check
+1931=Min. Größe
+1932=Volume-Mindestgröße: %IV
+1933=Start bei: %IV
+1934=Vol.-Dateien: %l (%l) von %l, MFT-Fragmente: %l (%l)
+1935=&Vol#
+1936=CLUS
+1937=FILE
+1938=INDX
+1939=Mod
+;CORRECTED 3.6:
+1940=LBA &Start
+1941=Chec&k
+1942=Min. Größe
+1944=&Volume öffnen
+1945=Speiche&rn~...
+1946=&Laden~...
+
+;CHANGED 3.0::
+1947=Scan-Log speichern
+1948=Scan-Log laden
+1949=Scanning~...
+1950=LBA scannen: %~I - %~I (%IV)
+1951=Gescannt:
+;::CHANGED 3.0
+
+1952=Dateien: %l (%l) von %l, MFT-Fragmente: %l (%l). INDX: %l (%l)
+1953=S&tart/Stopp
+1954=&Bereich~...
+;NEW 3.0:
+1955=Lesen der Inode Table~... %l
+1956=Überprüfung des Startsektor-Werts #%l:#%l~ %l%%
+1957=Lesen von MFT-Fragment #%l: %l
+;CHANGED:
+1958=MFT-Fragment nicht gefunden #%l: %~I
+1959=Verzeichnisprüfung #%l (%l%%)
+1960=Warten ...
+1961=Verarbeitung von Volumes ...
+1962=Einige Parameter sind noch nicht erkannt worden.\n\
+	Es wird empfohlen, mit dem Scanning fortzufahren,\n\
+	ansonsten werden zugewiesene Daten nicht verfügbar sein.\n\n\
+	Mit Scanning fortfahrn?
+
+;NEW 3.0:
+1963=Vorherige Scan-Resultate löschen
+1964=Volume-MFT-Fragmente ...
+1965=Alle MFT-Fragmente ...
+1966=Scan-&Bereich auswählen ...
+;NEW 3.0::
+1967=Vollständiger Scan
+1968=Raw-Scan kann NTFS-, exFAT-, HFS-Resultate verbessern, benötigt jedoch mehr Zeit und Speicher
+1969=Raw-Scan erlaubt auch das Wiederherstellen von Dateien, wenn FS nicht unterstützt wird oder ernsthaft beschädigt ist
+
+;::NEW 3.0
+
+;************************* FATSearch ****************************
+;CHANGED 3.0:
+1971=FAT-Suche
+1972=Volume
+1973=Cluster
+1974=Daten-Start
+1975=FS
+1976=Boot
+1977=FAT1
+1978=FAT2
+1979=Root
+1980=Gefunden
+1981=FAT-Tabelle suchen~... %l
+
+1984=&Vol#
+1985=Clust
+1986=&Start
+1987=FS
+1988=Boot
+1989=FAT1
+1990=FAT2
+1991=Root
+1992=Ge&funden
+;NEW 3.0::
+1993=Dateien
+1994=Ende LBA
+1995=Indikatoren
+;::NEW 3.0
+
+;************************* Editor ***************************
+;NEW:CORRECTME:
+1998=(modifiziert)
+1999=(ausgeblendete Änderungen)
+2000=Sektor: %~I (%l%%)
+2001=String nicht gefunden.
+2002=Sektoren %~I~-~%~I
+;CHANGED 3.2:
+2003=Volume-Sektoren
+2004=Datei
+2005=Verzeichnis
+2006=Sektoren
+2010=[Ende der Datensätze]
+2011=[PgDn: nächster Datensatz]
+2014=Cluster-Map
+
+;NEW:
+2086=[..][+gefunden]
+;CHANGED 3.4.3:
+2087=[Alle gefundenen / virtuelles FS]
+2088=[Erweitertes Attribut]
+2089=[Ordner]
+;CHANGED 3.6:
+2090=Lesen: %s (%l%%)\n\
+	Verzeichnisse: %~l, Dateien: %~I
+2091=Möchten Sie die Operation abbrechen?\n\
+	Dies wird zu einem unvollständigen Struktur-Recovery führen.
+2093=Name
+2094=Größe
+2095=Modifiziert
+2096=MFT-Nummer
+2097=Pfad
+2099=Name
+2100=Größe
+2101=Modifiziert
+2102=Cluster
+2103=Pfad
+2104=%l%% verarbeitet %l gefunden
+2105=%l gefunden
+;CHANGED 3.4:
+2111=Dateidatensatz [0..%l]:
+;CHANGED 3.4:
+2112=Zu Dateidatensatz gehen
+;NEW 3.0::
+2113=Goto Inode-Eintrag
+2114=Inode [1..%l]
+;::NEW 3.0
+
+;NEW 3.4::
+2115=Goto Node-Datensatz
+2116=Node [0..%l]:
+;NEW 3.6:
+2121=Entfernte Items am Ende der Liste
+2122=Anzahl der Unterebenen erweitern:
+2123=Ebenen erweitern~...
+2124=Nach Schreibdatum sortieren
+2125=Nach ID sortieren
+2126=Ungültige(s) FS/Parameter
+;::NEW 3.4
+
+;NEW 3.0::
+2127=Dateisystem
+2128=Gefundene Resultate
+;::NEW 3.0
+;NEW 3.6:
+2129=FS + Gefundene Resultate
+2130=Diese Nachricht nicht erneut zeigen
+2131=MFT
+2132=Gefundene MFT-Fragmente
+2133=Restliche MFT-Fragmente
+2134=Fehler beim Lesen von MFT~#%l-%l
+2138=MFT ...
+;CHANGED:
+2139=MFT-Nummern:
+;CHANGED:
+2140=Extra gefunden
+;CHANGED:
+2141=Tech. Datensätze
+;CHANGED:
+2142=Verschoben
+;CHANGED 3.4.3:
+2143=Virtuelles Dateisystem bilden (schreibgeschützt)
+
+;NEW 3.0::
+2170=Mit Rekonstruktion fortfahren
+2171=Pure FS-Rekonstruktion
+2172=Rekonstruktion per Default
+2173=Weniger Resultate pro Rekonstruktion
+2174=Mehr Resultate pro Rekonstruktion
+2175=Vollständiger Scan innerhalb der Partition
+;CHANGED 3.6:
+2176=Benutzerdef. Modus
+2177=Laden~...
+2178=Andere Resultate + Vollständiger Scan ...
+2180=[Andere Resultate + Vollständiger Scan]
+;::NEW 3.0
+
+2191=~LUN#%l LBA:%-10I
+2192=Block: %~I
+
+;**********************************************************
+;NEW 3.0::
+2195=In dem aktuellen Panel gibt es keine markierten Dateien.
+;CHANGED 3.7:
+2196=Möchten Sie die Dateien nur aus dem aktuellen Panel verarbeiten?
+;NEW 3.4.3:
+;CHANGED 3.7:
+2197=Möchten Sie das Verzeichnis öffnen und Dateien im Panel verarbeiten?
+;CHANGED 3.7:
+2198=Ohne Aktivierung können Sie nur bis zu ~4000 Dateien verarbeiten.
+;CHANGED 3.7:
+2199=Mit der Free Edition können Sie nur bis zu ~4000 Dateien verarbeiten.
+;::NEW 3.0
+
+;CHANGEME:
+;CHANGED 3.6:
+;CHANGED 3.7:
+2200=Mit der Free Edition können Sie nur Dateien im aktuellen Panel verarbeiten \
+	(Sie sollten zuerst ein Unterverzeichnis im aktuellen Panel öffnen).
+2201=Lizenzvereinbarung
+2202=Ich akzeptiere die Lizenzvereinbarung
+2203=&Akzeptieren
+2204=\n\
+	~Lizenzvereinbarungs-Datei (EULA)\n\
+	~%s\n\
+	~wurde nicht gefunden oder ist beschädigt.\n\n\
+	~Das volle Package auf der Software-Site bekommen.\n\
+	~Alle Dateien in ein einzelnes Verzeichnis extrahieren.
+2205=&Über
+2206=Über DMDE
+2207=&Lizenz
+2209=Anzahl der Kopien:
+;CHANGED 3.2:
+2210=Lizenziert bis:
+;CHANGED 3.7:
+2211=Lizenz #%s für:
+;CHANGED 3.2:
+2212=Abgelaufen
+2213=Sie verwenden wahrscheinlich eine alte Software-Version.\n\
+	Bitte schauen Sie nach Updates auf der Software-Site.
+2214=Ungültige Lizenzdatei
+2215=Ohne Aktivierung können Sie nur Dateien aus dem aktuellen Panel wiederherstellen.
+2216=Admin
+;NEW 3.4.3:
+2217=Dem Root-Benutzer den GUI-Zugriff erlauben
+2220=Demo
+2221=Aktiviert
+2222=Nicht aktiviert
+2223=NA
+
+;NEW 3.0:
+2224=license.key fehlt
+2225=Website:
+2226=Kauf:
+2227=Kontakt:
+2228=Support:
+2229=Die Funktion ist veraltet.\n\
+	Sind Sie sicher, dass Sie fortfahren möchten?
+;CHANGED 3.4:
+2230=Manuelle Aktivierung
+2234=&Speichern~...
+2235=1. Speichern Sie die Datei "dmdeinst.dat" (oder Sie notieren sich Ihre Prod.ID und Inst.ID)
+;CHANGED 3.6:
+2236=2. Senden Sie (Upload) "dmdeinst.dat" (oder Sie geben Prod.ID und Inst.ID ein) an die Aktivierungs-Site auf einem beliebigen PC
+2237=Aktivierungsseiten:
+2238=3. Aktivierungscode:
+2239=Ö&ffnen~...
+2240=Aktivierung (nur Demonstration)
+2241=Aktivierung
+2242=O&nline-Aktivierung
+
+;CHANGED 3.4:
+2243=Online konnte nicht aktiviert werden.\n\
+	Verwenden Sie die manuelle Aktivierung.
+;CHANGED 3.4:
+2244=&Manuelle Aktivierung~...
+2245=Gerät hat keine gültige Seriennummer oder ist nicht erreichbar.
+2246=Aktivierungscode eingeben (oder "acode.txt" öffnen).
+2249=&Beenden
+2250=&Über
+2251=Einige Features sind ohne Aktivierung deaktiviert.\n\
+	Möchten Sie trotzdem fortfahren?
+2252=Clipboard-Daten sind kein gültiger Aktivierungscode.
+2253=Die Datei ist kein gültiger Aktivierungscode.
+2255=Aktivierungscode aus Datei laden
+2256=Installations-ID in Datei speichern
+2257=Aktivierungscode speichern
+2258=Host-Adresse erhalten~...
+;CHANGED 3.0:
+;CHANGED 3.6:
+2259=Der Domainname konnte nicht aufgelöst werden
+2260=Socket konnte nicht erstellt werden.
+2261=Verbindung~...
+;CHANGED 3.0:
+2262=Verbindung zum Server fehlgeschlagen
+2264=Anfrage an Server senden~...
+;CHANGED 3.7:
+2265=Fehler beim Senden der Anforderung an den Server
+2266=Auf Server-Antwort warten~...
+2267=Verbindung schließen~...
+2268=Via Internet aktivieren
+2269=Proxy-Einstellungen
+2270=Proxy verwenden
+2271=Adresse:
+2272=Port:
+;CHANGED 3.0:
+2273=Laden nicht möglich
+;CHANGED 3.0:
+2274=Funktion nicht gefunden
+2275=WSA-Start fehlgeschlagen.
+2280=Aktivieren mit Gerät~...
+2281=&Zurücksetzen
+2282=Falsches Gerät für Aktivierung ausgewählt
+2283=Maintenance endet %02h/%h.\n\
+	Sie können die Software weiterhin in demselben Environment verwenen.\n\
+	Stellen Sie sicher, dass Sie eine Backup-Kopie der Software anfertigen, einschließlich Schlüssel \n\
+	(alle Dateien im Arbeitsverzeichnis).
+2290=Stationär: Dieser Computer
+2291=Portable: Ausgewähltes Gerät
+2292=Portable:
+2293=Portable Aktivierung zurücksetzen
+2294=Einmal-Aktivierung
+
+2297=Aktivierungscode ist in Datei gespeichert
+2298=Temporär aktivierte Client Edition
+2299=Temporär aktiviert. Code konnte aber nicht gespeichert
+
+2300=Einmalpasswort anfordern
+2301=Einmalpasswort eingeben:
+2302=Schutzcode anfordern
+2303=Schutzcode eingeben:
+;NEW 3.6::
+2304=Verwenden Sie die manuelle Aktivierung, wenn auf diesem Rechner kein Internet vorhanden ist. \
+	(Sie erhalten Instruktionen, um Ihren Aktivierungscode auf der Site zu bekommen.)\n\n\
+	Die Online-Aktivierung erfolgt automatisch (Internetverbindung wird verwendet).
+2305=Online (autom.)
+2306=Manuell
+;::NEW 3.6
+;NEW 3.7:
+2307=Wählen Sie Manuelle Aktivierung, wenn Sie nur den Lizenzschlüssel als Textzeichenfolge haben.
+
+2310=Startpasswort anfordern
+2311=Startpasswort eingeben:
+2312=Startpasswort setzen
+2313=Startpasswort setzen
+2314=Startpasswort setzen:
+2315=Sie können das Passwort setzen, um Ihren Lizenzschlüssel zu schützen.\n\
+	Gültige Zeichen:~
+2316=Ungültige Zeichen
+2317=Das Passwort ist nicht stark genug.\n\
+	Sind Sie sicher, dass Sie ein simples Passwort verwenden möchten?
+2318=Falsches Passwort
+
+2330=Ungültige Lizenzdatei oder falsches Passwort
+2331=Lizenzschlüssel ist gespeichert in
+2332=Lizenzschlüssel laden
+
+;NEW 3.0::
+2333=Lizenzschlüssel eingeben
+2334=Geben Sie Ihren Lizenzschlüssel für DMDE ein:
+2335=Lizenzierter Benutzer:
+2336=Einmalpasswort:
+2337=&Kaufen ...
+2338=&Laden ...
+;CHANGED 3.10:
+2339=Wenn Sie die Datei "license.key" erhalten haben, verwenden Sie zuerst den Button "Laden".
+2340=Aktivierung ist erforderlich, um ohne Einschränkungen wiederherzustellen
+2341=Mit Free-Edition fortfahren
+2342=Ohne Aktivierung fortfahren
+2343=Lizenzschlüssel eingeben ...
+2344=Aktivieren ...
+2345=Lizenzschlüssel~...
+2346=Falscher Lizenzschlüssel
+2347=Ungültiger/leerer Benutzername
+;::NEW 3.0
+;NEW 3.4::
+2348=Lizenzschlüssel passt nicht (falsche Version)
+2349=Einmalpasswörter werden in Ihrem persönlichen Site-Bereich bereitgestellt (siehe Hilfe)
+2350=Online-Aktivierung
+2351=Manuelle Aktivierung
+2352=Lizenzschlüssel
+2353=Proxy ...
+;::NEW 3.4
+;NEW 3.4.3::
+2354=Lizenzschlüsseldatei ist erforderlich
+2355=Ziehen Sie Ihre "license.key"-Datei hierher oder lokalisieren Sie diese mittels dem Button "Laden"
+2356=Geben Sie Ihren Geheim Code ein:
+2357=Der Geheim Code wird in Ihrem persönlichen Site-Bereich bereitgestellt (siehe Hilfe)
+;::NEW 3.4.3
+;NEW 3.7::
+2358=Lizenzschlüssel ersetzen~...
+2359=Mit einem neuen Lizenzschlüssel müssen Sie die Software neu starten und reaktivieren.\n\
+	Möchten Sie fortfahren?
+2360=Geben Sie einen neuen Lizenzschlüssel an, um den vorhandenen zu ersetzen
+2361=Lizenzschlüsseldaten sind erforderlich
+2362=Derselbe Lizenzschlüssel wird angewandt
+;::NEW 3.7
+
+;NEW 3.7::
+2396=Behalten Sie die vorherige Protokolldatei (.\~)
+2397=Überprüfen Sie das Protokoll nach dem Speichern
+2398=Protokolldatei
+2399=Häufigkeit der automatischen Speicherung
+;::NEW 3.7
+;********************** MFT Runs **************************
+2400=Wahl per Default
+2401=Markierung der Voll-Duplikate aufheben
+2402=Markierung der Schnittmengen aufheben
+2403=Markierung des Basis-MFT aufheben
+2404=Alles markieren
+2405=Markierung komplett aufheben
+2406=Nicht Markiertes ausblenden
+2407=Nicht Markiertes einblenden
+2408=Filter~...
+;CHANGED 3.0:
+2409=Nach Dateinummer sortieren
+2410=Nach Länge sortieren
+2411=Nach Festplattenposition sortieren
+2412=Nach Volume-Festplattenposition sortieren
+2413=Nach Qualität sortieren
+2414=Nach Nummer sortieren
+2415=Laden ...
+2416=Speichern ...
+;NEW 3.0::
+2417=Nach max. Anzahl der Dateien sortieren
+2418=Nach max. Anzahl der Referenzen sortieren
+2419=Nach max. Cluster sortieren
+2423=Mehr Items zeigen
+2424=LBA
+2425=Param
+2426=MaxFiles
+2427=MaxClust
+2428=Referenzen
+2429=Die besten
+;::NEW 3.0
+2430=Korrekt
+2431=Verbunden
+2432=Unbekannt
+2433=Außenstehend
+2434=Klein
+2435=Deaktiviert
+2436=Filter
+2440=Wird geladen~...
+2441=Informationen über MFT-Fragmente laden
+2442=Informationen über MFT-Fragmente speichern
+2443=MFT-Fragmente
+2444=Menü
+2445=Default
+2446=Volume-Parameter sind verschieden.\n\
+	Sind Sie sicher, dass Sie strange MFT-Fragmente verwenden wollen?
+2447=Volume:~
+2448=CLUS:%l FILE:%l INDX:%l Mod:%l Start: %~I
+2450=Min. Länge:
+2451=Sektor niedrig:
+2452=Sektor hoch:
+2453=Nummer niedrig:
+2454=Nummer hoch:
+;NEW 3.0:
+2455=Clustergröße:
+;NEW 3.6::
+2456=oberste
+2457=ruhe
+2458=andere oberste
+2459=andere ruhe
+;::NEW 3.6
+
+2460=FILE#
+2461=Länge
+2462=MFT-Start
+2463=Cluster
+2464=FILE
+2465=INDX
+2466=Mod
+2467=Vol.-Start~#1
+2468=Check
+2469=Vol.-Start~#2
+2470=&FILE#
+2471=&Länge
+2472=MFT-Start
+2473=CLUS
+2474=FILE
+2475=INDX
+2476=Mod
+2477=&Vol-Start#1
+2478=Ü&berprüfung
+2479=Vol-Start#2
+
+;NEW 3.0::
+2480=Parameter
+2481=Additional
+2482=Volume während Scan berechnen
+2483=Volume mit den FS-Strukturen berechnen
+2484=Volume mit den Raw-Dateisignaturen berechnen
+2485=Möchten Sie einen neuen Scan starten?
+2486=FS-Fragmente
+2487=Parameter~...
+
+2489=FS-Fragmente von Volume~...
+2490=Alle FS-Fragmente~...
+2491=Detaillierte Ansicht
+2492=FS-Volume neu berechnen~...
+2493=Das Volume neu berechnen~...
+2494=Berechnung abbrechen
+2495=Nächste Fragmentberechnung
+2496=Dateitypen nach Signaturen
+2497=Dateitypen - Nicht gefunden
+2498=Hauptresultate
+2499=Additionale Resultate
+2500=Restliche Resultate
+;::NEW 3.0
+
+;*********************** I/O Params ***********************
+2501=Geräte-I/O-Handler-Script wurde nicht gespeichert.\n\
+	Sind Sie sicher, dass Sie fortfahren möchten?
+2502=I/O-Parameter laden
+2503=I/O-Parameter speichern
+;CHANGED:
+2504=Interface
+2505=I/O-Fehler
+2506=Additional
+2510=&Laden~...
+2511=&Speichern~...
+2520=ATA-Reset
+;CHANGED 3.10:
+2522=ATA-Softreset, wenn nicht bereit, Timeout, ms
+;NEW 3.10:
+2523=Prüfen, ob Gerät wieder verbunden ist, Verzögerung, ms
+
+;******************* Search spec sector *******************
+2550=Suche nach speziellem Sektor
+2557=MFT-Datensatz
+2558=INDX-Datensatz
+2559=FAT16-Tabelle
+2560=FAT32-Tabelle
+2561=FAT-Verzeichnis
+;CHANGED:
+2562=exFAT-Verzeichnis
+2563=ExtFS Grp Descriptors
+2564=ExtFS Verz.-einträge
+2565=Anderer Sektor
+;NEW 3.6::
+2586=In kompatible Logdatei speichern ...
+2587=Autosave:
+;::NEW 3.6
+
+;******************** FullScan Continuation ***************
+;NEW 3.4::
+2588=Originale Sektorgröße ist anders [%l].
+2589=Autosave-Log-Pfad
+;::NEW 3.4
+
+;NEW 3.0::
+2590=Das Log wurde nicht korrekt gespeichert oder geladen.\n\
+	Einige Resultate sind möglicherweise verloren.
+2591=Das Log wurde in einer älteren Version erstellt.\n\
+	Die Resultate sind möglicherweise schlechter als in der neuen Version.
+2592=Das Log wurde in einer neueren Version erstellt.\n\
+	Einige Resultate werden möglichweise ausgelassen oder nicht korrekt angewandt.
+2593=Es gibt möglicherweise nicht genügend Speicher, um den Scan abzuschließen.\n\
+	Möchten Sie trotzdem fortfahren?
+2594=Lange Berechnung
+2595=Berechnung
+2596=Laden
+2597=Nach Größe sortieren
+2598=Nach Dateianzahl sortieren
+2599=Nach überprüfter Anzahl sortieren
+2600=Nach letztem Sektor sortieren
+;::NEW 3.0
+
+;*********************** PartMan **************************
+
+2607=Diese Tabelle kann nicht entfernt werden.
+2608=Extra Tabelle entfernen?
+2609=GPT-Tabelle mit allen Partitionen entfernen?
+2610=Das ist keine Primär-/Basispartition.
+2611=Bootfähigen (aktiv) Partitionsstatus setzen?
+2612=Bootfähigen (aktiv) Partitionsstatus zurücksetzen?
+2613=Bootsektor-Signatur setzen (MBR/VBR/EBR On)?
+2614=Bootsektor-Signatur zurücksetzen (MBR/VBR/EBR Off)?
+2615=GPT+MBR-Signaturen setzen (GPT On)?
+2616=GPT+MBR-Signaturen zurücksetzen (GPT Off)?
+2618=Partitionierung in Datei speichern
+2619=&Anwenden
+2620=Primäre Partition (MBR)
+2621=Logischer Datenträger (MBR)
+2622=Erweiterte Partition (MBR)
+2623=GUID-Partition (GPT)
+2630=Fehler beim Lesen von Sektor %~I.\n\
+	Möchten Sie trotzdem fortfahren?
+2631=Möchten Sie bestehende Partitionen entfernen?
+2632=Partitionsschnittmenge.
+2633=Die Partition kann nicht erstellt werden.
+2634=MBR-Partition ist größer als 2~TiB.\n\
+	Sind Sie sicher, dass Sie fortfahren möchten?
+2635=Partitionierungsfehler gefunden.
+2636=Inkompatibler Partitionstyp.
+2637=Partition ist zu groß für MBR-Layout.
+2638=Hybrid-Partitionierung wird nicht unterstützt.
+2639=Partition kann nicht in der ausgewählten Location erstellt werden.
+;CHANGED 3.6:
+2641=Sektor wird von einer anderen Partition verwendet.\n\
+	Sie sollten überschnittene Partitionseinträge entfernen.
+2642=MBR unterstützt nur bis zu 2~TiB.
+2643=Nicht unterstützte GPT-Version.
+2644=Standard-FAT/FAT32-Partition ist erforderlich
+2645=Standard-Floppy ist erforderlich
+2646=Boot-Image-Dateien öffnen
+2647=Möchten Sie den aktuellen MBR-Bootcode überschreiben?
+;::NEW
+
+2660=Aktion rückgängig machen
+2661=Aktion wiederherstellen
+2662=Partitionierungsänderungen rückgängig machen
+2663=Aus Datei laden ...
+2664=Screenshot in Textdatei~...
+2665=GPT+MBR-Signaturen (GPT Off) zurücksetzen~...
+2666=GPT+MBR-Signaturen (GPT On) setzen~...
+2667=GPT Off
+2668=GPT On
+;NEW:
+2669=Bootsektoren schreiben~...
+;NEW 3.0:
+2670=In Textdatei speichern
+2671=V&BR On/Off
+
+;NEW 3.7::
+2680=Globaler Nur-Lese-Modus ist gesetzt (Menü Laufwerk)
+2681=Der globale Nur-Lese-Modus wird deaktiviert
+2682=Das Schreiben auf Geräte möglich sein wird
+2683="RW Access" muss aktiviert sein
+2684=Das Schreiben muss in Geräteparametern (Interface) erlaubt sein
+2685=Direktes Schreiben ist für das Gerät zulässig
+2686=Ich verstehe die Risiken
+2687=Jede Änderung kann zu weiteren Datenverlusten führen (siehe Hilfe)
+2688=Das aktuelle Gerät kann nur teilweise geschrieben werden.\n\
+	Möchten Sie trotzdem fortfahren?
+2689=Möchten Sie mit virtuellen Änderungen fortfahren, die nicht geschrieben werden können?
+;::NEW 3.7
+
+;********************* CopySectors ************************
+2700=Gerät
+2701=Partition
+2702=Datei
+2703=Editor
+2704=Auswahl
+2708=Partition~...
+2710=Quelle und Ziel
+2711=Parameter
+2720=Umgekehrte Kopie
+2721=Doppel-Thread
+2722=Die Quelle für Kopieren sperren
+2723=Log verwenden, um mit Kopieren fortzufahen
+2724=Kopieren fehlerhafter Sektoren aus Log wiederholen
+2725=Logdatei:
+2726=Log aktualisieren, wenn Anzahl von Sektoren kopiert wird
+2727=&Parameter
+2728=I/O-Parameter von Quellgerät
+2729=Ab Sektor fortfahren
+2730=Ab Byte fortfahren
+2731=min.
+2732=max.
+2740=&Menü
+2741=&Laden ...
+2742=&Speichern ...
+2750=Ungültige Quellparameter.
+2751=Ungültige Zielparameter.
+2752=Ungültiges Offset zur Fortsetzung.
+
+2753=Sektorengrößen der Quelle und Ziel sind verschieden.\n\
+	Logische Struktur der Quelle wird auf dem Ziel nicht verfügbar sein.\n\
+	Sind Sie sicher, dass Sie fortfahren möchten?
+
+2760=Quellobjekt konnte nicht gesichert werden
+2761=Zielobjekt konnte nicht gesichert werden
+2762=Quellobjekt konnte nicht geladen werden
+2763=Zielobjekt konnte nicht geladen werden
+2764=Kopierparameter speichern
+2765=Kopierparameter laden
+
+;NEW:
+2769=Logdatei
+2770=Kopieren-Log wird gelesen ...
+2771=Kopierte Bereiche konnten nicht geladen werden
+2772=Schreiben wird nicht unterstützt
+2773=Fehler beim Schreiben auf das Ziel
+2774=Zuweisung von Platz für Datei~...
+2780=Möchten Sie Bytes schreiben\n\
+	%~I~- %~I der Quelle
+2781=Möchten Sie die Quelle schreiben
+2782=Möchten Sie die Quelldatei schreiben
+2783=in die Datei (Fortsetzung)?
+2784=in die Datei?
+2785=auf das Ziel (es wird überschrieben, Fortsetzung)?
+2786=auf das Ziel (es wird überschrieben)?
+2787=Es wird empfohlen, all Quell-Volumes zu sperren, \
+	um Modifikationen während des Kopierens zu verhindern. \
+	Sie können Sperren ignorieren aber die Vollständigkeit der Daten kann beschädigt werden.\n\
+	Nicht markierte Volumes sind noch nicht gesperrt.
+
+2790=Jüngst
+2791=Erfolgreich gelesen:
+2792=Lesefehler:
+2793=Übersprungen:
+2794=Schreibfehler:
+2795=Insgesamt
+2796=Übrig:
+2797=Quellgröße:
+
+;********************** Recovery *************************
+2900=Operation unerwartet abgebrochen
+2901=Operation durch Benutzer abgebrochen
+;CHANGED 3.0:
+2902=Verzeichniss insgesamt:
+;CHANGED 3.0:
+2903=Dateien insgesamt:
+;CHANGED 3.0:
+2904=Volume insgesamt:
+2910=Abgebrochen
+
+;CHANGED 3.0::
+2920=Unvollständige Verzeichnisse:
+2921=Verzeichnisse übersprungen:
+2922=Dateien übersprungen:
+2923=Fehlerhafte Dateien übersprungen:
+;::CHANGED 3.0
+;CHANGED 3.6::
+2924=Fehlerhafte Dateien wiederhergestellt:
+2925=Dateien insgesamt wiederhergestellt:
+2926=Volume insgesamt wiederhergestellt:
+;::CHANGED 3.6
+;NEW 3.4.3::
+2927=Ausgeschlossene Verzeichnisse/Dateien:
+2928=Fehler bei Öffnung von Verzeichnissen/Dateien:
+;::NEW 3.4.3
+;NEW 3.7:
+2929=Dateien + Alt. Datenströme
+2930=CSV-Datei
+2931=Log-Verzeichnisse
+2932=Log-Aktionen
+
+2940=Manufacturer/Model:
+2941=Revision:
+2942=Serial:
+2943=Source
+2944=Stripe size: %l
+2945=Parity delay: %l
+2946=LUN#%l LBA_Offset: %I~ LBA_Size: %I
+2947=Quell-Volume
+2948=LBA Start: %I~ LBA Size: %I
+2949=Label:
+2950=Ziel:
+2960=Total source directories:
+2961=Total source files:
+2962=Total source volume:
+2963=Incomplete directories:
+2964=Verzeichnisse übersprungen:
+2965=Dateien übersprungen:
+2966=Fehlerhafte Dateien übersprungen:
+2967=Fehlerhafte Dateien wiederhergestellt:
+2968=Total files recovered:
+2969=Total volume recovered:
+
+;NEW_3.0::
+2970=I/O-Parameter~...
+2971=Event-Handler~...
+2972=Events %l
+2973=Event-Handler
+2974=Abfrage
+2975=Ignorieren
+2976=Ignorieren und ausblenden
+2977=Überspringen
+2978=Umbenennen
+2979=Zusammenführen
+2980=Splitten
+;NEW 3.6:
+2981=Nach $Bad verschieben
+;NEW 3.6:
+2982=Alle nach $Bad verschieben
+2983=Öffnen der Datei fehlgeschlagen:
+2984=Fehler beim Lesen der Datei:
+2985=Erstellen des Verzeichnisses fehlgeschlagen:
+2986=Erstellen eines anderen Namen fehlgeschlagen:
+2987=Verzeichnis ist bereits vorhanden:
+2988=Umbenennungsschwellenwert erreicht:
+
+2989=Erstellen der Datei fehlgeschlagen:
+2990=Erstellen eines anderen Namen fehlgeschlagen:
+2991=Datei ist bereits vorhanden:
+2992=Umbenennungsschwellenwert erreicht:
+2993=Schreiben der Datei fehlgeschlagen:
+2994=Weiter schreiben fehlgeschlagen:
+
+2995=Max. Umbenennungen, wenn Verzeichnis vorhanden:
+2996=Max. Umbenennungen, wenn Datei vorhanden:
+;::NEW_3.0
+
+;******************** selectdisk ************************
+3001=Wahrscheinlich ist gesamtes Volume nicht zugänglich.
+3002=Adressierungsprobleme sind möglich.
+;CHANGED 3.4:
+3003=Möchten Sie trotzdem fortfahren? (siehe Hilfe)
+;CHANGED 3.4:
+3004=Dies ist OK, wenn immer derselbe USB-Adapter verwendet wird.
+;CHANGED 3.6:
+3005=Image / Log öffnen~...
+3006=Portable Aktivierung
+3007=A&ktivierung
+;NEW 3.4::
+;Initiale/Verfügbare/Ausgewählte Gerätekapazität
+3008=Initial:
+3009=Verfügbar:
+3010=Ausgewählt:
+;::NEW 3.4
+;NEW 3.6:
+3011=Lesen Sie weiter
+
+;*********************** RAID ***************************
+3030=RAID-Parameter laden
+3031=RAID-Parameter speichern
+3032=Delay:
+3033=Menü
+3034=Laden~...
+3035=Speichern~...
+3036=Laden~...
+3037=Speichern~...
+3038=Striping~...
+3040=Striping
+
+;NEW 3.0::
+3041=Mehrere Images hinzufügen~...
+3042=Offset festlegen, Größe für alle ...
+;::NEW 3.0
+
+;NEW 3.2::
+3043=Neue Image-Datei erstellen ...
+3044=Auf alle Festplatten anwenden
+3045=Festplattengröße festlegen
+3046=Festplattengröße:
+
+;CHANGED 3.6::
+3050=RAID: Autom. berechnen (Scan) ...
+
+3060=RAID - Berechnung
+3062=[Enter]: RAID-Berechnung (Scan) ...
+3064=RAID-Berechnung
+;::CHANGED 3.6
+
+3070=Hauptparameter
+3072=Anzahl der Festplatten
+3073=RAID-Levels
+;CHANGED 3.6:
+3074=Min.-max. Stripe-Größe
+;CHANGED 3.6:
+3076=Min.-Max. Verzögerung
+3078=LBA-Offset-Schritt
+
+3080=Festgelegte Reihenfolge der Festplatten
+3081=Nach Stripe-Größe separieren
+3082=Additionale Algorithmen
+3083=Sample-Größe
+
+3086=Zu viele mögliche Konfigurationen können zu einem Speichermangel oder zu einer sehr langsamen Verarbeitung führen.\n\n\
+	Möchten Sie trotzdem fortfahren?
+;NEW 3.4:
+3087=Zu viele mögliche Konfigurationen.\n\
+	Spezifizieren Sie die Parameter genauer.
+
+;CHANGED 3.6:
+3090=Parameter für RAID-Berechnung ...
+3092=RAID-Konfigurationen
+
+3093=Stripe
+3094=Sie können versuchen, die Resultate zu öffnen, bevor der Scan abgeschlossen ist
+;NEW 3.6::
+3095=RAID öffnen
+3096=RAID-Parameter öffnen~...
+3097=Konfigurationen
+3098=Konf.
+3099=Die ausgewählte RAID-Konfiguration öffnen
+3100=LBA-Offset
+;::NEW 3.6
+
+3120=&Nächster Tab
+;CHANGED 3.4.3:
+3122=Fensterparameter speichern
+;NEW 3.4.3::
+3123=Fontgröße --
+3124=Fontgröße ++
+3125=Fenstergröße --
+3126=Fenstergröße ++
+;::NEW 3.4.3
+
+3130=Möchten Sie beenden?
+
+;Haupt-/Additionale/Erweiterte Parameter: 
+3140=Haupt
+3141=Additional
+3142=Erweitert
+3144=Optionen
+
+3160=Schwellenwerte
+3161=SMART-Werte
+
+3220=Aufzeichnungen
+
+3230=Schreiben wird für das Gerät nicht unterstützt.
+
+3240=Das Dump (Speicherauszug) wurde wahrscheinlich für ein anderes Gerät erstellt.\n\
+	Sind Sie sicher, dass Sie fortfahren möchten?
+3241=Das Dump (Speicherauszug) wurde für eine andere Gerätekapazität erstellt.\n\
+	Sind Sie sicher, dass Sie fortfahren möchten?
+
+3260=Aktion
+3262=Die Aktion wählen
+3264=&Abbruch
+3265=Geräte-I/O-Parameter ...
+
+3280=Splitten ...
+3281=Gesplittetes Image erstellen
+3282=Image splitten in Dateien der Größe:
+
+3300=Springender Scan
+3301=Scan neu starten
+3302=Vorherige Resultate löschen
+3303=Scan-Log speichern, um es später zu laden und um erneute Scans zu verrmeiden
+
+3310=Spezifiziertes markieren
+3311=Markierung des Spezifizierten aufheben
+3312=Markierungen aktualisieren
+
+3313=Spezifiziertes markieren~...
+3314=Markierung des Spezifizierten aufheben ...
+3315=Nach Spalte sortieren
+3316=Max. Länge:
+
+3330=Scan
+3332=&Raw: Dateisignaturen ...
+
+;CHANGED 3.4:
+;3334=Möchten Sie nur mit den Raw-Resultaten fortfahren?
+3334=Nur Raw-Resultate öffnen
+;CHANGED 3.4:
+3335=Raw-Resultate enthalten nur bestimmte Dateitypen ohne Originalnamen und Pfade.\n\
+	Für bessere Resultate offene gefundene Top-FS-Volumes (NTFS, FAT etc.)
+3336=Einige Raw-Dateigrößen werden berechnet, wenn der Scan abgeschlossen ist.
+;NEW 3.4:
+3337=Rechtsklick verwenden / Menü, um nur Raw-Resultate zu öffnen
+
+3350=Dateitypen & Signaturen
+3352=Typ
+3353=Flags
+
+3354=Hinzufügen~...
+3355=Löschen
+3356=Bearbeiten~...
+
+3360=Dateityp
+3362=Titel
+3363=Einfügen nach
+3364=Extensionen
+3365=Signatur
+3366=hex-Zeichen: \\x00-\\xFF, jedes Zeichen: ?
+;CHANGED 3.4:
+3367=Min. - Max. Offset:
+
+3370=Optionen
+3371=Zuverlässig (als EOF verwenden)
+3372=Dichte Daten ohne Lücken
+3374=Datei-Container
+3376=Für FS-Berechnung verwenden
+
+3380=EOF-Signatur
+;CHANGED 3.4:
+3382=Min. - Max. Offset (EOF):
+;NEW 3.4::
+3384=Möchten Sie gefundene Resultate für den Dateityp entfernen?
+3385=Titel/Gruppe:
+;CHANGED 3.4.3:
+3386=Mehr Bedingungen ...
+;CHANGED 3.4.3:
+3387=Autom. erkennen ...
+3388=Nächste Signatur hinzufügen
+3389=Bedingung:
+3390=[OR]: Optionale Signatur
+3391=[AND]: Erforderliche Signatur
+3392=[AND NOT]: Verbotene Signatur
+3393=[ENTFERNEN]
+;::NEW 3.4
+;NEW 3.7::
+3394=Unterschriften speichern
+3395=Signaturen laden
+;::NEW 3.7
+
+;Normal/entfernt/gefunden/gefunden nach Signaturdatei:
+;CHANGED 3.4.3:
+3400=Normal
+3401=Entfernt
+3402=Gefunden
+3403=Gefunden Entfernt
+3410=Nach Signatur
+3411=Nach Signatur (+EOF)
+3412=Nach Signatur (-EOF)
+3413=Nach Signatur (verkürzt)
+3414=Nach EOF-Signatur
+;NEW 3.6::
+3415=Nach Signaturen (Raw)
+3416=Nach FS
+3417=Nicht durch Signaturen verifiziert
+3418=Auch durch Signaturen gefunden
+3419=Nicht durch Signaturen gefunden
+;::NEW 3.6
+
+;Leeres Verzeichnis /mit entfernten/mit gefundenen Dateien:
+3420=Leer
+3421=Mit entfernten
+3422=Mit gefundenen
+
+3440=Alle Volume-Panels und Objekte werden geschlossen.\n\
+	Möchten Sie fortfahren?
+3441=Möchten Sie die Suche schließen?
+
+3444=Dateien suchen~...
+3446=Attribute
+
+;found results:
+3450=Gefunden
+3452=Mit vollständigem Scan fortfahren
+
+3454=Falsches Merging verhindern
+;CHANGED 3.7:
+3455=Autom. INDX-Verarbeitung
+;CHANGED 3.7:
+3456=Volle INDX-Verarbeitung
+;NEW 3.6:
+3457=Alte Verz.-Nodes verarbeiten
+;NEW 3.6:
+3458=Alle alten Dateieinträge ein einbeziehen
+
+3500=Nur Verzeichnisse mit Dateien verarbeiten
+;CHANGED 3.4.3:
+;CHANGED 3.6:
+3501=Verzeichnisnamen einbeziehen
+3502=Unterstützung für extra lange Pfade
+3504=Aktion~...
+
+3506=Filter
+3508=Verschlüsselte NTFS-Datei wiederherstellen:
+3509=In separate Streams
+3510=In portables Format (Backup)
+3511=In NTFS-verschlüsselte Datei
+;NEW 3.4.3::
+3512=Die EFS-Datei in portablem Format (Backup) wiederherstellen
+3513=Alle EFS-Dateien in portablem Format (Backup) wiederherstellen
+3514=Verschlüsselte Datei (EFS) konnte nicht erstellt werden
+3515=Backup
+;::NEW 3.4.3
+
+3522=Namen:
+3523=Größe:
+;NEW 3.4:
+3524=Modifiziert:
+;NEW 3.7:
+3525=Ausgeschlossene Kategorien:
+
+3560=EFS aus Backup wiederherstellen~...
+3562=Nachrichten nicht zeigen
+3563=Keine EFS-Unterstützung gefunden
+3564=NTFS-verschlüsselte Dateien aus Backup wiederherstellen
+3565=Datei/Maske:
+3566=Quellverzeichnis:
+3567=Unterverzeichnisse verarbeiten
+3568=Ziel:
+;::NEW 3.2
+
+;NEW 3.4::
+3570=Dateiliste~...
+;CHANGED 3.4.3:
+3571=Sektorliste~...
+;CHANGED 3.7:
+3573=Sektorliste
+;CHANGED 3.4.3:
+3574=Speichern in:
+3575=Optionen:
+;CHANGED 3.6:
+3576=Pfade
+3577=Virtuelle Cluster
+3578=Inline-Daten
+3579=Sektoren
+3580=Bytes
+
+;NEW 3.4.3::
+3581=LBA-Start
+3582=LBA-Länge
+3583=Sektorbereiche
+3584=Sektorbereich
+3585=Nur spezifizierte Bereiche:
+3586=Sektorbereiche~...
+3587=Sektorbereiche laden
+;::NEW 3.4.3
+;NEW 3.6::
+3588=Ändern~...
+3589=Sektorwerte ändern
+3590=Verschiebung (+/-):
+;::NEW 3.6
+
+3600=Maximal %l von %l getesteten Dateien können dieselben Signaturen haben.\n\
+	Wahrscheinlich gibt es verschiedene Dateitypen oder zu wenig Beispieldateien.\n\
+	Möchten Sie trotzdem fortfahren?
+3601=Spezifizieren Sie ein Verzeichnis mit funktionierenden Beispieldateien für die Analyse
+
+3602=Erkennen
+3603=Hinzufügen~...
+3604=%l verschiedene Datei(en) geladen (Maximum ist %l).\n\
+	Je mehr Beispieldateien zur Verfügung gestellt werden, desto besser.
+3605=Keine Signatur gefunden
+3606=Nur %l von %l getesteten Dateien haben die gefundenen Signaturen.\n\
+	Dateien ohne gefundene Signaturen:
+
+3607=Test~...
+3608=Dateisignaturen testen
+3609=Gefundene Signaturen: %I
+3610=Dateityp:~
+3611=Keine Übereinstimmungen
+3612=Dateigröße %~I~
+3613=(Übereinstimmung)
+3614=(Originalgröße: %~I)
+3615=(EOF-Markierung gefunden)
+3616=(EOF-Markierung nicht gefunden)
+3617=(verkürzt)
+3618=Andere gefundene Signaturen:
+;NEW 3.6::
+3630=Raw-Resultate filtern
+3631=Raw-Resultate filtern (nach FS-Daten)
+3632=Alle (ungefilterten) Raw-Resultate anzeigen
+3633=Minimale Raw-Resultate (FS-Resultate ausschließen)
+3634=Benutzerdef. Parameter
+3635=* Aktuelle Cluster-Map wird verwendet, um FS-Resultate auszuschließen
+3636=Nur Cluster-ausgerichtete Resultate
+3637=Min. Cluster
+3638=Max. Cluster
+3639=Verwendete FS-Cluster ausschließen
+3640=Verkürzen, wenn verwendeter FS-Cluster erreicht ist
+;::NEW 3.6
+
+;CHANGED 3.7:
+3700=Pop-up-Hinweise (mouseover)
+;NEW 3.6:
+3701=Schritt-für-Schritt-Permanenthinweise
+;CHANGED 3.7:
+3704=klicken Sie für den nächsten Hinweis
+;CHANGED 3.7:
+3705=Alle Hinweise reduzieren
+;NEW 3.7:
+3706=Reduzieren Sie den Hinweis
+;NEW 3.7:
+3707=Rechtsklick - Hinweismenü
+
+3710=Gerät auswählen
+;CHANGED 3.6:
+3711=Berechnete RAID-Konfigurationen
+3712=Partitionen ansehen
+3713=Zurückkehren zu Partitionen, um ein anderes Volume zu öffnen
+3714=Verzeichnisbaum ansehen
+
+;CHANGED 3.4.3:
+3720=Erweitern Sie und klicken, um ein Verzeichnis in dem Datei-Panel zu öffnen
+;CHANGED 3.4.3:
+3721=Verlorene und entfernte Objekte ansehen (virtuelles FS)
+;CHANGED 3.6:
+3722=Erhalten Sie mehr / weniger / andere Resultate (virtuelles FS)
+;CHANGED 3.4.3:
+3723=Daten wiederherzustellen (markieren Sie im Vorfeld Dateien und Verzeichnisse)
+;NEW 3.4.3:
+3724=Suche nach Name (z.B., wenn die Verzeichnisstruktur beschädigt ist.)
+
+3731=Um entfernte Dateien wiederherzustellen und für virtuelle Datenträger wählen Sie logische Datenträger aus.\n\
+	In anderen Fällen (Partitionsverlust, Format, Beschädigung etc.) wählen Sie physikalische Geräte aus.
+3732=Die Festplatte auswählen, die verlorene Daten enthält
+3733=OK, um die Festplatte zu öffnen
+
+3740=Klicken Sie auf „Gefunden“ für Partitions-Express-Suche, wenn die notwendige Partition nicht erkannt wurde.
+3741=Wählen Sie die notwendige Partition aus, wenn sie erkannt wurde.\n\
+	Ansonsten führen Sie einen vollständigen Scan aus.
+3742=Klicken Sie, um Volume zu öffnen, wenn es erkannt wurde.
+3743=Führen Sie einen vollständigen Scan aus, wenn die Partition nicht gefunden wird.
+
+3750=Stellen Sie sicher, dass Sie nur den ausgewählten Bereich scannen möchten.
+3751=Mögliche Dateisysteme für die Suche markieren (Raw wird auch empfohlen)
+3752=Scan starten
+3753=Scan-Resultate laden, wenn zuvor gespeichert
+
+3754=Scan fortsetzen/pausieren
+3755=Raw-Resultate versuchen, wenn keine FS-Volumes gefunden werden
+;CHANGED 3.4.3:
+3756=Warten Sie und wählen das geeigneste FS-Volume aus \
+	(siehe die Größe, Dateinummer, Qualität % und „+“ Indikatoren).\n\
+	Mehrere Varianten für dasselbe FS-Volume sind möglich \
+	(nur zur Verwendung in den komplexesten Fällen, siehe Hilfe)
+
+3757=Das ausgewählte Volume öffnen
+;NEW 3.4.3:
+3758=Raw-Suche ist eine optionale Möglichkeit, um spezifische Dateitypen zu suchen.\n\
+	Es ist erforderlich, wenn FS-Recovery nicht möglich ist (siehe Hilfe).
+
+3770=OK zum Verarbeiten virtueller Rekonstruktion (nur im Speicher)
+3771=Pure Rekonstruktion zum ersten Mal durchführen.\n\
+	Später können Sie erneut scannen für mehr Resultate.
+3772=Default-Rekonstruktion zum ersten Mal verwenden.\n\
+	Später können Sie es wiederholen für optimale Parameter.
+3773=Vollständigen Scan durchführen, um mehr verlorene Resultate zu finden
+3774=Sie können andere Volumes versuchen, wenn die aktuellen Resultate keinesfalls geeignet sind \
+	oder nach Recovery beschädigt wurden
+3775=Sie können die Anzahl der Resultate verringern (--) oder erhöhen (++) \
+	in der aktuellen Rekonstruktion
+
+3790=Die Quelle für Daten-Recovery
+; Mit der Free-Edition können Sie die im Datei-Panel aufgelisteten Dateien wiederherstellen. \
+; (Sie sollten das Verzeichnis öffnen, das die erforderlichen Dateien enthält.)
+3791=Gesamtes Recovery-Volume optional berechnen (und Gesamtfortschritt aktivieren)
+3792=Das Zielverzeichnis auswählen (auf einer anderen Festplatte)
+3793=Recovery starten
+;NEW 3.4.3:
+3794=Dateikategorien auswählen
+
+3800=Neue(n) Dateityp/Signatur hinzufügen
+3801=Eine spezifizierte Datei testen (überprüfen Sie, ob die Dateisignatur bereits hinzugefügt ist).
+3802=Die neue Signatur automatisch berechnen durch Analyse funktionierender Beispieldateien (experimentelles Feature)
+3803=Klicken Sie auf OK, um das Hinzufügen des neuen Typs abzuschließen.
+;::NEW 3.4

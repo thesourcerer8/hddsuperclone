@@ -1,0 +1,967 @@
+object MainForm: TMainForm
+  Left = 1251
+  Height = 439
+  Top = 468
+  Width = 615
+  AllowDropFiles = True
+  Caption = 'ddrescueview'
+  ClientHeight = 419
+  ClientWidth = 615
+  Color = clForm
+  Constraints.MinHeight = 200
+  Constraints.MinWidth = 600
+  Menu = MainMenu1
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnDropFiles = FormDropFiles
+  OnResize = FormResize
+  OnShow = FormShow
+  Position = poScreenCenter
+  ShowHint = True
+  LCLVersion = '2.0.10.0'
+  object TopPanel: TPanel
+    Left = 0
+    Height = 96
+    Top = 0
+    Width = 615
+    Align = alTop
+    AutoSize = True
+    BevelOuter = bvNone
+    ClientHeight = 96
+    ClientWidth = 615
+    ParentFont = False
+    TabOrder = 0
+    object RescueStatusBox: TGroupBox
+      Left = 4
+      Height = 92
+      Top = 2
+      Width = 528
+      Align = alLeft
+      AutoSize = True
+      BorderSpacing.Left = 4
+      BorderSpacing.Top = 2
+      BorderSpacing.Right = 4
+      BorderSpacing.Bottom = 2
+      Caption = 'Rescue status'
+      ClientHeight = 72
+      ClientWidth = 524
+      ParentFont = False
+      TabOrder = 0
+      object RSCol1Panel: TPanel
+        Left = 6
+        Height = 70
+        Top = 0
+        Width = 153
+        Align = alLeft
+        AutoSize = True
+        BorderSpacing.Left = 6
+        BorderSpacing.Right = 6
+        BorderSpacing.Bottom = 2
+        BevelOuter = bvNone
+        ChildSizing.LeftRightSpacing = 2
+        ChildSizing.TopBottomSpacing = 2
+        ChildSizing.HorizontalSpacing = 2
+        ChildSizing.VerticalSpacing = 2
+        ChildSizing.Layout = cclLeftToRightThenTopToBottom
+        ChildSizing.ControlsPerLine = 2
+        ClientHeight = 70
+        ClientWidth = 153
+        TabOrder = 0
+        object lblInputSize: TLabel
+          Left = 2
+          Height = 15
+          Hint = 'Size of the rescue device'
+          Top = 2
+          Width = 67
+          BorderSpacing.CellAlignVertical = ccaCenter
+          Caption = 'Input size:'
+          ParentColor = False
+          OnDblClick = rsLabelClick
+        end
+        object EditInputSize: TEdit
+          AnchorSideLeft.Side = asrBottom
+          Left = 71
+          Height = 15
+          Top = 2
+          Width = 80
+          BorderSpacing.Left = 2
+          BorderStyle = bsNone
+          Color = clForm
+          Constraints.MaxWidth = 80
+          ParentShowHint = False
+          ReadOnly = True
+          TabStop = False
+          TabOrder = 0
+          Text = 'EditInputSize'
+        end
+        object lblDomainSize: TLabel
+          Left = 2
+          Height = 15
+          Hint = 'Size of the rescue domain'
+          Top = 19
+          Width = 67
+          BorderSpacing.CellAlignVertical = ccaCenter
+          Caption = 'Domain size:'
+          ParentColor = False
+          Visible = False
+          OnDblClick = rsLabelClick
+        end
+        object EditDomainSize: TEdit
+          AnchorSideLeft.Side = asrBottom
+          Left = 71
+          Height = 15
+          Top = 19
+          Width = 80
+          BorderSpacing.Left = 2
+          BorderStyle = bsNone
+          Color = clForm
+          Constraints.MaxWidth = 80
+          ParentShowHint = False
+          ReadOnly = True
+          TabStop = False
+          TabOrder = 1
+          Text = 'EditDomainSize'
+          Visible = False
+        end
+        object lblErrorCount: TLabel
+          Left = 2
+          Height = 15
+          Hint = 'Number of distinct bad sector areas'
+          Top = 36
+          Width = 67
+          BorderSpacing.CellAlignVertical = ccaCenter
+          Caption = 'Error count:'
+          ParentColor = False
+        end
+        object EditErrorCount: TEdit
+          AnchorSideLeft.Side = asrBottom
+          Left = 71
+          Height = 15
+          Top = 36
+          Width = 80
+          BorderSpacing.Left = 2
+          BorderStyle = bsNone
+          Color = clForm
+          Constraints.MaxWidth = 80
+          ParentShowHint = False
+          ReadOnly = True
+          TabStop = False
+          TabOrder = 2
+          Text = 'EditErrorCount'
+        end
+        object lblPending: TLabel
+          Left = 2
+          Height = 15
+          Hint = 'Total size of pending areas (non-tried + non-trimmed + non-scraped)'
+          Top = 53
+          Width = 67
+          BorderSpacing.CellAlignVertical = ccaCenter
+          Caption = 'Pending:'
+          ParentColor = False
+          OnDblClick = rsLabelClick
+        end
+        object EditPending: TEdit
+          AnchorSideLeft.Side = asrBottom
+          Left = 71
+          Height = 15
+          Top = 53
+          Width = 80
+          BorderSpacing.Left = 2
+          BorderStyle = bsNone
+          Color = clForm
+          Constraints.MaxWidth = 80
+          ParentShowHint = False
+          ReadOnly = True
+          TabStop = False
+          TabOrder = 3
+          Text = 'EditPending'
+        end
+      end
+      object RSCol2Panel: TPanel
+        Left = 165
+        Height = 70
+        Top = 0
+        Width = 175
+        Align = alLeft
+        AutoSize = True
+        BorderSpacing.Left = 6
+        BorderSpacing.Right = 6
+        BorderSpacing.Bottom = 2
+        BevelOuter = bvNone
+        ChildSizing.LeftRightSpacing = 2
+        ChildSizing.TopBottomSpacing = 2
+        ChildSizing.HorizontalSpacing = 2
+        ChildSizing.VerticalSpacing = 2
+        ChildSizing.Layout = cclLeftToRightThenTopToBottom
+        ChildSizing.ControlsPerLine = 3
+        ClientHeight = 70
+        ClientWidth = 175
+        TabOrder = 1
+        object ShapeFinished: TShape
+          Left = 2
+          Height = 10
+          Top = 4
+          Width = 10
+          BorderSpacing.CellAlignHorizontal = ccaCenter
+          BorderSpacing.CellAlignVertical = ccaCenter
+          Brush.Color = clLime
+          Constraints.MaxHeight = 10
+          Constraints.MaxWidth = 10
+        end
+        object lblRescued: TLabel
+          Left = 14
+          Height = 15
+          Hint = 'Rescued data block'
+          Top = 2
+          Width = 77
+          BorderSpacing.CellAlignVertical = ccaCenter
+          Caption = 'Rescued:'
+          ParentColor = False
+          OnDblClick = rsLabelClick
+        end
+        object EditRescued: TEdit
+          AnchorSideLeft.Side = asrBottom
+          Left = 93
+          Height = 15
+          Top = 2
+          Width = 80
+          BorderSpacing.Left = 2
+          BorderStyle = bsNone
+          Color = clForm
+          Constraints.MaxWidth = 80
+          ParentShowHint = False
+          ReadOnly = True
+          TabStop = False
+          TabOrder = 0
+          Text = 'EditRescued'
+        end
+        object ShapeOutsideDomain: TShape
+          Left = 2
+          Height = 10
+          Top = 21
+          Width = 10
+          BorderSpacing.CellAlignHorizontal = ccaCenter
+          BorderSpacing.CellAlignVertical = ccaCenter
+          Brush.Color = 3421236
+          Constraints.MaxHeight = 10
+          Constraints.MaxWidth = 10
+          Visible = False
+        end
+        object lblOutsideDomain: TLabel
+          Left = 14
+          Height = 15
+          Hint = 'Block outside the rescue domain specified in the domain log file'
+          Top = 19
+          Width = 77
+          BorderSpacing.CellAlignVertical = ccaCenter
+          Caption = 'Not in domain'
+          ParentColor = False
+          Visible = False
+          OnDblClick = rsLabelClick
+        end
+        object EditOutsideDomain: TEdit
+          AnchorSideLeft.Side = asrBottom
+          Left = 93
+          Height = 15
+          Top = 19
+          Width = 80
+          BorderSpacing.Left = 2
+          BorderStyle = bsNone
+          Color = clForm
+          Constraints.MaxWidth = 80
+          ParentShowHint = False
+          ReadOnly = True
+          TabStop = False
+          TabOrder = 1
+          Text = 'EditOutsideDomain'
+          Visible = False
+        end
+        object ShapeBad: TShape
+          Left = 2
+          Height = 10
+          Top = 38
+          Width = 10
+          BorderSpacing.CellAlignHorizontal = ccaCenter
+          BorderSpacing.CellAlignVertical = ccaCenter
+          Brush.Color = clRed
+          Constraints.MaxHeight = 10
+          Constraints.MaxWidth = 10
+        end
+        object lblBadSectors: TLabel
+          Left = 14
+          Height = 15
+          Hint = 'Block which failed to read on the previous attempt'
+          Top = 36
+          Width = 77
+          BorderSpacing.CellAlignVertical = ccaCenter
+          Caption = 'Bad sectors:'
+          ParentColor = False
+          OnDblClick = rsLabelClick
+        end
+        object EditBadSectors: TEdit
+          AnchorSideLeft.Side = asrBottom
+          Left = 93
+          Height = 15
+          Top = 36
+          Width = 80
+          BorderSpacing.Left = 2
+          BorderStyle = bsNone
+          Color = clForm
+          Constraints.MaxWidth = 80
+          ParentShowHint = False
+          ReadOnly = True
+          TabStop = False
+          TabOrder = 2
+          Text = 'EditBadSectors'
+        end
+        object ShapeActive: TShape
+          Left = 2
+          Height = 10
+          Top = 55
+          Width = 10
+          BorderSpacing.CellAlignHorizontal = ccaCenter
+          BorderSpacing.CellAlignVertical = ccaCenter
+          Brush.Color = clBtnFace
+          Constraints.MaxHeight = 10
+          Constraints.MaxWidth = 10
+          Pen.Color = clAqua
+        end
+        object lblCurrentPos: TLabel
+          Left = 14
+          Height = 15
+          Hint = 'Current read position on the rescue device'
+          Top = 53
+          Width = 77
+          BorderSpacing.CellAlignVertical = ccaCenter
+          Caption = 'Current pos:'
+          ParentColor = False
+          OnDblClick = rsLabelClick
+        end
+        object EditCurrentPos: TEdit
+          AnchorSideLeft.Side = asrBottom
+          Left = 93
+          Height = 15
+          Top = 53
+          Width = 80
+          BorderSpacing.Left = 2
+          BorderStyle = bsNone
+          Color = clForm
+          Constraints.MaxWidth = 80
+          ParentShowHint = False
+          ReadOnly = True
+          TabStop = False
+          TabOrder = 3
+          Text = 'EditCurrentPos'
+        end
+      end
+      object RSCol3Panel: TPanel
+        Left = 346
+        Height = 70
+        Top = 0
+        Width = 172
+        Align = alLeft
+        AutoSize = True
+        BorderSpacing.Left = 6
+        BorderSpacing.Right = 6
+        BorderSpacing.Bottom = 2
+        BevelOuter = bvNone
+        ChildSizing.LeftRightSpacing = 2
+        ChildSizing.TopBottomSpacing = 2
+        ChildSizing.HorizontalSpacing = 2
+        ChildSizing.VerticalSpacing = 2
+        ChildSizing.Layout = cclLeftToRightThenTopToBottom
+        ChildSizing.ControlsPerLine = 3
+        ClientHeight = 70
+        ClientWidth = 172
+        TabOrder = 2
+        object ShapeNonTried: TShape
+          Left = 2
+          Height = 10
+          Top = 4
+          Width = 10
+          BorderSpacing.CellAlignHorizontal = ccaCenter
+          BorderSpacing.CellAlignVertical = ccaCenter
+          Brush.Color = clGray
+          Constraints.MaxHeight = 10
+          Constraints.MaxWidth = 10
+        end
+        object lblNonTried: TLabel
+          Left = 14
+          Height = 15
+          Hint = 'Block that has not yet been attempted to read'
+          Top = 2
+          Width = 74
+          BorderSpacing.CellAlignVertical = ccaCenter
+          Caption = 'Non-tried'
+          ParentColor = False
+          OnDblClick = rsLabelClick
+        end
+        object EditNontried: TEdit
+          AnchorSideLeft.Side = asrBottom
+          Left = 90
+          Height = 15
+          Top = 2
+          Width = 80
+          BorderSpacing.Left = 2
+          BorderStyle = bsNone
+          Color = clForm
+          Constraints.MaxWidth = 80
+          ParentShowHint = False
+          ReadOnly = True
+          TabStop = False
+          TabOrder = 0
+          Text = 'EditNontried'
+        end
+        object ShapeNonTrimmed: TShape
+          Left = 2
+          Height = 10
+          Top = 21
+          Width = 10
+          BorderSpacing.CellAlignHorizontal = ccaCenter
+          BorderSpacing.CellAlignVertical = ccaCenter
+          Brush.Color = clYellow
+          Constraints.MaxHeight = 10
+          Constraints.MaxWidth = 10
+        end
+        object lblNonTrimmed: TLabel
+          Left = 14
+          Height = 15
+          Hint = 'Block that was skipped by ddrescue on a read error (or slow read), to maximize performance. May contain readable data.'
+          Top = 19
+          Width = 74
+          BorderSpacing.CellAlignVertical = ccaCenter
+          Caption = 'Non-trimmed'
+          ParentColor = False
+          OnDblClick = rsLabelClick
+        end
+        object EditNontrimmed: TEdit
+          AnchorSideLeft.Side = asrBottom
+          Left = 90
+          Height = 15
+          Top = 19
+          Width = 80
+          BorderSpacing.Left = 2
+          BorderStyle = bsNone
+          Color = clForm
+          Constraints.MaxWidth = 80
+          ParentShowHint = False
+          ReadOnly = True
+          TabStop = False
+          TabOrder = 1
+          Text = 'EditNontrimmed'
+        end
+        object ShapeNonScraped: TShape
+          Left = 2
+          Height = 10
+          Top = 38
+          Width = 10
+          BorderSpacing.CellAlignHorizontal = ccaCenter
+          BorderSpacing.CellAlignVertical = ccaCenter
+          Brush.Color = clBlue
+          Constraints.MaxHeight = 10
+          Constraints.MaxWidth = 10
+        end
+        object lblNonScraped: TLabel
+          Left = 14
+          Height = 15
+          Hint = 'Trimmed block that has yet to be scraped (pre-1.19 ddrescue: Trimmed block that has yet to be split). May contain readable data.'
+          Top = 36
+          Width = 74
+          BorderSpacing.CellAlignVertical = ccaCenter
+          Caption = 'Non-scraped'
+          ParentColor = False
+          OnDblClick = rsLabelClick
+        end
+        object EditNonscraped: TEdit
+          AnchorSideLeft.Side = asrBottom
+          Left = 90
+          Height = 15
+          Top = 36
+          Width = 80
+          BorderSpacing.Left = 2
+          BorderStyle = bsNone
+          Color = clForm
+          Constraints.MaxWidth = 80
+          ParentShowHint = False
+          ReadOnly = True
+          TabStop = False
+          TabOrder = 2
+          Text = 'EditNonscraped'
+        end
+      end
+    end
+    object TopPiePanel: TPanel
+      Left = 549
+      Height = 92
+      Top = 2
+      Width = 64
+      Align = alRight
+      AutoSize = True
+      BorderSpacing.Around = 2
+      BevelOuter = bvNone
+      ChildSizing.EnlargeVertical = crsHomogenousSpaceResize
+      ChildSizing.Layout = cclLeftToRightThenTopToBottom
+      ChildSizing.ControlsPerLine = 1
+      ClientHeight = 92
+      ClientWidth = 64
+      TabOrder = 1
+      object PieImage: TImage
+        Left = 0
+        Height = 64
+        Top = 14
+        Width = 64
+        BorderSpacing.CellAlignVertical = ccaCenter
+        Constraints.MaxHeight = 64
+        Constraints.MaxWidth = 64
+        Constraints.MinHeight = 64
+        Constraints.MinWidth = 64
+      end
+    end
+  end
+  object MainPanel: TPanel
+    Left = 0
+    Height = 300
+    Top = 96
+    Width = 615
+    Align = alClient
+    BevelOuter = bvNone
+    ClientHeight = 300
+    ClientWidth = 615
+    TabOrder = 1
+    object ZoomPanel: TPanel
+      Left = 0
+      Height = 245
+      Top = 0
+      Width = 50
+      Align = alLeft
+      BevelOuter = bvNone
+      BorderStyle = bsSingle
+      ClientHeight = 241
+      ClientWidth = 46
+      Color = clGray
+      Constraints.MinHeight = 30
+      Constraints.MinWidth = 30
+      ParentColor = False
+      TabOrder = 0
+      object ZoomImage: TImage
+        Left = 0
+        Height = 241
+        Top = 0
+        Width = 46
+        Align = alClient
+        Constraints.MinHeight = 25
+        Constraints.MinWidth = 25
+        OnMouseDown = ZoomImageMouseDown
+        OnMouseMove = ZoomImageMouseMove
+        OnMouseUp = ZoomImageMouseUp
+      end
+      object BtnCloseZoomBar: TSpeedButton
+        Left = 30
+        Height = 13
+        Hint = 'Close zoom bar'
+        Top = 2
+        Width = 13
+        Anchors = [akTop, akRight]
+        Glyph.Data = {
+          C2010000424DC20100000000000036000000280000000B0000000B0000000100
+          1800000000008C010000130B0000130B00000000000000000000FF00FFFF00FF
+          FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF000000FF00
+          FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF00
+          0000FF00FFFF00FFFF00FF000000FF00FFFF00FFFF00FF000000FF00FFFF00FF
+          FF00FF000000FF00FFFF00FF000000000000000000FF00FF0000000000000000
+          00FF00FFFF00FF000000FF00FFFF00FFFF00FF00000000000000000000000000
+          0000FF00FFFF00FFFF00FF000000FF00FFFF00FFFF00FFFF00FF000000000000
+          000000FF00FFFF00FFFF00FFFF00FF000000FF00FFFF00FFFF00FF0000000000
+          00000000000000000000FF00FFFF00FFFF00FF000000FF00FFFF00FF00000000
+          0000000000FF00FF000000000000000000FF00FFFF00FF000000FF00FFFF00FF
+          FF00FF000000FF00FFFF00FFFF00FF000000FF00FFFF00FFFF00FF000000FF00
+          FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF00
+          0000FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF
+          FF00FF000000
+        }
+        OnClick = BtnCloseZoomBarClick
+      end
+    end
+    object GridPanel: TPanel
+      Left = 50
+      Height = 245
+      Top = 0
+      Width = 565
+      Align = alClient
+      BevelOuter = bvNone
+      BorderStyle = bsSingle
+      ClientHeight = 241
+      ClientWidth = 561
+      Color = clGray
+      Constraints.MinHeight = 30
+      Constraints.MinWidth = 30
+      ParentColor = False
+      TabOrder = 1
+      OnResize = GridPanelResize
+      object BlockImage: TImage
+        Left = 0
+        Height = 241
+        Top = 0
+        Width = 561
+        Align = alClient
+        Constraints.MinHeight = 25
+        Constraints.MinWidth = 25
+        OnMouseDown = BlockImageMouseDown
+        OnMouseMove = BlockImageMouseMove
+        OnMouseUp = BlockImageMouseUp
+        OnMouseWheel = BlockImageMouseWheel
+      end
+    end
+    object BottomPanel: TPanel
+      Left = 0
+      Height = 50
+      Top = 250
+      Width = 615
+      Align = alBottom
+      BevelOuter = bvNone
+      ClientHeight = 50
+      ClientWidth = 615
+      Color = clForm
+      ParentColor = False
+      TabOrder = 2
+      Visible = False
+      object DbgLog: TMemo
+        Left = 433
+        Height = 50
+        Hint = 'Debug log'
+        Top = 0
+        Width = 182
+        Align = alRight
+        Color = cl3DLight
+        OnDblClick = DbgLogDblClick
+        ReadOnly = True
+        ScrollBars = ssAutoVertical
+        TabOrder = 0
+      end
+      object CommentsMemo: TMemo
+        Left = 0
+        Height = 50
+        Hint = 'Comment lines from the ddrescue mapfile'
+        Top = 0
+        Width = 428
+        Align = alClient
+        Color = cl3DLight
+        ReadOnly = True
+        ScrollBars = ssAutoVertical
+        TabOrder = 1
+      end
+      object BottomHSplitter: TSplitter
+        Left = 428
+        Height = 50
+        Top = 0
+        Width = 5
+        Align = alRight
+        Color = clForm
+        ParentColor = False
+        ResizeAnchor = akRight
+      end
+    end
+    object MainVSplitter: TSplitter
+      Cursor = crVSplit
+      Left = 0
+      Height = 5
+      Top = 245
+      Width = 615
+      Align = alBottom
+      AutoSnap = False
+      Color = clForm
+      MinSize = 50
+      ParentColor = False
+      ResizeAnchor = akBottom
+      Visible = False
+    end
+  end
+  object StatusBar: TStatusBar
+    Left = 0
+    Height = 23
+    Top = 396
+    Width = 615
+    Panels = <    
+      item
+        Text = 'No file opened'
+        Width = 100
+      end>
+    ParentShowHint = False
+    SimplePanel = False
+    ShowHint = True
+  end
+  object MainMenu1: TMainMenu
+    Left = 80
+    Top = 128
+    object FileMenu: TMenuItem
+      Caption = 'File'
+      object miOpenMapfile: TMenuItem
+        Caption = 'Open mapfile'
+        OnClick = miOpenMapfileClick
+      end
+      object miOpenDomFile: TMenuItem
+        Caption = 'Open domain mapfile'
+        Enabled = False
+        OnClick = miOpenDomFileClick
+      end
+      object miCloseMapfile: TMenuItem
+        Caption = 'Close mapfile'
+        Enabled = False
+        OnClick = miCloseMapfileClick
+      end
+      object saveFormImage: TMenuItem
+        Caption = 'Save screenshot'
+        OnClick = saveFormImageClick
+      end
+      object miExit: TMenuItem
+        Caption = 'Exit'
+        OnClick = miExitClick
+      end
+    end
+    object View1: TMenuItem
+      Caption = 'View'
+      object miRefresh: TMenuItem
+        Caption = 'Refresh now'
+        Hint = 'Updates the block view immediately'
+        OnClick = miRefreshClick
+      end
+      object miCenterCurPos: TMenuItem
+        AutoCheck = True
+        Caption = 'Center on current position'
+        Hint = 'Center the block grid on the current rescue position whenever an update is done'
+        OnClick = miCenterCurPosClick
+      end
+      object miZoomBar: TMenuItem
+        Caption = 'Show zoom bar'
+        Checked = True
+        OnClick = miZoomBarClick
+      end
+      object miShowMemos: TMenuItem
+        Caption = 'Show log panel'
+        OnClick = miShowMemosClick
+      end
+    end
+    object OptionsMenu: TMenuItem
+      Caption = 'Options'
+      object miAutorefresh: TMenuItem
+        Caption = 'Automatic refresh'
+        object miARoff: TMenuItem
+          Caption = 'off'
+          Checked = True
+          GroupIndex = 2
+          RadioItem = True
+          OnClick = autoParseClick
+        end
+        object miAR5sec: TMenuItem
+          Tag = 5
+          Caption = '5 seconds'
+          GroupIndex = 2
+          RadioItem = True
+          OnClick = autoParseClick
+        end
+        object miAR10sec: TMenuItem
+          Tag = 10
+          Caption = '10 seconds'
+          GroupIndex = 2
+          RadioItem = True
+          OnClick = autoParseClick
+        end
+        object miAR30sec: TMenuItem
+          Tag = 30
+          Caption = '30 seconds'
+          GroupIndex = 2
+          RadioItem = True
+          OnClick = autoParseClick
+        end
+        object miAR1min: TMenuItem
+          Tag = 60
+          Caption = '1 minute'
+          GroupIndex = 2
+          RadioItem = True
+          OnClick = autoParseClick
+        end
+        object miAR2mins: TMenuItem
+          Tag = 120
+          Caption = '2 minutes'
+          GroupIndex = 2
+          RadioItem = True
+          OnClick = autoParseClick
+        end
+        object miAR5mins: TMenuItem
+          Tag = 300
+          Caption = '5 minutes'
+          GroupIndex = 2
+          RadioItem = True
+          OnClick = autoParseClick
+        end
+      end
+      object miGridsize: TMenuItem
+        Caption = 'Grid size'
+        object mi4px: TMenuItem
+          Tag = 4
+          Caption = '4 px'
+          GroupIndex = 3
+          RadioItem = True
+          OnClick = setGridSize
+        end
+        object mi6px: TMenuItem
+          Tag = 6
+          Caption = '6 px'
+          GroupIndex = 3
+          RadioItem = True
+          OnClick = setGridSize
+        end
+        object mi8px: TMenuItem
+          Tag = 8
+          Caption = '8 px'
+          Checked = True
+          GroupIndex = 3
+          RadioItem = True
+          OnClick = setGridSize
+        end
+        object mi10px: TMenuItem
+          Tag = 10
+          Caption = '10 px'
+          GroupIndex = 3
+          RadioItem = True
+          OnClick = setGridSize
+        end
+        object mi12px: TMenuItem
+          Tag = 12
+          Caption = '12 px'
+          GroupIndex = 3
+          RadioItem = True
+          OnClick = setGridSize
+        end
+        object mi14px: TMenuItem
+          Tag = 14
+          Caption = '14 px'
+          GroupIndex = 3
+          RadioItem = True
+          OnClick = setGridSize
+        end
+        object mi16px: TMenuItem
+          Tag = 16
+          Caption = '16 px'
+          GroupIndex = 3
+          RadioItem = True
+          OnClick = setGridSize
+        end
+        object mi20px: TMenuItem
+          Tag = 20
+          Caption = '20 px'
+          GroupIndex = 3
+          RadioItem = True
+          OnClick = setGridSize
+        end
+        object mi24px: TMenuItem
+          Tag = 24
+          Caption = '24 px'
+          GroupIndex = 3
+          RadioItem = True
+          OnClick = setGridSize
+        end
+      end
+      object miPrefixes: TMenuItem
+        Caption = 'Unit prefixes'
+        object miDecimalPrefixes: TMenuItem
+          Caption = 'Decimal (SI) prefixes (e.g. 80.06 GB)'
+          Checked = True
+          GroupIndex = 1
+          RadioItem = True
+          OnClick = UnitFormatClick
+        end
+        object miBinaryPrefixes: TMenuItem
+          Caption = 'Binary (IEC) prefixes (e.g. 74.56 GiB)'
+          GroupIndex = 1
+          RadioItem = True
+          OnClick = UnitFormatClick
+        end
+      end
+      object miSectSize: TMenuItem
+        Caption = 'Device sector size'
+        Hint = 'You can manually select the rescue device''s sector size. It is also automatically determined from the log file''s command line, if possible. This settings has minor influences in display.'
+        object DS512: TMenuItem
+          Tag = 512
+          AutoCheck = True
+          Caption = 'Default (512 Bytes)'
+          Checked = True
+          GroupIndex = 1
+          RadioItem = True
+          OnClick = DSClick
+        end
+        object DS2048: TMenuItem
+          Tag = 2048
+          AutoCheck = True
+          Caption = 'Optical media (2048 Bytes)'
+          GroupIndex = 1
+          RadioItem = True
+          OnClick = DSClick
+        end
+        object DS4096: TMenuItem
+          Tag = 4096
+          AutoCheck = True
+          Caption = 'Advanced Format (4096 Bytes)'
+          GroupIndex = 1
+          RadioItem = True
+          OnClick = DSClick
+        end
+        object DSCustom: TMenuItem
+          AutoCheck = True
+          Caption = 'Custom...'
+          GroupIndex = 1
+          RadioItem = True
+          OnClick = DSClick
+        end
+      end
+      object miContigDom: TMenuItem
+        AutoCheck = True
+        Caption = 'Contiguous domain'
+        OnClick = miContigDomClick
+      end
+      object miSettings: TMenuItem
+        Caption = 'Settings'
+        OnClick = miSettingsClick
+      end
+    end
+    object Extras1: TMenuItem
+      Caption = 'Help'
+      object miAbout: TMenuItem
+        Caption = 'About'
+        Hint = 'Shows an information box about the program'
+        OnClick = miAboutClick
+      end
+    end
+  end
+  object OpenDialog1: TOpenDialog
+    Filter = 'All files|*.*'
+    Options = [ofReadOnly, ofHideReadOnly, ofPathMustExist, ofFileMustExist, ofEnableSizing]
+    Left = 160
+    Top = 128
+  end
+  object updateTimer: TTimer
+    Enabled = False
+    OnTimer = miRefreshClick
+    Left = 240
+    Top = 128
+  end
+  object ApplicationEvents1: TApplicationProperties
+    OnShowHint = ApplicationEvents1ShowHint
+    Left = 336
+    Top = 128
+  end
+  object SaveDialog1: TSaveDialog
+    DefaultExt = '.png'
+    Filter = 'Portable network graphics|*.png'
+    Options = [ofOverwritePrompt, ofEnableSizing, ofViewDetail]
+    Left = 432
+    Top = 128
+  end
+  object RetryTimer: TTimer
+    Enabled = False
+    Interval = 100
+    OnTimer = miRefreshClick
+    Left = 240
+    Top = 192
+  end
+end

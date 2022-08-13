@@ -1,0 +1,38 @@
+# enable vendor specific commands
+buffersize 0
+setreadpio
+ata28cmd 0x45 0x0b 0x00 0x44 0x57 0xa0 0x80
+
+# vsc to prepare for rom read
+buffersize 0x200
+clearbuffer
+setbuffer 0
+  24 00 01 00 00 00 00 00 00 00 03 00 00 00 00 00
+endbuffer
+setwritepio
+ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+
+# vsc to get a section of the rom
+# the buffer size is based on the second byte of the command
+# 0x80 sectors * 0x200 bytes per sector = 0x10000
+buffersize 0x10000
+clearbuffer
+setreadpio
+ata28cmd 0xd5 0x80 0xbf 0x4f 0xc2 0xa0 0xb0
+
+# write the buffer to file
+writebuffer 3rom0.bin 0 0 0x10000
+
+# vsc to get another section of the rom
+clearbuffer
+ata28cmd 0xd5 0x80 0xbf 0x4f 0xc2 0xa0 0xb0
+
+# write the buffer to file
+writebuffer 3rom1.bin 0 0 0x10000
+
+# vsc to get another section of the rom
+clearbuffer
+ata28cmd 0xd5 0x80 0xbf 0x4f 0xc2 0xa0 0xb0
+
+# write the buffer to file
+writebuffer 3rom2.bin 0 0 0x10000

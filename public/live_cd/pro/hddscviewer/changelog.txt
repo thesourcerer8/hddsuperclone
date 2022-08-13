@@ -1,0 +1,42 @@
+HDDSCViewer Changelog
+
+version 1.0 20220212
+  * Added the option to load a domain
+  * Log and domain file names are displayed
+  * Block information is shown in display
+
+version 0.9.beta 20190901
+  * Added the option Show high time
+
+version 0.8.beta 20190901
+  * Fixed a memory leak
+  * Added information to the user manual
+
+version 0.7.alpha 20181204
+  * Reduceded the number of available languages for translation
+  * Improved the processing speed when scrolling
+  * Added additional main grid sizes
+  * Fixed a bug where some blocks were not correct status
+
+version 0.6.1-alpha 20180714
+  * The installer now puts a link in the application menu
+
+version 0.6-alpha 20170903
+  * Removed some code that was causing a library error
+
+version 0.5-alpha 20170629
+  * Added language packs
+
+version 0.4-alpha 20161015
+  * Fixed a console error message with GTK
+
+version 0.3-alpha 20160905
+  * Changed the name from HDDViewer to HDDSCViewer
+  * Added multiple language support
+  * Added the option Highlight good data
+
+version 0.2-alpha 20160731
+  * Added support for newer ddrescue map files
+
+version 0.1-alpha 20160707
+  * Initial release

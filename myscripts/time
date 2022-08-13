@@ -1,0 +1,4 @@
+gettime
+hex
+echo $time
+echo $date

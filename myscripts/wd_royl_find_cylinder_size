@@ -1,0 +1,305 @@
+
+
+
+
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'WD find cylinder size'
+
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+echo ""
+
+include good_subroutines
+
+# set a blank string variable to compare with user input
+# make sure not to set this anyplace else
+sets $null = ""
+
+# set this to itself for use with the menu system
+# make sure not to set this anyplace else
+# if it was not previously set it will = 0
+seti $using_menu = $using_menu
+
+
+
+# set these for later, and to make it easy to change if needed
+seti $read_block_size = 512 * 128
+seti $initial_read_size = 512 * 16
+seti $sector_start = 1
+seti $head_start = 0
+
+
+# this is only needed to help keep the script happy
+seti $divide_check = $read_block_size % 512
+if $divide_check != 0
+  echo "read_block_size is not dividable by 512"
+  previousscript
+endif
+
+
+gosub find_sectors_per_track
+
+
+
+previousscript
+end
+
+
+
+
+
+subroutine find_sectors_per_track
+  seti $command_failed = 0
+  seti $total_heads = 0
+  seti $head_bitmap = 0
+  gosub read_data_table
+  seti $cylinder_start = 0 - $negative_cylinders
+
+  gosub find_cylinder_size
+  seti $sector_count1 = $sector - 1
+  seti $cylinder_start = $cylinder_start + 1
+  seti $sector_start = $sector - 16
+  if $sector_start < 1
+    seti $sector_start = 1
+  endif
+  seti $initial_read_size = 512
+  gosub find_cylinder_size
+  seti $sector_count2 = $sector - 1
+  seti $cylinder_start = $cylinder_start + 1
+  seti $sector_start = $sector - 16
+  if $sector_start < 1
+    seti $sector_start = 1
+  endif
+  gosub find_cylinder_size
+  seti $sector_count3 = $sector - 1
+  echo "sector count1 = " $sector_count1
+  echo "sector count2 = " $sector_count2
+  echo "sector count3 = " $sector_count3
+  if $sector_count1 != $sector_count2
+    echo "Unable to determine sectors per cylinder"
+    previousscript
+  elseif $sector_count2 != $sector_count3
+    echo "Unable to determine sectors per cylinder"
+    previousscript
+  else
+    echo "Sectors per cylinder = " $sector_count1
+  endif
+  seti $sectors_per_cylinder = $sector_count1
+endsubroutine
+
+
+
+
+
+subroutine read_data_table
+  gosub enable_vsc
+
+  # vsc to prepare to get drive data table
+  echo "prepare to get data table"
+  buffersize 0x200
+  clearbuffer
+  setbuffer 0
+    0d 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00
+  endbuffer
+  setwritepio
+  ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+
+  # vsc to get to get drive data table
+  echo "getting data table"
+  buffersize 0x200
+  clearbuffer
+  setreadpio
+  ata28cmd 0xd5 0x01 0xbf 0x4f 0xc2 0xa0 0xb0
+  # check if command failed
+  gosub status_check
+  copybuffertoscratchpad 0 0 512
+
+  gosub disable_vsc
+
+  echo "data table read done"
+
+  printscratchpad 0 512
+  seti $value = 0
+
+  seti $offset = 29
+  seti $bytes = 1
+  gosub process_offset
+  seti $total_heads = $value
+
+  seti $offset = 31
+  seti $bytes = 1
+  gosub process_offset
+  seti $head_bitmap = $value
+
+  seti $offset = 36
+  seti $bytes = 2
+  gosub process_offset
+  seti $negative_cylinders = $value
+
+endsubroutine
+
+
+
+
+
+subroutine process_offset
+  if $bytes = 1
+    seti $value = scratchpad $offset b
+  elseif $bytes = 2
+    seti $value = scratchpad $offset w
+  elseif $bytes = 4
+    seti $value = scratchpad $offset dw
+  elseif $bytes = 8
+    seti $value = scratchpad $offset qw
+  else
+    seti $value = 0
+    echo "BYTE COUNT OUT OF RANGE"
+  endif
+  hex
+  sets $offset_string = "0x" $offset
+  sets $value_string = "0x" $value
+  sets $bytes_string = "0x" $bytes
+  decimal
+  echo "offset=" $offset " (" $offset_string ")  value=" $value " (" $value_string ")(" $bytes " bytes)"
+endsubroutine
+
+
+
+
+
+subroutine find_cylinder_size
+  gosub enable_vsc
+
+  seti $cylinder = $cylinder_start
+  seti $sector = $sector_start
+  seti $head = $head_start
+  seti $read_size = $initial_read_size
+  while $sector < 65536
+    echo "cylinder=" $cylinder "  sector=" $sector
+    # vsc to prepare for chs read
+    #echo "prepare to read chs"
+    buffersize 0x200
+    clearbuffer
+    seti $offsetl = $cylinder & 0xff
+    seti $offsetm1 = $cylinder > 8
+    seti $offsetm1 = $offsetm1 & 0xff
+    seti $offsetm2 = $cylinder > 16
+    seti $offsetm2 = $offsetm2 & 0xff
+    seti $offseth = $cylinder > 24
+    seti $offseth = $offseth & 0xff
+
+    seti $sectorl = $sector & 0xff
+    seti $sectorh = $sector > 8
+    seti $sectorh = $sectorh & 0xff
+
+    seti $sizel = 0
+    seti $sizem1 = 0
+    seti $sizem2 = 0
+    seti $sizeh = 0
+
+    setbuffer 0
+      0c 00  01 00  $offsetl $offsetm1  $offsetm2 $offseth  $head 00  $sectorl $sectorh  $sizel $sizem1 $sizem2 $sizeh
+    endbuffer
+    hex
+    #echo "keysector= 0c 00  01 00  " $offsetl " " $offsetm1 " " $offsetm2 " " $offseth "  " $head " 00  " $sectorl " " $sectorh "  " $sizel " " $sizem1 " " $sizem2 " " $sizeh
+    setwritepio
+    ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+    #echo "command= d6 01 be 4f c2 a0 b0"
+    decimal
+    # check if command failed
+    gosub status_check_no_stop
+
+    # vsc to read chs
+    seti $sectors = $read_size / 512
+    buffersize $read_size
+    clearbuffer
+    setreadpio
+    #echo "reading chs"
+    ata28cmd 0xd5 $sectors 0xbf 0x4f 0xc2 0xa0 0xb0
+    hex
+    #echo "command= d5 " $sectors " bf 4f c2 a0 b0"
+    decimal
+    # check if command failed
+    gosub status_check_no_stop
+    if $command_failed != 0
+      if $read_size > 512
+        seti $read_size = 512
+        seti $sector = $sector - 32
+        seti $sector = $sector - $sectors
+        if $sector < 1
+          seti $sector = 1
+        endif
+      else
+        break
+      endif
+    endif
+
+    seti $sector = $sector + $sectors
+  done
+
+  gosub disable_vsc
+endsubroutine
+
+
+
+
+
+
+subroutine status_check
+  seti $command_failed = 0
+  gosub check_command_status
+  if $command_failed = 1
+    echo "Command failed!"
+    gosub show_sense_data
+    gosub show_ata_return_status
+    previousscript
+  endif
+endsubroutine
+
+
+
+subroutine status_check_no_stop
+  seti $command_failed = 0
+  gosub check_command_status
+  if $command_failed = 1
+    echo "Command failed!"
+    gosub show_sense_data
+    gosub show_ata_return_status
+  endif
+endsubroutine
+
+
+
+subroutine enable_vsc
+  # enable vendor specific commands
+  #echo "enable vsc"
+  buffersize 0
+  setreadpio
+  ata28cmd 0x45 0x0b 0x00 0x44 0x57 0xa0 0x80
+  # check if command failed
+  gosub status_check
+endsubroutine
+
+
+
+subroutine disable_vsc
+  # disable vendor specific commands
+  #echo "disable vsc"
+  buffersize 0
+  setreadpio
+  ata28cmd 0x44 0x0b 0x00 0x44 0x57 0xa0 0x80
+  # check if command failed
+  gosub status_check
+endsubroutine
+
+
+

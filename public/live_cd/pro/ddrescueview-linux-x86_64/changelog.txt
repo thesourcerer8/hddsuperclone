@@ -1,0 +1,106 @@
+#### v0.4.5 ####
+Released 2022-02-25
+
+- Fixed an issue that emerged with the mapfile backup mechanism in ddrescue 1.24 and later.
+  When an update interval was set in ddrescueview, the program would be stuck on the backup version
+  of the mapfile, causing no progress to be shown over time.
+  With this patch, ddrescueview avoids the issue by re-opening the file every time it needs to be read.
+- Abandoned the nonsensical versioning scheme (alpha x - labled versions)
+
+#### v0.4 alpha 4 ####
+Released 2020-09-01
+
+- Updated to compile on FPC 3.2.0 without errors. Thanks to Peter Green for the patch.
+- It's now possible to select a range on the Zoom Bar using right click dragging, just like on the Block Grid.
+- Added an option in the Settings to zoom in on mouse position without centering the Block Grid on that position.
+  This is now the default. It seems more intuitive when the blocks previously under the mouse 
+  stay under the mouse after zooming in or out.
+- Added an Option 'Center on Current Position' to the View menu, which keeps the Block Grid centered on the 
+  current rescue position. Handy to keep the rescue position on screen when zoomed in. 
+  This overrides much of the usual zooming functionality and deactivates interaction with the Zoom Bar.
+- Zooming and scrolling in large map files is now considerably faster.
+- Application title (as reported to the OS, for the task bar etc.) now shows loaded file name.
+- The program will now make a second attempt to refresh the mapfile, when ddrescue is currently rewriting it.
+- New application icon in multiple sizes up to 256x256
+- Reduced compiler warnings and hints
+
+#### v0.4 alpha 3 ####
+Released 2016-07-20
+
+- Renamed 'logfile' to 'mapfile', to reflect the changes in ddrescue 1.20.
+- Support for mapfiles from ddrescue 1.22 added. The current pass is displayed in the GUI.
+- Improved speed of the mapfile parser for very large files.
+- Added a bunch of command-line switches. ddrescueview now supports the following arguments:
+    ddrescueview <options> -m domain-mapfile rescue-mapfile
+    where rescue-mapfile must come last and <options> can be:
+     -r (off|5s|10s|30s|1m|2m|5m)  Set refresh interval, e.g. -r 30s
+     -lp                           Show log panel
+     -gs (4|6|..|24)               Set grid size, e.g. -gs 10  
+     -ub                           Use binary unit prefixes instead of decimal
+     -x left                       X position of window on screen, in pixels
+     -y top                        Y position of window on screen, in pixels
+     -w width                      Client-width of window, in pixels
+     -h height                     Client-height of window, in pixels
+     -safe                         Turn off optimizations       
+
+
+#### v0.4 alpha 2 ####
+Released 2015-05-27
+
+- The wiki on the sourceforge page now has some documentation for the program.
+- Support for domain log files. Outside-domain blocks are painted dark gray by default.
+  The commandline parameter for the domain log file is -m domain_logfile.
+- Option to show the inside-domain blocks contiguously, useful for highly fragmented domains.
+- Up to 10x faster block drawing using direct memory writes. Includes fallback if not supported.
+- Right mouse-button dragging on the block grid now zooms in to the dragged area.
+- Redesigned the top panel again.
+- Changed formatting of most size strings in the top panel and the Block inspector.
+- Double-Clicking the labels in the Rescue status box now toggles between sectors, bytes and hex.
+- Error count now shows only the number of 'bad sector' areas, to keep up with ddrescue 1.20.
+- The zoom bar now scrolls whole block rows, except when touching the start or end of device.
+- The zoom bar now has better highlighting of the zoomed-in area.
+- A screenshot of the main window can be saved from the File menu.
+- The pie chart in the top border is now shown as an empty circle when no file is opened.
+- Pressing ESC now closes the active window, except for the main window.
+- The status bar now shows [Updating...] or [Opening...] while refreshing or opening a log file.
+- Block inspector: Window now uses its previous position on screen when re-opened.
+- Block inspector: Checking Track Cur. Position checkbox now changes block to current position.
+- Block inspector: Deselects block on the main form when closed.
+- Fixed device sector size set to Custom (0) on program start. Now 512.
+- Fixed various resizing bugs with the Bottom panel.
+- Unused blocks at the end of the grid are not selectable any more.
+- The Comment line memo now clears its contents when the log file is closed.
+- Fixed excessive menu bar flickering on win32 when dragging the zoom bar.
+- Zoom bar now shows full device when device size changes, block grid stays at current zoom setting.
+- No more unused blocks when zooming far into the end of the rescue device.
+- Fixed slider values in the settings dialog not updating correctly.
+- More robust error handling in the parser prevents crash when fed with unparsable logfile.
+- The parser now forgets the previously parsed comment lines when re-reading the logfile.
+- Fixed some integer overflows for very large drives. Should now work with drives up to 8 EiB.
+
+
+#### v0.4 alpha ####
+Released 2015-04-13
+
+- Added ability to zoom the block grid using the mouse wheel
+- Added a 'zoom bar' left of the block grid, which can be used to shift the zoomed-in area.
+- Renamed the 'non-split' status to 'non-scraped' to keep up with ddrescue 1.19.
+- The rescue status (error size, current phase etc.) is now shown in the top panel.
+- The status bar now only shows the log file name.
+- Renamed and reordered items in the main window's menu.
+- The top panel block info has been removed. Only the block color key is shown.
+- Removed the 'Use Block Inspector' checkbox. The BI is now always used when clicking the grid.
+- The block inspector now shows the status type distribution inside the block and the block bounds.
+- The selected grid block is now highlighted using a white marker.
+- ddrescueview's debug log is now hidden by default. It can be activated in the menu.
+- The comment lines of the logfile can be viewed, next to the debug log.
+- Block colors and blending weights can now be edited in the options menu. The settings are not yet saved.
+- Major restructure of the code (esp. control flow).
+- Most GUI elements now adjust better to widgetset differences. This improves the cross-platform look.
+- Fixed various small bugs, surely introduced some others.
+
+
+#### v0.3 ####
+Released 2013-03-28
+
+- initial release (after porting to Lazarus)

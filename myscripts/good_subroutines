@@ -1,0 +1,84 @@
+echo 'This contains common subroutines that are used by other scripts.'
+echo 'This file is required by most scripts.'
+exit 0
+
+
+subroutine show_sense_data
+  if $direct_mode = 0
+    hex
+    echo "sense_key=0x" $io_sense_key " asc=0x" $io_asc " ascq=0x" $io_ascq
+    decimal
+  endif
+endsubroutine
+
+
+subroutine show_passthrough_cmd_status
+  if $direct_mode = 0
+    echo "status=" $io_status " masked_status=" $io_masked_status " msg_status=" $io_msg_status
+    echo "sb_len_wr=" $io_sb_len_wr " host_status=" $io_host_status " driver_status=" $io_driver_status
+    echo "resid=" $io_resid " duration=" $io_duration " info=" $io_info
+  endif
+endsubroutine
+
+
+subroutine show_sense_buffer
+  if $direct_mode = 0
+    echo "Sense buffer:"
+    printsensebuffer 0 $io_sb_len_wr
+  endif
+endsubroutine
+
+
+subroutine show_ata_return_status
+  hex
+  echo "error=0x" $ata_return_error " count=0x" $ata_return_count " lba=0x" $ata_return_lba " device=0x" $ata_return_device " status=0x" $ata_return_status " altstatus=0x" $ata_alternate_status
+  echo "command_status= 0x" $command_status
+  echo "data_transferred= 0x" $data_transferred
+  decimal
+endsubroutine
+
+
+subroutine refresh_status
+  if $direct_mode = 1
+    getstatus
+    hex
+    echo "error=0x" $ata_return_error " status=0x" $ata_return_status " altstatus=0x" $ata_alternate_status
+    decimal
+  else
+    echo "status not available in passthrough mode"
+  endif
+endsubroutine
+
+
+subroutine check_command_status
+  seti $error_bit = $ata_return_status & 1
+  seti $command_failed = 0
+  if $error_bit != 0
+    seti $command_failed = 1
+  elseif $command_status != 0
+    seti $command_failed = 1
+  elseif $io_sense_key > 1
+    seti $command_failed = 1
+    # usb attached ata devices will normally give this code, so don't count it as failed
+    if $io_sense_key = 4
+      if $io_asc = 0
+        if $io_ascq = 0
+          seti $command_failed = 0
+        endif
+      endif
+    endif
+  endif
+endsubroutine
+
+
+subroutine reset_device
+  if $direct_mode = 0
+    echo "Reopening the device"
+    reopendisk
+  else
+    echo "Performing a soft reset"
+    softreset
+  endif
+endsubroutine
+
+

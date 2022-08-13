@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Zarządzanie zmianami</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Spis treści</a> &middot; <a href="howto.html">Praca</a> &middot; 
+<a href="menu.html">Menu</a> &middot; <a href="menu_disk.html">Dysk</a>
+<hr />
+<h3>Zarządzanie zmianami</h3>
+<p>
+<b><span style="color:red">Uwaga!</span></b>
+Bezpośrednia modyfikacja zawartości dysku może mieć dalsze konsekwencje, w tym utratę danych lub niemożność załadowania i uruchomienia systemu.
+</p>
+<p>
+Gdy system operacyjny wykryje nowe błędy FS (a także uzyska dostęp do FS ze starymi błędami), 
+może uruchomić narzędzie do sprawdzania dysków w celu usunięcia błędów, 
+co może również spowodować usunięcie danych użytkownika. 
+System operacyjny może uruchomić narzędzie sprawdzające w trybie online lub podczas rozruchu.
+</p>
+<p>
+Partycjonowanie modyfikacji może spowodować brak możliwości uruchamiania z dysku 
+lub niedostępność niektórych partycji po zastosowaniu. 
+Nigdy nie modyfikuj partycjonowania na bieżącym dysku startowym lub dysku systemowym.
+
+Użyj alternatywnego dysku startowego lub podłączyć dysk jako wtórną do innego komputera. 
+Nie uruchamiaj oprogramowania z dysku, który będzie modyfikowany.
+</p>
+<p>
+Bezpośrednie zmiany dysków wprowadzane są w systemie po ponownym uruchomieniu komputera, 
+aktualizacji konfiguracji dysku lub ponownym podłączeniu podłączanego urządzenia.
+System operacyjny Windows może zabronić bezpośredniego zapisu na niektórych używanych obszarach dyskowych - 
+zobacz <a href="lockvolumes.html">Blokowanie woluminów</a>.
+Niektóre programy antywirusowe mogą blokować bezpośredni zapis na dysk.
+W systemie Windows można również spróbować <a href="devioparams.html">opcji interfejsa</a>
+<span class="ii">IO SCSI</span>, aby obejść pewne ograniczenia.
+</p>
+<p>
+Zmiany wprowadzone za pomocą poleceń 
+<a href="copysectors.html">Kopiuj sektory</a> i
+<a href="fillsectors.html">Wypełnij sektory</a>
+są natychmiast zapisywane na dysku.
+</p>
+<p>
+Zmiany wprowadzone w 
+<a href="diskeditor.html">edytorze dysku</a> i <a href="partitions.html">menedżerze partycji</a>
+pozostają wirtualne do momentu jawnego zastosowania ich na dysku. 
+Do zarządzania zmianami wirtualnymi można użyć następujących poleceń menu <span class="ii">Dysk</span>.
+</p>
+
+<h4>Globalny tryb tylko do odczytu</h4>
+<p>
+Globalnie wyłącz wszystkie operacje zapisu (dla wszystkich urządzeń i obrazów urządzeń).<br />
+Zobacz także <a href="devioparams.html">opcję</a> <span class="ii">Zezwól na zapis</span> 
+specyficzną dla urządzenia.
+</p>
+
+<h4>Załaduj dane wycofania/zrzutu z pliku...</h4>
+<p>
+Można załadować dane wycofania (jeśli zapisane przy zastosowaniu wcześniejszych zmian), 
+a tym samym cofnąć ostatnich zmian.
+Możesz również skorzystać z polecenia do załadować zmian, 
+które zostało zatopione do pliku zamiast stosowania na dysku.
+</p>
+<h4>Zrzuć zmiany do pliku...</h4> <!--Dump-->
+<p>
+Możesz zrzucić zmiany w pliku, a nie stosując je bezpośrednio na dysku. 
+Później możesz ponownie otworzyć dysku i załadować wszystkie niestosowania zmian z pliku.
+</p>
+<h4>Cofnij zmiany</h4>
+<p>
+Grupa cofanie ostatniej zmiany. 
+Aby cofnąć poszczególnych działań, użyć odpowiednich poleceń <a href="diskeditor.html">Disk Editor</a> 
+(menu <a href="menu_edit.html">Edycja</a>) lub <a href="partitions.html">Partition Manager</a>.
+</p>
+<h4>Redo zmiany</h4>
+<p>Grupa ponawianie ostatnich zmian.</p>
+<h4>Przywróć wszystkie zmiany</h4>
+<p>Odrzuć wszystkie niestosowane zmiany.</p>
+<h4 id="apply">Zastosuj zmiany... [<span class="ii">Ctrl+W</span>]</h4>
+<p>Napisz zmian do dysku.
+</p>
+</div></div>
+</body>
+</html>

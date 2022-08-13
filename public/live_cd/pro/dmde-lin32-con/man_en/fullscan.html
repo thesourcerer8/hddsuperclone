@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Full Scan</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="fullscan"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">TOC</a> &middot; <a href="howto.html">Work</a> &middot; <a href="menu.html">Menu</a> &middot; <a href="menu_tools.html">Tools</a>
+<hr />
+<h2>Full Scan</h2>
+<p>
+<a href="#raw">Raw File Search</a> 
+&nbsp;
+</p>
+
+<p>
+Comprehensive search method allows you to find and virtually rebuild the directory structure 
+of a damaged file system or to find lost files of known types by signatures if a file system can not be used.
+</p>
+<p>
+If a file system is not seriously damaged then the volume may be opened before the scan completes. 
+When choosing a volume, you can be guided by quality indicators and other parameters (details are <a href="#columns">below</a>).
+</p>
+<p>
+Before working with special types of storages 
+(striped volumes&nbsp;/ RAIDs, encrypted storages, disk images), 
+refer to the <a href="openvolume.html#open_sstor">appropriate instructions</a> 
+(in the section <a href="openvolume.html">Open Volume</a>), 
+otherwise Full Scan will give incorrect FS results if you simply run on individual source disks.
+
+For regular partition, it is recommended to <a href="devices.html">open a physical device</a> 
+and scan the entire area the partition may occupy (including previous and new locations)
+rather than trying to work with the damaged logical disk.
+The software may read beyond the selected area if it is necessary.
+</p>
+<p>
+<b>Different volume variants may be given for the same volume</b> which are usefull in the most complex cases <b>only</b>
+(such as interrupted FS transformation: move&nbsp;/ split&nbsp;/ merge&nbsp;/ resize&nbsp;/ cluster resize, 
+or for spanned volumes).
+
+In such cases some files can be recovered correctly from one volume variant,
+and others from another one, despite the same files might be visible on both volume variants.
+
+Open the selected variant as a volume and <a href="datarecovery.html">recover</a> files.
+If files are missing or being recovered incorrectly you should continue the scan or try another variant.
+</p>
+
+<table><tr>
+<th class="ii">Open&nbsp;volume</th><td>Open volume selected in the list.</td></tr>
+<tr><th class="ii">Save...</th><td>Save search log to a file.</td></tr>
+<tr><th class="ii">Load...</th><td>Load search log from a file
+(to continue previous search or to use previous search results).
+</td></tr>
+<tr><th class="ii">Start/Stop</th><td>Start/stop scan. 
+If scan parameters are not changed the scan will be continued.
+</td></tr>
+<tr><th class="ii">Parameters</th><td>
+Select scan area, FS, parameters to gather data and calculate volumes.<br />
+<span class="ii">Jumping scan</span> is used when it is necessary to faster find the main results
+over the entire disk
+without waiting the scan completes.
+<p class="spec" style="border:none">
+Jumping scan is carried out selectively over the entire disk
+gradually covering the entire scan area. 
+Volumes with the large number of files are being found first.
+</p>
+</td></tr>
+<tr><th class="ii">Log-file</th><td>
+Options to save the scan state and results automatically to a file
+</td></tr>
+<tr><th class="ii">Menu</th><td>Besides, allows changing volume sorting order.</td></tr>
+</table>
+
+<p>
+The columns <b class="ii">%</b> and <b class="ii">Check</b> allow 
+preliminary estimating data recovery quality of a found volume variant
+(the percentage and number of correct interconnections between FS structures and files 
+found by <a href="#raw">signatures</a> for <b>NTFS, exFAT, HFS</b>;
+and for other file systems only FS structures are checked).
+</p>
+<p>
+<b class="ii">Min. Size</b> is the minimum size estimate of the area occupied by the volume files 
+(only the best found FS fragments are taken into account).
+</p>
+
+<p>
+The column <b class="ii">Indicators</b>
+shows the absence (damage) ("<b class="ii">-</b>") 
+or presence ("<b class="ii">+</b>") of the corresponding FS structures
+(<b class="ii">B/C</b> - boot sector/copy; for <b>FAT</b>: <b class="ii">F</b> - FAT table/copy, <b class="ii">R</b> - root directory).
+</p>
+
+<h3 id="raw">Raw File Search</h3>
+<p>
+File signatures are used as a last resort to find lost files when recovery by file systems (above) is not possible.
+Additionally file signatures are used to improve and control the quality for <b>NTFS, exFAT, HFS</b> search.
+They are also used to mark and filter files found both by a file system and by signatures,
+that is files with a high probability of recovery
+(see <a href="filepanel.html#fileicons">File Panel icons</a>).
+</p>
+<p>
+Raw results are available under the directory <span class="ii">$Raw</span> in the <a href="filepanel.html">file panel</a>
+when any volume is opened.
+To exclude results found by a file system of an opened volume, 
+you can use the symbolic directory <span class="ii">$Raw - Filter Raw Results</span>
+(<a href="clustermap.html">cluster map</a> features are used to determine and exclude the space 
+occupied by files).
+</p>
+<p>
+Normally there are no reasons to open Raw results individually when there are FS results.
+Raw recovery is possible only for files which have special signatures.
+Raw recovery does not work properly for fragmented files (only the first file fragment is recovered correctly).
+Raw recovery does not provide original file names and directory structure.
+Raw recovery does not always allow detecting original file sizes.
+If there is neither end file signature nor built-in size info for a given file type
+then it is assumed a file continues until the next found signature,
+so searching for all present file types may improve size detection.
+</p>
+<p>
+For some built-in file types, consecutive fragments can be combined into one file, 
+so the number of files in the file panel may be less than in the scan results. 
+</p>
+<p>
+<span class="ii">Raw: File Signatures</span>: select file types for search, add new file signatures.
+</p>
+<h4>File Signatures</h4>
+<p>File Signature is a fixed sequence of bytes at the file beginning for the certain file type. 
+E.g. if you open any PDF file in a <a href="diskeditor.html">hex editor</a> 
+you can see the same sequence of the first 4&nbsp;bytes:
+<div class="spec" style="font-family:monospace">
+0000: &nbsp; <span style="color:blue">25 50 44 46</span> 2D 31 2E 33&nbsp; 0A ... &nbsp; &nbsp; &nbsp;  <span style="color:blue">%PDF</span>-1.3...
+</div>
+In DMDE you may then specify a custom file <span class="ii">signature</span> as <span class="tt">%PDF</span>
+(or as <span class="tt">\x25\x50\x44\x46</span> in hex codes).
+The question mark (<span class="tt">?</span>) may be used to specify a variable byte of the signature.
+The code <span class="tt">\mXY</span> specifes a fixed bit mask for the previous byte 
+where <span class="tt">XY</span> is a mask hex value
+(e.g. the code <span class="tt">\x02\m03</span> cpecifies that
+only two least significant bits of the byte <span class="tt">\x02</span> are fixed).
+</p>
+<p>
+If the signature position in a file is not fixed then minimum and maximum offsets must be specified.
+Entire signature must fit in the first 4096 bytes.
+</p>
+<h4 id="raw_add">Adding New File Types</h4>
+<p>
+In addition to built-in file types and corresponding signatures, 
+it is possible to add new types by the user (only if these types have unique signatures):
+Full Scan (Parameters) - <span class="ii">Raw: File Signatures</span>&nbsp;- <span class="ii">Add</span>.
+</p>
+<p>
+In simple cases, it is possible to automatically calculate the signature of a new type 
+on the base of sample files.
+You should push the button "<span class="ii">...</span>"
+and specify possible extenstions (comma separated) and the path where working files of the necessary type are located.
+If the recovery is being made from the camera, you can take a different photo&nbsp;/ video 
+to the new media in the same format to obtain sample files.
+</p>
+<p>
+The <span class="ii">Test</span> button allows you to check the signatures on a specific file 
+and find out whether files of this type are defined correctly.
+</p>
+
+<div class="spec">
+<p>
+The option <span class="ii">use for FS calculation</span>
+enables checking interconnections between FS structures and files found by the signature.
+Additionally the files in the FS will be marked in a <a href="filepanel.html#fileicons">File Panel</a>
+as found also by a signature (or not found).
+<br />
+
+Multiple comma separated <span class="ii">Extensions</span> may be specified for <span class="ii">FS calculation</span>.<br />
+Mark signature as <span class="ii">reliable</span> if it contains at least 4 different bytes at a fixed position
+(do not mark otherwise not to truncate other files if false positives happen).<br />
+<span class="ii">File-container</span> may contain other file types inside
+(mark in order not to truncate when other type files are met).<br />
+<span class="ii">EOF Signature</span> is an optional signature at the end of a file.
+</p>
+</div>
+
+</div></div>
+</body>
+</html>

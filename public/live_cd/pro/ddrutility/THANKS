@@ -1,0 +1,19 @@
+ddrutility THANKS file
+
+ddrutility has originally been written by Scott Dwyer.
+
+Thanks to all that have helped by reporting bugs, and supplying ideas.
+
+Special thanks to Nicholas Sperling for supplying a small C program to work with
+my original test proccessbitmap bash script. While none of his original code
+exists in ddrutility, the idea inspired me to learn C programming.
+
+Thanks to olegkrutov for pointing out and helping with issues processing the
+NTFS file system.
+
+Thanks to Christian Franke for supplying modifications to configure.ac for
+better compatibility, and for supplying a patch for ddru_findbad so it no longer
+relies on the BASH shell.
+
+And of course, thanks to Antonio Diaz Diaz for creating and maintaining GNU
+ddrescue, and putting up with my ideas and modifications.

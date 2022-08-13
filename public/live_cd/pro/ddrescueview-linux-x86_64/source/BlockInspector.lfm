@@ -1,0 +1,350 @@
+object BlockForm: TBlockForm
+  Left = 1249
+  Height = 263
+  Top = 171
+  Width = 460
+  BorderIcons = [biSystemMenu]
+  Caption = 'Block inspector'
+  ClientHeight = 263
+  ClientWidth = 460
+  Color = clForm
+  Constraints.MinHeight = 200
+  Constraints.MinWidth = 460
+  FormStyle = fsStayOnTop
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnHide = FormHide
+  OnShow = FormShow
+  Position = poMainFormCenter
+  ShowHint = True
+  LCLVersion = '2.0.10.0'
+  object TopPanel: TPanel
+    Left = 6
+    Height = 23
+    Top = 6
+    Width = 448
+    Align = alTop
+    AutoSize = True
+    BorderSpacing.Around = 6
+    BevelOuter = bvNone
+    ClientHeight = 23
+    ClientWidth = 448
+    TabOrder = 1
+    object BlockEdit: TSpinEdit
+      Left = 33
+      Height = 23
+      Top = 0
+      Width = 88
+      Align = alLeft
+      BorderSpacing.Left = 4
+      OnChange = BlockEditChange
+      TabOrder = 0
+    end
+    object lblBlockHeadline: TLabel
+      Left = 0
+      Height = 23
+      Top = 0
+      Width = 29
+      Align = alLeft
+      BorderSpacing.CellAlignVertical = ccaCenter
+      Caption = 'Block'
+      Layout = tlCenter
+      ParentColor = False
+      OnDblClick = lblBlockHeadlineDblClick
+    end
+    object EditBlockInfo: TEdit
+      Left = 125
+      Height = 15
+      Top = 4
+      Width = 319
+      Align = alClient
+      BorderSpacing.Around = 4
+      BorderSpacing.CellAlignVertical = ccaCenter
+      BorderStyle = bsNone
+      Color = clForm
+      ParentFont = False
+      TabOrder = 1
+      Text = '0'
+    end
+  end
+  object MapEntryList: TStringGrid
+    Left = 6
+    Height = 125
+    Top = 97
+    Width = 448
+    Align = alTop
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    AutoFillColumns = True
+    BorderSpacing.Around = 6
+    ColCount = 3
+    Columns = <    
+      item
+        MinSize = 80
+        MaxSize = 100
+        SizePriority = 0
+        Title.Caption = 'Status'
+        Width = 90
+      end    
+      item
+        MinSize = 130
+        MaxSize = 300
+        Title.Caption = 'Start'
+        Width = 177
+      end    
+      item
+        MinSize = 130
+        MaxSize = 300
+        Title.Caption = 'Length'
+        Width = 177
+      end>
+    DefaultColWidth = 80
+    DefaultRowHeight = 16
+    ExtendedSelect = False
+    FixedCols = 0
+    MouseWheelOption = mwGrid
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goColSizing, goRowSelect, goThumbTracking, goSmoothScroll]
+    RowCount = 1
+    TabOrder = 0
+    UseXORFeatures = True
+    OnHeaderSized = MapEntryListHeaderSized
+    ColWidths = (
+      90
+      177
+      177
+    )
+  end
+  object BlockInfo: TGroupBox
+    Left = 6
+    Height = 56
+    Top = 35
+    Width = 448
+    Align = alTop
+    AutoSize = True
+    BorderSpacing.Around = 6
+    Caption = 'Sector distribution'
+    ChildSizing.HorizontalSpacing = 2
+    ChildSizing.ShrinkHorizontal = crsScaleChilds
+    ChildSizing.Layout = cclLeftToRightThenTopToBottom
+    ChildSizing.ControlsPerLine = 42
+    ClientHeight = 36
+    ClientWidth = 444
+    TabOrder = 2
+    object BICol1Panel: TPanel
+      Left = 4
+      Height = 32
+      Top = 2
+      Width = 119
+      AutoSize = True
+      BorderSpacing.Left = 4
+      BorderSpacing.Top = 2
+      BorderSpacing.Right = 12
+      BorderSpacing.Bottom = 2
+      BevelOuter = bvNone
+      ChildSizing.VerticalSpacing = 2
+      ChildSizing.ShrinkHorizontal = crsScaleChilds
+      ChildSizing.Layout = cclTopToBottomThenLeftToRight
+      ChildSizing.ControlsPerLine = 2
+      ClientHeight = 32
+      ClientWidth = 119
+      TabOrder = 0
+      object lblNonTried: TLabel
+        Left = 0
+        Height = 15
+        Hint = 'Non-tried sectors'
+        Top = 0
+        Width = 55
+        BorderSpacing.CellAlignVertical = ccaCenter
+        Caption = 'Non-tried:'
+        ParentColor = False
+      end
+      object lblRescued: TLabel
+        Left = 0
+        Height = 15
+        Hint = 'Rescued sectors'
+        Top = 17
+        Width = 55
+        BorderSpacing.CellAlignVertical = ccaCenter
+        Caption = 'Rescued:'
+        ParentColor = False
+      end
+      object EditNonTriedSectors: TEdit
+        AnchorSideLeft.Side = asrBottom
+        Left = 59
+        Height = 15
+        Top = 0
+        Width = 60
+        BorderSpacing.Left = 4
+        BorderStyle = bsNone
+        Color = clForm
+        Constraints.MaxWidth = 60
+        ParentFont = False
+        TabOrder = 0
+        Text = '0'
+      end
+      object EditRescuedSectors: TEdit
+        AnchorSideLeft.Side = asrBottom
+        Left = 59
+        Height = 15
+        Top = 17
+        Width = 60
+        BorderSpacing.Left = 4
+        BorderStyle = bsNone
+        Color = clForm
+        Constraints.MaxWidth = 60
+        ParentFont = False
+        TabOrder = 1
+        Text = '0'
+      end
+    end
+    object BICol2Panel: TPanel
+      Left = 135
+      Height = 32
+      Top = 2
+      Width = 141
+      AutoSize = True
+      BorderSpacing.Left = 12
+      BorderSpacing.Top = 2
+      BorderSpacing.Right = 12
+      BorderSpacing.Bottom = 2
+      BevelOuter = bvNone
+      ChildSizing.VerticalSpacing = 2
+      ChildSizing.ShrinkHorizontal = crsScaleChilds
+      ChildSizing.Layout = cclTopToBottomThenLeftToRight
+      ChildSizing.ControlsPerLine = 2
+      ClientHeight = 32
+      ClientWidth = 141
+      TabOrder = 1
+      object lblNonTrimmed: TLabel
+        Left = 0
+        Height = 15
+        Hint = 'Non-trimmed sectors'
+        Top = 0
+        Width = 77
+        BorderSpacing.CellAlignVertical = ccaCenter
+        Caption = 'Non-trimmed:'
+        ParentColor = False
+      end
+      object lblNonScraped: TLabel
+        Left = 0
+        Height = 15
+        Hint = 'Non-scraped sectors'
+        Top = 17
+        Width = 77
+        BorderSpacing.CellAlignVertical = ccaCenter
+        Caption = 'Non-scraped:'
+        ParentColor = False
+      end
+      object EditNonTrimmedSectors: TEdit
+        AnchorSideLeft.Side = asrBottom
+        Left = 81
+        Height = 15
+        Top = 0
+        Width = 60
+        BorderSpacing.Left = 4
+        BorderStyle = bsNone
+        Color = clForm
+        Constraints.MaxWidth = 60
+        ParentFont = False
+        TabOrder = 0
+        Text = '0'
+      end
+      object EditNonScrapedSectors: TEdit
+        AnchorSideLeft.Side = asrBottom
+        Left = 81
+        Height = 15
+        Top = 17
+        Width = 60
+        BorderSpacing.Left = 4
+        BorderStyle = bsNone
+        Color = clForm
+        Constraints.MaxWidth = 60
+        ParentFont = False
+        TabOrder = 1
+        Text = '0'
+      end
+    end
+    object BICol3Panel: TPanel
+      Left = 288
+      Height = 32
+      Top = 2
+      Width = 135
+      AutoSize = True
+      BorderSpacing.Left = 12
+      BorderSpacing.Top = 2
+      BorderSpacing.Right = 4
+      BorderSpacing.Bottom = 2
+      BevelOuter = bvNone
+      ChildSizing.VerticalSpacing = 2
+      ChildSizing.ShrinkHorizontal = crsScaleChilds
+      ChildSizing.Layout = cclLeftToRightThenTopToBottom
+      ChildSizing.ControlsPerLine = 2
+      ClientHeight = 32
+      ClientWidth = 135
+      TabOrder = 2
+      object lblBad: TLabel
+        Left = 0
+        Height = 15
+        Hint = 'Unreadable sectors'
+        Top = 0
+        Width = 71
+        BorderSpacing.CellAlignVertical = ccaCenter
+        Caption = 'Bad sector(s):'
+        ParentColor = False
+      end
+      object EditBadSectors: TEdit
+        AnchorSideLeft.Side = asrBottom
+        Left = 75
+        Height = 15
+        Top = 0
+        Width = 60
+        BorderSpacing.Left = 4
+        BorderStyle = bsNone
+        Color = clForm
+        Constraints.MaxWidth = 60
+        ParentFont = False
+        TabOrder = 0
+        Text = '0'
+      end
+    end
+  end
+  object BottomPanel: TPanel
+    Left = 6
+    Height = 31
+    Top = 228
+    Width = 448
+    Align = alTop
+    AutoSize = True
+    BorderSpacing.Around = 6
+    BevelOuter = bvNone
+    ClientHeight = 31
+    ClientWidth = 448
+    TabOrder = 3
+    object TrackCurrentCheckBox: TCheckBox
+      Left = 205
+      Height = 19
+      Hint = 'Always show the block which contains current_pos'
+      Top = 6
+      Width = 147
+      Align = alRight
+      BorderSpacing.Around = 6
+      Caption = '> Track current position'
+      OnChange = TrackCurrentCheckBoxChange
+      TabOrder = 0
+    end
+    object CloseBIButton: TButton
+      Left = 358
+      Height = 25
+      Top = 0
+      Width = 90
+      Align = alRight
+      AutoSize = True
+      BorderSpacing.Left = 6
+      BorderSpacing.Bottom = 6
+      Cancel = True
+      Caption = 'Close'
+      Constraints.MinWidth = 90
+      OnClick = CloseBIButtonClick
+      TabOrder = 1
+    end
+  end
+end

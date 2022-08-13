@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Шаблоны редактора дисков</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+<style type="text/css">/*<![CDATA[*/
+td,th{vertical-align:top}
+/*]]>*/</style>
+</head>
+<body>
+<a name="templates"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Содержание</a> &middot; <a href="howto.html">Работа</a> &middot; <a href="menu.html">Меню</a>
+&middot; <a href="menu_viewas.html">Режим</a>
+<hr />
+<h2>Шаблоны редактора дисков</h2>
+<p>
+<a href="diskeditor.html">Дисковый редактор</a>,
+кроме <a href="menu_viewas.html">встроенных шаблонов</a>, поддерживает
+пользовательские шаблоны для просмотра и редактирования различных дисковых структур.
+В шаблонах могут использоваться условия, операторы перехода, переменные 
+для разбора сложных дисковых структур, таких как записи MFT.</p>
+
+<p>По умолчанию шаблоны загружаются из файла <span class="tt">template.txt</span>. 
+Для использования других файлов можно изменить параметр <span class="tt">editortemplates=</span> 
+<a href="inifile.html">ini-файла</a>,
+допускаются символы подстановки (например, <span class="tt">editortemplates=template*</span>).
+</p>
+
+<h3>Структура файла шаблонов</h3>
+<p>Каждый шаблон начинается с указания имени в квадратных скобках <span class="tt">[Template Name]</span>,
+за которым следуют параметры и инструкции шаблона (по одной на строку файла).
+</p>
+
+<h3>Параметры шаблона</h3>
+<p>
+<span class="tt">guid:{GUID}</span> - идентификатор шаблона.<br />
+<span class="tt">o:1</span> - шаблон может применяться к невыровненным по секторам сктруктурам (может применяться смещение).<br />
+<span class="tt">fuse:0</span> - не использовать шаблон.<br />
+<span class="tt">flow:0</span> - отображение по одной записи.<br />
+<span class="tt">flow:1</span> - отображение записей одна за другой.<br />
+<span class="tt">big-endian:1</span> - определяет порядок байт "big-endian".<br />
+<span class="tt">h:Header</span> - отображение постоянного заголовка <span class="tt">Header</span>.
+</p>
+
+<h3>Константы</h3>
+<p>
+Константы указываются в виде десятичных и шестнадцатеричных (с префиксом <span class="tt">0x</span>) целых чисел.
+</p>
+
+<h3>Переменные</h3>
+<p>
+<span class="tt">$RECSIZE</span> - размер записи шаблона<br/>
+<span class="tt">$RECDEVOFS</span> - позиция текущей записи на диске (в байтах от начала диска)<br/>
+<span class="tt">$NEXTOFS</span> - смещение, применяемое к <b>блокам данных</b> (см. далее)<br/>
+<span class="tt">$OFFSET</span> - дополнительное относительное смещение, применяемое к <b>блокам данных</b><br/>
+<span class="tt">$XOFS</span> - дополнительное смещение столбца для вывода (см. ниже <span class="tt">x:X</span>)<br/>
+<span class="tt">$1</span> ... <span class="tt">$4</span> - глобальные пользовательские переменные (64-битные целые со знаком)<br/>
+<span class="tt">$varname</span> - локальная переменная (64-битное целое со знаком), 
+где <span class="tt">varname</span> чувствительна к регистру и может содержать цифры, 
+латинские буквы и символы подчеркивания. 
+Локальная переменная должна быть инициализирована с помощью оператора 
+присваивания <span class="tt">:=</span> и действительна только внутри блока инструкций, 
+в котором она инициализирована.
+</p>
+
+<h3>Блоки данных</h3>
+<p><b>Блок данных</b> - это, обычно, отдельный байт/слово/двойное слово в указанной позиции,
+но также допустимы диапазоны байтов/бит, обрабатываемых как одна переменная.
+Блок данных заключается в фигурные скобки <span class="tt">{...}</span>.
+</p>
+<p>
+<span class="tt">{Z}</span> определяет диапазон <span class="tt">Z</span> байт, 
+	начиная со смещения <span class="tt">$NEXTOFS</span>
+	(при этом <span class="tt">$NEXTOFS</span> будет увеличен на <span class="tt">Z</span> байт);<br />
+<span class="tt">{X,Z}</span> определяет диапазон <span class="tt">Z</span> байт, начиная со смещения <span class="tt">X</span>, <br />
+<span class="tt">{X:Y,Z}</span> определяет диапазон <span class="tt">Z</span> бит, начиная со смещения <span class="tt">X</span> байт <span class="tt">Y</span> бит,<br />
+где <span class="tt">X</span>, <span class="tt">Y</span> и <span class="tt">Z</span> - любые переменные или константы;<br />
+несколько диапазонов разделяются точкой с запятой, например, <span class="tt">{0x00,4;$1:$2,4}</span>.
+</p>
+
+<h3>Форматы данных</h3>
+<p>Формат определяет способ отображения и редактирования блока данных (например, целое число / символ / строка).</p>
+<p>Поддерживаются следующие форматы:<br />
+<span class="tt">%u</span> - беззнаковое целое (до 64 бит)<br/>
+<span class="tt">%d</span> - целое со знаком (до 64 бит)<br/>
+<span class="tt">%X / %x</span> - шестнадцатеричное число (до 64 бит)<br/>
+<span class="tt">%c</span> - символ ANSI (8 бит)<br/>
+<span class="tt">C</span> - строка ANSI<br/>
+<span class="tt">U</span> - строка в Юникоде (UTF-16)<br/>
+<span class="tt">u</span> - строка в кодировке utf-8<br/>
+<span class="tt">T</span> - текстовая строка (в зависимости от <a href="menu_viewas.html">таблицы кодировки</a>)<br/>
+<span class="tt">CXm</span> - побайтовый шестнадцатеричный вывод в несколько строк<br/>
+<span class="tt">UNIXDATE</span> - дата в формате Unix (секунды с 1980)<br/>
+<span class="tt">FILETIME</span> - дата в формате Windows file time (наносекунды с 1601)<br/>
+<span class="tt">F:ABCD..</span> - флаги (где <span class="tt">A</span> отображается, если выставлен бит 0, и <span class="tt">B</span> - если снят, и т.д.)
+</p>
+
+<h3>Вывод</h3>
+<p>
+Инструкция вывода определяет положение на экране и формат блока данных или переменной или просто выводит текст.
+</p>
+<p>
+<span class="tt">{...},x:X,w:W,c:C,Format</span> выводит блок данных <span class="tt">{...}</span> в колонке <span class="tt">X</span> 
+максимальной ширины <span class="tt">W</span> цветом <span class="tt">С</span> в формате <span class="tt">Format</span>.
+<br />
+<span class="tt">x:X,w:W,c:C,Text</span> выводит <span class="tt">Text</span> в колонке <span class="tt">X</span> максимальной ширины <span class="tt">W</span>.
+<span class="tt">Text</span> может быть заключен в кавычки (<span class="tt">"Text"</span>).
+</p>
+<p>
+Параметры <span class="tt">w:W</span> и <span class="tt">c:C</span> опциональны
+(<span class="tt">0</span> - цвет по умолчанию, <span class="tt">1</span> - заголовок, 
+<span class="tt">8</span> - красный, <span class="tt">10</span> - серый).
+</p>
+<p>
+Вывод производится в текущую строку, инструкция
+<span class="tt">=</span> (знак равенства) выполняет переход к следующей строке.
+</p>
+
+<h3>Операторы и выражения</h3>
+<p>
+Выражение - это комбинация переменных, констант, блоков данных и операторов
+(<span class="tt">~</span>,
+<span class="tt">NOT</span>;
+<span class="tt">*</span>,
+<span class="tt">/</span>,
+<span class="tt">%</span>;
+<span class="tt">+</span>, 
+<span class="tt">-</span>; 
+<span class="tt">&lt;&lt;</span>,
+<span class="tt">&gt;&gt;</span>;
+<span class="tt">&lt;</span>, 
+<span class="tt">&lt;=</span>,
+<span class="tt">&gt;</span>,
+<span class="tt">&gt;=</span>;
+<span class="tt">=</span>,
+<span class="tt">!=</span>; 
+<span class="tt">&</span>; 
+<span class="tt">^</span>;
+<span class="tt">|</span>;
+<span class="tt">AND</span>;
+<span class="tt">OR</span>), например: <br />
+<span class="tt">$2+{0x08:$1,5}</span>
+</p>
+<p>Оператор присваивания <span class="tt">:=</span> используется для копирования результата выражения в переменную,
+например:<br />
+<span class="tt">$1:=$2+{0x08:$1,5}</span><br />
+<span class="tt">$2:=$OFFSET & 8</span>
+</p>
+
+<h3>Условия, циклы и переходы</h3>
+<h4>Условия</h4>
+<div>
+<span class="tt">IF Выражение1</span><br />
+<span class="tt">&nbsp;&nbsp;</span>...
+  (инструкции для выполнения, если результат <span class="tt">Выражения1</span> ненулевой/истина)<br />
+<span class="tt">ELSEIF Выражение2</span><br />
+<span class="tt">&nbsp;&nbsp;</span>...
+  (иначе инструкции для выполнения, если результат <span class="tt">Выражения2</span> ненулевой/истина)<br />
+<span class="tt">ELSE</span><br />
+<span class="tt">&nbsp;&nbsp;</span>...
+  (иначе инструкции для выполнения в остальных случаях)<br />
+<span class="tt">ENDIF</span><br />
+</div>
+
+<h4>Циклы</h4>
+<div>
+<span class="tt">WHILE Выражение3</span><br />
+<span class="tt">&nbsp;&nbsp;</span>... 
+  (инструкции для выполнения пока результат <span class="tt">Выражение3</span> ненулевой/истина) <br />
+<span class="tt">&nbsp;&nbsp;</span>перейти к началу цикла: <br />
+<span class="tt">&nbsp;&nbsp;CONTINUE</span><br />
+<span class="tt">&nbsp;&nbsp;</span>прервать выполнение цикла: <br />
+<span class="tt">&nbsp;&nbsp;BREAK</span><br />
+<span class="tt">ENDWHILE</span>
+</div>
+           	
+<h4>Переходы</h4>
+<p>Строка <span class="tt">LABEL:N</span> определяет метку, 
+а инструкция <span class="tt">GOTO:N</span> - переход на строку <span class="tt">LABEL:N</span>,
+где <span class="tt">N</span>&nbsp;- любая константа. Неаккуратное использование оператора перехода <span class="tt">GOTO</span>
+может привести к зацикливанию.
+</p>
+
+<h3>Переключатели и горячие ссылки</h3>
+<p>Инструкция переключателя <span class="tt">$1:=TOGGLE:N,x:X</span> выводит поле переключателя
+<span class="tt">[+]</span> (<span class="tt">[-]</span>) в столбце <span class="tt">X</span> текущей строки вывода, 
+где <span class="tt">N</span> - уникальный номер переключателя (переменная или константа);
+и переменная <span class="tt">$1</span> принимает значение <span class="tt">0</span> или <span class="tt">1</span> 
+в зависимости от состояния переключателя
+(переключение происходит нажатием клавиши [<span class="ii">пробел</span>] или кликом мыши). 
+Это позволяет изменять вывод шаблона на лету (например, разворачивать&nbsp;/ сворачивать структуры, 
+где номер переключателя <span class="tt">N</span> удобно устанавливать равным смещению структуры).
+</p>
+
+<p>
+Инструкция горячей ссылки <span class="tt">$VAR=Param</span> делает текущую строку вывода горячей ссылкой, 
+т.е. позволяет переходить к смещению объекта&nbsp;/ записи&nbsp;/ открывать другой связанный объект в окне редактора
+двойным щелчком по строке (или нажатием [<span class="ii">Enter</span>]). 
+<span class="tt">Param</span> - это значение выражения, используемое ссылкой 
+(смещение, номер записи, файла, сектора и т.д.), и <span class="tt">$VAR</span> - одна из следующих специальных переменных:<br />
+
+<span class="tt">$GOTOREC, $GOTORECOFS</span> - перейти к указанным номеру и смещению записи объекта<br />
+<span class="tt">$GOTOOFS</span> - перейти к указанному смещению объекта<br />
+
+<span class="tt">$OPENLBA</span> - открыть указанный сектор диска<br />
+<span class="tt">$OPENDEVOFS</span> - открыть указанный байт диска<br />
+<span class="tt">$OPENVOLSEC</span> - открыть указанный сектор
+<a href="openvolume.html">тома</a><br />
+<span class="tt">$OPENCLUSTER</span> - открыть указанный кластер
+<a href="openvolume.html">тома</a><br />
+<span class="tt">$OPENVOLPAGE</span> - открыть указанную страницу / объект
+<a href="openvolume.html">тома</a><br />
+<span class="tt">$OPENFILENUM</span> - открыть запись файла с указанным номером<br />
+<span class="tt">$OPENFILENUMDATA</span> - открыть содержимое файла с указанным номером<br />
+<span class="tt">$OPENFILERECOFS</span> - открыть файл по указанному смещению файловой записи в объекте<br />
+<span class="tt">$OPENATTROFS</span> - открыть поток данных по указанному смещению записи атрибута в объекте.<br />
+Можно указать шаблон, примененный после перехода, с помощью инструкции: <br />
+<span class="tt">$OPENTEMPLATE='{GUID}'</span>; 
+указать дополнительное смещение шаблона:
+<span class="tt">$OPENTEMPLOFS=Param</span>.
+</p>
+
+<h3>Дополнительные разделы шаблона</h3>
+<p><b>Вычисление размера записи</b> - инструкции между строками 
+<span class="tt">CALCSIZESTART</span> и <span class="tt">CALCSIZEEND</span>.
+Используется, если размер записи может быть больше размера сектора и может зависеть от данных.
+Значение переменной <span class="tt">$RECSIZE</span> можно изменить только в этом разделе шаблона.
+</p>
+<p><b>Предварительная обработка данных</b> - инструкции между строками 
+<span class="tt">LOADSTART</span> и <span class="tt">LOADEND</span>.
+Используется, например, для обработки USN в записях MFT (восстановление последних двух байт в каждом секторе). 
+Блоки данных можно изменять в этом разделе шаблона: 
+например, инструкция <span class="tt">{X,Y}:={Z,Y}</span> копирует <span class="tt">Y</span> байт по смещению <span class="tt">Z</span> 
+в позицию по смещению&nbsp;<span class="tt">X</span>.
+</p>
+<p><b>Постобработка данных</b> - инструкции между строками 
+<span class="tt">FLUSHSTART</span> и <span class="tt">FLUSHEND</span>.
+Используется для обратного преобразования перед записью изменённых данных на диск 
+(также можно изменять блоки данных).
+</p>
+
+<h3>Определения</h3>
+
+<p>
+Определения используются для замены повторяющихся блоков инструкций. 
+Определение может быть объявлено в любом шаблоне следующим образом:
+</p>
+
+<p>
+<span class="tt">DEFINE DefineTitle(%1%,%2%,...)</span><br />
+<span class="tt">&nbsp;&nbsp;</span>... (инструкции, в которых могут использоваться переменные подстановки 
+<span class="tt">%1%,%2%,...</span>) <br />
+<span class="tt">ENDDEFINE</span><br />
+</p>
+
+<p>
+Определение можно использовать далее в любом шаблоне. 
+При обработке оно будет заменено соответствующими инструкциями и подставленными переменными:<br />
+<span class="tt">DefineTitle($varname1,$varname2,...)</span><br />
+</p>
+
+</div></div>
+</body>
+</html>

@@ -1,0 +1,149 @@
+version 2.8 released November 23, 2016
+  * No longer uses automake
+  * Uses regular make file
+  * No program changes were made
+
+version 2.7 released January 11, 2015
+  * Ddru_ntfsfindbad 1.5 released:
+    + Fixed possible program crash if partition boot sector error
+    + Better partition boot sector error output
+  * Ddru_ntfsbitmap 1.5 released:
+    + Fixed possible program crash if partition boot sector error
+    + Better partition boot sector error output
+
+version 2.6 released October 15 2014
+  * Changes have been made for compiling compatibility:
+    + Some unneeded items removed from configure.ac
+    + Added lib check for iconv
+  * Some improvements have been made to the documentation:
+    + Added examples to the --mftdomain option of ntfs_bitmap
+    + Updated info about ddru_findbad being slow
+  * Ddru_findbad 1.11 released:
+    + No longer relies on bash
+    + Fixed a bug dealing with bad ntfscluster results
+    + Images are now accessed as read only
+  * Ddru_ntfsfindbad 1.4 released:
+    + Fixed potential memory bug with name conversions
+    + Fixed iconv BOM issue
+    + Fixed a bug with mft data run length
+    + Fixed issue with current postition in logfile
+  * Ddru_ntfsbitmap 1.4 released:
+    + Fixed potential memory bug with name conversions
+    + Fixed iconv BOM issue
+  * Ddru_diskutility 1.3 released:
+    + Initial release
+
+version 2.5 released June 8 2014
+  * Some code restructuring has been done:
+  * Ddru_ntfsbitmap 1.3 released:
+    + Now able to process non 512 byte sectors
+    + Can process some partial MFT errors
+    + Fixed a bug in MFT domain logfile creation
+    + Now able to process older NTFS version
+  * Ddru_ntfsfindbad 1.3 released:
+    + Now able to process non 512 byte sectors
+    + Can process some partial MFT errors
+    + Now able to process older NTFS version
+
+version 2.4 released May 15 2014
+  * Ddru_ntfsbitmap 1.2 released:
+    + Added option --restart to delete all files at start
+    + Fixed a bug in domain logfile creation
+  * Ddru_ntfsfindbad 1.2 released:
+    + Fixed a bug where 0 byte errors were reported
+    + Fixed a bug in the debug output
+
+version 2.3
+  * Ddru_ntfsfindbad 1.1 released:
+    + Fixed bug where filename is output in DOS format
+    + Now converts NTFS filenames from UTF-16 to UTF-8
+    + Added option --encoding to choose output encoding
+    + Added option --noconvert to turn off iconv conversion
+
+version 2.2
+  * Ddru_ntfsbitmap 1.1 released:
+    + Added option to bridge small gaps of unused space
+    + Boot sector file now deleted if not NTFS
+    + Improved handling of ddrescue return codes
+  * Ddru_findbad 1.10 released:
+    + Added option to manually control partition types
+
+version 2.1
+  * Ddru_findbad 1.9 released:
+    + Now uses fdisk if gfdisk is not available
+  * Ddru_ntfsfindbad 1.0 released:
+    + Initial release
+
+version 2.0
+  * Documentation updates
+    + Added requirements to the top of the readme file
+  * Ddru_ntfsbitmap 1.0 released:
+    + Made some changes to the code for portability
+  * Ddru_findbad 1.8 released:
+    + Fixed a bug that could cause an error processing the log file
+    + Now displays the logfile lines as it processes them
+
+version 1.99-beta2
+  * Documentation updates
+    + New section added "Important Notes"
+    + Ddru_ntfsbitmap documentation improvements
+  * Changes and improvements to ddru_ntfsbitmap
+    + New option added to ddru_ntfsbitamp, "--mftdomain"
+    + Output report now contains domain logfile info
+    + Fixed bug where domain logfile did not include all drive space
+    + Output file __mftbitmap renamed __mftshort and includes more
+
+version 1.99-beta1
+  * Complete change in packaging - now uses make
+  * Ddrutility is now a collection of programs
+  * Original ddrutility renamed to ddru_findbad
+  * Ddru_findbad 1.7 released:
+    + No longer counts non-tried "?" areas
+    + Quits if nothing bad found in logfile instead of producing errors
+    + Removed full documentation from --help and man
+    + Full documentation now located in info ddrutility
+    + Added examples to documentation
+  * Ddru_ntfsbitmap 0.99 beta1 released"
+    + Initial release
+
+version 1.6
+  * Fixed bug where ddrescue logfile was not processed
+
+version 1.5
+  * No longer uses ddrescuelog
+  * Improved error handling
+    + Improved some error and warning messages for easier understanding
+    + Eliminated some conditions that caused errors
+    + Most error messages go to the debug file
+  * Uses single base name for output files
+    + Reconstructed output files for different uses
+  * Improved processing speed
+    + Only checks once per cluster/block instead of every sector
+  * Shows total run time when done
+  * Sector file can contain ranges
+  * Added option to produce extra types of output files
+  * Fixed command input problem that caused infinite loop
+  * Added quick processing option
+  * Added special quick ntfs processing option
+  * Added version number to output files
+  * Many more small changes and improvements too numerous to list
+
+version 1.4
+  * Added MAN page
+    + Made improvements to --help output
+  * Added support for HFS+ file system
+  * Added support for GPT and APT partition tables
+  * Improved some of the code
+    + Improved how it handles loop devices
+    + Improved handling of FAT partitions
+    + Changed names of temp files so less likely to be existing file
+    + Target, logfile, and output file names can now contain spaces
+    + Added option to change sector size
+    + Added option to include more info in long results
+    + Changed command line arguments
+  * Fixed bug so Linux partitions get correct block size
+  * Major code reconstruction to make it more modular
+
+version 1.3
+  * Initial release
+

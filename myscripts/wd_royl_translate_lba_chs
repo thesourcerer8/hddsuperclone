@@ -1,0 +1,284 @@
+
+
+
+
+
+
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'WD translate LBA CHS'
+
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+echo ""
+
+include good_subroutines
+
+# set a blank string variable to compare with user input
+# make sure not to set this anyplace else
+sets $null = ""
+
+# set this to itself for use with the menu system
+# make sure not to set this anyplace else
+# if it was not previously set it will = 0
+seti $using_menu = $using_menu
+
+
+
+while 1 = 1
+  echo "q) Quit"
+  echo "p) Previous menu"
+  echo "1) translate LBA to CHS"
+  echo "2) translate CHS to LBA"
+  echo "Enter your choice:"
+  userinput $choicestring
+
+  if $choicestring = q
+    exit 0
+
+  elseif $choicestring = p
+    previousscript
+
+  elseif $choicestring = 1
+    gosub translate_lba_to_chs
+
+  elseif $choicestring = 2
+    gosub translate_chs_to_lba
+
+  else
+    echo "bad choice= " $choicestring
+  endif
+done
+
+previousscript
+end
+
+
+
+
+
+subroutine translate_lba_to_chs
+  while 1 = 1
+    echo "Enter LBA in decimal (0x for hex):"
+    userinput $choicestring
+    if $choicestring != $null
+      seti $lba = $choicestring 0
+      break
+    else
+      echo "Choice cannot be blank!"
+    endif
+  done
+
+  gosub enable_vsc
+
+  # vsc to prepare for translate
+  echo "prepare to translate lba to chs"
+  buffersize 0x200
+  clearbuffer
+  seti $lba1 = $lba & 0xff
+  seti $lba2 = $lba > 8
+  seti $lba2 = $lba2 & 0xff
+  seti $lba3 = $lba > 16
+  seti $lba3 = $lba3 & 0xff
+  seti $lba4 = $lba > 24
+  seti $lba4 = $lba4 & 0xff
+  seti $lba5 = $lba > 32
+  seti $lba5 = $lba5 & 0xff
+  seti $lba6 = $lba > 40
+  seti $lba6 = $lba6 & 0xff
+
+  setbuffer 0
+    15 00  $lba1 $lba2 $lba3 $lba4 $lba5 $lba6
+  endbuffer
+  hex
+  echo "keysector= 15 00  " $lba1 " " $lba2 "  " $lba3 " " $lba4 "  " $lba5 " " $lba6
+  setwritepio
+  ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+  echo "command= d6 01 be 4f c2 a0 b0"
+  decimal
+  # check if command failed
+  gosub status_check
+  # vsc to read result
+  buffersize 0x200
+  clearbuffer
+  setreadpio
+  echo "reading result"
+  ata28cmd 0xd5 0x01 0xbf 0x4f 0xc2 0xa0 0xb0
+  hex
+  echo "command= d5 01 bf 4f c2 a0 b0"
+  decimal
+  # check if command failed
+  gosub status_check
+  scratchpadsize 0x200
+  copybuffertoscratchpad 0 0 512
+
+  gosub disable_vsc
+
+  printscratchpad 0 32
+  seti $cylinder = scratchpad 4 dw
+  seti $head = scratchpad 8 w
+  seti $sector = scratchpad 10 w
+  hex
+  sets $cstring = "0x" $cylinder
+  sets $hstring = "0x" $head
+  sets $sstring = "0x" $sector
+  decimal
+  echo "cylinder = " $cylinder " (" $cstring ")"
+  echo "head = " $head " (" $hstring ")"
+  echo "sector = " $sector " (" $sstring ")"
+
+endsubroutine
+
+
+
+
+
+subroutine translate_chs_to_lba
+  while 1 = 1
+    echo "Enter cylinder in decimal (0x for hex):"
+    userinput $choicestring
+    if $choicestring != $null
+      seti $cylinder = $choicestring 0
+      break
+    else
+      echo "Choice cannot be blank!"
+    endif
+  done
+  while 1 = 1
+    echo "Enter head in decimal (0x for hex):"
+    userinput $choicestring
+    if $choicestring != $null
+      seti $head = $choicestring 0
+      break
+    else
+      echo "Choice cannot be blank!"
+    endif
+  done
+  while 1 = 1
+    echo "Enter sector in decimal (0x for hex):"
+    userinput $choicestring
+    if $choicestring != $null
+      seti $sector = $choicestring 0
+      break
+    else
+      echo "Choice cannot be blank!"
+    endif
+  done
+
+
+  gosub enable_vsc
+
+  # vsc to prepare for translate
+  echo "prepare to translate chs to lba"
+  buffersize 0x200
+  clearbuffer
+  seti $offsetl = $cylinder & 0xff
+  seti $offsetm1 = $cylinder > 8
+  seti $offsetm1 = $offsetm1 & 0xff
+  seti $offsetm2 = $cylinder > 16
+  seti $offsetm2 = $offsetm2 & 0xff
+  seti $offseth = $cylinder > 24
+  seti $offseth = $offseth & 0xff
+
+  seti $sectorl = $sector & 0xff
+  seti $sectorh = $sector > 8
+  seti $sectorh = $sectorh & 0xff
+
+  seti $head = $head & 0xff
+  setbuffer 0
+    16 00  $offsetl $offsetm1  $offsetm2 $offseth  $head 00  $sectorl $sectorh
+  endbuffer
+  hex
+  echo "keysector= 16 00  " $offsetl " " $offsetm1 "  "  $offsetm2  " " $offseth "  " $head " 0  "  $sectorl " " $sectorh
+  setwritepio
+  ata28cmd 0xd6 0x01 0xbe 0x4f 0xc2 0xa0 0xb0
+  echo "command= d6 01 be 4f c2 a0 b0"
+  decimal
+  # check if command failed
+  gosub status_check
+  # vsc to read result
+  buffersize 0x200
+  clearbuffer
+  setreadpio
+  echo "reading result"
+  ata28cmd 0xd5 0x01 0xbf 0x4f 0xc2 0xa0 0xb0
+  hex
+  echo "command= d5 01 bf 4f c2 a0 b0"
+  decimal
+  # check if command failed
+  gosub status_check
+  scratchpadsize 0x200
+  copybuffertoscratchpad 0 0 512
+
+  gosub disable_vsc
+
+  printscratchpad 0 32
+
+  seti $lba = scratchpad 2 qw
+  seti $lba = $lba & 0xffffffffffff
+  hex
+  sets $lstring = "0x" $lba
+  decimal
+  echo "lba = " $lba " (" $lstring ")"
+
+endsubroutine
+
+
+
+
+
+subroutine status_check
+  seti $command_failed = 0
+  gosub check_command_status
+  if $command_failed = 1
+    echo "Command failed!"
+    gosub show_sense_data
+    gosub show_ata_return_status
+    previousscript
+  endif
+endsubroutine
+
+
+
+subroutine status_check_no_stop
+  seti $command_failed = 0
+  gosub check_command_status
+  if $command_failed = 1
+    echo "Command failed!"
+    gosub show_sense_data
+    gosub show_ata_return_status
+  endif
+endsubroutine
+
+
+
+subroutine enable_vsc
+  # enable vendor specific commands
+  echo "enable vsc"
+  buffersize 0
+  setreadpio
+  ata28cmd 0x45 0x0b 0x00 0x44 0x57 0xa0 0x80
+  # check if command failed
+  gosub status_check
+endsubroutine
+
+
+
+subroutine disable_vsc
+  # disable vendor specific commands
+  echo "disable vsc"
+  buffersize 0
+  setreadpio
+  ata28cmd 0x44 0x0b 0x00 0x44 0x57 0xa0 0x80
+  # check if command failed
+  gosub status_check
+endsubroutine
+
+
+

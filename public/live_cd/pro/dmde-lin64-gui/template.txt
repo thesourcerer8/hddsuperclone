@@ -1,0 +1,4845 @@
+;DMDE Disk Editor Templates
+
+DEFINE _t(%1%)
+	x:$x,%1%
+ENDDEFINE
+DEFINE _ift(%1%,%2%,%3%)
+	%1%,x:$x,%2%
+	x:0,w:$x,%3%
+ENDDEFINE
+DEFINE _iftl(%1%,%2%,%3%)
+	_ift(%1%,%2%,%3%)
+	EOL
+ENDDEFINE
+DEFINE _ift(%1%,%2%,%3%,%4%)
+	%1%,x:$x,%3%,%2%
+	x:0,w:$x,%4%
+ENDDEFINE
+DEFINE _iftl(%1%,%2%,%3%,%4%)
+	_ift(%1%,%2%,%3%,%4%)
+	EOL
+ENDDEFINE
+DEFINE _sft(%1%,%2%,%3%)
+	_ift({%1%},%2%,%3%)
+ENDDEFINE
+DEFINE _sft(%1%,%2%,%3%,%4%)
+	_ift({%1%},%2%,%3%,%4%)
+ENDDEFINE
+DEFINE _sftl(%1%,%2%,%3%)
+	_iftl({%1%},%2%,%3%)
+ENDDEFINE
+DEFINE _sftl(%1%,%2%,%3%,%4%)
+	_iftl({%1%},%2%,%3%,%4%)
+ENDDEFINE
+
+[Test]
+fuse:0
+$i:=0
+WHILE $i<5
+  $i:=$i+1
+  $j:=0
+  $x:=10
+  WHILE $j<5 
+    $j:=$j+1
+    {4},x:$x,%u
+    $x:=$x+11
+  ENDWHILE
+  EOL
+ENDWHILE
+
+;//////////////////////////////////////////
+[MFT Record]
+;remove guid not to use by default:
+guid:{1df5ef71-7ae4-b176-c967-f94c63c5fb7a}
+flow:1
+
+CALCSIZESTART
+  $1:={0x1C,2}
+  IF $1<1024
+    $1:=1024
+  ENDIF
+  $RECSIZE:=$1
+CALCSIZEEND
+
+DEFINE _ntfs_fixuprec(%flush%, %recsign%)
+  IF (%recsign% = 0) OR ({0x00,4} = %recsign%)
+    $fx_srcofs:={0x04,2}
+    $fx_count:={0x06,2}
+    $fx_minofs:= 0x28 ;INDX
+    IF (%recsign% = 0)
+      $fx_minofs:= 0x2A ;FILE
+    ENDIF
+    IF ($fx_srcofs >= $fx_minofs) AND ($fx_srcofs < 0x1FE) AND ($fx_count > 1)
+      $fx_value:={$fx_srcofs,2}
+      $fx_dstofs:=0x1FE
+      IF (%flush%) OR ({$fx_dstofs,2} = {$fx_srcofs,2})
+        WHILE ($fx_count > 1) AND ($fx_dstofs + 2 <= $RECSIZE)
+          $fx_srcofs:=$fx_srcofs+2
+          $fx_count:=$fx_count-1
+          IF (%flush%)
+            {$fx_srcofs,2}:={$fx_dstofs,2}
+            {$fx_dstofs,2}:=$fx_value
+          ELSE
+            {$fx_dstofs,2}:={$fx_srcofs,2}
+          ENDIF
+          $fx_dstofs:=$fx_dstofs+0x200
+        ENDWHILE
+      ENDIF
+    ENDIF
+  ENDIF
+ENDDEFINE
+
+LOADSTART
+  _ntfs_fixuprec(0, 0)
+LOADEND
+
+FLUSHSTART
+  _ntfs_fixuprec(1, 0)
+FLUSHEND
+
+$OPENFILERECOFS:=0x00
+$63:=TOGGLE:0,x:1
+
+$10:=0     ;default color
+IF {0x00,4}!=0x454c4946
+  $10:=8   ;error color
+ENDIF
+
+IF {0x16,2}&1
+  $13:=0   ;default color
+ELSE
+  $13:=10  ;grayed (removed)
+ENDIF
+
+x:5,c:$10,File #
+IF {0x04,2}>=0x30
+  ({0x2C,4}),x:10,#%10u
+ENDIF
+({0x10,2}),x:22,(%u)
+
+IF $63
+  EOL
+  $XOFS:=5
+  $x:=17
+  _sftl(4, %4c, c:$10, magic ("FILE"))
+  $10:=0
+  $fx_srcofs:={$NEXTOFS,2}
+  IF ($fx_srcofs<0x2A) OR ($fx_srcofs>=$RECSIZE)
+    $10:=8
+  ENDIF
+  _sftl(2, %X, c:$10, fixups offset 0x)
+  $10:=$13
+  IF {$NEXTOFS,2}<2
+    $10:=8
+  ENDIF
+  _sftl(2, %u, fixups count)
+  _sftl(4, %08X, LSNlo 0x)
+  _sftl(4, %08X, LSNHi 0x)
+  _sftl(2, %u, seq. number)
+  _sftl(2, %u, hlink number)
+  _sftl(2, %X, attrs offset)
+  _sftl(2, %X, flags)
+  _sftl(4, %u, used size)
+  _sftl(4, %u, record size)
+  _sftl(4, %u, basefileref)
+  _sftl(2, %X, [0x24] 0x)
+  _sftl(2, %u, basefileref seq.)
+  _sftl(2, %u, next attribute #)
+  IF $fx_srcofs>=0x30
+    _sftl(2, %X, [0x2A] 0x)
+    _sftl(4, %u, file #)
+  ENDIF
+  IF $fx_srcofs>=0x2A AND $fx_srcofs<0x1FE
+    _ift({$fx_srcofs,2}, %04X, fixup 0x)
+  ENDIF
+ELSE
+  ;if grayed
+  IF NOT $10 AND $13
+    $10:=$13
+  ENDIF
+  x:31,"
+  {0x00,4},x:32,c:$10,%4c
+  x:36,"
+ENDIF
+
+;Attributes
+$2:={0x14,2}
+WHILE 1
+  EOL
+  $XOFS:=1
+  $1:=$2
+  IF $1<0x2A OR $1>=$RECSIZE
+    x:4,c:8,ERROR Attribute Offset
+    EOL
+    BREAK
+  ENDIF
+  $OFFSET:=$1
+  $9:={0x00,4}
+  IF $9!=0xFFFFFFFF
+    $63:=TOGGLE:$1,x:0
+  ELSE
+    {0x00,4},x:10,c:10,%8X
+    x:18,h End Mark
+    BREAK
+  ENDIF
+
+  $OPENATTROFS:=$1
+
+  x:4,#
+  $3:={0x0E,2}
+  $3,x:5,%u
+
+  IF NOT $63
+    {0x00,4},x:10,c:$13,%8X
+    x:18,h
+  ENDIF
+  IF NOT $63 AND {0x09,1}
+    ;Attr name
+    $3:={0x0A,2}
+    $4:={0x09,1}<<1
+    x:20,:
+    IF ($3<=0) OR ($3>={0x04,4}) OR ($3>=$RECSIZE-$OFFSET)
+      x:21,c:8,ERROR Attrname Offset
+    ELSEIF ($4>0)
+      {$3,$4},x:21,c:$13,U
+    ENDIF
+    EOL
+  ENDIF
+  $x:=20
+  IF $9=0x10
+    _t($STANDARD_INFORMATION)
+  ELSEIF $9=0x20
+    _t($ATTRIBUTE_LIST)
+  ELSEIF $9=0x30
+    _t($FILE_NAME)
+  ELSEIF $9=0x50
+    _t($SECURITY_DESCRIPTOR)
+  ELSEIF $9=0x60
+    _t($VOLUME_NAME)
+  ELSEIF $9=0x70
+    _t($VOLUME_INFORMATION)
+  ELSEIF $9=0x80
+    _t($DATA)
+  ELSEIF $9=0x90
+    _t($INDEX_ROOT)
+  ELSEIF $9=0xA0
+    _t($INDEX_ALLOCATION)
+  ELSEIF $9=0xB0
+    _t($BITMAP)
+  ELSEIF $9=0x100
+    _t($LOGGED_UTILITY_STREAM)
+  ELSE
+    _t(Other Attribute)
+  ENDIF
+
+  $10:=0             ;color
+  $2:={0x04,4}
+  $5:=$2             ;full attr length
+  IF $2<=0
+    $10:=8           ;error color
+  ELSE
+    $2:=$1+$2        ;next attribute offset
+    IF $2>$RECSIZE
+      $2:=$RECSIZE
+      $5:=$2-$1
+      $10:=8
+    ENDIF
+  ENDIF
+
+  $XOFS:=$XOFS+4
+  $x:=15
+  IF $63
+    EOL
+    _iftl({0, 4}, %X, Attr. type 0x)
+    _iftl({4, 4}, %X, c:$10, Attr. length 0x)
+  ELSEIF $10
+    EOL
+    _iftl({4, 4}, %X, c:$10, Attr. length 0x)
+  ENDIF
+  IF $2<=0 
+    EOL
+    BREAK
+  ENDIF
+
+  IF $63
+    _iftl({0x08,1}, %u, Non-resident)
+    _iftl({0x09,1}, %u, Attrname len)
+    _iftl({0x0A,2}, %X, Attrname ofs 0x)
+    _ift( {0x0C,2}, %04X, Flags 0x)
+    {0x0C:0,2},x:$x+11,F:C-+-
+    {0x0C:14,2},x:$x+14,F:E-S-
+    EOL
+    _iftl({0x0E,2}, %u, Attr. number)
+  ENDIF
+
+  IF NOT {0x08,1}
+    ;resident attribute
+    $10:=0           ;color for offset
+    $11:=0           ;color for size
+
+    $3:={0x14,2}     ;data offset
+    $4:={0x10,4}     ;data size
+
+    IF $3>$5         
+      ;$3>full attr length
+      $3:=$5
+      $4:=0
+      $10:=8
+    ENDIF
+    IF $3+$4>$5
+      $4:=$5-$3
+      $11:=8
+    ENDIF
+
+    IF NOT $63
+      $x:=27
+      IF {0x00,4}=0x80
+        ;$DATA:
+        ;if grayed
+        IF NOT $11 AND $13
+          $11:=$13
+        ENDIF
+        {0x10,4},x:$x,c:$11,%u
+        EOL
+      ELSEIF $11
+        EOL
+        x:0,c:$11,Data Size
+        {0x10,4},x:$x,c:$11,%u
+        EOL
+      ENDIF
+      IF $10
+        EOL
+        _iftl({0x14,2}, %X, c:$10, Data Offset 0x)
+      ENDIF
+    ELSE
+      $x:=15
+      _iftl({0x10,4}, %u, c:$11, Data Size)
+      _iftl({0x14,2}, %X, c:$10, Data Offset 0x)
+      $9:={0x09,1}<<1
+      IF $9
+        $8:={0x0A,2}
+        IF ($8<=0) OR ($8>={0x04,4}) OR ($8>=$RECSIZE-$OFFSET)
+          _iftl(, ERROR Attrname Offset, c:8, Attr. name)
+        ELSE
+          _iftl({$8,$9}, U, Attr. name)
+        ENDIF
+      ENDIF
+    ENDIF
+
+    $NEXTOFS:=$3
+
+    $XOFS:= $XOFS+4
+    $x:=18
+    IF {0x00,4}=0x10
+      ;standard information
+      IF NOT $63
+        $NEXTOFS:=$NEXTOFS+8
+        $4:=$4-8
+        {8},x:$x+16,c:$13,FILETIME
+        EOL
+      ELSE
+        _sftl(8, FILETIME, created)
+        _sftl(8, FILETIME, modified)
+        _sftl(8, FILETIME, changed)
+        _sftl(8, FILETIME, accessed)
+        _sft( 2, F:R-H-S-V-D-A-d-n-t-s-r-c-o-i-e-+-, attrs)
+        {2},x:$x+17,F:+-+-+-+-+-+-+-+-+-+-+-+-D-I-+-+-
+        EOL
+        $4:=$4 - ($NEXTOFS - $3)
+        $3:=$NEXTOFS
+        IF $4>=12
+          _sftl(4, %u, Max versions)
+          _sftl(4, %u, Version)
+          _sftl(4, %u, Class Id)
+          $4:=$4 - ($NEXTOFS - $3)
+          $3:=$NEXTOFS
+          IF $4>=24
+            _sftl(4, %u, Owner Id)
+            _sftl(4, %u, Security Id)
+            _sftl(8, %u, Quota Charged)
+            _sftl(8, %u, USN)
+          ENDIF
+        ENDIF
+      ENDIF
+      $4:=$4 - ($NEXTOFS - $3)
+      $3:=$NEXTOFS
+    ELSEIF {0x00,4}=0x20
+      ;attribute list
+      IF $63
+        $XOFS:= $XOFS-4
+        x:0,attr.type len n.len n.ofs vcn               MFT      (#)   attr# name
+        EOL
+        $8:=$OFFSET
+        $OFFSET:=$OFFSET+$3
+
+        WHILE $4>0
+          IF {0x04,2} 
+            $OPENFILENUM:={0x10,4}
+            {0x00,4},x:0,%8X
+            x:8,h
+          ENDIF
+          $9:=
+          {0x04,2},x:10,%u
+          IF NOT $9
+            BREAK
+          ENDIF
+          {0x06,1},x:15,%u
+          $7:=
+          {0x07,1},x:20,%3X
+          x:23,h
+          {0x08,8},x:26,%d
+          {0x10,6},x:44,%u
+          {0x16,2},x:54,%u
+          {0x18,2},x:59,%u
+          $6:={0x06,1}<<1
+          IF $6
+            {$7,$6},x:65,U
+          ENDIF
+          EOL
+          IF $9>$4
+            $9:=$4
+          ENDIF
+          IF NOT $9
+            BREAK
+          ENDIF
+          $OFFSET:=$OFFSET+$9
+          $3:=$3+$9
+          $4:=$4-$9
+        ENDWHILE
+
+        $OFFSET:=$8
+      ENDIF
+    ELSEIF {0x00,4}=0x30
+      ;file name
+      $OPENFILENUM:={$3,4}
+      IF $63
+        _ift({6}, %u, directory)
+        x:$x+12,(
+        {2},x:$x+13,%u
+        x:$x+18,)
+        EOL
+        _sftl(8, FILETIME, created)
+        _sftl(8, FILETIME, modified)
+        _sftl(8, FILETIME, changed)
+        _sftl(8, FILETIME, accessed)
+        _sftl(8, %u, allocated)
+        _sftl(8, %u, size)
+        _sft( 2, F:R-H-S-V-D-A-d-n-t-s-r-c-o-i-e-+-, attrs)
+        {2},x:$x+17,F:+-+-+-+-+-+-+-+-+-+-+-+-D-I-+-+-
+        EOL
+        _sftl(4, %u, reparse)
+        _sftl(1, %u, name len)
+        _sftl(1, %u, posix)
+        x:0,name
+      ELSE
+        $NEXTOFS:=$NEXTOFS+0x42
+        $x:= $x+5
+      ENDIF
+      $9:={$3+0x40,1}<<1
+      IF $9
+        {$9},x:$x,c:$13,U
+      ENDIF
+      EOL
+      $4:=$4 - ($NEXTOFS - $3)
+      $3:=$NEXTOFS
+    ELSEIF {0x00,4}=0x60
+      EOL
+      $x:=18
+      _iftl({$3,$4}, U, c:$13, Volume Name)
+      $3:=$3+$4
+      $4:=0
+    ELSEIF $63 AND {0x00,4}=0x90 AND {$3,4}=0x30 AND $4>0x20
+      ;INDX ROOT
+      ;IF {0x10,2}=0x10
+      $8:=$OFFSET ;store
+      $OFFSET:=$OFFSET+$3+0x20
+      $3:=$3+0x20
+      $4:=$4-0x20
+
+      $10:=0   ;color
+      $12:=0   ;END MARK
+      $9:=0    ;entry size
+      WHILE $4>=0x10
+        IF $9
+          IF $9>=$4
+            $9:=$4
+            $3:=$3+$9
+            $4:=0
+            BREAK 
+          ENDIF
+          $3:=$3+$9
+          $4:=$4-$9
+          $OFFSET:=$OFFSET+$9
+        ENDIF
+
+        $9:={0x08,2}  ;entry size
+        IF $9&7 OR $9<0x10
+          $9:=8
+          CONTINUE
+        ENDIF
+        IF $9>$4
+          $9:=$4
+        ENDIF
+
+        IF NOT {0x0C:1,1} AND $9<0x54
+          $9:=8
+          CONTINUE
+        ENDIF
+
+        IF NOT {0x0C:1,1} OR NOT $12
+          IF {0x00,4}
+            ;MFT num:
+            $OPENFILENUM:={0x00,4}
+          ENDIF
+          {0x00,6},x:1,c:$10,%u
+          ;MFT seq num
+          x:11,(
+          {0x06,2},x:12,c:$10,%u
+          x:17,)
+        ENDIF
+
+        IF {0x0C:1,1}
+          ;last entry
+          IF NOT $12
+            $12:=1
+            x:19,END MARK
+            EOL
+          ENDIF
+          BREAK
+          $10:=10  ;grayed
+          $7:=8
+          IF {0x0C:0,1}
+            $7:=$7+8
+          ENDIF
+          IF $9!=$7
+            $9:=8
+          ENDIF
+          CONTINUE
+        ENDIF
+        ;{0x0A,2} orig nameattr size
+        ;{0x0C,1} UINT8 flags:
+        ;&0x02 last entry
+        ;&0x01: {entry_size-8,8} -> next sort vcn
+        ;{0x0D,1} !=0 - D
+        ;{0x0E,2} !=0 - U
+        ;{0x10,original nameattr size} = name.data
+ 
+        ;dir MFT num:
+        {0x10,6},x:19,c:10,%u
+        ;dir MFT seq num
+        x:29,(
+        {0x16,2},x:30,c:10,%u
+        x:35,)
+
+        ;creation time:
+        {0x18,8},x:37,w:10,c:10,FILETIME
+        ;last modification time:
+        {0x20,8},x:48,w:10,c:10,FILETIME
+        ;last change time:
+        {0x28,8},x:59,w:10,c:10,FILETIME
+        ;access time:
+        {0x30,8},x:70,w:10,c:10,FILETIME
+        EOL
+        $OPENFILENUM:={0x00,4}
+        ;allocated size:
+        {0x38,8},x:3,c:10,%u
+        ;size:
+        {0x40,8},x:23,c:$10,%u
+        ;{0x48,4}: file attributes
+        ;namelen in bytes:
+        $7:={0x50,1}<<1   
+        ;{0x51,1}: ngt
+        ;name:
+        {0x52,$7},x:42,c:$10,U
+        EOL
+        $7:=(0x59+$7)&~7
+        $11:=$7+8
+        IF {0x0C:0,1}
+          ;sub nodes
+          $7:=$11
+        ENDIF
+        IF $7!=$9 AND $11!=$9
+          $9:=8
+        ENDIF
+      ENDWHILE
+      $OFFSET:=$8  ;restore
+    ENDIF
+
+;$OFFSET = attr offset
+;$3 = offset (relative to $OFFSET)
+;$4 = rest data size
+;$5 = full attr length
+
+    IF $3<$5
+      ;hex output
+      IF $63
+        x:0,Hex
+        EOL
+        {$3,$5-$3},x:0,CXm($4)
+      ENDIF
+      EOL
+    ENDIF
+  ELSE
+    ;non-resident attribute
+    IF NOT $63
+      IF {0x00,4}=0x80
+        ;$DATA
+        {0x30,8},x:27,c:$13,%u
+        EOL
+      ENDIF
+    ELSE
+      $x:=15
+      $NEXTOFS:=0x10
+      _sftl(8, %d, start vcn)
+      _sftl(8, %d, end vcn)
+      _sftl(2, %X, runs offs 0x)
+      _sftl(2, %u, clogblk)
+      _sftl(4, %08X, [0x24] 0x)
+      _sftl(8, %u, allocated)
+      _sftl(8, %u, size)
+      _sftl(8, %u, initialized)
+      IF {0x20,2}>=0x48 AND (NOT {0x09,1} OR {0x0A,2}>=0x48)
+        _sftl(8, %u, compressed)
+      ENDIF
+
+      $3:={0x0A,2}
+      $4:={0x09,1}<<1
+      IF $4
+        _iftl({$3,$4}, U, Attrname)
+      ENDIF
+
+      ;runlist:
+      $3:=$1+{0x20,2}
+      $cluster:=0
+      $vcn:=0
+      WHILE $3<$2
+        $OFFSET:=$3
+        $vcn,x:0,%10d
+        x:11,run0x
+        {0x00,1},x:16,%02X
+        IF NOT {0x00,1}
+          BREAK
+        ENDIF
+        $4:={0:0,4}
+        x:20,len
+        {1,$4},x:25,%d
+        $vcn:=$vcn+{1,$4}
+        $4:=$4+1
+        $9:={0:4,4}
+        x:35,relc0x
+        IF NOT $9
+          x:41,-
+        ELSE
+          ;relative cluster value:
+          $7:=
+          {$4,$9},x:41,%X
+          ;convert to signed value:
+          IF {$4+$9-1,1}&0x80
+            $7:=$7-(1<<($9*8))
+          ENDIF
+          $cluster:=$cluster+$7
+          $cluster,x:50,:%d
+        ENDIF
+        EOL
+        $3:=$3+$4+$9
+      ENDWHILE
+    ENDIF
+  ENDIF
+ENDWHILE
+
+;//////////////////////////////////////////
+[NTFS Attribute List]
+;uncomment guid to use by default:
+guid:{27731dac-f9ab-8526-2ea2-55622acbbe12}
+h: attr.type len n.len n.ofs vcn               MFT      (#)   attr# name
+
+WHILE $OFFSET<$RECSIZE
+  $NEXTOFS:=0
+  {4},x:1,%8X
+  x:9,h
+  $2:={2},x:11,%u
+  IF NOT $2
+    BREAK
+  ENDIF
+  $3:={$NEXTOFS,1}<<1
+  {1},x:16,%u
+  $4:={1},x:21,%3X
+  x:24,h
+  {8},x:27,%d
+  $OPENFILENUM:={0x10,4}
+  {6},x:45,%u
+  {2},x:55,%u
+  {2},x:60,%u
+  IF $3
+    {$4,$3},x:66,U
+  ENDIF
+  EOL
+  IF $2<=0
+    BREAK
+  ENDIF
+  $OFFSET:=$OFFSET+$2
+ENDWHILE
+
+;//////////////////////////////////////////
+[NTFS Dir Entries]
+;uncomment guid to use by default:
+guid:{451037af-3415-2b8f-a8e9-b3b9d72cd284}
+flow:1
+h:     MFT No             Size              Name
+
+CALCSIZESTART
+  $1:=$RECSIZE
+  ;"INDX" header:
+  IF {0x00,4}=0x58444E49
+    $1:=0x18+{0x20,2}
+    IF $1<512
+      $1:=512
+    ENDIF
+  ENDIF
+  $RECSIZE:=$1
+CALCSIZEEND
+
+LOADSTART
+  _ntfs_fixuprec(0, 0x58444E49)
+LOADEND
+
+FLUSHSTART
+  _ntfs_fixuprec(1, 0x58444E49)
+FLUSHEND
+
+$10:=0   ;color
+IF {0x00,4}=0x58444E49
+  $63:=TOGGLE:$OFFSET,x:1
+  $XOFS:=$XOFS+5
+  $x:=17
+  _ift({0x00,4}, %4c, c:$10, magic ("INDX"))
+  IF NOT $63
+    x:30,c:$10,vcn:
+    {0x10,8},x:35,%d
+    EOL
+  ELSE
+    EOL
+    _iftl({0x04,2}, %04X, c:$10, fixups offset 0x)
+    _iftl({0x06,2}, %u, fixups count)
+    _iftl({0x08,4}, %08X, LSNlo 0x)
+    _iftl({0x0C,4}, %08X, LSNHi 0x)
+    _iftl({0x10,8}, %d, c:$10, vcn)
+    _iftl({0x18,2}, %u, c:$10, items offset)
+    _iftl({0x1C,4}, %u, c:$10, usedsize)
+    _iftl({0x20,4}, %u, c:$10, recordsize)
+  ENDIF
+  $XOFS:=$XOFS-5
+  $OFFSET:=0x18+{0x18,2}
+ELSEIF {0x00,4}=0x30 AND {0x10,2}=0x10
+  $OFFSET:=0x20
+ENDIF
+
+$4:=$RECSIZE - $OFFSET
+$12:=0
+      $9:=0    ;entry size
+      WHILE 1
+        IF $9
+          IF $9>=$4
+            $9:=$4
+            $3:=$3+$9
+            $4:=0
+            BREAK 
+          ENDIF
+          $3:=$3+$9
+          $4:=$4-$9
+          $OFFSET:=$OFFSET+$9
+        ENDIF
+
+        IF $4<0x10
+          BREAK
+        ENDIF
+
+        $9:={0x08,2}  ;entry size
+        IF $9&7 OR $9<0x10
+          $9:=8
+          CONTINUE
+        ENDIF
+        IF $9>$4
+          IF $12 
+            $9:=8
+            CONTINUE
+          ENDIF
+          $9:=$4
+        ENDIF
+
+        IF $12 AND ({0x0C:1,1} OR $9<0x54 OR {0x0A,2}<0x42 OR {0x0A,2}>$9)
+          $9:=8
+          CONTINUE
+        ENDIF
+
+        $63:=TOGGLE:$OFFSET,x:1
+
+        IF NOT {0x0C:1,1} OR NOT $12
+          IF {0x00,8}
+            ;MFT num:
+            $OPENFILENUMDATA:={0x00,4}
+            x:4,>
+          ENDIF
+          IF {0x04,2}
+            x:4,x
+            {0x00,6},x:5,c:$10,%X
+          ELSE
+            {0x00,4},x:5,c:$10,%u
+          ENDIF
+          ;MFT seq num
+          x:15,(
+          {0x06,2},x:16,c:$10,%u
+          x:21,)
+        ENDIF
+
+        IF $63
+          =
+          x:5,Entry Size:
+          {0x08,2},x:24,c:$10,%u
+          = 
+          x:5,Attr. Size:
+          {0x0A,2},x:24,c:$10,%u
+          =
+          x:5,Flags:
+          {0x0C,4},x:24,c:$10,%X
+          ;{0x0C,1} flags:
+            ;&0x02 last entry
+            ;&0x01: {entry_size-8,8} -> next sort vcn
+          ;{0x0D,1} !=0 - D
+          ;{0x0E,2} !=0 - U
+          =
+        ENDIF
+
+        IF {0x0C:1,1}
+          $12:=1
+          x:24,END MARK
+          =
+          ;BREAK
+          $7:=0x10
+          IF {0x0C:0,1}
+            IF $63
+              ;sub nodes
+              x:5,Subnode VCN:
+              {$7,8},x:24,c:$10,%d
+              =
+            ENDIF
+            $7:=$7+8
+          ENDIF
+          IF $9!=$7
+            $9:=8
+          ENDIF
+          $10:=10  ;grayed
+          CONTINUE
+        ENDIF
+
+        ;IF ($9<0x54 OR {0x0A,2}<0x42 OR {0x0A,2}>$9)
+        ;  $9:=8
+        ;  =
+        ;  CONTINUE
+        ;ENDIF
+
+        IF $63 
+          $OPENFILENUMDATA:={0x10,4}
+          x:5,Dir MFT Num:     >
+          IF {0x14,2}
+            x:23,x
+            {0x10,6},x:24,c:$10,%X
+          ELSE
+            {0x10,4},x:24,c:$10,%u
+          ENDIF
+          x:35,(
+          {0x16,2},x:36,c:$10,%u
+          x:41,)
+          =
+          x:5,Creation Time:
+          {0x18,8},x:24,c:$10,FILETIME
+          =
+          x:5,Modification Time:
+          {0x20,8},x:24,c:$10,FILETIME
+          =
+          x:5,Change Time:
+          {0x28,8},x:24,c:$10,FILETIME
+          =
+          x:5,Access Time:
+          {0x30,8},x:24,c:$10,FILETIME
+          =
+          x:5,Allocated Size:
+          {0x38,8},x:24,c:$10,%u
+          =
+          x:5,Size:
+          {0x40,8},x:24,c:$10,%u
+          =
+          x:5,Attributes:
+          {0x48,4},x:24,c:$10,%X
+          =
+          x:5,Name Length:
+          {0x50,1},x:24,c:$10,%u
+          =
+          x:5,Name POSIX:
+          {0x51,1},x:24,c:$10,%u
+          =
+          $7:={0x50,1}<<1   
+          x:5,Name:
+          {0x52,$7},x:24,c:$10,U
+        ELSE
+          IF {0x48,4} & 0x10000000
+            x:24,[dir]
+          ELSE  
+            ;size:
+            {0x40,8},x:24,c:$10,%u
+          ENDIF
+          ;namelen in bytes:
+          $7:={0x50,1}<<1   
+          ;{0x51,1}: ngt
+          ;name:
+          {0x52,$7},x:42,c:$10,U
+        ENDIF
+        =
+        $7:=(0x59+$7)&~7
+        $11:=$7+8
+        IF {0x0C:0,1}
+          ;IF $63
+            ;sub nodes
+            x:5,Subnode VCN:
+            {$7,8},x:24,c:$10,%d
+            =
+          ;ENDIF
+          $7:=$11
+        ENDIF
+        IF $7!=$9 AND $11!=$9
+          $9:=8
+        ENDIF
+      ENDWHILE
+
+;//////////////////////////////////////////
+[ExtFS Superblock]
+guid:{e753e591-7808-eb38-a7d0-42cace180382}
+o:1
+$RECSIZE:=1024
+$XOFS:=1
+$x:=24
+
+DEFINE _uuid(%1%)
+  _sft(4, %08X, %1%)
+  x:$x+8,-
+  {2},x:$x+9,%04X
+  x:$x+13,-
+  {2},x:$x+14,%04X
+  x:$x+18,-
+  {2},x:$x+19,%.2cX
+  x:$x+23,-
+  {6},x:$x+24,%.6cX
+ENDDEFINE _uuid
+
+_sftl(4, %u, s_inodes_count)
+_sftl(4, %u, s_blocks_count_lo)
+_sftl(4, %u, s_r_blocks_count_lo)
+_sftl(4, %u, _free_blocks_count_lo)
+_sftl(4, %u, s_free_inodes_count)
+_sftl(4, %u, s_first_data_block)
+_sftl(4, %u, s_log_block_size)
+_sftl(4, %u, s_log_cluster_size)
+_sftl(4, %u, s_blocks_per_group)
+_sftl(4, %u, s_obso_frags_per_group)
+_sftl(4, %u, s_inodes_per_group)
+_sftl(4, UNIXDATE, s_mtime)
+_sftl(4, UNIXDATE, s_wtime)
+_sftl(2, %u, s_mnt_count)
+_sftl(2, %u, s_max_mnt_count)
+_sftl(2, %2cX, s_magic (53EF))
+_sftl(2, %u, s_state)
+_sftl(2, %u, s_errors)
+_sftl(2, %u, s_minor_rev_level)
+_sftl(4, UNIXDATE, s_lastcheck)
+_sftl(4, %u, s_checkinterval)
+_sftl(4, %u, s_creator_os)
+$revision:=
+_sftl(4, %u, s_rev_level)
+_sftl(2, %u, s_def_resuid)
+_sftl(2, %u, s_def_resgid)
+
+IF $revision
+  _sftl(4, %u, s_first_ino)
+  _sftl(2, %u, s_inode_size)
+  _sftl(2, %u, s_block_group_nr#)
+  _sftl(4, %X, s_feature_compat 0x)
+  ;0x1	Directory prealloc
+  ;0x2	"imagic inodes"
+  ;0x4	journal
+  ;0x8	extended attributes
+  ;0x10	reserved GDT blocks for filesystem expansion
+  ;0x20	directory indices
+  ;0x40 "Lazy BG"
+  ;0x80 "Exclude inode"
+  _sftl(4, %X, s_feature_incompat 0x)
+  ;0x1	Compression.
+  ;0x2	Directory entries record the file type
+  ;0x4	FS needs recovery
+  ;0x8	FS has a separate journal device
+  ;0x10	Meta block groups
+  ;0x40	file extents
+  ;0x80	2^64 blocks
+  ;0x200 Flexible block groups
+  ;0x400 Inodes for large extended attributes
+  ;0x1000 Data in directory entry
+  _sftl(4, %X, s_feature_ro_compat 0x)
+  ;0x1	Sparse superblocks.
+  ;0x2	files greater than 2GiB.
+  ;0x8	file sizes are in blocks, not 512-byte sectors
+  ;0x10	Group descriptor checksums
+  ;0x20	no 32,000 subdirectory limit
+  ;0x40	large inodes
+  ;0x80	FS has a snapshot.
+  _uuid(s_uuid)
+  ;UUID of the volume
+  EOL
+  _sftl(16, u, s_volume_name)
+  ;_sftl(64, %64c, s_last_mounted)
+  $NEXTOFS:=$NEXTOFS+64
+  _sftl(4, %u, s_algorithm_usage_bitmap)
+  ;compression
+  ;_sftl(1, %u, s_prealloc_blocks)
+  ;_sftl(1, %u, s_prealloc_dir_blocks)
+  ;_sftl(2, %u, s_reserved_gdt_blocks)
+
+  $NEXTOFS:=$NEXTOFS+4
+
+  IF {0x5C:2,1}
+    ;has journal
+    _uuid(s_journal_uuid)
+    EOL
+    _sftl(4, %u, s_journal_inum)
+    _sftl(4, %u, s_journal_dev)
+  ENDIF
+  ;_sftl(4, %u, s_last_orphan)
+  ;_sftl(16, %16cX, s_hash_seed)
+  ;_sftl(1, %u, s_def_hash_version)
+  ;_sftl(1, %u, s_jnl_backup_type)
+  $NEXTOFS:=$NEXTOFS+22
+  _sftl(2, %u, s_desc_size)
+  ;_sftl(4, %u, s_default_mount_opts)
+  $NEXTOFS:=$NEXTOFS+4
+  _sftl(4, %u, s_first_meta_bg)
+  _sftl(4, UNIXDATE, s_mkfs_time)
+  ;_sftl(68, CXm, s_jnl_blocks 4x17)
+  $NEXTOFS:=$NEXTOFS+68
+  ;64bit support valid if EXT4_FEATURE_COMPAT_64BIT
+  _sftl(4, %X, s_blocks_count_hi 0x)
+  _sftl(4, %X, s_r_blocks_count_hi 0x)
+  _sftl(4, %X, s_free_blocks_count_hi 0x)
+  _sftl(2, %u, s_min_extra_isize)
+  _sftl(2, %u, s_want_extra_isize)
+  _sftl(4, %X, s_flags 0x)
+  ;0x0001	Signed directory hash in use.
+  ;0x0002	Unsigned directory hash in use.
+  ;0x0004	To test development code.
+  _sftl(2, %u, s_raid_stride)
+  _sftl(2, %u, s_mmp_interval)
+  _sftl(2, %u, s_mmp_block)
+  _sftl(4, %u, s_raid_stripe_width)
+  _sftl(1, %u, s_log_groups_per_flex)
+  ;0x175	__u8	s_reserved_char_pad	
+  ;0x176	__le16	s_reserved_pad	
+  $NEXTOFS:=$NEXTOFS+3
+  _sftl(8, %u, s_kbytes_written)
+  ;0x180	__le32	s_snapshot_inum
+  ;0x184	__le32	s_snapshot_id
+  ;0x188	__le64	s_snapshot_r_blocks_count
+  ;0x190	__le32	s_snapshot_list
+  ;0x194	__le32	s_error_count
+  ;0x198	__le32	s_first_error_time
+  ;0x19C	__le32	s_first_error_ino
+  ;0x1A0	__le64	s_first_error_block
+  ;0x1A8	__u8	s_first_error_func[32]
+  ;0x1C8	__le32	s_first_error_line
+  ;0x1CC	__le32	s_last_error_time
+  ;0x1D0	__le32	s_last_error_ino
+  ;0x1D4	__le32	s_last_error_line
+  ;0x1D8	__le64	s_last_error_block
+  ;0x1E0	__u8	s_last_error_func[32]
+  ;0x200	__u8	s_mount_opts[64]
+  ;0x240	__le32	s_reserved[108]
+  _sftl(4, %08X, s_checksum 0x)
+ENDIF
+
+;//////////////////////////////////////////
+[extFS Group Descriptors x32]
+guid:{f377e6df-e06c-7909-922e-90d58c09259d}
+flow:1
+h: blk_bitmap ino_bitmap ino_table freblk frino usedir flag nusei csum
+
+WHILE $OFFSET+32<=$RECSIZE
+  {0x0,4},x:1,%10u
+  {0x4,4},x:12,%10u
+  {0x8,4},x:23,%10u
+  {0xC,2},x:34,%5u
+  {0xE,2},x:40,%5u
+  {0x10,2},x:46,%5u
+  {0x12,2},x:52,%4X
+  x:56,h
+  ;{0x14,4},x:58,%10u
+  ;{0x18,2},x:58,%4X
+  ;x:62,h
+  ;{0x1A,2},x:64,%4X
+  ;x:68,h
+  {0x1C,2},x:58,%5u
+  {0x1E,2},x:64,%4X
+  x:68,h
+  =
+  $OFFSET:=$OFFSET+32
+ENDWHILE
+
+;//////////////////////////////////////////
+[extFS Group Descriptors x64]
+guid:{d3f3136d-fe00-3ffd-5cfb-eef922c334a3}
+flow:1
+h:        blk_bitmap        ino_bitmap         ino_table  freeblk  freeino   usedir    unuse flags chksum
+IF $1<=0
+  ;desriptor size not given
+  $1:=64
+ENDIF
+
+WHILE $OFFSET+$1<=$RECSIZE
+  {0x0,4;0x20,4},x:0,%18u
+  {0x4,4;0x24,4},x:18,%18u
+  {0x8,4;0x28,4},x:36,%18u
+  {0xC,2;0x2C,2},x:54,%9u
+  {0xE,2;0x2E,2},x:63,%9u
+  {0x10,2;0x30,2},x:72,%9u
+  {0x1C,2;0x32,2},x:81,%9u
+  {0x12,2},x:91,%4X
+  x:95,h
+  {0x1E,2},x:97,%4X
+  =
+  $OFFSET:=$OFFSET+$1
+ENDWHILE
+
+;//////////////////////////////////////////
+[extFS Inodes Entries]
+guid:{e39b26a7-c80d-8db3-adac-4251831fd053}      
+flow:1
+
+IF $1<=0
+  ;inode size not given
+  $1:=128
+ENDIF
+;$64=inode number (if given)
+
+WHILE $OFFSET+$1<=$RECSIZE
+  $OPENFILERECOFS:=$OFFSET
+  $63:=TOGGLE:$OFFSET,x:1
+  x:5,Inode ====== #
+  $64,x:19,%u =======
+  $OFFSET,x:29,(+%u) =====
+  x:39,====================
+  IF $64>0
+    $64:=$64+1
+  ENDIF
+  =
+  $OPENFILERECOFS:=$OFFSET
+  x:5,i_mode:
+  {0x0,2},x:19,%X
+  x:23,h:
+  $mode:={0x0:12,4}
+  IF $mode=0x1
+    x:25,FIFO
+  ELSEIF $mode=0x2
+    x:25,CHR
+  ELSEIF $mode=0x4
+    x:25,DIR
+  ELSEIF $mode=0x6
+    x:25,BLK
+  ELSEIF $mode=0x8
+    x:25,FILE
+  ELSEIF $mode=0xA
+    x:25,LINK
+  ELSEIF $mode=0xC
+    x:25,SOCK
+  ENDIF
+  x:30,Oth:
+  {0x0:0,3},x:34,F:X-W-R-
+  x:38,Grp:
+  {0x0:3,3},x:42,F:X-W-R-
+  x:46,Own:
+  {0x0:6,3},x:50,F:X-W-R-
+  x:54,StB:
+  {0x0:9,1},x:58,F:+-
+  x:60,Gid:
+  {0x0:10,1},x:64,F:+-
+  x:66,Uid:
+  {0x0:11,1},x:70,F:+-
+  =
+  IF $63
+    x:5,i_uid:
+    {0x2,2},x:19,%u
+    =
+  ENDIF
+  x:5,i_size_lo:
+  {0x4,4},x:19,%u
+  =
+  IF $63
+    x:5,i_atime:
+    {0x8,4},x:19,UNIXDATE
+    =
+    x:5,i_ctime:
+    {0xC,4},x:19,UNIXDATE
+    =
+  ENDIF
+  x:5,i_mtime:
+  {0x10,4},x:19,UNIXDATE
+  =
+  IF $63
+    x:5,i_dtime:
+    {0x14,4},x:19,UNIXDATE
+    =
+    x:5,i_gid:
+    {0x18,2},x:19,%u
+    =
+    x:5,i_links_count:
+    {0x1A,2},x:19,%u
+    =
+    x:5,i_blocks_lo:
+    {0x1C,4},x:19,%u
+    =
+    x:5,i_flags:
+    {0x20,4},x:19,%08X
+    x:27,h
+
+    IF {0x21:4,1}
+      x:30,INDEX
+    ENDIF
+    IF {0x21:5,1}
+      x:36,IMAGIC
+    ENDIF
+    IF {0x22:1,1}
+      x:43,TOPDIR
+    ENDIF
+    IF {0x22:2,1}
+      x:50,HUGE
+    ENDIF
+    IF {0x22:3,1}
+      x:55,EXTENT
+    ENDIF
+    IF {0x22:5,1}
+      x:62,EA
+    ENDIF
+    IF {0x23:4,1}
+      x:63,INLINE
+    ENDIF
+ 
+    ;0x20    EXT4_APPEND_FL
+    ;0x1000  EXT4_INDEX_FL
+    ;0x2000  EXT4_IMAGIC_FL
+    ;0x4000  EXT4_JOURNAL_DATA_F
+    ;0x20000 EXT4_TOPDIR_FL
+    ;0x40000 EXT4_HUGE_FILE_FL
+    ;0x80000 EXT4_EXTENTS_FL
+    ;0x200000 EXT4_EA_INODE_FL
+    ;0x10000000 EXT4_INLINE_DATA_FL
+    =
+
+    x:5,l_i_version:
+    {0x24,4},x:19,%u
+    =
+
+    $3:=1        
+    ;extents        
+    IF {0x22:3,1}
+      ;extents header
+      $4:=$OFFSET+0x28
+      ;save offset:
+      $2:=$OFFSET
+      $OFFSET:=$4
+  
+      x:2,eh_magic (F30A):
+      {0x00,2},x:19,%04X
+      x:23,h
+      =
+      x:2,eh_entries:
+      {0x02,2},x:19,%u
+      =
+      x:2,eh_max:
+      {0x04,2},x:19,%u
+      =
+      x:2,eh_depth:
+      {0x06,2},x:19,%u
+      =
+      x:2,eh_generation:
+      {0x08,4},x:19,%X
+      x:27,h
+      =
+
+      ;extents:
+      $3:={0x06,2}
+      $4:=$4+0x0C
+      $5:={0x02,2}
+      IF $5>4
+        $5:=4
+      ENDIF
+
+      WHILE $5>0
+        $OFFSET:=$4
+        IF NOT $3
+          ;extent
+          x:3,ee_block:
+          {0x00,4},x:19,%u
+    
+          x:30,ee_len:
+          {0x04,2},x:41,%u
+        
+          $OPENCLUSTER:={0x08,4;0x06,2}
+          x:49,ee_start:
+          {0x08,4;0x06,2},x:60,%u
+          =
+        ELSE
+          ;inode
+          x:3,ei_block:
+          {0x00,4},x:19,%u
+      
+          $OPENTEMPLATE:='{30747da5-cdcb-b665-e094-12c9cdf32a26}'
+          $OPENCLUSTER:={0x04,4;0x08,2}
+          x:30,ei_leaf:
+          {0x04,4;0x08,2},x:41,%u
+          =
+        ENDIF
+  
+        $4:=$4+12
+        $5:=$5-1
+      ENDWHILE
+
+      $OFFSET:=$2          ;restore offset
+      $3:=0                ;no blocks
+    ENDIF
+    IF $3
+      IF {0x0:12,4}=0xA
+        ;link
+        IF {0x4,4}<=60
+          ;no blocks
+          $3:=0
+        ENDIF
+      ENDIF
+      IF {0x23:4,1}
+        ;inline data
+        $3:=0            
+      ENDIF
+      IF NOT $3
+        ;inline data
+        $4:={0x4,4}
+        IF $4>60
+          $4:=60
+        ENDIF
+        IF $4>0
+          x:5,i_block:
+          IF {0x0:12,4}=0xA
+            ;link
+            {0x28,$4},x:19,C
+          ELSE
+            ;data
+            {0x28,$4},x:19,T
+          ENDIF
+          =
+        ENDIF
+      ENDIF    
+    ENDIF
+    IF $3
+      ;blocks:
+      $NEXTOFS:=0x28
+      $OPENCLUSTER:={0x28,4}
+      x:5,i_block:
+      $i:=0
+      WHILE $i<3
+        $i:=$i+1
+        $j:=0
+        $x:=19
+        WHILE $j<5 
+          $j:=$j+1
+          {4},x:$x,%u
+          $x:=$x+11
+        ENDWHILE
+        =
+      ENDWHILE
+    ENDIF
+    =
+    x:5,i_generation:
+    {0x64,4},x:19,%u
+    =
+    x:5,i_file_acl_lo:
+    {0x68,4},x:19,%u
+    =
+  ENDIF
+  x:5,i_size_high:
+  {0x6C,4},x:19,%X
+  x:27,h
+  =
+  IF $63
+    ;0x70	__le32	i_obso_faddr
+    ;=
+    ;0x0	__le16	l_i_blocks_high
+    x:5,l_i_blocks_hi:
+    {0x74,2},x:19,%X
+    x:23,h
+    =
+    ;0x2	__le16	l_i_file_acl_high
+    x:5,l_i_file_aclh:
+    {0x76,2},x:19,%X
+    x:23,h
+    =
+    ;0x4	__le16	l_i_uid_high
+    x:5,l_i_uid_high:
+    {0x78,2},x:19,%X
+    x:23,h
+    =
+    ;0x6	__le16	l_i_gid_high
+    x:5,l_i_gid_high:
+    {0x7A,2},x:19,%X
+    x:23,h
+    =
+    ;0x8	__le16	l_i_checksum_lo
+    x:5,l_i_checksuml:
+    {0x7C,2},x:19,%X
+    x:23,h
+    =
+    ;0xA	__le16	l_i_reserved
+    x:5,l_i_reserved:
+    {0x7E,2},x:19,%X
+    x:23,h
+    =
+    IF $1>128
+      x:5,i_extra_isize:
+      {0x80,2},x:19,%u
+      =
+      x:5,i_pad1:
+      {0x82,2},x:19,%u
+      =
+      x:5,i_ctime_extra:
+      {0x84,4},x:19,%u
+      =
+      x:5,i_mtime_extra:
+      {0x88,4},x:19,%u
+      =
+      x:5,i_atime_extra:
+      {0x8C,4},x:19,%u
+      =
+      x:5,i_crtime:
+      {0x90,4},x:19,UNIXDATE
+      =
+      x:5,i_crtime_extra:
+      {0x94,4},x:19,%u
+      =
+      x:5,i_version_hi:
+      {0x98,4},x:19,%X
+      x:27,h
+      =
+    ENDIF
+  ENDIF
+  IF $OFFSET+$1>=$RECSIZE
+    BREAK
+  ENDIF
+  $OFFSET:=$OFFSET+$1
+ENDWHILE
+
+;//////////////////////////////////////////
+[extFS Extent List]
+guid:{30747da5-cdcb-b665-e094-12c9cdf32a26}
+
+CALCSIZESTART
+  IF {0x00,2}=0xF30A
+    $1:= (0x0C + {0x02,2}*12 + 511) & ~511
+    IF $1>0x10000
+      $1:=0x10000
+    ENDIF
+    IF $RECSIZE<$1
+      $RECSIZE:=$1
+    ENDIF
+  ENDIF
+CALCSIZEEND
+
+  ;extents header
+  $4:=0x00
+  $OFFSET:=$4
+
+  x:2,eh_magic (F30A):
+  {0x00,2},x:19,%04X
+  x:23,h
+  =
+  x:2,eh_entries:
+  {0x02,2},x:19,%u
+  =
+  x:2,eh_max:
+  {0x04,2},x:19,%u
+  =
+  x:2,eh_depth:
+  {0x06,2},x:19,%u
+  =
+  x:2,eh_generation:
+  {0x08,4},x:19,%X
+  x:27,h
+  
+  ;extents:
+  $3:={0x06,2}
+  $4:=$4+0x0C
+  $5:={0x02,2}
+;  IF $5>4
+;    $5:=4
+;  ENDIF
+WHILE ($5>0) AND ($4+12<=$RECSIZE)
+  $OFFSET:=$4
+  IF NOT $3
+    ;extent
+    =
+    x:3,ee_block:
+    {0x00,4},x:19,%u
+
+    x:30,ee_len:
+    {0x04,2},x:41,%u
+    
+    $OPENCLUSTER:={0x08,4;0x06,2}
+    x:49,ee_start:
+    {0x08,4;0x06,2},x:60,%u
+  ELSE
+    ;inode
+    =
+    x:3,ei_block:
+    {0x00,4},x:19,%u
+    
+    $OPENTEMPLATE:='{30747da5-cdcb-b665-e094-12c9cdf32a26}'
+    $OPENCLUSTER:={0x04,4;0x08,2}
+    x:30,ei_leaf:
+    {0x04,4;0x08,2},x:41,%u
+  ENDIF
+
+  $4:=$4+12
+  $5:=$5-1
+ENDWHILE
+
+;//////////////////////////////////////////
+[extFS Directory Entries]
+guid:{8a4dbd31-8a3a-0aa6-b095-58c6f3416fed}
+flow:1
+h: Inode    ESize  NmLen  Type  Name
+
+CALCSIZESTART
+  IF $1<=0
+    ;recsize is not given
+    IF $RECSIZE<4096
+      $RECSIZE:=4096
+    ENDIF
+  ENDIF
+CALCSIZEEND
+
+;removed:
+$4:=0
+;index hashes:
+$5:=0
+$6:=0
+
+WHILE $OFFSET+0x08<=$RECSIZE
+  $10:=0
+  $2:={0x06,1}
+  $3:=($2+11)&0xFC
+
+  IF $OFFSET=0 AND {0x04,5}=\x0C\x00\x01\x02\x2E
+    $5:=1
+  ENDIF
+  IF $OFFSET=0x0C AND {0x06,4}!=\x02\x02\x2E\x2E
+    $5:=0
+  ENDIF
+  IF $5 AND $OFFSET=0x18 AND {0x0,4}=0 AND {0x07,1}=0 AND $4>=0x28 AND {0xA,2}>0
+    ;dx_root
+    $63:=TOGGLE:0,x:1
+    x:5,dx_root (index hashes)
+    =
+    IF $63
+      x:9,reserved_zero
+      {0x00,4},x:28,%u
+      =
+      x:9,hash_version
+      {0x04,1},x:28,%u
+      =
+      x:9,info_length (8)
+      {0x05,1},x:28,%u
+      =
+      x:9,indirect_levels
+      {0x06,1},x:28,%u
+      =
+      x:9,unused_flags
+      {0x07,1},x:28,%u
+      =
+      x:9,limit
+      {0x08,2},x:28,%u
+      =
+      x:9,count
+      {0x0A,2},x:28,%u
+      =
+      x:38,block:
+      {0x0C,4},x:58,%u
+      =
+    ENDIF
+
+    $6:={0x0A,2}-1
+    $OFFSET:=0x28
+  ENDIF
+
+  IF $OFFSET=0 AND {0x0,4}=0 AND {0x6,2}=0 AND {0xA,2}>0
+    ;dx_node
+    $5:=1
+
+      x:1,dx_node fake.inode (0)
+      {0x0,4},x:28,%u
+      =
+      x:9,fake.rec_len
+      {0x4,2},x:28,%u
+      =
+      x:9,name_len (0)
+      {0x6,1},x:28,%u
+      =
+      x:9,file_type (0)
+      {0x7,1},x:28,%u
+      =
+      x:9,limit
+      {0x8,2},x:28,%u
+      =
+      x:9,count
+      {0xA,2},x:28,%u
+      =
+    IF {0xA,2}>1
+      $63:=TOGGLE:0,x:5
+      x:9,hashes
+    ENDIF
+
+      x:38,block:
+      {0xC,4},x:58,%u
+      =
+
+    $4:={0x4,2}
+    $6:={0xA,2}-1
+    $OFFSET:=0x10
+  ENDIF
+
+  IF $6
+    WHILE 1
+      IF $63
+        x:9,hash:
+        {0x00,4},x:28,c:$10,%08X
+        x:38,block:
+        {0x04,4},x:58,c:$10,%u
+        =
+      ENDIF
+      $6:=$6-1
+      IF NOT $6
+        BREAK
+      ENDIF
+      $OFFSET:=$OFFSET+8
+      IF $OFFSET>=$4
+        $OFFSET:=$4
+        $4:=0
+        BREAK
+      ENDIF
+    ENDWHILE
+    $6:=0
+  ENDIF
+
+  IF $4
+    IF NOT {0x07,1} OR {0x07,1}>7 OR {0x04:0,2}>0 OR {0x04,2}<8
+      $2:=0
+    ENDIF
+    $5:=$2+8
+    IF $5>{0x04,2}
+      $2:=0
+    ENDIF
+    IF $RECSIZE>0
+      $5:=$OFFSET+{0x04,2}
+      IF $5>$RECSIZE
+        $2:=0
+      ENDIF
+    ENDIF
+    IF NOT $2
+      $3:=$OFFSET+4
+      IF $3>=$4
+        $4:=0
+      ENDIF
+      IF $3>=$RECSIZE
+        BREAK
+      ENDIF
+      $OFFSET:=$3
+      CONTINUE
+    ENDIF
+  ENDIF
+
+  IF NOT $4 AND {0x00,6}=0
+    BREAK
+  ENDIF
+
+  $OPENFILENUMDATA:={0x00,4}
+  $10:=0
+  IF $4
+    $10:=10 ;grayed
+  ENDIF
+  {0x00,4},x:1,c:$10,%u
+  $1:={0x04,2},x:12,c:$10,%u
+  $2:={0x06,1},x:19,c:$10,%u
+  {0x07,1},x:25,c:$10,%X
+  ;0x0	Unknown.
+  ;0x1	Regular file.
+  ;0x2	Directory.
+  ;0x3	Character device file.
+  ;0x4	Block device file.
+  ;0x5	FIFO.
+  ;0x6	Socket.
+  ;0x7	Symbolic link.
+  IF {0x07,1}=2
+    x:30,>
+  ENDIF
+  IF $4
+    x:29,x
+  ENDIF
+
+  {0x08,$2},x:31,c:$10,u
+  $3,x:81,c:$10,%u
+  =
+  IF $3<$1
+    IF NOT $4
+      $4:=$OFFSET+$1
+    ENDIF
+  ELSE
+    $3:=$1
+  ENDIF
+  IF $3<4
+    $3:=4
+  ENDIF
+  $3:=$OFFSET+$3
+  IF $4 AND $3>=$4
+    $3:=$4
+    $4:=0
+  ENDIF
+  IF $3>=$RECSIZE
+    BREAK
+  ENDIF
+  $OFFSET:=$3
+ENDWHILE
+
+;//////////////////////////////////////////
+[extFS HTree Root (dx_root)]
+fuse:0
+h: Inode    ESize  NmLen  Type  Name
+
+$OPENFILENUM:={0x00,4}
+{0x00,4},x:1,%u
+$1:={0x04,2},x:12,%u
+$2:={0x06,1},x:19,%u
+{0x07,1},x:25,%X
+{0x08,$2},x:30,C
+=
+$OFFSET:=$1
+$OPENFILENUM:={0x00,4}
+{0x00,4},x:1,%u
+$2:={0x04,2},x:12,%u
+$3:={0x06,1},x:19,%u
+{0x07,1},x:25,%X
+{0x08,$3},x:30,C
+=
+$OFFSET:=0
+$XOFS:=1
+$x:=19
+$NEXTOFS:=0x18
+_iftl({4}, %u, reserved_zero)
+_iftl({1}, %u, hash_version)
+_iftl({1}, %u, info_length (8))
+_iftl({1}, %u, indirect_levels)
+_iftl({1}, %u, unused_flags)
+_iftl({2}, %u, limit)
+$2:=
+_iftl({2}, %u, count)
+_iftl({4}, %u, block)
+
+WHILE $OFFSET+8<=$RECSIZE
+  _ift({4}, %08X, hash)
+  $XOFS:=$XOFS+29
+  _iftl({4}, %u, block)
+  $XOFS:=$XOFS-29
+  $2:=$2-1
+  IF $2<=1
+    BREAK
+  ENDIF
+ENDWHILE
+
+;//////////////////////////////////////////
+[extFS HTree Node (dx_node)]
+fuse:0
+$XOFS:=1
+$x:=19
+_iftl({4}, %u, fake.inode (0))
+_iftl({2}, %u, fake.rec_len)
+_iftl({1}, %u, name_len (0))
+_iftl({1}, %u, file_type (0))
+_iftl({2}, %u, limit)
+$2:=
+_iftl({2}, %u, count)
+_iftl({4}, %u, block)
+
+WHILE $OFFSET+8<=$RECSIZE
+  _ift({4}, %08X, hash)
+  $XOFS:=$XOFS+29
+  _iftl({4}, %u, block)
+  $XOFS:=$XOFS-29
+  $2:=$2-1
+  IF $2<=0
+    BREAK
+  ENDIF
+ENDWHILE
+
+;//////////////////////////////////////////
+[exFAT Boot Sector]
+guid:{69aff35a-367b-8d25-22d2-2dfb6664ad4f}
+$XOFS:=1
+$x:=24
+;{0x00,3}BS_jmpBoot        {0xEB7690}
+x:24,"
+x:33,"
+_iftl({0x03,8}, %-8c, OEMName (EXFAT))
+;{0x0b,43}Zeroed
+_iftl({0x40,8}, %u, PartitionOffset)
+_iftl({0x48,8}, %u, VolumeLength)
+_iftl({0x50,4}, %u, FATOffset)
+_iftl({0x54,4}, %u, FATLength)
+_iftl({0x58,4}, %u, ClusterHeapOffset)
+_iftl({0x5C,4}, %u, ClusterCount)
+_iftl({0x60,4}, %u, RootDirectoryFirstCluster)
+_iftl({0x64,4}, %08X, VolumeSerialNumber 0x)
+_ift({0x69,1}, %02X, FileSystemRevision)
+x:27,.
+{0x68,1},x:28,%02X
+EOL
+_ift({0x6A,2}, %04X, VolumeFlags 0x)
+{0x6A:0,3},x:32,F:21DCFN
+;Active FAT     0  1 0 – 1st, 1 – 2nd
+;Volume Dirty   1  1 0 – Clean, 1 - Dirty
+;Media Failure  2  1 0 – No Failures, 1 – Failures Reported
+;Clear to Zero  3  1 No Meaning
+;Reserved       4 12
+EOL
+_iftl({0x6C,1}, %u, BytesPerSectorPow)
+_iftl({0x6D,1}, %u, SectorsPerClusterPow)
+_iftl({0x6E,1}, %u, NumberOfFATS)
+_iftl({0x6F,1}, %02X, DriveSelect 0x)
+_iftl({0x6F,1}, %u, PercentInUse)
+;{0x71,7}Reserved
+;{0x78,390}BS_Code
+_iftl({0x1FE,2}, %04X, BS_ExtSign (0xAA55))
+
+;//////////////////////////////////////////
+[exFAT Dir Entries]
+guid:{4496390b-27f1-a0f9-35bd-e144918e7ed0}
+flow:1
+WHILE $OFFSET+32<=$RECSIZE
+  $10:=0
+  IF NOT {0x00:7,1}
+    $10:=10 ;grayed
+  ENDIF
+  {0x00,1},x:1,c:$10,%02X
+  x:3,h
+  IF NOT {0x00:7,1}
+    x:4,c:$10,x
+  ENDIF
+  IF {0x00:0,7}=1
+    ;BITMAP
+    $OPENFILERECOFS:=$OFFSET
+    x:5,BITMAP  #:
+    {0x01,1},x:15,c:$10,F:21
+    x:47,cl:
+    {0x14,4},x:50,c:$10,%u
+    x:61,size:
+    {0x18,8},x:67,c:$10,%u
+  ELSEIF {0x00:0,7}=2
+    ;UPCASE
+    $OPENFILERECOFS:=$OFFSET
+    x:5,c:$10,UPCASE:
+    x:12,CS:
+    {0x04,4},x:15,c:$10,%08X
+    x:23,c:$10,h
+    x:47,cl:
+    {0x14,4},x:50,c:$10,%u
+    x:61,size:
+    {0x18,8},x:67,c:$10,%u
+  ELSEIF {0x00:0,7}=3
+    ;VOLLABEL
+    x:5,LABEL len:
+    {0x01,1},x:15,c:$10,%u
+    x:20,name:
+    $1:={0x01,1}<<1
+    IF $1>30
+      $1:=30
+    ENDIF
+    {0x02,$1},x:25,c:$10,U
+  ENDIF
+  IF {0x00:0,7}=5
+    $OPENFILERECOFS:=$OFFSET
+    x:5,#
+    {0x01,1},x:6,c:$10,%u
+    x:10,csum:
+    {0x02,2},x:15,c:$10,%04X
+    x:19,c:$10,h
+    x:29,attrs:
+    {0x04,1},x:35,c:$10,F:R-H-S-V-D-A-+-+-
+
+    ;Creation Time:
+    ;{0x0A:9,7},x:64,-%03u
+    ;x:67,-
+    ;{0x0A:5,4},x:68,-%02u
+    ;x:70,-
+    ;{0x0A:0,5},x:71,-%02u
+    ;{0x08:11+5},x:74,-%02u
+    ;x:76,:
+    ;{0x08:5,6},x:77,-%02u
+    ;x:79,:
+    ;{0x08:0,5}<<1,x:80,-%02u
+    ;x:82,.
+    ;{0x0D,1},x:83,%02u
+  ENDIF
+  IF {0x00:0,7}=0x40
+    IF $OFFSET>=32
+      $OPENFILERECOFS:=$OFFSET-32
+    ELSE
+      $OPENFILERECOFS:=$OFFSET
+    ENDIF
+    x:5,F
+    {0x01,1},x:6,c:$10,F:+-+-
+    x:10,nlen:
+    {0x03,1},x:15,c:$10,%u
+    x:18,hash:
+    {0x04,2},x:23,c:$10,%04X
+    x:27,h
+    x:29,size:
+    {0x08,8},x:34,c:$10,%u
+    x:47,cl:
+    {0x14,4},x:50,c:$10,%u
+    x:61,alloc:
+    {0x18,8},x:67,c:$10,%u
+  ENDIF
+  IF {0x00:0,7}=0x41
+    x:5,F
+    {0x01,1},x:6,c:$10,F:+-+-
+    x:10,name:
+    {0x02,30},x:15,c:$10,U
+  ENDIF
+  =
+  $OFFSET:=$OFFSET+32
+ENDWHILE
+
+;//////////////////////////////////////////
+[HFS Volume Header]
+guid:{f40f1a35-fe5d-19c5-3e94-a10992273292}
+big_endian:1
+o:1
+
+$XOFS:=1
+$x:=24
+
+_iftl({0x00,2}, C, signature)
+_iftl({0x02,2}, %u, version)
+_iftl({0x04,4}, %08X, attributes 0x)
+_iftl({0x08,4}, C, lastMountedVersion)
+_iftl({0x0C,4}, %u, journalInfoBlock)
+;    UInt32              createDate;
+;    UInt32              modifyDate;
+;    UInt32              backupDate;
+;    UInt32              checkedDate;
+_iftl({0x20,4}, %u, fileCount)
+_iftl({0x24,4}, %u, folderCount)
+_iftl({0x28,4}, %u, blockSize)
+_iftl({0x2C,4}, %u, totalBlocks)
+_iftl({0x30,4}, %u, freeBlocks)
+_iftl({0x34,4}, %u, nextAllocation)
+_iftl({0x38,4}, %u, rsrcClumpSize)
+_iftl({0x3C,4}, %u, dataClumpSize)
+_iftl({0x40,4}, %u, nextCatalogID)
+_iftl({0x44,4}, %u, writeCount)
+_iftl({0x48,8}, %u, encodingsBitmap)
+ 
+$OFFSET:=0x50
+$63:=TOGGLE:$OFFSET,x:0
+$XOFS:=$XOFS+4
+x:0,finderInfo
+IF $63
+  $1:=0;
+  WHILE $OFFSET<0x68
+    EOL
+    x:0,finderInfo[
+    $1,x:11,%u]
+    {0x00,4},x:19,%u
+    $OFFSET:=$OFFSET+4
+    $1:=$1+1
+  ENDWHILE
+ENDIF
+EOL
+$XOFS:=$XOFS-4
+$OFFSET:=0
+_ift({0x68,4}, %08X, volume identifier 0x)
+x:32,-
+{0x6C,4},x:33,%08X
+EOL
+
+$1:=0x70
+WHILE $1<0x200
+  $XOFS:= 1
+  $OFFSET:=$1
+  $63:=TOGGLE:$OFFSET,x:0
+  $XOFS:= 5
+  $x:=0
+  IF $1==0x70
+    _t(allocationFile)
+  ELSEIF $1==0xC0
+    _t(extentsFile)
+  ELSEIF $1==0x110
+    _t(catalogFile)
+  ELSEIF $1==0x160
+    _t(attributesFile)
+  ELSEIF $1==0x1B0
+    _t(startupFile)
+  ENDIF
+
+  $x:= 20
+  IF NOT $63
+    {0x00,8},x:$x,%u
+    EOL
+  ELSE
+    EOL
+    _iftl({0x00,8}, %u, logicalSize)
+    _iftl({0x08,4}, %u, clumpSize)
+    _iftl({0x0c,4}, %u, totalBlocks)
+
+    $OFFSET:=$OFFSET+0x10
+    $63:=TOGGLE:$OFFSET,x:0
+    x:4,extents
+    IF NOT $63
+      $OPENCLUSTER:={0x00,4},x:20,%u
+      EOL
+    ELSE
+      $2:=0
+      WHILE $2<8
+        x:4,startBlock
+        $OPENCLUSTER:={0x00,4},x:20,%u
+        x:35,blockCount
+        {0x04,4},x:46,%u
+        EOL
+        $OFFSET:=$OFFSET+8
+        $2:=$2+1
+      ENDWHILE
+    ENDIF
+  ENDIF
+  $1:=$1+0x50
+ENDWHILE
+
+;//////////////////////////////////////////
+[HFS Catalog Nodes]
+guid:{8c5be8bc-d060-0d6d-d76f-fc081e1d9187}
+big_endian:1
+flow:1
+
+CALCSIZESTART
+  IF $1<=0
+    ;recsize is not given
+    IF $RECSIZE<4096
+      $RECSIZE:=4096
+    ENDIF
+  ENDIF
+CALCSIZEEND
+
+;BTNodeDescriptor 
+x:1,fLink >
+$GOTOREC:={0x00,4},x:25,%u
+=
+x:1,bLink >
+$GOTOREC:={0x04,4},x:25,%u
+=
+x:1,kind
+$9:={0x08,1},x:25,%u
+IF $9==0xff
+  x:32,kBTLeafNode
+ELSEIF $9==0
+  x:32,kBTIndexNode
+ELSEIF $9==1
+  x:32,kBTHeaderNode
+ELSEIF $9==2
+  x:32,kBTMapNode 
+ELSE
+  x:32,c:8,Unknown
+ENDIF
+=
+x:1,height
+{0x09,1},x:25,%u
+=
+x:1,numRecords
+{0x0A,2},x:25,%u
+=
+x:1,reserved
+{0x0C,2},x:25,%u
+=
+$2:=0x0E
+$12:=$RECSIZE-2
+;num records:
+$13:={0x0A,2}
+
+WHILE $2<$RECSIZE AND $13>0
+  $13:=$13-1
+  x:1,==========
+  =
+  $OFFSET:=$2-2
+  IF $9==0
+    x:1,keyLength
+    $1:={0x02,2},x:25,%u
+    IF $1==0 
+      BREAK
+    ENDIF
+    =
+    x:1,parentID >
+    $OPENFILENUM:={0x04,4},x:25,%u
+    =
+    x:1,nodeName
+    $8:={0x08,2},x:25,%u
+    $8:=$8*2
+    IF $8>510
+      $8:=510
+    ENDIF
+    {0x0A,$8},x:32,U
+    =
+    $OFFSET:=$OFFSET+$1+4
+    x:1,Node Number >
+    $GOTOREC:={0x00,4},x:25,%u
+    =
+  ELSEIF $9==1
+    ;BTHeaderRec
+    x:1,treeDepth
+    {0x02,2},x:25,%u
+    =
+    x:1,rootNode >
+    $GOTOREC:={0x04,4},x:25,%u
+    =
+    x:1,leafRecords
+    {0x08,4},x:25,%u
+    =
+    x:1,firstLeafNode >
+    $GOTOREC:={0x0C,4},x:25,%u
+    =
+    x:1,LastLeafNode >
+    $GOTOREC:={0x10,4},x:25,%u
+    =
+    x:1,nodeSize
+    {0x14,2},x:25,%u
+    =
+    x:1,maxKeyLength
+    {0x16,2},x:25,%u
+    =
+    x:1,totalNodes
+    {0x18,4},x:25,%u
+    =
+    x:1,freeNodes
+    {0x1C,4},x:25,%u
+    =
+    x:1,reserved1
+    {0x20,2},x:25,%u
+    =
+    x:1,clumpSize
+    {0x22,4},x:25,%u
+    =
+    x:1,btreeType
+    {0x26,1},x:25,%u
+    =
+    x:1,keyCompareType
+    {0x27,1},x:25,%X
+    x:27,h
+    =
+    x:1,attributes
+    {0x28,4},x:25,%08X
+    x:33,h
+    ;UInt32    reserved3[16]
+    BREAK
+  ELSE 
+    x:1,keyLength
+    $1:={0x02,2},x:25,%u
+    IF $1==0 
+      BREAK
+    ENDIF
+    =
+    x:1,parentID >
+    $OPENFILENUM:={0x4,4},x:25,%u
+    =
+    x:1,nodeName
+    $8:={0x8,2},x:25,%u
+    $8:=$8*2
+    IF $8>510
+      $8:=510
+    ENDIF
+    {0x0A,$8},x:32,U
+    IF $OFFSET+$1+4>=$RECSIZE
+      BREAK
+    ENDIF
+    =
+    $OFFSET:=$OFFSET+$1+4
+    $63:=TOGGLE:$OFFSET,x:1
+    x:5,recordType
+    $7:={0x00,2},x:25,%u
+    IF $7==1
+      ;HFSPlusCatalogFolder
+      x:32,HFSPlusCatalogFolder
+      =
+      IF $63
+        x:5,flags
+        {0x02,2},x:25,%X
+        x:34,h
+        =
+        x:5,valence
+        {0x04,4},x:25,%X
+        x:38,h
+        =
+        x:5,folderID >
+        $OPENFILENUM:={0x08,4},x:25,%u
+        =
+        x:5,createDate
+        {0x0C,4},x:25,%u
+        =
+        x:5,contentModDate
+        {0x10,4},x:25,%u
+        =
+        x:5,attributeModDate
+        {0x14,4},x:25,%u
+        =
+        x:5,accessDate
+        {0x18,4},x:25,%u
+        =
+        x:5,backupDate
+        {0x1C,4},x:25,%u
+        =
+;       {0x20,0x10}
+;       HFSPlusBSDInfo      permissions;
+; HFSPlusBSDInfo {
+;    UInt32  ownerID;
+;    UInt32  groupID;
+;    UInt8   adminFlags;
+;    UInt8   ownerFlags;
+;    UInt16  fileMode;
+;    union {
+;        UInt32  iNodeNum;
+;        UInt32  linkCount;
+;        UInt32  rawDevice;
+;    } special;
+
+;       {0x30,0x10}
+;       FolderInfo            userInfo;
+;struct FolderInfo {
+;  Rect      windowBounds;       /* The position and dimension of the folder's window */
+;  UInt16    finderFlags;
+;  Point     location;           /* Folder's location in the parent */
+;                                /* folder. If set to {0, 0}, the Finder */
+;                                /* will place the item automatically */
+;  UInt16    reservedField;
+;};
+
+;       {0x40,0x10}
+;    ExtendedFolderInfo  finderInfo;
+;struct ExtendedFolderInfo {
+;  Point     scrollPosition;     /* Scroll position (for icon views) */
+;  SInt32    reserved1;
+;  UInt16    extendedFinderFlags;
+;  SInt16    reserved2;
+;  SInt32    putAwayFolderID;
+;};
+        x:5,textEncoding
+        {0x50,4},x:25,%u
+        =
+;       UInt32              reserved;
+      ENDIF
+    ELSEIF $7==2
+      ;HFSPlusCatalogFile
+      x:32,HFSPlusCatalogFile >
+      $OPENFILERECOFS:=$2
+      =
+      IF $63
+        x:5,flags
+        {0x02,2},x:25,%X
+        x:34,h
+        =
+        x:5,reserved1
+        {0x04,4},x:25,%X
+        x:33,h
+        =
+        x:5,fileID >
+        $OPENFILENUM:={0x08,4},x:25,%u
+        =
+        x:5,createDate
+        {0x0C,4},x:25,%u
+        =
+        x:5,contentModDate
+        {0x10,4},x:25,%u
+        =
+        x:5,attributeModDate
+        {0x14,4},x:25,%u
+        =
+        x:5,accessDate
+        {0x18,4},x:25,%u
+        =
+        x:5,backupDate
+        {0x1C,4},x:25,%u
+        =
+;       {0x20,0x10}
+;       HFSPlusBSDInfo      permissions;
+; HFSPlusBSDInfo {
+;    UInt32  ownerID;
+;    UInt32  groupID;
+;    UInt8   adminFlags;
+;    UInt8   ownerFlags;
+;    UInt16  fileMode;
+;    union {
+;        UInt32  iNodeNum;
+;        UInt32  linkCount;
+;        UInt32  rawDevice;
+;    } special;
+
+;       {0x30,0x10}
+;       FileInfo            userInfo;
+;struct FileInfo {
+;  OSType    fileType;           /* The type of the file */
+;  OSType    fileCreator;        /* The file's creator */
+;  UInt16    finderFlags;
+;  Point     location;           /* File's location in the folder. */
+;  UInt16    reservedField;
+;};
+
+;       {0x40,0x10}
+;       ExtendedFileInfo    finderInfo;
+;struct ExtendedFileInfo {
+;  SInt16    reserved1[4];
+;  UInt16    extendedFinderFlags;
+;  SInt16    reserved2;
+;  SInt32    putAwayFolderID;
+;};
+
+        x:5,textEncoding
+        {0x50,4},x:25,%u
+        =
+;       {0x54}
+;       UInt32              reserved2;
+ 
+;       {0x58}
+;       HFSPlusForkData     dataFork;
+;       HFSPlusForkData     resourceFork;
+        $4:=$OFFSET+0x58
+        $3:=0
+        WHILE $3<2
+          $OFFSET:=$4
+          $63:=TOGGLE:$OFFSET,x:1
+          IF $3==0
+            x:5,dataFork
+          ELSE
+            x:5,resourceFork
+          ENDIF
+
+          IF NOT $63
+            {0x00,8},x:25,%u
+            $OPENCLUSTER:={0x10,4}
+          ELSE
+            =
+            x:5,logicalSize
+            {0x00,8},x:25,%u
+            =
+            x:5,clumpSize
+            {0x08,4},x:25,%u
+            =
+            x:5,totalBlocks
+            {0x0c,4},x:25,%u
+            =
+            $OFFSET:=$OFFSET+0x10
+            $63:=TOGGLE:$OFFSET,x:5
+            x:9,extents
+            IF NOT $63
+              $OPENCLUSTER:={0x00,4},x:25,%u
+            ELSE
+              $5:=0
+              WHILE $5<8
+                =
+                x:9,startBlock:
+                $OPENCLUSTER:={0x00,4},x:25,%u
+                x:35,blockCount:
+                {0x04,4},x:51,%u
+                $OFFSET:=$OFFSET+8
+                $5:=$5+1
+              ENDWHILE
+            ENDIF
+          ENDIF
+          =
+          $4:=$4+0x50
+          $3:=$3+1
+        ENDWHILE
+      ENDIF
+    ELSEIF ($7==3) OR ($7==4)
+      ;HFSPlusCatalogThread 
+      IF ($7==3)
+        x:32,HFSPlusFolderThreadRec
+      ELSE
+        x:32,HFSPlusFileThreadRec
+      ENDIF
+      =
+      x:5,reserved
+      {0x02,2},x:25,%X
+      x:29,h
+      =
+      x:5,parentID >
+      $OPENFILENUM:={0x04,4},x:25,%u
+      =
+      x:5,nodeName
+      $8:={0x8,2},x:25,%u
+      $8:=$8*2
+      IF $8>510
+        $8:=510
+      ENDIF
+      {0x0A,$8},x:32,U
+      =
+    ELSE
+      x:32,Unknown Record Type
+      =
+    ENDIF
+  ENDIF
+  $2:=$2+$1
+  $12:=$12-2
+  $OFFSET:=0
+  IF {$12,2}<=$2
+    BREAK
+  ENDIF
+  $2:={$12,2}
+ENDWHILE
+
+;//////////////////////////////////////////
+[HFS Extents Nodes]
+guid:{95b010bd-e409-fd86-764a-ea95e78bf763}
+big_endian:1
+flow:1
+$XOFS:=1
+$x:=24
+
+;BTNodeDescriptor 
+$GOTOREC:=
+_iftl({0x00,4}, %u, fLink >)
+$GOTOREC:=
+_iftl({0x04,4}, %u, bLink >)
+$9:=
+_iftl({0x08,1}, %u, kind)
+IF $9==0xff
+  x:32,kBTLeafNode
+ELSEIF $9==0
+  x:32,kBTIndexNode
+ELSEIF $9==1
+  x:32,kBTHeaderNode
+ELSEIF $9==2
+  x:32,kBTMapNode 
+ELSE
+  x:32,c:8,Unknown
+ENDIF
+EOL
+
+_iftl({0x09,1}, %u, height)
+_iftl({0x0A,2}, %u, numRecords)
+_iftl({0x0C,2}, %u, reserved)
+
+$2:=0x0E
+$12:=$RECSIZE-2
+;records num:
+$13:={0x0A,2}
+
+WHILE $2<$RECSIZE AND $13>0
+  $13:=$13-1
+  x:1,==========
+  =
+  $OFFSET:=$2-2
+  IF $9==1
+    ;BTHeaderRec
+    _iftl({0x02,2}, %u, treeDepth)
+    $GOTOREC:=
+    _iftl({0x04,4}, %u, rootNode >)
+    _iftl({0x08,4}, %u, leafRecords)
+    $GOTOREC:=
+    _iftl({0x0C,4}, %u, firstLeafNode >)
+    $GOTOREC:=
+    _iftl({0x10,4}, %u, LastLeafNode >)
+    _iftl({0x14,2}, %u, nodeSize)
+    _iftl({0x16,2}, %u, maxKeyLength)
+    _iftl({0x18,4}, %u, totalNodes)
+    _iftl({0x1C,4}, %u, freeNodes)
+    _iftl({0x20,2}, %u, reserved1)
+    _iftl({0x22,4}, %u, clumpSize)
+    _iftl({0x26,1}, %u, btreeType)
+    _iftl({0x27,1}, %X, keyCompareType 0x)
+    _iftl({0x28,4}, %08X, attributes 0x)
+    ;UInt32    reserved3[16]
+    BREAK
+  ELSE
+    $1:=
+    _iftl({0x02,2}, %u, keyLength)
+    IF $1==0 
+      BREAK
+    ENDIF
+    _iftl({0x04,1}, %u, forkType)
+    _iftl({0x05,1}, %u, pad)
+    $OPENFILENUM:=
+    _iftl({0x06,4}, %u, fileID >)
+    _iftl({0x0A,4}, %u, startBlock)
+    $OFFSET:=$OFFSET+$1+4
+    IF $9==1
+      $GOTOREC:=
+      _iftl({0x00,4}, %u, Node Number >)
+    ELSE
+            $63:=TOGGLE:$OFFSET,x:5
+            x:9,extents
+            IF NOT $63
+              $OPENCLUSTER:={0x00,4},x:25,%u
+            ELSE
+              $5:=0
+              WHILE $5<8
+                =
+                x:9,startBlock:
+                $OPENCLUSTER:={0x00,4},x:25,%u
+                x:35,blockCount:
+                {0x04,4},x:51,%u
+                $OFFSET:=$OFFSET+8
+                $5:=$5+1
+              ENDWHILE
+            ENDIF
+            =
+    ENDIF
+  ENDIF
+  $2:=$2+1
+  $12:=$12-2
+  $OFFSET:=0
+  IF {$12,2}<=$2
+    BREAK
+  ENDIF
+  $2:={$12,2}
+ENDWHILE
+
+;//////////////////////////////////////////
+[Apple Partition Map]
+guid:{8d3ad335-7279-d9c2-7c82-1d013c3da08e}
+big_endian:1
+flow:1
+$XOFS:=1
+$x:=24
+IF {0x00,2} = 0x4552
+  ;Apple Partition Scheme
+  _sftl({2}, C, signature ("ER"))
+  _sftl({2}, %u, block size)
+  _sftl({4}, %u, blocks number)
+ELSE
+  _sftl({2}, C, signature ("PM"))
+  _sftl({2}, %u, reserved)
+  _sftl({4}, %u, partitions number)
+  _sftl({4}, %u, partition start)
+  _sftl({4}, %u, partition size)
+  _sftl({32}, C, partition name)
+  _sftl({32}, C, partition type)
+  _sftl({4}, %u, data start)
+  _sftl({4}, %u, data size)
+  _sftl({4}, %08X, partition status 0x)
+  _sftl({4}, %u, boot code start)
+  _sftl({4}, %u, boot code size)
+  _sftl({4}, %u, bootloader code address)
+  _sftl({4}, %u, reserved)
+  _sftl({4}, %u, boot code entry point)
+  _sftl({4}, %u, reserved)
+  _sftl({4}, %08X, boot code checksum 0x)
+  _sftl({16}, C, processor type)
+ENDIF
+
+;//////////////////////////////////////////
+[MBR Partition Table]
+fuse:0
+x:1,Disk identifier (Windows):
+=
+{0x1B8,4},x:1,%08X
+x:9,h
+=
+x:1,Boot  System ID   :   First    :    Last    : Relative : Number of
+=
+x:1,Flag              :Cyl Head Sec:Cyl Head Sec:  Sector  :  Sectors 
+=
+$OFFSET:=0x1BE
+$i:=0
+WHILE $i < 4 
+  $OPENLBA:={0x08,4}
+  {0x00,1},x:1,%02X
+  x:3,h
+  {0x04,1},x:7,%02X
+  x:9,h
+  x:19,:
+  {0x03,1;0x02:6,2},x:20,%4u
+  {0x01,1},x:25,%3u
+  {0x02:0,6},x:29,%2u
+  x:32,:
+  {0x07,1;0x06:6,2},x:33,%4u
+  {0x05,1},x:38,%3u
+  {0x06:0,6},x:42,%2u
+  x:45,:
+  {0x08,4},x:46,%10u
+  x:56,:
+  {0x0C,4},x:57,%10u
+  =
+  $OFFSET:=$OFFSET+16
+  $i:=$i+1
+ENDWHILE
+x:1,MBR signature (0xAA55):
+=
+{0x00,2},x:1,%04X
+x:5,h
+
+;//////////////////////////////////////////
+[FAT Entries]
+fuse:0
+flow:1
+h: Name     Ext       Size   Cluster  Attrs   Modified            Created                 Accessed
+
+WHILE $OFFSET < $RECSIZE
+  $OPENFILERECOFS:=$OFFSET
+  IF {00,1}=0xE5
+    x:0,x
+    $10:=10
+  ELSE
+    $10:=0
+  ENDIF
+  IF {0x0B:0,4}!=0xF         ;Short Name Entry
+    {0x00,8},x:01,c:$10,C
+    {0x08,3},x:10,c:$10,C
+    IF {0x0B:4,1}
+      x:13,>
+    ENDIF
+    {0x1C,4},x:14,c:$10,-%u
+    {0x1A,2;0x14,2},x:24,c:$10,-%u
+    {0x0B,1},x:35,c:$10,F:R-H-S-V-D-A-+-+-
+    ;Modification Time:
+    {0x16,4},x:44,c:$10,DOSDATE
+    ;Creation Time:
+    {0x0E,4},x:64,c:$10,DOSDATE
+    x:83,.
+    {0x0D,1},x:84,c:$10,%02u
+    ;Access Date:
+    {0x12,2},x:88,c:$10,DOSDATE
+  ELSE
+    ;LFN Entry:
+    IF {0:7,1}
+      x:3,x
+    ELSE
+      {0:0,5},x:2,c:$10,-%u
+    ENDIF
+    {0:5,3},x:5,c:$10,F:+-L-R-
+    {1,10},x:10,c:$10,U
+    {0x0E,12},x:15,c:$10,U
+    {0x1C,4},x:21,c:$10,U
+    {0x1A,2},x:25,c:$10,-%u
+    {0x0B,1},x:35,c:$10,F:R-H-S-V-D-A-+-+-
+    {0x0D,1},x:45,c:$10,%02X
+    x:47,h
+  ENDIF
+  =
+  $OFFSET:=$OFFSET+32
+ENDWHILE
+
+;//////////////////////////////////////////
+[ReFS Volume Header]
+guid:{b0e7a24d-7796-1e8f-c782-fb752e970447}
+$XOFS:=1
+$x:=24
+_iftl({0x03,8}, C, FSName)
+_iftl({0x10,4}, %08X, Identifier)
+_iftl({0x18,8}, %u, LBASize)
+_iftl({0x20,4}, %u, BytesPerSec)
+_iftl({0x24,4}, %u, SecPerClus)
+
+;//////////////////////////////////////////
+[ReFS Superblock]
+guid:{9b4d6f1e-5d3d-924d-c220-2cce1c7f9173}
+$XOFS:=1
+$x:=24
+IF {0x00,4}=0x42505553
+  _iftl({0x00,0x0c}, CXm, Node Signature)
+  _iftl({0x0c,4}, %X, Volume Signature      0x)
+  _iftl({0x10,8}, %X, Sequence Number       0x)
+  _iftl({0x18,8}, %X, [0x18]                0x)
+  _ift( {0x20,8}, %X, Cluster Number [0..3] 0x)
+  {0x28,8},x:42,%X
+  {0x30,8},x:60,%X
+  {0x38,8},x:78,%X
+  EOL
+  _ift({0x40,8}, %X, Object Id             0x)
+  x:40,-
+  {0x48,8},x:42,%X
+  EOL
+  $3:=0xC0
+  $4:=1
+ELSE
+  _iftl({0x00,8}, %X, Page Number (Cluster) 0x)
+  _iftl({0x08,8}, %X, Sequence Number       0x)
+  _ift( {0x10,8}, %X, Object Id             0x)
+  x:40,-
+  {0x18,8},x:42,%X
+  EOL
+  $3:=0xA0
+  $4:=0
+ENDIF
+
+$OPENTEMPLATE:='{cdb0fa46-17bb-d839-15c5-8b7d9f75e0e2}'
+$OPENCLUSTER:=
+_iftl({$3,8}, %X, FS Descr. Page 1    > 0x)
+
+$3:=$3+8
+$OPENTEMPLATE:='{cdb0fa46-17bb-d839-15c5-8b7d9f75e0e2}'
+$OPENCLUSTER:=
+_iftl({$3,8}, %X, FS Descr. Page 2    > 0x)
+
+;//////////////////////////////////////////
+[ReFS Descriptors]
+guid:{cdb0fa46-17bb-d839-15c5-8b7d9f75e0e2}
+
+$RECSIZE:=16384
+$XOFS:=1
+$x:=24
+IF {0x00,4}=0x504b4843
+  _iftl({0x00,0x0c}, CXm, Node Signature)
+  _iftl({0x0c,4}, %X, Volume Signature      0x)
+  _iftl({0x10,8}, %X, Sequence Number       0x)
+  _iftl({0x18,8}, %X, [0x18]                0x)
+  _ift( {0x20,8}, %X, Cluster Number [0..3] 0x)
+  {0x28,8},x:42,%X
+  {0x30,8},x:60,%X
+  {0x38,8},x:78,%X
+  EOL
+  _ift( {0x40,8}, %X, Object Id             0x)
+  x:40,-
+  {0x48,8},x:42,%X
+  EOL
+  $3:=0x90
+  $4:=1
+ELSE
+  _iftl({0x00,8}, %X, Page Number (Cluster) 0x)
+  _iftl({0x08,8}, %X, Sequence Number       0x)
+  _ift( {0x10,8}, %X, Object Id             0x)
+  x:40,-
+  {0x18,8},x:42,%X
+  EOL
+  ;$1:=
+  ;_iftl({0x38,4}, %X, Descr Offset         0x)
+  $3:=0x58
+  $4:=0
+ENDIF
+$1:=
+_iftl({$3,4}, %u, Descriptors Number)
+$2:=$3+4
+$11:=$1
+$12:=$2
+$63:=TOGGLE:$OFFSET,x:0,Offsets
+EOL
+IF $63
+  WHILE $1>0
+    $11-$1,x:2,%2u:
+    $3:={$2,4},x:6,%X
+    $2:=$2+4
+    $1:=$1-1
+    IF $2+4>$RECSIZE
+      BREAK
+    ENDIF
+    EOL
+  ENDWHILE
+ENDIF
+$1:=$11
+$2:=$12
+  WHILE $1>0
+    $11-$1,x:2,%2u:
+    $3:={$2,4}
+    IF $3+8>$RECSIZE OR $3<0x5C
+      x:6,c:8,Wrong Offs.
+    ELSE
+      x:6,>
+      IF $4
+        $OPENTEMPLATE:='{2bf504cd-5185-ff23-a9bc-929a1abdcf79}'
+      ELSE
+        $OPENTEMPLATE:='{650e7e87-71ad-6b45-52fc-ff29f7ee07bb}'
+      ENDIF
+      $OPENVOLPAGE:={$3,8},x:8,%X
+      IF $4
+        $5:=$3+8
+        {$5,8},x:24,%X
+        $5:=$5+8
+        {$5,8},x:40,%X
+        $5:=$5+8
+        {$5,8},x:56,%X
+      ENDIF
+    ENDIF
+    $2:=$2+4
+    $1:=$1-1
+    IF $2+4>$RECSIZE
+      BREAK
+    ENDIF
+    EOL
+  ENDWHILE
+
+;//////////////////////////////////////////
+[ReFSv1 Node]
+guid:{650e7e87-71ad-6b45-52fc-ff29f7ee07bb}
+
+DEFINE _refs_nodeheader(%size%,%esize%)
+  $10:=$OFFSET+1
+  $63:=TOGGLE:$10,x:0,Header / Size     0x
+  $2:={0,4}
+  $c:=0
+  IF $OFFSET+$2>%size%
+    $c:=8
+    $2:=%size%-$OFFSET
+  ENDIF
+  {0,4},x:24,c:$c,%X
+  EOL
+  IF $63 AND $2
+    {0,$2},x:4,CXm
+  ENDIF
+
+  $10:=$OFFSET+$2
+  IF ($2>=4) AND ($10+4<=%size%)
+    $OFFSET:=$10
+    $63:=TOGGLE:$OFFSET,x:0,Entries Info/Size 0x
+    $2:={0,4}
+    $c:=0
+    IF $OFFSET+$2>%size%
+      $c:=8
+      $2:=%size%-$OFFSET
+    ELSEIF $2<0x1C
+      $c:=8
+    ENDIF
+    {0,4},x:24,c:$c,%X
+    EOL
+  ELSE
+    $2:=0
+  ENDIF
+  IF $2>=0x1C AND $63
+    EOL
+    $XOFS:=$XOFS+4
+    $x:=20
+    _iftl(   {4,4}, %X, Unused Offset     0x)
+    _iftl(   {8,4}, %X, Unused Size       0x)
+    _iftl({0x0C,1}, %u, Level)
+    _iftl({0x0D,1}, %X, Flags             0x)
+    _iftl({0x0E,2}, %X, [0x0E]            0x)
+    $GOTORECOFS:=
+    _iftl({0x10,4}, %X, Entries Offsets > 0x)
+    _iftl({0x14,4}, %u, Entries Num)
+    IF $2>0x20
+      _iftl({0x18,8}, %X, [0x18]            0x)
+    ELSEIF $2=0x20 ;ReFSv1
+      _iftl({0x18,4}, %X, End Offset        0x)
+      _iftl({0x1C,4}, %X, [0x1C]            0x)
+    ELSEIF $2>0x18
+      {0x18,$2-0x18},x:0,CXm
+    ENDIF
+    IF $2>=0x24
+      _iftl({0x20,4}, %X, End Offset        0x)
+    ELSEIF $2>0x20
+      {0x20,$2-0x20},x:0,CXm
+    ENDIF
+    IF $2>=0x28
+      _iftl({0x24,4}, %X, [0x24]            0x)
+    ELSEIF $2>0x24
+      {0x24,$2-0x24},x:0,CXm
+    ENDIF
+    $XOFS:=$XOFS-4
+  ENDIF
+  %esize%:=$2
+ENDDEFINE
+
+$RECSIZE:=0x4000
+$XOFS:=1
+x:0,Page Number (Cluster) 0x
+{0x00,8},x:24,%X
+=
+x:0,Sequence Number       0x
+{0x08,8},x:24,%X
+=
+x:0,Object Id >           0x
+{0x10,8},x:24,%X
+x:40,-
+$OPENTEMPLATE:='{650e7e87-71ad-6b45-52fc-ff29f7ee07bb}'
+$OPENFILENUM:=
+$nodeid:=
+{0x18,8},x:42,%X
+=
+x:0,[0x20]:               0x
+{0x20,8},x:24,CX
+=
+x:0,[0x28]:               0x
+{0x28,8},x:24,CX
+=
+$OFFSET:=0x30
+
+$esize:=0
+_refs_nodeheader($RECSIZE,$esize)
+
+IF $esize>=0x1C
+  $1:={0x10,4}
+  $3:={0x14,4}
+  $4:=$OFFSET
+  WHILE $3>0 AND $4+$1+4<=$RECSIZE
+    $XOFS:=1
+    $OFFSET:=$4
+
+    x:0,[0x
+    $OFFSET+$1,x:3,%X]
+
+    $2:={$1,4}
+    $1:=$1+4
+
+    x:9,0x
+    $2,x:11,%X:
+
+    $2:=$OFFSET+$2
+    IF $2+24>$RECSIZE
+      x:18,c:8,Error Offset
+      =
+      $3:=$3-1
+      CONTINUE
+    ENDIF
+    $OFFSET:=$2
+    x:18,AttrSize/ KeyOfs/ KeySz / Flags / ValOfs/ ValSize
+    =
+    x:16,0x
+    $9:={0,4}
+    IF $OFFSET+$9>$RECSIZE
+      $9:=$RECSIZE-$OFFSET
+      $10:=8
+    ELSE
+      $10:=0
+    ENDIF
+    {0,4},x:18,c:$10,%X
+
+    ;Key Offs
+    $7:={4,2}
+    ;Key Size
+    $8:={6,2}
+
+    IF $8 AND $7>=$9
+      $8:=0
+      $10:=8
+    ELSE
+      $10:=0
+    ENDIF
+    {4,2},x:28,c:$10,%X
+    IF $8 AND $7+$8>$9
+      $8:=$9-$7
+      $10:=8
+    ENDIF
+    {6,2},x:36,c:$10,%X
+
+    ;Flags
+    $flags:={8,2},x:44,%X
+
+    ;Value Offs
+    $5:={0x0A,2}
+    ;Value Size
+    $6:={0x0C,4}
+
+    IF $6 AND $5>=$9
+      $10:=8
+      $6:=0
+    ELSE
+      $10:=0
+    ENDIF
+    {0x0A,2},x:52,c:$10,%X
+    IF $6 AND $5+$6>$9
+      $6:=$9-$5
+      $10:=8
+    ENDIF
+    {0x0C,4},x:60,c:$10,%X
+    IF $8>=4 AND {$7,4}=0x010030
+      $OPENFILERECOFS:=$OFFSET
+      x:6,>
+    ENDIF
+    =
+    IF $8
+      $10:=$7+$OFFSET
+      $63:=TOGGLE:$10,x:2,Key
+      IF $63
+        {$7,$8},x:12,CXm
+      ELSEIF {$7,2}=0x0030
+        $2:=$7+4;
+        $10:=$8-4;
+        {$2,$10},x:18,U
+      ELSEIF $8=16 AND NOT {$7,8}
+        x:12,Obj. Id > 0x
+        {$7,8},x:24,%X
+        x:40,-
+        $10:=$7+8
+        $OPENTEMPLATE:='{650e7e87-71ad-6b45-52fc-ff29f7ee07bb}'
+        $OPENFILENUM:={$10,8},x:42,%X
+      ELSE
+        $10:=$8
+        IF $10>16
+          $10:=16
+        ENDIF  
+        {$7,$10},x:12,CXm
+      ENDIF
+      =
+    ENDIF
+
+    IF NOT $6
+      $3:=$3-1
+      CONTINUE
+    ENDIF
+    $10:=$5+$OFFSET
+    $63:=TOGGLE:$10,x:2,Value
+    IF $8>=4 AND ({$7,4}=0x010030 OR {$7,4}=0x0160) OR $8=4 AND {$7,4}=0x10
+      $59:=1
+    ELSEIF $8=4 AND {$7,4}=0x10000000
+      $59:=2
+    ELSE
+      $59:=0
+    ENDIF
+    IF $63 AND $59=1 AND $6>=0x20 AND {$5,4}>0 AND {$5,4}<=$6
+      =
+      $XOFS:=7
+      $OFFSET:=$OFFSET+$5
+      $12:=$OFFSET+$6
+
+      $esize:=0
+      _refs_nodeheader($12,$esize)
+
+      IF $esize>=0x1C
+
+        $21:={0x10,4}
+        $23:={0x14,4}
+        $24:=$OFFSET
+
+        WHILE $23>0 AND $24+$21+4<=$12
+          $XOFS:=7
+          $OFFSET:=$24
+
+          x:0,[0x
+          $OFFSET+$21,x:3,%X]
+
+          $2:={$21,4}
+          $21:=$21+4
+
+          x:9,0x
+          $2,x:11,%X:
+
+          $2:=$OFFSET+$2
+          IF $2+24>$12
+            x:18,c:8,Error Offset
+            =
+            $23:=$23-1
+            CONTINUE
+          ENDIF
+          $OFFSET:=$2
+          x:18,AttrSize/ KeyOfs/ KeySz / Flags / ValOfs/ ValSize
+          =
+          x:16,0x
+          $29:={0,4}
+          IF $OFFSET+$29>$12
+            $29:=$12-$OFFSET
+            $10:=8
+          ELSE
+            $10:=0
+          ENDIF
+          {0,4},x:18,c:$10,%X
+
+          ;Key Offs
+          $27:={4,2}
+          ;Key Size
+          $28:={6,2}
+
+          IF $28 AND $27>=$29
+            $28:=0
+            $10:=8
+          ELSE
+            $10:=0
+          ENDIF
+          {4,2},x:28,c:$10,%X
+          IF $28 AND $27+$28>$29
+            $28:=$29-$27
+            $10:=8
+          ENDIF
+          {6,2},x:36,c:$10,%X
+
+          ;Flags
+          {8,2},x:44,%X
+
+          ;Value Offs
+          $25:={0x0A,2}
+          ;Value Size
+          $26:={0x0C,4}
+
+          IF $26 AND $25>=$29
+            $26:=0
+            $10:=8
+          ELSE
+            $10:=0
+          ENDIF
+          {0x0A,2},x:52,c:$10,%X
+          IF $26 AND $25+$26>$29
+            $26:=$29-$25
+            $10:=8
+          ENDIF
+          {0x0C,4},x:60,c:$10,%X
+          =
+          IF $28
+            $10:=$27+$OFFSET
+            $63:=TOGGLE:$10,x:2,Key
+            IF $63
+              {$27,$28},x:12,CXm
+            ELSE
+              $10:=$28
+              IF $10>16
+                $10:=16
+              ENDIF
+              {$27,$10},x:12,CXm
+            ENDIF
+            =
+          ENDIF
+
+          IF NOT $26
+            $23:=$23-1
+            CONTINUE
+          ENDIF
+          $10:=$25+$OFFSET
+          $63:=TOGGLE:$10,x:2,Value
+          IF $63 AND $59=1 AND $26>=0x20 AND {$25,4}>0 AND {$25,4}<=$26
+            =
+            $XOFS:=13
+            $OFFSET:=$OFFSET+$25
+            $32:=$OFFSET+$26
+
+            $esize:=0
+            _refs_nodeheader($32,$esize)
+
+            IF $esize>=0x1C
+
+              $41:={0x10,4}
+              $43:={0x14,4}
+              $44:=$OFFSET
+
+              WHILE $43>0 AND $44+$41+4<=$32
+                $OFFSET:=$44
+
+                x:0,[0x
+                $OFFSET+$41,x:3,%X]
+
+                $2:={$41,4}
+                $41:=$41+4
+
+                x:9,0x
+                $2,x:11,%X:
+
+                $2:=$OFFSET+$2
+                IF $2+44>$32
+                  x:18,c:8,Error Offset
+                  =
+                  $43:=$43-1
+                  CONTINUE
+                ENDIF
+                $OFFSET:=$2
+                x:18,AttrSize/ KeyOfs/ KeySz / Flags / ValOfs/ ValSize
+                =
+                x:16,0x
+                $49:={0,4}
+                IF $OFFSET+$49>$32
+                  $49:=$32-$OFFSET
+                  $10:=8
+                ELSE
+                  $10:=0
+                ENDIF
+                {0,4},x:18,c:$10,%X
+
+                ;Key Offs
+                $47:={4,2}
+                ;Key Size
+                $48:={6,2}
+
+                IF $48 AND $47>=$49
+                  $48:=0
+                  $10:=8
+                ELSE
+                  $10:=0
+                ENDIF
+                {4,2},x:28,c:$10,%X
+                IF $48 AND $47+$48>$49
+                  $48:=$49-$47
+                  $10:=8
+                ENDIF
+                {6,2},x:36,c:$10,%X
+
+                ;Flags
+                {8,2},x:44,%X
+
+                ;Value Offs
+                $45:={0x0A,2}
+                ;Value Size
+                $46:={0x0C,4}
+
+                IF $46 AND $45>=$49
+                  $46:=0
+                  $10:=8
+                ELSE
+                  $10:=0
+                ENDIF
+                {0x0A,2},x:52,c:$10,%X
+                IF $46 AND $45+$46>$49
+                  $46:=$49-$45
+                  $10:=8
+                ENDIF
+                {0x0C,4},x:60,c:$10,%X
+                =
+                IF $48
+                  $10:=$47+$OFFSET
+                  $63:=TOGGLE:$10,x:2,Key
+                  IF $63
+                    {$47,$48},x:12,CXm
+                  ELSE
+                    $10:=$48
+                    IF $10>16
+                      $10:=16
+                    ENDIF
+                    {$47,$10},x:12,CXm
+                  ENDIF
+                  =
+                ENDIF
+
+                IF NOT $46
+                  $43:=$43-1
+                  CONTINUE
+                ENDIF
+                $10:=$OFFSET+$45
+                $63:=TOGGLE:$10,x:2,Value
+                $10:=$45+8
+                IF $63
+                  {$45,$46},x:12,CXm
+                ELSEIF NOT $48 OR ($46=0x18) AND {$45,8} AND {$10,8}=0x0808020000 
+                  IF $46>=0x8
+                    x:12,Page >    0x
+                    $OPENTEMPLATE:='{650e7e87-71ad-6b45-52fc-ff29f7ee07bb}'
+                    $OPENVOLPAGE:={$45,8},x:24,%X
+                  ENDIF
+                ELSE
+                  IF $46>=0x18
+                    $10:=$45+0x10
+                    x:12,Cluster > 0x
+                    $OPENVOLPAGE:={$10,8},x:24,%X
+                  ENDIF
+                ENDIF
+                =
+                $43:=$43-1
+              ENDWHILE
+
+              $XOFS:=13
+              $OFFSET:=$44
+              $41:={0x10,4}
+              $43:={0x14,4}
+              IF $43>0 AND $41+4<=$32
+                $10:=$OFFSET+$41
+                $63:=TOGGLE:$10,x:0,Entries Offsets
+                =
+                IF $63
+                  WHILE $43>0 AND $41+4<=$32
+                    x:4,0x
+                    $10:=$OFFSET+$1
+                    $10,x:6,%X:
+                    x:12,> 0x
+                    $GOTORECOFS:=$OFFSET+{$41,4}
+                    {$41,4},x:16,%X
+                    $41:=$41+4
+                    $43:=$43-1
+                    =
+                  ENDWHILE
+                ENDIF
+              ENDIF
+            ENDIF
+          ELSEIF $63
+            {$25,$26},x:12,CXm
+          ELSE
+            $10:=$25+8
+            $11:=$27+8
+            IF NOT $28 AND $26>=0x8 OR $26=0x18 AND {$25,8} AND {$10,8}=0x0808020000
+              x:12,Page >    0x
+              $OPENTEMPLATE:='{650e7e87-71ad-6b45-52fc-ff29f7ee07bb}'
+              $OPENVOLPAGE:={$25,8},x:24,%X
+            ELSEIF $28=0x0E AND {$11,6}=0x38 AND $26>=0x60 AND {$25,4}=0
+              $10:=$25+0x0C
+              x:12,Obj. Id > 0x
+              $OPENTEMPLATE:='{650e7e87-71ad-6b45-52fc-ff29f7ee07bb}'
+              $OPENFILENUM:={$10,8},x:24,%X
+              =
+              $10:=$25+0x5E
+              $11:=$25+0x54
+              $11:={$11,1}*2
+              IF 0x5E+$11>$26
+                $11:=$26-0x5E
+              ENDIF
+              {$10,$11},x:18,U
+            ELSEIF $28=0x10
+              IF $26>=0x18
+                $10:=$25+0x10
+                x:12,Cluster > 0x
+                $OPENVOLPAGE:={$10,8},x:24,%X
+              ENDIF
+            ENDIF
+          ENDIF
+          =
+          $23:=$23-1
+        ENDWHILE
+
+        $XOFS:=7
+        $OFFSET:=$24
+        $21:={0x10,4}
+        $23:={0x14,4}
+        IF $23>0 AND $21+4<=$12
+          $10:=$OFFSET+$21
+          $63:=TOGGLE:$10,x:0,Entries Offsets
+          =
+          IF $63
+            WHILE $23>0 AND $21+4<=$12
+              x:4,0x
+              $10:=$OFFSET+$1
+              $10,x:6,%X:
+              x:12,> 0x
+              $GOTORECOFS:=$OFFSET+{$21,4}
+              {$21,4},x:16,%X
+              $21:=$21+4
+              $23:=$23-1
+              =
+            ENDWHILE
+          ENDIF
+        ENDIF
+      ENDIF
+    ELSEIF $63 
+      {$5,$6},x:12,CXm
+    ELSE
+      $10:=$5+8
+      $11:=$7+8
+      IF $8>=2 AND {$7,2}=0x0510
+        x:12,Label:
+        {$5,$6},x:18,U
+      ELSEIF $8>=4 AND {$7,4}=0x020030 AND $6>=0x20
+        x:12,Obj. Id > 0x
+        $OPENTEMPLATE:='{650e7e87-71ad-6b45-52fc-ff29f7ee07bb}'
+        $OPENFILENUM:={$5,8},x:24,%X
+      ELSEIF ($nodeid=2) OR ($nodeid=0x0C) OR (NOT $59 OR $6=0x18) AND {$5,8} AND $6>=0x10 AND {$10,8}=0x0808020000
+        x:12,Page >    0x
+        $OPENTEMPLATE:='{650e7e87-71ad-6b45-52fc-ff29f7ee07bb}'
+        IF ($nodeid = 0xB) OR ($nodeid = 0xC)
+          $OPENCLUSTER:={$5,8},x:24,%X
+        ELSE
+          $OPENVOLPAGE:={$5,8},x:24,%X
+        ENDIF
+      ELSEIF ($nodeid>=0x500) AND ($8=0x0E) AND ({$11,6}=0x38) AND ($6>=0x60) AND ({$5,4}=0)
+        $10:=$5+0x0C
+        x:12,Obj. Id > 0x
+        $OPENTEMPLATE:='{650e7e87-71ad-6b45-52fc-ff29f7ee07bb}'
+        $OPENFILENUM:={$10,8},x:24,%X
+        =
+        $10:=$5+0x5E
+        $11:=$5+0x54
+        $11:={$11,1}*2
+        IF 0x5E+$11>$6
+          $11:=$6-0x5E
+        ENDIF
+        {$10,$11},x:18,U
+      ENDIF
+      =
+    ENDIF
+    $3:=$3-1
+  ENDWHILE
+
+  $XOFS:=1
+  $OFFSET:=$4
+  $1:={0x10,4}
+  $3:={0x14,4}
+  IF $3>0 AND $1+4<=$RECSIZE
+    $10:=$OFFSET+$1
+    $63:=TOGGLE:$10,x:0,Entries Offsets
+    =
+    IF $63
+      WHILE $3>0 AND $1+4<=$RECSIZE
+        x:4,0x
+        $10:=$OFFSET+$1
+        $10,x:6,%X:
+        x:12,> 0x
+        $GOTORECOFS:=$OFFSET+{$1,4}
+        {$1,4},x:16,%X
+        $1:=$1+4
+        $3:=$3-1
+        =
+      ENDWHILE
+    ENDIF
+  ENDIF
+ENDIF
+
+;//////////////////////////////////////////
+[ReFSv3 Node]
+guid:{2bf504cd-5185-ff23-a9bc-929a1abdcf79}
+
+$RECSIZE:=0x4000
+
+CALCSIZESTART
+  IF $1>=0x4000
+    $RECSIZE:=$1
+  ELSE
+    ;recsize is not given
+    $10:=0x50+{0x50,4}+0x10
+    IF {$10,4}>=0x4000
+      $RECSIZE:=0x10000
+    ENDIF
+  ENDIF
+CALCSIZEEND
+
+DEFINE _refs_keyprefix(%keyofs%,%result%)
+    x:0,[0x
+    $OFFSET+%keyofs%,x:3,%X]
+
+    $2:={%keyofs%,2}
+    ;%keyofs%:=%keyofs%+4
+
+    x:9,0x
+    $2,x:11,%X:
+
+    IF $2+24>$RECSIZE
+      x:18,c:8,Key Offset Error
+      %result%:=0
+    ELSE
+      $OFFSET:=$OFFSET+$2
+      %result%:=1
+    ENDIF
+ENDDEFINE
+
+DEFINE _refs_v3run()
+    x:18,Page      / Flags / AttrSize / Vcn      / Len
+    EOL
+    $attrsize:={0xA,2}
+    $c:=0
+    IF $OFFSET+$attrsize>$RECSIZE
+      $attrsize:=$RECSIZE-$OFFSET
+      $c:=8
+    ENDIF
+
+    $_expanded:=0
+    IF $attrsize > 0x18
+      $_expanded:=TOGGLE:$OFFSET,x:11
+    ENDIF
+    x:15,>0x
+    $OPENVOLPAGE:=
+    {0,8},x:18,c:$c,%X
+
+    {8,2},x:30,%X
+    {0xA,2},x:38,c:$c,%X
+
+    IF $attrsize < 0x18
+      $c:=8
+    ENDIF
+    {0xC,8},x:49,c:$c,%X
+    {0x14,4},x:60,%X
+    IF ($attrsize > 0x18) AND $_expanded
+      EOL
+      {0x18,$attrsize-0x18},x:13,CXm
+    ENDIF
+ENDDEFINE
+
+DEFINE _refs_keyprefix_and_vcnrun(%keyofs%,%result%)
+    _refs_keyprefix(%keyofs%,%result%)
+    IF %result%
+      $flags:={8,2}
+      IF $flags & 0x40
+        _refs_v3run()
+        %result%:=0
+      ENDIF
+    ENDIF
+ENDDEFINE
+
+$XOFS:=1
+x:0,Node Signature
+{0x00,0x0c},x:18,CXm
+=
+x:0,Volume Signature      0x
+{0x0c,4},x:24,%X
+=
+x:0,Sequence Number       0x
+{0x10,8},x:24,%X
+=
+x:0,                      0x
+{0x18,8},x:24,%X
+=
+x:0,Cluster Number [0..3] 0x
+{0x20,8},x:24,%X
+{0x28,8},x:42,%X
+{0x30,8},x:60,%X
+{0x38,8},x:78,%X
+=
+x:0,Object Id >           0x
+{0x40,8},x:24,%X
+x:40,-
+$OPENTEMPLATE:='{2bf504cd-5185-ff23-a9bc-929a1abdcf79}'
+$OPENFILENUM:=
+$nodeid:=
+{0x48,8},x:42,%X
+=
+$OFFSET:=0x50
+$esize:=0
+_refs_nodeheader($RECSIZE,$esize)
+
+IF $esize>=0x1C
+  $1:={0x10,4}
+  $3:={0x14,4}
+  $4:=$OFFSET
+  WHILE $3>0 AND $4+$1+4<=$RECSIZE
+    $XOFS:=1
+    $OFFSET:=$4
+
+    $res:=0
+    _refs_keyprefix_and_vcnrun($1,$res)
+    $1:=$1+4
+
+    IF NOT $res
+      EOL
+      $3:=$3-1
+      CONTINUE
+    ENDIF
+
+    x:18,AttrSize/ KeyOfs/ KeySz / Flags / ValOfs/ ValSize
+    EOL
+    x:16,0x
+    $attrsize:={0,4}
+    $c:=0
+    IF $OFFSET+$attrsize>$RECSIZE
+      $attrsize:=$RECSIZE-$OFFSET
+      $c:=8
+    ENDIF
+    {0,4},x:18,c:$c,%X
+
+    ;Key Offs
+    $7:={4,2}
+    ;Key Size
+    $8:={6,2}
+
+    $c:=0
+    IF $8 AND $7>=$attrsize
+      $8:=0
+      $c:=8
+    ENDIF
+    {4,2},x:28,c:$c,%X
+    IF $8 AND $7+$8>$attrsize
+      $8:=$attrsize-$7
+      $c:=8
+    ENDIF
+    {6,2},x:36,c:$c,%X
+
+    $flags:=
+    {8,2},x:44,%X
+
+    ;Value Offs
+    $5:={0x0A,2}
+    ;Value Size
+    $6:={0x0C,4}
+
+    $c:=0
+    IF $6 AND $5>=$attrsize
+      $c:=8
+      $6:=0
+    ENDIF
+    {0x0A,2},x:52,c:$c,%X
+    IF $6 AND $5+$6>$attrsize
+      $6:=$attrsize-$5
+      $c:=8
+    ENDIF
+    {0x0C,4},x:60,c:$c,%X
+    IF $8>=4 AND {$7,4}=0x010030
+      $OPENFILERECOFS:=$OFFSET
+      x:6,>
+    ENDIF
+    =
+    IF $8
+      $10:=$7+$OFFSET
+      $63:=TOGGLE:$10,x:2,Key
+      IF $63
+        {$7,$8},x:12,CXm
+      ELSEIF {$7,4}=0x010030 OR {$7,4}=0x020030
+        $2:=$7+4;
+        $10:=$8-4;
+        {$2,$10},x:18,U
+      ELSEIF $8=16 AND NOT {$7,8}
+        x:12,Obj. Id > 0x
+        {$7,8},x:24,%X
+        x:40,-
+        $10:=$7+8
+        $OPENTEMPLATE:='{2bf504cd-5185-ff23-a9bc-929a1abdcf79}'
+        $OPENFILENUM:={$10,8},x:42,%X
+      ELSE
+        $10:=$8
+        IF $10>16
+          $10:=16
+        ENDIF  
+        {$7,$10},x:12,CXm
+      ENDIF
+      =
+    ENDIF
+
+    IF NOT $6
+      $3:=$3-1
+      CONTINUE
+    ENDIF
+    $10:=$5+$OFFSET
+    $63:=TOGGLE:$10,x:2,Value
+    $59:=0
+    IF ($flags & 1) AND ($6>=0x50)
+      $59:=1
+    ELSEIF $8=4 AND {$7,4}=0x10000000
+      $59:=2
+    ELSEIF $8=4 AND {$7,4}=0x10
+      $59:=1
+    ELSEIF $8>=4 
+      IF {$7,4}=0x010030 OR {$7,4}=0x0160 OR {$7,4}=0x80000040 AND {$7+4,4}=0
+        $59:=1
+      ENDIF
+    ENDIF
+
+    IF $63 AND $59=1 AND $6>=0x20 AND {$5,4}>0 AND {$5,4}<=$6
+      =
+      $XOFS:=7
+      $OFFSET:=$OFFSET+$5
+      $12:=$OFFSET+$6
+      $esize:=0
+      _refs_nodeheader($12,$esize)
+
+      IF $esize>=0x1C
+        $21:={0x10,4}
+        $23:={0x14,4}
+        $24:=$OFFSET
+
+        WHILE $23>0 AND $24+$21+4<=$12
+          $XOFS:=7
+          $OFFSET:=$24
+
+          $res:=0
+          _refs_keyprefix_and_vcnrun($21,$res)
+          $21:=$21+4
+
+          IF NOT $res
+            EOL
+            $23:=$23-1
+            CONTINUE
+          ENDIF
+
+          x:18,AttrSize/ KeyOfs/ KeySz / Flags / ValOfs/ ValSize
+          EOL
+          x:16,0x
+          $29:={0,4}
+          $c:=0
+          IF $OFFSET+$29>$12
+            $29:=$12-$OFFSET
+            $c:=8
+          ENDIF
+          {0,4},x:18,c:$c,%X
+
+          ;Key Offs
+          $27:={4,2}
+          ;Key Size
+          $28:={6,2}
+
+          $c:=0
+          IF $28 AND $27>=$29
+            $28:=0
+            $c:=8
+          ENDIF
+          {4,2},x:28,c:$c,%X
+          IF $28 AND $27+$28>$29
+            $28:=$29-$27
+            $c:=8
+          ENDIF
+          {6,2},x:36,c:$c,%X
+
+          ;Flags
+          {8,2},x:44,%X
+
+          ;Value Offs
+          $25:={0x0A,2}
+          ;Value Size
+          $26:={0x0C,4}
+
+          $c:=0
+          IF $26 AND $25>=$29
+            $26:=0
+            $c:=8
+          ENDIF
+          {0x0A,2},x:52,c:$c,%X
+          IF $26 AND $25+$26>$29
+            $26:=$29-$25
+            $c:=8
+          ENDIF
+          {0x0C,4},x:60,c:$c,%X
+          =
+          IF $28
+            $10:=$27+$OFFSET
+            $63:=TOGGLE:$10,x:2,Key
+            IF $63
+              {$27,$28},x:12,CXm
+            ELSE
+              $10:=$28
+              IF $10>16
+                $10:=16
+              ENDIF
+              {$27,$10},x:12,CXm
+            ENDIF
+            =
+          ENDIF
+
+          IF NOT $26
+            $23:=$23-1
+            CONTINUE
+          ENDIF
+          $10:=$25+$OFFSET
+          $63:=TOGGLE:$10,x:2,Value
+          IF $63 AND $59=1 AND $26>=0x20 AND {$25,4}>0 AND {$25,4}<=$26
+            =
+            $XOFS:=13
+            $OFFSET:=$OFFSET+$25
+            $32:=$OFFSET+$26
+            $esize:=0
+            _refs_nodeheader($32,$esize)
+
+            IF $esize>=0x1C
+              $41:={0x10,4}
+              $43:={0x14,4}
+              $44:=$OFFSET
+
+              WHILE $43>0 AND $44+$41+4<=$32
+                $OFFSET:=$44
+
+                $res:=0
+                _refs_keyprefix_and_vcnrun($41,$res)
+                $41:=$41+4
+
+                IF NOT $res
+                  EOL
+                  $43:=$43-1
+                  CONTINUE
+                ENDIF
+
+                x:18,AttrSize/ KeyOfs/ KeySz / Flags / ValOfs/ ValSize
+                EOL
+                x:16,0x
+                $49:={0,4}
+                $c:=0
+                IF $OFFSET+$49>$32
+                  $49:=$32-$OFFSET
+                  $c:=8
+                ENDIF
+                {0,4},x:18,c:$c,%X
+
+                ;Key Offs
+                $47:={4,2}
+                ;Key Size
+                $48:={6,2}
+
+                $c:=0
+                IF $48 AND $47>=$49
+                  $48:=0
+                  $c:=8
+                ENDIF
+                {4,2},x:28,c:$c,%X
+                IF $48 AND $47+$48>$49
+                  $48:=$49-$47
+                  $c:=8
+                ENDIF
+                {6,2},x:36,c:$c,%X
+
+                ;Flags
+                {8,2},x:44,%X
+
+                ;Value Offs
+                $45:={0x0A,2}
+                ;Value Size
+                $46:={0x0C,4}
+
+                $c:=0
+                IF $46 AND $45>=$49
+                  $46:=0
+                  $c:=8
+                ENDIF
+                {0x0A,2},x:52,c:$c,%X
+                IF $46 AND $45+$46>$49
+                  $46:=$49-$45
+                  $c:=8
+                ENDIF
+                {0x0C,4},x:60,c:$c,%X
+                =
+                IF $48
+                  $10:=$47+$OFFSET
+                  $63:=TOGGLE:$10,x:2,Key
+                  IF $63
+                    {$47,$48},x:12,CXm
+                  ELSE
+                    $10:=$48
+                    IF $10>16
+                      $10:=16
+                    ENDIF
+                    {$47,$10},x:12,CXm
+                  ENDIF
+                  =
+                ENDIF
+
+                IF NOT $46
+                  $43:=$43-1
+                  CONTINUE
+                ENDIF
+                $10:=$OFFSET+$45
+                $63:=TOGGLE:$10,x:2,Value
+                $10:=$45+0x20
+                IF $63
+                  {$45,$46},x:12,CXm
+                ELSEIF NOT $48 OR ($46=0x30) AND {$45,8} AND {$10,8}=0x0808020000
+                  IF $46>=0x8
+                    x:12,Page >    0x
+                    $OPENTEMPLATE:='{2bf504cd-5185-ff23-a9bc-929a1abdcf79}'
+                    $OPENVOLPAGE:={$45,8},x:24,%X
+                  ENDIF
+                ELSE
+                  IF $46>=0x18
+                    $10:=$45+0x10
+                    x:12,Cluster > 0x
+                    $OPENVOLPAGE:={$10,8},x:24,%X
+                  ENDIF
+                ENDIF
+                =
+                $43:=$43-1
+              ENDWHILE
+
+              $XOFS:=13
+              $OFFSET:=$44
+              $41:={0x10,4}
+              $43:={0x14,4}
+              IF $43>0 AND $41+4<=$32
+                $10:=$OFFSET+$41
+                $63:=TOGGLE:$10,x:0,Entries Offsets
+                =
+                IF $63
+                  WHILE $43>0 AND $41+4<=$32
+                    x:4,0x
+                    $10:=$OFFSET+$1
+                    $10,x:6,%X:
+                    x:12,> 0x
+                    $GOTORECOFS:=$OFFSET+{$41,2}
+                    {$41,4},x:16,%X
+                    $41:=$41+4
+                    $43:=$43-1
+                    =
+                  ENDWHILE
+                ENDIF
+              ENDIF
+            ENDIF
+          ELSEIF $63
+            {$25,$26},x:12,CXm
+          ELSE
+            $10:=$25+0x20
+            $11:=$27+8
+            IF NOT $28 AND $26>=0x8 OR $26=0x30 AND {$25,8} AND {$10,8}=0x0808020000
+              x:12,Page >    0x
+              $OPENTEMPLATE:='{2bf504cd-5185-ff23-a9bc-929a1abdcf79}'
+              $OPENVOLPAGE:={$25,8},x:24,%X
+            ELSEIF $28=0x0E AND {$11,6}=0x38 AND $26>=0x60 AND {$25,4}=0
+              $10:=$25+0x0C+0x08
+              x:12,Obj. Id > 0x
+              $OPENTEMPLATE:='{2bf504cd-5185-ff23-a9bc-929a1abdcf79}'
+              $OPENFILENUM:={$10,8},x:24,%X
+              =
+              $10:=$25+0x5E
+              $11:=$25+0x54
+              $11:={$11,1}*2
+              IF 0x5E+$11>$26
+                $11:=$26-0x5E
+              ENDIF
+              {$10,$11},x:18,U
+            ELSEIF $28=0x10
+              IF $26>=0x18
+                $10:=$25+0x10
+                x:12,Cluster > 0x
+                $OPENVOLPAGE:={$10,8},x:24,%X
+              ENDIF
+            ENDIF
+          ENDIF
+          =
+          $23:=$23-1
+        ENDWHILE
+
+        $XOFS:=7
+        $OFFSET:=$24
+        $21:={0x10,4}
+        $23:={0x14,4}
+        IF $23>0 AND $21+4<=$12
+          $10:=$OFFSET+$21
+          $63:=TOGGLE:$10,x:0,Entries Offsets
+          =
+          IF $63
+            WHILE $23>0 AND $21+4<=$12
+              x:4,0x
+              $10:=$OFFSET+$1
+              $10,x:6,%X:
+              x:12,> 0x
+              $GOTORECOFS:=$OFFSET+{$21,2}
+              {$21,4},x:16,%X
+              $21:=$21+4
+              $23:=$23-1
+              =
+            ENDWHILE
+          ENDIF
+        ENDIF
+      ENDIF
+    ELSEIF $63 
+      {$5,$6},x:12,CXm
+    ELSE
+      $10:=$5+0x20
+      $11:=$7+8
+      IF (NOT $59 OR $6=0x30) AND {$5,8} AND $6>=0x28 AND {$10,8}=0x0808020000
+        x:12,Page >    0x
+        $OPENTEMPLATE:='{2bf504cd-5185-ff23-a9bc-929a1abdcf79}'
+        IF ($nodeid = 0xB) OR ($nodeid = 0xC)
+          $OPENCLUSTER:={$5,8},x:24,%X
+        ELSE
+          $OPENVOLPAGE:={$5,8},x:24,%X
+        ENDIF
+      ELSEIF ($nodeid=2) OR ($nodeid=4)
+        x:12,Page >    0x
+        $OPENTEMPLATE:='{2bf504cd-5185-ff23-a9bc-929a1abdcf79}'
+        $5:=$5+0x20
+        $OPENVOLPAGE:={$5,8},x:24,%X
+      ELSEIF $8>=2 AND {$7,2}=0x0510
+        x:12,Label:
+        {$5,$6},x:18,U
+      ELSEIF $8>=4 AND {$7,4}=0x020030 AND $6>=0x20
+        x:12,Obj. Id > 0x
+        $OPENTEMPLATE:='{2bf504cd-5185-ff23-a9bc-929a1abdcf79}'
+        $5:=$5+0x08
+        $OPENFILENUM:={$5,8},x:24,%X
+      ELSEIF $nodeid>=0x500 AND $8=0x0E AND {$11,6}=0x38 AND $6>=0x60 AND {$5,4}=0
+        $10:=$5+0x0C+0x08
+        x:12,Obj. Id > 0x
+        $OPENTEMPLATE:='{2bf504cd-5185-ff23-a9bc-929a1abdcf79}'
+        $OPENFILENUM:={$10,8},x:24,%X
+        =
+        $10:=$5+0x5E
+        $11:=$5+0x54
+        $11:={$11,1}*2
+        IF 0x5E+$11>$6
+          $11:=$6-0x5E
+        ENDIF
+        {$10,$11},x:18,U
+      ENDIF
+      =
+    ENDIF
+    $3:=$3-1
+  ENDWHILE
+
+  $XOFS:=1
+  $OFFSET:=$4
+  $1:={0x10,4}
+  $3:={0x14,4}
+  IF $3>0 AND $1+4<=$RECSIZE
+    $10:=$OFFSET+$1
+    $63:=TOGGLE:$10,x:0,Entries Offsets
+    =
+    IF $63
+      WHILE $3>0 AND $1+4<=$RECSIZE
+        x:4,0x
+        $10:=$OFFSET+$1
+        $10,x:6,%X:
+        x:12,> 0x
+        $GOTORECOFS:=$OFFSET+{$1,2}
+        {$1,4},x:16,%X
+        $1:=$1+4
+        $3:=$3-1
+        =
+      ENDWHILE
+    ENDIF
+  ENDIF
+ENDIF
+
+;//////////////////////////////////////////
+[APFS Node]
+guid:{d9e4fb83-4991-9aa6-7d0e-929edde456ed}
+
+CALCSIZESTART
+  IF $1<=0
+    ;recsize is not given
+    IF (({0x18,4} & 0xffff) = 1) AND ({0x20,4}=0x4253584E)
+      $1:= {0x24,4}
+    ENDIF
+  ENDIF
+  IF ({0x24,4}>=512) AND ({0x24,4}<=0x100000)
+    $RECSIZE:= $1
+  ELSE
+    $RECSIZE:= 4096
+  ENDIF
+CALCSIZEEND
+
+$1:= $RECSIZE
+IF $2<=0
+  ;partition offset is not given
+  IF (({0x18,4} & 0xffff) = 1) AND ({0x20,4}=0x4253584E)
+    $2:= $RECDEVOFS
+  ENDIF
+ENDIF
+$partofs:= $2
+
+$XOFS:= 1
+
+$expanded:= TOGGLE:0,x:0
+x:4,obj_phys
+
+$XOFS:= 5
+$x:= 10
+$objtype:= {0x18,4} & 0xffff
+$storagetype:= {0x18,4} & 0xc0000000
+
+IF $expanded
+  EOL
+  _sftl(8, %X, o_cksum)
+  _sftl(8, %X, o_oid)
+ELSE
+  $NEXTOFS:=0x08
+  {8},x:$x,%X
+  EOL
+ENDIF
+
+  _sftl(8, %X, o_xid)
+  _sft(4, %X, o_type)
+  $x:= 26
+  IF $objtype=1
+    _t(NX_SUPERBLOCK)
+  ELSEIF $objtype=2
+    _t(BTREE)
+  ELSEIF $objtype=3
+    _t(BTREE_NODE)
+  ELSEIF $objtype=5
+    _t(SPACEMAN)
+  ELSEIF $objtype=0xB
+    _t(OMAP)
+  ELSEIF $objtype=0xC
+    _t(CHECKPOINT_MAP)
+  ELSEIF $objtype=0xD
+    _t(FS)
+  ELSEIF $objtype=0x11
+    _t(NX_REAPER)
+  ENDIF
+
+  $x:= 42
+  IF $storagetype=0
+    _t(OBJ_VIRTUAL)
+  ELSEIF $storagetype=0x80000000
+    _t(OBJ_EPHEMERAL)
+  ELSEIF $storagetype=0x40000000
+    _t(OBJ_PHYSICAL)
+  ELSE
+    x:$x,c:8,OBJ_ERRTYPE
+  ENDIF
+  EOL
+
+;#define OBJ_VIRTUAL 0x00000000
+;#define OBJ_EPHEMERAL 0x80000000
+;#define OBJ_PHYSICAL 0x40000000
+;#define OBJ_NOHEADER 0x20000000
+;#define OBJ_ENCRYPTED 0x10000000
+;#define OBJ_NONPERSISTENT 0x08000000
+
+$subtype:={$NEXTOFS,4}
+IF $expanded
+  _sftl(4, %X, o_subtype)
+ENDIF
+
+$XOFS:=1
+$NEXTOFS:=0x20
+
+IF $objtype=1
+  ;NX_SUPERBLOCK
+  $x:=24
+  _sftl(4, %4c, nx_magic ("NXSB"))
+  _sftl(4, %u, nx_block_size)
+  _sftl(8, %u, nx_block_count)
+  _sftl(8, %X, nx_features           0x)
+  _sftl(8, %X, nx_ro_compat_features 0x)
+  _sftl(8, %X, nx_incompat_features  0x)
+  _sftl(16, %16cX, nx_uuid)
+  _sftl(8, %X, nx_next_oid           0x)
+  _sftl(8, %X, nx_next_xid           0x)
+  _sftl(4, %X, nx_xp_desc_blocks     0x)
+  _sftl(4, %X, nx_xp_data_blocks     0x)
+  _sftl(8, %X, nx_xp_desc_base       0x)
+  _sftl(8, %X, nx_xp_data_base       0x)
+  $OPENTEMPLATE:='{d9e4fb83-4991-9aa6-7d0e-929edde456ed}'
+  $OPENDEVOFS:=$partofs+(2+{$NEXTOFS,4})*$RECSIZE
+  _sftl(4, %X, nx_xp_desc_next      >0x)
+  _sftl(4, %X, nx_xp_data_next       0x)
+  _sftl(4, %X, nx_xp_desc_index      0x)
+  _sftl(4, %X, nx_xp_desc_len        0x)
+  _sftl(4, %X, nx_xp_data_index      0x)
+  _sftl(4, %X, nx_xp_data_len        0x)
+  _sftl(8, %X, nx_spaceman_oid       0x)
+  $OPENTEMPLATE:='{d9e4fb83-4991-9aa6-7d0e-929edde456ed}'
+  $OPENDEVOFS:=$partofs+{$NEXTOFS,8}*$RECSIZE
+  _sftl(8, %X, nx_omap_oid          >0x)
+  _sftl(8, %X, nx_reaper_oid         0x)
+  _sftl(4, %X, nx_test_type          0x)
+  $count:=
+  _sftl(4, %X, nx_max_file_systems   0x)
+  $i:=0
+  WHILE ($i<$count) AND ($NEXTOFS+0x08<=$RECSIZE)
+    $i,x:0,nx_fs_oid[%u]
+    x:$x-2,0x
+    {8},x:$x,%X
+    EOL
+    $i:=$i+1
+  ENDWHILE
+  x:0,...
+ELSEIF $objtype=0xC
+  ;CHECKPOINT_MAP
+  $x:=14
+  _iftl({4}, %X, cpm_flags   0x)
+  $count:=
+  _iftl({4}, %u, cpm_count)
+  $i:=0
+  WHILE $i<$count AND $NEXTOFS+0x28<=$RECSIZE
+    $i,x:4,cpm_map[%u]
+    $i:=$i+1
+    $expanded:=TOGGLE:$NEXTOFS,x:0
+    $entryofs:=$NEXTOFS
+    EOL
+    IF $expanded
+      $XOFS:=$XOFS+4
+      $objtype:={$NEXTOFS,4}&0xffff
+      $storagetype:={$NEXTOFS,4}&0xc0000000
+      _ift({4}, %X, cpm_type    0x)
+      $x:=26
+      IF $objtype=1
+        _t(NX_SUPERBLOCK)
+      ELSEIF $objtype=2
+        _t(BTREE)
+      ELSEIF $objtype=5
+        _t(SPACEMAN)
+      ELSEIF $objtype=0xC
+        _t(CHECKPOINT_MAP)
+      ELSEIF $objtype=0x11
+        _t(NX_REAPER)
+      ENDIF
+      $x:=42
+      IF $storagetype=0
+        _t(OBJ_VIRTUAL)
+      ELSEIF $storagetype=0x80000000
+        _t(OBJ_EPHEMERAL)
+      ELSEIF $storagetype=0x40000000
+        _t(OBJ_PHYSICAL)
+      ELSE
+        x:$x,c:8,OBJ_ERRTYPE
+      ENDIF
+      EOL
+      $x:=14
+      _iftl({4}, %X, cpm_subtype 0x)
+      _iftl({4}, %X, cpm_size    0x)
+      _iftl({4}, %X, cpm_pad     0x)
+      _iftl({8}, %X, cpm_fs_oid  0x)
+      _iftl({8}, %X, cpm_oid     0x)
+
+      $OPENTEMPLATE:='{d9e4fb83-4991-9aa6-7d0e-929edde456ed}'
+      $OPENDEVOFS:=$partofs+{$NEXTOFS,8}*$RECSIZE
+      _iftl({8}, %X, cpm_paddr  >0x)
+      $XOFS:=$XOFS-4
+    ENDIF
+    $NEXTOFS:=$entryofs+0x28
+  ENDWHILE
+ELSEIF $objtype=0x2 OR $objtype=0x3
+  ;B-tree node
+  $x:=24
+  $valsofs:=$RECSIZE
+  $flags:=
+  _ift({2}, %X, btn_flags             0x)
+  IF $flags&0x1
+    x:$x+6,ROOT
+    $valsofs:=$valsofs-0x28
+  ENDIF
+  IF $flags&0x2
+    x:$x+11,LEAF
+  ENDIF
+  IF $flags&0x4
+    x:$x+16,FIX_KVS
+  ENDIF
+  IF $flags&0x8000
+    x:$x+24,c:8,CHK_INVAL
+  ENDIF
+  EOL
+  _iftl({2}, %X, btn_level             0x)
+  $nkeys:=
+  _iftl({4}, %u, btn_nkeys)
+  $tocofs:=
+  _iftl({2}, %X, btn_table_space.off   0x)
+  $keysofs:=$tocofs+{$NEXTOFS,2}
+  _iftl({2}, %X, btn_table_space.len   0x)
+  _iftl({2}, %X, btn_free_space.off    0x)
+  _iftl({2}, %X, btn_free_space.len    0x)
+  _iftl({2}, %X, btn_key_free_list.off 0x)
+  _iftl({2}, %X, btn_key_free_list.len 0x)
+  _iftl({2}, %X, btn_val_free_list.off 0x)
+  _iftl({2}, %X, btn_val_free_list.len 0x)
+  
+  $dataofs:=$NEXTOFS
+  $keysofs:=$dataofs+$keysofs
+
+  $NEXTOFS:=$dataofs+$tocofs
+  $expanded:=TOGGLE:$NEXTOFS,x:0
+  x:4,TOC
+  =
+  IF $expanded
+    $i:=0
+    $XOFS:=$XOFS+4
+    WHILE $i<$nkeys
+      $i:=$i+1
+      IF $flags&0x4
+        IF $NEXTOFS+4>$RECSIZE
+          BREAK
+        ENDIF
+        x:0,k:
+        {2},x:2,%X
+        x:8,v:
+        {2},x:10,%X
+      ELSE
+        IF $NEXTOFS+8>$RECSIZE
+          BREAK
+        ENDIF
+        x:0,k.off:
+        {2},x:6,%X
+        x:12,k.len:
+        {2},x:18,%X
+        x:24,v.off:
+        {2},x:30,%X
+        x:36,v.len:
+        {2},x:42,%X
+      ENDIF
+      =
+    ENDWHILE
+    $XOFS:=$XOFS-4
+  ENDIF
+
+  $NEXTOFS:=$dataofs+$tocofs
+  ;$expanded:=TOGGLE:$NEXTOFS,x:0
+  ;IF $expanded
+    $i:=0
+    $xk:=0
+    IF $flags&0x4
+      x:0,kofs vofs
+      $xk:=10
+    ELSE
+      x:0,kofs/l  vofs/l
+      $xk:=16
+    ENDIF
+    IF $subtype=0xB AND $flags&0x2
+      x:$xk,ok_oid          ok_xid          ov_flags ov_size  ov_paddr
+    ELSEIF $subtype=0xB
+      x:$xk,ok_oid          ok_xid           obj_id
+    ELSEIF $subtype=0xE
+      x:$xk,obj_id   type
+    ENDIF
+    =
+    WHILE $i<$nkeys
+      ;$i,x:0,key[%d]
+      $i:=$i+1
+      $keyofs:=0
+      $valofs:=0
+      $valsz:=0
+      IF $flags&0x4
+        IF $NEXTOFS+4>$RECSIZE
+          =
+          BREAK
+        ENDIF
+        $keyofs:=$keysofs+{2}
+        $keyofs,x:0,%X
+        $valofs:={2}
+        IF ($valofs=0xffff)
+          $valofs:=-1
+          x:5,-
+        ELSE
+          $valofs:=$valsofs-$valofs
+          $valofs,x:5,%X
+        ENDIF
+      ELSE
+        IF $NEXTOFS+8>$RECSIZE
+          EOL
+          BREAK
+        ENDIF
+        $keyofs:=$keysofs+{2}
+        $keysz:={2}
+        $valofs:=$valsofs-{2}
+        $valsz:={2}
+        $keyofs|$keysz<<32,x:0,%X/%X
+        $valofs|$valsz<<32,x:8,%X/%X
+      ENDIF
+      IF $subtype=0xB
+        {$keyofs,8},x:10,%X
+        {$keyofs+8,8},x:26,%X
+        IF $flags&0x2
+          {$valofs,4},x:42,%X
+          {$valofs+4,4},x:51,%X
+          $OPENTEMPLATE:='{d9e4fb83-4991-9aa6-7d0e-929edde456ed}'
+          $OPENDEVOFS:=$partofs+{$valofs+8,8}*$RECSIZE
+          x:59,>
+          {$valofs+8,8},x:60,%X
+        ELSE
+          $OPENTEMPLATE:='{d9e4fb83-4991-9aa6-7d0e-929edde456ed}'
+          $OPENDEVOFS:=$partofs+{$valofs,8}*$RECSIZE
+          x:43,>
+          {$valofs,8},x:44,%X
+        ENDIF
+      ELSEIF $subtype=0xE                              	
+        {$keyofs:0,60},x:$xk,%X
+        {$keyofs:60,4},x:$xk+16,%X
+        $etype:={$keyofs:60,4}
+        $nlen:=0
+        IF $etype=5
+          x:$xk+18,>
+          $OPENFILENUM:=
+          {$keyofs+8,8},x:$xk+19,%X
+        ELSEIF $etype=8
+          {$keyofs+8,8},x:$xk+22,%X
+;       ELSEIF $etype=4
+;uint16_t name_len;
+;uint8_t name[0];
+;         {$keyofs+10,{$keyofs+8,2}},x:$xk+19,w:10,%u
+        ENDIF
+        IF ($flags&0x2)=0 
+          x:59,>
+          $OPENVOLPAGE:=
+          {$valofs,8},x:60,%X
+        ELSEIF $etype=5
+          {$valofs,8},x:$xk+30,%X
+          $l:={$valofs+8,2}
+          IF $l>0
+            {$valofs+10,$l},x:$xk+39,u
+          ENDIF
+        ELSEIF $etype=6
+          {$valofs,4},x:$xk+22,%X
+        ELSEIF $etype=8
+          {$valofs,8},x:$xk+36,%X
+          $OPENDEVOFS:=$partofs+{$valofs+8,8}*$RECSIZE
+          x:$xk+51,>
+          {$valofs+8,8},x:$xk+52,%X
+        ELSEIF $etype=9
+          x:$xk+18,>
+          $OPENFILENUM:=
+          {$valofs,8},x:$xk+19,%X
+          {$keyofs+8,4},x:$xk+35,%08X
+          $l:={$keyofs+8,2}&0x3ff
+          IF $l>0
+            {$keyofs+12,$l},x:$xk+44,u
+          ENDIF
+        ELSEIF $etype=3
+          x:$xk+18,>
+          $OPENFILENUM:=
+          {$valofs,8},x:$xk+19,%X
+          $exp:=TOGGLE:$valofs,x:$xk+35
+          $xv:=$xk+35
+          IF $exp
+            EOL
+            $sxofs:= $XOFS
+            $XOFS:=$xv-14
+            $x:=14
+            $OPENFILENUM:=
+            _iftl({$valofs+8,8}, %X, private_id >)
+            _iftl({$valofs+0x10,8}, %X, create_time)
+            _iftl({$valofs+0x18,8}, %X, mod_time)
+            _iftl({$valofs+0x20,8}, %X, change_time)
+            _iftl({$valofs+0x28,8}, %X, access_time)
+            _iftl({$valofs+0x30,8}, %X, intern_flags)
+            _iftl({$valofs+0x38,4}, %X, n_child/link)
+            _iftl({$valofs+0x3C,4}, %X, def_prot_cls)
+            _iftl({$valofs+0x40,4}, %X, wr_gen_count)
+            _iftl({$valofs+0x44,4}, %X, bsd_flags)
+            _iftl({$valofs+0x48,4}, %X, owner)
+            _iftl({$valofs+0x4C,4}, %X, group)
+            _iftl({$valofs+0x50,2}, %X, mode)
+            _iftl({$valofs+0x52,2}, %X, pad1)
+            _iftl({$valofs+0x54,8}, %X, pad2)
+            $XOFS:=$sxofs
+          ENDIF
+          $nameofs:= 0
+          $namesz:= 0
+          IF ($valsz>0x60)
+            $v:=$valofs+0x5C
+            IF $exp
+              EOL
+              x:$xv-15,xf_num_exts:
+              {$v,2},x:$xv,%u
+              EOL
+              x:$xv-15,xf_used_data:
+              {$v+2,2},x:$xv,%u
+            ENDIF
+              $_vnum:={$v,2}
+              $_vsz:=$valsz-0x60
+              $v:=$v+4
+              $_dofs:=$v
+              $_dxofs:=$_vnum*4
+            WHILE ($_vsz>=4) AND ($_vnum>0)
+              $x_exp:= 0
+              IF $exp
+                EOL
+                $x_exp:=TOGGLE:$v,x:$xv-15
+                x:$xv-12,x_type: 0x
+                {$v,1},x:$xv+2,%X
+                EOL
+                IF $x_exp
+                  x:$xv-12,x_flags: 0x
+                  {$v+1,1},x:$xv+2,%X
+                  EOL
+                  x:$xv-12,x_size:
+                  {$v+2,2},x:$xv+2,%u
+                ENDIF
+              ELSEIF ({$v,1} = 4)
+                $nameofs:= $_dofs+$_dxofs
+                $namesz:= {$v+2,2}
+              ENDIF
+              IF $x_exp
+                EOL
+                IF {$v,1} = 4
+                  x:$xv-10,name:
+                  {$_dofs+$_dxofs,{$v+2,2}},x:$xv+2,u
+                ELSEIF {$v,1} = 8
+                  x:$xv-10,size:
+                  {$_dofs+$_dxofs,8},x:$xv+2,%d
+                  EOL
+                  x:$xv-10,alloc_size:
+                  {$_dofs+$_dxofs+8,8},x:$xv+2,%d
+                  EOL
+                  x:$xv-10,crypto_id:
+                  {$_dofs+$_dxofs+0x10,8},x:$xv+2,%d
+                  EOL
+                  x:$xv-10,written:
+                  {$_dofs+$_dxofs+0x18,8},x:$xv+2,%d
+                  EOL
+                  x:$xv-10,read:
+                  {$_dofs+$_dxofs+0x20,8},x:$xv+2,%d
+                ENDIF
+              ENDIF
+                $_dxofs:=($_dxofs+{$v+2,2}+7) & ~7
+                $_vsz:=$_vsz-4
+                $_vnum:=$_vnum-1
+                $v:=$v+4
+            ENDWHILE
+          ENDIF
+          IF $namesz>0
+            {$nameofs,$namesz},x:$xv+9,u
+          ENDIF
+        ELSEIF $etype=4
+          $xv:=$xk+35
+          $l:={$keyofs+8,2}
+          IF $l>0
+            {$keyofs+10,$l},x:$xk+44,u
+          ENDIF
+;uint16_t flags;
+;uint16_t xdata_len;
+;uint8_t xdata[0];
+;XATTR_DATA_EMBEDDED flag (2)
+;j_xattr_dstream_t
+          $exp:=TOGGLE:$valofs,x:$xk+35
+          $xflags:=
+          {$valofs, 2},x:$xk+39,%X
+          IF ($xflags & 2)
+            IF $exp
+              EOL
+              $xdata_len:=
+              {$valofs+2,2},x:$xk,%u
+              EOL
+              {$valofs+4,$xdata_len},x:$xk,CXm
+            ENDIF
+          ELSE
+            x:$xk+18,>
+            $OPENFILENUM:=
+            {$valofs+4,8},x:$xk+19,%X
+            IF ($xflags & 1) AND $exp
+                  EOL
+                  $_dofs:=$valofs+4+8
+                  x:$xv-10,size:
+                  {$_dofs,8},x:$xv+2,%d
+                  EOL
+                  x:$xv-10,alloc_size:
+                  {$_dofs+8,8},x:$xv+2,%d
+                  EOL
+                  x:$xv-10,crypto_id:
+                  {$_dofs+0x10,8},x:$xv+2,%d
+                  EOL
+                  x:$xv-10,written:
+                  {$_dofs+0x18,8},x:$xv+2,%d
+                  EOL
+                  x:$xv-10,read:
+                  {$_dofs+0x20,8},x:$xv+2,%d
+            ENDIF
+          ENDIF
+        ELSE
+          x:$xk+18,>
+          $OPENFILENUM:={$valofs,8},x:$xk+19,%X
+        ENDIF
+      ENDIF
+      =
+    ENDWHILE
+  ;ENDIF
+
+ELSEIF $objtype=0xB
+  ;OMAP
+  $x:=24
+  _sftl(4, %X, om_flags              0x)
+  _sftl(4, %X, om_snapshot           0x)
+  _sftl(4, %X, om_treetype           0x)
+  _sftl(4, %X, om_snapshot_treetype  0x)
+  $OPENTEMPLATE:='{d9e4fb83-4991-9aa6-7d0e-929edde456ed}'
+  $OPENDEVOFS:=$partofs+{$NEXTOFS,8}*$RECSIZE
+  _sftl(8, %X, om_tree_oid          >0x)
+  _sftl(8, %X, om_scanpshot_tree_oid 0x)
+  _sftl(8, %X, om_most_recent_snap   0x)
+  _sftl(8, %X, om_pending_revert_min 0x)
+  _sftl(8, %X, om_pending_revert_max 0x)
+ELSEIF $objtype=0xD
+  ;FS
+  $x:= 30
+  _sftl(4, %4c, apfs_magic ("APSB"))
+  _sftl(4, %u, apfs_fs_index)
+  _sftl(8, %X, apfs_features               0x)
+  _sftl(8, %X, apfs_ro_compat_features     0x)
+  _sftl(8, %X, apfs_incompat_features      0x)
+  _sftl(8, %X, apfs_unmount_time           0x)
+  _sftl(8, %X, apfs_fs_reserve_block_count 0x)
+  _sftl(8, %X, apfs_fs_quota_block_count   0x)
+  _sftl(8, %X, apfs_fs_alloc_count         0x)
+  ;_sftl(0x14, , apfs_meta_crypto)
+  $NEXTOFS:=$NEXTOFS+0x14
+  _sftl(4, %X, apfs_root_tree_type         0x)
+  _sftl(4, %X, apfs_extentref_tree_type    0x)
+  _sftl(4, %X, apfs_snap_meta_tree_type    0x)
+  $OPENTEMPLATE:='{d9e4fb83-4991-9aa6-7d0e-929edde456ed}'
+  $OPENDEVOFS:=$partofs+{$NEXTOFS,8}*$RECSIZE
+  _sftl(8, %X, apfs_omap_oid              >0x)
+  _sftl(8, %X, apfs_root_tree_oid          0x)
+  _sftl(8, %X, apfs_extentref_tree_oid     0x)
+  _sftl(8, %X, apfs_snap_meta_tree_oid     0x)
+  ;apfs_revert_to_xid: QWORD;
+  ;apfs_revert_to_sblock_oid: QWORD;
+  $NEXTOFS:= $NEXTOFS + 16
+  _sftl(8, %X, apfs_next_obj_oid           0x)
+  _sftl(8, %X, apfs_num_files              0x)
+  _sftl(8, %X, apfs_num_directories        0x)
+  _sftl(8, %X, apfs_num_symlinks           0x)
+  _sftl(8, %X, apfs_num_other_fsobjects    0x)
+  _sftl(8, %X, apfs_num_snapshots          0x)
+  _sftl(8, %X, apfs_total_blocks_alloced   0x)
+  _sftl(8, %X, apfs_total_blocks_freed     0x)
+  _sftl(16, %16cX, apfs_vol_uuid)
+  _sftl(8, %X, apfs_last_mod_time          0x)
+  _sftl(8, %X, apfs_fs_flags               0x)
+  ;apfs_formatted_by: apfs_modified_by_t;
+  ;apfs_modified_by: [APFS_MAX_HIST] of apfs_modified_by_t;
+  $NEXTOFS:=$NEXTOFS + 9 * (32+16)
+  _sftl(256, u, apfs_volname)
+
+  ;apfs_next_doc_id {4}
+  ;apfs_role {2}
+  ;reserved {2}
+  ;apfs_root_to_xid {8}
+  ;apfs_er_state_oid {8}
+ENDIF
+
+;//////////////////////////////////////////
+[Btrfs Superblock]
+guid:{fc37ba87-d054-da55-3646-6a896b7e761d}
+o:1
+DEFINE _btrfs_key(%key_offset%)
+	$OPENFILENUM:=
+	_sftl(8, %X, obj_id > 0x)
+	_sftl(1, %X, type 0x)
+	%key_offset%:=
+	_sftl(8, %X, offset 0x)
+ENDDEFINE _btrfs_key
+
+DEFINE _btrfs_chunk_item(%endofs%, %ofs_in_chunk%, %volofs%)
+	$_x:=$x
+	$x:=20
+	$_chunk_size:=
+	_sftl(8, %X, chunk size 0x)
+	_sftl(8, %X, root ref objid 0x)
+	_sftl(8, %X, stripe length 0x)
+	_sftl(8, %X, type 0x)
+	_sftl(4, %u, optimal io alignment)
+	_sftl(4, %u, optimal io width)
+	_sftl(4, %u, minimal io size)
+	$_nstripes:=
+	_sftl(2, %u, number of stripes)
+	_sftl(2, %u, sub stripes)
+
+	$XOFS:=$XOFS+4
+	;Stripes follow (for each number of stripes):
+	$_i:=0
+	WHILE ($_i<$_nstripes) AND ($NEXTOFS < %endofs%)
+		_sftl(8, %u, device id)
+		$_stripe_ofs:=
+		_sftl(8, %X, offset 0x)
+		;for superblock only:
+		IF ((%ofs_in_chunk%)>=0) AND ((%ofs_in_chunk%)<$_chunk_size)
+			$OPENTEMPLATE:='{99e01878-19b8-d05c-58f9-c0bcf3210faf}'
+			$_devofs:= (%ofs_in_chunk%) + $_stripe_ofs
+			$OPENDEVOFS:= (%volofs%) + $_devofs
+			_iftl($_devofs, %X, chunk tree root > 0x)
+		ENDIF
+		_sftl(0x10, %16cX, device UUID)
+		$_i:=$_i+1
+	ENDWHILE
+	$XOFS:=$XOFS-4
+	$x:=$_x
+ENDDEFINE _btrfs_chunk_item
+
+$RECSIZE:=0x1000
+
+$XOFS:=1
+$x:=20
+_sftl(0x20, %32cX, Checksum)
+_sftl(0x10, %16cX, FS UUID)
+$sbofs:=
+_sftl(8, %X, this blk ph. addr 0x)
+_sftl(8, %X, flags 0x)
+_sftl(8, %8c,magic "_BHRfS_M")
+_sftl(8, %u, generation)
+$OPENVOLPAGE:=
+_sftl(8, %X, root tree l.addr >0x)
+$OPENVOLPAGE:=
+$chunktreeofs:=
+_sftl(8, %X, chunk tree l.addr>0x)
+$OPENVOLPAGE:=
+_sftl(8, %X, log tree log.addr>0x)
+_sftl(8, %u, log_root_transid)
+_sftl(8, %u, total_bytes)
+_sftl(8, %u, bytes_used)
+_sftl(8, %X, root_dir_objectid 0x)
+_sftl(8, %u, num_devices)
+_sftl(4, %u, sectorsize)
+_sftl(4, %u, nodesize)
+_sftl(4, %u, leafsize)
+_sftl(4, %u, stripesize)
+$scarrsz:=
+_sftl(4, %u, sys_chunk_array_size)
+_sftl(8, %u, chunk_root_generation)
+_sftl(8, %X, compat_flags      0x)
+_sftl(8, %X, compat_ro_flags   0x)
+_sftl(8, %X, incompat_flags    0x)
+_sftl(2, %u, csum_type)
+_sftl(1, %u, root_level)
+_sftl(1, %u, chunk_root_level)
+_sftl(1, %u, log_root_level)
+$exp:=TOGGLE:$NEXTOFS,x:0
+x:4,DEV_ITEM
+EOL
+IF $exp
+	{0x62},x:4,CXm
+ENDIF
+
+$NEXTOFS:=0x12B
+_sftl(0x100, u, label)
+_sftl(8, %u, cache_generation)
+_sftl(8, %u, uuid_tree_generation)
+;23b f0 reserved
+;32b 800 
+
+$exp:=TOGGLE:$NEXTOFS,x:0
+x:4,sys_chunk_array
+EOL
+IF $exp
+	$XOFS:=$XOFS+4
+	$NEXTOFS:=0x32b
+	IF $scarrsz > 0x800
+		$scarrsz:= 0x800
+	ENDIF
+	$endofs:= 0x32b + $scarrsz
+	WHILE $NEXTOFS < $endofs
+		_btrfs_key($key_offset)
+		$XOFS:=$XOFS+4
+		_btrfs_chunk_item($endofs, $chunktreeofs-$key_offset, $RECDEVOFS - $sbofs)
+		$XOFS:=$XOFS-4
+	ENDWHILE
+	$XOFS:=$XOFS-4
+ENDIF
+
+;$NEXTOFS:=0xb2b
+;b2b 	2a0 		Contain super_roots (4 btrfs_root_backup)
+;dcb 	235 		current unused 
+
+DEFINE _btrfs_dir_item(%name_len%)
+	_btrfs_key($_key_offset)
+	_sftl(8, %u, transid)
+	_sftl(2, %u, data_len)
+	%name_len%:=
+	_sftl(2, %u, name_len)
+	_sftl(1, %u, type)
+ENDDEFINE _btrfs_dir_item
+
+DEFINE _btrfs_time
+	{8},x:$x,UNIXDATE
+	x:$x+19,.
+	{4},x:$x+20,%09u
+ENDDEFINE
+
+DEFINE _btrfs_timel(%1%)
+	_btrfs_time
+	x:0,%1%
+	EOL
+ENDDEFINE
+
+DEFINE _btrfs_inode_item
+	_sftl(8, %u, generation)
+	_sftl(8, %u, transid)
+	_sftl(8, %u, size)
+	_sftl(8, %u, nbytes)
+	_sftl(8, %u, block_group)
+	_sftl(4, %u, nlink)
+	_sftl(4, %X, uid 0x)
+	_sftl(4, %X, gid 0x)
+	_sftl(4, %X, mode 0x)
+	_sftl(8, %X, rdev 0x)
+	_sftl(8, %X, flags 0x)
+	_sftl(8, %u, sequence)
+	;80	__le64 	reserved[4]
+	$NEXTOFS:=$NEXTOFS+32
+	_btrfs_timel(atime)
+	_btrfs_timel(ctime)
+	_btrfs_timel(mtime)
+	_btrfs_timel(otime)
+ENDDEFINE _btrfs_inode_item
+
+DEFINE _btrfs_root_item
+	_btrfs_inode_item
+	_sftl(8, %u, generation)
+	_sftl(8, %X, root_dirid 0x)
+	$OPENVOLPAGE:=
+	_sftl(8, %X, bytenr >0x)
+	;continued//!!!!
+ENDDEFINE _btrfs_root_item
+
+;//////////////////////////////////////////
+[Btrfs Node]
+guid:{99e01878-19b8-d05c-58f9-c0bcf3210faf}
+;o:1
+
+CALCSIZESTART
+	IF $1<=0
+		;recsize is not given
+		$1:= 0x4000
+	ENDIF
+	$RECSIZE:=$1
+CALCSIZEEND
+
+$XOFS:=1
+$x:=16
+_sftl(0x20, %32cX, Checksum)
+_sftl(0x10, %16cX, FS UUID)
+$OPENVOLPAGE:=
+_sftl(8, %X, Log. address  0x)
+_sftl(7, %X, Flags 0x)
+_sftl(1, %u, Backref. Rev.)
+_sftl(0x10, %16cX, Chunk tree UUID)
+_sftl(8, %u, Generation)
+_sftl(8, %X, Tree ID 0x)
+$num:=
+_sftl(4, %u, Number of items)
+$level:=
+_sftl(1, %u, Level)
+$x0:= 4
+$x1:= $x0+17
+$x2:= $x1+5
+$x3:= $x2+15
+$x4:= 0
+x:$x0,Obj ID
+x:$x1,Type
+x:$x2,Offset
+IF $level == 0
+	$x4:= $x3+7
+	x:$x3,Offset
+	x:$x4,Size
+ELSE
+	$x4:= $x3+15
+	x:$x3,BlockNr
+	x:$x4,Generation
+ENDIF
+EOL
+$i:=0
+WHILE $i < $num
+	
+	$_key_objid:=
+	{8},x:$x0,%X
+	$_key_type:=
+	{1},x:$x1,%02X
+	$_key_offset:=
+	{8},x:$x2,%X
+
+	IF $level > 0
+		x:$x3-1,>
+		$OPENVOLPAGE:=
+		{8},x:$x3,%X
+		{8},x:$x4,%u
+		EOL
+	ELSE		
+		$dataofs:=
+		{4},x:$x3,%X
+		$datasz:=
+		{4},x:$x4,%X
+
+		$exp:=0
+		IF $datasz
+			$exp:=TOGGLE:$NEXTOFS,x:0
+		ENDIF
+		$keyofs:= $NEXTOFS
+		$NEXTOFS:= 0x65 + $dataofs
+		$endofs:= $NEXTOFS + $datasz
+		IF $endofs > $RECSIZE
+			$endofs:= $RECSIZE
+		ENDIF
+		IF $exp
+			EOL
+			$XOFS:= $XOFS+4
+			IF ($_key_type = 0xe4) 
+				_btrfs_chunk_item($endofs, -1, 0)
+			ELSEIF ($_key_type = 0x0C)
+				_sftl(8, %u, dir.index)
+				$len:=
+				_sftl(2, %u, len)
+				_sftl($len, u, name)
+			ELSEIF ($_key_type = 0x18) OR ($_key_type = 0x60)
+				_btrfs_dir_item($name_len)
+				_sftl($name_len, u, name)
+			ELSEIF ($_key_type = 0x54) 
+				WHILE ($NEXTOFS < $endofs)
+					_btrfs_dir_item($name_len)
+					_sftl($name_len, u, name)
+				ENDWHILE
+			ELSEIF ($_key_type = 0x1)
+				_btrfs_inode_item
+			ELSEIF ($_key_type = 0x84)
+				_btrfs_root_item
+			ELSE
+				{$datasz},x:0,CXm
+			ENDIF
+			$XOFS:= $XOFS-4
+		ELSE
+			IF ($_key_type = 0x0C)
+				$NEXTOFS:=$NEXTOFS+8
+				$len:={2}
+				{$len}, x:$x4+6, u
+			ELSEIF ($_key_type = 0x18) OR ($_key_type = 0x60) OR ($_key_type = 0x54)
+				$NEXTOFS:=$NEXTOFS+27
+				$len:={2}
+				$NEXTOFS:=$NEXTOFS+1
+				{$len}, x:$x4+6, u
+			ENDIF
+			EOL
+		ENDIF
+		$NEXTOFS:= $keyofs
+	ENDIF
+	IF $NEXTOFS >= $RECSIZE
+		BREAK
+	ENDIF
+	$i:=$i+1
+ENDWHILE

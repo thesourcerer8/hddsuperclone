@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=HDDSuperTool
+GenericName=HDDSuperTool
+Comment=HDDSuperTool
+Exec= /home/tech/hddsupertool/temp/hddsupertool_start.sh
+Terminal=true
+Type=Application
+Categories=Utility;

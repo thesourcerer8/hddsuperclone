@@ -1,0 +1,938 @@
+_HDDSuperClone_2.3.1_20220115_
+|__|0000|__|
+Datei
+|__|0001|__|
+Aufhören
+|__|0002|__|
+Offenes Projekt
+|__|0003|__|
+Projektdatei (Fortschritt) laden
+|__|0004|__|
+Fehler!
+|__|0005|__|
+Warnung
+|__|0006|__|
+Fehler bei der Verarbeitung der Protokolldatei!
+Die Protokolldatei wurde nicht geladen.
+
+|__|0007|__|
+Die Logdatei ist fehlerhaft!
+Die Protokolldatei muss repariert werden, bevor sie verwendet werden kann.
+Weitere Informationen finden Sie in den Konsolenmeldungen.
+
+|__|0008|__|
+Sprache
+|__|0009|__|
+Sprache exportieren
+|__|0010|__|
+Sprache importieren
+|__|0011|__|
+Datei kann nicht zum Schreiben geöffnet werden
+|__|0012|__|
+Datei kann nicht zum Lesen geöffnet werden
+|__|0013|__|
+Fehler bei der Verarbeitung der importierten Sprachdatei
+|__|0014|__|
+Sprache erfolgreich geändert!
+|__|0015|__|
+Erfolg!
+|__|0016|__|
+Neues Projekt
+|__|0017|__|
+Neue Projektdatei (Fortschritt).
+|__|0018|__|
+Optionen
+|__|0019|__|
+Wählen Sie Quelllaufwerk
+|__|0020|__|
+Wählen Sie Ziel
+|__|0021|__|
+Fehler bei der Auswahl der Quelle
+|__|0022|__|
+Fehler beim Auswählen des Ziels
+|__|0023|__|
+Wählen Sie Zielbild
+|__|0024|__|
+WARNUNG: Dieses Laufwerk steht auch dem Betriebssystem zur Verfügung!
+Das ist zu gefährlich und würde wahrscheinlich zu einem Computerabsturz führen!
+Bitte beachten Sie unbedingt die Anweisungen zum Ausblenden des Laufwerks!
+
+|__|0025|__|
+ACHTUNG: Das ausgewählte Gerät ist ein Slave auf der Steuerung!
+Dies funktioniert nicht immer wie erwartet!
+Das könnte sehr gefährlich sein und zu Datenverlust (oder Schlimmerem) führen!
+Es wird empfohlen, dass das Gerät Master auf der Steuerung ist!
+
+|__|0026|__|
+WARNUNG: Möglicherweise befindet sich auf derselben Steuerung ein weiteres Laufwerk!
+Sie sollten NIEMALS mit einem Laufwerk arbeiten, wenn sich ein anderes Laufwerk auf demselben Controller befindet!
+Das könnte sehr gefährlich sein und zu Datenverlust (oder Schlimmerem) führen!
+
+|__|0027|__|
+Sie müssen zuerst ein Projekt auswählen.
+|__|0028|__|
+Antrieb
+|__|0029|__|
+Bilddatei
+|__|0030|__|
+NULL (Kein Ziel)
+|__|0031|__|
+Bilddatei auswählen
+|__|0032|__|
+Anschließen
+|__|0033|__|
+Trennen
+|__|0034|__|
+Anfang
+|__|0035|__|
+Halt
+|__|0036|__|
+Sie müssen zuerst die Verbindung trennen.
+|__|0037|__|
+Sie müssen zuerst eine Verbindung herstellen.
+|__|0038|__|
+Sie müssen ein Projekt, eine Quelle und ein Ziel auswählen, bevor Sie eine Verbindung herstellen.
+|__|0039|__|
+Geräte können nicht verbunden werden
+|__|0040|__|
+Geräte jetzt verbunden
+|__|0041|__|
+Geräte jetzt getrennt
+|__|0042|__|
+Quelle und Ziel können nicht dasselbe Gerät sein
+|__|0043|__|
+Kein Projekt ausgewählt
+
+|__|0044|__|
+Keine Quelle ausgewählt
+
+|__|0045|__|
+Kein Ziel ausgewählt
+
+|__|0046|__|
+Fährt
+|__|0047|__|
+Modus
+|__|0048|__|
+Automatische Passthrough-Erkennung
+|__|0049|__|
+Passthrough-SCSI
+|__|0050|__|
+Passthrough-ATA
+|__|0051|__|
+Direkte IDE
+|__|0052|__|
+Direktes AHCI
+|__|0053|__|
+Einstellungen
+|__|0054|__|
+Erweiterte Einstellungen
+|__|0055|__|
+Der Direktmodus in der kostenlosen Version ist nur PIO!
+
+|__|0056|__|
+Die Rückgewinnung ist ebenfalls auf 10 Prozent begrenzt!
+
+|__|0057|__|
+Einstellungen klonen
+|__|0058|__|
+Phase 1
+|__|0059|__|
+Phase 2
+|__|0060|__|
+Phase 3
+|__|0061|__|
+Phase 4
+|__|0062|__|
+Teilen
+|__|0063|__|
+Teilen Sie 2
+|__|0064|__|
+Trimmen (überschreibt das Teilen)
+|__|0065|__|
+Kratzen
+|__|0066|__|
+Mark Böser Kopf
+|__|0067|__|
+Lesen Sie Böser Kopf
+|__|0068|__|
+Umkehren
+|__|0069|__|
+Schnell überspringen
+|__|0070|__|
+Phasenkontrolle
+|__|0071|__|
+Wiederholungen
+|__|0072|__|
+Clustergröße (LBA)
+|__|0073|__|
+Eingabe-Offset (LBA)
+|__|0074|__|
+Größe (LBA)
+|__|0075|__|
+Blockgröße (LBA)
+|__|0076|__|
+Sprunggröße (LBA) Phase 1-2-3
+|__|0077|__|
+Max. Sprunggröße (LBA) Phase-1-2
+|__|0078|__|
+Schwellenwert überspringen (ms) Phase-1-2
+|__|0079|__|
+Ratensprung (kB/s) Phase-3
+|__|0080|__|
+Beenden auf Langsam (kB/s) Phase-1-2
+|__|0081|__|
+Beenden auf langsame Zeit (Sek.) Phase-1-2
+|__|0082|__|
+Fehler beim Schreiben der Fortschrittsprotokolldatei
+|__|0083|__|
+Projektdatei speichern unter
+|__|0084|__|
+Projekt speichern
+|__|0085|__|
+Projekt speichern als
+|__|0086|__|
+Werkzeug
+|__|0087|__|
+Aktuellen Status zurücksetzen
+|__|0088|__|
+OK
+|__|0089|__|
+Abbrechen
+|__|0090|__|
+Dadurch wird der aktuelle Protokollstatus auf Phase1 zurückgesetzt.
+und aktuelle Position auf 0,
+und alle Sprungdaten zurücksetzen
+|__|0091|__|
+Protokoll zurücksetzen
+|__|0092|__|
+Dadurch wird die Position auf 0 zurückgesetzt,
+den aktuellen Status auf nicht ausprobiert,
+und wird alle unvollendeten Blöcke ändern
+im Protokoll auf den Status nicht versucht.
+Dadurch werden auch alle Sprungdaten zurückgesetzt.
+|__|0093|__|
+Reparaturprotokoll
+|__|0094|__|
+Dadurch wird das aktuelle Fortschrittsprotokoll im Speicher repariert.
+Es wird empfohlen, vor der Reparatur eine Sicherungskopie des Protokolls zu erstellen.
+|__|0095|__|
+Null füllen
+|__|0096|__|
+Markierung ausfüllen
+|__|0097|__|
+Domänendatei laden
+|__|0098|__|
+Sie müssen ein neues Projekt starten, bevor Sie eine ddrescue-Protokolldatei importieren können
+|__|0099|__|
+Importieren Sie die ddrescue-Protokolldatei (Map).
+|__|0100|__|
+Exportieren Sie die ddrescue-Protokolldatei (Karte).
+|__|0101|__|
+Fehler beim Exportieren der ddrescue-Protokolldatei (Map).
+|__|0102|__|
+Projekt
+|__|0103|__|
+Quelle
+|__|0104|__|
+Ziel (Alle Daten werden überschrieben!)
+|__|0105|__|
+Domain
+|__|0106|__|
+Gesamt-LBA
+|__|0107|__|
+LBA zu lesen
+|__|0108|__|
+Domänengröße
+|__|0109|__|
+Laufzeit
+|__|0110|__|
+Verbleibende Zeit
+|__|0111|__|
+Aktuelle Position
+|__|0112|__|
+Aktueller Status
+|__|0113|__|
+Tageskurs
+|__|0114|__|
+Aktuelle Rate
+|__|0115|__|
+Gesamtpreis
+|__|0116|__|
+Größe des Basissprungs
+|__|0117|__|
+Überspringt
+|__|0118|__|
+Läufe überspringen
+|__|0119|__|
+Zurücksetzen überspringen
+|__|0120|__|
+Letzte Laufgröße
+|__|0121|__|
+Beendet
+|__|0122|__|
+Nicht ausprobiert
+|__|0123|__|
+Unbeschnitten
+|__|0124|__|
+Ungeteilt
+|__|0125|__|
+Nicht geschabt
+|__|0126|__|
+Schlecht
+|__|0127|__|
+Datenvorschau
+|__|0128|__|
+Aktuell / Neueste / Längste
+|__|0129|__|
+Gefüllt
+|__|0130|__|
+Erneut versucht
+|__|0131|__|
+Verbleibende Wiederholungsversuche
+|__|0132|__|
+Domäne löschen
+|__|0133|__|
+Fehler beim Schreiben der Sicherungsprotokolldatei
+|__|0134|__|
+Information
+|__|0135|__|
+Beenden wegen langsamer Lesegeschwindigkeit
+|__|0136|__|
+Interner Programmfehler, Position in Fortschrittsprotokolldatei nicht gefunden
+|__|0137|__|
+Interner Programmfehler, Domänenprüfung ergab Position außerhalb des zulässigen Bereichs
+|__|0138|__|
+Interner Programmfehler bei der Domänenprüfung
+|__|0139|__|
+Fehler: Das Ziel wurde als Laufwerk des Host-Betriebssystems erkannt
+|__|0140|__|
+Fehler: Ziel kann nicht geöffnet werden
+|__|0141|__|
+Fehler: Ziel kann nicht gesucht werden
+|__|0142|__|
+Fehler: Größe des Ziels kann nicht abgerufen werden
+|__|0143|__|
+Fehler: Die Quelle wurde als gemountet erkannt
+|__|0144|__|
+Es wird empfohlen, alle Partitionen auf der Quelle auszuhängen.
+Sie können die Option --force verwenden, um die Quelle trotzdem zu verwenden (nicht empfohlen).
+|__|0145|__|
+Fehler: Quelle kann nicht geöffnet werden
+|__|0146|__|
+Befehl zum Identifizieren des Geräts konnte nicht ausgeführt werden
+|__|0147|__|
+
+Status / Fehler
+|__|0148|__|
+Host-E/A-Fehler während der Identifizierung
+|__|0149|__|
+Fehler: Der Befehl zum Lesen der Kapazität ist mit den Prüfdaten fehlgeschlagen
+|__|0150|__|
+Host-E/A-Fehler während Kapazität
+|__|0151|__|
+Fehler: Quellgröße ist ungültig
+|__|0152|__|
+Fehler: Die Lesegröße geht über das Ende des Geräts hinaus
+|__|0153|__|
+Fehler: Gerätefehler an der Quelle erkannt
+|__|0154|__|
+Host-E/A-Fehler beim Lesen der Quelle
+|__|0155|__|
+Lesezugriff im Direktmodus der kostenlosen Version hat das Limit von 10 Prozent erreicht
+|__|0156|__|
+Fehler: Ziel kann nicht geschrieben werden
+|__|0157|__|
+Fehler beim Schreiben von Daten zum Ziel
+|__|0158|__|
+Überprüfung der Größe des Quellgeräts fehlgeschlagen
+|__|0159|__|
+Quellgerät kann nicht erneut geöffnet werden
+|__|0160|__|
+Das Quelllaufwerk hat nicht richtig auf den Identifizierungsbefehl reagiert
+|__|0161|__|
+Das Quelllaufwerk hat mit einem Fehler zum Identifizieren des Befehls geantwortet
+|__|0162|__|
+Host-E/A-Fehler während der Identifizierung des Quelllaufwerks
+|__|0163|__|
+Das Quelllaufwerk hat nicht richtig auf den Lesekapazitätsbefehl reagiert
+|__|0164|__|
+Host-E/A-Fehler während des Quellkapazitätsbefehls
+|__|0165|__|
+Quelllaufwerk meldet falsche Größe / Größe geändert
+|__|0166|__|
+Fehler beim Ändern des Chunk-Status, Block nicht gefunden
+|__|0167|__|
+Fehler beim Ändern des Chunk-Status, befindet sich nicht innerhalb des Blocks
+|__|0168|__|
+Die Rettung wird mit den aktuellen Einstellungen beendet
+|__|0169|__|
+Fehler beim Zuordnen des Speichers
+|__|0170|__|
+Physikalische Pufferadresse im 32-Bit-Bereich kann nicht abgerufen werden.
+Bitte versuchen Sie, den Virtual Disk Driver zu starten.
+
+Alternativ können Sie versuchen, den Modus erneut zu wählen (in einen anderen Modus wechseln und zurück) oder das Programm neu starten.
+|__|0171|__|
+posix_memalign fehlgeschlagen
+|__|0172|__|
+FEHLER: Maximale Scratchpad-Größe überschritten
+|__|0173|__|
+FEHLER: Maximale Sensebuffer-Größe überschritten
+|__|0174|__|
+Kein Sicherungsprotokoll erstellen
+|__|0175|__|
+Zugriff auf gemountete Festplatte erzwingen (nicht empfohlen)
+|__|0176|__|
+Ändern des Ausgangs-Offsets aktivieren (mit Vorsicht verwenden)
+|__|0177|__|
+Ausgangs-Offset (Standardwert ist -1, folgt dem Eingangs-Offset)
+|__|0178|__|
+Sie müssen die erweiterten Einstellungen erneut öffnen, damit diese Änderung wirksam wird
+|__|0179|__|
+Bei einem schwerwiegenden Laufwerksfehler auszuführende Aktion:
+|__|0180|__|
+Klonen mit Fehlermeldung stoppen
+|__|0181|__|
+Aufrufbefehl:
+|__|0182|__|
+Das Laufwerk reagiert nach dem Befehlsaufruf immer noch nicht
+|__|0183|__|
+Der aufgerufene Befehl ist mit Exit-Signal / Status fehlgeschlagen
+|__|0184|__|
+Befehl testen
+|__|0185|__|
+Der Befehl wurde normal abgeschlossen
+|__|0186|__|
+Fehler beim Berechnen von CHS, Wert außerhalb der Grenzen
+|__|0187|__|
+Deaktiviert (sicherer bei Stromausfall)
+|__|0188|__|
+Aktiviert (schneller)
+|__|0189|__|
+Betriebssystem-Schreibpuffer (muss getrennt werden, um wirksam zu werden)
+|__|0190|__|
+Hilfe
+|__|0191|__|
+Etwa
+|__|0192|__|
+Timer-Einstellungen
+|__|0193|__|
+Diese Timer-Einstellungen gelten nur für die Modi Direct IDE und Direct AHCI.
+Bei den Passthrough-Modi haben sie keine Wirkung.
+
+|__|0194|__|
+Anfängliche Wartezeit bei Besetzt (ms)
+|__|0195|__|
+Wartezeit bei Besetzt (ms)
+|__|0196|__|
+Soft-Reset-Zeit (ms)
+|__|0197|__|
+Hard-Reset-Zeit (ms)
+|__|0198|__|
+Zeitüberschreitung zurücksetzen (ms)
+|__|0199|__|
+Allgemeine Zeitüberschreitung (ms)
+|__|0200|__|
+Aktion für Reset-Timeout
+|__|0201|__|
+Nichts tun
+|__|0202|__|
+Das Ende entspricht nicht der Antriebsgröße!
+Logdatei meldet Größe von
+|__|0203|__|
+,
+aber Quelle hat eine Größe von
+|__|0204|__|
+.
+Sind Sie sicher, dass dies die richtige Fortschrittsprotokolldatei für dieses Laufwerk ist?
+
+|__|0205|__|
+Gleichen Controller / Slave erzwingen (nicht empfohlen)
+|__|0206|__|
+PIO-Modus
+|__|0207|__|
+Phasen-Timer (Soft-Reset-Timer)
+|__|0208|__|
+Rücksetzzeit Phase 1-2 (ms)
+|__|0209|__|
+Rücksetzzeit Phase 3 (ms)
+|__|0210|__|
+Rücksetzzeit Phase 4 (ms)
+|__|0211|__|
+Trim/Divide Rücksetzzeit (ms)
+|__|0212|__|
+Rücksetzzeit durch 2 teilen (ms)
+|__|0213|__|
+Scrap-Reset-Zeit (ms)
+|__|0214|__|
+Phasentimer aktivieren
+|__|0215|__|
+Generisches Blockgerät
+|__|0216|__|
+Generisches Quellgerät
+|__|0217|__|
+Fehler: Quelle konnte nicht gesucht werden
+|__|0218|__|
+Fehler: Quelle konnte nicht gelesen werden
+|__|0219|__|
+Fehler: Quellgröße ist nicht durch Sektorgröße teilbar,
+Quellgröße ist
+|__|0220|__|
+Generische Quelldatei
+|__|0221|__|
+Ausrichtungsoffset (LBA)
+|__|0222|__|
+Sektorgröße (Byte)
+|__|0223|__|
+Retry-Reset-Zeit (ms)
+|__|0224|__|
+Aktivieren Sie die Verwendung von ATA Return, um fehlerhafte Sektoren zu markieren
+|__|0225|__|
+Phasenprotokolle aktivieren
+|__|0226|__|
+Klon
+Modus
+|__|0227|__|
+Virtuell
+Modus 1
+|__|0228|__|
+Klon-/Treibermodus
+|__|0229|__|
+Klon
+|__|0230|__|
+Modus 1
+|__|0231|__|
+Fehler beim Öffnen des virtuellen Festplattentreibers
+|__|0232|__|
+Fehler beim Beenden des virtuellen Festplattentreibers
+|__|0233|__|
+Fehler beim Schließen des virtuellen Festplattentreibers
+|__|0234|__|
+Fehler beim Starten des virtuellen Festplattentreibers
+|__|0235|__|
+Fehler: Offset im Treibermodus nicht erlaubt
+|__|0236|__|
+Interner Treiberpufferfehler
+|__|0237|__|
+Fehler: Vom Ziel kann nicht gelesen werden
+|__|0238|__|
+Virtuell
+Modus 2
+|__|0239|__|
+Virtuell
+Modus 3
+|__|0240|__|
+Virtuell
+Modus 4
+|__|0241|__|
+Modus 2
+|__|0242|__|
+Modus 3
+|__|0243|__|
+Modus 4
+|__|0244|__|
+Virtuell
+Modus 5
+|__|0245|__|
+Modus 5
+|__|0246|__|
+Fehler: Ungerade Sektorgröße im Treibermodus nicht zulässig
+|__|0247|__|
+Fehler: Zeitüberschreitung oder Fehler des Treibers
+|__|0248|__|
+Sanft
+Zurücksetzen
+|__|0249|__|
+Schwer
+Zurücksetzen
+|__|0250|__|
+Warnung! 
+Die Verwendung des Treibermodus mit dem Ziel null löscht das aktuelle Fortschrittsprotokoll.
+Sobald Sie auf Start klicken, wird das Protokoll gelöscht.
+Wenn Sie das aktuelle Protokoll behalten möchten, trennen Sie die Verbindung und erstellen Sie eine Kopie.
+|__|0251|__|
+Starten Sie den Virtual Disk-Treiber
+|__|0252|__|
+Stoppen Sie den Virtual Disk-Treiber
+|__|0253|__|
+Langsame Sprünge
+|__|0254|__|
+Zuletzt gelesene Größe
+|__|0255|__|
+Interner Programmfehler, Position in Domain nicht gefunden
+|__|0256|__|
+Nur virtueller Fahrer
+|__|0257|__|
+Neue Domänendatei
+|__|0258|__|
+Domänendatei speichern
+|__|0259|__|
+Domänendatei speichern unter
+|__|0260|__|
+Aktivierungsdatei laden
+|__|0261|__|
+Aktivierung fehlgeschlagen
+|__|0262|__|
+Aktivierung erfolgreich.
+Sie müssen das Programm neu starten, damit die Änderungen wirksam werden.
+|__|0263|__|
+Vorgang bestätigen
+|__|0264|__|
+Möchten Sie die Aktivierung entfernen?
+|__|0265|__|
+Aktivierung entfernen
+|__|0266|__|
+Operation fehlgeschlagen
+
+|__|0267|__|
+Operation erfolgreich abgeschlossen
+
+|__|0268|__|
+Fehler! 
+Die Festplatte ist sicherheitsgesperrt!
+|__|0269|__|
+Ports deaktivieren
+|__|0270|__|
+Fehler: Datei kann nicht geöffnet werden
+|__|0271|__|
+Fehler: Keine Sicherungsdatei
+|__|0272|__|
+Deaktivieren Sie Ports für den AHCI-Modus, um ein Laufwerk vor dem Betriebssystem zu verbergen.
+Warnung! 
+Wenn Sie den Port für das Betriebssystemlaufwerk deaktivieren,
+das System kann nicht booten!
+|__|0273|__|
+Geben Sie die Ports, die Sie deaktivieren möchten, als durch Leerzeichen getrennte Ganzzahlen ein.
+Es ist am besten, wenn die Portnummern von der niedrigsten zur höchsten geordnet sind.
+Sie können Portinformationen finden, indem Sie Quelllaufwerke im AHCI-Modus auflisten.
+
+|__|0274|__|
+Aktuell deaktivierte Ports (GRUB-Daten)
+|__|0275|__|
+Stellen Sie deaktivierte Ports ein
+|__|0276|__|
+Aktualisierte deaktivierte Ports (GRUB-Daten)
+|__|0277|__|
+Ports aktualisieren
+|__|0278|__|
+Fehler: Kopieren der Datei fehlgeschlagen
+|__|0279|__|
+Fehler: Aktualisierung von GRUB fehlgeschlagen
+|__|0280|__|
+Weitere Informationen finden Sie in der Ausgabe der Terminalkonsole
+|__|0281|__|
+Fehler: Die Zeile kann in GRUB nicht gefunden werden
+|__|0282|__|
+Sie sind dabei, eine Änderung an der Startkonfiguration vorzunehmen.
+Ein Neustart ist erforderlich, damit die Änderungen wirksam werden.
+|__|0283|__|
+Stellen Sie die ursprüngliche Konfiguration des Startports wieder her
+|__|0284|__|
+SCSI-Schreibzugriff auf Ziel aktivieren (für ungerade Sektorgröße)
+|__|0285|__|
+Anpassung der Ausgangssektorgröße aktivieren
+|__|0286|__|
+Anpassung der Ausgangssektorgröße
+|__|0287|__|
+Ausgabeoptionen des Virtual Disk Device Driver für Lesefehler
+|__|0288|__|
+Lesefehler zurückgeben (Standard)
+|__|0289|__|
+Null gefüllte Daten zurückgeben
+|__|0290|__|
+Rückgabezeichen gefüllte Daten
+|__|0291|__|
+Cluster-Lesegröße der virtuellen Festplatte (Modus 3)
+|__|0292|__|
+Gerätename der virtuellen Festplatte
+|__|0293|__|
+Der Gerätetreiber der virtuellen Festplatte wird nicht ausgeführt
+|__|0294|__|
+Ziel löschen
+|__|0295|__|
+Sie sind dabei, alle Daten auf dem Ziel zu löschen!
+Möchten Sie wirklich alle Daten löschen?
+|__|0296|__|
+Analysieren
+|__|0297|__|
+Ergebnisse
+|__|0298|__|
+Total, gut, schlecht, langsam
+|__|0299|__|
+Erweiterte Analyse aktivieren
+|__|0300|__|
+Leerlauf
+|__|0301|__|
+Trimmen
+|__|0302|__|
+Teilung 1
+|__|0303|__|
+Teilung 2
+|__|0304|__|
+Schaben
+|__|0305|__|
+Wiederholen
+|__|0306|__|
+Füllung
+|__|0307|__|
+Löschen
+|__|0308|__|
+(Schlechter Kopf)
+|__|0309|__|
+Leseziel
+|__|0310|__|
+Lektüre:
+|__|0311|__|
+Analysieren
+|__|0312|__|
+Varianz erkennen
+|__|0313|__|
+Phase 1
+|__|0314|__|
+Phase 2
+|__|0315|__|
+Phase 3
+|__|0316|__|
+Phase 4
+|__|0317|__|
+Beendet
+|__|0318|__|
+(Umkehren)
+|__|0319|__|
+Der Treiber ist bereits installiert und aktiv
+
+|__|0320|__|
+Der Treiberspeicher ist jetzt verbunden
+
+|__|0321|__|
+Fehler beim Verbinden mit dem Treiberspeicher
+
+|__|0322|__|
+Kann nicht zum Schreiben geöffnet werden
+|__|0323|__|
+Make fehlgeschlagen, weitere Informationen finden Sie in der Konsole
+|__|0324|__|
+Fehler beim Installieren des Treibermoduls, siehe Konsole für weitere Informationen
+|__|0325|__|
+Treiberinstallation erfolgreich
+
+|__|0326|__|
+Das Entfernen des Treibermoduls ist fehlgeschlagen. Weitere Informationen finden Sie in der Konsole
+|__|0327|__|
+Erfolg beim Entfernen des Treibers
+
+|__|0328|__|
+Varianz-Lesezeiten niedrig/hoch:
+|__|0329|__|
+Zone
+|__|0330|__|
+Gesamt
+|__|0331|__|
+Gut
+|__|0332|__|
+Schlecht
+|__|0333|__|
+Niedrig
+|__|0334|__|
+Hoch
+|__|0335|__|
+Durchschnitt
+|__|0336|__|
+Zonen
+|__|0337|__|
+Analyseergebnisse anzeigen
+|__|0338|__|
+Fehler: Zurücksetzen überspringen erkannt. 
+Die Einstellungen müssen möglicherweise geändert werden.
+Die Sprunggröße kann zu niedrig oder zu hoch sein.
+Das Laufwerk hat möglicherweise ein langsames Problem, das zu viele langsame Sprünge verursacht.
+Wenn Sie diese Meldung sehr schnell erhalten, werden möglicherweise keine Daten gelesen.
+Weitere Informationen finden Sie in der Bedienungsanleitung.
+|__|0339|__|
+Bedienungsanleitung HTML
+|__|0340|__|
+Fehler: SMART wird auf diesem Gerät nicht unterstützt
+|__|0341|__|
+Fehler: SMART ist auf diesem Gerät nicht aktiviert
+|__|0342|__|
+Fehler: SMART-Daten können nicht vom Gerät gelesen werden
+|__|0343|__|
+ICH WÜRDE
+|__|0344|__|
+Flaggen
+|__|0345|__|
+Strom
+|__|0346|__|
+Schlimmste
+|__|0347|__|
+Schwelle
+|__|0348|__|
+Rohdaten
+|__|0349|__|
+Attributname
+|__|0350|__|
+Version der SMART-Datenstruktur
+|__|0351|__|
+CLEVER
+|__|0352|__|
+SMART-Ergebnisse anzeigen
+|__|0353|__|
+Die Bilddatei ist derzeit vorhanden.
+Dadurch wird die Wiederherstellung mit dieser Image-Datei fortgesetzt.
+|__|0354|__|
+Verwenden Sie die physische Sektorgröße als logisch für virtuelle Laufwerke
+|__|0355|__|
+Langsam
+Treiber
+|__|0356|__|
+Verwenden Sie Schaltflächenfarben in der unteren Statusleiste
+|__|0357|__|
+Bedienungsanleitung TEXT
+|__|0358|__|
+Primäre Relaiseinstellungen
+|__|0359|__|
+Einstellungen der primären Relaisplatine
+|__|0360|__|
+Aktuelle Relaisplatine
+|__|0361|__|
+Wählen Sie Primäre Relaisplatine
+|__|0362|__|
+Aktivierungsbedingung
+|__|0363|__|
+Relais 1 anziehen
+|__|0364|__|
+Relais 2 erregen
+|__|0365|__|
+Relais 3 erregen
+|__|0366|__|
+Relais 4 erregen
+|__|0367|__|
+Relais 5 erregen
+|__|0368|__|
+Relais 6 erregen
+|__|0369|__|
+Relais 7 erregen
+|__|0370|__|
+Relais 8 anziehen
+|__|0371|__|
+Deaktivierungsbedingung
+|__|0372|__|
+Aktivierungszeit (Sek.)
+|__|0373|__|
+Verzögerungszeit nach der Aktivierung (Sek.)
+|__|0374|__|
+Testen Sie den Relaisbetrieb
+|__|0375|__|
+Einstellungen der Relaisplatine
+|__|0376|__|
+Wählen Sie USB-Relais
+|__|0377|__|
+Fehler bei der Auswahl des USB-Relais
+|__|0378|__|
+Fehler beim Relaisbetrieb, siehe Konsole für weitere Informationen
+|__|0379|__|
+Fehler: Es wurde kein Relais ausgewählt
+|__|0380|__|
+Primärrelais aktivieren
+|__|0381|__|
+Primärrelais aktivieren
+|__|0382|__|
+Aktivieren (Ausschalten)
+|__|0383|__|
+Deaktivieren (Einschalten)
+|__|0384|__|
+Diese Sektorgröße wird für den ausgewählten Modus in der kostenlosen Version nicht unterstützt.
+Der generische Modus ist der einzige Modus in der kostenlosen Version, der eine andere Sektorgröße als 512 oder 4096 zulässt.
+
+|__|0385|__|
+Die Rettung konnte nicht abgeschlossen werden
+|__|0386|__|
+Die Rettung wurde vor Abschluss gestoppt.
+Stoppcode \u003d
+|__|0387|__|
+Identifizieren-Ergebnisse anzeigen
+|__|0388|__|
+Direkt-USB
+|__|0389|__|
+USB-Reset-Optionen
+|__|0390|__|
+USB-Massenrücksetzung aktivieren
+|__|0391|__|
+USB-Soft-Reset aktivieren
+|__|0392|__|
+USB-Hard-Reset aktivieren
+|__|0393|__|
+USB-Port-Reset aktivieren
+|__|0394|__|
+Sie sind dabei, den USB-Massenspeichertreiber zu deaktivieren,
+Danach werden vom Betriebssystem keine USB-Speichergeräte mehr erkannt.
+|__|0395|__|
+Sie sind dabei, den USB-Massenspeichertreiber wiederherzustellen.
+|__|0396|__|
+Deaktivieren Sie den USB-Massenspeichertreiber
+|__|0397|__|
+Stellen Sie den USB-Massenspeichertreiber wieder her
+|__|0398|__|
+Warnung! 
+Das Ziel ist kleiner als die Quelle.
+Einige Daten werden möglicherweise nicht kopiert.
+|__|0399|__|
+Aktivieren Sie das zweimalige Lesen bei Zeitüberschreitung
+|__|0400|__|
+Direktes USB-ATA
+|__|0401|__|
+Aus der DMDE-Bytes-Datei zur Domäne hinzufügen
+|__|0402|__|
+Fehler: Domain ist nicht aktiv oder keine Domaindatei geladen
+|__|0403|__|
+Warten Sie immer auf das Zurücksetzen der Timer
+|__|0404|__|
+Ändern der aktuellen Position aktivieren (kann den Algorithmus zum Überspringen beeinflussen)
+|__|0405|__|
+Virtual Disk IO Nur SCSI
+|__|0406|__|
+Langsam
+|__|0407|__|
+Problem mit langsam reagierender Firmware
+|__|0408|__|
+Problem mit teilweisem Zugriff
+|__|0409|__|
+Schlechter oder schwacher Kopf
+|__|0410|__|
+Erweitert
+Analysieren
+|__|0411|__|
+Aktivieren Sie den Wiederherstellungsassistenten
+|__|0412|__|
+Wiederaufbauhilfe
+|__|0413|__|
+Der Wiederherstellungsassistent funktioniert nur im direkten ahci-Modus
+|__|0414|__|
+Die Wiederherstellungshilfe wird auf diesem Gerät nicht unterstützt
+|__|0415|__|
+Fehler beim Deaktivieren der Wiederherstellungshilfe
+|__|0416|__|
+Fehler beim Aktivieren der Wiederherstellungshilfe
+|__|0417|__|
+Logische Einheit auswählen
+|__|0418|__|
+Dieses Gerät hat mehr als eine logische Einheit.
+Bitte wählen Sie die logische Einheit aus.
+|__|0419|__|
+Mögliche logische Einheiten
+|__|0420|__|
+Logische Einheit einstellen
+|__|0421|__|
+Ausschalten
+|__|0422|__|
+Ein
+|__|0423|__|
+Treiberspeicherfehler beheben
+|__|0424|__|
+Wiederholen Sie den Verbindungsaufbau bei einem Fehler nach dem Aus- und Wiedereinschalten des Relais
+|__|0425|__|
+Max. Leserate (kB/s)
+|__|0426|__|
+Führen Sie beim Auflisten von Quellgeräten keine Identifizierung durch
+

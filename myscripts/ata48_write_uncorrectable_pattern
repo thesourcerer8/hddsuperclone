@@ -1,0 +1,189 @@
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'Make bad sector(s) from the disk using 48 bit write uncorrectable non-data command.'
+  echo 'This creates a pseudo-uncorrectable error with logging.'
+  echo 'This requires number variables "sector", "count", "space", and "number" to be set.'
+  echo '"sector" is the starting sector to write.'
+  echo '"count" is the number of sectors to write (max 65536).'
+  echo '"space" is the space between the bad writes.'
+  echo '"number" is the number of times to repeat the pattern.'
+  echo 'Example: hddsupertool -t /dev/sda -f ata48_write_uncorrectable sector=0 count=1 space=10 number=10'
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+
+include good_subroutines
+
+# set a blank string variable to compare with user input
+# make sure not to set this anyplace else
+sets $null = ""
+
+# set this to itself for use with the menu system
+# make sure not to set this anyplace else
+# if it was not previously set it will = 0
+seti $using_menu = $using_menu
+
+
+# find out if using menus or if variables were set on the command line, and ask for input if they were not set
+
+seti $ask = 0
+while 1 = 1
+  variablecheck $sector
+  if $error_level < 16
+    seti $ask = 1
+  elseif $using_menu = 1
+    seti $ask = 1
+  endif
+  if $ask = 1
+    echo "Enter starting sector:"
+    userinput $choicestring
+    if $choicestring != $null
+      seti $sector = $choicestring 0
+      break
+    else
+      echo "Choice cannot be blank!"
+    endif
+  else
+    break
+  endif
+done
+
+seti $ask = 0
+while 1 = 1
+  variablecheck $count
+  if $error_level < 16
+    seti $ask = 1
+  elseif $using_menu = 1
+    seti $ask = 1
+  endif
+  if $ask = 1
+    echo "Enter count:"
+    userinput $choicestring
+    if $choicestring != $null
+      seti $count = $choicestring 0
+      break
+    else
+      echo "Choice cannot be blank!"
+    endif
+  else
+    break
+  endif
+done
+
+seti $ask = 0
+while 1 = 1
+  variablecheck $space
+  if $error_level < 16
+    seti $ask = 1
+  elseif $using_menu = 1
+    seti $ask = 1
+  endif
+  if $ask = 1
+    echo "Enter space:"
+    userinput $choicestring
+    if $choicestring != $null
+      seti $space = $choicestring 0
+      break
+    else
+      echo "Choice cannot be blank!"
+    endif
+  else
+    break
+  endif
+done
+
+seti $ask = 0
+while 1 = 1
+  variablecheck $number
+  if $error_level < 16
+    seti $ask = 1
+  elseif $using_menu = 1
+    seti $ask = 1
+  endif
+  if $ask = 1
+    echo "Enter number:"
+    userinput $choicestring
+    if $choicestring != $null
+      seti $number = $choicestring 0
+      break
+    else
+      echo "Choice cannot be blank!"
+    endif
+  else
+    break
+  endif
+done
+
+seti $ask = 0
+variablecheck $yes
+if $error_level < 16
+  seti $ask = 1
+elseif $using_menu = 1
+  seti $ask = 1
+endif
+if $ask = 1
+  echo "You are about to perform a data changing command,"
+  echo 'type "YES" to continue:'
+  userinput $choicestring
+  if $choicestring != yes
+    if $choicestring != YES
+      echo "You chose not to continue."
+      previousscript
+    endif
+  endif
+endif
+
+
+# set the buffer size for non-data command
+buffersize 0
+
+while $number > 0
+
+  # set the LBAs to the proper sector start
+  seti $LBAlow = $sector & 0xffff
+  seti $temp = $sector > 16
+  seti $LBAmid = $temp & 0xffff
+  seti $temp = $sector > 32
+  seti $LBAhigh = $temp & 0xffff
+
+  # set some things for the ata write command
+  setwritepio
+  # set features to 55 - Create a pseudo-uncorrectable error with logging
+  seti $features = 0x55
+  # set device bits 7(compatibility) 6(LBA mode) 5(compatibility)
+  seti $device = 0xe0
+  # set the command for write uncorrectable non-data extended
+  seti $command = 0x45
+
+  # perform the command
+  ata48cmd $features $count $LBAhigh $LBAmid $LBAlow $device $command
+
+  # check if command failed
+  seti $command_failed = 0
+  gosub check_command_status
+  if $command_failed = 1
+    echo "Command failed!"
+    gosub show_sense_data
+    gosub show_ata_return_status
+    previousscript
+  endif
+
+  echo "Command completed"
+
+  seti $sector = $sector + $count
+  seti $sector = $sector + $space
+  seti $number = $number - 1
+
+done
+
+previousscript
+end
+
+
+
+

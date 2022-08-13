@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Zarządzanie partycjami</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="partitions"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">Spis treści</a> &middot; <a href="howto.html">Praca</a> &middot; 
+<a href="menu.html">Menu</a> &middot; <a href="menu_disk.html">Dysk</a>
+<hr />
+<h2>Zarządzanie partycjami</h2>
+<p>
+Narzędzie do przeglądania, przeszukiwania i <a href="openvolume.html">otwarcia woluminów</a>, 
+a także proste <a href="#partman">zarządzanie partycji</a> na dyskach stylu MBR i GPT. 
+Inne style (np. hybrydowy, dynamiczny) nie są obsługiwane i partycji może być wyświetlany jako znalezione.
+</p>
+<p>
+<b><span style="color:red">Ostrzeżenie!</span>
+Wszelkie modyfikacje dysku mogą spowodować dalszą utratę danych</b>
+(<a href="changes.html">czytaj więcej</a>) 
+</p>
+<p>
+Aby umożliwić modyfikacje, należy włączyć opcję <span class="ii">Zaawans.</span>
+Wszystkie zmiany pozostają wirtualne, 
+dopóki nie zastosujesz ich za pomocą przycisku <span class="ii">Zastosuj</span>
+lub polecenia menu kontekstowego <span class="ii">Zastosuj partycjonowanie</span>. 
+Operacje zapisu należy potwierdzić lub włączyć opcją <span class="ii">Zezwól na zapis</span>
+w <a href="devioparams.html">parametrach urządzenia</a>. 
+Zobacz także sekcję <a href="changes.html">Zarządzanie zmianami</a>.
+</p>
+<p>
+Zarządzanie partycjami obsługuje modyfikacje, 
+które zmieniają tylko tabele partycji i sektory rozruchowe bez dotykania zawartości partycji. 
+Obejmują one usuwanie i <a href="#addpartition">przywracanie</a> partycji, 
+<a href="#bootrestore">przywracanie sektora rozruchowego</a> z jego kopii 
+oraz inne podstawowe operacje. 
+</p>
+
+<h3 id="partman">Okno dialogowe "Partycje"</h3>
+
+<p>
+Po wybraniu pola wyboru <span class="ii">znajdź</span> szybkie wyszukiwanie za utracone i usunięte partycje jest wykonywana. 
+
+W przypadku bardziej skomplikowanych i głębsze wyszukiwanie, 
+użyj <a href="fullscan.html">Pełne skanowanie</a>.
+Woluminy otwarty po Pełne skanowania są dodawane do listy znalezionych partycji 
+(np. odzyskiwanie jest możliwe, jeżeli ważne sektory startowe znajduje).
+</p>
+<div class="spec">
+<p>
+Aby nie uruchomić ekspresowej wyszukiwania, partycji odznacz pole <span class="ii">Pokaż partycje</span> 
+przy <a href="devices.html">otwarcie urządzenia</a> lub <a href="raids.html">zabudowania macierzy RAID</a>.
+</p>
+<p>
+Pola wyboru trybu informacji:
+</p>
+<ul style="margin-top:0;margin-bottom:0">
+<li><span class="ii">znajdź</span>: 
+wyświetlanie znalezionych partycji</li>
+<li><span class="ii">tablice</span>:
+wyświetlenia tablic partycji AMBR i GPT</li>
+<li><span class="ii">GiB</span>:
+pokaż rozmiary w jednostkach binarnych
+<li><span class="ii">szczegóły</span>: 
+wyświetlanie kilku linii na partycji zgodnie z źródła informacji</li>
+</ul>
+<p>
+<b>(A)</b> - startowy (aktywne) stan partycji (kolumna <b>Particja</b>).
+</p>
+<p>
+<b>Wskaźniki</b> wykazuje obecności struktur:
+</p>
+<ul style="margin-top:0;margin-bottom:0">
+<li><b>T</b> &#8211; tablica partycji</li>
+<li><b>E</b> &#8211; wpis w tablicy</li>
+<li><b>B</b> &#8211; sektor rozruchowy woluminu</li>
+<li><b>C</b> &#8211; kopia sektora startowego/tabeli GPT</li>
+<li><b>F</b> &#8211; Struktury podstawowe FS (na przykład, plik pierwszy rekord MFT dla NTFS)</li>
+<li><b>f</b> &#8211; MFTMirr dla NTFS</li>
+<li><b>x</b> &#8211; struktura jest nieobecny lub uszkodzony</li>
+</ul>
+<p>
+Czerwony kolor wskazuje błędy w partycjonowani.
+Niektóre błędy podziału może być ustalona przez usuwanie i wstawianie partycji.
+</p>
+</div>
+
+<p>
+Użyj przycisk <span class="ii">Menu</span>, aby wywołać menu z operacji dostępnych dla wybranej partycji.
+</p>
+
+<div class="l">
+<h4>Otwórz wolumin</h4>
+<p>
+<a href="openvolume.html">Otwórz wolumin</a>, aby wyświetlić i <a href="datarecovery.html">odzyskać pliki</a>.
+</p>
+<h4>Otwórz parametry woluninu</h4>
+<p>Zobacz i ręcznie edytować parametry woluminu, zanim faktycznie <a href="datarecovery.html">otwartym</a>.
+</p>
+<h4>Pokaż litery woluninów</h4>
+<p>
+Wyświetlanie litery woluninów nadany przez OS.
+</p>
+<h4>Pełne skanowanie</h4>
+<p><a href="fullscan.html">Pełne skanowanie</a></p>
+<h4>Utwórz Obraz/Klonuj...</h4>
+<p>
+Wywołać okno dialogowe <a href="copysectors.html">Skopiuj sektory</a> do tworzenia obrazu partycji lub klonowania partycji.
+</p>
+<h4 id="addpartition">Wstaw partycje (Undelete)...</h4>
+<p>
+Wstaw utracone lub usunięte wolumen do tabeli partycji.
+Nieprawidłowy partycji może uniemożliwić wstawiania, więc muszą być usunięte przed wstawiania. 
+Całkowicie uszkodzone partycje mogą być resetowane za pomocą komendy 
+<a href="#togglembr">Wstaw/usuń sygnaturę MBR</a> stosowane do najwyższego elementu.
+Należy dodać partycje od początku do końca dysku. 
+</p>
+<h4>Usuń partycje...</h4>
+<p>
+Usuń istniejących partycji lub tablicy partycji. 
+</p>
+<h4>Tworzenie partycji RAW...</h4>
+<p>
+Tworzenie niesformatowany (RAW) partycji w nieprzydzielone miejsce. 
+Jeśli nie ma błędów partycjonowania zalecane jest używać tylko 
+standardowych narzędzi systemu do tworzenia i usuwania partycji.
+</p>
+<h4 id="bootrestore">Przywrócenie sektora rozruchowego z kopii...</h4>
+<p>
+Wymienić uszkodzone boot sektora z kopii zapasowej.
+</p>
+<h4>Aktywuj/dezaktywuj partycje jako startową...</h4>
+<p>
+Ustawić lub zresetować aktywny <b>(A)</b> status partycji rozruchowej.
+</p>
+<h4 id="togglembr">Wstaw/usuń sygnaturę MBR/Boot... (MBR On/Off)</h4>
+<p>
+Ustawić lub zresetować podpis sektora rozruchowego (<span class="tt">0xAA55</span>).
+</p>
+
+<h4>Zresetuj GPT + MBR podpisy (GPT Off)</h4>
+<p>Zresetować podpis sektora rozruchowego (<span class="tt">0xAA55</span>) i podpisy tabel GPT (<span class="tt">EFI PART</span>).</p>
+
+<h4>Ustaw GPT + MBR podpisy (GPT On)</h4>
+<p>Ustawić podpisy GPT i startowych. Dostępne tylko na dyskach GPT po zresetowaniu.</p>
+
+<h4>Napisz sektorów startowych</h4>
+<p>Dodać <a href="setup.html#dos">DOS dysku startowego</a>.</p>
+
+<h4>Cofnij działanie</h4>
+<p>Cofnąć ostatnie działanie.</p>
+
+<h4>Redo działanie</h4>
+<p>Powtarza cofnięte działanie.</p>
+
+<h4>Cofnij zmiany partycjonowania</h4>
+<p>Cofnij wszystkie zmiany partycjonowania.</p>
+
+<h4>Zresetuj wszystkie zmiany</h4> <!--Odrzuć zmiany partycjonowania-->
+<p>Resetowanie wszystkich niestosowania zmian.</p>
+
+<h4 id="partbkupopen">Załadować z pliku...</h4>
+<p>Załaduj partycjonowania dysku lub dane wycofania z pliku. 
+Zobacz <a href="changes.html">zmiany</a> w szczegółach.
+</p>
+
+<h4 id="partbkup">Zapisz bieżące partycjonowanie do pliku...</h4>
+<p>
+Zapis aktualnego partycjonowania do pliku dla kopii zapasowych.
+Dostępne tylko wtedy, jeśli urządzenie jest podzielony i nie ma niezastosowanymi zmian.
+</p>
+
+<h4 id="partapply">Zastosuj partycjonowanie...</h4>
+<p>
+Napisz zmian partycjonowania do dysku. 
+Zobacz <a href="changes.html">stosowania zmian</a> do szczegółów.
+</p>
+</div>
+
+</div></div>
+</body>
+</html>

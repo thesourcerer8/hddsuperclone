@@ -1,0 +1,19 @@
+ddru_ntfsfindbad - Part of the ddrutility tool set
+Uses the logfile from GNU ddrescue to make a list of files that have read errors
+on an NTFS partition.
+
+Usage: ddru_ntfsfindbad [options] <source_disk> <input_logfile>
+
+OPTIONS:
+ -v, --version                 Show version and exit
+ -h, --help                    Show help and exit
+ -D, --debug                   Turn on debugging and create a debug file
+ -V, --verbose                 Show additional information
+ -e, --encoding <encoding>     Set output of NTFS filename language encoding
+ -i, --inputoffset <bytes>     Set input offset (partition offset)
+ -n, --noconvert               Turn off iconv file name conversion
+
+Report bugs to maximus57@hotmail.com
+Or better yet, report bugs at the project home page
+Ddrutility homepage: http://sourceforge.net/projects/ddrutility/
+

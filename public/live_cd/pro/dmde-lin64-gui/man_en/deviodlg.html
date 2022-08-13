@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DMDE - Device I/O Dialog Box</title>
+<link rel="stylesheet" href="dmdeman.css" type='text/css' />
+</head>
+<body>
+<a name="deviodlg"></a>
+<div id="bklayer">
+<div id="wrapper">
+<a href="toc.html">TOC</a> &middot; <a href="howto.html">Work</a> &middot; 
+<hr />
+<h3>Device I/O Dialog Box</h3>
+<a href="devioparams.html">Device I/O Parameters</a>
+&nbsp;
+<a href="deviohsc.html">Device I/O Handler Script</a>
+
+<p>If an error occurs during device I/O then the dialog box appears where
+you can choose how to handle the error.
+<span style="color:#ff0000; font-weight: bold;">Attention!</span>
+Make sure to read the information on working with <a href="badrecovery.html">damaged devices</a>.
+</p>
+<p class="spec">
+The following information is displayed: 
+<b>[W]</b> indicates that error occurred when writing to device,
+<b>LUN</b> - disk number in the <a href="raids.html">virtual RAID</a>, 
+sector numbers where error has occurred,
+attempt number, error number, and error description (given by OS in Windows).
+After a number of retries (defined by <a href="devioparams.html">parameters</a>)
+program waits for a user reaction (unless skipping errors mode in <a href="devioparams.html">parameters</a> is selected)
+and the button <span class="ii">Retry</span> becomes active. Dialog box appears before the block of data is processed.
+</p>
+
+<p><strong>Abort:</strong> abort current operation.</p>
+<p class="spec">
+Pressing Abort causes error sectors not to be copied to the destination (this behaviour may change in the future versions).
+Button is inactive if the operation is not abortable.
+</p>
+
+<p><strong>Retry:</strong> retry I/O.</p>
+<p class="spec">In some cases it is possible to successfully read a sector
+and continue without data distortion after a number of retries.
+Button is inactive while I/O is in the progress.
+</p>
+
+<p><strong>Ignore:</strong>
+continue operation ignoring the error.
+</p>
+<p class="spec">
+The current operation will be continued but most probably with data distortion.
+When reading file system structures this may cause loss of some files and directory structure damage.
+</p>
+
+<p><strong>Ignore all:</strong>
+continue operation ignoring all analogous errors.
+</p>
+<p class="spec">
+After a number of retries (defined by <a href="devioparams.html">parameters</a>)
+program does not wait for user choise but ignore the error and continue the current operation.
+</p>
+
+<p><strong>Update:</strong> 
+update the list of devices, and update the device handle.
+Use <a href="devioparams.html#deviopar_more">the additional parameter</a> <span class="ii">reopen device handle on error</span>
+for automatic updating on each error.
+</p>
+
+<p><b>ATA Reset:</b> 
+perform ATA soft reset.
+Available only if <a href="devices.html">device is opened</a> via <span class="ii">ATA interface</span> under DOS.
+</p>
+
+<p><strong>Parameters:</strong>
+<a href="devioparams.html">Device I/O settings</a>
+</p>
+
+<p><strong>Confirm, Cancel:</strong>
+used for <span class="tt">%CONFIRM%</span> variable in the
+<a href="deviohsc.html">Device I/O Handler Script</a>
+</p>
+&nbsp;
+</div></div>
+</body>
+</html>

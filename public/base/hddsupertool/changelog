@@ -1,0 +1,93 @@
+HDDSuperTool Changelog
+
+version 1.10-1.8 20170129
+  * Fixed a bug with ata return data
+  * Improved some error output
+
+version 1.9-1.8 20170110
+  * Improved error checking on conditional statements
+  * Upgraded max scratchpad size to 256MB
+  * Updated the wd_royl_check_rom script
+
+version 1.8-1.7 20161125
+  * Improved some IO code for direct mode
+  * Improved some of the WD VSC scripts
+  * Added the script wd_royl_read_rom
+  * Added the script wd_royl_check_rom
+  * Added the script wd_royl_write_rom
+
+version 1.7-1.6 20160515
+  * Added some entries to the smart data script
+  * Added the script wd_royl_dump_mod_select
+  * Internal program code changes
+  * Now also includes an uninstaller (hddsupertool-uninstall.sh)
+  * Added DEB and RPM installers for download
+
+version 1.6-1.5 20160130
+  * Changed date value to use "." instead of ":"
+  * Changed definition of number variable $time
+  * Added a section in the manual about USB devices
+  * Updated the installation section of the manual
+  * Minor update to the help in some of the VSC scripts
+
+version 1.5.1-1.4 20160128
+  * Removed debugging code that could cause issues
+
+version 1.5-1.4 20160101
+  * Removed the commands DIRECTIO and PASSTHROUGH
+  * Removed some more error checking that reported false errors
+  * Added a second method to check if drive is seen by OS
+  * Fixed a bug with 48 bit commands when device is slave
+  * Changed the output of drive listing for better information
+  * Direct mode is no longer allowed if drive is seen by OS
+  * lsblk is no longer required for passthrough drive listing
+  * Added the option --ahci (full version only)
+  * Removed the options --xterm and --no-xterm
+  * Removed the command PIOLENGTHUNKNOWN
+  * Fixed a bug with direct mode IDE PIO reads and writes
+  * Chaged the command_status values to allow for more
+  * The INCLUDE command now searches same directory as script
+  * Fixed a bug where the --command option did not work
+  * Now installs with make
+  * Added the section Script Examples to the documentation
+  * Other documentation improvements
+  * Added the script wd_royl_dump_mod_all
+
+version 1.4.1-1.3 20151226
+  * Removed --direct option until it could be fixed
+
+version 1.4-1.3 20151018
+  * Fixed an issue with the variable $date
+  * Added Tips and Tricks to the documentation
+  * Removed some error checking that reported false errors
+  * Updated the VSC script wd_royl_dump_mod02
+  * Updated the VSC script wd_dump_mod42
+  * Added some new VSC scripts for WD (slow fix)
+  * Fixed rate update issue in scan and image scripts
+  * Added the script ata_sct_error_control_timer
+
+version 1.3-1.2 20151003
+  * Added the --quiet option
+  * Modified the scripts so the help can be extracted
+  * Added the script help to the main documentation
+
+version 1.2-1.1 20150829
+  * Changed the scan script timeout to be like the imaging script
+  * Fixed the threshold value in the smart data script
+  * Better aligned the data in the smart data script
+  * Added the command RESETTIMEOUT
+  * Bugfix: drives wrongfully reported as being visable to the OS
+  * Else command now gives error if any other text is on the line
+
+version 1.1-1.0 20150718
+  * Fixed a bug in the BREAK command that affected ELSE statements
+
+version 1.0-1.0 20150712
+  * Now named hddsupertool
+  * Too many changes to list in the changelog
+
+version 0.99-beta-pre2 20150223
+  * Fixed issue where generic device could not be opened
+
+version 0.99-beta-pre1 20150222
+  * Initial release of hddscripttool

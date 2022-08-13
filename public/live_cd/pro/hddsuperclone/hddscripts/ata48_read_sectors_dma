@@ -1,0 +1,141 @@
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'Read sector(s) from the disk using 48 bit read dma data-in command.'
+  echo 'This requires number variables "sector" and "count" to be set.'
+  echo '"sector" is the starting sector to read.'
+  echo '"count" is the number of sectors to read (max 65536).'
+  echo 'This also requires the string variable "file" to be set.'
+  echo '"file" is the name of the file the data will be written to.'
+  echo 'Example: hddsupertool -t /dev/sda -f ata48_read_sectors_dma sector=0 count=1 file=="sector0.bin"'
+  echo 'Example: hddsupertool -t /dev/sda -f ata48_read_sectors_dma sector=2048 count=16 file=="sectors2048-2053.bin"'
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+
+include good_subroutines
+
+# set a blank string variable to compare with user input
+# make sure not to set this anyplace else
+sets $null = ""
+
+
+# set this to itself for use with the menu system
+# make sure not to set this anyplace else
+# if it was not previously set it will = 0
+seti $using_menu = $using_menu
+
+
+# find out if using menus or if variables were set on the command line, and ask for input if they were not set
+
+seti $ask = 0
+while 1 = 1
+  variablecheck $sector
+  if $error_level < 16
+    seti $ask = 1
+  elseif $using_menu = 1
+    seti $ask = 1
+  endif
+  if $ask = 1
+    echo "Enter starting sector:"
+    userinput $choicestring
+    if $choicestring != $null
+      seti $sector = $choicestring 0
+      break
+    else
+      echo "Choice cannot be blank!"
+    endif
+  else
+    break
+  endif
+done
+
+seti $ask = 0
+while 1 = 1
+  variablecheck $count
+  if $error_level < 16
+    seti $ask = 1
+  elseif $using_menu = 1
+    seti $ask = 1
+  endif
+  if $ask = 1
+    echo "Enter count:"
+    userinput $choicestring
+    if $choicestring != $null
+      seti $count = $choicestring 0
+      break
+    else
+      echo "Choice cannot be blank!"
+    endif
+  else
+    break
+  endif
+done
+
+seti $ask = 0
+variablecheck $file
+if $error_level < 16
+  seti $ask = 1
+elseif $using_menu = 1
+  seti $ask = 1
+endif
+if $ask = 1
+  echo "Enter file name, or leave blank to show data on screen:"
+  userinput $choicestring
+  sets $file = $choicestring
+endif
+
+
+
+
+# set the buffer size
+seti $buffersize = $count * 512
+buffersize $buffersize
+clearbuffer
+
+# set the LBAs to the proper sector start
+seti $LBAlow = $sector & 0xffff
+seti $temp = $sector > 16
+seti $LBAmid = $temp & 0xffff
+seti $temp = $sector > 32
+seti $LBAhigh = $temp & 0xffff
+
+# set some things for the ata read command
+setreaddma
+# set features to 0
+seti $features = 0
+# set device bits 7(compatibility) 6(LBA mode) 5(compatibility)
+seti $device = 0xe0
+# set the command for read dma extended data-in
+seti $command = 0x25
+
+# perform the command
+ata48cmd $features $count $LBAhigh $LBAmid $LBAlow $device $command
+
+# check if command failed
+seti $command_failed = $command_failed
+gosub check_command_status
+if $command_failed = 1
+  echo "Command failed!"
+  gosub show_sense_data
+  gosub show_ata_return_status
+  previousscript
+endif
+
+# show the actual data on the screen or write the data to the file
+if $file = $null
+  printbuffer 0 $data_transferred
+else
+  writebuffer $file 0 0 $data_transferred
+  echo "Data written to file: " $file
+endif
+
+previousscript
+end
+
+
+

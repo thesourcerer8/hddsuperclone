@@ -1,0 +1,67 @@
+29 January 2017
+Version 1.10-1.8 released.
+Program changes: Fixed a bug where under some conditions the ata return data was not accurate, due to a non-standard sense descriptor. In these cases there is no ata return data, so it is now zeroed out. Improved some error output for better clarity.
+
+
+10 January 2017
+Version 1.9-1.8 released.
+Program changes: Improved the error checking of conditional statements, so that forgetting to put a $ in front of a variable is more likely caught. Minor code changes to allow for shared code changes for GUI version of hddsuperclone. Upgraded the maximum scratchpad size from 32MB to 256MB.
+Script changes: Updated the wd_royl_check_rom script so that it better processes the modules found at the end of the ROM.
+
+
+25 November 2016
+Version 1.8-1.7 released.
+Program changes: Made some improvements to direct mode to properly handle IO better.
+Script changes: Improved some of the WD VSC scripts by adding a second attempt to load the key sector. This can help sometimes with buffer issues on USB drives. Added the script wd_royl_read_rom for reading ROM. Added the script wd_royl_check_rom to check the integrity of a dumped ROM file. Added the script wd_royl_write_rom to allow writing the ROM.
+
+
+15 May 2016
+Version 1.7-1.6 released.
+Program changes: Some internal program changes were made due to shared code with hddsuperclone. Hopefully these changes are transparent and do not cause any issues. There is now an uninstaller included and installed (hddsupertool-uninstall.sh). Added DEB and RPM installer files as available downloads.
+Script changes: Added some entries to the smart data script. Added the script wd_royl_dump_mod_select.
+
+
+30 January 2016
+Version 1.6-1.5 released.
+Program changes: Changed the returned value of the string variable $date to use the character "." instead of ":". This was done to be able to include the date stamp in a file name with the FAT32 file system. The WD slow fix patches use this and would give a segmentation fault when trying to write to a USB flash drive. Changed the definition of the number variable $time to be the time since the Epoch (1970-01-01 00:00:00 +0000 (UTC)). The original definition was that it was the time since program start, which was incorrect. Added a section in the manual about USB connected devices not always supporting commands. Updated the installation section in the manual.
+Script changes: Minor update to the help section of some of the VSC scripts to indicate that they don't always work for USB attached drives.
+
+
+28 January 2016
+Version 1.5.1-1.4 released.
+Program changes: Removed some debugging code that could cause issues such as program crashes. The debugging code was not meant to be included in the public release.
+
+
+01 January 2016
+Version 1.5-1.4 released.
+Program changes: Removed the scripting commands DIRECTIO and PASSTHROUGH, as they were likely to never be used and were complicating the program code. Removed some more error checking on the buffers that was causing false positives during the checking phase. Added a second method for checking if the drive can be seen by the OS, as the initial method fails to detect if the drive did not respond correctly to the identify device command. Fixed a bug with 48 bit commands when the device select is 1 (slave). This may have had something to do with the weird results I have seen in the past when working with a device that was a slave. Improved the output of the drive listing when choosing a drive to show more important information. Direct mode is no longer allowed if the drive can be seen by the OS. The command lsblk is no longer required for drive listing in passthrough mode, as it was not available by default in all versions of Linux. Added the option --ahci to allow for AHCI mode disk access (full version only). Removed the options --xterm and --no-xterm as they were likely never going to be used and were just complicating things. Removed the command PIOLENGTHUNKNOWN as the results were not always reliable. Fixed a serious bug with direct mode IDE PIO reads and writes, where the data would get corrupted after the first 512 bytes. Chaged the command_status return values to allow for more values. The INCLUDE command now searches same directory as the running script for the script to include. Fixed a bug where the --command option did not work it passthrough mode (it would give an error when trying to perform commands to the disk, because the disk was not being opened). I am not sure when that got broken as it used to work once upon a time. The program now installs with make (sudo make install), and the install and uninstall shell scripts have been removed. This makes the installation much easier as it avoids the permission issues of executing the shell scripts. Added the section Script Examples to the documentation. Made some other updates and improvements to the documentation.
+Script changes: Added the script wd_royl_dump_mod_all.
+
+
+26 December 2015
+Version 1.4.1-1.3 released.
+Program changes: Removed the option --direct until it could be fixed in the next release. The PIO reads and writes could have corrupt data if reading or writing more than 512 bytes at a time.
+
+
+18 October 2015
+Version 1.4-1.3 released.
+Program changes: Fixed an issue with the variable $date where the result included an unwanted newline character, and also modified the output so it does not contain spaces. Added the new section Tips and Tricks to the documentation. Removed some error checking on the buffers that was causing false positives during the checking phase. This would happen in menu mode when different scripts were ran and previous variables still contained values.
+Script changes: Made improvements to the VSC script wd_royl_dump_mod02 (has also been renamed from wd_dump_mod2). Made improvements to the VSC script wd_dump_mod42 Added the new VSC script wd_royl_dump_mod32. Added the new VSC scripts wd_royl_patch_mod02 and wd_royl_patch_mod32, which together provide a solution to the WD slow issue. Added the script ata_sct_error_control_timer, which can set the error control timer to control how long a drive will attempt to process read errors.
+
+
+3 October 2015
+Version 1.3-1.2 released.
+The primary purpose of this release is for documentation changes. The help from all the script files is now included in the main documentation.
+Program changes: Added the option --quiet which surpresses some of the program output so that the help can be extracted from the scripts to be included in the main documentation.
+Script changes: Modified all the scripts to be able to print the help for use in the documentation.
+
+
+29 August 2015
+Version 1.2-1.1 released.
+Script changes: The timeout in the scan device script has been changed so it is now like the imaging script timeout. Fixed the threshold value in the smart data script. Aligned the data in the smart data script, and also made the raw data all one value.
+Program changes: Added the command RESETTIMEOUT, which is now a separate time than the busytimeout. This allows for a separate timeout after a soft reset is performed, to give the option to perform some other command if the drive did not recover quickly after the soft reset. Fixed a bug in direct mode where a drive may be wrongfully reported as being visable to the OS. The ELSE command will now give an error if any other text is on the same line.
+
+
+18 July 2015
+Version 1.1-1.0 released. This is a bugfix release. It fixes a bug in the BREAK command that affected some following ELSE statements. The bug was discovered when working on a more advanced script. It is unclear if it actually affected any of the scripts provided so far.
+

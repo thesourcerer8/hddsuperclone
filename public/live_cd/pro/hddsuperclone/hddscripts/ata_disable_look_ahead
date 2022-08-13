@@ -1,0 +1,53 @@
+seti $printhelp = $printhelp
+seti $help = $help
+if $help = 1
+  echo 'Disable read look ahead.'
+  echo 'Example: hddsupertool -t /dev/sda -f ata_disable_look_ahead'
+  if $printhelp = 1
+    exit 0
+  endif
+  echo 'Hit ENTER to continue...'
+  userinput $choicestring
+  previousscript
+endif
+
+include good_subroutines
+
+
+buffersize 0
+setreadpio
+
+# set the LBAs and count to 0
+seti $count = 0
+seti $LBAlow = 0
+seti $LBAmid = 0
+seti $LBAhigh = 0
+
+# set features to disable read look ahead
+seti $features = 0x55
+# set device bits 7(compatibility) 5(compatibility)
+seti $device = 0xa0
+# set the command for set features non-data
+seti $command = 0xef
+
+# perform the command
+ata28cmd $features $count $LBAlow $LBAmid $LBAhigh $device $command
+
+# check if command failed
+seti $command_failed = 0
+gosub check_command_status
+if $command_failed = 1
+  echo "Command failed!"
+  gosub show_sense_data
+  gosub show_ata_return_status
+  previousscript
+endif
+
+echo "Command completed"
+
+previousscript
+end
+
+
+
+
