@@ -39,7 +39,7 @@
 #define  GTKCOLOR_TEAL       "#008080"        // (0,128,128)
 #define  GTKCOLOR_NAVY       "#000080"        // (0,0,128)
 
-#define MAX_BUTTON_LABEL_SIZE 256
+#define MAX_BUTTON_LABEL_SIZE 1024
 
 #define BUTTONID_PHASE1    1
 #define BUTTONID_PHASE2    2

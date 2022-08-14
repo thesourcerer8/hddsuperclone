@@ -5,6 +5,7 @@
 
 
 #include "common.h"
+#include "clone_gui_language.h"
 #include "io.h"
 
 time_t start_time_ccc, end_time_ccc;
@@ -15,6 +16,11 @@ int ccc_indent_ccc;
 int spaces_ccc;
 char *argument_ccc[MAX_ARGUMENTS];
 unsigned int argument_count_ccc;
+
+bool ncq_supported_ccc = false;    // word 76 bit 8
+bool rebuild_assist_supported_ccc = false;    // word 78 bit 11
+bool rebuild_assist_enabled_ccc;
+int rebuild_assist_test_ccc = -1;
 
 int process_id_ccc;
 int driver_return_zeros_on_error_ccc;
@@ -1349,7 +1355,7 @@ int set_main_usb_buffer_ccc(void)
 
 
 
-#if 0
+#if 1
 int set_rebuild_assist_enabled_ccc (void)
 {
   if (!ahci_mode_ccc)

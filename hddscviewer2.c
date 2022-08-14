@@ -984,7 +984,7 @@ static void dmde_domain_ok_sel( GtkWidget *w, GtkFileSelection *fs )
 
 
 
-gint reload_file(void)
+gboolean reload_file(gpointer user_data)
 {
   printf ("%s\n",  log_file);
   total_size = 0;
@@ -3084,7 +3084,7 @@ int get_block_information(long long position, long long size)
   long long bad = 0;
   long long finished = 0;
   long long hightime = 0;
-  char tempchar[256];
+  char tempchar[2148];
   char lines[maxcount*sizeof(tempchar)];
   strcpy (lines, "");
   // process current status
@@ -3544,7 +3544,11 @@ int print_gui_error_message(char *message, char *title, int type)
 {
   GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   GtkWidget *dialog;
+#if 0
   GtkDialogFlags message_type;
+#else
+  GtkMessageType message_type;
+#endif
   if (type)
   {
     message_type = GTK_MESSAGE_WARNING;

@@ -15096,7 +15096,7 @@ int extract_smart_data_ccc(void)
     threshold_data_valid = 1;
   }
 
-  char temp[256];
+  char temp[20000];
   uint16_t version;
   memcpy (&version, smart_data, 2);
   sprintf (temp, "# %s %d\n", curlang_ccc[LANGSMARTVERSION], version);
@@ -17108,7 +17108,7 @@ int increase_head_map_memory_ccc(int new_lines)
 
 
 
-#if 1
+#if 0
 int set_rebuild_assist_enabled_ccc (void)
 {
   if (!ahci_mode_ccc)
@@ -18187,7 +18187,7 @@ int get_mac_address_ccc(void)
 
   // process network interfaces and choose the first one that is not lo (local)
   char interface[255] = "";
-  char command[255];
+  char command[1024];
   strcpy (command, "ls /sys/class/net");
   FILE *fp = popen(command, "r");
   if (fp != NULL)
@@ -18728,7 +18728,7 @@ int process_active_licenses_ccc (void)
             char expired_name[384];
             sprintf (expired_name, "license_files/expired/%s", dir->d_name);
             fprintf (stdout, "Moving expired %s to %s.\n", full_name, expired_name);
-            char command[512];
+            char command[2048];
             sprintf (command, "mv %s %s", full_name, expired_name);
             int ret = system(command);
             if (ret)

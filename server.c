@@ -2824,9 +2824,9 @@ int report_serverp(void)
   get_the_time_ccc();
   char name[64];
   sprintf (name, "tailp_%s", current_date_ccc);
-  char log_name[64];
+  char log_name[92];
   sprintf (log_name, "%s.log", name);
-  char zip_name[64];
+  char zip_name[128];
   sprintf (zip_name, "%s.7z", log_name);
   char command[256];
   sprintf (command, "tail -n10000 serverp.log > %s", log_name);

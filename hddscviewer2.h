@@ -167,7 +167,7 @@ int copy_newlanguage(void);
 
 #define DISPLAY_MESSAGE_SIZE 4096
 #define EXIT_MESSAGE_SIZE 2048
-#define TEMP_MESSAGE_SIZE 2048
+#define TEMP_MESSAGE_SIZE 32768
 #define DEBUG_MESSAGE_SIZE 4096
 #define ERROR_MESSAGE_SIZE 1024
 #define MAX_LINE_LENGTH 256
@@ -359,7 +359,7 @@ int selected_color = WHITE;
 int time_color = WHITE;
 int domain_color = YELLOW;
 int main_grid_size = MAINGRIDSIZE;
-gint timeout_tag = NULL;
+gint timeout_tag = 0; // NULL;
 int autotimer_on = 0;
 int show_bad_head = 0;
 int show_good_data = 0;
@@ -455,7 +455,7 @@ int find_domain_block(long long position);
 
 int delete_domain_line(int line);
 
-gint reload_file(void);
+gboolean reload_file(gpointer user_data);
 
 void set_autoupdate_timer(GtkWidget *w, gpointer data);
 

@@ -123,7 +123,7 @@ do                                                 \
 #define DISPLAY_MESSAGE_SIZE 4096
 #define EXIT_MESSAGE_SIZE 2048
 #define ERROR_MESSAGE_SIZE 1024
-#define TEMP_MESSAGE_SIZE 2048
+#define TEMP_MESSAGE_SIZE 32768
 #define DEBUG_MESSAGE_SIZE 4096
 #define REBUILD_ASSIST_FIELD_LENGTH 128
 
@@ -527,6 +527,9 @@ extern int table_size_ccc;
 extern int table_entry_count_ccc;
 extern FILE *pagemap_ccc;
 
+extern bool ncq_supported_ccc;    // word 76 bit 8
+extern bool rebuild_assist_supported_ccc;    // word 78 bit 11
+
 
 extern char device_driver_ccc[MAX_DEVICES][64];
 extern char device_bus_ccc[MAX_DEVICES][64];
@@ -642,6 +645,7 @@ extern unsigned char rebuild_assist_element_length_ccc;
 extern char rebuild_assist_element_mask_ccc[REBUILD_ASSIST_FIELD_LENGTH];
 extern char rebuild_assist_working_mask_ccc[REBUILD_ASSIST_FIELD_LENGTH];
 
+extern int rebuild_assist_test_ccc;
 
 
 int supertooltool_ccc (void);
@@ -922,14 +926,11 @@ int make_license_files_ccc (int version, int type, int days, int number);
 
 int process_active_licenses_ccc (void);
 
+int disable_rebuild_assist_ccc(void);
 
+int enable_rebuild_assist_ccc(void);
 
-
-
-
-
-
-
+int rebuild_assist_disable_head_ccc (int head);
 
 
 
