@@ -71,7 +71,6 @@ void signal_callback_handler_ccc(int signum)
 
 int fail6_ccc=0;
 int fail7_ccc=0;
-int fail8_ccc=0;
 int fail9_ccc=0;
 int fail10_ccc=0;
 int fail11_ccc=0;
@@ -104,7 +103,6 @@ int main (int argc, char **argv)
   command_line_ccc = false;
   fail6_ccc = 0;
   fail7_ccc = 0;
-  fail8_ccc = 0;
   fail9_ccc = 0;
   fail10_ccc = 0;
   fail11_ccc = 0;
@@ -290,13 +288,8 @@ int main (int argc, char **argv)
         break;
 
       case 'a':
-        #ifdef FULLVERSION
         direct_mode_ccc = true;
         ahci_mode_ccc = true;
-        #else
-        fprintf (stdout, "*** AHCI mode is disabled in free version! ***\n");
-        exit (0);
-        #endif
         break;
 
       case ATAMODE:
@@ -322,15 +315,8 @@ int main (int argc, char **argv)
         break;
 
       case 'L':
-        #ifdef FULLVERSION
-        process_serial_ccc(optarg);
         version_ccc();
         exit(0);
-        #else
-        fprintf (stdout, "*** License is disabled in free version! ***\n");
-        version_ccc();
-        exit(0);
-        #endif
         break;
 
       case 'Q':
@@ -561,32 +547,11 @@ int main (int argc, char **argv)
 #endif
 #endif
 
-#ifdef FULLVERSION
-  if (license_type_ccc > 0)
+  max_dma_size_ccc = (pagesize_ccc / 8) * pagesize_ccc;
+  if (ahci_mode_ccc)
   {
-    max_dma_size_ccc = (pagesize_ccc / 8) * pagesize_ccc;
-    if (ahci_mode_ccc)
-    {
-      max_dma_size_ccc = ( (pagesize_ccc - 128) / 16 ) * pagesize_ccc;
-    }
+    max_dma_size_ccc = ( (pagesize_ccc - 128) / 16 ) * pagesize_ccc;
   }
-  else
-  {
-    if (direct_mode_ccc)
-    {
-      if (ahci_mode_ccc)
-      {
-        fprintf (stdout, "Direct AHCI mode is not allowed without a valid license.\n");
-        exit (0);
-      }
-      else
-      {
-        fprintf (stdout, "Direct IDE mode is not allowed without a valid license.\n");
-        exit (0);
-      }
-    }
-  }
-#endif
 
   return_value_ccc = initialize_memory_ccc();
   if (return_value_ccc != 0)
@@ -773,18 +738,6 @@ int main (int argc, char **argv)
 void cleanup_ccc(void)
 {
 #ifdef FULLVERSION
-  unsigned char eid[8] = {0,0,0,0,0,0,0,0};
-  eid[0] = random_data_ccc[2];
-  eid[1] = random_data_ccc[3];
-
-  eid[2] = (check_command_ccc << 7) | (check_read_ccc << 6) | (check_write_ccc << 5) | (compare_mac_ccc << 3) | (license_file_checksum_ccc << 2) | (check_checksum_ccc << 1);
-  eid[2] = rotl8_ccc(rotl8_ccc(eid[0], 1) ^ rotl8_ccc(eid[1], 1) ^ rotl8_ccc(eid[2], 1) , 1);
-
-  eid[3] = (fail6_ccc << 7) | (fail7_ccc << 6) | (fail8_ccc << 5) | (fail9_ccc << 4) | (fail10_ccc << 3) | (fail11_ccc << 2) | (fail12_ccc << 1) | fail13_ccc;
-  eid[3] = rotl8_ccc(rotl8_ccc(eid[0], 2) ^ rotl8_ccc(eid[1], 2) ^ rotl8_ccc(eid[3], 2) , 2);
-
-  eid[4] = rotl8_ccc(rotl8_ccc(eid[0], 3) ^ rotl8_ccc(eid[1], 3) ^ rotl8_ccc(eid[4], 3) , 3);
-
 
   int success = 1;
   unsigned int checksum = 0;
@@ -826,17 +779,7 @@ void cleanup_ccc(void)
     fclose (readfile);
   }
 
-  eid[5] = rotl8_ccc(rotl8_ccc(eid[0], 4) ^ rotl8_ccc(eid[1], 4) ^ rotl8_ccc(checksum >> 16, 4) , 4);
-  eid[6] = rotl8_ccc(rotl8_ccc(eid[0], 5) ^ rotl8_ccc(eid[1], 5) ^ rotl8_ccc(checksum >> 8, 5) , 5);
-  eid[7] = rotl8_ccc(rotl8_ccc(eid[0], 6) ^ rotl8_ccc(eid[1], 6) ^ rotl8_ccc(checksum, 6) , 6);
 
-  //fprintf (stdout, "File size= %lld\n", file_size);
-  //fprintf (stdout, "Checksum= %06x\n", checksum);
-
-  if (!quiet_ccc)
-  {
-    fprintf (stdout, "ExitID: %02x%02x%02x%02x%02x%02x%02x%02x\n", eid[0], eid[1], eid[2], eid[3], eid[4], eid[5], eid[6], eid[7]);
-  }
 #endif
 
 
@@ -924,16 +867,9 @@ void help_ccc(void)
 void version_ccc(void)
 {
   printf ("%s %s\n", title, version_number);
-#ifdef FULLVERSION
-  print_license_ccc(1);
   printf ("Copyright (C) %d Scott Dwyer.\n", copyright_year);
-  printf ("License type: PROPRIETARY\n");
+  printf ("License type: FREE SOFTWARE, GPLv2\n");
   printf ("There is NO WARRANTY, to the extent permitted by law.\n");
-#else
-  printf ("Copyright (C) %d Scott Dwyer.\n", copyright_year);
-  printf ("License type: FREEWARE\n");
-  printf ("There is NO WARRANTY, to the extent permitted by law.\n");
-#endif
 }
 
 
@@ -1008,7 +944,6 @@ int initialize_memory_ccc(void)
     string_variable_pointer_ccc[i] = &string_variable_buffer_ccc[i * cols];
   }
 
-  #ifdef FULLVERSION
   if (!quiet_ccc)
   {
     fprintf (stdout, "Initializing memory\n");
@@ -1071,18 +1006,6 @@ int initialize_memory_ccc(void)
     }
     memset (ccc_buffer_ccc, 0, real_buffer_size_ccc);
   }
-  #else
-  unsigned int align = pagesize_ccc;
-  free (ccc_buffer_ccc);
-  if (posix_memalign(&ccc_buffer_ccc, align, real_buffer_size_ccc))
-  {
-    perror("posix_memalign failed");
-    return (-1);
-  }
-  memset (ccc_buffer_ccc, 0, real_buffer_size_ccc);
-  #endif
-
-  //exit (0);
 
 
   // set the starting main buffer size
@@ -3262,527 +3185,6 @@ char *trim_white_space_ccc(char *str)
 
   return str;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-#ifdef FULLVERSION
-int process_serial_ccc(char *serial)
-{
-  if (decode_serial_ccc(serial) != 0)
-  {
-    get_random_value_ccc(1000000);
-    fprintf (stderr, "Invalid Serial\n");
-    return (-1);
-  }
-  if (check_serial_ccc() != 0)
-  {
-    if (check_serial_ccc() == 1)
-    {
-      get_random_value_ccc(100000);
-      fprintf (stderr, "License Expired\n");
-    }
-    else
-    {
-      get_random_value_ccc(1000000);
-      fprintf (stderr, "Invalid Serial\n");
-    }
-    return (-1);
-  }
-
-  if (make_serial_file_ccc() == 0)
-  {
-    fprintf (stderr, "License successfully applied!\n");
-  }
-
-  return (0);
-}
-
-
-
-
-
-
-int decode_serial_ccc(char *serial)
-{
-  unsigned int i;
-  unsigned int n = 0;
-  for (i = 0; i < strlen(serial); i++)
-  {
-    //fprintf (stdout, "i=%d n=%d\n", i, n);
-    if (n == 25)
-    {
-      return (-1);
-    }
-
-    char raw_character = tolower(serial[i]);
-
-    switch (raw_character)
-    {
-      case '0':
-        sletter_ccc[n] = 0;
-        break;
-      case '1':
-        sletter_ccc[n] = 1;
-        break;
-      case '2':
-        sletter_ccc[n] = 2;
-        break;
-      case '3':
-        sletter_ccc[n] = 3;
-        break;
-      case '4':
-        sletter_ccc[n] = 4;
-        break;
-      case '5':
-        sletter_ccc[n] = 5;
-        break;
-      case '6':
-        sletter_ccc[n] = 6;
-        break;
-      case '7':
-        sletter_ccc[n] = 7;
-        break;
-      case '8':
-        sletter_ccc[n] = 8;
-        break;
-      case '9':
-        sletter_ccc[n] = 9;
-        break;
-      case 'a':
-        sletter_ccc[n] = 10;
-        break;
-      case 'b':
-        sletter_ccc[n] = 11;
-        break;
-      case 'c':
-        sletter_ccc[n] = 12;
-        break;
-      case 'd':
-        sletter_ccc[n] = 13;
-        break;
-      case 'e':
-        sletter_ccc[n] = 14;
-        break;
-      case 'f':
-        sletter_ccc[n] = 15;
-        break;
-      case 'g':
-        sletter_ccc[n] = 16;
-        break;
-      case 'h':
-        sletter_ccc[n] = 17;
-        break;
-      case 'j':
-        sletter_ccc[n] = 18;
-        break;
-      case 'k':
-        sletter_ccc[n] = 19;
-        break;
-      case 'm':
-        sletter_ccc[n] = 20;
-        break;
-      case 'n':
-        sletter_ccc[n] = 21;
-        break;
-      case 'p':
-        sletter_ccc[n] = 22;
-        break;
-      case 'q':
-        sletter_ccc[n] = 23;
-        break;
-      case 'r':
-        sletter_ccc[n] = 24;
-        break;
-      case 't':
-        sletter_ccc[n] = 25;
-        break;
-      case 'u':
-        sletter_ccc[n] = 26;
-        break;
-      case 'v':
-        sletter_ccc[n] = 27;
-        break;
-      case 'w':
-        sletter_ccc[n] = 28;
-        break;
-      case 'x':
-        sletter_ccc[n] = 29;
-        break;
-      case 'y':
-        sletter_ccc[n] = 30;
-        break;
-      case 'z':
-        sletter_ccc[n] = 31;
-        break;
-      case '-':
-        n--;
-        break;
-      default:
-        return (-1);
-    }
-    n++;
-  }
-  if (n < 25)
-  {
-    return (-1);
-  }
-
-  int letter_checksum = sletter_ccc[0] ^ sletter_ccc[1] ^ sletter_ccc[2] ^ sletter_ccc[3] ^ sletter_ccc[4] ^ sletter_ccc[5] ^ sletter_ccc[6] ^ sletter_ccc[7] ^ sletter_ccc[8] ^ sletter_ccc[9] ^ sletter_ccc[10] ^ sletter_ccc[11] ^ sletter_ccc[12] ^ sletter_ccc[13] ^ sletter_ccc[14] ^ sletter_ccc[15] ^ sletter_ccc[16] ^ sletter_ccc[17] ^ sletter_ccc[18] ^ sletter_ccc[19] ^ sletter_ccc[20] ^ sletter_ccc[21] ^ sletter_ccc[22] ^ sletter_ccc[23];
-  if (letter_checksum != sletter_ccc[24])
-  {
-    return (-1);
-  }
-
-  sbyte_ccc[0] = (sletter_ccc[0] << 3) | (sletter_ccc[1] >> 2);
-  sbyte_ccc[1] = (sletter_ccc[1] << 6) | (sletter_ccc[2] << 1) | (sletter_ccc[3] >> 4);
-  sbyte_ccc[2] = (sletter_ccc[3] << 4) | (sletter_ccc[4] >> 1);
-  sbyte_ccc[3] = (sletter_ccc[4] << 7) | (sletter_ccc[5] << 2) | (sletter_ccc[6] >> 3);
-  sbyte_ccc[4] = (sletter_ccc[6] << 5) | sletter_ccc[7];
-
-  sbyte_ccc[5] = (sletter_ccc[0+8] << 3) | (sletter_ccc[1+8] >> 2);
-  sbyte_ccc[6] = (sletter_ccc[1+8] << 6) | (sletter_ccc[2+8] << 1) | (sletter_ccc[3+8] >> 4);
-  sbyte_ccc[7] = (sletter_ccc[3+8] << 4) | (sletter_ccc[4+8] >> 1);
-  sbyte_ccc[8] = (sletter_ccc[4+8] << 7) | (sletter_ccc[5+8] << 2) | (sletter_ccc[6+8] >> 3);
-  sbyte_ccc[9] = (sletter_ccc[6+8] << 5) | sletter_ccc[7+8];
-
-  sbyte_ccc[10] = (sletter_ccc[0+16] << 3) | (sletter_ccc[1+16] >> 2);
-  sbyte_ccc[11] = (sletter_ccc[1+16] << 6) | (sletter_ccc[2+16] << 1) | (sletter_ccc[3+16] >> 4);
-  sbyte_ccc[12] = (sletter_ccc[3+16] << 4) | (sletter_ccc[4+16] >> 1);
-  sbyte_ccc[13] = (sletter_ccc[4+16] << 7) | (sletter_ccc[5+16] << 2) | (sletter_ccc[6+16] >> 3);
-  sbyte_ccc[14] = (sletter_ccc[6+16] << 5) | sletter_ccc[7+16];
-
-  sbyte_ccc[15] = sletter_ccc[24];
-
-  return (0);
-}
-
-
-
-
-
-
-int check_serial_ccc(void)
-{
-  int byte_checksum = sbyte_ccc[0] ^ sbyte_ccc[1] ^ sbyte_ccc[2] ^ sbyte_ccc[3] ^ sbyte_ccc[4] ^ sbyte_ccc[5] ^ sbyte_ccc[6] ^ sbyte_ccc[7] ^ sbyte_ccc[8] ^ sbyte_ccc[9] ^ sbyte_ccc[10] ^ sbyte_ccc[11] ^ sbyte_ccc[12] ^ sbyte_ccc[13];
-  if (byte_checksum != sbyte_ccc[14])
-  {
-    check_checksum_ccc = 1;
-    return (-1);
-  }
-
-  if (rotl8_ccc(rotl8_ccc(sbyte_ccc[0], 1) ^ rotl8_ccc(sbyte_ccc[1], 2) ^ rotl8_ccc(sbyte_ccc[2], 3) ^ rotl8_ccc(sbyte_ccc[3], 4) , 1) != sbyte_ccc[6])
-  {
-    fail6_ccc = 1;
-    return (-1);
-  }
-
-  if (rotl8_ccc(rotl8_ccc(sbyte_ccc[0], 2) ^ rotl8_ccc(sbyte_ccc[1], 3) ^ rotl8_ccc(sbyte_ccc[2], 4) ^ rotl8_ccc(sbyte_ccc[3], 5) , 2) != sbyte_ccc[7])
-  {
-    fail7_ccc = 1;
-    return (-1);
-  }
-
-  superbyte_ccc[10] = sbyte_ccc[10] ^ ( rotr8_ccc(rotr8_ccc(sbyte_ccc[2], 1) ^ rotr8_ccc(sbyte_ccc[3], 2) ^ rotr8_ccc(sbyte_ccc[4], 3) ^ rotr8_ccc(sbyte_ccc[5], 4) , 1) );
-  superbyte_ccc[11] = sbyte_ccc[11] ^ ( rotr8_ccc(rotr8_ccc(sbyte_ccc[2], 2) ^ rotr8_ccc(sbyte_ccc[3], 3) ^ rotr8_ccc(sbyte_ccc[4], 4) ^ rotr8_ccc(sbyte_ccc[5], 5) , 2) );
-  superbyte_ccc[12] = sbyte_ccc[12] ^ ( rotr8_ccc(rotr8_ccc(sbyte_ccc[2], 3) ^ rotr8_ccc(sbyte_ccc[3], 4) ^ rotr8_ccc(sbyte_ccc[4], 5) ^ rotr8_ccc(sbyte_ccc[5], 6) , 3) );
-  superbyte_ccc[13] = sbyte_ccc[13] ^ ( rotr8_ccc(rotr8_ccc(sbyte_ccc[2], 4) ^ rotr8_ccc(sbyte_ccc[3], 5) ^ rotr8_ccc(sbyte_ccc[4], 6) ^ rotr8_ccc(sbyte_ccc[5], 7) , 4) );
-  //fprintf (stdout, "bytes= %d %d %d %d\n", superbyte_ccc[10], superbyte_ccc[11], superbyte_ccc[12], superbyte_ccc[13]); //debug
-
-  full_license_ccc = ((rotl8_ccc(sbyte_ccc[0], 2) ^ sbyte_ccc[3]) >> 7);
-
-  time_t seconds;
-  seconds = time(NULL);
-  unsigned int current_day = seconds/3600/24;
-  expire_day_ccc = (((rotl8_ccc(sbyte_ccc[0], 2) ^ sbyte_ccc[3]) << 8) & 32512) | (rotl8_ccc(sbyte_ccc[1], 4) ^ sbyte_ccc[4]);
-  days_remaining_ccc = expire_day_ccc - current_day;
-  if (current_day > expire_day_ccc)
-  {
-    return (1);
-  }
-
-  return (0);
-}
-
-
-
-
-
-
-int make_serial_file_ccc(void)
-{
-  unsigned char file_data[1024];
-  int i;
-  for (i = 0; i < 1024; i++)
-  {
-    file_data[i] = get_random_value_ccc(1000);
-  }
-
-  while (file_data[0] < 4 || file_data[0] > (255-16) )
-  {
-    file_data[0] = get_random_value_ccc(1000);
-  }
-  while (file_data[1] > (255-16) )
-  {
-    file_data[1] = get_random_value_ccc(1000);
-  }
-  while (file_data[2] > (255-16) )
-  {
-    file_data[2] = get_random_value_ccc(1000);
-  }
-  while (file_data[3] > (255-16) )
-  {
-    file_data[3] = get_random_value_ccc(1000);
-  }
-
-  for (i = 0; i < 15; i++)
-  {
-    file_data[file_data[1]+i+256] = sbyte_ccc[i] ^ file_data[file_data[0]+i];
-  }
-
-  get_mac_address_ccc();
-  for( i = 0; i < 6; i++ )
-  {
-    file_data[file_data[2]+i+512] = ccc_mac_address_ccc[i] ^ file_data[file_data[0]+i];
-  }
-
-  unsigned char checksum = 0;
-  for (i = 0; i < 1023; i++)
-  {
-    checksum = checksum ^ file_data[i];
-  }
-  file_data[1023] = checksum;
-
-  FILE *writefile = fopen(license_file_name_ccc, "wb");
-  if (writefile == NULL)
-  {
-    fprintf(stderr, "Cannot open license file for writing (%s).\n", strerror(errno));
-    return (-1);
-  }
-
-  if (fwrite(file_data, 1, 1024, writefile) != 1024 )
-  {
-    fprintf(stderr, "Error writing license file (%s).\n", strerror(errno));
-    return (-1);
-  }
-
-  fclose (writefile);
-
-  return (0);
-}
-
-
-
-
-
-
-int check_license_file_ccc(void)
-{
-  unsigned char file_data[1024];
-  FILE *readfile = fopen(license_file_name_ccc, "rb");
-  if (readfile == NULL)
-  {
-    return (2);
-  }
-
-  if (fread(file_data, 1, 1024, readfile) != 1024 )
-  {
-    fprintf(stderr, "Error reading license file (%s).\n", strerror(errno));
-    return (-1);
-  }
-
-  fclose (readfile);
-
-
-  int i;
-  unsigned char checksum = 0;
-  for (i = 0; i < 1023; i++)
-  {
-    checksum = checksum ^ file_data[i];
-  }
-  if (checksum != file_data[1023])
-  {
-    license_file_checksum_ccc = 1;
-    return (-1);
-  }
-
-  for (i = 0; i < 15; i++)
-  {
-    sbyte_ccc[i] = file_data[file_data[1]+i+256] ^ file_data[file_data[0]+i];
-  }
-
-  unsigned char extracted_mac[16];
-  for (i = 0; i < 15; i++)
-  {
-    extracted_mac[i] = file_data[file_data[2]+i+512] ^ file_data[file_data[0]+i];
-  }
-
-  get_mac_address_ccc();
-  for (i = 0; i < 6; i++)
-  {
-    if (extracted_mac[i] != ccc_mac_address_ccc[i])
-    {
-      compare_mac_ccc = 1;
-      return (-2);
-    }
-  }
-
-  return_value_ccc = check_serial_ccc();
-  if (return_value_ccc != 0)
-  {
-    return (return_value_ccc);
-  }
-
-  return (0);
-}
-
-
-
-
-
-
-
-int get_mac_address_ccc(void)
-{
-  struct ifreq ifr;
-  struct ifconf ifc;
-  char buf[1024];
-  int success = 0;
-
-  int sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);
-  if (sock == -1)
-  {
-    // handle error
-  }
-
-  ifc.ifc_len = sizeof(buf);
-  ifc.ifc_buf = buf;
-  if (ioctl(sock, SIOCGIFCONF, &ifc) == -1)
-  {
-    // handle error
-  }
-
-  struct ifreq* it = ifc.ifc_req;
-  const struct ifreq* const end = it + (ifc.ifc_len / sizeof(struct ifreq));
-
-  for (; it != end; ++it) {
-    strcpy(ifr.ifr_name, it->ifr_name);
-    if (ioctl(sock, SIOCGIFFLAGS, &ifr) == 0) {
-      if (! (ifr.ifr_flags & IFF_LOOPBACK)) { // don't count loopback
-        if (ioctl(sock, SIOCGIFHWADDR, &ifr) == 0) {
-          success = 1;
-          break;
-        }
-      }
-    }
-    else
-    {
-      // handle error
-    }
-  }
-
-  if (success)
-  {
-    memcpy(ccc_mac_address_ccc, ifr.ifr_hwaddr.sa_data, 6);
-  }
-  else
-  {
-    int i;
-    for (i = 0; i < 6; i++)
-    {
-      ccc_mac_address_ccc[i] = 0;
-    }
-  }
-
-  return (success);
-}
-
-
-
-
-
-
-int print_license_ccc(int show)
-{
-  int i;
-  for (i = 0; i < 16; i ++)
-  {
-    sbyte_ccc[i] = default_sbytes_ccc[i];
-  }
-  return_value_ccc = check_license_file_ccc();
-  if (return_value_ccc != 0)
-  {
-    license_type_ccc = 0;
-    if (return_value_ccc == 1)
-    {
-      license_information_ccc = 3;
-    }
-    else if (return_value_ccc == 2)
-    {
-      license_information_ccc = 0;
-    }
-    else
-    {
-      license_information_ccc = 4;
-    }
-  }
-  else if (!full_license_ccc)
-  {
-    license_type_ccc = 1;
-    license_information_ccc = 1;
-  }
-  else if (full_license_ccc)
-  {
-    license_type_ccc = 2;
-    license_information_ccc = 2;
-  }
-  else
-  {
-    license_type_ccc = 0;
-    license_information_ccc = 0;
-  }
-
-  if (show)
-  {
-    if (license_information_ccc == 0)
-    {
-      fprintf (stdout, "License = Free version\n");
-    }
-    else if (license_information_ccc == 1)
-    {
-      fprintf (stdout, "License = Limited version, %d days remaining\n", days_remaining_ccc);
-    }
-    else if (license_information_ccc == 2)
-    {
-      fprintf (stdout, "License = Full version, %d days remaining\n", days_remaining_ccc);
-    }
-    else if (license_information_ccc == 3)
-    {
-      fprintf (stdout, "License = Expired (free version)\n");
-    }
-    else if (license_information_ccc == 4)
-    {
-      fprintf (stdout, "License = Invalid (free version)\n");
-    }
-    else
-    {
-      fprintf (stdout, "License = Unrecognized license type\n");
-    }
-  }
-
-  return (0);
-}
-#endif
-
 
 
 

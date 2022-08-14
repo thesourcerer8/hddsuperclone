@@ -552,21 +552,6 @@ int execute_line_ccc(bool perform_check, unsigned int line_number, char *command
     }
   }
 
-#ifdef FULLVERSION
-  // check serial byte 8 at random
-  unsigned char temp_random = get_random_value_ccc(1);
-  if (license_type_ccc > 0 && temp_random == 33)
-  {
-    check_command_ccc = 1;
-    if (rotl8_ccc(rotl8_ccc(sbyte_ccc[0], 3) ^ rotl8_ccc(sbyte_ccc[1], 4) ^ rotl8_ccc(sbyte_ccc[2], 5) ^ rotl8_ccc(sbyte_ccc[3], 6) , 3) != sbyte_ccc[8])
-    {
-      fail8_ccc = 1;
-      return (-1);
-    }
-  }
-#endif
-
-
   return (return_value_ccc);
 }
 
@@ -3518,19 +3503,6 @@ int setup_dma_write_ccc(bool perform_check, unsigned int line_number, char *rest
 
   if (!perform_check)
   {
-#ifdef FULLVERSION
-    // check serial byte 8 at random
-    unsigned char temp_random = get_random_value_ccc(1);
-    if (temp_random == 33)
-    {
-      check_command_ccc = 1;
-      if (rotl8_ccc(rotl8_ccc(sbyte_ccc[0], 3) ^ rotl8_ccc(sbyte_ccc[1], 4) ^ rotl8_ccc(sbyte_ccc[2], 5) ^ rotl8_ccc(sbyte_ccc[3], 6) , 3) != sbyte_ccc[8])
-      {
-        fail8_ccc = 1;
-        return (-1);
-      }
-    }
-#endif
     passthrough_ccc.transfer_length = 2;    // sector field
     passthrough_ccc.byte_block = 1;    // block
     passthrough_ccc.protocol = 6;    // dma
