@@ -82,7 +82,7 @@ char identify_device_raw_text_ccc[65536];
 clone_settings_ccc_type clone_settings_ccc;
 advanced_settings_ccc_type advanced_settings_ccc;
 timer_settings_ccc_type timer_settings_ccc;
-primary_relay_settings_ccc_type primary_relay_settings_ccc;
+extern primary_relay_settings_ccc_type primary_relay_settings_ccc;
 display_output_ccc_type display_output_ccc;
 
 

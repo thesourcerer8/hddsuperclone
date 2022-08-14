@@ -16,6 +16,7 @@
 
 unsigned long long primary_relay_delay_time_ccc;
 unsigned long long primary_relay_activation_time_ccc;
+primary_relay_settings_ccc_type primary_relay_settings_ccc;
 
 
 int find_all_usb_devices_ccc(void)
