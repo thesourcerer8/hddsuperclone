@@ -13,8 +13,39 @@
 #include "io.h"
 #include "clone_gui_common.h"
 
+unsigned char io_byte_ccc[16];
+uint8_t io_singlebyte_ccc;
+uint16_t io_word_ccc;
+uint32_t io_doubleword_ccc;
+uint64_t io_quadword_ccc;
+uint8_t start_bit_ccc;
+int command_status_ccc;
+int identify_flag_ccc;
+char error_string_ccc[255];
+int lsblk_ccc = 1;
+void *hba_virt_addr_ccc;
+int performing_reset_ccc = 0;
+int did_hard_reset_ccc = 0;
+int did_power_cycle_ccc = 0;
+int words_per_logical_sector_ccc = 256;
+int bytes_per_logical_sector_ccc = 512;
+char driver_device_name_ccc[64];
+bool check_message_ccc;
+char *title_ccc;
+char virtual_driver_name_ccc[MAX_DEVICE_NAME_LENGTH];
 
 struct sg_io_hdr io_hdr;
+
+bool use_fpdma_ccc;
+bool wait_for_ds_bit_ccc;
+int driver_running_ccc;
+#define MAXLANGLENGTH 2048
+#define LANGCOUNT 427
+char curlang_ccc[LANGCOUNT][MAXLANGLENGTH];
+
+
+char *version_number_ccc;
+
 
 
 

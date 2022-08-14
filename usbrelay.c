@@ -14,8 +14,8 @@
 #include "clone_gui_common.h"
 
 
-
-
+unsigned long long primary_relay_delay_time_ccc;
+unsigned long long primary_relay_activation_time_ccc;
 
 
 int find_all_usb_devices_ccc(void)

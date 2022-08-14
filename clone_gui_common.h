@@ -21,80 +21,80 @@
 #define PRIMARY_RELAY_ACTIVATION_TIME 3    // 3 sec
 #define PRIMARY_RELAY_DELAY_TIME 15    // 15 sec
 
-char *title_ccc;
-char *version_number_ccc;
-char *copyright_year_ccc;
-char curlang_ccc[LANGCOUNT][MAXLANGLENGTH];
-char newlang_ccc[LANGCOUNT][MAXLANGLENGTH];
-int translate_ccc;
-char *log_file_ccc;
-char *ddilog_file_ccc;
-char *ddelog_file_ccc;
-char *domain_file_ccc;
-int check_log_size_ccc;
-bool do_domain_ccc;
-bool create_domain_ccc;
-bool domain_dd_ccc;
-bool importdd_ccc;
-char level4_middle_text_ccc[4096];
-int running_clone_ccc;
-char command_to_call_ccc[MAX_CALL_LENGTH];
-char power_command_to_call_ccc[MAX_CALL_LENGTH];
-bool stop_on_error_ccc;
-bool do_call_command_ccc;
-bool activate_primary_relay_on_error_ccc;
-bool stop_on_power_cycle_ccc;
-bool call_power_command_ccc;
-bool power_cycle_primary_relay_ccc;
-bool check_message_ccc;
-bool write_buffer_disable_ccc;
-bool write_buffer_enable_ccc;
-bool driver_return_error_ccc;
-bool driver_return_zeros_ccc;
-bool driver_return_marked_ccc;
-int memory_used_ccc;
-bool data_read_from_log_ccc;
-int driver_mode_ccc;
-int driver_running_ccc;
-char virtual_driver_name_ccc[MAX_DEVICE_NAME_LENGTH];
-long long last_small_read_size_ccc;
-long long last_big_read_size_ccc;
-long long last_actual_read_size_ccc;
-long long driver_read_rate_size_ccc;
-bool no_io_error_ccc;
-char new_ports_ccc[256];
-int running_analyze_ccc;
-long long analyze_stoptime_ccc;
-char analyze_text_ccc[MAX_ANALYZE_TEXT_LENGTH];
-int analyze_read_attempts_ccc[MAXANALYZESECTIONS];
-int analyze_good_reads_ccc[MAXANALYZESECTIONS];
-int analyze_bad_reads_ccc[MAXANALYZESECTIONS];
-int analyze_slow_reads_ccc[MAXANALYZESECTIONS];
-int analyze_timeouts_ccc[MAXANALYZESECTIONS];
-long long analyze_read_time_ccc[MAXANALYZESECTIONS];
-long long analyze_low_time_ccc[MAXANALYZESECTIONS];
-long long analyze_high_time_ccc[MAXANALYZESECTIONS];
-bool enable_extended_analyze_ccc;
-long long analyze_slow_position_ccc[MAXANALYZESLOW];
-long long analyze_slow_size_ccc[MAXANALYZESLOW];
-long long analyze_slow_low_ccc[MAXANALYZESLOW];
-long long analyze_slow_high_ccc[MAXANALYZESLOW];
-long long analyze_slow_section_ccc[MAXANALYZESLOW];
-int analyze_slow_total_reads_ccc;
-long long skip_timeout_copy_ccc;
-int cluster_size_copy_ccc;
-char smart_data_text_ccc[MAX_SMART_DATA_TEXT_LENGTH];
-bool aggressive_driver_ccc;
-bool color_statusbar_ccc;
-char primary_relay_name_ccc[MAX_RELAY_NAME_LENGTH];
-unsigned long long primary_relay_activation_time_ccc;
-unsigned long long primary_relay_delay_time_ccc;
-bool rebuild_assist_enabled_ccc;
-bool use_fpdma_ccc;
-bool wait_for_ds_bit_ccc;
-char identify_device_raw_text_ccc[65536];
-
-struct
+extern char *title_ccc;
+extern char *version_number_ccc;
+extern char *copyright_year_ccc;
+extern char curlang_ccc[LANGCOUNT][MAXLANGLENGTH];
+extern char newlang_ccc[LANGCOUNT][MAXLANGLENGTH];
+extern int translate_ccc;
+extern char *log_file_ccc;
+extern char *ddilog_file_ccc;
+extern char *ddelog_file_ccc;
+extern char *domain_file_ccc;
+extern int check_log_size_ccc;
+extern bool do_domain_ccc;
+extern bool create_domain_ccc;
+extern bool domain_dd_ccc;
+extern bool importdd_ccc;
+extern char level4_middle_text_ccc[4096];
+extern int running_clone_ccc;
+extern char command_to_call_ccc[MAX_CALL_LENGTH];
+extern char power_command_to_call_ccc[MAX_CALL_LENGTH];
+extern bool stop_on_error_ccc;
+extern bool do_call_command_ccc;
+extern bool activate_primary_relay_on_error_ccc;
+extern bool stop_on_power_cycle_ccc;
+extern bool call_power_command_ccc;
+extern bool power_cycle_primary_relay_ccc;
+extern bool check_message_ccc;
+extern bool write_buffer_disable_ccc;
+extern bool write_buffer_enable_ccc;
+extern bool driver_return_error_ccc;
+extern bool driver_return_zeros_ccc;
+extern bool driver_return_marked_ccc;
+extern int memory_used_ccc;
+extern bool data_read_from_log_ccc;
+extern int driver_mode_ccc;
+extern int driver_running_ccc;
+extern char virtual_driver_name_ccc[MAX_DEVICE_NAME_LENGTH];
+extern long long last_small_read_size_ccc;
+extern long long last_big_read_size_ccc;
+extern long long last_actual_read_size_ccc;
+extern long long driver_read_rate_size_ccc;
+extern bool no_io_error_ccc;
+extern char new_ports_ccc[256];
+extern int running_analyze_ccc;
+extern long long analyze_stoptime_ccc;
+extern char analyze_text_ccc[MAX_ANALYZE_TEXT_LENGTH];
+extern int analyze_read_attempts_ccc[MAXANALYZESECTIONS];
+extern int analyze_good_reads_ccc[MAXANALYZESECTIONS];
+extern int analyze_bad_reads_ccc[MAXANALYZESECTIONS];
+extern int analyze_slow_reads_ccc[MAXANALYZESECTIONS];
+extern int analyze_timeouts_ccc[MAXANALYZESECTIONS];
+extern long long analyze_read_time_ccc[MAXANALYZESECTIONS];
+extern long long analyze_low_time_ccc[MAXANALYZESECTIONS];
+extern long long analyze_high_time_ccc[MAXANALYZESECTIONS];
+extern bool enable_extended_analyze_ccc;
+extern long long analyze_slow_position_ccc[MAXANALYZESLOW];
+extern long long analyze_slow_size_ccc[MAXANALYZESLOW];
+extern long long analyze_slow_low_ccc[MAXANALYZESLOW];
+extern long long analyze_slow_high_ccc[MAXANALYZESLOW];
+extern long long analyze_slow_section_ccc[MAXANALYZESLOW];
+extern int analyze_slow_total_reads_ccc;
+extern long long skip_timeout_copy_ccc;
+extern int cluster_size_copy_ccc;
+extern char smart_data_text_ccc[MAX_SMART_DATA_TEXT_LENGTH];
+extern bool aggressive_driver_ccc;
+extern bool color_statusbar_ccc;
+extern char primary_relay_name_ccc[MAX_RELAY_NAME_LENGTH];
+extern unsigned long long primary_relay_activation_time_ccc;
+extern unsigned long long primary_relay_delay_time_ccc;
+extern bool rebuild_assist_enabled_ccc;
+extern bool use_fpdma_ccc;
+extern bool wait_for_ds_bit_ccc;
+extern char identify_device_raw_text_ccc[65536];
+ 
+typedef struct
 {
   bool no_phase1;
   bool no_phase2;
@@ -125,9 +125,11 @@ struct
   int sector_size;
   int block_offset;
   long long max_read_rate;
-} clone_settings_ccc;
+} clone_settings_ccc_type;
+extern clone_settings_ccc_type clone_settings_ccc;
 
-struct
+
+typedef struct
 {
   bool force_mounted;
   bool force_dangerous;
@@ -161,9 +163,12 @@ struct
   bool use_physical_sector_size_for_virtual;
   long long driver_minimum_cluster_size;
   bool color_statusbar;
-} advanced_settings_ccc;
+} advanced_settings_ccc_type;
+extern advanced_settings_ccc_type advanced_settings_ccc;
 
-struct
+
+
+typedef struct
 {
   unsigned long long initial_busy_wait_time;
   unsigned long long busy_wait_time;
@@ -188,9 +193,11 @@ struct
   int usb_soft_reset_enabled;
   int usb_hard_reset_enabled;
   int usb_port_reset_enabled;
-} timer_settings_ccc;
+} timer_settings_ccc_type;
+extern timer_settings_ccc_type timer_settings_ccc;
 
-struct
+
+typedef struct
 {
   bool activate_primary_relay1;
   bool activate_primary_relay2;
@@ -212,9 +219,11 @@ struct
   unsigned long long primary_relay_delay_time;
   char primary_relay_name[MAX_RELAY_NAME_LENGTH];
 }
-primary_relay_settings_ccc;
+primary_relay_settings_ccc_type;
+extern primary_relay_settings_ccc_type primary_relay_settings_ccc;
 
-struct
+
+typedef struct
 {
   char logfile[1024];
   char domainfile[1024];
@@ -247,7 +256,9 @@ struct
   char retried[32];
   char retrypasses[32];
   char longestreadtime[32];
-} display_output_ccc;
+} display_output_ccc_type;
+extern display_output_ccc_type display_output_ccc;
+
 
 
 

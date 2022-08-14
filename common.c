@@ -5,7 +5,333 @@
 
 
 #include "common.h"
+#include "io.h"
 
+time_t start_time_ccc, end_time_ccc;
+struct timeval tvBegin_ccc, tvEnd_ccc, tvDiff_ccc, tvCurrent_ccc;
+bool check_only_ccc;
+bool do_indentation_ccc;
+int ccc_indent_ccc;
+int spaces_ccc;
+char *argument_ccc[MAX_ARGUMENTS];
+unsigned int argument_count_ccc;
+
+int process_id_ccc;
+int driver_return_zeros_on_error_ccc;
+int driver_io_scsi_only_ccc;
+bool quiet_ccc;
+bool stop_signal_ccc;
+bool superclone_ccc;
+bool critical_process_ccc;
+bool pending_exit_ccc;
+bool logfile_changed_ccc;
+bool domainfile_changed_ccc;
+bool force_danger_ccc;
+bool force_stupid_ccc;
+bool repair_log_ccc;
+bool fill_mode_ccc;
+bool driver_only_ccc;
+bool cleanup_mode_ccc;
+unsigned long long verbose_ccc;
+unsigned long long debug_ccc;
+bool debugversion_ccc;
+bool verbosedebug_ccc;
+int return_value_ccc;
+bool print_hex_ccc;
+int if_statement_level_ccc;
+int while_statement_level_ccc;
+long long error_level_ccc;
+unsigned char exitcode_ccc;
+FILE *debug_file_ccc;
+char *disk_1_ccc;
+char *disk_2_ccc;
+char *script_file_ccc;
+char current_script_ccc[MAX_LINE_LENGTH];
+int print_error_message_ccc;
+char exit_message_ccc[EXIT_MESSAGE_SIZE];
+char error_message_ccc[ERROR_MESSAGE_SIZE];
+char display_message_ccc[DISPLAY_MESSAGE_SIZE];
+char tempmessage_ccc[TEMP_MESSAGE_SIZE];
+char debug_message_ccc[DEBUG_MESSAGE_SIZE];
+char log_display_message_ccc[DISPLAY_MESSAGE_SIZE];
+
+void* ccc_buffer_ccc;
+unsigned long long ccc_main_buffer_size_ccc;
+void* ccc_scratchpad_ccc;
+unsigned long long ccc_main_scratchpad_size_ccc;
+void* sensebuffer_ccc;
+unsigned long long sensebuffer_size_ccc;
+void* ccc_usbbuffer_ccc;
+char usbcbwbuffer_ccc[USBCBW_BUFFER_SIZE];
+char usbcswbuffer_ccc[USBCSW_BUFFER_SIZE];
+unsigned long long ccc_main_usbbuffer_size_ccc;
+void* padding_buffer_ccc;
+unsigned char identify_buffer_ccc[IDENTIFY_BUFFER_SIZE];
+unsigned char ata_identify_buffer_ccc[IDENTIFY_BUFFER_SIZE];
+unsigned char read_capacity_buffer_ccc[512];
+int append_script_ccc;
+long long *number_variable_buffer_ccc;
+char **string_variable_pointer_ccc;
+char current_date_ccc[40];
+char current_time_ccc[40];
+unsigned char random_data_ccc[2048];
+
+unsigned char sbyte_ccc[16];
+
+unsigned char superbyte_ccc[1024];
+int license_type_ccc;
+int license_version_ccc;
+int license_time_ccc;
+int activation_type_ccc;
+int activation_days_remaining_ccc;
+int check_command_ccc;
+int check_read_ccc;
+int check_write_ccc;
+
+int disk1_fd_ccc;
+int disk2_fd_ccc;
+int current_disk_ccc;
+
+int main_driver_fd_ccc;
+bool command_line_ccc;
+int command_length_ccc;
+unsigned char sense_buf_ccc[255];
+unsigned char sense_key_ccc;
+unsigned char asc_ccc;
+unsigned char ascq_ccc;
+unsigned char ata_error_ccc;
+unsigned char ata_status_ccc;
+unsigned char ata_device_ccc;
+unsigned char ata_count1_ccc;
+unsigned char ata_count2_ccc;
+unsigned char ata_lba1_ccc;
+unsigned char ata_lba2_ccc;
+unsigned char ata_lba3_ccc;
+unsigned char ata_lba4_ccc;
+unsigned char ata_lba5_ccc;
+unsigned char ata_lba6_ccc;
+long long ata_lba_ccc;
+int ata_count_ccc;
+int io_status_ccc;
+int io_masked_status_ccc;
+int msg_status_ccc;
+int io_sb_len_wr_ccc;
+int io_host_status_ccc;
+int io_driver_status_ccc;
+int io_resid_ccc;
+int io_duration_ccc;
+int io_info_ccc;
+int ata_return_valid_ccc;
+int ata_check_ccc;
+bool pio_mode_ccc;
+int driver_installed_ccc;
+long long hpa_lba_ccc;
+long long dco_lba_ccc;
+bool extended_support_ccc;
+bool enable_process_chunk_ccc;
+bool enable_read_twice_ccc;
+bool enable_scsi_write_ccc=false;
+bool charater_device_driver_mode_ccc;
+
+unsigned long reg_base_address_ccc;
+unsigned long control_base_address_ccc;
+unsigned long bus_base_address_ccc;
+bool device_select_base_ccc;
+unsigned long long hba_base_address_ccc;
+unsigned long long hba_reset_address_ccc;
+unsigned long long port_base_address_ccc;
+unsigned long long port_reset_address_ccc;
+int port_number_base_ccc;
+char device_driver_base_ccc[64];
+char device_bus_base_ccc[64];
+char current_source_model_ccc[64];
+char current_source_serial_ccc[64];
+char current_destination_model_ccc[64];
+char current_destination_serial_ccc[64];
+int current_device_type_ccc;
+bool copy_image_mode_ccc;
+bool generic_mode_ccc;
+bool direct_mode_ccc;
+bool ahci_mode_ccc;
+bool ata_passthrough_ccc;
+bool scsi_passthrough_ccc;
+bool nvme_passthrough_ccc;
+bool auto_passthrough_ccc;
+bool usb_mode_ccc;
+bool usb_allow_ata_ccc;
+bool supertool_mode_chosen_ccc;
+unsigned int pagesize_ccc;
+unsigned long long table_virtual_address_ccc;
+unsigned long long command_list_virtual_address_ccc;
+unsigned long long fis_virtual_address_ccc;
+unsigned long long buffer_virtual_address_ccc;
+unsigned long long table_physical_address_ccc;
+unsigned long long command_list_physical_address_ccc;
+unsigned long long fis_physical_address_ccc;
+unsigned long long buffer_physical_address_ccc[8192];
+int command_list_size_ccc;
+int fis_size_ccc;
+void* table_buffer_ccc;
+void* command_list_buffer_ccc;
+void* fis_buffer_ccc;
+int hba_mem_dev_ccc;
+uint32_t hba_alloc_mem_size_ccc;
+void *hba_mem_pointer_ccc;
+int port_mem_dev_ccc;
+uint32_t port_alloc_mem_size_ccc;
+void *port_mem_pointer_ccc;
+void *port_virt_addr_ccc;
+unsigned long long max_dma_size_ccc;
+unsigned long long real_buffer_size_ccc;
+unsigned long long first_read_time_ccc;
+unsigned long long soft_reset_time_ccc;
+unsigned long long hard_reset_time_ccc;
+unsigned long long busy_wait_time_ccc;
+unsigned long long reset_wait_time_ccc;
+unsigned long long initial_busy_wait_time_ccc;
+unsigned long long general_timeout_ccc;
+int usb_timeout_ccc;
+int cbw_timeout_ccc;
+int csw_timeout_ccc;
+unsigned long long power_cycle_time_ccc;
+bool phase_timers_ccc;
+unsigned long long orig_soft_reset_time_ccc;
+unsigned long long p12_soft_reset_time_ccc;
+unsigned long long p3_soft_reset_time_ccc;
+unsigned long long p4_soft_reset_time_ccc;
+unsigned long long td_soft_reset_time_ccc;
+unsigned long long d2_soft_reset_time_ccc;
+unsigned long long sc_soft_reset_time_ccc;
+unsigned long long rt_soft_reset_time_ccc;
+char *drive_serial_ccc;
+int new_source_ccc;
+int new_destination_ccc;
+long long source_total_size_ccc;
+long long bytes_per_sector_ccc;
+long long target_total_size_ccc;
+long long generic_source_total_size_ccc;
+unsigned char *driver_control_address_ccc;
+unsigned char *driver_error_bitmap_address_ccc;
+unsigned char *driver_transfer_buffer_address_ccc;
+unsigned char *driver_main_data_buffer_address_ccc;
+unsigned char *driver_table_buffer_ccc;
+unsigned char *driver_command_list_buffer_ccc;
+unsigned char *driver_fis_buffer_ccc;
+int driver_memory_mapped_ccc;
+bool always_wait_for_reset_timers_ccc;
+bool dont_wait_for_drdy_ccc;
+
+bool table_address_changed_ccc;
+unsigned char table_address_backup_ccc[4];
+bool ahci_address_changed_ccc;
+uint64_t command_list_address_backup_ccc;
+uint64_t fis_address_backup_ccc;
+bool ahci_interrupt_changed_ccc;
+uint32_t interrupt_backup_ccc;
+bool memory_mapped_ccc;
+bool memory_failed_ccc;
+bool io_permissions_ccc;
+int table_size_ccc;
+int table_entry_count_ccc;
+FILE *pagemap_ccc;
+
+
+char device_driver_ccc[MAX_DEVICES][64];
+char device_bus_ccc[MAX_DEVICES][64];
+unsigned long long reg_address_ccc[MAX_DEVICES];
+unsigned long long control_address_ccc[MAX_DEVICES];
+unsigned long long bus_address_ccc[MAX_DEVICES];
+unsigned long long hba_address_ccc[MAX_DEVICES];
+int port_number_ccc[MAX_DEVICES];
+unsigned int port_status_ccc[MAX_DEVICES];
+unsigned long long port_address_ccc[MAX_DEVICES];
+unsigned int port_signature_ccc[MAX_DEVICES];
+bool device_select_ccc[MAX_DEVICES];
+bool device_present_ccc[MAX_DEVICES];
+bool device_visable_ccc[MAX_DEVICES];
+char device_reference_ccc[MAX_DEVICES][32];
+char device_name_ccc[MAX_DEVICES][32];
+char model_ccc[MAX_DEVICES][41];
+char serial_ccc[MAX_DEVICES][21];
+char drive_list_ccc[MAX_DEVICES][64];
+long long drive_size_ccc[MAX_DEVICES];
+int drive_bytes_per_sector_ccc[MAX_DEVICES];
+int device_type_ccc[MAX_DEVICES];
+int device_count_ccc;
+int choose_device_mode_ccc;
+int did_reset_ccc;
+bool enable_hba_reset_on_connect_source_ccc;
+bool enable_hba_test_on_connect_source_ccc;
+bool enable_dont_identify_on_choose_source_ccc;
+bool enable_data_dump_ccc;
+char data_dump_filename_ccc[1024];
+bool enable_dump_identify_on_check_ccc;
+
+int usbr1_vendor_id_ccc;
+int usbr1_product_id_ccc;
+char usbr1_vendor_string_ccc[256];
+char usbr1_product_string_ccc[256];
+char usbr1_extra_id_string_ccc[256];
+int usbr1_bus_number_ccc;
+int usbr1_bus_real_number_ccc;
+int usbr1_device_number_ccc;
+
+int usbd1_vendor_id_ccc;
+int usbd1_product_id_ccc;
+char usbd1_vendor_string_ccc[256];
+char usbd1_product_string_ccc[256];
+char usbd1_extra_id_string_ccc[256];
+int usbd1_bus_number_ccc;
+int usbd1_bus_real_number_ccc;
+int usbd1_device_number_ccc;
+int usbd1_bulk_in_endpoint_ccc;
+int usbd1_bulk_out_endpoint_ccc;
+
+int usb_device_count_ccc;
+int usb_vendor_id_ccc[MAX_USB_DEVICES];
+int usb_product_id_ccc[MAX_USB_DEVICES];
+char usb_vendor_string_ccc[MAX_USB_DEVICES][256];
+char usb_product_string_ccc[MAX_USB_DEVICES][256];
+char usb_serial_string_ccc[MAX_USB_DEVICES][256];
+char usb_extra_id_string_ccc[MAX_USB_DEVICES][256];
+int usb_bus_number_ccc[MAX_USB_DEVICES];
+int usb_bus_real_number_ccc[MAX_USB_DEVICES];
+int usb_device_number_ccc[MAX_USB_DEVICES];
+int usb_known_relay_ccc[MAX_USB_DEVICES];
+int usb_mass_storage_ccc[MAX_USB_DEVICES];
+int usb_bulk_in_endpoint_ccc[MAX_USB_DEVICES];
+int usb_bulk_out_endpoint_ccc[MAX_USB_DEVICES];
+struct usb_dev_handle *usbr1_dev_handle_ccc;
+struct usb_dev_handle *usbd1_dev_handle_ccc;
+int new_usb_ccc;
+unsigned char usb_transfer_direction_ccc;
+unsigned char usb_lun_ccc;
+int usb_lun_set_ccc;
+uint32_t usb_tag_ccc;
+uint32_t usb_transfer_length_ccc;
+unsigned char usb_csw_status_ccc;
+uint32_t usb_csw_residue_ccc;
+int usb_read_residue_ccc;
+int usb_csw_valid_ccc;
+int usb_bulk_reset_enabled_ccc;
+int usb_soft_reset_enabled_ccc;
+int usb_hard_reset_enabled_ccc;
+int usb_port_reset_enabled_ccc;
+
+bool use_rebuild_assist_ccc;
+bool rebuild_assist_data_valid_ccc;
+unsigned char rebuild_assist_element_length_ccc;
+char rebuild_assist_element_mask_ccc[REBUILD_ASSIST_FIELD_LENGTH];
+char rebuild_assist_working_mask_ccc[REBUILD_ASSIST_FIELD_LENGTH];
+
+passthrough_ccc_type passthrough_ccc;
+driver_control_data_ccc_type driver_control_data_ccc;
+ncq_error_log_data_ccc_type ncq_error_log_data_ccc;
+rebuild_assist_log_data_ccc_type rebuild_assist_log_data_ccc;
+
+
+unsigned int total_script_lines_ccc;
+char **script_line_pointer_ccc;
 
 
 int message_exit_ccc(char *message)
@@ -952,10 +1278,166 @@ void dump_info_to_filename_ccc(char *filename, char *info)
 
 
 
+// function to find the next matching command and return the line number
+// returns -1 if not found
+int find_command_ccc(char *search_command, unsigned int start_line)
+{
+  int scanline;
+  unsigned int line_number;
+  char command[MAX_LINE_LENGTH];
+  for (line_number = start_line; line_number < total_script_lines_ccc; line_number++)
+  {
+    scanline = sscanf(script_line_pointer_ccc[line_number], "%s[^\n]", command);
+
+    // if there is a command found check to see if it matches
+    if (scanline == 1)
+    {
+      //fprintf (stdout, "command= %s\n", command);
+      if (strcasecmp(search_command, command) == 0)
+      {
+        return (line_number);
+      }
+    }
+  }
+  return (-1);
+}
 
 
 
 
+
+
+// function to set usb buffer
+int set_main_usb_buffer_ccc(void)
+{
+  if (ccc_main_usbbuffer_size_ccc > MAX_USB_BUFFER_SIZE)
+  {
+    if (superclone_ccc)
+    {
+      strcpy (tempmessage_ccc, "ERROR: Maximum USB buffer size exceeded.\n");    //TODO make a language entry for this
+      message_error_ccc(tempmessage_ccc);
+      print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
+      clear_error_message_ccc();
+    }
+    else
+    {
+      fprintf (stderr, "ERROR: Maximum USB buffer size exceeded.\n");
+    }
+    return GENERAL_ERROR_RETURN_CODE;
+  }
+  free (ccc_usbbuffer_ccc);
+  ccc_usbbuffer_ccc = calloc(ccc_main_usbbuffer_size_ccc, 1);
+  if (ccc_usbbuffer_ccc == NULL)
+  {
+    if (superclone_ccc)
+    {
+      strcpy (tempmessage_ccc, curlang_ccc[LANGALLOCATEMEMERR]);
+      message_error_ccc(tempmessage_ccc);
+      sprintf (tempmessage_ccc, " (%s)", strerror(errno));
+      message_error_ccc(tempmessage_ccc);
+      print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
+      clear_error_message_ccc();
+    }
+    else
+    {
+      fprintf (stderr, "Error allocating memory (%s)\n", strerror(errno));
+    }
+    return GENERAL_ERROR_RETURN_CODE;
+  }
+  return (0);
+}
+
+
+
+#if 0
+int set_rebuild_assist_enabled_ccc (void)
+{
+  if (!ahci_mode_ccc)
+  {
+    strcpy (tempmessage_ccc, curlang_ccc[LANGREBUILDASSISTAHCIONLY]);
+    message_error_ccc(tempmessage_ccc);
+    print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
+    clear_error_message_ccc();
+    return -1;
+  }
+  if (!ncq_supported_ccc || !rebuild_assist_supported_ccc)
+  {
+    strcpy (tempmessage_ccc, curlang_ccc[LANGREBUILDASSISTNOTSUPPORTED]);
+    message_error_ccc(tempmessage_ccc);
+    print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
+    clear_error_message_ccc();
+    return -1;
+  }
+
+  // first disable rebuild assist to make sure it is cleared
+  if (disable_rebuild_assist_ccc())
+  {
+    strcpy (tempmessage_ccc, curlang_ccc[LANGREBUILDASSISTERRORDISABLING]);
+    message_error_ccc(tempmessage_ccc);
+    print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
+    clear_error_message_ccc();
+    return -1;
+  }
+  rebuild_assist_enabled_ccc = false;
+
+  // now enable rebuild assist
+  if (enable_rebuild_assist_ccc())
+  {
+    strcpy (tempmessage_ccc, curlang_ccc[LANGREBUILDASSISTERRORENABLING]);
+    message_error_ccc(tempmessage_ccc);
+    print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
+    clear_error_message_ccc();
+    disable_rebuild_assist_ccc();
+    return -1;
+  }
+  rebuild_assist_enabled_ccc = true;
+
+  // only for testing
+  if (rebuild_assist_test_ccc >= 0)
+  {
+  //disable_rebuild_assist_ccc();
+  rebuild_assist_disable_head_ccc(rebuild_assist_test_ccc);
+  }
+
+  read_rebuild_assist_log_ccc();
+  if (1)
+  {
+    int i;
+    fprintf (stdout, "flags=%02x length=%02x mask=", rebuild_assist_log_data_ccc.flags, rebuild_assist_log_data_ccc.length);
+    for (i = 0; i < rebuild_assist_log_data_ccc.length; i++)
+    {
+      fprintf (stdout, "%02x", rebuild_assist_log_data_ccc.mask[i]);
+    }
+    fprintf (stdout, " disabled=");
+    for (i = 0; i < rebuild_assist_log_data_ccc.length; i++)
+    {
+      fprintf (stdout, "%02x", rebuild_assist_log_data_ccc.disabled[i]);
+    }
+    fprintf (stdout, "\n");
+    int head = 0;
+    while ((head / 8) < rebuild_assist_element_length_ccc)
+    {
+      int bytenumber = head / 8;
+      int byteremainder = head % 8;
+      int checkmask = rebuild_assist_log_data_ccc.mask[bytenumber] >> byteremainder;
+      checkmask = checkmask & 1;
+      int disabled = rebuild_assist_log_data_ccc.disabled[bytenumber] >> byteremainder;
+      disabled  = disabled  & 1;
+      if (checkmask && disabled)
+      {
+        fprintf (stdout, "head %d is disabled\n", head);
+      }
+      else if (checkmask)
+      {
+        fprintf (stdout, "head %d is enabled\n", head);
+      }
+      head++;
+    }
+  }
+
+  return 0;
+}
+#endif
 
 
 

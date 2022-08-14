@@ -2056,7 +2056,7 @@ int set_sense_buffer_ccc(void)
 
 
 
-
+#if 0
 // function to set usb buffer
 int set_main_usb_buffer_ccc(void)
 {
@@ -2096,7 +2096,7 @@ int set_main_usb_buffer_ccc(void)
   }
   return (0);
 }
-
+#endif
 
 
 
@@ -17108,7 +17108,7 @@ int increase_head_map_memory_ccc(int new_lines)
 
 
 
-
+#if 1
 int set_rebuild_assist_enabled_ccc (void)
 {
   if (!ahci_mode_ccc)
@@ -17196,7 +17196,7 @@ int set_rebuild_assist_enabled_ccc (void)
 
   return 0;
 }
-
+#endif
 
 
 

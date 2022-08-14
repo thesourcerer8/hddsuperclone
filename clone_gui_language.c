@@ -8,6 +8,8 @@
 
 #include "clone_gui_language.h"
 
+char enlang_ccc[LANGCOUNT][MAXLANGLENGTH];
+
 
 
 int setup_enlanguage_ccc(void)

@@ -10,6 +10,7 @@
 
 
 #include "clone_gui_common.h"
+#include "clone_gui_common.c"
 #include "clone_gui3.h"
 #include "common.h"
 #include "hddsuperclone3_glade.h"

@@ -11,6 +11,29 @@
 #include "common.h"
 #include "tool.h"
 
+unsigned int script_rows_ccc = 1000;
+unsigned int number_variable_rows_ccc = 100;
+unsigned int string_variable_rows_ccc = 100;
+char *menufile1_ccc = "hddmenu";
+char *menufile2_ccc = "hddscripts/hddmenu";
+char *menufile3_ccc = "/usr/local/bin/hddscripts/hddmenu";
+char script_directory1_ccc[PATH_MAX] = "";
+char script_directory2_ccc[PATH_MAX] = "hddscripts/";
+char script_directory3_ccc[PATH_MAX] = "/usr/local/bin/hddscripts/";
+char script_directory4_ccc[PATH_MAX] = "";
+char *current_script_directory_ccc = "";
+char full_script_path_ccc[PATH_MAX];
+char *script_line_buffer_ccc;
+extern char **script_line_pointer_ccc;
+extern unsigned int total_script_lines_ccc;
+char *number_variable_name_buffer_ccc;
+char **number_variable_name_pointer_ccc;
+unsigned int total_number_variables_ccc;
+char *string_variable_name_buffer_ccc;
+char **string_variable_name_pointer_ccc;
+char *string_variable_buffer_ccc;
+unsigned int total_string_variables_ccc;
+
 
 
 
@@ -1695,7 +1718,7 @@ int set_string_variable_ccc(int var_num, char *raw_value)
 
 
 
-
+#if 0
 // function to find the next matching command and return the line number
 // returns -1 if not found
 int find_command_ccc(char *search_command, unsigned int start_line)
@@ -1719,7 +1742,7 @@ int find_command_ccc(char *search_command, unsigned int start_line)
   }
   return (-1);
 }
-
+#endif
 
 
 

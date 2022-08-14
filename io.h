@@ -31,23 +31,28 @@
 #define READ_MEMORY_DRIVE_COMMAND 777
 #define DRIVER_WAIT_TO_ACTIVATE_TIME 2000000000ULL // time in nanoseconds
 
-unsigned char io_byte_ccc[16];
-uint8_t io_singlebyte_ccc;
-uint16_t io_word_ccc;
-uint32_t io_doubleword_ccc;
-uint64_t io_quadword_ccc;
-uint8_t start_bit_ccc;
-int command_status_ccc;
-int identify_flag_ccc;
-char error_string_ccc[255];
-int lsblk_ccc = 1;
-void *hba_virt_addr_ccc;
-int performing_reset_ccc = 0;
-int did_hard_reset_ccc = 0;
-int did_power_cycle_ccc = 0;
-int words_per_logical_sector_ccc = 256;
-int bytes_per_logical_sector_ccc = 512;
-char driver_device_name_ccc[64];
+#define MAX_DEVICE_NAME_LENGTH 32
+
+extern unsigned char io_byte_ccc[16];
+extern uint8_t io_singlebyte_ccc;
+extern uint16_t io_word_ccc;
+extern uint32_t io_doubleword_ccc;
+extern uint64_t io_quadword_ccc;
+extern uint8_t start_bit_ccc;
+extern int command_status_ccc;
+extern int identify_flag_ccc;
+extern char error_string_ccc[255];
+extern int lsblk_ccc;
+extern void *hba_virt_addr_ccc;
+extern int performing_reset_ccc;
+extern int did_hard_reset_ccc;
+extern int did_power_cycle_ccc;
+extern int words_per_logical_sector_ccc;
+extern int bytes_per_logical_sector_ccc;
+extern char driver_device_name_ccc[64];
+extern bool check_message_ccc;
+extern char *title_ccc;
+extern char virtual_driver_name_ccc[MAX_DEVICE_NAME_LENGTH];
 
 
 
@@ -131,6 +136,16 @@ int usb_get_sense_ccc(void);
 
 int usb_check_capacity_ccc(int timeout);
 
+
+extern bool use_fpdma_ccc;
+extern bool wait_for_ds_bit_ccc;
+extern int driver_running_ccc;
+#define MAXLANGLENGTH 2048
+#define LANGCOUNT 427
+#define LANGERROR 4
+#define LANGALLOCATEMEMERR 169
+extern char curlang_ccc[LANGCOUNT][MAXLANGLENGTH];
+extern char *version_number_ccc;
 
 
 

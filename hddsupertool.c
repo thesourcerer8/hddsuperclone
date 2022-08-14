@@ -19,6 +19,42 @@ char *version_number = "1.10-1.8 20170129x";
 int copyright_year = 2017;
 
 
+char *debugfile_ccc = "hddsupertool.log";
+
+//char *argument_ccc[MAX_ARGUMENTS];
+//unsigned int argument_count_ccc = 0;
+//bool check_only_ccc = false;
+//bool do_indentation_ccc = false;
+//bool quiet_ccc = false;
+//int ccc_indent_ccc = 0;
+//int spaces_ccc = 0;
+unsigned int script_rows_ccc = 1000;
+unsigned int number_variable_rows_ccc = 100;
+unsigned int string_variable_rows_ccc = 100;
+char *menufile1_ccc = "hddmenu";
+char *menufile2_ccc = "hddscripts/hddmenu";
+char *menufile3_ccc = "/usr/local/bin/hddscripts/hddmenu";
+char script_directory1_ccc[PATH_MAX] = "";
+char script_directory2_ccc[PATH_MAX] = "hddscripts/";
+char script_directory3_ccc[PATH_MAX] = "/usr/local/bin/hddscripts/";
+char script_directory4_ccc[PATH_MAX] = "";
+char *current_script_directory_ccc = "";
+char full_script_path_ccc[PATH_MAX];
+char *script_line_buffer_ccc;
+extern char **script_line_pointer_ccc;
+unsigned int total_lines_ccc;
+char *number_variable_name_buffer_ccc;
+char **number_variable_name_pointer_ccc;
+unsigned int total_number_variables_ccc;
+char *string_variable_name_buffer_ccc;
+char **string_variable_name_pointer_ccc;
+char *string_variable_buffer_ccc;
+unsigned int total_string_variables_ccc;
+
+
+bool forced_exit_ccc=false;
+
+
 
 // Function to handle ctrl-c
 void signal_callback_handler_ccc(int signum)
@@ -32,6 +68,16 @@ void signal_callback_handler_ccc(int signum)
   }
   pending_exit_ccc = true;
 }
+
+int fail6_ccc=0;
+int fail7_ccc=0;
+int fail8_ccc=0;
+int fail9_ccc=0;
+int fail10_ccc=0;
+int fail11_ccc=0;
+int fail12_ccc=0;
+int fail13_ccc=0;
+
 
 
 
@@ -640,12 +686,14 @@ int main (int argc, char **argv)
           cleanup_ccc();
           exit (1);
         }
-        if (device_select_base_ccc < 0 || device_select_base_ccc > 1)
+#if 0
+        if (device_select_base_ccc > 1)
         {
           fprintf (stderr, "Error: Device select can only be 0 or 1.\n");
           cleanup_ccc();
           exit (1);
         }
+#endif
       }
     }
 
@@ -2222,7 +2270,7 @@ int set_string_variable_ccc(int var_num, char *raw_value)
 
 // function to find the next matching command and return the line number
 // returns -1 if not found
-int find_command_ccc(char *search_command, char *search_command_cap, unsigned int start_line)
+int find_command3_ccc(char *search_command, char *search_command_cap, unsigned int start_line)
 {
   int scanline;
   unsigned int line_number;

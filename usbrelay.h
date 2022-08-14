@@ -80,6 +80,8 @@ bool deactivate_primary_relay7_ccc = false;
 bool deactivate_primary_relay8_ccc = false;
 
 
+extern unsigned long long primary_relay_delay_time_ccc;
+extern unsigned long long primary_relay_activation_time_ccc;
 
 
 

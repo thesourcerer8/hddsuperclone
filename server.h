@@ -46,7 +46,7 @@
 
 
 
-struct
+typedef struct
 {
   char http[LINE_LENGTH];
   char status_code[LINE_LENGTH];
@@ -55,9 +55,11 @@ struct
   char content_type[LINE_LENGTH];
   char connection[LINE_LENGTH];
   char body[MESSAGE_SIZE];
-} reply_items;
+} reply_items_type;
+extern reply_items_type reply_items;
 
-struct
+
+typedef struct
 {
   char command[LINE_LENGTH];
   char path[LINE_LENGTH];
@@ -69,9 +71,12 @@ struct
   char host[LINE_LENGTH];
   char connection[LINE_LENGTH];
   char body[MESSAGE_SIZE];
-} message_items;
+} message_items_type;
+extern message_items_type message_items;
 
-struct
+
+
+typedef struct
 {
   char receiver_email[LINE_LENGTH];
   char receiver_id[LINE_LENGTH];
@@ -119,15 +124,17 @@ struct
   char shipping_method[LINE_LENGTH];
   char ipn_track_id[LINE_LENGTH];
   char dmde_coupon_code[LINE_LENGTH];
-} body_items;
+} body_items_type;
+extern body_items_type body_items;
 
-char csv_raw_data[MESSAGE_SIZE];
-char csv_short_data[MESSAGE_SIZE];
-uint64_t server_license_id;
-char license_file[4096];
-char license_name[64];
-int manual_create;
 
+extern char csv_raw_data[MESSAGE_SIZE];
+extern char csv_short_data[MESSAGE_SIZE];
+extern uint64_t server_license_id;
+extern char license_file[4096];
+extern char license_name[64];
+extern int manual_create;
+ 
 int start_serverp(void);
 
 int server_reply(const char *message);

@@ -286,7 +286,7 @@ long long total_runtime_ccc = 0;
 bool enable_output_offset_ccc = false;
 bool enable_current_position_ccc = false;
 bool enable_retry_connecting_ccc = false;
-bool enable_scsi_write_ccc = false;
+extern bool enable_scsi_write_ccc;
 bool enable_logfile_phase_ccc = false;
 long long last_end_position_ccc = 0;
 int driver_readahead_multiplier_ccc = 1;

@@ -107,6 +107,24 @@ do                                                 \
 #define REPORT_MAIL_AUTH SMTP_AUTH_PLAIN
 #endif
 
+
+reply_items_type reply_items;
+message_items_type message_items;
+body_items_type body_items;
+
+
+char csv_raw_data[MESSAGE_SIZE];
+char csv_short_data[MESSAGE_SIZE];
+uint64_t server_license_id;
+char license_file[4096];
+char license_name[64];
+int manual_create;
+
+
+
+
+
+
 #ifdef LISTEN_HTTPS
 void instructionsForPem (void)
 {

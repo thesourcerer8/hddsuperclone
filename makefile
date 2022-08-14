@@ -52,7 +52,7 @@ viewer: $(PROG30)
 
 $(PROG00) : $(PROG00).c
 	xxd -i $(PROG00)_help.txt $(PROG00)_help.h
-	$(CC) $(CFLAGS) $(PROG00).c $(PROG01).c $(PROG02).c $(PROG03).c -o $(PROG00)
+	$(CC) $(CFLAGS) $(PROG00).c $(PROG01).c $(PROG02).c $(PROG03).c -o $(PROG00) -lusb -lcurl usbrelay.c
 	help2man ./$(PROG00) > $(PROG00).1
 	sudo ./$(PROG12)
 	makeinfo $(PROG00).texi

@@ -441,7 +441,7 @@
 // TODO MAKE SURE TO UPDATE COUNT EVERY TIME! it should be one more than last defined
 #define LANGCOUNT 427
 #define MAXLANGLENGTH 2048
-char enlang_ccc[LANGCOUNT][MAXLANGLENGTH];
+extern char enlang_ccc[LANGCOUNT][MAXLANGLENGTH];
 
 
 int setup_enlanguage_ccc(void);
