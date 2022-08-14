@@ -20,3 +20,9 @@ The Live-CD is using the following software:
 * hdparm: https://sourceforge.net/projects/hdparm/
 * isolinux: https://wiki.syslinux.org/wiki/index.php?title=ISOLINUX
 
+
+Building:
+* git clone github.com/thesourcerer8/hddsuperclone
+* cd hddsuperclone
+* make
+* sudo ./hddsuperclone
