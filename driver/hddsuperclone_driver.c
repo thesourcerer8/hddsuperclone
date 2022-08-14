@@ -23,6 +23,7 @@
 #include <linux/proc_fs.h>
 #include <linux/blk-mq.h>
 #include <scsi/sg.h>
+#include <linux/bsg.h>
 
 //This defines are available in blkdev.h from kernel 4.17 (vanilla).
 #ifndef SECTOR_SHIFT
@@ -95,7 +96,7 @@ do                                                 \
 
 #define DRIVER_VERSION "2.6_20211126"
 
-MODULE_LICENSE("Proprietary");
+MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("Driver for HDDSuperClone");
 MODULE_AUTHOR("Scott Dwyer");
 MODULE_VERSION(DRIVER_VERSION);
@@ -114,7 +115,7 @@ module_param_string(mmap_tb, filename_mmap_tb, 32, 0);
 static char filename_mmap_mdb[32] = MAIN_DRIVER_MMAPMDB_NAME;
 module_param_string(mmap_mdb, filename_mmap_mdb, 32, 0);
 
-
+static struct lock_class_key super_bio_compl_lkclass;
 
 // TODO always make sure this matches the structure in the program!
 /*
@@ -1599,8 +1600,11 @@ static long process_ioctl(struct file *f, const unsigned cmd, const unsigned lon
         data_major_num = 0;
         goto out;
       }
-
+#if 0
       data_device.gd = alloc_disk(16);
+#else
+      data_device.gd = __alloc_disk_node(data_queue, NUMA_NO_NODE, &super_bio_compl_lkclass);
+#endif
       if (!data_device.gd)
       {
         goto out_unregister;
