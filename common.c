@@ -1446,4 +1446,120 @@ int set_rebuild_assist_enabled_ccc (void)
 #endif
 
 
+int disable_rebuild_assist_ccc(void)
+{
+  unsigned char data[LOG_PAGE_SIZE];
+  memset (data, 0, sizeof(data));
+  int ret = write_rebuild_assist_log_ccc (data);
+  if (ret || (ata_status_ccc & 1))
+  {
+    do_soft_reset_ccc(0);
+  }
+  ret = write_rebuild_assist_log_ccc (data);
+  if (ret)
+  {
+    fprintf (stdout, "failed to disable rebuild assist, return=%d\n", ret);
+    return ret;
+  }
+  if (ata_status_ccc & 1)
+  {
+    fprintf (stdout, "error disabling rebuild assist, status=%02x error=%02x\n", ata_status_ccc, ata_error_ccc);
+    return -1;
+  }
+  read_rebuild_assist_log_ccc();
+  use_fpdma_ccc = false;
+  fprintf (stdout, "rebuild assist disabled\n");
+  return 0;
+}
+
+
+int enable_rebuild_assist_ccc(void)
+{
+  unsigned char data[LOG_PAGE_SIZE];
+  memset (data, 0, sizeof(data));
+  data[0] = 1;
+  int ret = write_rebuild_assist_log_ccc (data);
+  if (ret)
+  {
+    fprintf (stdout, "failed to enable rebuild assist, return=0x%x\n", ret);
+    return ret;
+  }
+  if (ata_status_ccc & 1)
+  {
+    fprintf (stdout, "error enabling rebuild assist, status=%02x error=%02x\n", ata_status_ccc, ata_error_ccc);
+    return -1;
+  }
+  ret = read_rebuild_assist_log_ccc();
+  if (ret || ata_status_ccc & 1)
+  {
+    fprintf (stdout, "failed to read rebuild assist log, return=%d status=0x%02x error=0x%02x\n", ret, ata_status_ccc, ata_error_ccc);
+  }
+  use_fpdma_ccc = true;
+  fprintf (stdout, "rebuild assist enabled\n");
+  return 0;
+}
+
+
+int rebuild_assist_disable_head_ccc (int head)
+{
+  // remember to disable the rebuild assist to clear it or this likely won't work
+  unsigned char data[LOG_PAGE_SIZE];
+  memset (data, 0, sizeof(data));
+
+  // process the head number
+  int bytenumber = head / 8;
+  int byteremainder = head % 8;
+  //int checkmask = rebuild_assist_working_mask_ccc[bytenumber] >> byteremainder;
+  int checkmask = rebuild_assist_element_mask_ccc[bytenumber] >> byteremainder;
+  checkmask = checkmask & 1;
+  if (!checkmask)
+  {
+    fprintf (stdout, "invalid head for rebuild assist\n");
+    return -1;
+  }
+  int byteplacement = 8 + rebuild_assist_element_length_ccc + bytenumber;
+  if (byteplacement >= LOG_PAGE_SIZE)
+  {
+    fprintf (stdout, "internal error, byte placement out of bounds\n");
+    return -1;
+  }
+  int bytedata = 1 << byteremainder;
+  data[byteplacement] = bytedata;
+  data[0] = 1;
+  int ret = write_rebuild_assist_log_ccc (data);
+  if (ret)
+  {
+    fprintf (stdout, "failed to disable head, return=0x%x\n", ret);
+    return ret;
+  }
+  if (ata_status_ccc & 1)
+  {
+    fprintf (stdout, "error disabling head, status=%02x error=%02x\n", ata_status_ccc, ata_error_ccc);
+    return -1;
+  }
+
+  if (0)
+  {
+    fprintf (stdout, "rebuild assist write log data\n");
+    int i;
+    for (i = 0; i < 32; i+=16)
+    {
+      fprintf (stdout, "%x: ", i);
+      int n;
+      for (n=0; n < 16 && i+n < 32; n++)
+      {
+        fprintf (stdout, "%02x ", data[i+n]);
+      }
+      fprintf (stdout, "   ");
+      for (n=0; n < 16 && i+n < 32; n++)
+      {
+        fprintf (stdout, "%c", isprint(data[i+n]) ? data[i+n] : '.');
+      }
+      fprintf (stdout, "\n");
+    }
+  }
+
+  return 0;
+}
+
 

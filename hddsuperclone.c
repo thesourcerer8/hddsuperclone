@@ -16679,7 +16679,7 @@ int get_ascq_from_additional_sense_ccc(int value)
 
 
 
-
+#if 0
 int rebuild_assist_disable_head_ccc (int head)
 {
   // remember to disable the rebuild assist to clear it or this likely won't work
@@ -16741,7 +16741,7 @@ int rebuild_assist_disable_head_ccc (int head)
 
   return 0;
 }
-
+#endif
 
 
 
@@ -16898,7 +16898,7 @@ int rebuild_assist_remove_head_ccc (int head)
 
 
 
-
+#if 0
 int enable_rebuild_assist_ccc(void)
 {
   unsigned char data[LOG_PAGE_SIZE];
@@ -16924,11 +16924,11 @@ int enable_rebuild_assist_ccc(void)
   fprintf (stdout, "rebuild assist enabled\n");
   return 0;
 }
+#endif
 
 
 
-
-
+#if 0
 int disable_rebuild_assist_ccc(void)
 {
   unsigned char data[LOG_PAGE_SIZE];
@@ -16954,7 +16954,7 @@ int disable_rebuild_assist_ccc(void)
   fprintf (stdout, "rebuild assist disabled\n");
   return 0;
 }
-
+#endif
 
 
 

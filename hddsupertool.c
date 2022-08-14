@@ -3222,7 +3222,12 @@ int print_gui_error_message_ccc(char *message, char *title, int type)
   return 0;
 }
 
-
+int set_lun_dialog_ccc (int max_lun)
+{
+  printf("We have to set the LUN, the maximum value is %d. Which LUN do you want?\n",max_lun);
+  printf("This function is only implemented in the GUI. Now we are choosing 0 by default.\n");
+  return 0;
+}
 
 
 
