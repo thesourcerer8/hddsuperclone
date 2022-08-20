@@ -101,7 +101,7 @@ int prepare_cdb_ccc(void)
 
 
 
-
+#define sensebuf ((char*)io_hdr.sbp)
 
 
 
@@ -114,28 +114,28 @@ int post_ioctl_ccc(void)
   // if there was sense data written then check for errors
   if (io_hdr.sb_len_wr != 0)
   {
-    switch (io_hdr.sbp[0])
+    switch (sensebuf[0])
     {
       case 0xF0:
       case 0xF1:
-        sense_key_ccc = io_hdr.sbp[2] & 0x0f;
-        asc_ccc = io_hdr.sbp[12];
-        ascq_ccc = io_hdr.sbp[13];
+        sense_key_ccc = sensebuf[2] & 0x0f;
+        asc_ccc = sensebuf[12];
+        ascq_ccc = sensebuf[13];
         fixed = 1;
         break;
 
       case 0x70:
       case 0x71:
-        sense_key_ccc = io_hdr.sbp[2] & 0x0f;
-        asc_ccc = io_hdr.sbp[12];
-        ascq_ccc = io_hdr.sbp[13];
+        sense_key_ccc = sensebuf[2] & 0x0f;
+        asc_ccc = sensebuf[12];
+        ascq_ccc = sensebuf[13];
         break;
 
       case 0x72:
       case 0x73:
-        sense_key_ccc = io_hdr.sbp[1] & 0x0f;
-        asc_ccc = io_hdr.sbp[2];
-        ascq_ccc = io_hdr.sbp[3];
+        sense_key_ccc = sensebuf[1] & 0x0f;
+        asc_ccc = sensebuf[2];
+        ascq_ccc = sensebuf[3];
         descriptor = 1;
         break;
 
@@ -161,7 +161,7 @@ int post_ioctl_ccc(void)
         int i;
         for (i = 0; i < io_hdr.sb_len_wr; i++)
         {
-          sprintf (tempmessage_ccc, "%02x ", io_hdr.sbp[i]);
+          sprintf (tempmessage_ccc, "%02x ", sensebuf[i]);
           if (superclone_ccc)
           {
             message_error_ccc(tempmessage_ccc);
@@ -213,14 +213,14 @@ int post_ioctl_ccc(void)
   memset(sensebuffer_ccc, 0, sensebuffer_size_ccc);
   memcpy(sensebuffer_ccc, io_hdr.sbp, io_hdr.sb_len_wr);
 
-  if (descriptor && io_hdr.sb_len_wr > 21 && io_hdr.sbp[8] == 0x9 && io_hdr.sbp[9] == 0xc)
+  if (descriptor && io_hdr.sb_len_wr > 21 && sensebuf[8] == 0x9 && sensebuf[9] == 0xc)
   {
-    int additional_sense_length = io_hdr.sbp[7];
+    int additional_sense_length = sensebuf[7];
     unsigned char ata_return_descriptor[additional_sense_length];
     int i;
     for (i = 0; i < additional_sense_length; i ++)
     {
-      memcpy(&ata_return_descriptor[i], &io_hdr.sbp[i+8], 1);
+      memcpy(&ata_return_descriptor[i], &sensebuf[i+8], 1);
     }
 
     set_number_variable_value_ccc("$ata_return_error", ata_return_descriptor[3]);
@@ -243,12 +243,12 @@ int post_ioctl_ccc(void)
     int i;
     for (i = 0; i < 4; i ++)
     {
-      memcpy(&information[i], &io_hdr.sbp[i+3], 1);
+      memcpy(&information[i], &sensebuf[i+3], 1);
     }
     unsigned char command_specific_information[4];
     for (i = 0; i < 4; i ++)
     {
-      memcpy(&command_specific_information[i], &io_hdr.sbp[i+8], 1);
+      memcpy(&command_specific_information[i], &sensebuf[i+8], 1);
     }
 
     set_number_variable_value_ccc("$ata_return_error", information[0]);
@@ -284,7 +284,7 @@ int post_ioctl_ccc(void)
     int i;
     for (i = 0; i < io_hdr.sb_len_wr; i++)
     {
-      fprintf (stdout, "%02x ", io_hdr.sbp[i]);
+      fprintf (stdout, "%02x ", sensebuf[i]);
     }
     fprintf (stdout, "\n");
     fprintf (stdout, "io_status_ccc %d\n", io_status_ccc);
@@ -7430,7 +7430,11 @@ int identify_device_direct_ccc(unsigned long long address, int select, int count
 
   if (drq)
   {
-    insw(address, ccc_buffer_ccc, IDENTIFY_BUFFER_SIZE);
+    #if defined(__i386__) || defined(__x86_64__)
+      insw(address, ccc_buffer_ccc, IDENTIFY_BUFFER_SIZE);
+    #else
+      fprintf(stderr,"This insw needs to be ported to other architectures, perhaps with memcpy\n");
+    #endif
   }
   else
   {
