@@ -984,7 +984,7 @@ static void dmde_domain_ok_sel( GtkWidget *w, GtkFileSelection *fs )
 
 
 
-gboolean reload_file(gpointer user_data)
+gboolean reload_file(__attribute__((unused)) gpointer user_data)
 {
   printf ("%s\n",  log_file);
   total_size = 0;
