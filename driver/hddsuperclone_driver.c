@@ -115,7 +115,9 @@ module_param_string(mmap_tb, filename_mmap_tb, 32, 0);
 static char filename_mmap_mdb[32] = MAIN_DRIVER_MMAPMDB_NAME;
 module_param_string(mmap_mdb, filename_mmap_mdb, 32, 0);
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,0,0)
 static struct lock_class_key super_bio_compl_lkclass;
+#endif
 
 // TODO always make sure this matches the structure in the program!
 /*
@@ -1600,10 +1602,12 @@ static long process_ioctl(struct file *f, const unsigned cmd, const unsigned lon
         data_major_num = 0;
         goto out;
       }
-#if 0
-      data_device.gd = alloc_disk(16);
-#else
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,0,0)
+      // Needed for Kernel 5.15
       data_device.gd = __alloc_disk_node(data_queue, NUMA_NO_NODE, &super_bio_compl_lkclass);
+#else
+      // Needed for Kernel 4.4.0
+      data_device.gd = alloc_disk(16);
 #endif
       if (!data_device.gd)
       {
