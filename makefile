@@ -44,7 +44,7 @@ docdir= $(DESTDIR)/usr/local/share/doc/
 menudir= $(DESTDIR)/usr/local/share/applications/
 driverdir= driver/
 
-all:  $(PROG12) $(PROG11) $(PROG20) $(PROG30)
+all:  $(PROG12) $(PROG11) $(PROG20) $(PROG30) $(PROG00)
 change:  $(PROG11)
 clone: $(PROG12) $(PROG20)
 viewer: $(PROG30)
