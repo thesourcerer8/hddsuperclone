@@ -54,9 +54,7 @@ int supertooltool_ccc (void)
       if (superbyte_ccc[27] == 0x1e)
       {
         fprintf (stdout, "H) Direct AHCI\n");
-#ifdef GODMODE
-        fprintf (stdout, "U) USB\n");
-#endif
+        fprintf (stdout, "U) USB (might be experimental)\n");
       }
       fprintf (stdout, "Choose which mode > ");
       fflush(stdout);
@@ -91,7 +89,6 @@ int supertooltool_ccc (void)
           ahci_mode_ccc = true;
           break;
         }
-#ifdef GODMODE
         else if (strcasecmp(raw_value, "U") == 0)
         {
           ata_passthrough_ccc = false;
@@ -101,7 +98,6 @@ int supertooltool_ccc (void)
           usb_mode_ccc = true;
           break;
         }
-#endif
         else
         {
           fprintf (stderr, "Error! Choice \'%s\' is not valid.\n", raw_value);
