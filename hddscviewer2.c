@@ -3076,7 +3076,7 @@ int get_block_information(long long position, long long size)
     //message_now(tempmessage);
     return -1;
   }
-  int maxcount = 4096;
+  int maxcount = 64;
   long long nontried = 0;
   long long nontrimmed = 0;
   long long nondivided = 0;
