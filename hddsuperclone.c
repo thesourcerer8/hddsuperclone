@@ -14,54 +14,6 @@
 #include "hddsuperclone_help.h"
 #include "hddsuperclone_driver.h"
 #include "hddsupertool_help.h"
-#include "smtp.h"
-
-#ifdef GODMODE
-#define MAIL_VERSION             1
-#define MAIL_PROCESSING_FLAGS    (EMAIL | IPADDRESS | COUNTRY | REGION | CITY)
-#define MAIL_SERVER              "smtp.mailgun.org"
-#define MAIL_PORT                "587"
-#define MAIL_SECURITY            SMTP_SECURITY_NONE
-#define MAIL_FLAGS               SMTP_NO_CERT_VERIFY /* Do not verify cert. */
-#define MAIL_AUTH                SMTP_AUTH_PLAIN
-#define MAIL_USER                "postmaster@get-your-own-account.mailgun.org"
-#define MAIL_PASS                "get-your-own-password"
-#define MAIL_FROM                "get-your-own-account@gmail.com"
-#define MAIL_FROM_NAME           "HDDSuperClone"
-#define MAIL_SUBJECT             "hddscactivation"
-#define MAIL_TO                  "get-your-own-account@gmail.com"
-#define MAIL_TO_NAME             "get-your-own-account"
-#define ALT_MAIL_VERSION             1
-#define ALT_MAIL_PROCESSING_FLAGS    (EMAIL | IPADDRESS | COUNTRY | REGION | CITY)
-#define ALT_MAIL_SERVER              "smtp.mailgun.org"
-#define ALT_MAIL_PORT                "2525"
-#define ALT_MAIL_SECURITY            SMTP_SECURITY_NONE
-#define ALT_MAIL_FLAGS               SMTP_NO_CERT_VERIFY /* Do not verify cert. */
-#define ALT_MAIL_AUTH                SMTP_AUTH_PLAIN
-#define ALT_MAIL_USER                "postmaster@get-your-own-account.mailgun.org"
-#define ALT_MAIL_PASS                "get-your-own-password"
-#define ALT_MAIL_FROM                "get-your-own-account@gmail.com"
-#define ALT_MAIL_FROM_NAME           "HDDSuperClone"
-#define ALT_MAIL_SUBJECT             "hddscactivation"
-#define ALT_MAIL_TO                  "get-your-own-account@gmail.com"
-#define ALT_MAIL_TO_NAME             "get-your-own-account"
-#endif
-
-
-// make license
-// initial version is 1
-// type is 1 for trial, 2 for full version
-// first line: qword id, word version, word type, dword checksum
-// second line: qword encrypt key, qword expire time
-// third line: qword reserved, qword reserved
-
-// to create temp license: hddsuperclone --license-version 1 --license-type 1 --license-time 65 --license-make 1
-// to create full license: hddsuperclone --license-version 1 --license-type 2 --license-time 0 --license-make 1
-// version and type input are in hex
-// to process active: hddsuperclone --license-process-active
-
-// to update after moving new license to active: ./ftp.sh
-
 
 
 // Function to handle ctrl-c
