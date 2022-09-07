@@ -17,7 +17,6 @@ CFLAGS = -Wall -W -O0 -g
 else
 CFLAGS = -Wall -W -Wno-deprecated-declarations
 endif
-SSLFLAGS = -lssl -lcrypto
 USBFLAGS = -lusb
 CURLFLAGS = -lcurl
 GTKFLAGS = `pkg-config --cflags --libs gtk+-$(GTKVER).0` -export-dynamic
@@ -27,7 +26,6 @@ PROG02 = io
 PROG03 = common
 PROG04 = tool
 PROG05 = usbrelay
-PROG06 = smtp
 PROG20 = hddsuperclone
 PROG21 = clone_gui$(GTKVER)
 PROG22 = clone_gui_language
@@ -71,7 +69,7 @@ $(PROG20) : $(PROG20).c
 	cp -f public/base/$(PROG20)/EULA $(PROG20)_EULA.txt
 	xxd -i $(PROG20)_EULA.txt $(PROG20)_EULA.h
 	xxd -i $(driverdir)$(PROG20)_driver.c $(PROG20)_driver.h
-	$(CC) $(CFLAGS) $(PROG20).c $(PROG01).c $(PROG02).c $(PROG04).c $(PROG05).c $(PROG06).c $(PROG03).c $(PROG21).c $(PROG22).c -o $(PROG20) $(GTKFLAGS) $(CURLFLAGS) $(USBFLAGS) $(SSLFLAGS)
+	$(CC) $(CFLAGS) $(PROG20).c $(PROG01).c $(PROG02).c $(PROG04).c $(PROG05).c $(PROG03).c $(PROG21).c $(PROG22).c -o $(PROG20) $(GTKFLAGS) $(CURLFLAGS) $(USBFLAGS)
 	sudo ./$(PROG12)
 	makeinfo $(PROG00).texi
 	makeinfo $(PROG00).texi --html --no-split
@@ -104,7 +102,7 @@ server : $(PROG20).c
 	cp -f public/base/$(PROG20)/EULA $(PROG20)_EULA.txt
 	xxd -i $(PROG20)_EULA.txt $(PROG20)_EULA.h
 	xxd -i $(driverdir)$(PROG20)_driver.c $(PROG20)_driver.h
-	$(CC) $(CFLAGS) $(PROG20).c $(PROG01).c $(PROG02).c $(PROG04).c $(PROG05).c $(PROG06).c $(PROG03).c $(PROG21).c $(PROG22).c -o $(PROG20) $(GTKFLAGS) $(CURLFLAGS) $(USBFLAGS) $(SSLFLAGS)
+	$(CC) $(CFLAGS) $(PROG20).c $(PROG01).c $(PROG02).c $(PROG04).c $(PROG05).c $(PROG03).c $(PROG21).c $(PROG22).c -o $(PROG20) $(GTKFLAGS) $(CURLFLAGS) $(USBFLAGS)
 
 installserver:
 	rm -f $(bindir)$(PROG20)
