@@ -18,7 +18,7 @@ else
 CFLAGS = -Wall -W -Wno-deprecated-declarations
 endif
 USBFLAGS = -lusb
-CURLFLAGS = -lcurl
+CURLFLAGS = -DUSE_CURL -lcurl
 GTKFLAGS = `pkg-config --cflags --libs gtk+-$(GTKVER).0` -export-dynamic
 PROG00 = hddsupertool
 PROG01 = commands
@@ -93,7 +93,9 @@ $(PROG30) : $(PROG30)$(GTKVER).c
 	$(OFFICEVER) --headless --convert-to html:HTML hddscviewer.odt
 	$(OFFICEVER) --headless --convert-to pdf:writer_pdf_Export hddscviewer.odt
 
-
+windows : hddscviewer2.c
+	xxd -i hddscviewer2.glade hddscviewer2_glade.h
+	$(CC) -Wall -Wextra -O2 -fsanitize=address,undefined -Wno-deprecated-declarations hddscviewer2.c -o hddscviewer $(GTKFLAGS)
 	
 server : $(PROG20).c
 	xxd -i $(PROG00)_help.txt $(PROG00)_help.h
