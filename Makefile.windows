@@ -1,6 +1,6 @@
 CC = gcc 
-CFLAGS = -Wall -Wextra -O2 -fsanitize=address,undefined -Wno-deprecated-declarations
-GTKFLAGS = `pkg-config --cflags --libs gtk+-2.0` -export-dynamic
+CFLAGS = -Wall -Wextra -O2 -Wno-deprecated-declarations
+GTKFLAGS = `pkg-config --cflags --libs gtk+-2.0`
 
 all : hddscviewer2.c
 	xxd -i hddscviewer2.glade hddscviewer2_glade.h
