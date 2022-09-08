@@ -7,7 +7,9 @@
 #include <gtk/gtk.h>
 #include "conditional.h"
 #ifdef DEBUG
+#ifdef USE_CURL
 #include <curl/curl.h>
+#endif
 #endif
 #include <stdio.h>
 #include <stdlib.h>

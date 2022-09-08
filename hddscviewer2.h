@@ -20,7 +20,9 @@
 #include <cairo.h>
 #include "conditional.h"
 #ifdef DEBUG
+#ifdef USE_CURL
 #include <curl/curl.h>
+#endif
 #endif
 #include <sys/stat.h>
 

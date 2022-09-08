@@ -617,6 +617,7 @@ void get_data_dump_filename_ccc(void)
 
 
 #ifdef DEBUG
+#ifdef USE_CURL
 static size_t WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp)
 {
   size_t realsize = size * nmemb;
@@ -635,6 +636,7 @@ static size_t WriteMemoryCallback(void *contents, size_t size, size_t nmemb, voi
 
   return realsize;
 }
+#endif
 #endif
 
 
@@ -1016,6 +1018,10 @@ int translate_language_ccc(char *fromlang, char *translang, char *language, char
 char* get_translated_data_ccc(char *url_data)
 {
  #ifdef DEBUG
+  #ifndef USE_CURL
+   return url_data;
+  #else
+
   do_nanosleep_ccc(TRANSLATETIMERALL);  // this is a timer to deal with google translator
   CURL *curl_handle;
   CURLcode res;
@@ -1066,6 +1072,7 @@ char* get_translated_data_ccc(char *url_data)
   curl_global_cleanup();
 
   return chunk.memory;
+  #endif
 #else
   return url_data;
 #endif
