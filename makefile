@@ -15,7 +15,7 @@ CC= gcc
 ifneq (,$(findstring k,$(MAKEFLAGS)))
 CFLAGS = -Wall -W -O0 -g
 else
-CFLAGS = -Wall -W -Wno-deprecated-declarations
+CFLAGS = -Wall -Wextra -O0 -g3 -fno-omit-frame-pointer -fsanitize=address,undefined -Wno-deprecated-declarations
 endif
 USBFLAGS = -lusb
 CURLFLAGS = -DUSE_CURL -lcurl
