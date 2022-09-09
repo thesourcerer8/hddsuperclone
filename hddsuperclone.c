@@ -4838,8 +4838,13 @@ int get_log_status_ccc(long long mask)
     endpos = source_total_size_ccc;
   }
   int start_line = find_block_ccc(startpos);
-  long long start_size_adjust = startpos - lposition_ccc[start_line];
   int end_line = find_block_ccc(endpos-1);
+  //TODO: find_block_ccc() returns -1 on error and is used to index multiple arrays
+  //  until I can understand how best to propagate the error, just pretend
+  //  everything is OK:
+  if (start_line < 0) return 0;
+  if (end_line < 0) return 0;
+  long long start_size_adjust = startpos - lposition_ccc[start_line];
   long long end_size_adjust = (lposition_ccc[end_line] + lsize_ccc[end_line]) - endpos;
   //fprintf (stdout, "start line=%d start position=%llx end line=%d end position=%llx\n", start_line, startpos, end_line, endpos);    //debug
   //fprintf (stdout, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n");    //debug
@@ -15680,7 +15685,7 @@ void set_mode_fillzero_ccc (void)
     clear_mode_ccc();
     fill_mode_ccc = true;
     clear_source_ccc();
-    source_total_size_ccc = lposition_ccc[total_lines_ccc - 1] + lsize_ccc[total_lines_ccc - 1];
+    source_total_size_ccc = (total_lines_ccc)? lposition_ccc[total_lines_ccc - 1] + lsize_ccc[total_lines_ccc - 1] : 0;
     update_mode_ccc();
     // re-initialize memory after mode change
     initialize_memory_ccc();
@@ -15699,7 +15704,7 @@ void set_mode_fillmark_ccc (void)
     fill_mode_ccc = true;
     fill_mark_ccc = true;
     clear_source_ccc();
-    source_total_size_ccc = lposition_ccc[total_lines_ccc - 1] + lsize_ccc[total_lines_ccc - 1];
+    source_total_size_ccc = (total_lines_ccc)? lposition_ccc[total_lines_ccc - 1] + lsize_ccc[total_lines_ccc - 1] : 0;
     update_mode_ccc();
     // re-initialize memory after mode change
     initialize_memory_ccc();
@@ -15736,7 +15741,7 @@ void set_mode_driveronly_ccc (void)
     clear_mode_ccc();
     driver_only_ccc = true;
     clear_source_ccc();
-    source_total_size_ccc = lposition_ccc[total_lines_ccc - 1] + lsize_ccc[total_lines_ccc - 1];
+    source_total_size_ccc = (total_lines_ccc)? lposition_ccc[total_lines_ccc - 1] + lsize_ccc[total_lines_ccc - 1] : 0;
     update_mode_ccc();
     // re-initialize memory after mode change
     initialize_memory_ccc();

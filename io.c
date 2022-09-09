@@ -101,7 +101,7 @@ int prepare_cdb_ccc(void)
 
 
 
-#define sensebuf ((char*)io_hdr.sbp)
+#define sensebuf ((unsigned char*)io_hdr.sbp)
 
 
 

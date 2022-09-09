@@ -13,13 +13,13 @@ endif
 
 CC= gcc
 ifneq (,$(findstring k,$(MAKEFLAGS)))
-CFLAGS = -Wall -W -O0 -g
+CFLAGS = -Wall -Wextra -O0 -g3 -rdynamic
 else
-CFLAGS = -Wall -W -Wno-deprecated-declarations
+CFLAGS = -Wall -Wextra -O0 -g3 -rdynamic -fno-omit-frame-pointer -fsanitize=address,undefined -Wno-deprecated-declarations
 endif
 USBFLAGS = -lusb
 CURLFLAGS = -DUSE_CURL -lcurl
-GTKFLAGS = `pkg-config --cflags --libs gtk+-$(GTKVER).0` -export-dynamic
+GTKFLAGS = `pkg-config --cflags --libs gtk+-$(GTKVER).0`
 PROG00 = hddsupertool
 PROG01 = commands
 PROG02 = io

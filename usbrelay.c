@@ -27,8 +27,7 @@ int find_all_usb_devices_ccc(void)
     sprintf (tempmessage_ccc, "Finding USB devices\n");
     message_now_ccc(tempmessage_ccc);
     // clear the list
-    int i;
-    for (i = 0; i < MAX_USB_DEVICES; i++)
+    for (int i = 0; i < MAX_USB_DEVICES; i++)
     {
       usb_vendor_id_ccc[i] = 0;
       usb_product_id_ccc[i] = 0;
@@ -83,7 +82,7 @@ int find_all_usb_devices_ccc(void)
         }
         else
         {
-          fprintf (stdout, "Error: Unnable to get vendor string %04x:%04x (%s)\n", usb_vendor_id_ccc[i], usb_product_id_ccc[i], strerror(errno));
+          fprintf (stdout, "Error: Unnable to get vendor string %04x:%04x (%s)\n", usb_vendor_id_ccc[usb_device_count_ccc], usb_product_id_ccc[usb_device_count_ccc], strerror(errno));
         }
 
         rval = usb_get_string_simple(dev_handle, dev->descriptor.iProduct, buffer, sizeof(buffer));
@@ -93,7 +92,7 @@ int find_all_usb_devices_ccc(void)
         }
         else
         {
-          fprintf (stdout, "Error: Unable to get product string %04x:%04x (%s)\n", usb_vendor_id_ccc[i], usb_product_id_ccc[i], strerror(errno));
+          fprintf (stdout, "Error: Unable to get product string %04x:%04x (%s)\n", usb_vendor_id_ccc[usb_device_count_ccc], usb_product_id_ccc[usb_device_count_ccc], strerror(errno));
         }
 
         rval = usb_get_string_simple(dev_handle, dev->descriptor.iSerialNumber, buffer, sizeof(buffer));
@@ -103,7 +102,7 @@ int find_all_usb_devices_ccc(void)
         }
         else
         {
-          fprintf (stdout, "Error: Unable to get serial string %04x:%04x (%s)\n", usb_vendor_id_ccc[i], usb_product_id_ccc[i], strerror(errno));
+          fprintf (stdout, "Error: Unable to get serial string %04x:%04x (%s)\n", usb_vendor_id_ccc[usb_device_count_ccc], usb_product_id_ccc[usb_device_count_ccc], strerror(errno));
         }
 
         // if the device is known to have an extra id or serial then get it
@@ -125,7 +124,7 @@ int find_all_usb_devices_ccc(void)
           }
           else
           {
-            fprintf (stdout, "Failed to get special id %04x:%04x, %d (%s)\n", usb_vendor_id_ccc[i], usb_product_id_ccc[i], bytesreceived, strerror(errno));
+            fprintf (stdout, "Failed to get special id %04x:%04x, %d (%s)\n", usb_vendor_id_ccc[usb_device_count_ccc], usb_product_id_ccc[usb_device_count_ccc], bytesreceived, strerror(errno));
           }
           // if it is a known usb relay then mark it
           usb_known_relay_ccc[usb_device_count_ccc] = 1;
@@ -195,13 +194,13 @@ int find_all_usb_devices_ccc(void)
     }
 
     // flip bus numbers so they match up with what the OS reports
-    for (i = 0; i < usb_device_count_ccc; i++)
+    for (int i = 0; i < usb_device_count_ccc; i++)
     {
       usb_bus_real_number_ccc[i] = (busnum + 1) - usb_bus_number_ccc[i];
     }
 
     // show all device info
-    for (i = 0; i < usb_device_count_ccc; i++)
+    for (int i = 0; i < usb_device_count_ccc; i++)
     {
       //fprintf (stdout, "%d:%d  %04x:%04x  %s  %s\n", usb_bus_real_number_ccc[i], usb_device_number_ccc[i], usb_vendor_id_ccc[i], usb_product_id_ccc[i], usb_vendor_string_ccc[i], usb_product_string_ccc[i]);
     }

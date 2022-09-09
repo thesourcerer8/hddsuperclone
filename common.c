@@ -649,6 +649,7 @@ int set_table_buffer_ccc(void)
     if (!driver_memory_mapped_ccc)
     {
       free (table_buffer_ccc);
+      table_buffer_ccc = NULL;
     }
     unsigned int align = pagesize_ccc;
     if (tries != 0)
