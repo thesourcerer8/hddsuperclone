@@ -15685,7 +15685,7 @@ void set_mode_fillzero_ccc (void)
     clear_mode_ccc();
     fill_mode_ccc = true;
     clear_source_ccc();
-    source_total_size_ccc = lposition_ccc[total_lines_ccc - 1] + lsize_ccc[total_lines_ccc - 1];
+    source_total_size_ccc = (total_lines_ccc)? lposition_ccc[total_lines_ccc - 1] + lsize_ccc[total_lines_ccc - 1] : 0;
     update_mode_ccc();
     // re-initialize memory after mode change
     initialize_memory_ccc();
@@ -15704,7 +15704,7 @@ void set_mode_fillmark_ccc (void)
     fill_mode_ccc = true;
     fill_mark_ccc = true;
     clear_source_ccc();
-    source_total_size_ccc = lposition_ccc[total_lines_ccc - 1] + lsize_ccc[total_lines_ccc - 1];
+    source_total_size_ccc = (total_lines_ccc)? lposition_ccc[total_lines_ccc - 1] + lsize_ccc[total_lines_ccc - 1] : 0;
     update_mode_ccc();
     // re-initialize memory after mode change
     initialize_memory_ccc();
@@ -15741,7 +15741,7 @@ void set_mode_driveronly_ccc (void)
     clear_mode_ccc();
     driver_only_ccc = true;
     clear_source_ccc();
-    source_total_size_ccc = lposition_ccc[total_lines_ccc - 1] + lsize_ccc[total_lines_ccc - 1];
+    source_total_size_ccc = (total_lines_ccc)? lposition_ccc[total_lines_ccc - 1] + lsize_ccc[total_lines_ccc - 1] : 0;
     update_mode_ccc();
     // re-initialize memory after mode change
     initialize_memory_ccc();
