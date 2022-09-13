@@ -19,9 +19,9 @@
 // Function to handle ctrl-c
 void signal_callback_handler_ccc(int signum)
 {
+  (void) signum;
   if (!critical_process_ccc)
   {
-    signum = signum;
     sprintf(tempmessage_ccc, "Terminated by user\n");
     message_exit_ccc(tempmessage_ccc);
     forced_exit_ccc = true;
@@ -13999,7 +13999,6 @@ int process_source_ccc(void)
     if (!data_read_from_log_ccc)
     {
       sector_size_ccc = bytes_per_sector_ccc;
-      sector_offset = sector_offset;
       if (superbyte_ccc[23] == 0x5b)
       {
       block_size_ccc = logical_sectors_per_physical;
@@ -14347,7 +14346,6 @@ int process_source_ccc(void)
     if (!data_read_from_log_ccc)
     {
       sector_size_ccc = blocksize;
-      sector_offset = sector_offset;
       if (superbyte_ccc[23] == 0x5b)
       {
       block_size_ccc = logical_sectors_per_physical;
@@ -14441,7 +14439,6 @@ int process_source_ccc(void)
     if (!data_read_from_log_ccc)
     {
       sector_size_ccc = bytes_per_log_sec;
-      sector_offset = sector_offset;
       if (superbyte_ccc[23] == 0x5b)
       {
       block_size_ccc = blocksize;

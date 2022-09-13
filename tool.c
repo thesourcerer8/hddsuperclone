@@ -1205,11 +1205,6 @@ int process_lines_ccc(void)
           recess = true;
         }
 
-        else
-        {
-          ccc_indent_ccc = ccc_indent_ccc;
-        }
-
         if (recess)
         {
           current_indent--;

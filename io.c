@@ -2340,11 +2340,6 @@ int ahci_rw_ccc(int command_type, int write_bit)
       return 0;
     }
   }
-  else
-  {
-    command_type = command_type;
-    write_bit = write_bit;
-  }
   return 0;
 }
 
@@ -2500,7 +2495,6 @@ int do_ata_dma_read_ccc(int command_type)
   }
   else
   {
-    command_type = command_type;
     sprintf (tempmessage_ccc, "ERROR: DMA not allowed in free version.\n");
     if (superclone_ccc)
     {
@@ -2847,7 +2841,6 @@ int do_ata_dma_write_ccc(int command_type)
   }
   else
   {
-    command_type = command_type;
     sprintf (tempmessage_ccc, "ERROR: DMA not allowed in free version.\n");
     if (superclone_ccc)
     {
@@ -6843,14 +6836,7 @@ int process_resources_ccc(unsigned long long *start, unsigned long long *end, un
           port_address_ccc[device_count_ccc] = potential_hba_start + 0x100 + (i*0x80);
           memcpy(&io_doubleword_ccc, port_virt_addr_ccc + 0x128 + (i*0x80), 4);
           port_status_ccc[device_count_ccc] = io_doubleword_ccc;
-          if (port_status_ccc == 0)
-          {
-            device_present_ccc[device_count_ccc] = false;
-          }
-          else
-          {
-            device_present_ccc[device_count_ccc] = true;
-          }
+          device_present_ccc[device_count_ccc] = true;
           //fprintf (stdout, "port_status_ccc= 0x%x\n", port_status_ccc);  //debug
           memcpy(&io_doubleword_ccc, port_virt_addr_ccc + 0x124 + (i*0x80), 4);
           port_signature_ccc[device_count_ccc] = io_doubleword_ccc;
@@ -8284,10 +8270,6 @@ int identify_device_ahci_ccc(int count)
     }
 
     memset (ccc_buffer_ccc, 0, ccc_main_buffer_size_ccc);
-  }
-  else
-  {
-    count = count;
   }
   return (0);
 }
@@ -10628,7 +10610,6 @@ int disable_fis_ccc(unsigned long long time)
   }
   else
   {
-    time = time;
     timeout = 0;
   }
   return (timeout);
@@ -10671,7 +10652,6 @@ int enable_fis_ccc(unsigned long long time)
   }
   else
   {
-    time = time;
     timeout = 0;
   }
   return (timeout);
@@ -10714,7 +10694,6 @@ int disable_start_ccc(unsigned long long time)
   }
   else
   {
-    time = time;
     timeout = 0;
   }
   return (timeout);
@@ -10757,7 +10736,6 @@ int enable_start_ccc(unsigned long long time)
   }
   else
   {
-    time = time;
     timeout = 0;
   }
   return (timeout);
@@ -10799,7 +10777,6 @@ int enable_command_issue_ccc(unsigned long long time)
   }
   else
   {
-    time = time;
     timeout = 0;
   }
   return (timeout);

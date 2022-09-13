@@ -59,6 +59,7 @@ bool forced_exit_ccc=false;
 // Function to handle ctrl-c
 void signal_callback_handler_ccc(int signum)
 {
+  (void) signum;
   if (!critical_process_ccc)
   {
   fprintf(stderr, "\nTerminated by user\n");
@@ -1658,11 +1659,6 @@ int process_lines_ccc(void)
           recess = true;
         }
 
-        else
-        {
-          ccc_indent_ccc = ccc_indent_ccc;
-        }
-
         if (recess)
         {
           current_indent--;
@@ -3183,7 +3179,7 @@ int call_command_on_power_cycle_ccc(void)
 void update_display_status_buttons_ccc(int time_ms)
 {
   // do nothing, this is for clone gui
-  time_ms = time_ms;
+  (void)time_ms;
 }
 
 
@@ -3191,9 +3187,9 @@ void update_display_status_buttons_ccc(int time_ms)
 int print_gui_error_message_ccc(char *message, char *title, int type)
 {
   // do nothing, this is for clone gui
-  message = message;
-  title = title;
-  type = type;
+  (void) message;
+  (void) title;
+  (void) type;
   return 0;
 }
 

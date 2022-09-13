@@ -5703,17 +5703,14 @@ int endsubroutine_ccc(bool perform_check, unsigned int line_number)
   if (!perform_check)
   {
     int new_line;
-    if (!perform_check)
+    subroutine_stack_counter_ccc --;
+    if (subroutine_stack_counter_ccc < 0)
     {
-      subroutine_stack_counter_ccc --;
-      if (subroutine_stack_counter_ccc < 0)
-      {
-        fprintf (stderr, "\nError: ENDSUBROUTINE without SUBROUTINE,\n");
-        fprintf (stderr, "%s %d.\n", error_string, line_number-1);
-        return (-1);
-      }
-      new_line = ccc_subroutine_stack_ccc[subroutine_stack_counter_ccc];
+      fprintf (stderr, "\nError: ENDSUBROUTINE without SUBROUTINE,\n");
+      fprintf (stderr, "%s %d.\n", error_string, line_number-1);
+      return (-1);
     }
+    new_line = ccc_subroutine_stack_ccc[subroutine_stack_counter_ccc];
     return (new_line);
   }
   return (0);
@@ -5739,19 +5736,16 @@ int returnsub_ccc(bool perform_check, unsigned int line_number)
   if (!perform_check)
   {
     int new_line;
-    if (!perform_check)
+    subroutine_stack_counter_ccc --;
+    if (subroutine_stack_counter_ccc < 0)
     {
-      subroutine_stack_counter_ccc --;
-      if (subroutine_stack_counter_ccc < 0)
-      {
-        fprintf (stderr, "\nError: RETURNSUB without SUBROUTINE,\n");
-        fprintf (stderr, "%s %d.\n", error_string, line_number-1);
-        return (-1);
-      }
-      new_line = ccc_subroutine_stack_ccc[subroutine_stack_counter_ccc];
-      while_stack_counter_ccc = subroutine_while_stack_ccc[subroutine_stack_counter_ccc];
-      endif_stack_counter_ccc = subroutine_endif_stack_ccc[subroutine_stack_counter_ccc];
+      fprintf (stderr, "\nError: RETURNSUB without SUBROUTINE,\n");
+      fprintf (stderr, "%s %d.\n", error_string, line_number-1);
+      return (-1);
     }
+    new_line = ccc_subroutine_stack_ccc[subroutine_stack_counter_ccc];
+    while_stack_counter_ccc = subroutine_while_stack_ccc[subroutine_stack_counter_ccc];
+    endif_stack_counter_ccc = subroutine_endif_stack_ccc[subroutine_stack_counter_ccc];
     return (new_line);
   }
   return (0);
@@ -7785,8 +7779,8 @@ int send_usb_control_msg_ccc(bool perform_check, unsigned int line_number, char 
 
 int usb_raw_read_ccc(bool perform_check, unsigned int line_number, char *rest_of_line)
 {
-  line_number = line_number;
-  rest_of_line = rest_of_line;
+  (void) line_number;
+  (void) rest_of_line;
   if (!perform_check)
   {
     return_value_ccc = do_usb_raw_read_ccc(usb_timeout_ccc);
@@ -7801,8 +7795,8 @@ int usb_raw_read_ccc(bool perform_check, unsigned int line_number, char *rest_of
 
 int usb_raw_write_ccc(bool perform_check, unsigned int line_number, char *rest_of_line)
 {
-  line_number = line_number;
-  rest_of_line = rest_of_line;
+  (void) line_number;
+  (void) rest_of_line;
   if (!perform_check)
   {
     return_value_ccc = do_usb_raw_write_ccc(usb_timeout_ccc);
@@ -7817,8 +7811,8 @@ int usb_raw_write_ccc(bool perform_check, unsigned int line_number, char *rest_o
 
 int usb_reset_ccc(bool perform_check, unsigned int line_number, char *rest_of_line)
 {
-  line_number = line_number;
-  rest_of_line = rest_of_line;
+  (void) line_number;
+  (void) rest_of_line;
   if (!perform_check)
   {
     return_value_ccc = do_usb_reset_ccc();
