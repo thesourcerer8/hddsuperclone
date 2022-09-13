@@ -116,7 +116,7 @@ int hba_test_ccc(void);
 
 void dump_hba_data_to_file_ccc(FILE *file, unsigned char *data, int size);
 
-void dump_data_to_file_ccc(FILE *file, unsigned char *data, int size);
+void dump_data_to_file_ccc(FILE *file, void *data, int size);
 
 int wait_not_busy_ccc(unsigned long long time);
 

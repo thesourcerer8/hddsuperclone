@@ -1616,17 +1616,17 @@ int setmainbuffer_ccc(bool perform_check, unsigned int line_number, char *rest_o
 
   int current_line = line_number+1;
   char *full_line;
+  char input_text[MAX_LINE_LENGTH];
   if (command_line_ccc)
   {
     fprintf (stdout, "setbuffer> ");
-    char input_text[MAX_LINE_LENGTH];
     fflush(stdout);
     fgets(input_text, sizeof input_text, stdin);
     full_line = input_text;
   }
   else
   {
-    full_line = get_full_line_ccc(current_line);
+    full_line = get_full_line_ccc(current_line, input_text);
   }
   char line[MAX_LINE_LENGTH];
   strcpy (line, full_line);
@@ -1649,17 +1649,17 @@ int setmainbuffer_ccc(bool perform_check, unsigned int line_number, char *rest_o
     {
       current_line++;
       char *full_line;
+      char input_text[MAX_LINE_LENGTH];
       if (command_line_ccc)
       {
         fprintf (stdout, "setbuffer> ");
-        char input_text[MAX_LINE_LENGTH];
         fflush(stdout);
         fgets(input_text, sizeof input_text, stdin);
         full_line = input_text;
       }
       else
       {
-        full_line = get_full_line_ccc(current_line);
+        full_line = get_full_line_ccc(current_line, input_text);
       }
       strcpy (line, full_line);
 
@@ -3155,6 +3155,7 @@ int write_log_ccc(bool perform_check, unsigned int line_number, char *rest_of_li
     if (fprintf(writefile, "%s\n", value) < 0 )
     {
       fprintf(stderr, "Error writing to %s (%s).\nAborting...\n", file_name, strerror(errno));
+      fclose (writefile);
       return (-1);
     }
 
@@ -4996,17 +4997,17 @@ int setmainscratchpad_ccc(bool perform_check, unsigned int line_number, char *re
 
   int current_line = line_number+1;
   char *full_line;
+  char input_text[MAX_LINE_LENGTH];
   if (command_line_ccc)
   {
     fprintf (stdout, "setscratchpad> ");
-    char input_text[MAX_LINE_LENGTH];
     fflush(stdout);
     fgets(input_text, sizeof input_text, stdin);
     full_line = input_text;
   }
   else
   {
-    full_line = get_full_line_ccc(current_line);
+    full_line = get_full_line_ccc(current_line, input_text);
   }
   char line[MAX_LINE_LENGTH];
   strcpy (line, full_line);
@@ -5029,17 +5030,17 @@ int setmainscratchpad_ccc(bool perform_check, unsigned int line_number, char *re
     {
       current_line++;
       char *full_line;
+      char input_text[MAX_LINE_LENGTH];
       if (command_line_ccc)
       {
         fprintf (stdout, "setscratchpad> ");
-        char input_text[MAX_LINE_LENGTH];
         fflush(stdout);
         fgets(input_text, sizeof input_text, stdin);
         full_line = input_text;
       }
       else
       {
-        full_line = get_full_line_ccc(current_line);
+        full_line = get_full_line_ccc(current_line, input_text);
       }
       strcpy (line, full_line);
     }
@@ -7021,17 +7022,17 @@ int set_usbbuffer_ccc(bool perform_check, unsigned int line_number, char *rest_o
 
   int current_line = line_number+1;
   char *full_line;
+  char input_text[MAX_LINE_LENGTH];
   if (command_line_ccc)
   {
     fprintf (stdout, "setusbbuffer> ");
-    char input_text[MAX_LINE_LENGTH];
     fflush(stdout);
     fgets(input_text, sizeof input_text, stdin);
     full_line = input_text;
   }
   else
   {
-    full_line = get_full_line_ccc(current_line);
+    full_line = get_full_line_ccc(current_line, input_text);
   }
   char line[MAX_LINE_LENGTH];
   strcpy (line, full_line);
@@ -7054,17 +7055,17 @@ int set_usbbuffer_ccc(bool perform_check, unsigned int line_number, char *rest_o
     {
       current_line++;
       char *full_line;
+      char input_text[MAX_LINE_LENGTH];
       if (command_line_ccc)
       {
         fprintf (stdout, "setusbbuffer> ");
-        char input_text[MAX_LINE_LENGTH];
         fflush(stdout);
         fgets(input_text, sizeof input_text, stdin);
         full_line = input_text;
       }
       else
       {
-        full_line = get_full_line_ccc(current_line);
+        full_line = get_full_line_ccc(current_line, input_text);
       }
       strcpy (line, full_line);
     }

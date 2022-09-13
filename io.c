@@ -4305,8 +4305,9 @@ void dump_hba_data_to_file_ccc(FILE *file, unsigned char *data, int size)
 
 
 
-void dump_data_to_file_ccc(FILE *file, unsigned char *data, int size)
+void dump_data_to_file_ccc(FILE *file, void *buffer, int size)
 {
+  unsigned char* data = buffer;
   if (size % 16)
   {
     fprintf (file, "warning, size of data not evenly dividable by 16\n");
@@ -9783,14 +9784,15 @@ int get_device_information_ccc(char *driver, char *bus, int bus_count, int devic
             break;
           }
         }
-        char temp = line[n-2];
-        int device_compare = strtol(&temp, NULL, 0);
+        //char temp = line[n-2];
+        //int device_compare = strtol(&temp, NULL, 0);
+        int device_compare = line[n-2] - '0';
         if (device == device_compare)
         {
           //fprintf (stdout, "found target %s %s %c %d %d \n", check_location, line, temp, device, device_compare);  //debug
           strcpy (check_target, line);
           strcat (device_reference_ccc[current_device_count], ".0");
-          strncat (device_reference_ccc[current_device_count], &temp, 1);
+          strncat (device_reference_ccc[current_device_count], &line[n-2], 1);
           device_visable_ccc[current_device_count] = true;
           target_found = 1;
           break;

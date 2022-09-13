@@ -1766,11 +1766,11 @@ int initialize_memory_ccc(void)
       }
       else
       {
-        unsigned int align = pagesize_ccc;
         if (!driver_memory_mapped_ccc)
         {
           free (ccc_buffer_ccc);
-          if (posix_memalign(&ccc_buffer_ccc, align, real_buffer_size_ccc))
+          ccc_buffer_ccc = valloc(real_buffer_size_ccc);
+          if (!ccc_buffer_ccc)
           {
             strcpy (tempmessage_ccc, curlang_ccc[LANGPOSIXMEMFAIL]);
             message_error_ccc(tempmessage_ccc);
@@ -1783,7 +1783,7 @@ int initialize_memory_ccc(void)
         }
         else
         {
-          ccc_buffer_ccc = driver_main_data_buffer_address_ccc;
+          ccc_buffer_ccc = (char*) driver_main_data_buffer_address_ccc;
         }
         memset (ccc_buffer_ccc, 0, real_buffer_size_ccc);
       }
@@ -1799,6 +1799,7 @@ int initialize_memory_ccc(void)
   {
     unsigned int align = pagesize_ccc;
     free (ccc_buffer_ccc);
+    ccc_buffer_ccc = valloc(real_buffer_size_ccc);
     if (posix_memalign(&ccc_buffer_ccc, align, real_buffer_size_ccc))
     {
       strcpy (tempmessage_ccc, curlang_ccc[LANGPOSIXMEMFAIL]);
