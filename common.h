@@ -696,7 +696,7 @@ int find_command_ccc(char *search_command, unsigned int start_line);
 
 int find_command_plus1_ccc(char *search_command, char *search_command_cap, char *first_item, unsigned int start_line);
 
-char *get_full_line_ccc(unsigned int line_number);
+char *get_full_line_ccc(unsigned int line_number, char* max_line_buffer);
 
 char *get_rest_of_line_ccc(unsigned int line_number);
 
@@ -906,7 +906,7 @@ int set_rebuild_assist_disabled_ccc (void);
 
 void dump_data_to_filename_binary_ccc(char *filename, unsigned char *data, int size, char *description);
 
-void dump_data_to_filename_ccc(char *filename, unsigned char *data, int size, char *description);
+void dump_data_to_filename_ccc(char *filename, void *data, int size, char *description);
 
 void dump_info_to_filename_ccc(char *filename, char *info);
 

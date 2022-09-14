@@ -651,21 +651,22 @@ int set_table_buffer_ccc(void)
       free (table_buffer_ccc);
       table_buffer_ccc = NULL;
     }
-    unsigned int align = pagesize_ccc;
     if (tries != 0)
     {
       padding_buffer_ccc = realloc(padding_buffer_ccc, table_size_ccc*tries);
-      //memset (padding_buffer_ccc, 0, table_size_ccc*tries);   //debug
     }
     if (driver_memory_mapped_ccc)
     {
       table_buffer_ccc = driver_table_buffer_ccc;
     }
-    else if (posix_memalign(&table_buffer_ccc, align, table_size_ccc))
+    else
     {
-      sprintf (tempmessage_ccc, "posix_memalign failed (%s)", strerror(errno));
-      message_now_ccc(tempmessage_ccc);
-      return (-1);
+      table_buffer_ccc = valloc(table_size_ccc);
+      if(!table_buffer_ccc) {
+        sprintf (tempmessage_ccc, "posix_memalign failed (%s)", strerror(errno));
+        message_now_ccc(tempmessage_ccc);
+        return (-1);
+      }
     }
     memset (table_buffer_ccc, 0, table_size_ccc);
     #if UINTPTR_MAX == 0xffffffff
@@ -1232,8 +1233,9 @@ void dump_data_to_filename_binary_ccc(char *filename, unsigned char *data, int s
 
 
 
-void dump_data_to_filename_ccc(char *filename, unsigned char *data, int size, char *description)
+void dump_data_to_filename_ccc(char *filename, void* buffer, int size, char *description)
 {
+  unsigned char *data = buffer;
   FILE *file = fopen(filename, "a");
   time_t mytime;
   mytime = time(NULL);
@@ -1562,5 +1564,4 @@ int rebuild_assist_disable_head_ccc (int head)
 
   return 0;
 }
-
 

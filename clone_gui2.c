@@ -2478,9 +2478,9 @@ void choose_source_ccc(void)
 
 void get_source_from_button_ccc (GtkWidget *w, gpointer data)
 {
+  (void) w;
   new_source_ccc = GPOINTER_TO_INT( data );
   g_print ("selection=%d  \n", new_source_ccc);
-  w = w;
 }
 
 
@@ -2642,9 +2642,9 @@ void choose_destination_ccc(void)
 
 void get_destination_from_button_ccc (GtkWidget *w, gpointer data)
 {
+  (void) w;
   new_destination_ccc = GPOINTER_TO_INT( data );
   g_print ("selection=%d  \n", new_destination_ccc);
-  w = w;
 }
 
 
@@ -2974,6 +2974,7 @@ void stop_display_status_update_timer_ccc (void)
 
 gint display_status_update_action_ccc (gpointer data)
 {
+  (void) data;
   if (fill_mode_ccc || !connected_ccc || running_clone_ccc)
   {
     display_status_timer_running_ccc = 0;
@@ -2982,7 +2983,6 @@ gint display_status_update_action_ccc (gpointer data)
   //g_print ("timer\n");    //debug
   refresh_status_ccc(current_disk_ccc);
   update_gui_status_buttons_ccc();
-  data = data;
   return 1;
 }
 
@@ -5256,11 +5256,11 @@ void update_clone_button_settings_ccc (void)
   gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(clustersize_spin_button_ccc), gtk_adjustment_ccc);
   gtk_spin_button_set_value(GTK_SPIN_BUTTON(clustersize_spin_button_ccc), clone_settings_ccc.cluster_size);
 
-  gtk_adjustment_ccc = (GtkAdjustment *) gtk_adjustment_new (0, 0, 0x7fffffffffffffff, 1, 100, 0);
+  gtk_adjustment_ccc = (GtkAdjustment *) gtk_adjustment_new (0, 0, 9999999999999999.0, 1, 100, 0);
   gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(inputoffset_spin_button_ccc), gtk_adjustment_ccc);
   gtk_spin_button_set_value(GTK_SPIN_BUTTON(inputoffset_spin_button_ccc), clone_settings_ccc.input_offset);
 
-  gtk_adjustment_ccc = (GtkAdjustment *) gtk_adjustment_new (0, -1, 0x7fffffffffffffff, 1, 100, 0);
+  gtk_adjustment_ccc = (GtkAdjustment *) gtk_adjustment_new (0, -1, 9999999999999999.0, 1, 100, 0);
   gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(size_spin_button_ccc), gtk_adjustment_ccc);
   gtk_spin_button_set_value(GTK_SPIN_BUTTON(size_spin_button_ccc), clone_settings_ccc.read_size);
 
@@ -5268,11 +5268,11 @@ void update_clone_button_settings_ccc (void)
   gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(blocksize_spin_button_ccc), gtk_adjustment_ccc);
   gtk_spin_button_set_value(GTK_SPIN_BUTTON(blocksize_spin_button_ccc), clone_settings_ccc.block_size);
 
-  gtk_adjustment_ccc = (GtkAdjustment *) gtk_adjustment_new (0, 0, 0x7fffffffffffffff, 1, 100, 0);
+  gtk_adjustment_ccc = (GtkAdjustment *) gtk_adjustment_new (0, 0, 9999999999999999.0, 1, 100, 0);
   gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(skipsize_spin_button_ccc), gtk_adjustment_ccc);
   gtk_spin_button_set_value(GTK_SPIN_BUTTON(skipsize_spin_button_ccc), clone_settings_ccc.min_skip_size);
 
-  gtk_adjustment_ccc = (GtkAdjustment *) gtk_adjustment_new (0, 0, 0x7fffffffffffffff, 1, 100, 0);
+  gtk_adjustment_ccc = (GtkAdjustment *) gtk_adjustment_new (0, 0, 9999999999999999.0, 1, 100, 0);
   gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(maxskipsize_spin_button_ccc), gtk_adjustment_ccc);
   gtk_spin_button_set_value(GTK_SPIN_BUTTON(maxskipsize_spin_button_ccc), clone_settings_ccc.max_skip_size);
 
@@ -5342,11 +5342,11 @@ void update_advanced_button_settings_ccc (void)
   gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (use_physical_sector_size_for_virtual_checkbutton_ccc), advanced_settings_ccc.use_physical_sector_size_for_virtual );
   gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (use_color_statusbar_checkbutton_ccc), advanced_settings_ccc.color_statusbar );
 
-  gtk_adjustment_ccc = (GtkAdjustment *) gtk_adjustment_new (0, -1, 0x7fffffffffffffff, 1, 100, 0);
+  gtk_adjustment_ccc = (GtkAdjustment *) gtk_adjustment_new (0, -1, 9999999999999999.0, 1, 100, 0);
   gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(output_offset_spinbutton_ccc), gtk_adjustment_ccc);
   gtk_spin_button_set_value(GTK_SPIN_BUTTON(output_offset_spinbutton_ccc), advanced_settings_ccc.output_offset);
 
-  gtk_adjustment_ccc = (GtkAdjustment *) gtk_adjustment_new (0, -1, 0x7fffffffffffffff, 1, 100, 0);
+  gtk_adjustment_ccc = (GtkAdjustment *) gtk_adjustment_new (0, -1, 9999999999999999.0, 1, 100, 0);
   gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(current_position_spinbutton_ccc), gtk_adjustment_ccc);
   gtk_spin_button_set_value(GTK_SPIN_BUTTON(current_position_spinbutton_ccc), advanced_settings_ccc.current_position);
 
@@ -6038,9 +6038,9 @@ void choose_primary_usb_ccc(void)
 
 void get_usb_from_button_ccc (GtkWidget *w, gpointer data)
 {
+  (void) w;
   new_usb_ccc = GPOINTER_TO_INT( data );
   g_print ("selection=%d  \n", new_usb_ccc);
-  w = w;
 }
 
 

@@ -59,6 +59,7 @@ bool forced_exit_ccc=false;
 // Function to handle ctrl-c
 void signal_callback_handler_ccc(int signum)
 {
+  (void) signum;
   if (!critical_process_ccc)
   {
   fprintf(stderr, "\nTerminated by user\n");
@@ -1658,11 +1659,6 @@ int process_lines_ccc(void)
           recess = true;
         }
 
-        else
-        {
-          ccc_indent_ccc = ccc_indent_ccc;
-        }
-
         if (recess)
         {
           current_indent--;
@@ -2252,37 +2248,12 @@ int find_command_plus1_ccc(char *search_command, char *search_command_cap, char 
 }
 
 
-
-
-
-
 // function to return a full line
-char *get_full_line_ccc(unsigned int line_number)
+char *get_full_line_ccc(unsigned int line_number, char* max_line_buffer)
 {
-  char full_line[MAX_LINE_LENGTH] = "";
-  sscanf(script_line_pointer_ccc[line_number], "%[^\n]", full_line);
-  char *return_data = full_line;
-  return (return_data);
+  sscanf(script_line_pointer_ccc[line_number], "%[^\n]", max_line_buffer);
+  return max_line_buffer;
 }
-
-
-
-
-
-
-// function to return the rest of a line after the command
-char *get_rest_of_line(unsigned int line_number)
-{
-  char command[MAX_COMMAND_LENGTH] = "";
-  char rest_of_line[MAX_LINE_LENGTH] = "";
-  sscanf(script_line_pointer_ccc[line_number], "%s %[^\n]", command, rest_of_line);
-  char *return_data = rest_of_line;
-  return (return_data);
-}
-
-
-
-
 
 
 // function to process comparison statement
@@ -3208,7 +3179,7 @@ int call_command_on_power_cycle_ccc(void)
 void update_display_status_buttons_ccc(int time_ms)
 {
   // do nothing, this is for clone gui
-  time_ms = time_ms;
+  (void)time_ms;
 }
 
 
@@ -3216,9 +3187,9 @@ void update_display_status_buttons_ccc(int time_ms)
 int print_gui_error_message_ccc(char *message, char *title, int type)
 {
   // do nothing, this is for clone gui
-  message = message;
-  title = title;
-  type = type;
+  (void) message;
+  (void) title;
+  (void) type;
   return 0;
 }
 

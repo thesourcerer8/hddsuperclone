@@ -19,9 +19,9 @@
 // Function to handle ctrl-c
 void signal_callback_handler_ccc(int signum)
 {
+  (void) signum;
   if (!critical_process_ccc)
   {
-    signum = signum;
     sprintf(tempmessage_ccc, "Terminated by user\n");
     message_exit_ccc(tempmessage_ccc);
     forced_exit_ccc = true;
@@ -1766,11 +1766,11 @@ int initialize_memory_ccc(void)
       }
       else
       {
-        unsigned int align = pagesize_ccc;
         if (!driver_memory_mapped_ccc)
         {
           free (ccc_buffer_ccc);
-          if (posix_memalign(&ccc_buffer_ccc, align, real_buffer_size_ccc))
+          ccc_buffer_ccc = valloc(real_buffer_size_ccc);
+          if (!ccc_buffer_ccc)
           {
             strcpy (tempmessage_ccc, curlang_ccc[LANGPOSIXMEMFAIL]);
             message_error_ccc(tempmessage_ccc);
@@ -1783,7 +1783,7 @@ int initialize_memory_ccc(void)
         }
         else
         {
-          ccc_buffer_ccc = driver_main_data_buffer_address_ccc;
+          ccc_buffer_ccc = (char*) driver_main_data_buffer_address_ccc;
         }
         memset (ccc_buffer_ccc, 0, real_buffer_size_ccc);
       }
@@ -1799,6 +1799,7 @@ int initialize_memory_ccc(void)
   {
     unsigned int align = pagesize_ccc;
     free (ccc_buffer_ccc);
+    ccc_buffer_ccc = valloc(real_buffer_size_ccc);
     if (posix_memalign(&ccc_buffer_ccc, align, real_buffer_size_ccc))
     {
       strcpy (tempmessage_ccc, curlang_ccc[LANGPOSIXMEMFAIL]);
@@ -13998,7 +13999,6 @@ int process_source_ccc(void)
     if (!data_read_from_log_ccc)
     {
       sector_size_ccc = bytes_per_sector_ccc;
-      sector_offset = sector_offset;
       if (superbyte_ccc[23] == 0x5b)
       {
       block_size_ccc = logical_sectors_per_physical;
@@ -14346,7 +14346,6 @@ int process_source_ccc(void)
     if (!data_read_from_log_ccc)
     {
       sector_size_ccc = blocksize;
-      sector_offset = sector_offset;
       if (superbyte_ccc[23] == 0x5b)
       {
       block_size_ccc = logical_sectors_per_physical;
@@ -14440,7 +14439,6 @@ int process_source_ccc(void)
     if (!data_read_from_log_ccc)
     {
       sector_size_ccc = bytes_per_log_sec;
-      sector_offset = sector_offset;
       if (superbyte_ccc[23] == 0x5b)
       {
       block_size_ccc = blocksize;

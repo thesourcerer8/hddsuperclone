@@ -2340,11 +2340,6 @@ int ahci_rw_ccc(int command_type, int write_bit)
       return 0;
     }
   }
-  else
-  {
-    command_type = command_type;
-    write_bit = write_bit;
-  }
   return 0;
 }
 
@@ -2500,7 +2495,6 @@ int do_ata_dma_read_ccc(int command_type)
   }
   else
   {
-    command_type = command_type;
     sprintf (tempmessage_ccc, "ERROR: DMA not allowed in free version.\n");
     if (superclone_ccc)
     {
@@ -2847,7 +2841,6 @@ int do_ata_dma_write_ccc(int command_type)
   }
   else
   {
-    command_type = command_type;
     sprintf (tempmessage_ccc, "ERROR: DMA not allowed in free version.\n");
     if (superclone_ccc)
     {
@@ -4305,8 +4298,9 @@ void dump_hba_data_to_file_ccc(FILE *file, unsigned char *data, int size)
 
 
 
-void dump_data_to_file_ccc(FILE *file, unsigned char *data, int size)
+void dump_data_to_file_ccc(FILE *file, void *buffer, int size)
 {
+  unsigned char* data = buffer;
   if (size % 16)
   {
     fprintf (file, "warning, size of data not evenly dividable by 16\n");
@@ -6842,14 +6836,7 @@ int process_resources_ccc(unsigned long long *start, unsigned long long *end, un
           port_address_ccc[device_count_ccc] = potential_hba_start + 0x100 + (i*0x80);
           memcpy(&io_doubleword_ccc, port_virt_addr_ccc + 0x128 + (i*0x80), 4);
           port_status_ccc[device_count_ccc] = io_doubleword_ccc;
-          if (port_status_ccc == 0)
-          {
-            device_present_ccc[device_count_ccc] = false;
-          }
-          else
-          {
-            device_present_ccc[device_count_ccc] = true;
-          }
+          device_present_ccc[device_count_ccc] = true;
           //fprintf (stdout, "port_status_ccc= 0x%x\n", port_status_ccc);  //debug
           memcpy(&io_doubleword_ccc, port_virt_addr_ccc + 0x124 + (i*0x80), 4);
           port_signature_ccc[device_count_ccc] = io_doubleword_ccc;
@@ -8283,10 +8270,6 @@ int identify_device_ahci_ccc(int count)
     }
 
     memset (ccc_buffer_ccc, 0, ccc_main_buffer_size_ccc);
-  }
-  else
-  {
-    count = count;
   }
   return (0);
 }
@@ -9783,14 +9766,15 @@ int get_device_information_ccc(char *driver, char *bus, int bus_count, int devic
             break;
           }
         }
-        char temp = line[n-2];
-        int device_compare = strtol(&temp, NULL, 0);
+        //char temp = line[n-2];
+        //int device_compare = strtol(&temp, NULL, 0);
+        int device_compare = line[n-2] - '0';
         if (device == device_compare)
         {
           //fprintf (stdout, "found target %s %s %c %d %d \n", check_location, line, temp, device, device_compare);  //debug
           strcpy (check_target, line);
           strcat (device_reference_ccc[current_device_count], ".0");
-          strncat (device_reference_ccc[current_device_count], &temp, 1);
+          strncat (device_reference_ccc[current_device_count], &line[n-2], 1);
           device_visable_ccc[current_device_count] = true;
           target_found = 1;
           break;
@@ -10626,7 +10610,6 @@ int disable_fis_ccc(unsigned long long time)
   }
   else
   {
-    time = time;
     timeout = 0;
   }
   return (timeout);
@@ -10669,7 +10652,6 @@ int enable_fis_ccc(unsigned long long time)
   }
   else
   {
-    time = time;
     timeout = 0;
   }
   return (timeout);
@@ -10712,7 +10694,6 @@ int disable_start_ccc(unsigned long long time)
   }
   else
   {
-    time = time;
     timeout = 0;
   }
   return (timeout);
@@ -10755,7 +10736,6 @@ int enable_start_ccc(unsigned long long time)
   }
   else
   {
-    time = time;
     timeout = 0;
   }
   return (timeout);
@@ -10797,7 +10777,6 @@ int enable_command_issue_ccc(unsigned long long time)
   }
   else
   {
-    time = time;
     timeout = 0;
   }
   return (timeout);
