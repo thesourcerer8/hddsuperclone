@@ -246,13 +246,8 @@ int main (int argc, char **argv)
 
   strcpy (virtual_driver_name_ccc, "sdv");
 
-  // clear license data
-  memset (license_data_ccc, 0, sizeof(license_data_ccc));
-
-
   // get process id of this program
   process_id_ccc = getpid();
-
 
   // get executable file name and current directory path
   if (getcwd(start_working_directory_ccc, sizeof(start_working_directory_ccc)) == NULL)
@@ -671,154 +666,105 @@ int main (int argc, char **argv)
 
 
 
-
-
-  if (!quiet_ccc)
-  {
-    sprintf (tempmessage_ccc, "%s %s\n", title_ccc, version_number_ccc);
-    message_now_ccc(tempmessage_ccc);
-#ifdef DEBUG
-    sprintf (tempmessage_ccc, "DEBUG version\n");
-    message_now_ccc(tempmessage_ccc);
-    debugversion_ccc = true;
-#endif
-#ifdef GODMODE
-    sprintf (tempmessage_ccc, "GOD MODE\n");
-    message_now_ccc(tempmessage_ccc);
-#endif
-  }
-
-  // create random data for later use
-  memset (random_data_ccc, 0, sizeof(random_data_ccc));
-  int i;
-  for (i = 0; i < 1024; i += 4)
-  {
-    int n = get_random_value_ccc(100);
-    random_data_ccc[i] = n;
-    random_data_ccc[i+1] = n >> 8;
-    random_data_ccc[i+2] = n >> 16;
-    random_data_ccc[i+3] = n >> 24;
-  }
-
-  memset (superbyte_ccc, 0, sizeof(superbyte_ccc));
-
-
-#ifdef GODMODE
-  memcpy (license_data_ccc, master_data_ccc, 1024);
-  if (!quiet_ccc)
-    {
-      sprintf (tempmessage_ccc, "GOD MODE ACTIVE\n");
-      message_now_ccc(tempmessage_ccc);
-    }
-#else
-  // allow full pro mode for free
-  memcpy (license_data_ccc, master_data_ccc, 1024);
-  if (!quiet_ccc)
-    {
-      sprintf (tempmessage_ccc, "FREE PRO MODE ACTIVE\n");
-      message_now_ccc(tempmessage_ccc);
-    }
-#endif
-
-  superbyte_ccc[0] = license_data_ccc[0x00] ^ 0x43;  // (0x47) 0x04 hard
-  superbyte_ccc[1] = license_data_ccc[0x01] ^ 0x85;  // (0x83) 0x06 hard
-  superbyte_ccc[2] = license_data_ccc[0x02] ^ 0xc1;  // (0xc9) 0x08 hard
-  superbyte_ccc[3] = license_data_ccc[0x03] ^ 0x04;  // (0x0d) 0x09 hard
-  superbyte_ccc[4] = license_data_ccc[0x04] ^ 0xb2;  // (0xb2) 0x00 hard
-  superbyte_ccc[5] = license_data_ccc[0x05] ^ 0xe7;  // (0xe6) 0x01 hard
-  superbyte_ccc[6] = license_data_ccc[0x06] ^ 0xe3;  // (0xdb) 0x38 hard
-  superbyte_ccc[7] = license_data_ccc[0x07] ^ 0x6f;  // (0x7f) 0x10 hard
-  superbyte_ccc[8] = license_data_ccc[0x08] ^ 0x1a;  // (0x3a) 0x20 hard
-  superbyte_ccc[9] = license_data_ccc[0x09] ^ 0xdc;  // (0xfd) 0x21 hard
-  superbyte_ccc[10] = license_data_ccc[0x0a] ^ 0x03;  // (0x1b) 0x18 hard
-  superbyte_ccc[11] = license_data_ccc[0x0b] ^ 0x55;  // (0x55) 0x00 hard
-  superbyte_ccc[12] = license_data_ccc[0x0c] ^ 0x2e;  // (0x26) 0x08 hard
-  superbyte_ccc[13] = license_data_ccc[0x0d] ^ 0x29;  // (0x3d) 0x14 hard
-  superbyte_ccc[14] = license_data_ccc[0x0e] ^ 0x8a;  // (0x93) 0x19 hard
-  superbyte_ccc[15] = license_data_ccc[0x0f] ^ 0xaa;  // (0x2a) 0x80 hard
-  superbyte_ccc[16] = license_data_ccc[0x10] ^ 0xd7;  // (0xfb) 0x2c hard
-  superbyte_ccc[17] = license_data_ccc[0x11] ^ 0x67;  // (0x4f) 0x28 hard
-  superbyte_ccc[18] = license_data_ccc[0x12] ^ 0xbf;  // (0x8f) 0x30 hard
-  superbyte_ccc[19] = license_data_ccc[0x13] ^ 0x1f;  // (0x13) 0x0c hard
-  superbyte_ccc[20] = license_data_ccc[0x14] ^ 0x4e;  // (0x67) 0x29 soft
-  superbyte_ccc[21] = license_data_ccc[0x15] ^ 0x73;  // (0xd5) 0xa6 soft
-  superbyte_ccc[22] = license_data_ccc[0x16] ^ 0xde;  // (0x0f) 0xd1 soft
-  superbyte_ccc[23] = license_data_ccc[0x17] ^ 0x20;  // (0x7b) 0x5b soft
-  superbyte_ccc[24] = license_data_ccc[0x18] ^ 0xb7;  // (0x03) 0xb4 soft
-  superbyte_ccc[25] = license_data_ccc[0x19] ^ 0x41;  // (0x30) 0x71 soft
-  superbyte_ccc[26] = license_data_ccc[0x1a] ^ 0x54;  // (0xae) 0xfa soft
-  superbyte_ccc[27] = license_data_ccc[0x1b] ^ 0x3d;  // (0x23) 0x1e soft
-  superbyte_ccc[28] = license_data_ccc[0x1c] ^ 0xf5;  // (0xba) 0x4f soft
-  superbyte_ccc[29] = license_data_ccc[0x1d] ^ 0x41;  // (0x21) 0x60 soft
-  superbyte_ccc[30] = license_data_ccc[0x1e] ^ 0xb7;  // (0x6e) 0xd9 soft
-  superbyte_ccc[31] = license_data_ccc[0x1f] ^ 0x97;  // (0x0b) 0x9c soft
-  superbyte_ccc[32] = license_data_ccc[0x20] ^ 0xa3;  // (0x20) 0x83 soft
-  superbyte_ccc[33] = license_data_ccc[0x21] ^ 0x33;  // (0x83) 0xb0 soft
-  superbyte_ccc[34] = license_data_ccc[0x22] ^ 0xd8;  // (0x89) 0x51 soft
-  superbyte_ccc[35] = license_data_ccc[0x23] ^ 0x14;  // (0x32) 0x26 soft
-  superbyte_ccc[36] = license_data_ccc[0x24] ^ 0x1e;  // (0x71) 0x6f soft
-  superbyte_ccc[37] = license_data_ccc[0x25] ^ 0x32;  // (0xc7) 0xf5 soft
-  superbyte_ccc[38] = license_data_ccc[0x26] ^ 0x99;  // (0xc9) 0x50 soft
-  superbyte_ccc[39] = license_data_ccc[0x27] ^ 0x4d;  // (0x43) 0x0e soft
-  superbyte_ccc[40] = license_data_ccc[0x28] ^ 0x8a;  // (0x8f) 0x05 soft
-  superbyte_ccc[41] = license_data_ccc[0x29] ^ 0x83;  // (0x57) 0xd4 soft
-  superbyte_ccc[42] = license_data_ccc[0x2a] ^ 0x64;  // (0x44) 0x20 soft
-  superbyte_ccc[43] = license_data_ccc[0x2b] ^ 0x16;  // (0x2b) 0x3d soft
-  superbyte_ccc[44] = license_data_ccc[0x2c] ^ 0x8f;  // (0x07) 0x88 soft
-  superbyte_ccc[45] = license_data_ccc[0x2d] ^ 0x1d;  // (0x2e) 0x33 soft
-  superbyte_ccc[46] = license_data_ccc[0x2e] ^ 0xcd;  // (0x56) 0x9b soft
-  superbyte_ccc[47] = license_data_ccc[0x2f] ^ 0x55;  // (0x14) 0x41 soft
-  superbyte_ccc[48] = license_data_ccc[0x30] ^ 0x23;  // (0x29) 0x0a soft
-  superbyte_ccc[49] = license_data_ccc[0x31] ^ 0x74;  // (0xad) 0xd9 soft
-  superbyte_ccc[50] = license_data_ccc[0x32] ^ 0xda;  // (0xf8) 0x22 soft
-  superbyte_ccc[51] = license_data_ccc[0x33] ^ 0x62;  // (0x29) 0x4b soft
-  superbyte_ccc[52] = license_data_ccc[0x34] ^ 0xda;  // (0x2a) 0xf0 soft
-  superbyte_ccc[53] = license_data_ccc[0x35] ^ 0xdd;  // (0x52) 0x8f soft
-  superbyte_ccc[54] = license_data_ccc[0x36] ^ 0xc7;  // (0x01) 0xc6 soft
-  superbyte_ccc[55] = license_data_ccc[0x37] ^ 0x6b;  // (0x2d) 0x46 soft
-  superbyte_ccc[56] = license_data_ccc[0x38] ^ 0x3a;  // (0x51) 0x6b soft
-  superbyte_ccc[57] = license_data_ccc[0x39] ^ 0x8d;  // (0x41) 0xcc soft
-  superbyte_ccc[58] = license_data_ccc[0x3a] ^ 0xc8;  // (0xbc) 0x74 soft
-  superbyte_ccc[59] = license_data_ccc[0x3b] ^ 0x59;  // (0x55) 0x0c soft
-  superbyte_ccc[60] = license_data_ccc[0x3c] ^ 0x61;  // (0xcb) 0xaa soft
-  superbyte_ccc[61] = license_data_ccc[0x3d] ^ 0x29;  // (0x45) 0x6c soft
-  superbyte_ccc[62] = license_data_ccc[0x3e] ^ 0x67;  // (0x72) 0x15 soft
-  superbyte_ccc[63] = license_data_ccc[0x3f] ^ 0x18;  // (0x3d) 0x25 soft
-  superbyte_ccc[64] = license_data_ccc[0x40] ^ 0x64;  // (0x6c) 0x08 hard
-  superbyte_ccc[65] = license_data_ccc[0x41] ^ 0x79;  // (0x71) 0x08 hard
-  superbyte_ccc[66] = license_data_ccc[0x42] ^ 0xff;  // (0xf7) 0x08 hard
-  superbyte_ccc[67] = license_data_ccc[0x43] ^ 0x6d;  // (0x65) 0x08 hard
-  superbyte_ccc[68] = license_data_ccc[0x44] ^ 0x2c;  // (0x28) 0x04 hard
-  superbyte_ccc[69] = license_data_ccc[0x45] ^ 0x92;  // (0xa6) 0x34 hard
-  superbyte_ccc[70] = license_data_ccc[0x46] ^ 0xef;  // (0xe8) 0x07 hard
-  superbyte_ccc[71] = license_data_ccc[0x47] ^ 0x75;  // (0x7a) 0x0f hard
-  superbyte_ccc[72] = license_data_ccc[0x48] ^ 0xf1;  // (0xff) 0x0e hard
-  superbyte_ccc[73] = license_data_ccc[0x49] ^ 0x28;  // (0x24) 0x0c hard
-  superbyte_ccc[74] = license_data_ccc[0x4a] ^ 0x1d;  // (0x19) 0x04 hard
-  superbyte_ccc[75] = license_data_ccc[0x4b] ^ 0x59;  // (0x51) 0x08 hard
-  superbyte_ccc[76] = license_data_ccc[0x4c] ^ 0x33;  // (0x33) 0x00 hard
-  superbyte_ccc[77] = license_data_ccc[0x4d] ^ 0x0;  // (0x7d)
-  superbyte_ccc[78] = license_data_ccc[0x4e] ^ 0x0;  // (0x61)
-  superbyte_ccc[79] = license_data_ccc[0x4f] ^ 0x0;  // (0x79)
-  superbyte_ccc[80] = license_data_ccc[0x50] ^ 0x0;  // (0x78) email pass
-  superbyte_ccc[81] = license_data_ccc[0x51] ^ 0x0;  // (0x79) email pass
-  superbyte_ccc[82] = license_data_ccc[0x52] ^ 0x0;  // (0x75) email pass
-  superbyte_ccc[83] = license_data_ccc[0x53] ^ 0x0;  // (0x20) email pass
-  superbyte_ccc[84] = license_data_ccc[0x54] ^ 0x0;  // (0x93) email pass
-  superbyte_ccc[85] = license_data_ccc[0x55] ^ 0x0;  // (0xd3) email pass
-  superbyte_ccc[86] = license_data_ccc[0x56] ^ 0x0;  // (0x5b) email pass
-  superbyte_ccc[87] = license_data_ccc[0x57] ^ 0x0;  // (0x77) email pass
-  superbyte_ccc[88] = license_data_ccc[0x58] ^ 0x0;  // (0x60) email pass
-  superbyte_ccc[89] = license_data_ccc[0x59] ^ 0x0;  // (0x8e) email pass
-  superbyte_ccc[90] = license_data_ccc[0x5a] ^ 0x0;  // (0x23) email pass
-  superbyte_ccc[91] = license_data_ccc[0x5b] ^ 0x0;  // (0x73) email pass
-  superbyte_ccc[92] = license_data_ccc[0x5c] ^ 0x0;  // (0x63) email pass
-  superbyte_ccc[93] = license_data_ccc[0x5d] ^ 0x0;  // (0xb5) email pass
-  superbyte_ccc[94] = license_data_ccc[0x5e] ^ 0x0;  // (0x78) email pass
-  superbyte_ccc[95] = license_data_ccc[0x5f] ^ 0x0;  // (0x08) email pass
+  superbyte_ccc[0] = 0x04;
+  superbyte_ccc[1] = 0x06;
+  superbyte_ccc[2] = 0x08;
+  superbyte_ccc[3] = 0x09;
+  superbyte_ccc[4] = 0x00;
+  superbyte_ccc[5] = 0x01;
+  superbyte_ccc[6] = 0x38;
+  superbyte_ccc[7] = 0x10;
+  superbyte_ccc[8] = 0x20;
+  superbyte_ccc[9] = 0x21;
+  superbyte_ccc[10] = 0x18;
+  superbyte_ccc[11] = 0x00;
+  superbyte_ccc[12] = 0x08;
+  superbyte_ccc[13] = 0x14;
+  superbyte_ccc[14] = 0x19;
+  superbyte_ccc[15] = 0x80;
+  superbyte_ccc[16] = 0x2c;
+  superbyte_ccc[17] = 0x28;
+  superbyte_ccc[18] = 0x30;
+  superbyte_ccc[19] = 0x0c;
+  superbyte_ccc[20] = 0x29;
+  superbyte_ccc[21] = 0xa6;
+  superbyte_ccc[22] = 0xd1;
+  superbyte_ccc[23] = 0x5b;
+  superbyte_ccc[24] = 0xb4;
+  superbyte_ccc[25] = 0x71;
+  superbyte_ccc[26] = 0xfa;
+  superbyte_ccc[27] = 0x1e;
+  superbyte_ccc[28] = 0x4f;
+  superbyte_ccc[29] = 0x60;
+  superbyte_ccc[30] = 0xd9;
+  superbyte_ccc[31] = 0x9c;
+  superbyte_ccc[32] = 0x83;
+  superbyte_ccc[33] = 0xb0;
+  superbyte_ccc[34] = 0x51;
+  superbyte_ccc[35] = 0x26;
+  superbyte_ccc[36] = 0x6f;
+  superbyte_ccc[37] = 0xf5;
+  superbyte_ccc[38] = 0x50;
+  superbyte_ccc[39] = 0x0e;
+  superbyte_ccc[40] = 0x05;
+  superbyte_ccc[41] = 0xd4;
+  superbyte_ccc[42] = 0x20;
+  superbyte_ccc[43] = 0x3d;
+  superbyte_ccc[44] = 0x88;
+  superbyte_ccc[45] = 0x33;
+  superbyte_ccc[46] = 0x9b;
+  superbyte_ccc[47] = 0x41;
+  superbyte_ccc[48] = 0x0a;
+  superbyte_ccc[49] = 0xd9;
+  superbyte_ccc[50] = 0x22;
+  superbyte_ccc[51] = 0x4b;
+  superbyte_ccc[52] = 0xf0;
+  superbyte_ccc[53] = 0x8f;
+  superbyte_ccc[54] = 0xc6;
+  superbyte_ccc[55] = 0x46;
+  superbyte_ccc[56] = 0x6b;
+  superbyte_ccc[57] = 0xcc;
+  superbyte_ccc[58] = 0x74;
+  superbyte_ccc[59] = 0x0c;
+  superbyte_ccc[60] = 0xaa;
+  superbyte_ccc[61] = 0x6c;
+  superbyte_ccc[62] = 0x15;
+  superbyte_ccc[63] = 0x25;
+  superbyte_ccc[64] = 0x08;
+  superbyte_ccc[65] = 0x08;
+  superbyte_ccc[66] = 0x08;
+  superbyte_ccc[67] = 0x08;
+  superbyte_ccc[68] = 0x04;
+  superbyte_ccc[69] = 0x34;
+  superbyte_ccc[70] = 0x07;
+  superbyte_ccc[71] = 0x0f;
+  superbyte_ccc[72] = 0x0e;
+  superbyte_ccc[73] = 0x0c;
+  superbyte_ccc[74] = 0x04;
+  superbyte_ccc[75] = 0x08;
+  superbyte_ccc[76] = 0x00;
+  superbyte_ccc[77] = 0x7d;
+  superbyte_ccc[78] = 0x61;
+  superbyte_ccc[79] = 0x79;
+  superbyte_ccc[80] = 0x78;
+  superbyte_ccc[81] = 0x79;
+  superbyte_ccc[82] = 0x75;
+  superbyte_ccc[83] = 0x20;
+  superbyte_ccc[84] = 0x93;
+  superbyte_ccc[85] = 0xd3;
+  superbyte_ccc[86] = 0x5b;
+  superbyte_ccc[87] = 0x77;
+  superbyte_ccc[88] = 0x60;
+  superbyte_ccc[89] = 0x8e;
+  superbyte_ccc[90] = 0x23;
+  superbyte_ccc[91] = 0x73;
+  superbyte_ccc[92] = 0x63;
+  superbyte_ccc[93] = 0xb5;
+  superbyte_ccc[94] = 0x78;
+  superbyte_ccc[95] = 0x08;
 
 #ifdef DEBUG
-  for (i = 0; i < 96; i++)
+  for (int i = 0; i < 96; i++)
   {
     //fprintf (stdout, "superbyte%d(%02x) = %02x\n", i, i, superbyte_ccc[i]);
   }
@@ -17824,68 +17770,3 @@ int rebuild_assist_map_heads_ccc (void)
   fclose (headmap_debug_file);
   return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-long long check_time_file_ccc(void)
-{
-  unsigned char temp_data[8];
-  FILE *readfile = fopen(time_check_file_name_ccc, "rb");
-  if (readfile == NULL)
-  {
-    return 0;
-  }
-  fread(temp_data, 1, 8, readfile);
-  uint64_t temp_time;
-  memcpy (&temp_time, temp_data, 8);
-  fclose (readfile);
-  return temp_time;
-}
-
-
-
-
-
-void set_time_file_ccc(void)
-{
-  unsigned char temp_data[8];
-  uint64_t temp_time = start_time_ccc;
-  memcpy (temp_data, &temp_time, 8);
-  FILE *writefile= fopen(time_check_file_name_ccc, "wb");
-  if (writefile != NULL)
-  {
-    fwrite(temp_data, 1, 8, writefile);
-    fclose (writefile);
-  }
-}
-
-
-
