@@ -6580,7 +6580,7 @@ int find_all_devices_ccc(void)
       strcpy (drive_list_ccc[device_count_ccc], "/dev/");
       strcat (drive_list_ccc[device_count_ccc], name);
       strncpy (model_ccc[device_count_ccc], model, sizeof(model_ccc)/MAX_DEVICES);
-      //  get device info
+      // get device info
       long long size = strtoull(raw_size, NULL, 0);
       long long bytes_per_sec = strtoull(raw_bytes_per_sec, NULL, 0);
       drive_size_ccc[device_count_ccc] = size;
