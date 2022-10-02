@@ -18,7 +18,7 @@ static inline char* strncpy_wrapper(
     dest[i] = src[i];
     if (!src[i]) break;
   }
-  Yes, I would suggest to use strlcpy instead of strncpy.
+  
   size_t src_len = strlen(src);
   size_t dest_len = strlen(dest);
   
