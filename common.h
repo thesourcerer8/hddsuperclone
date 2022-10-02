@@ -305,8 +305,6 @@ uint32_t rotr32_ccc(uint32_t value, int shift);
 uint64_t rotl64_ccc(uint64_t value, int shift);
 uint64_t rotr64_ccc(uint64_t value, int shift);
 int get_random_value_ccc(int speed);
-extern unsigned char random_data_ccc[2048];
-//char *driver_buffer_ccc;
 
 extern unsigned char sbyte_ccc[16];
 extern unsigned char superbyte_ccc[1024];

@@ -54,6 +54,7 @@ unsigned int total_string_variables_ccc;
 
 bool forced_exit_ccc=false;
 
+#include "strncpy_wrapper.h"
 
 
 // Function to handle ctrl-c
@@ -489,18 +490,6 @@ int main (int argc, char **argv)
 #endif
   }
 
-  // create random data for later use
-  memset (random_data_ccc, 0, sizeof(random_data_ccc));
-  int i;
-  for (i = 0; i < 1024; i += 4)
-  {
-    int n = get_random_value_ccc(100);
-    random_data_ccc[i] = n;
-    random_data_ccc[i+1] = n >> 8;
-    random_data_ccc[i+2] = n >> 16;
-    random_data_ccc[i+3] = n >> 24;
-  }
-
 #ifdef GODMODE
   superbyte_ccc[0] = 0x04;
   superbyte_ccc[1] = 0x06;
@@ -526,26 +515,6 @@ int main (int argc, char **argv)
   license_type_ccc = 0xff;
   sprintf (tempmessage_ccc, "GOD MODE ACTIVE\n");
   message_now_ccc(tempmessage_ccc);
-#else
-#ifdef NOTFREE
-  print_license_ccc(0);
-
-  unsigned char sid[8];
-  sid[0] = random_data_ccc[0];
-  sid[1] = random_data_ccc[1];
-  sid[2] = rotl8_ccc(rotl8_ccc(sid[0], 1) ^ rotl8_ccc(sid[1], 1) ^ rotl8_ccc(sbyte_ccc[0], 1) , 1);
-  sid[3] = rotl8_ccc(rotl8_ccc(sid[0], 2) ^ rotl8_ccc(sid[1], 2) ^ rotl8_ccc(sbyte_ccc[1], 2) , 2);
-  sid[4] = rotl8_ccc(rotl8_ccc(sid[0], 3) ^ rotl8_ccc(sid[1], 3) ^ rotl8_ccc(sbyte_ccc[2], 3) , 3);
-  unsigned char temp = (sbyte_ccc[3] & 128) | license_information_ccc;
-  sid[5] = rotl8_ccc(rotl8_ccc(sid[0], 4) ^ rotl8_ccc(sid[1], 4) ^ rotl8_ccc(temp, 4) , 4);
-  sid[6] = rotl8_ccc(rotl8_ccc(sid[0], 5) ^ rotl8_ccc(sid[1], 5) ^ rotl8_ccc((expire_day_ccc >> 8) & 255, 5) , 5);
-  sid[7] = rotl8_ccc(rotl8_ccc(sid[0], 6) ^ rotl8_ccc(sid[1], 6) ^ rotl8_ccc((expire_day_ccc & 255), 6) , 6);
-
-  if (!quiet_ccc)
-  {
-    fprintf (stdout, "SessionID: %02x%02x%02x%02x%02x%02x%02x%02x\n", sid[0], sid[1], sid[2], sid[3], sid[4], sid[5], sid[6], sid[7]);
-  }
-#endif
 #endif
 
   max_dma_size_ccc = (pagesize_ccc / 8) * pagesize_ccc;
@@ -3090,34 +3059,6 @@ uint64_t rotr64_ccc(uint64_t value, int shift)
 }
 
 
-
-
-
-
-
-// function to get random value
-int get_random_value_ccc(int speed)
-{
-  struct timeval tvstart;
-  gettimeofday(&tvstart, NULL);
-  //printf("%ld.%06ld\n", tvstart.tv_sec, tvstart.tv_usec);
-  int random_value;
-  int i;
-  for (i = 0; i < speed; i++)
-  {
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    //printf("%ld.%06ld\n", tv.tv_sec, tv.tv_usec);
-    srand( (tv.tv_usec + 1000000 * tv.tv_sec) );
-    random_value = rand();
-    //fprintf (stdout, "random=%d\n", random_value);
-  }
-  struct timeval tvend;
-  gettimeofday(&tvend, NULL);
-  //printf("%ld.%06ld\n", tvend.tv_sec, tvend.tv_usec);
-
-  return (random_value);
-}
 
 
 

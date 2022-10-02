@@ -47,7 +47,7 @@ char curlang_ccc[LANGCOUNT][MAXLANGLENGTH];
 char *version_number_ccc;
 
 
-
+#include "strncpy_wrapper.h"
 
 
 

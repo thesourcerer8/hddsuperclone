@@ -15,6 +15,7 @@
 #include "hddsuperclone_driver.h"
 #include "hddsupertool_help.h"
 
+#include "strncpy_wrapper.h"
 
 // Function to handle ctrl-c
 void signal_callback_handler_ccc(int signum)
@@ -10797,7 +10798,7 @@ int write_chunk_ccc(long long position, int size)
 
   int sector_size_bak = sector_size_ccc;
   long long main_buffer_size_bak = ccc_main_buffer_size_ccc;
-  void* temp_buffer;
+  void* temp_buffer = NULL;
   if (output_sector_size_adjustment_ccc != 0)
   {
     // sanity check
@@ -12973,37 +12974,6 @@ uint64_t rotr64_ccc(uint64_t value, int shift)
 {
   return (value >> shift) | (value << (sizeof(value) * 8 - shift));
 }
-
-
-
-
-
-
-
-// function to get random value
-int get_random_value_ccc(int speed)
-{
-  struct timeval tvstart;
-  gettimeofday(&tvstart, NULL);
-  //printf("%ld.%06ld\n", tvstart.tv_sec, tvstart.tv_usec);
-  int random_value;
-  int i;
-  for (i = 0; i < speed; i++)
-  {
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    //printf("%ld.%06ld\n", tv.tv_sec, tv.tv_usec);
-    srand( (tv.tv_usec + 1000000 * tv.tv_sec) );
-    random_value = rand();
-    //fprintf (stdout, "random=%d\n", random_value);
-  }
-  struct timeval tvend;
-  gettimeofday(&tvend, NULL);
-  //printf("%ld.%06ld\n", tvend.tv_sec, tvend.tv_usec);
-
-  return (random_value);
-}
-
 
 
 

@@ -19,6 +19,8 @@ unsigned long long primary_relay_activation_time_ccc;
 char primary_relay_name_ccc[MAX_RELAY_NAME_LENGTH];
 primary_relay_settings_ccc_type primary_relay_settings_ccc;
 
+#include "strncpy_wrapper.h"
+
 
 int find_all_usb_devices_ccc(void)
 {

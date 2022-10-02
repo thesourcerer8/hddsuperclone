@@ -80,7 +80,7 @@ long long *number_variable_buffer_ccc;
 char **string_variable_pointer_ccc;
 char current_date_ccc[40];
 char current_time_ccc[40];
-unsigned char random_data_ccc[2048];
+
 
 unsigned char sbyte_ccc[16];
 
@@ -339,6 +339,7 @@ rebuild_assist_log_data_ccc_type rebuild_assist_log_data_ccc;
 unsigned int total_script_lines_ccc;
 char **script_line_pointer_ccc;
 
+#include "strncpy_wrapper.h"
 
 int message_exit_ccc(char *message)
 {

@@ -15,8 +15,7 @@
 #include "common.h"
 #include "hddsuperclone2_glade.h"
 
-
-
+#include "strncpy_wrapper.h"
 
 
 
