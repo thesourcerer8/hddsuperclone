@@ -512,7 +512,6 @@ int main (int argc, char **argv)
   superbyte_ccc[18] = 0x30;
   superbyte_ccc[19] = 0x0c;
 
-  license_type_ccc = 0xff;
   sprintf (tempmessage_ccc, "GOD MODE ACTIVE\n");
   message_now_ccc(tempmessage_ccc);
 #endif

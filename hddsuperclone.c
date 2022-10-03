@@ -200,11 +200,6 @@ int main (int argc, char **argv)
   aggressive_driver_ccc = true;
   charater_device_driver_mode_ccc = false; // TODO make this an option normally false
   color_statusbar_ccc = false;
-  license_type_ccc = 0;
-  license_version_ccc = 0;
-  license_time_ccc = 0;
-  activation_type_ccc = 0;
-  activation_days_remaining_ccc = 0;
   running_analyze_ccc = 0;
   drive_locked_ccc = false;
   smart_supported_ccc = false;
@@ -367,26 +362,19 @@ int main (int argc, char **argv)
         break;
 
       case LICENSETYPE:
-        license_type_ccc = strtoull(optarg, NULL, 16);
         break;
 
       case LICENSEVERSION:
-        license_version_ccc = strtoull(optarg, NULL, 16);
         break;
 
       case LICENSETIME:
-        license_time_ccc = strtoull(optarg, NULL, 0);
         break;
 
       case MAKELICENSE:
-        //make_license_files_ccc (license_version_ccc, license_type_ccc, license_time_ccc, strtoull(optarg, NULL, 0));
         exit(0);
-        break;
 
       case LICENSEPROCESSACTIVE:
-        //process_active_licenses_ccc();
         exit(0);
-        break;
 
       case 'Q':
         quiet_ccc = true;
@@ -419,25 +407,13 @@ int main (int argc, char **argv)
         break;
 
       case RUN_SERVERP:
-#ifdef GODMODE
-        //start_serverp();
-#endif
         exit(0);
-        break;
 
       case COMMAND_SERVERP:
-#ifdef GODMODE
-        //send_serverp_command(optarg);
-#endif
         exit(0);
-        break;
 
       case MANUAL_CREATE:
-#ifdef GODMODE
-       //import_transaction_files();
-#endif
         exit(0);
-        break;
 
       case SUPERTOOL:
         superclone_ccc = false;
@@ -496,13 +472,11 @@ int main (int argc, char **argv)
       case TESTSKIP:
         test_skip_ccc(strtoul(optarg, NULL, 0));
         exit(0);
-        break;
 
       case TESTSKIPFAST:
         skip_fast_ccc = true;
         test_skip_ccc(strtoul(optarg, NULL, 0));
         exit(0);
-        break;
 
       case '?':
         // getopt_long already printed an error message.
@@ -764,14 +738,6 @@ int main (int argc, char **argv)
   superbyte_ccc[94] = 0x78;
   superbyte_ccc[95] = 0x08;
 
-#ifdef DEBUG
-  for (int i = 0; i < 96; i++)
-  {
-    //fprintf (stdout, "superbyte%d(%02x) = %02x\n", i, i, superbyte_ccc[i]);
-  }
-#endif
-
-
   // Check if root privilages
   if (geteuid())
   {
@@ -799,13 +765,6 @@ int main (int argc, char **argv)
   cleanup_ccc();
   return 0;
 }
-// end of main
-//******************************************************
-
-
-
-
-
 
 
 // time functions

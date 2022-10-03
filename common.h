@@ -308,10 +308,6 @@ int get_random_value_ccc(int speed);
 
 extern unsigned char sbyte_ccc[16];
 extern unsigned char superbyte_ccc[1024];
-extern int license_type_ccc;
-extern int license_version_ccc;
-extern int license_time_ccc;
-extern int activation_type_ccc;
 extern int activation_days_remaining_ccc;
 extern int check_command_ccc;
 extern int check_read_ccc;
