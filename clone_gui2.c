@@ -15,8 +15,7 @@
 #include "common.h"
 #include "hddsuperclone2_glade.h"
 
-
-
+#include "strncpy_wrapper.h"
 
 
 
@@ -5869,42 +5868,15 @@ void about_ccc (void)
   char temp [1024];
   sprintf (temp, "Copyright (C) %s Scott Dwyer", copyright_year_ccc);
   gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog),temp);
-
-
-#ifdef GODMODE
   strcpy (temp, "License type: PROPRIETARY (GOD MODE) ");
-#else
-  strcpy (temp, "License type: PROPRIETARY ");
-#endif
-  char temp2[256];
-  if (activation_type_ccc == 1)
-  {
-    sprintf (temp2, "(TEMPORARY VERSION)\n%d days remaining\n", activation_days_remaining_ccc);
-    strcat (temp, temp2);
-  }
-  else if (activation_type_ccc == 2)
-  {
-    sprintf (temp2, "(FULL VERSION)\n");
-    strcat (temp, temp2);
-  }
-  else
-  {
-    sprintf (temp2, "(FREE VERSION)\n");
-    strcat (temp, temp2);
-  }
+  sprintf (temp, "(FULL VERSION)\n");
   strcat (temp, "There is NO WARRANTY, to the extent permitted by law.");
-
-
   gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(dialog), temp);
-
   gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(dialog), "www.sdcomputingservice.com");
-
-
   char eula[hddsuperclone_EULA_txt_len + 1];
   memcpy(eula, hddsuperclone_EULA_txt, hddsuperclone_EULA_txt_len);
   eula[hddsuperclone_EULA_txt_len] = '\0';
   gtk_about_dialog_set_license(GTK_ABOUT_DIALOG(dialog), eula);
-
   gtk_dialog_run(GTK_DIALOG (dialog));
   gtk_widget_destroy(dialog);
 }

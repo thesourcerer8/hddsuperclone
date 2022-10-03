@@ -80,16 +80,11 @@ long long *number_variable_buffer_ccc;
 char **string_variable_pointer_ccc;
 char current_date_ccc[40];
 char current_time_ccc[40];
-unsigned char random_data_ccc[2048];
+
 
 unsigned char sbyte_ccc[16];
 
 unsigned char superbyte_ccc[1024];
-int license_type_ccc;
-int license_version_ccc;
-int license_time_ccc;
-int activation_type_ccc;
-int activation_days_remaining_ccc;
 int check_command_ccc;
 int check_read_ccc;
 int check_write_ccc;
@@ -339,6 +334,7 @@ rebuild_assist_log_data_ccc_type rebuild_assist_log_data_ccc;
 unsigned int total_script_lines_ccc;
 char **script_line_pointer_ccc;
 
+#include "strncpy_wrapper.h"
 
 int message_exit_ccc(char *message)
 {

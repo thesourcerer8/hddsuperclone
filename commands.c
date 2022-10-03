@@ -13,6 +13,8 @@
 #include "common.h"
 #include "commands.h"
 
+#include "strncpy_wrapper.h"
+
 
 // function to either check or execute a command
 int execute_line_ccc(bool perform_check, unsigned int line_number, char *command, char *rest_of_line)

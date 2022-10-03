@@ -17,8 +17,7 @@ char *title = "HDDSCViewer";
 char *version_number = "1.0_20220212";
 int copyright_year = 2022;
 
-
-
+#include "strncpy_wrapper.h"
 
 
 int main (int argc, char **argv)
