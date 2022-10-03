@@ -2282,10 +2282,10 @@ int compare_ccc(bool perform_check, char *rest_of_line)
 
   bool string_check = false;
   int variable1_type = 0;
-  char *string_variable1;
-  char *string_variable2;
-  long long variable1;
-  long long variable2;
+  char *string_variable1 = NULL;
+  char *string_variable2 = NULL;
+  long long variable1 = 0;
+  long long variable2 = 0;
   if (raw_variable1[0] == '$')
   {
     int var_type = check_variable_ccc(raw_variable1+1);

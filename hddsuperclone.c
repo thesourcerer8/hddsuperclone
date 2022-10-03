@@ -12931,53 +12931,6 @@ char *get_future_date_ccc(long long days)
   }
 
 
-
-
-
-
-// rotate funtions
-uint8_t rotl8_ccc(uint8_t value, int shift)
-{
-  return (value << shift) | (value >> (sizeof(value) * 8 - shift));
-}
-uint8_t rotr8_ccc(uint8_t value, int shift)
-{
-  return (value >> shift) | (value << (sizeof(value) * 8 - shift));
-}
-
-
-uint16_t rotl16_ccc(uint16_t value, int shift)
-{
-  return (value << shift) | (value >> (sizeof(value) * 8 - shift));
-}
-uint16_t rotr16_ccc(uint16_t value, int shift)
-{
-  return (value >> shift) | (value << (sizeof(value) * 8 - shift));
-}
-
-
-uint32_t rotl32_ccc(uint32_t value, int shift)
-{
-  return (value << shift) | (value >> (sizeof(value) * 8 - shift));
-}
-uint32_t rotr32_ccc(uint32_t value, int shift)
-{
-  return (value >> shift) | (value << (sizeof(value) * 8 - shift));
-}
-
-
-uint64_t rotl64_ccc(uint64_t value, int shift)
-{
-  return (value << shift) | (value >> (sizeof(value) * 8 - shift));
-}
-uint64_t rotr64_ccc(uint64_t value, int shift)
-{
-  return (value >> shift) | (value << (sizeof(value) * 8 - shift));
-}
-
-
-
-
 int do_nanosleep_ccc(unsigned long long time)
 {
   // sleep time in nanoseconds
