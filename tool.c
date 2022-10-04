@@ -1201,11 +1201,6 @@ int process_lines_ccc(void)
           recess = true;
         }
 
-        else
-        {
-          ccc_indent_ccc = ccc_indent_ccc;
-        }
-
         if (recess)
         {
           current_indent--;
@@ -1776,37 +1771,11 @@ int find_command_plus1_ccc(char *search_command, char *search_command_cap, char 
 }
 
 
-
-
-
-
 // function to return a full line
-char *get_full_line_ccc(unsigned int line_number)
-{
-  char full_line[MAX_LINE_LENGTH] = "";
-  sscanf(script_line_pointer_ccc[line_number], "%[^\n]", full_line);
-  char *return_data = full_line;
-  return (return_data);
+char *get_full_line_ccc(unsigned int line_number, char *max_line_buffer) {
+  sscanf(script_line_pointer_ccc[line_number], "%[^\n]", max_line_buffer);
+  return max_line_buffer;
 }
-
-
-
-
-
-
-// function to return the rest of a line after the command
-char *get_rest_of_line(unsigned int line_number)
-{
-  char command[MAX_COMMAND_LENGTH] = "";
-  char rest_of_line[MAX_LINE_LENGTH] = "";
-  sscanf(script_line_pointer_ccc[line_number], "%s %[^\n]", command, rest_of_line);
-  char *return_data = rest_of_line;
-  return (return_data);
-}
-
-
-
-
 
 
 // function to process comparison statement
@@ -1866,10 +1835,10 @@ int compare_ccc(bool perform_check, char *rest_of_line)
 
   bool string_check = false;
   int variable1_type = 0;
-  char *string_variable1;
-  char *string_variable2;
-  long long variable1;
-  long long variable2;
+  char *string_variable1 = NULL;
+  char *string_variable2 = NULL;
+  long long variable1 = 0;
+  long long variable2 = 0;
   if (raw_variable1[0] == '$')
   {
     int var_type = check_variable_ccc(raw_variable1+1);

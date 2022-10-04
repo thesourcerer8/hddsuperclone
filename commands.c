@@ -13,6 +13,8 @@
 #include "common.h"
 #include "commands.h"
 
+#include "strncpy_wrapper.h"
+
 
 // function to either check or execute a command
 int execute_line_ccc(bool perform_check, unsigned int line_number, char *command, char *rest_of_line)
@@ -564,7 +566,7 @@ int echo_ccc(bool perform_check, unsigned int line_number, char *rest_of_line)
 {
   int i;
   int length = strlen(rest_of_line);
-  char var_name[length];
+  char var_name[length+1];
   bool print = false;
   bool dquote;
   char *error_string = "Error processing ECHO command on line";
@@ -1563,8 +1565,8 @@ int printbuffer_ccc(bool perform_check, unsigned int line_number, char *rest_of_
 
 int setmainbuffer_ccc(bool perform_check, unsigned int line_number, char *rest_of_line)
 {
-  int length = strlen(rest_of_line);
-  char raw_offset[length];
+  //int length = strlen(rest_of_line);
+  char raw_offset[MAX_LINE_LENGTH];
   char leftover[MAX_LINE_LENGTH];
   char* endptr;
   unsigned long long offset;
@@ -1616,17 +1618,17 @@ int setmainbuffer_ccc(bool perform_check, unsigned int line_number, char *rest_o
 
   int current_line = line_number+1;
   char *full_line;
+  char input_text[MAX_LINE_LENGTH];
   if (command_line_ccc)
   {
     fprintf (stdout, "setbuffer> ");
-    char input_text[MAX_LINE_LENGTH];
     fflush(stdout);
     fgets(input_text, sizeof input_text, stdin);
     full_line = input_text;
   }
   else
   {
-    full_line = get_full_line_ccc(current_line);
+    full_line = get_full_line_ccc(current_line, input_text);
   }
   char line[MAX_LINE_LENGTH];
   strcpy (line, full_line);
@@ -1649,17 +1651,17 @@ int setmainbuffer_ccc(bool perform_check, unsigned int line_number, char *rest_o
     {
       current_line++;
       char *full_line;
+      char input_text[MAX_LINE_LENGTH];
       if (command_line_ccc)
       {
         fprintf (stdout, "setbuffer> ");
-        char input_text[MAX_LINE_LENGTH];
         fflush(stdout);
         fgets(input_text, sizeof input_text, stdin);
         full_line = input_text;
       }
       else
       {
-        full_line = get_full_line_ccc(current_line);
+        full_line = get_full_line_ccc(current_line, input_text);
       }
       strcpy (line, full_line);
 
@@ -1756,9 +1758,9 @@ int endmainbuffer_ccc(bool perform_check, unsigned int line_number, char *rest_o
 
 int change_main_buffer_size_ccc(bool perform_check, unsigned int line_number, char *rest_of_line)
 {
-  int length = strlen(rest_of_line);
-  char raw_size[length];
-  char leftover[length];
+  //int length = strlen(rest_of_line);
+  char raw_size[MAX_LINE_LENGTH];
+  char leftover[MAX_LINE_LENGTH];
   char* endptr;
   unsigned long long size;
   bool size_is_variable = false;
@@ -2238,9 +2240,9 @@ int read_buffer_ccc(bool perform_check, unsigned int line_number, char *rest_of_
 // function to set data transfer direction
 int set_direction_ccc(bool perform_check, unsigned int line_number, char *rest_of_line)
 {
-  int length = strlen(rest_of_line);
-  char raw_data[length];
-  char leftover[length];
+  //int length = strlen(rest_of_line);
+  char raw_data[MAX_LINE_LENGTH];
+  char leftover[MAX_LINE_LENGTH];
   char *error_string = "Error processing DIRECTION command on line";
   int scanline = sscanf(rest_of_line, "%s %[^\n]", raw_data, leftover);
   if (scanline != 1)
@@ -3155,6 +3157,7 @@ int write_log_ccc(bool perform_check, unsigned int line_number, char *rest_of_li
     if (fprintf(writefile, "%s\n", value) < 0 )
     {
       fprintf(stderr, "Error writing to %s (%s).\nAborting...\n", file_name, strerror(errno));
+      fclose (writefile);
       return (-1);
     }
 
@@ -3203,8 +3206,7 @@ int get_time_ccc(bool perform_check, unsigned int line_number, char *rest_of_lin
 
 int exit_with_code_ccc(bool perform_check, unsigned int line_number, char *rest_of_line)
 {
-  int length = strlen(rest_of_line);
-  char raw_exitcode[length];
+  char raw_exitcode[MAX_LINE_LENGTH];
   char leftover[MAX_LINE_LENGTH];
   unsigned char tempcode;
   char* endptr;
@@ -3734,9 +3736,9 @@ int resettimeout_ccc(bool perform_check, unsigned int line_number, char *rest_of
 
 int softtimeout_ccc(bool perform_check, unsigned int line_number, char *rest_of_line)
 {
-  int length = strlen(rest_of_line);
-  char raw_time[length];
-  char leftover[length];
+  //int length = strlen(rest_of_line);
+  char raw_time[MAX_LINE_LENGTH];
+  char leftover[MAX_LINE_LENGTH];
   char* endptr;
   unsigned long long time;
   char *error_string = "Error processing SOFTTIMEOUT command on line";
@@ -3781,9 +3783,9 @@ int softtimeout_ccc(bool perform_check, unsigned int line_number, char *rest_of_
 
 int hardtimeout_ccc(bool perform_check, unsigned int line_number, char *rest_of_line)
 {
-  int length = strlen(rest_of_line);
-  char raw_time[length];
-  char leftover[length];
+  //int length = strlen(rest_of_line);
+  char raw_time[MAX_LINE_LENGTH];
+  char leftover[MAX_LINE_LENGTH];
   char* endptr;
   unsigned long long time;
   char *error_string = "Error processing HARDTIMEOUT command on line";
@@ -3876,9 +3878,9 @@ int generaltimeout_ccc(bool perform_check, unsigned int line_number, char *rest_
 
 int load_script_file_ccc(bool perform_check, unsigned int line_number, char *rest_of_line)
 {
-  int length = strlen(rest_of_line);
-  char raw_data[length];
-  char leftover[length];
+  //int length = strlen(rest_of_line);
+  char raw_data[MAX_LINE_LENGTH];
+  char leftover[MAX_LINE_LENGTH];
   char *error_string = "Error processing LOADSCRIPT command on line";
   int scanline = sscanf(rest_of_line, "%s %[^\n]", raw_data, leftover);
   if (scanline != 1)
@@ -3992,9 +3994,9 @@ int previous_script_file_ccc(bool perform_check, unsigned int line_number, char 
 
 int include_script_ccc(bool perform_check, unsigned int line_number, char *rest_of_line)
 {
-  int length = strlen(rest_of_line);
-  char raw_data[length];
-  char leftover[length];
+  //int length = strlen(rest_of_line);
+  char raw_data[MAX_LINE_LENGTH];
+  char leftover[MAX_LINE_LENGTH];
   char *error_string = "Error processing INCLUDE command on line";
   int scanline = sscanf(rest_of_line, "%s %[^\n]", raw_data, leftover);
   if (scanline != 1)
@@ -4341,9 +4343,9 @@ int wordflip_scratchpad_ccc(bool perform_check, unsigned int line_number, char *
 // function to get file size, which is placed into the variable error_level
 int get_file_size_ccc(bool perform_check, unsigned int line_number, char *rest_of_line)
 {
-  int length = strlen(rest_of_line);
-  char raw_file_name[length];
-  char leftover[length];
+  //int length = strlen(rest_of_line);
+  char raw_file_name[MAX_LINE_LENGTH];
+  char leftover[MAX_LINE_LENGTH];
   char *file_name;
   char *error_string = "Error processing GETFILESIZE command on line";
   int scanline = sscanf(rest_of_line, "%s %[^\n]", raw_file_name, leftover);
@@ -4746,9 +4748,9 @@ int read_scratchpad_ccc(bool perform_check, unsigned int line_number, char *rest
 // function to delete file
 int delete_file_ccc(bool perform_check, unsigned int line_number, char *rest_of_line)
 {
-  int length = strlen(rest_of_line);
-  char raw_file_name[length];
-  char leftover[length];
+  //int length = strlen(rest_of_line);
+  char raw_file_name[MAX_LINE_LENGTH];
+  char leftover[MAX_LINE_LENGTH];
   char *file_name;
   char *error_string = "Error processing DELETEFILE command on line";
   int scanline = sscanf(rest_of_line, "%s %[^\n]", raw_file_name, leftover);
@@ -4806,9 +4808,9 @@ int delete_file_ccc(bool perform_check, unsigned int line_number, char *rest_of_
 // function to perform an external command
 int call_command_ccc(bool perform_check, unsigned int line_number, char *rest_of_line)
 {
-  int length = strlen(rest_of_line);
-  char raw_command[length];
-  char leftover[length];
+  //int length = strlen(rest_of_line);
+  char raw_command[MAX_LINE_LENGTH];
+  char leftover[MAX_LINE_LENGTH];
   char *command;
   char *error_string = "Error processing CALLCOMMAND command on line";
   int scanline = sscanf(rest_of_line, "%s %[^\n]", raw_command, leftover);
@@ -4864,9 +4866,9 @@ int call_command_ccc(bool perform_check, unsigned int line_number, char *rest_of
 // function to get user input
 int user_input_ccc(bool perform_check, unsigned int line_number, char *rest_of_line)
 {
-  int length = strlen(rest_of_line);
-  char raw_variable_name[length];
-  char leftover[length];
+  //int length = strlen(rest_of_line);
+  char raw_variable_name[MAX_LINE_LENGTH];
+  char leftover[MAX_LINE_LENGTH];
   char *error_string = "Error processing USERINPUT command on line";
   int scanline = sscanf(rest_of_line, "%s %[^\n]", raw_variable_name, leftover);
   if (scanline != 1)
@@ -4944,8 +4946,8 @@ int user_input_ccc(bool perform_check, unsigned int line_number, char *rest_of_l
 
 int setmainscratchpad_ccc(bool perform_check, unsigned int line_number, char *rest_of_line)
 {
-  int length = strlen(rest_of_line);
-  char raw_offset[length];
+  //int length = strlen(rest_of_line);
+  char raw_offset[MAX_LINE_LENGTH];
   char leftover[MAX_LINE_LENGTH];
   char* endptr;
   unsigned long long offset;
@@ -4997,17 +4999,17 @@ int setmainscratchpad_ccc(bool perform_check, unsigned int line_number, char *re
 
   int current_line = line_number+1;
   char *full_line;
+  char input_text[MAX_LINE_LENGTH];
   if (command_line_ccc)
   {
     fprintf (stdout, "setscratchpad> ");
-    char input_text[MAX_LINE_LENGTH];
     fflush(stdout);
     fgets(input_text, sizeof input_text, stdin);
     full_line = input_text;
   }
   else
   {
-    full_line = get_full_line_ccc(current_line);
+    full_line = get_full_line_ccc(current_line, input_text);
   }
   char line[MAX_LINE_LENGTH];
   strcpy (line, full_line);
@@ -5030,17 +5032,17 @@ int setmainscratchpad_ccc(bool perform_check, unsigned int line_number, char *re
     {
       current_line++;
       char *full_line;
+      char input_text[MAX_LINE_LENGTH];
       if (command_line_ccc)
       {
         fprintf (stdout, "setscratchpad> ");
-        char input_text[MAX_LINE_LENGTH];
         fflush(stdout);
         fgets(input_text, sizeof input_text, stdin);
         full_line = input_text;
       }
       else
       {
-        full_line = get_full_line_ccc(current_line);
+        full_line = get_full_line_ccc(current_line, input_text);
       }
       strcpy (line, full_line);
     }
@@ -5150,9 +5152,9 @@ int endmainscratchpad_ccc(bool perform_check, unsigned int line_number, char *re
 
 int change_main_scratchpad_size_ccc(bool perform_check, unsigned int line_number, char *rest_of_line)
 {
-  int length = strlen(rest_of_line);
-  char raw_size[length];
-  char leftover[length];
+  //int length = strlen(rest_of_line);
+  char raw_size[MAX_LINE_LENGTH];
+  char leftover[MAX_LINE_LENGTH];
   char* endptr;
   unsigned long long size;
   bool size_is_variable = false;
@@ -5703,17 +5705,14 @@ int endsubroutine_ccc(bool perform_check, unsigned int line_number)
   if (!perform_check)
   {
     int new_line;
-    if (!perform_check)
+    subroutine_stack_counter_ccc --;
+    if (subroutine_stack_counter_ccc < 0)
     {
-      subroutine_stack_counter_ccc --;
-      if (subroutine_stack_counter_ccc < 0)
-      {
-        fprintf (stderr, "\nError: ENDSUBROUTINE without SUBROUTINE,\n");
-        fprintf (stderr, "%s %d.\n", error_string, line_number-1);
-        return (-1);
-      }
-      new_line = ccc_subroutine_stack_ccc[subroutine_stack_counter_ccc];
+      fprintf (stderr, "\nError: ENDSUBROUTINE without SUBROUTINE,\n");
+      fprintf (stderr, "%s %d.\n", error_string, line_number-1);
+      return (-1);
     }
+    new_line = ccc_subroutine_stack_ccc[subroutine_stack_counter_ccc];
     return (new_line);
   }
   return (0);
@@ -5739,19 +5738,16 @@ int returnsub_ccc(bool perform_check, unsigned int line_number)
   if (!perform_check)
   {
     int new_line;
-    if (!perform_check)
+    subroutine_stack_counter_ccc --;
+    if (subroutine_stack_counter_ccc < 0)
     {
-      subroutine_stack_counter_ccc --;
-      if (subroutine_stack_counter_ccc < 0)
-      {
-        fprintf (stderr, "\nError: RETURNSUB without SUBROUTINE,\n");
-        fprintf (stderr, "%s %d.\n", error_string, line_number-1);
-        return (-1);
-      }
-      new_line = ccc_subroutine_stack_ccc[subroutine_stack_counter_ccc];
-      while_stack_counter_ccc = subroutine_while_stack_ccc[subroutine_stack_counter_ccc];
-      endif_stack_counter_ccc = subroutine_endif_stack_ccc[subroutine_stack_counter_ccc];
+      fprintf (stderr, "\nError: RETURNSUB without SUBROUTINE,\n");
+      fprintf (stderr, "%s %d.\n", error_string, line_number-1);
+      return (-1);
     }
+    new_line = ccc_subroutine_stack_ccc[subroutine_stack_counter_ccc];
+    while_stack_counter_ccc = subroutine_while_stack_ccc[subroutine_stack_counter_ccc];
+    endif_stack_counter_ccc = subroutine_endif_stack_ccc[subroutine_stack_counter_ccc];
     return (new_line);
   }
   return (0);
@@ -5961,7 +5957,7 @@ int elsestate_ccc(bool perform_check, unsigned int line_number, char *rest_of_li
   char *error_string = "Error processing ELSE command on line";
   int length = strlen(rest_of_line);
   char temp[length+1];
-  char leftover[length];
+  char leftover[length+1];
   int scanline = sscanf(rest_of_line, "%s %[^\n]", temp, leftover);
   if (scanline > 0)
   {
@@ -6013,6 +6009,12 @@ int ccc_elseif_ccc(bool perform_check, unsigned int line_number, char *rest_of_l
     fprintf (stderr, "%s %d.\n", error_string, line_number-1);
     return (-1);
   }
+
+  //TODO: endif_stack_counter_ccc can be 0, which means
+  //  statement_condition_ccc can be indexed by -1 which
+  //  is a memory bug, but the script parser breaks when
+  //  I treat that as an error! quick hack return success:
+  if (endif_stack_counter_ccc < 1) return 0;
 
   if (statement_condition_ccc[endif_stack_counter_ccc-1])
   {
@@ -7016,17 +7018,17 @@ int set_usbbuffer_ccc(bool perform_check, unsigned int line_number, char *rest_o
 
   int current_line = line_number+1;
   char *full_line;
+  char input_text[MAX_LINE_LENGTH];
   if (command_line_ccc)
   {
     fprintf (stdout, "setusbbuffer> ");
-    char input_text[MAX_LINE_LENGTH];
     fflush(stdout);
     fgets(input_text, sizeof input_text, stdin);
     full_line = input_text;
   }
   else
   {
-    full_line = get_full_line_ccc(current_line);
+    full_line = get_full_line_ccc(current_line, input_text);
   }
   char line[MAX_LINE_LENGTH];
   strcpy (line, full_line);
@@ -7049,17 +7051,17 @@ int set_usbbuffer_ccc(bool perform_check, unsigned int line_number, char *rest_o
     {
       current_line++;
       char *full_line;
+      char input_text[MAX_LINE_LENGTH];
       if (command_line_ccc)
       {
         fprintf (stdout, "setusbbuffer> ");
-        char input_text[MAX_LINE_LENGTH];
         fflush(stdout);
         fgets(input_text, sizeof input_text, stdin);
         full_line = input_text;
       }
       else
       {
-        full_line = get_full_line_ccc(current_line);
+        full_line = get_full_line_ccc(current_line, input_text);
       }
       strcpy (line, full_line);
     }
@@ -7779,8 +7781,8 @@ int send_usb_control_msg_ccc(bool perform_check, unsigned int line_number, char 
 
 int usb_raw_read_ccc(bool perform_check, unsigned int line_number, char *rest_of_line)
 {
-  line_number = line_number;
-  rest_of_line = rest_of_line;
+  (void) line_number;
+  (void) rest_of_line;
   if (!perform_check)
   {
     return_value_ccc = do_usb_raw_read_ccc(usb_timeout_ccc);
@@ -7795,8 +7797,8 @@ int usb_raw_read_ccc(bool perform_check, unsigned int line_number, char *rest_of
 
 int usb_raw_write_ccc(bool perform_check, unsigned int line_number, char *rest_of_line)
 {
-  line_number = line_number;
-  rest_of_line = rest_of_line;
+  (void) line_number;
+  (void) rest_of_line;
   if (!perform_check)
   {
     return_value_ccc = do_usb_raw_write_ccc(usb_timeout_ccc);
@@ -7811,8 +7813,8 @@ int usb_raw_write_ccc(bool perform_check, unsigned int line_number, char *rest_o
 
 int usb_reset_ccc(bool perform_check, unsigned int line_number, char *rest_of_line)
 {
-  line_number = line_number;
-  rest_of_line = rest_of_line;
+  (void) line_number;
+  (void) rest_of_line;
   if (!perform_check)
   {
     return_value_ccc = do_usb_reset_ccc();

@@ -15,7 +15,7 @@ cd ./pro/hddsuperclone
 
 rm -f conditional.h
 cp -f public-conditional.h conditional.h
-changecode
+#changecode
 
 make clean
 make clone

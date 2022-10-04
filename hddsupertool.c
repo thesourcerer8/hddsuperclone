@@ -54,11 +54,13 @@ unsigned int total_string_variables_ccc;
 
 bool forced_exit_ccc=false;
 
+#include "strncpy_wrapper.h"
 
 
 // Function to handle ctrl-c
 void signal_callback_handler_ccc(int signum)
 {
+  (void) signum;
   if (!critical_process_ccc)
   {
   fprintf(stderr, "\nTerminated by user\n");
@@ -488,18 +490,6 @@ int main (int argc, char **argv)
 #endif
   }
 
-  // create random data for later use
-  memset (random_data_ccc, 0, sizeof(random_data_ccc));
-  int i;
-  for (i = 0; i < 1024; i += 4)
-  {
-    int n = get_random_value_ccc(100);
-    random_data_ccc[i] = n;
-    random_data_ccc[i+1] = n >> 8;
-    random_data_ccc[i+2] = n >> 16;
-    random_data_ccc[i+3] = n >> 24;
-  }
-
 #ifdef GODMODE
   superbyte_ccc[0] = 0x04;
   superbyte_ccc[1] = 0x06;
@@ -522,29 +512,8 @@ int main (int argc, char **argv)
   superbyte_ccc[18] = 0x30;
   superbyte_ccc[19] = 0x0c;
 
-  license_type_ccc = 0xff;
   sprintf (tempmessage_ccc, "GOD MODE ACTIVE\n");
   message_now_ccc(tempmessage_ccc);
-#else
-#ifdef NOTFREE
-  print_license_ccc(0);
-
-  unsigned char sid[8];
-  sid[0] = random_data_ccc[0];
-  sid[1] = random_data_ccc[1];
-  sid[2] = rotl8_ccc(rotl8_ccc(sid[0], 1) ^ rotl8_ccc(sid[1], 1) ^ rotl8_ccc(sbyte_ccc[0], 1) , 1);
-  sid[3] = rotl8_ccc(rotl8_ccc(sid[0], 2) ^ rotl8_ccc(sid[1], 2) ^ rotl8_ccc(sbyte_ccc[1], 2) , 2);
-  sid[4] = rotl8_ccc(rotl8_ccc(sid[0], 3) ^ rotl8_ccc(sid[1], 3) ^ rotl8_ccc(sbyte_ccc[2], 3) , 3);
-  unsigned char temp = (sbyte_ccc[3] & 128) | license_information_ccc;
-  sid[5] = rotl8_ccc(rotl8_ccc(sid[0], 4) ^ rotl8_ccc(sid[1], 4) ^ rotl8_ccc(temp, 4) , 4);
-  sid[6] = rotl8_ccc(rotl8_ccc(sid[0], 5) ^ rotl8_ccc(sid[1], 5) ^ rotl8_ccc((expire_day_ccc >> 8) & 255, 5) , 5);
-  sid[7] = rotl8_ccc(rotl8_ccc(sid[0], 6) ^ rotl8_ccc(sid[1], 6) ^ rotl8_ccc((expire_day_ccc & 255), 6) , 6);
-
-  if (!quiet_ccc)
-  {
-    fprintf (stdout, "SessionID: %02x%02x%02x%02x%02x%02x%02x%02x\n", sid[0], sid[1], sid[2], sid[3], sid[4], sid[5], sid[6], sid[7]);
-  }
-#endif
 #endif
 
   max_dma_size_ccc = (pagesize_ccc / 8) * pagesize_ccc;
@@ -1658,11 +1627,6 @@ int process_lines_ccc(void)
           recess = true;
         }
 
-        else
-        {
-          ccc_indent_ccc = ccc_indent_ccc;
-        }
-
         if (recess)
         {
           current_indent--;
@@ -2252,37 +2216,12 @@ int find_command_plus1_ccc(char *search_command, char *search_command_cap, char 
 }
 
 
-
-
-
-
 // function to return a full line
-char *get_full_line_ccc(unsigned int line_number)
+char *get_full_line_ccc(unsigned int line_number, char* max_line_buffer)
 {
-  char full_line[MAX_LINE_LENGTH] = "";
-  sscanf(script_line_pointer_ccc[line_number], "%[^\n]", full_line);
-  char *return_data = full_line;
-  return (return_data);
+  sscanf(script_line_pointer_ccc[line_number], "%[^\n]", max_line_buffer);
+  return max_line_buffer;
 }
-
-
-
-
-
-
-// function to return the rest of a line after the command
-char *get_rest_of_line(unsigned int line_number)
-{
-  char command[MAX_COMMAND_LENGTH] = "";
-  char rest_of_line[MAX_LINE_LENGTH] = "";
-  sscanf(script_line_pointer_ccc[line_number], "%s %[^\n]", command, rest_of_line);
-  char *return_data = rest_of_line;
-  return (return_data);
-}
-
-
-
-
 
 
 // function to process comparison statement
@@ -2342,10 +2281,10 @@ int compare_ccc(bool perform_check, char *rest_of_line)
 
   bool string_check = false;
   int variable1_type = 0;
-  char *string_variable1;
-  char *string_variable2;
-  long long variable1;
-  long long variable2;
+  char *string_variable1 = NULL;
+  char *string_variable2 = NULL;
+  long long variable1 = 0;
+  long long variable2 = 0;
   if (raw_variable1[0] == '$')
   {
     int var_type = check_variable_ccc(raw_variable1+1);
@@ -3124,34 +3063,6 @@ uint64_t rotr64_ccc(uint64_t value, int shift)
 
 
 
-// function to get random value
-int get_random_value_ccc(int speed)
-{
-  struct timeval tvstart;
-  gettimeofday(&tvstart, NULL);
-  //printf("%ld.%06ld\n", tvstart.tv_sec, tvstart.tv_usec);
-  int random_value;
-  int i;
-  for (i = 0; i < speed; i++)
-  {
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    //printf("%ld.%06ld\n", tv.tv_sec, tv.tv_usec);
-    srand( (tv.tv_usec + 1000000 * tv.tv_sec) );
-    random_value = rand();
-    //fprintf (stdout, "random=%d\n", random_value);
-  }
-  struct timeval tvend;
-  gettimeofday(&tvend, NULL);
-  //printf("%ld.%06ld\n", tvend.tv_sec, tvend.tv_usec);
-
-  return (random_value);
-}
-
-
-
-
-
 int do_nanosleep_ccc(unsigned long long time)
 {
   // sleep time in nanoseconds
@@ -3208,7 +3119,7 @@ int call_command_on_power_cycle_ccc(void)
 void update_display_status_buttons_ccc(int time_ms)
 {
   // do nothing, this is for clone gui
-  time_ms = time_ms;
+  (void)time_ms;
 }
 
 
@@ -3216,9 +3127,9 @@ void update_display_status_buttons_ccc(int time_ms)
 int print_gui_error_message_ccc(char *message, char *title, int type)
 {
   // do nothing, this is for clone gui
-  message = message;
-  title = title;
-  type = type;
+  (void) message;
+  (void) title;
+  (void) type;
   return 0;
 }
 

@@ -13,27 +13,23 @@ endif
 
 CC= gcc
 ifneq (,$(findstring k,$(MAKEFLAGS)))
-CFLAGS = -Wall -W -O0 -g
+CFLAGS = -Wall -Wextra -O0 -g3 -rdynamic
 else
-CFLAGS = -Wall -W -Wno-deprecated-declarations
+CFLAGS = -Wall -Wextra -O2 -g3 -rdynamic -fno-omit-frame-pointer -fsanitize=address,undefined -Wno-deprecated-declarations
 endif
-SSLFLAGS = -lssl -lcrypto
 USBFLAGS = -lusb
-CURLFLAGS = -lcurl
-GTKFLAGS = `pkg-config --cflags --libs gtk+-$(GTKVER).0` -export-dynamic
+CURLFLAGS = -DUSE_CURL -lcurl
+GTKFLAGS = `pkg-config --cflags --libs gtk+-$(GTKVER).0`
 PROG00 = hddsupertool
 PROG01 = commands
 PROG02 = io
 PROG03 = common
 PROG04 = tool
 PROG05 = usbrelay
-PROG06 = smtp
-PROG07 = server
 PROG20 = hddsuperclone
 PROG21 = clone_gui$(GTKVER)
 PROG22 = clone_gui_language
 PROG30 = hddscviewer
-PROG11 = changecode
 PROG12 = create_script_help
 scripts = hddscripts
 bindir = $(DESTDIR)/usr/local/bin/
@@ -44,7 +40,7 @@ docdir= $(DESTDIR)/usr/local/share/doc/
 menudir= $(DESTDIR)/usr/local/share/applications/
 driverdir= driver/
 
-all:  $(PROG12) $(PROG11) $(PROG20) $(PROG30) $(PROG00)
+all:  $(PROG12) $(PROG20) $(PROG30) $(PROG00)
 change:  $(PROG11)
 clone: $(PROG12) $(PROG20)
 viewer: $(PROG30)
@@ -59,9 +55,6 @@ $(PROG00) : $(PROG00).c
 	makeinfo $(PROG00).texi --html --no-split
 	makeinfo $(PROG00).texi --plaintext -o $(PROG00).txt
 
-$(PROG11) : $(PROG11).c
-	$(CC) $(CFLAGS) $(PROG11).c -o $(PROG11)
-
 $(PROG12) : $(PROG12).c
 	$(CC) $(CFLAGS) $(PROG12).c -o $(PROG12)
 
@@ -72,15 +65,12 @@ $(PROG20) : $(PROG20).c
 	cp -f public/base/$(PROG20)/EULA $(PROG20)_EULA.txt
 	xxd -i $(PROG20)_EULA.txt $(PROG20)_EULA.h
 	xxd -i $(driverdir)$(PROG20)_driver.c $(PROG20)_driver.h
-	$(CC) $(CFLAGS) $(PROG20).c $(PROG01).c $(PROG02).c $(PROG04).c $(PROG05).c $(PROG06).c $(PROG07).c $(PROG03).c $(PROG21).c $(PROG22).c -o $(PROG20) $(GTKFLAGS) $(CURLFLAGS) $(USBFLAGS) $(SSLFLAGS)
+	$(CC) $(CFLAGS) $(PROG20).c $(PROG01).c $(PROG02).c $(PROG04).c $(PROG05).c $(PROG03).c $(PROG21).c $(PROG22).c -o $(PROG20) $(GTKFLAGS) $(CURLFLAGS) $(USBFLAGS)
 	sudo ./$(PROG12)
 	makeinfo $(PROG00).texi
 	makeinfo $(PROG00).texi --html --no-split
 	makeinfo $(PROG00).texi --plaintext -o $(PROG00).txt
 	help2man ./$(PROG20) > $(PROG20).1
-	#makeinfo $(PROG20).texi
-	#makeinfo $(PROG20).texi --html --no-split
-	#makeinfo $(PROG20).texi --plaintext -o $(PROG20).txt
 	$(OFFICEVER) --headless --convert-to txt:Text hddsuperclone.odt
 	$(OFFICEVER) --headless --convert-to html:HTML hddsuperclone.odt
 	$(OFFICEVER) --headless --convert-to pdf:writer_pdf_Export hddsuperclone.odt
@@ -90,27 +80,9 @@ $(PROG20) : $(PROG20).c
 $(PROG30) : $(PROG30)$(GTKVER).c
 	xxd -i $(PROG30)$(GTKVER).glade $(PROG30)$(GTKVER)_glade.h
 	$(CC) $(CFLAGS) $(PROG30)$(GTKVER).c -o $(PROG30) $(GTKFLAGS) $(CURLFLAGS)
-	#makeinfo $(PROG30).texi --html --no-split
-	#makeinfo $(PROG30).texi --plaintext -o $(PROG30).txt
 	$(OFFICEVER) --headless --convert-to txt:Text hddscviewer.odt
 	$(OFFICEVER) --headless --convert-to html:HTML hddscviewer.odt
 	$(OFFICEVER) --headless --convert-to pdf:writer_pdf_Export hddscviewer.odt
-
-
-	
-server : $(PROG20).c
-	xxd -i $(PROG00)_help.txt $(PROG00)_help.h
-	xxd -i $(PROG20)_help.txt $(PROG20)_help.h
-	xxd -i $(PROG20)$(GTKVER).glade $(PROG20)$(GTKVER)_glade.h
-	cp -f public/base/$(PROG20)/EULA $(PROG20)_EULA.txt
-	xxd -i $(PROG20)_EULA.txt $(PROG20)_EULA.h
-	xxd -i $(driverdir)$(PROG20)_driver.c $(PROG20)_driver.h
-	$(CC) $(CFLAGS) $(PROG20).c $(PROG01).c $(PROG02).c $(PROG04).c $(PROG05).c $(PROG06).c $(PROG07).c $(PROG03).c $(PROG21).c $(PROG22).c -o $(PROG20) $(GTKFLAGS) $(CURLFLAGS) $(USBFLAGS) $(SSLFLAGS)
-
-installserver:
-	rm -f $(bindir)$(PROG20)
-	cp $(PROG20) $(bindir)$(PROG20)
-
 
 clean:
 	rm -f $(PROG00)
@@ -162,7 +134,6 @@ install:
 	cp $(PROG20) $(bindir)$(PROG20)
 	cp $(PROG20)-uninstall.sh $(bindir)$(PROG20)-uninstall.sh
 	cp $(PROG20).1 $(mandir)$(PROG20).1
-	#cp $(PROG20).info $(infodir)$(PROG20).info
 	rm -f $(bindir)$(PROG30)
 	rm -f $(bindir)$(PROG30)-uninstall.sh
 	cp $(PROG30) $(bindir)$(PROG30)
@@ -220,7 +191,6 @@ installclone:
 	rm -f $(menudir)$(PROG20).desktop
 	rm -f -r $(docdir)$(PROG20)
 	mkdir -p $(bindir)
-	#mkdir -p $(infodir)
 	mkdir -p $(mandir)
 	mkdir -p $(menudir)
 	mkdir -p $(docdir)$(PROG20)
@@ -230,7 +200,6 @@ installclone:
 	cp $(PROG20)-install-depends-red.sh $(bindir)$(PROG20)-install-depends-red.sh
 	cp $(PROG20).1 $(mandir)$(PROG20).1
 	cp -R $(scripts) $(bindir)
-	#cp $(PROG20).info $(infodir)$(PROG20).info
 	cp $(PROG20).txt $(docdir)$(PROG20)
 	cp $(PROG20).html $(docdir)$(PROG20)
 	cp $(PROG00).txt $(docdir)$(PROG20)

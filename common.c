@@ -80,16 +80,11 @@ long long *number_variable_buffer_ccc;
 char **string_variable_pointer_ccc;
 char current_date_ccc[40];
 char current_time_ccc[40];
-unsigned char random_data_ccc[2048];
+
 
 unsigned char sbyte_ccc[16];
 
 unsigned char superbyte_ccc[1024];
-int license_type_ccc;
-int license_version_ccc;
-int license_time_ccc;
-int activation_type_ccc;
-int activation_days_remaining_ccc;
 int check_command_ccc;
 int check_read_ccc;
 int check_write_ccc;
@@ -339,6 +334,7 @@ rebuild_assist_log_data_ccc_type rebuild_assist_log_data_ccc;
 unsigned int total_script_lines_ccc;
 char **script_line_pointer_ccc;
 
+#include "strncpy_wrapper.h"
 
 int message_exit_ccc(char *message)
 {
@@ -649,22 +645,24 @@ int set_table_buffer_ccc(void)
     if (!driver_memory_mapped_ccc)
     {
       free (table_buffer_ccc);
+      table_buffer_ccc = NULL;
     }
-    unsigned int align = pagesize_ccc;
     if (tries != 0)
     {
       padding_buffer_ccc = realloc(padding_buffer_ccc, table_size_ccc*tries);
-      //memset (padding_buffer_ccc, 0, table_size_ccc*tries);   //debug
     }
     if (driver_memory_mapped_ccc)
     {
       table_buffer_ccc = driver_table_buffer_ccc;
     }
-    else if (posix_memalign(&table_buffer_ccc, align, table_size_ccc))
+    else
     {
-      sprintf (tempmessage_ccc, "posix_memalign failed (%s)", strerror(errno));
-      message_now_ccc(tempmessage_ccc);
-      return (-1);
+      table_buffer_ccc = valloc(table_size_ccc);
+      if(!table_buffer_ccc) {
+        sprintf (tempmessage_ccc, "posix_memalign failed (%s)", strerror(errno));
+        message_now_ccc(tempmessage_ccc);
+        return (-1);
+      }
     }
     memset (table_buffer_ccc, 0, table_size_ccc);
     #if UINTPTR_MAX == 0xffffffff
@@ -1231,8 +1229,9 @@ void dump_data_to_filename_binary_ccc(char *filename, unsigned char *data, int s
 
 
 
-void dump_data_to_filename_ccc(char *filename, unsigned char *data, int size, char *description)
+void dump_data_to_filename_ccc(char *filename, void* buffer, int size, char *description)
 {
+  unsigned char *data = buffer;
   FILE *file = fopen(filename, "a");
   time_t mytime;
   mytime = time(NULL);
@@ -1561,5 +1560,4 @@ int rebuild_assist_disable_head_ccc (int head)
 
   return 0;
 }
-
 

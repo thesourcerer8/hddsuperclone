@@ -305,15 +305,9 @@ uint32_t rotr32_ccc(uint32_t value, int shift);
 uint64_t rotl64_ccc(uint64_t value, int shift);
 uint64_t rotr64_ccc(uint64_t value, int shift);
 int get_random_value_ccc(int speed);
-extern unsigned char random_data_ccc[2048];
-//char *driver_buffer_ccc;
 
 extern unsigned char sbyte_ccc[16];
 extern unsigned char superbyte_ccc[1024];
-extern int license_type_ccc;
-extern int license_version_ccc;
-extern int license_time_ccc;
-extern int activation_type_ccc;
 extern int activation_days_remaining_ccc;
 extern int check_command_ccc;
 extern int check_read_ccc;
@@ -696,7 +690,7 @@ int find_command_ccc(char *search_command, unsigned int start_line);
 
 int find_command_plus1_ccc(char *search_command, char *search_command_cap, char *first_item, unsigned int start_line);
 
-char *get_full_line_ccc(unsigned int line_number);
+char *get_full_line_ccc(unsigned int line_number, char* max_line_buffer);
 
 char *get_rest_of_line_ccc(unsigned int line_number);
 
@@ -906,7 +900,7 @@ int set_rebuild_assist_disabled_ccc (void);
 
 void dump_data_to_filename_binary_ccc(char *filename, unsigned char *data, int size, char *description);
 
-void dump_data_to_filename_ccc(char *filename, unsigned char *data, int size, char *description);
+void dump_data_to_filename_ccc(char *filename, void *data, int size, char *description);
 
 void dump_info_to_filename_ccc(char *filename, char *info);
 

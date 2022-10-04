@@ -1602,7 +1602,7 @@ static long process_ioctl(struct file *f, const unsigned cmd, const unsigned lon
         data_major_num = 0;
         goto out;
       }
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,0,0)
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,15,0)
       // Needed for Kernel 5.15
       data_device.gd = __alloc_disk_node(data_queue, NUMA_NO_NODE, &super_bio_compl_lkclass);
 #else

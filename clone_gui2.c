@@ -15,8 +15,7 @@
 #include "common.h"
 #include "hddsuperclone2_glade.h"
 
-
-
+#include "strncpy_wrapper.h"
 
 
 
@@ -617,6 +616,7 @@ void get_data_dump_filename_ccc(void)
 
 
 #ifdef DEBUG
+#ifdef USE_CURL
 static size_t WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp)
 {
   size_t realsize = size * nmemb;
@@ -635,6 +635,7 @@ static size_t WriteMemoryCallback(void *contents, size_t size, size_t nmemb, voi
 
   return realsize;
 }
+#endif
 #endif
 
 
@@ -1016,6 +1017,10 @@ int translate_language_ccc(char *fromlang, char *translang, char *language, char
 char* get_translated_data_ccc(char *url_data)
 {
  #ifdef DEBUG
+  #ifndef USE_CURL
+   return url_data;
+  #else
+
   do_nanosleep_ccc(TRANSLATETIMERALL);  // this is a timer to deal with google translator
   CURL *curl_handle;
   CURLcode res;
@@ -1066,6 +1071,7 @@ char* get_translated_data_ccc(char *url_data)
   curl_global_cleanup();
 
   return chunk.memory;
+  #endif
 #else
   return url_data;
 #endif
@@ -2471,9 +2477,9 @@ void choose_source_ccc(void)
 
 void get_source_from_button_ccc (GtkWidget *w, gpointer data)
 {
+  (void) w;
   new_source_ccc = GPOINTER_TO_INT( data );
   g_print ("selection=%d  \n", new_source_ccc);
-  w = w;
 }
 
 
@@ -2635,9 +2641,9 @@ void choose_destination_ccc(void)
 
 void get_destination_from_button_ccc (GtkWidget *w, gpointer data)
 {
+  (void) w;
   new_destination_ccc = GPOINTER_TO_INT( data );
   g_print ("selection=%d  \n", new_destination_ccc);
-  w = w;
 }
 
 
@@ -2967,6 +2973,7 @@ void stop_display_status_update_timer_ccc (void)
 
 gint display_status_update_action_ccc (gpointer data)
 {
+  (void) data;
   if (fill_mode_ccc || !connected_ccc || running_clone_ccc)
   {
     display_status_timer_running_ccc = 0;
@@ -2975,7 +2982,6 @@ gint display_status_update_action_ccc (gpointer data)
   //g_print ("timer\n");    //debug
   refresh_status_ccc(current_disk_ccc);
   update_gui_status_buttons_ccc();
-  data = data;
   return 1;
 }
 
@@ -5249,11 +5255,11 @@ void update_clone_button_settings_ccc (void)
   gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(clustersize_spin_button_ccc), gtk_adjustment_ccc);
   gtk_spin_button_set_value(GTK_SPIN_BUTTON(clustersize_spin_button_ccc), clone_settings_ccc.cluster_size);
 
-  gtk_adjustment_ccc = (GtkAdjustment *) gtk_adjustment_new (0, 0, 0x7fffffffffffffff, 1, 100, 0);
+  gtk_adjustment_ccc = (GtkAdjustment *) gtk_adjustment_new (0, 0, 9999999999999999.0, 1, 100, 0);
   gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(inputoffset_spin_button_ccc), gtk_adjustment_ccc);
   gtk_spin_button_set_value(GTK_SPIN_BUTTON(inputoffset_spin_button_ccc), clone_settings_ccc.input_offset);
 
-  gtk_adjustment_ccc = (GtkAdjustment *) gtk_adjustment_new (0, -1, 0x7fffffffffffffff, 1, 100, 0);
+  gtk_adjustment_ccc = (GtkAdjustment *) gtk_adjustment_new (0, -1, 9999999999999999.0, 1, 100, 0);
   gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(size_spin_button_ccc), gtk_adjustment_ccc);
   gtk_spin_button_set_value(GTK_SPIN_BUTTON(size_spin_button_ccc), clone_settings_ccc.read_size);
 
@@ -5261,11 +5267,11 @@ void update_clone_button_settings_ccc (void)
   gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(blocksize_spin_button_ccc), gtk_adjustment_ccc);
   gtk_spin_button_set_value(GTK_SPIN_BUTTON(blocksize_spin_button_ccc), clone_settings_ccc.block_size);
 
-  gtk_adjustment_ccc = (GtkAdjustment *) gtk_adjustment_new (0, 0, 0x7fffffffffffffff, 1, 100, 0);
+  gtk_adjustment_ccc = (GtkAdjustment *) gtk_adjustment_new (0, 0, 9999999999999999.0, 1, 100, 0);
   gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(skipsize_spin_button_ccc), gtk_adjustment_ccc);
   gtk_spin_button_set_value(GTK_SPIN_BUTTON(skipsize_spin_button_ccc), clone_settings_ccc.min_skip_size);
 
-  gtk_adjustment_ccc = (GtkAdjustment *) gtk_adjustment_new (0, 0, 0x7fffffffffffffff, 1, 100, 0);
+  gtk_adjustment_ccc = (GtkAdjustment *) gtk_adjustment_new (0, 0, 9999999999999999.0, 1, 100, 0);
   gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(maxskipsize_spin_button_ccc), gtk_adjustment_ccc);
   gtk_spin_button_set_value(GTK_SPIN_BUTTON(maxskipsize_spin_button_ccc), clone_settings_ccc.max_skip_size);
 
@@ -5335,11 +5341,11 @@ void update_advanced_button_settings_ccc (void)
   gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (use_physical_sector_size_for_virtual_checkbutton_ccc), advanced_settings_ccc.use_physical_sector_size_for_virtual );
   gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (use_color_statusbar_checkbutton_ccc), advanced_settings_ccc.color_statusbar );
 
-  gtk_adjustment_ccc = (GtkAdjustment *) gtk_adjustment_new (0, -1, 0x7fffffffffffffff, 1, 100, 0);
+  gtk_adjustment_ccc = (GtkAdjustment *) gtk_adjustment_new (0, -1, 9999999999999999.0, 1, 100, 0);
   gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(output_offset_spinbutton_ccc), gtk_adjustment_ccc);
   gtk_spin_button_set_value(GTK_SPIN_BUTTON(output_offset_spinbutton_ccc), advanced_settings_ccc.output_offset);
 
-  gtk_adjustment_ccc = (GtkAdjustment *) gtk_adjustment_new (0, -1, 0x7fffffffffffffff, 1, 100, 0);
+  gtk_adjustment_ccc = (GtkAdjustment *) gtk_adjustment_new (0, -1, 9999999999999999.0, 1, 100, 0);
   gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(current_position_spinbutton_ccc), gtk_adjustment_ccc);
   gtk_spin_button_set_value(GTK_SPIN_BUTTON(current_position_spinbutton_ccc), advanced_settings_ccc.current_position);
 
@@ -5862,38 +5868,15 @@ void about_ccc (void)
   char temp [1024];
   sprintf (temp, "Copyright (C) %s Scott Dwyer", copyright_year_ccc);
   gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog),temp);
-
-
-#ifdef GODMODE
   strcpy (temp, "License type: PROPRIETARY (GOD MODE) ");
-#else
-  strcpy (temp, "License type: PROPRIETARY ");
-#endif
-  char temp2[256];
-  if (activation_type_ccc == 1)
-  {
-    sprintf (temp2, "(TEMPORARY VERSION)\n%d days remaining\n", activation_days_remaining_ccc);
-    strcat (temp, temp2);
-  }
-  else if (activation_type_ccc == 2)
-  {
-    sprintf (temp2, "(FULL VERSION)\n");
-    strcat (temp, temp2);
-  }
-  else
-  {
-    sprintf (temp2, "(FREE VERSION)\n");
-    strcat (temp, temp2);
-  }
+  sprintf (temp, "(FULL VERSION)\n");
   strcat (temp, "There is NO WARRANTY, to the extent permitted by law.");
-
-
   gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(dialog), temp);
-
   gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(dialog), "www.sdcomputingservice.com");
-
-  gtk_about_dialog_set_license(GTK_ABOUT_DIALOG(dialog), (char*)hddsuperclone_EULA_txt);
-
+  char eula[hddsuperclone_EULA_txt_len + 1];
+  memcpy(eula, hddsuperclone_EULA_txt, hddsuperclone_EULA_txt_len);
+  eula[hddsuperclone_EULA_txt_len] = '\0';
+  gtk_about_dialog_set_license(GTK_ABOUT_DIALOG(dialog), eula);
   gtk_dialog_run(GTK_DIALOG (dialog));
   gtk_widget_destroy(dialog);
 }
@@ -5940,46 +5923,7 @@ void help_text_ccc(void)
 
 void activate_with_file_ccc(void)
 {
-  GtkWidget *dialog;
-  dialog = gtk_file_chooser_dialog_new (curlang_ccc[LANGLOADACTIVATIONFILE],
-                                        GTK_WINDOW(main_window_ccc),
-                                        GTK_FILE_CHOOSER_ACTION_OPEN,
-                                        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                                        GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
-                                        NULL);
-  if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
-  {
-    char *filename;
-    filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-    fprintf (stdout, "PLEASE WAIT: Processing activation  %s\n", filename);
-    int ret2 = 0;
-    int ret = get_and_install_license_ccc(filename, 0);
-    if (ret)
-    {
-      // if it failed then try forcing hard link
-      ret2 = get_and_install_license_ccc(filename, 1);
-    }
-    if (ret2)
-    {
-      strcpy (tempmessage_ccc, curlang_ccc[LANGACTIVATIONFAILED]);
-      message_error_ccc(tempmessage_ccc);
-      sprintf (tempmessage_ccc, "\n0x%08x", ret);
-      message_error_ccc(tempmessage_ccc);
-      sprintf (tempmessage_ccc, "\n0x%08x", ret2);
-      message_error_ccc(tempmessage_ccc);
-      print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
-      clear_error_message_ccc();
-    }
-    else
-    {
-      strcpy (tempmessage_ccc, curlang_ccc[LANGACTIVATIONSUCCESS]);
-      message_error_ccc(tempmessage_ccc);
-      print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGINFO], 0);
-      clear_error_message_ccc();
-    }
-    g_free (filename);
-  }
-  gtk_widget_destroy (dialog);
+  
 }
 
 
@@ -5988,23 +5932,7 @@ void activate_with_file_ccc(void)
 
 void remove_activation_ccc (void)
 {
-  if (open_confirmation_dialog_ccc (curlang_ccc[LANGCONFIRMREMOVEACTIVATION]))
-  {
-    if (delete_license_file_ccc())
-    {
-      strcpy (tempmessage_ccc, curlang_ccc[LANGOPERATIONFAILED]);
-      message_error_ccc(tempmessage_ccc);
-      print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGWARN], 1);
-      clear_error_message_ccc();
-    }
-    else
-    {
-      strcpy (tempmessage_ccc, curlang_ccc[LANGOPERATIONSUCCEEDED]);
-      message_error_ccc(tempmessage_ccc);
-      print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGINFO], 0);
-      clear_error_message_ccc();
-    }
-  }
+  
 }
 
 
@@ -6082,9 +6010,9 @@ void choose_primary_usb_ccc(void)
 
 void get_usb_from_button_ccc (GtkWidget *w, gpointer data)
 {
+  (void) w;
   new_usb_ccc = GPOINTER_TO_INT( data );
   g_print ("selection=%d  \n", new_usb_ccc);
-  w = w;
 }
 
 
