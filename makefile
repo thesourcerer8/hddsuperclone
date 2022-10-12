@@ -41,7 +41,6 @@ menudir= $(DESTDIR)/usr/local/share/applications/
 driverdir= driver/
 
 all:  $(PROG12) $(PROG20) $(PROG30) $(PROG00)
-change:  $(PROG11)
 clone: $(PROG12) $(PROG20)
 viewer: $(PROG30)
 
@@ -118,7 +117,6 @@ clean:
 	rm -f $(PROG30).pdf
 	rm -f $(PROG30).txt
 	rm -f $(PROG30).markdown
-	rm -f $(PROG11)
 	rm -f $(PROG12)
 
 
@@ -138,8 +136,6 @@ install:
 	rm -f $(bindir)$(PROG30)-uninstall.sh
 	cp $(PROG30) $(bindir)$(PROG30)
 	cp $(PROG30)-uninstall.sh $(bindir)$(PROG30)-uninstall.sh
-	rm -f $(bindir)$(PROG11)
-	cp $(PROG11) $(bindir)$(PROG11)
 	rm -f $(bindir)$(PROG12)
 	cp $(PROG12) $(bindir)$(PROG12)
 	rm -f -r $(bindir)$(scripts)
@@ -154,8 +150,6 @@ install:
 
 
 installchange:
-	rm -f $(bindir)$(PROG11)
-	cp $(PROG11) $(bindir)$(PROG11)
 
 
 installtool:
@@ -224,7 +218,6 @@ uninstall:
 	rm -f $(bindir)$(PROG30)
 	rm -f $(bindir)$(PROG30)-uninstall.sh
 	rm -f $(menudir)$(PROG30).desktop
-	rm -f $(bindir)$(PROG11)
 	rm -f $(bindir)$(PROG12)
 	rm -f -r $(bindir)$(scripts)
 	rm -f -r $(docdir)$(PROG00)
