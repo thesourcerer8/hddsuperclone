@@ -22,7 +22,7 @@ The Live-CD is using the following software:
 
 
 Building:
-* sudo apt-get install git make gcc 
+* sudo apt-get install git make gcc libusb-dev
 * git clone github.com/thesourcerer8/hddsuperclone
 * cd hddsuperclone
 * make
