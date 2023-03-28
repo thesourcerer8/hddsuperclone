@@ -5,6 +5,7 @@ This repository continues the work on HDDSuperClone that was originally develope
 You can find the original website and more information here:
 http://www.hddsuperclone.com/
 
+Videos about HDDSuperClone and it's many features: https://www.youtube.com/channel/UCXfHI8OX-KE_1-Tc9aCkQTQ/videos
 
 Other software that is used:
 * SMTP Client: https://github.com/somnisoft/smtp-client
