@@ -5828,21 +5828,8 @@ void about_ccc (void)
   strcpy (temp, "License type: PROPRIETARY ");
 #endif
   char temp2[256];
-  if (activation_type_ccc == 1)
-  {
-    sprintf (temp2, "(TEMPORARY VERSION)\n%d days remaining\n", activation_days_remaining_ccc);
-    strcat (temp, temp2);
-  }
-  else if (activation_type_ccc == 2)
-  {
-    sprintf (temp2, "(FULL VERSION)\n");
-    strcat (temp, temp2);
-  }
-  else
-  {
-    sprintf (temp2, "(FREE VERSION)\n");
-    strcat (temp, temp2);
-  }
+  sprintf (temp2, "(OPENSOURCE VERSION)\n");
+  strcat (temp, temp2);
   strcat (temp, "There is NO WARRANTY, to the extent permitted by law.");
 
 
@@ -6216,23 +6203,3 @@ void map_heads_ccc (void)
   }
 #endif
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
