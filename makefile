@@ -2,7 +2,7 @@
 # add -g to CFLAGS for extra debugging
 # use -k command line option to enable debugging
 
-GTKVER = 2
+GTKVER = 3
 
 OSVER=$(shell lsb_release -sr)
 ifeq ($(OSVER),18.04)
