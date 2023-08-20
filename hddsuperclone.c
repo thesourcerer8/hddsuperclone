@@ -858,6 +858,7 @@ if (domainfile_changed_ccc && domain_file_ccc != NULL)
   free (dposition_ccc);
   free (dsize_ccc);
   free (dstatus_ccc);
+  free (padding_buffer_ccc);
 
   if (enable_data_dump_ccc || enable_dump_identify_on_check_ccc)
   {
