@@ -5837,7 +5837,11 @@ void about_ccc (void)
 
   gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(dialog), "www.sdcomputingservice.com");
 
-  gtk_about_dialog_set_license(GTK_ABOUT_DIALOG(dialog), (char*)hddsuperclone_EULA_txt);
+  char eula[hddsuperclone_EULA_txt_len + 1];
+  memcpy(eula, hddsuperclone_EULA_txt, hddsuperclone_EULA_txt_len);
+  eula[hddsuperclone_EULA_txt_len] = '\0';
+
+  gtk_about_dialog_set_license(GTK_ABOUT_DIALOG(dialog), (char*)eula);
 
   gtk_dialog_run(GTK_DIALOG (dialog));
   gtk_widget_destroy(dialog);
