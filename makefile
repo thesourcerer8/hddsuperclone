@@ -57,7 +57,7 @@ $(PROG00) : $(PROG00).c
 $(PROG12) : $(PROG12).c
 	$(CC) $(CFLAGS) $(PROG12).c -o $(PROG12)
 
-$(PROG20) : $(PROG20).c
+$(PROG20) : $(PROG20).c clone_gui3.c
 	xxd -i $(PROG00)_help.txt $(PROG00)_help.h
 	xxd -i $(PROG20)_help.txt $(PROG20)_help.h
 	xxd -i $(PROG20)$(GTKVER).glade $(PROG20)$(GTKVER)_glade.h
