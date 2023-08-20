@@ -71,7 +71,7 @@ void* ccc_usbbuffer_ccc;
 char usbcbwbuffer_ccc[USBCBW_BUFFER_SIZE];
 char usbcswbuffer_ccc[USBCSW_BUFFER_SIZE];
 unsigned long long ccc_main_usbbuffer_size_ccc;
-void* padding_buffer_ccc;
+void* padding_buffer_ccc=NULL;
 unsigned char identify_buffer_ccc[IDENTIFY_BUFFER_SIZE];
 unsigned char ata_identify_buffer_ccc[IDENTIFY_BUFFER_SIZE];
 unsigned char read_capacity_buffer_ccc[512];
