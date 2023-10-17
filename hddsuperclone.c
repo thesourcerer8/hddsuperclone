@@ -1260,7 +1260,15 @@ void install_driver_ccc (void)
   sprintf (tempdir, "/tmp/hddsctemp%d", process_id_ccc);
   char command[256];
   sprintf (command, "rm -rf %s", tempdir);
-  system(command);
+  if (system(command))
+  {
+    sprintf (tempmessage_ccc, "%s", curlang_ccc[LANGFAILEDTOCLEANDIR]);
+    message_now_ccc(tempmessage_ccc);
+    message_error_ccc(tempmessage_ccc);
+    print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
+    clear_error_message_ccc();
+    //return;
+  }
   mkdir(tempdir, 0777);
   char name[256];
   sprintf (name, "%s/%s%d.c", tempdir, DRIVER_FILE_NAME, process_id_ccc);
@@ -1325,7 +1333,15 @@ void install_driver_ccc (void)
   }
 
   sprintf (command, "rm -rf %s", tempdir);
-  system(command);
+  if (system(command))
+  {
+    sprintf (tempmessage_ccc, "%s", curlang_ccc[LANGFAILEDTOCLEANDIR]);
+    message_now_ccc(tempmessage_ccc);
+    message_error_ccc(tempmessage_ccc);
+    print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
+    clear_error_message_ccc();
+    //return;
+  }
 
   if (map_driver_memory_ccc())
   {
@@ -1400,13 +1416,16 @@ void uninstall_driver_ccc (void)
 
 void fix_driver_memory_driver_ccc (void)
 {
-  system("sync");
-  system("echo 3 > /proc/sys/vm/drop_caches");
-  system("echo 1 > /proc/sys/vm/compact_memory");
-  strcpy (tempmessage_ccc, curlang_ccc[LANGOPERATIONSUCCEEDED]);
-  message_error_ccc(tempmessage_ccc);
-  print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGINFO], 0);
-  clear_error_message_ccc();
+  int res0=system("sync");
+  int res1=system("echo 3 > /proc/sys/vm/drop_caches");
+  int res2=system("echo 1 > /proc/sys/vm/compact_memory");
+  if(res0==0 && res1==0 && res2==0)
+  {
+    strcpy (tempmessage_ccc, curlang_ccc[LANGOPERATIONSUCCEEDED]);
+    message_error_ccc(tempmessage_ccc);
+    print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGINFO], 0);
+    clear_error_message_ccc();
+  }
 }
 
 
@@ -16039,10 +16058,13 @@ void invoke_hba_reset_ccc (void)
 
 void disable_ports_ccc (void)
 {
-  system("cp -n /boot/grub/grub.cfg /boot/grub/grub_hddsc_original_bakup.cfg");
-  system("cp -n /etc/default/grub /etc/default/grub_hddsc_original_bakup");
-  system("cp -f /boot/grub/grub.cfg /boot/grub/grub_hddsc_last_bakup.cfg");
-  system("cp -f /etc/default/grub /etc/default/grub_hddsc_last_bakup");
+  int res0=system("cp -n /boot/grub/grub.cfg /boot/grub/grub_hddsc_original_bakup.cfg");
+  int res1=system("cp -n /etc/default/grub /etc/default/grub_hddsc_original_bakup");
+  int res2=system("cp -f /boot/grub/grub.cfg /boot/grub/grub_hddsc_last_bakup.cfg");
+  int res3=system("cp -f /etc/default/grub /etc/default/grub_hddsc_last_bakup");
+  if(res0 || res1 || res2 || res3)
+  {
+  }
   if (access("/boot/grub/grub_hddsc_original_bakup.cfg", F_OK ) == -1)
   {
     strcpy (tempmessage_ccc, curlang_ccc[LANGNOBACKUPFILE]);
@@ -16285,9 +16307,12 @@ void restore_ports_ccc (void)
 
 void disable_usb_mass_storage_ccc(void)
 {
-  system("cp -n /lib/modules/$(uname -r)/kernel/drivers/usb/storage/usb-storage.ko /root/usb-storage.ko.original");
-  system("cp -f /lib/modules/$(uname -r)/kernel/drivers/usb/storage/usb-storage.ko /root/usb-storage.ko.backup");
-
+  int res0=system("cp -n /lib/modules/$(uname -r)/kernel/drivers/usb/storage/usb-storage.ko /root/usb-storage.ko.original");
+  int res1=system("cp -f /lib/modules/$(uname -r)/kernel/drivers/usb/storage/usb-storage.ko /root/usb-storage.ko.backup");
+  if(res0 || res1)
+  {
+    // Perhaps it went wrong?
+  }
   if (access("/root/usb-storage.ko.original", F_OK ) == -1)
   {
     strcpy (tempmessage_ccc, curlang_ccc[LANGNOBACKUPFILE]);
@@ -16311,7 +16336,11 @@ void disable_usb_mass_storage_ccc(void)
 
   if (open_confirmation_dialog_ccc(curlang_ccc[LANGUSBMASSDISABLE]))
   {
-    system("modprobe -r usb-storage");
+    int res2=system("modprobe -r usb-storage");
+    if(res2)
+    {
+      // perhaps it went wrong?
+    }
     if (system("mv -fv /lib/modules/$(uname -r)/kernel/drivers/usb/storage/usb-storage.ko /root/usb-storage.ko"))
     {
       // error copying
