@@ -39,8 +39,6 @@ struct sg_io_hdr io_hdr;
 bool use_fpdma_ccc;
 bool wait_for_ds_bit_ccc;
 int driver_running_ccc;
-#define MAXLANGLENGTH 2048
-#define LANGCOUNT 427
 char curlang_ccc[LANGCOUNT][MAXLANGLENGTH];
 
 
