@@ -447,22 +447,11 @@ int setup_enlanguage_ccc(void)
   strcpy (enlang_ccc[LANGENABLERETRYCONNECTING], "Retry connecting on failure after relay power cycle");
   strcpy (enlang_ccc[LANGMAXREADRATE], "Max read rate (kB/s)");
   strcpy (enlang_ccc[LANGDONTIDENTIFY], "Do not perform identify when listing source devices");
-  //strcpy (enlang_ccc[], "");
-  //strcpy (enlang_ccc[], "");
+  strcpy (enlang_ccc[LANGFAILEDTOCLEANDIR], "Failed checking of source device size");
   //strcpy (enlang_ccc[], "");
 
 return 0;
 }
-
-
-
-
-
-
-
-
-
-
 
 
 

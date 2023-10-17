@@ -141,7 +141,7 @@ extern bool use_fpdma_ccc;
 extern bool wait_for_ds_bit_ccc;
 extern int driver_running_ccc;
 #define MAXLANGLENGTH 2048
-#define LANGCOUNT 427
+#define LANGCOUNT 428
 #define LANGERROR 4
 #define LANGALLOCATEMEMERR 169
 extern char curlang_ccc[LANGCOUNT][MAXLANGLENGTH];
