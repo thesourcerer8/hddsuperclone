@@ -1619,12 +1619,12 @@ int setmainbuffer_ccc(bool perform_check, unsigned int line_number, char *rest_o
   int current_line = line_number+1;
   char *full_line;
   char input_text[MAX_LINE_LENGTH];
+  input_text[0]='\0';
   if (command_line_ccc)
   {
     fprintf (stdout, "setbuffer> ");
     fflush(stdout);
-    fgets(input_text, sizeof input_text, stdin);
-    full_line = input_text;
+    full_line = fgets(input_text, sizeof input_text, stdin);
   }
   else
   {
@@ -1652,12 +1652,12 @@ int setmainbuffer_ccc(bool perform_check, unsigned int line_number, char *rest_o
       current_line++;
       char *full_line;
       char input_text[MAX_LINE_LENGTH];
+      input_text[0]='\0';
       if (command_line_ccc)
       {
         fprintf (stdout, "setbuffer> ");
         fflush(stdout);
-        fgets(input_text, sizeof input_text, stdin);
-        full_line = input_text;
+        full_line = fgets(input_text, sizeof input_text, stdin);
       }
       else
       {
@@ -5000,12 +5000,12 @@ int setmainscratchpad_ccc(bool perform_check, unsigned int line_number, char *re
   int current_line = line_number+1;
   char *full_line;
   char input_text[MAX_LINE_LENGTH];
+  input_text[0]='\0';
   if (command_line_ccc)
   {
     fprintf (stdout, "setscratchpad> ");
     fflush(stdout);
-    fgets(input_text, sizeof input_text, stdin);
-    full_line = input_text;
+    full_line = fgets(input_text, sizeof input_text, stdin);
   }
   else
   {
@@ -5033,12 +5033,12 @@ int setmainscratchpad_ccc(bool perform_check, unsigned int line_number, char *re
       current_line++;
       char *full_line;
       char input_text[MAX_LINE_LENGTH];
+      input_text[0]='\0';
       if (command_line_ccc)
       {
         fprintf (stdout, "setscratchpad> ");
         fflush(stdout);
-        fgets(input_text, sizeof input_text, stdin);
-        full_line = input_text;
+        full_line = fgets(input_text, sizeof input_text, stdin);
       }
       else
       {
@@ -7019,12 +7019,12 @@ int set_usbbuffer_ccc(bool perform_check, unsigned int line_number, char *rest_o
   int current_line = line_number+1;
   char *full_line;
   char input_text[MAX_LINE_LENGTH];
+  input_text[0]='\0';
   if (command_line_ccc)
   {
     fprintf (stdout, "setusbbuffer> ");
     fflush(stdout);
-    fgets(input_text, sizeof input_text, stdin);
-    full_line = input_text;
+    full_line = fgets(input_text, sizeof input_text, stdin);
   }
   else
   {
@@ -7052,12 +7052,12 @@ int set_usbbuffer_ccc(bool perform_check, unsigned int line_number, char *rest_o
       current_line++;
       char *full_line;
       char input_text[MAX_LINE_LENGTH];
+      input_text[0]='\0';
       if (command_line_ccc)
       {
         fprintf (stdout, "setusbbuffer> ");
         fflush(stdout);
-        fgets(input_text, sizeof input_text, stdin);
-        full_line = input_text;
+        full_line=fgets(input_text, sizeof input_text, stdin);
       }
       else
       {
