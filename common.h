@@ -20,6 +20,7 @@ do                                                 \
 #include <getopt.h>
 #include <stdbool.h>
 #include <string.h>
+#include <bsd/string.h>
 #include <ctype.h>
 #include <stdint.h>
 #include <time.h>
