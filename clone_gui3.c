@@ -1220,7 +1220,7 @@ int print_gui_error_message_ccc(char *message, char *title, int type)
   {
     GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     GtkWidget *dialog;
-    GtkDialogFlags message_type;
+    GtkMessageType message_type;
     if (type)
     {
       message_type = GTK_MESSAGE_WARNING;
