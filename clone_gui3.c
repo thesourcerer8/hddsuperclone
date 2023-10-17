@@ -1159,7 +1159,7 @@ int translate_language_slow_ccc(char *fromlang, char *translang, char *language,
     }
     //fprintf (stdout, "\n*****************************************************\n");
     //fprintf (stdout, "%s\n", new_lang_data);
-    if (strlen(new_lang_data) >= MAXLANGLENGTH)
+    if (strlen(new_lang_data) >= MAXLANGLENGTH-1)
     {
       fprintf (stdout, "Warning: language count %d exceeded max length and was truncated.\n", count);
       failure = 1;
