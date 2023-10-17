@@ -11085,7 +11085,11 @@ int start_driver_ccc (void)
       // install the node
       char command[256];
       sprintf (command, "mknod /dev/%s c %d 0", virtual_driver_name_ccc, ret);
-      system(command);
+      int sysres=system(command);
+      if(sysres)
+      {
+        //Creating the device node likely failed
+      }
     }
 
     // sleep for a few seconds before activating the driver to give it time to settle in
@@ -11159,7 +11163,10 @@ int stop_driver_ccc (void)
       // remove the node
       char command[256];
       sprintf (command, "rm -f /dev/%s", virtual_driver_name_ccc);
-      system(command);
+      if(system(command))
+      {
+        // Removing the device node likely failed
+      }
     }
 
     ret = close(main_driver_fd_ccc);
