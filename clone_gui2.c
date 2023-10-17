@@ -223,11 +223,6 @@ int start_gtk_ccc(int argc, char **argv, char *title, char *version)
   activate_primary_relay_button_main_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "activate_primary_relay_button_main"));
   deactivate_primary_relay_button_main_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "deactivate_primary_relay_button_main"));
   // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
-
-
 
 
   gtk_menu_item_set_label(GTK_MENU_ITEM(filemi_ccc), curlang_ccc[LANGFILE]);
@@ -293,9 +288,6 @@ int start_gtk_ccc(int argc, char **argv, char *title, char *version)
   gtk_menu_item_set_label(GTK_MENU_ITEM(restoreusbmassmi_ccc), curlang_ccc[LANGRESTOREUSBMASS]);
   gtk_button_set_label(GTK_BUTTON(activate_primary_relay_button_main_ccc), curlang_ccc[LANGACTIVATEMAIN]);
   gtk_button_set_label(GTK_BUTTON(deactivate_primary_relay_button_main_ccc), curlang_ccc[LANGDEACTIVATEMAIN]);
-  //gtk_menu_item_set_label(GTK_MENU_ITEM(), curlang_ccc[]);
-  //gtk_menu_item_set_label(GTK_MENU_ITEM(), curlang_ccc[]);
-  //gtk_menu_item_set_label(GTK_MENU_ITEM(), curlang_ccc[]);
   //gtk_menu_item_set_label(GTK_MENU_ITEM(), curlang_ccc[]);
 
   main_label = GTK_WIDGET (gtk_builder_get_object (builder, "main_label"));
@@ -372,10 +364,6 @@ int start_gtk_ccc(int argc, char **argv, char *title, char *version)
   gtk_label_set_text(GTK_LABEL(label_drivermode_ccc), curlang_ccc[LANGDRIVERMODE]);
   gtk_label_set_text(GTK_LABEL(data_drivermode_ccc), curlang_ccc[LANGCLONEMODE]);
   //gtk_label_set_text(GTK_LABEL(), curlang_ccc[]);
-  //gtk_label_set_text(GTK_LABEL(), curlang_ccc[]);
-  //gtk_label_set_text(GTK_LABEL(), curlang_ccc[]);
-
-
 
 
 
