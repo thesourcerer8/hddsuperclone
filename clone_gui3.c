@@ -8,7 +8,7 @@
 #include <config.h>
 #endif
 
-
+#include <string.h>
 #include "clone_gui_common.h"
 #include "clone_gui_common.c"
 #include "clone_gui3.h"
@@ -1360,7 +1360,7 @@ static void file_import_sel_ccc( char *import_file )
     {
       if (firstline)
       {
-        strncpy (found_title, line, MAXLANGLENGTH - 1);
+        strlcpy (found_title, line, MAXLANGLENGTH - 1);
         firstline = 0;
       }
       else
@@ -5859,8 +5859,13 @@ void help_html_ccc(void)
   if (pid == 0)
   {
     // make sure this exits and does not return
-    system("cp -f /usr/local/share/doc/hddsuperclone/hddsuperclone.html /tmp/");
-    system("sudo -E -H -P -u $(who | head -1 | awk '{print $1}') xdg-open /tmp/hddsuperclone.html > /dev/null 2>&1");
+    if(system("cp -f /usr/local/share/doc/hddsuperclone/hddsuperclone.html /tmp/")==0)
+    {
+      if(system("sudo -E -H -P -u $(who | head -1 | awk '{print $1}') xdg-open /tmp/hddsuperclone.html > /dev/null 2>&1"))
+      {
+	exit(0);
+      }
+    }
     exit(0);
   }
 }
@@ -5877,8 +5882,13 @@ void help_text_ccc(void)
   if (pid == 0)
   {
     // make sure this exits and does not return
-    system("cp -f /usr/local/share/doc/hddsuperclone/hddsuperclone.txt /tmp/");
-    system("sudo -E -H -P -u $(who | head -1 | awk '{print $1}') xdg-open /tmp/hddsuperclone.txt > /dev/null 2>&1");
+    if(system("cp -f /usr/local/share/doc/hddsuperclone/hddsuperclone.txt /tmp/")==0)
+    {
+      if(system("sudo -E -H -P -u $(who | head -1 | awk '{print $1}') xdg-open /tmp/hddsuperclone.txt > /dev/null 2>&1"))
+      {
+	exit(0);
+      }
+    }
     exit(0);
   }
 }
