@@ -15922,6 +15922,7 @@ void disable_ports_ccc (void)
 
   int maxlinelen = 65536;
   char line[maxlinelen];
+  memset(line,0,sizeof(line));
   char original_line[maxlinelen];
   char modified_line[maxlinelen];
   memset (original_line, 0, maxlinelen);
@@ -15931,7 +15932,7 @@ void disable_ports_ccc (void)
   while (fgets(line, sizeof line, readfile))
   {
     int n = 0;
-    while (line[n] != '\n' && line[n] != '\0' && n < maxlinelen)
+    while (line[n] != '\0' && line[n] != '\n' && n < maxlinelen)
     {
       if (strncmp(line+n, "GRUB_CMDLINE_LINUX_DEFAULT=\"", 28) == 0)
       {
