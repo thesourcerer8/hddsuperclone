@@ -2235,6 +2235,7 @@ void choose_source_ccc(void)
     gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (choose_source_scrolled_window_ccc), choose_source_vbox_ccc);
 
     GtkWidget *button[MAX_DEVICES];
+    for (i=0;i<MAX_DEVICES;i++) button[i]=NULL;
 
     if (ahci_mode_ccc)
     {
