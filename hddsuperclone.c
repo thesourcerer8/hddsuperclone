@@ -1168,16 +1168,16 @@ void release_devices_ccc (void)
   if (ahci_interrupt_changed_ccc)
   {
     // restore the interrupt settings
-    memcpy(port_virt_addr_ccc + superbyte_ccc[13], &interrupt_backup_ccc, 4);    //potential superbyte
+    memcpy(port_virt_addr_ccc + 0x14, &interrupt_backup_ccc, 4);    //potential superbyte
     ahci_interrupt_changed_ccc = false;
   }
 
   if (table_address_changed_ccc)
   {
-    outb(table_address_backup_ccc[0], bus_base_address_ccc+0+superbyte_ccc[0]);    //potential superbyte
-    outb(table_address_backup_ccc[1], bus_base_address_ccc+1+superbyte_ccc[0]);    //potential superbyte
-    outb(table_address_backup_ccc[2], bus_base_address_ccc+2+superbyte_ccc[0]);    //potential superbyte
-    outb(table_address_backup_ccc[3], bus_base_address_ccc+3+superbyte_ccc[0]);    //potential superbyte
+    outb(table_address_backup_ccc[0], bus_base_address_ccc+4);
+    outb(table_address_backup_ccc[1], bus_base_address_ccc+5);
+    outb(table_address_backup_ccc[2], bus_base_address_ccc+6);
+    outb(table_address_backup_ccc[3], bus_base_address_ccc+7);
     table_address_changed_ccc = false;
   }
 
@@ -1583,7 +1583,6 @@ int initialize_memory_ccc(void)
   real_buffer_size_ccc = MAX_BUFFER_SIZE;
   memory_failed_ccc = true;
   int attempt = 0;
-  if (superbyte_ccc[20] == 0x29)
   {
     if (usb_mode_ccc && !driver_memory_mapped_ccc)
     {
@@ -1603,7 +1602,6 @@ int initialize_memory_ccc(void)
         install_driver_ccc();
       }
 
-      if (superbyte_ccc[27] == 0x1e)
       {
         int multiplier = 1;
         if (driver_installed_ccc && driver_memory_mapped_ccc)
@@ -1677,7 +1675,7 @@ int initialize_memory_ccc(void)
 
       // initialize main buffer
       // create a buffer that is memory aligned with the pagesize
-      if (direct_mode_ccc && superbyte_ccc[21] == 0xa6)
+      if (direct_mode_ccc)
       {
         return_value_ccc = get_buffer_physical_memory_locations_ccc();
         if (return_value_ccc != 0)
@@ -2733,25 +2731,6 @@ int read_log_file_ccc(char *log_file)
   if (found_error)
   {
     total_lines_ccc = 0;
-  }
-
-  if (superbyte_ccc[56] != 0x6b)
-  {
-    // prevent pro settings from being set in config data
-    skip_fast_ccc = false;
-    mark_bad_head_ccc = false;
-    read_bad_head_ccc = true;
-    block_size_ccc = DEFAULT_BLOCK_SIZE;
-    //sector_size_ccc = DEFAULT_SECTOR_SIZE;
-    block_offset_ccc = 0;
-    max_read_rate_ccc = 0;
-    enable_process_chunk_ccc = false;
-    enable_read_twice_ccc = false;
-    enable_retry_connecting_ccc = false;
-    enable_scsi_write_ccc = false;
-    output_sector_size_adjustment_ccc = 0;
-    use_physical_sector_size_for_virtual_ccc = false;
-    use_rebuild_assist_ccc = false;
   }
 
   fclose(readfile);
@@ -4677,10 +4656,7 @@ int set_initial_data_from_log_ccc(int newproject)
     rate_count_ccc = 0;
     output_sector_size_adjustment_ccc = 0;
     min_skip_size_ccc = original_min_skip_size_ccc;
-    if (superbyte_ccc[56] == 0x6b)
-    {
-      enable_process_chunk_ccc = true;
-    }
+    enable_process_chunk_ccc = true;
   }
 
   if (read_size_ccc == -1  || read_size_ccc > (source_total_size_ccc - input_offset_ccc))
@@ -6429,18 +6405,6 @@ int add_to_domain_ccc(long long position, long long size)
 
 int clone_forward_ccc(void)
 {
-  if (!generic_mode_ccc && superbyte_ccc[28] != 0x4f)
-  {
-    if (sector_size_ccc != DEFAULT_SECTOR_SIZE && sector_size_ccc != ADVANCED_SECTOR_SIZE)
-    {
-      sprintf (tempmessage_ccc, "%s: %d", curlang_ccc[LANGUNSUPPORTEDSECTORSIZE], sector_size_ccc);
-      message_error_ccc(tempmessage_ccc);
-      print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
-      clear_error_message_ccc();
-      sector_size_ccc = DEFAULT_SECTOR_SIZE;
-      return INPUT_DEVICE_ERROR_RETURN_CODE;
-    }
-  }
   int ret = 0;
   int rollover = 0;
   //fprintf (stdout, "currentpos= %lld currentstat=%lld\n", current_position_ccc, current_status_ccc);  //debug
@@ -6853,18 +6817,6 @@ int clone_forward_ccc(void)
 
 int clone_reverse_ccc(void)
 {
-  if (!generic_mode_ccc && superbyte_ccc[28] != 0x4f)
-  {
-    if (sector_size_ccc != DEFAULT_SECTOR_SIZE && sector_size_ccc != ADVANCED_SECTOR_SIZE)
-    {
-      sprintf (tempmessage_ccc, "%s: %d", curlang_ccc[LANGUNSUPPORTEDSECTORSIZE], sector_size_ccc);
-      message_error_ccc(tempmessage_ccc);
-      print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
-      clear_error_message_ccc();
-      sector_size_ccc = DEFAULT_SECTOR_SIZE;
-      return INPUT_DEVICE_ERROR_RETURN_CODE;
-    }
-  }
   int ret = 0;
   int rollover = 0;
   //fprintf (stdout, "currentpos= %lld currentstat=%lld\n", current_position_ccc, current_status_ccc);  //debug
@@ -7267,18 +7219,6 @@ int clone_reverse_ccc(void)
 
 int driver_clone_forward_ccc(long long start, long long small_end, long long big_end)
 {
-  if (!generic_mode_ccc && superbyte_ccc[28] != 0x4f)
-  {
-    if (sector_size_ccc != DEFAULT_SECTOR_SIZE && sector_size_ccc != ADVANCED_SECTOR_SIZE)
-    {
-      sprintf (tempmessage_ccc, "%s: %d", curlang_ccc[LANGUNSUPPORTEDSECTORSIZE], sector_size_ccc);
-      message_error_ccc(tempmessage_ccc);
-      print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
-      clear_error_message_ccc();
-      sector_size_ccc = DEFAULT_SECTOR_SIZE;
-      return INPUT_DEVICE_ERROR_RETURN_CODE;
-    }
-  }
   // if the destination is null then reset the log to always read from the source
   int no_destination = 0;
   if (strcmp(disk_2_ccc, "/dev/null") == 0)
@@ -9505,10 +9445,6 @@ int trim_reverse_ccc(int status_type, int status_mask, int new_status_type)
 
 int analyze_drive_ccc(int sections, int extended)
 {
-  if (extended && superbyte_ccc[61] != 0x6c)
-  {
-    return 0;
-  }
   if (drive_locked_ccc)
   {
     strcpy (tempmessage_ccc, curlang_ccc[LANGDRIVELOCKED]);
@@ -11214,19 +11150,91 @@ int process_chunk_ccc(int new_status_type, int retstat, int rsize, int skip_info
     fprintf (debug_file_ccc, "process_chunk newstatus=0x%x  retstat=0x%x  rsize=0x%x  skipinfo=0x%x\n", new_status_type, retstat, rsize, skip_info);
   }
 
-  if (superbyte_ccc[22] == 0xd1)
+  // if it is the first sector of the read then mark it as bad and mark the rest as needed
+  if (ata_lba_ccc == current_position_ccc)
   {
-    // if it is the first sector of the read then mark it as bad and mark the rest as needed
-    if (ata_lba_ccc == current_position_ccc)
+    int ret = change_chunk_status_ccc(current_position_ccc, block_size_ccc, BAD | additional_status | get_timing_byte_ccc(), FULL_MASK);
+    if (ret < 0)
     {
-      int ret = change_chunk_status_ccc(current_position_ccc, block_size_ccc, BAD | additional_status | get_timing_byte_ccc(), FULL_MASK);
+      return ret;
+    }
+    ret = change_chunk_status_ccc(current_position_ccc + block_size_ccc, rsize - block_size_ccc, new_status_type | additional_status | get_timing_byte_ccc(), FULL_MASK);
+    if (ret < 0)
+    {
+      return ret;
+    }
+    if (driver_mode_ccc)
+    {
+      long long kposition = current_position_ccc * (sector_size_ccc / KERNEL_SECTOR_SIZE);
+      long long koffset = kposition - read_ctrl_data_ccc(CTRL_KSECTOR_START);
+      long long ksize = rsize * (sector_size_ccc / KERNEL_SECTOR_SIZE);
+      if (koffset >= 0 && koffset + ksize <= DRIVER_TRANSFER_BUFFER_SIZE / KERNEL_SECTOR_SIZE)
+      {
+        memset(driver_transfer_buffer_address_ccc + (koffset * KERNEL_SECTOR_SIZE), 0, ksize * KERNEL_SECTOR_SIZE);
+        memset(driver_error_bitmap_address_ccc + koffset, 0x80, ksize);
+      }
+    }
+  }
+  else
+  {
+    // if not the first sector of the read then do a new read up to the reported error and recheck
+    int rsize2 = ata_lba_ccc - current_position_ccc;
+    int retstat2 = read_chunk_ccc(current_position_ccc, rsize2);
+    if (stop_signal_ccc)
+    {
+      return STOP_SIGNAL_RETURN_CODE;
+    }
+    // if read was successful then write the chunk, otherwise mark the whole chunk
+    if (!retstat2 && !(ata_status_ccc & 1) && sense_key_ccc < 2 && !usb_read_residue_ccc)
+    {
+      int ret = write_chunk_ccc(current_position_ccc, rsize2);
+      if (ret)
+      {
+        // write error
+        return ret;
+      }
+      ret = change_chunk_status_ccc(current_position_ccc, rsize2, FINISHED | get_timing_byte_ccc(), FULL_MASK);
+      if (ret < 0)
+      {
+        // error changing chunk
+        return ret;
+      }
+      // mark the reported bad sector as bad
+      ret = change_chunk_status_ccc(current_position_ccc + rsize2, block_size_ccc, BAD | additional_status | original_timing_byte, FULL_MASK);
       if (ret < 0)
       {
         return ret;
       }
-      ret = change_chunk_status_ccc(current_position_ccc + block_size_ccc, rsize - block_size_ccc, new_status_type | additional_status | get_timing_byte_ccc(), FULL_MASK);
+      // if there is leftover then mark it as new status type
+      int rsize3 = rsize - rsize2 - block_size_ccc;
+      if (rsize3 > 0)
+      {
+        ret = change_chunk_status_ccc(current_position_ccc + rsize2 + block_size_ccc, rsize3, new_status_type | additional_status | original_timing_byte, FULL_MASK);
+        if (ret < 0)
+        {
+          // error changing chunk
+          return ret;
+        }
+      }
+      if (driver_mode_ccc)
+      {
+        long long kposition = (current_position_ccc + rsize2) * (sector_size_ccc / KERNEL_SECTOR_SIZE);
+        long long koffset = kposition - read_ctrl_data_ccc(CTRL_KSECTOR_START);
+        long long ksize = (rsize3 + block_size_ccc) * (sector_size_ccc / KERNEL_SECTOR_SIZE);
+        if (koffset >= 0 && koffset + ksize <= DRIVER_TRANSFER_BUFFER_SIZE / KERNEL_SECTOR_SIZE)
+        {
+          memset(driver_transfer_buffer_address_ccc + (koffset * KERNEL_SECTOR_SIZE), 0, ksize * KERNEL_SECTOR_SIZE);
+          memset(driver_error_bitmap_address_ccc + koffset, 0x80, ksize);
+        }
+      }
+    }
+    else
+    {
+      // if it failed the second read attempt then process the whole chunk as normal read error
+      int ret = change_chunk_status_ccc(current_position_ccc, rsize, ((rsize > block_size_ccc || (retstat && dont_mark)) ? new_status_type : BAD) | additional_status | original_timing_byte, FULL_MASK);
       if (ret < 0)
       {
+        // error changing chunk
         return ret;
       }
       if (driver_mode_ccc)
@@ -11239,102 +11247,6 @@ int process_chunk_ccc(int new_status_type, int retstat, int rsize, int skip_info
           memset(driver_transfer_buffer_address_ccc + (koffset * KERNEL_SECTOR_SIZE), 0, ksize * KERNEL_SECTOR_SIZE);
           memset(driver_error_bitmap_address_ccc + koffset, 0x80, ksize);
         }
-      }
-    }
-    else
-    {
-      // if not the first sector of the read then do a new read up to the reported error and recheck
-      int rsize2 = ata_lba_ccc - current_position_ccc;
-      int retstat2 = read_chunk_ccc(current_position_ccc, rsize2);
-      if (stop_signal_ccc)
-      {
-        return STOP_SIGNAL_RETURN_CODE;
-      }
-      // if read was successful then write the chunk, otherwise mark the whole chunk
-      if (!retstat2 && !(ata_status_ccc & 1) && sense_key_ccc < 2 && !usb_read_residue_ccc)
-      {
-        int ret = write_chunk_ccc(current_position_ccc, rsize2);
-        if (ret)
-        {
-          // write error
-          return ret;
-        }
-        ret = change_chunk_status_ccc(current_position_ccc, rsize2, FINISHED | get_timing_byte_ccc(), FULL_MASK);
-        if (ret < 0)
-        {
-          // error changing chunk
-          return ret;
-        }
-        // mark the reported bad sector as bad
-        ret = change_chunk_status_ccc(current_position_ccc + rsize2, block_size_ccc, BAD | additional_status | original_timing_byte, FULL_MASK);
-        if (ret < 0)
-        {
-          return ret;
-        }
-        // if there is leftover then mark it as new status type
-        int rsize3 = rsize - rsize2 - block_size_ccc;
-        if (rsize3 > 0)
-        {
-          ret = change_chunk_status_ccc(current_position_ccc + rsize2 + block_size_ccc, rsize3, new_status_type | additional_status | original_timing_byte, FULL_MASK);
-          if (ret < 0)
-          {
-            // error changing chunk
-            return ret;
-          }
-        }
-        if (driver_mode_ccc)
-        {
-          long long kposition = (current_position_ccc + rsize2) * (sector_size_ccc / KERNEL_SECTOR_SIZE);
-          long long koffset = kposition - read_ctrl_data_ccc(CTRL_KSECTOR_START);
-          long long ksize = (rsize3 + block_size_ccc) * (sector_size_ccc / KERNEL_SECTOR_SIZE);
-          if (koffset >= 0 && koffset + ksize <= DRIVER_TRANSFER_BUFFER_SIZE / KERNEL_SECTOR_SIZE)
-          {
-            memset(driver_transfer_buffer_address_ccc + (koffset * KERNEL_SECTOR_SIZE), 0, ksize * KERNEL_SECTOR_SIZE);
-            memset(driver_error_bitmap_address_ccc + koffset, 0x80, ksize);
-          }
-        }
-      }
-      else
-      {
-        // if it failed the second read attempt then process the whole chunk as normal read error
-        int ret = change_chunk_status_ccc(current_position_ccc, rsize, ((rsize > block_size_ccc || (retstat && dont_mark)) ? new_status_type : BAD) | additional_status | original_timing_byte, FULL_MASK);
-        if (ret < 0)
-        {
-          // error changing chunk
-          return ret;
-        }
-        if (driver_mode_ccc)
-        {
-          long long kposition = current_position_ccc * (sector_size_ccc / KERNEL_SECTOR_SIZE);
-          long long koffset = kposition - read_ctrl_data_ccc(CTRL_KSECTOR_START);
-          long long ksize = rsize * (sector_size_ccc / KERNEL_SECTOR_SIZE);
-          if (koffset >= 0 && koffset + ksize <= DRIVER_TRANSFER_BUFFER_SIZE / KERNEL_SECTOR_SIZE)
-          {
-            memset(driver_transfer_buffer_address_ccc + (koffset * KERNEL_SECTOR_SIZE), 0, ksize * KERNEL_SECTOR_SIZE);
-            memset(driver_error_bitmap_address_ccc + koffset, 0x80, ksize);
-          }
-        }
-      }
-    }
-  }
-  else
-  {
-    // process the whole chunk as normal read error for free version
-    int ret = change_chunk_status_ccc(current_position_ccc, rsize, ((rsize > block_size_ccc || (retstat && dont_mark)) ? new_status_type : BAD) | additional_status | original_timing_byte, FULL_MASK);
-    if (ret < 0)
-    {
-      // error changing chunk
-      return ret;
-    }
-    if (driver_mode_ccc)
-    {
-      long long kposition = current_position_ccc * (sector_size_ccc / KERNEL_SECTOR_SIZE);
-      long long koffset = kposition - read_ctrl_data_ccc(CTRL_KSECTOR_START);
-      long long ksize = rsize * (sector_size_ccc / KERNEL_SECTOR_SIZE);
-      if (koffset >= 0 && koffset + ksize <= DRIVER_TRANSFER_BUFFER_SIZE / KERNEL_SECTOR_SIZE)
-      {
-        memset(driver_transfer_buffer_address_ccc + (koffset * KERNEL_SECTOR_SIZE), 0, ksize * KERNEL_SECTOR_SIZE);
-        memset(driver_error_bitmap_address_ccc + koffset, 0x80, ksize);
       }
     }
   }
@@ -12491,23 +12403,16 @@ int process_chs_ccc(long long position)
 
 int check_buffer_limit_ccc(void)
 {
-  if (superbyte_ccc[26] == 0xfa)
+  int multiplier = 1;
+  if (driver_installed_ccc && driver_memory_mapped_ccc)
   {
-    int multiplier = 1;
-    if (driver_installed_ccc && driver_memory_mapped_ccc)
-    {
-      multiplier = 4;
-    }
-    //max_dma_size_ccc = (pagesize_ccc / 8) * pagesize_ccc;
-    max_dma_size_ccc = ((pagesize_ccc * multiplier) / 16) * pagesize_ccc;    // limited to this to more match the ahci limit
-    if (ahci_mode_ccc)
-    {
-      max_dma_size_ccc = ( ((pagesize_ccc * multiplier) - 128) / 16 ) * pagesize_ccc;
-    }
+    multiplier = 4;
   }
-  else
+  //max_dma_size_ccc = (pagesize_ccc / 8) * pagesize_ccc;
+  max_dma_size_ccc = ((pagesize_ccc * multiplier) / 16) * pagesize_ccc;    // limited to this to more match the ahci limit
+  if (ahci_mode_ccc)
   {
-    max_dma_size_ccc = pagesize_ccc;
+    max_dma_size_ccc = ( ((pagesize_ccc * multiplier) - 128) / 16 ) * pagesize_ccc;
   }
   int max_size = 0;
   if (direct_mode_ccc)
@@ -13847,23 +13752,8 @@ int process_source_ccc(void)
     if (!data_read_from_log_ccc)
     {
       sector_size_ccc = bytes_per_sector_ccc;
-      if (superbyte_ccc[23] == 0x5b)
-      {
       block_size_ccc = logical_sectors_per_physical;
       block_offset_ccc = sector_offset;
-      }
-    }
-    if (!generic_mode_ccc && superbyte_ccc[28] != 0x4f)
-    {
-      if (sector_size_ccc != DEFAULT_SECTOR_SIZE && sector_size_ccc != ADVANCED_SECTOR_SIZE)
-      {
-        sprintf (tempmessage_ccc, "%s: %d", curlang_ccc[LANGUNSUPPORTEDSECTORSIZE], sector_size_ccc);
-        message_error_ccc(tempmessage_ccc);
-        print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
-        clear_error_message_ccc();
-        sector_size_ccc = DEFAULT_SECTOR_SIZE;
-        return INPUT_DEVICE_ERROR_RETURN_CODE;
-      }
     }
     //fprintf(stdout, "LBA supported= %d\n", lba_supported_ccc);    //debug
     memcpy(&c, identify_buffer_ccc+256, 1);  // word 128
@@ -14194,23 +14084,8 @@ int process_source_ccc(void)
     if (!data_read_from_log_ccc)
     {
       sector_size_ccc = blocksize;
-      if (superbyte_ccc[23] == 0x5b)
-      {
       block_size_ccc = logical_sectors_per_physical;
       block_offset_ccc = sector_offset;
-      }
-    }
-    if (!generic_mode_ccc && superbyte_ccc[28] != 0x4f)
-    {
-      if (sector_size_ccc != DEFAULT_SECTOR_SIZE && sector_size_ccc != ADVANCED_SECTOR_SIZE)
-      {
-        sprintf (tempmessage_ccc, "%s: %d", curlang_ccc[LANGUNSUPPORTEDSECTORSIZE], sector_size_ccc);
-        message_error_ccc(tempmessage_ccc);
-        print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
-        clear_error_message_ccc();
-        sector_size_ccc = DEFAULT_SECTOR_SIZE;
-        return INPUT_DEVICE_ERROR_RETURN_CODE;
-      }
     }
     if (scsi_check_read_commands_ccc())
     {
@@ -14287,24 +14162,8 @@ int process_source_ccc(void)
     if (!data_read_from_log_ccc)
     {
       sector_size_ccc = bytes_per_log_sec;
-      if (superbyte_ccc[23] == 0x5b)
-      {
       block_size_ccc = blocksize;
       block_offset_ccc = sector_offset;
-      }
-    }
-    if (!generic_mode_ccc && superbyte_ccc[28] != 0x4f)
-    {
-      if (sector_size_ccc != DEFAULT_SECTOR_SIZE && sector_size_ccc != ADVANCED_SECTOR_SIZE)
-      {
-        sprintf (tempmessage_ccc, "%s: %d", curlang_ccc[LANGUNSUPPORTEDSECTORSIZE], sector_size_ccc);
-        message_error_ccc(tempmessage_ccc);
-        print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
-        clear_error_message_ccc();
-        sector_size_ccc = DEFAULT_SECTOR_SIZE;
-        return INPUT_DEVICE_ERROR_RETURN_CODE;
-      }
-      sector_size_ccc = DEFAULT_SECTOR_SIZE;
     }
   }
   else
@@ -15424,34 +15283,14 @@ void set_mode_direct_ccc (void)
 {
   if (!direct_mode_ccc || ahci_mode_ccc)
   {
-    if (superbyte_ccc[24] == 0xb4)
+    clear_mode_ccc();
+    direct_mode_ccc = true;
+    clear_source_ccc();
+    update_mode_ccc();
+    // re-initialize memory after mode change
+    if (initialize_memory_ccc())
     {
-      clear_mode_ccc();
-      direct_mode_ccc = true;
-      clear_source_ccc();
-      update_mode_ccc();
-      // re-initialize memory after mode change
-      if (initialize_memory_ccc())
-      {
-        //set_mode_auto_passthrough_ccc();
-      }
-    }
-    else
-    {
-      clear_mode_ccc();
-      sprintf (tempmessage_ccc, "%s",  curlang_ccc[LANGDIRECTPIO]);
-      message_error_ccc(tempmessage_ccc);
-      //sprintf (tempmessage_ccc, "%s",  curlang_ccc[LANGDIRECTLIMITED]);
-      //message_error_ccc(tempmessage_ccc);
-      print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGINFO], 0);
-      clear_error_message_ccc();
-      limit_recovery_ccc = false;
-      direct_mode_ccc = true;
-      pio_mode_ccc = true;
-      clear_source_ccc();
-      update_mode_ccc();
-      // re-initialize memory after mode change
-      initialize_memory_ccc();
+      //set_mode_auto_passthrough_ccc();
     }
   }
 }
@@ -15462,18 +15301,15 @@ void set_mode_ahci_ccc (void)
 {
   if (!ahci_mode_ccc)
   {
-    if (superbyte_ccc[25] == 0x71)
+    clear_mode_ccc();
+    direct_mode_ccc = true;
+    ahci_mode_ccc = true;
+    clear_source_ccc();
+    update_mode_ccc();
+    // re-initialize memory after mode change
+    if (initialize_memory_ccc())
     {
-      clear_mode_ccc();
-      direct_mode_ccc = true;
-      ahci_mode_ccc = true;
-      clear_source_ccc();
-      update_mode_ccc();
-      // re-initialize memory after mode change
-      if (initialize_memory_ccc())
-      {
-        //set_mode_auto_passthrough_ccc();
-      }
+      //set_mode_auto_passthrough_ccc();
     }
   }
 }
@@ -15486,16 +15322,13 @@ void set_mode_usb_ccc (void)
 {
   if (!usb_mode_ccc || usb_allow_ata_ccc)
   {
-    if (superbyte_ccc[25] == 0x71)
-    {
-      clear_mode_ccc();
-      usb_mode_ccc = true;
-      usb_allow_ata_ccc = false;
-      clear_source_ccc();
-      update_mode_ccc();
-      // re-initialize memory after mode change
-      initialize_memory_ccc();
-    }
+    clear_mode_ccc();
+    usb_mode_ccc = true;
+    usb_allow_ata_ccc = false;
+    clear_source_ccc();
+    update_mode_ccc();
+    // re-initialize memory after mode change
+    initialize_memory_ccc();
   }
 }
 
@@ -15507,16 +15340,13 @@ void set_mode_usb_ata_ccc (void)
 {
   if (!usb_mode_ccc || !usb_allow_ata_ccc)
   {
-    if (superbyte_ccc[25] == 0x71)
-    {
-      clear_mode_ccc();
-      usb_mode_ccc = true;
-      usb_allow_ata_ccc = true;
-      clear_source_ccc();
-      update_mode_ccc();
-      // re-initialize memory after mode change
-      initialize_memory_ccc();
-    }
+    clear_mode_ccc();
+    usb_mode_ccc = true;
+    usb_allow_ata_ccc = true;
+    clear_source_ccc();
+    update_mode_ccc();
+    // re-initialize memory after mode change
+    initialize_memory_ccc();
   }
 }
 
