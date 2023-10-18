@@ -5906,7 +5906,7 @@ int insert_domain_line_ccc(int line, long long position, long long size, long lo
     }
   }
   int i;
-  for (i = domain_lines_ccc; i > line; i--)
+  for (i = domain_lines_ccc; i > line && i > 0; i--)
   {
     dposition_ccc[i] = dposition_ccc[i-1];
     dsize_ccc[i] = dsize_ccc[i-1];
@@ -10814,6 +10814,7 @@ int write_chunk_ccc(long long position, int size)
     ccc_main_buffer_size_ccc = main_buffer_size_bak;
     memcpy (ccc_buffer_ccc, temp_buffer, main_buffer_size_bak);    // this is needed if there are possible operations after the write
     free(temp_buffer);
+    temp_buffer=NULL;
   }
 
   if (driver_mode_ccc)
@@ -10834,6 +10835,7 @@ int write_chunk_ccc(long long position, int size)
     }
   }
 
+  if(temp_buffer!=NULL) free(temp_buffer);
   return 0;
 }
 
