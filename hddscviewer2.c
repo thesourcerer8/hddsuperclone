@@ -2821,7 +2821,7 @@ int insert_domain_line(int line, long long position, long long size, long long s
     }
   }
   int i;
-  for (i = domain_lines; i > line; i--)
+  for (i = domain_lines; i > line && i>0; i--)
   {
     dposition[i] = dposition[i-1];
     dsize[i] = dsize[i-1];
