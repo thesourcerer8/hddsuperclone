@@ -414,29 +414,6 @@ int start_gtk_ccc(int argc, char **argv, char *title, char *version)
 
   // set intial button states
   set_disconnected_ccc();
-  if (superbyte_ccc[52] != 0xf0)
-  {
-    gtk_widget_set_sensitive (GTK_WIDGET(ahcimi_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(usbmi_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(usbatami_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(agressive_driver_checkbutton_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(driver_mode1_button_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(driver_mode2_button_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(driver_mode3_button_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(driver_mode4_button_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(driver_mode5_button_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(installdrivermi_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(uninstalldrivermi_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(driveronlymi_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(disableportsmi_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(restoreportsmi_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(analyze_long_button_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(primaryrelaymi_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(chooseprimaryrelaymi_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(disableusbmassmi_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(restoreusbmassmi_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(adddomainmi_ccc), FALSE);
-  }
 
   set_mode_auto_passthrough_ccc();
 
@@ -2001,22 +1978,19 @@ static void load_domain_file_ccc( char *log_file )
 // Get the selected domain and load it
 static void add_domain_file_ccc( char *log_file )
 {
-  if (superbyte_ccc[63] == 0x25)
-  {
-    gtk_label_set_text(GTK_LABEL(main_label), "");
-    //g_print ("%s\n", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
-    printf ("%s\n",  log_file);
+  gtk_label_set_text(GTK_LABEL(main_label), "");
+  //g_print ("%s\n", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
+  printf ("%s\n",  log_file);
 
-    int ret = read_domain_add_file_ccc(log_file);
-    if (ret < 0)
-    {
-      strcpy (tempmessage_ccc, curlang_ccc[LANGLOGLOADERR]);
-      message_error_ccc(tempmessage_ccc);
-      print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
-      clear_error_message_ccc();
-    }
-    update_display_ccc(0);
+  int ret = read_domain_add_file_ccc(log_file);
+  if (ret < 0)
+  {
+    strcpy (tempmessage_ccc, curlang_ccc[LANGLOGLOADERR]);
+    message_error_ccc(tempmessage_ccc);
+    print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
+    clear_error_message_ccc();
   }
+  update_display_ccc(0);
 }
 
 
@@ -2239,28 +2213,25 @@ void choose_source_ccc(void)
 
     if (ahci_mode_ccc)
     {
-      if (superbyte_ccc[53] == 0x8f)
+      int i;
+      for (i = 0; i < device_count_ccc; i++)
       {
-        int i;
-        for (i = 0; i < device_count_ccc; i++)
+        char button_label[MAX_BUTTON_LABEL_SIZE] = "";
+        if (verbose_ccc & DEBUG6)
         {
-          char button_label[MAX_BUTTON_LABEL_SIZE] = "";
-          if (verbose_ccc & DEBUG6)
-          {
-            sprintf (button_label, "%s %s %s %s %llx %d %llx (%lld) %s %s", device_driver_ccc[i], device_bus_ccc[i], device_reference_ccc[i], device_name_ccc[i], hba_address_ccc[i], port_number_ccc[i], port_address_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
-          }
-          else if (verbose_ccc & DEBUG5)
-          {
-            sprintf (button_label, "%s %s %llx %d %llx (%lld) %s %s", device_reference_ccc[i], device_name_ccc[i], hba_address_ccc[i], port_number_ccc[i], port_address_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
-          }
-          else
-          {
-            sprintf (button_label, "%s %s (%lld) %s %s", device_reference_ccc[i], device_name_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
-          }
-          button[i] = gtk_button_new_with_label(button_label);
-          gtk_button_set_alignment(GTK_BUTTON(button[i]), 0, .5);
-          g_signal_connect(button[i], "clicked", G_CALLBACK(get_source_from_button_ccc), GINT_TO_POINTER(i) );
+          sprintf (button_label, "%s %s %s %s %llx %d %llx (%lld) %s %s", device_driver_ccc[i], device_bus_ccc[i], device_reference_ccc[i], device_name_ccc[i], hba_address_ccc[i], port_number_ccc[i], port_address_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
         }
+        else if (verbose_ccc & DEBUG5)
+        {
+          sprintf (button_label, "%s %s %llx %d %llx (%lld) %s %s", device_reference_ccc[i], device_name_ccc[i], hba_address_ccc[i], port_number_ccc[i], port_address_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
+        }
+        else
+        {
+          sprintf (button_label, "%s %s (%lld) %s %s", device_reference_ccc[i], device_name_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
+        }
+        button[i] = gtk_button_new_with_label(button_label);
+        gtk_button_set_alignment(GTK_BUTTON(button[i]), 0, .5);
+        g_signal_connect(button[i], "clicked", G_CALLBACK(get_source_from_button_ccc), GINT_TO_POINTER(i) );
       }
     }
     else if (direct_mode_ccc)
@@ -3014,10 +2985,7 @@ void set_connected_ccc (void)
   gtk_widget_set_sensitive (GTK_WIDGET(clone_mode_button_ccc), driver_only_ccc ? FALSE : TRUE);
   gtk_widget_set_sensitive (GTK_WIDGET(analyze_button_ccc), TRUE);
   gtk_widget_set_sensitive (GTK_WIDGET(smart_button_ccc), TRUE);
-  if (superbyte_ccc[52] == 0xf0)
-  {
-    gtk_widget_set_sensitive (GTK_WIDGET(analyze_long_button_ccc), TRUE);
-  }
+  gtk_widget_set_sensitive (GTK_WIDGET(analyze_long_button_ccc), TRUE);
   if (driver_installed_ccc)
   {
     set_driver_mode_button_status_ccc(TRUE);
@@ -3041,11 +3009,8 @@ void set_disconnected_ccc (void)
   gtk_widget_set_sensitive (GTK_WIDGET(smart_button_ccc), FALSE);
   gtk_widget_set_sensitive (GTK_WIDGET(modemi_ccc), TRUE);
   gtk_widget_set_sensitive (GTK_WIDGET(drivesmi_ccc), TRUE);
-  if (superbyte_ccc[52] == 0xf0)
-  {
-    gtk_widget_set_sensitive (GTK_WIDGET(primaryrelaymi_ccc), TRUE);
-    gtk_widget_set_sensitive (GTK_WIDGET(chooseprimaryrelaymi_ccc), TRUE);
-  }
+  gtk_widget_set_sensitive (GTK_WIDGET(primaryrelaymi_ccc), TRUE);
+  gtk_widget_set_sensitive (GTK_WIDGET(chooseprimaryrelaymi_ccc), TRUE);
   gtk_widget_set_sensitive (GTK_WIDGET(soft_reset_button_ccc), FALSE);
   gtk_widget_set_sensitive (GTK_WIDGET(hard_reset_button_ccc), FALSE);
   gtk_widget_set_sensitive (GTK_WIDGET(clone_mode_button_ccc), FALSE);
@@ -3335,11 +3300,8 @@ void start_cloning_ccc (void)
   gtk_widget_set_sensitive (GTK_WIDGET(hard_reset_button_ccc), TRUE);
   gtk_widget_set_sensitive (GTK_WIDGET(analyze_button_ccc), TRUE);
   gtk_widget_set_sensitive (GTK_WIDGET(smart_button_ccc), TRUE);
-  if (superbyte_ccc[52] == 0xf0)
-  {
-    gtk_widget_set_sensitive (GTK_WIDGET(analyze_long_button_ccc), TRUE);
-    set_driver_mode_button_status_ccc(TRUE);
-  }
+  gtk_widget_set_sensitive (GTK_WIDGET(analyze_long_button_ccc), TRUE);
+  set_driver_mode_button_status_ccc(TRUE);
 
   if (ret && ret != STOP_SIGNAL_RETURN_CODE)
   {
@@ -3638,10 +3600,7 @@ void start_analyzing_ccc (void)
   gtk_widget_set_sensitive (GTK_WIDGET(hard_reset_button_ccc), TRUE);
   gtk_widget_set_sensitive (GTK_WIDGET(smart_button_ccc), TRUE);
   gtk_widget_set_sensitive (GTK_WIDGET(analyze_button_ccc), TRUE);
-  if (superbyte_ccc[52] == 0xf0)
-  {
-    gtk_widget_set_sensitive (GTK_WIDGET(analyze_long_button_ccc), TRUE);
-  }
+  gtk_widget_set_sensitive (GTK_WIDGET(analyze_long_button_ccc), TRUE);
   if (driver_installed_ccc)
   {
     set_driver_mode_button_status_ccc(TRUE);
@@ -3859,20 +3818,6 @@ void open_clone_settings_dialog_ccc (void)
   //gtk_button_set_label(GTK_BUTTON(), curlang_ccc[]);
   //gtk_label_set_text(GTK_LABEL(), curlang_ccc[]);
 
-  if (superbyte_ccc[54] != 0xc6)
-  {
-    gtk_widget_set_sensitive (GTK_WIDGET(markbad_check_button_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(readbad_check_button_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(rebuild_assist_check_button_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(skipfast_check_button_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(blocksize_spin_button_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(alignment_spinbutton_ccc), FALSE);
-    if (!generic_mode_ccc)
-    {
-      gtk_widget_set_sensitive (GTK_WIDGET(sectorsize_spinbutton_ccc), FALSE);
-    }
-  }
-
   g_signal_connect(G_OBJECT(phase1_check_button_ccc), "toggled", G_CALLBACK(set_state_from_button_ccc), GINT_TO_POINTER(BUTTONID_PHASE1));
   g_signal_connect(G_OBJECT(phase2_check_button_ccc), "toggled", G_CALLBACK(set_state_from_button_ccc), GINT_TO_POINTER(BUTTONID_PHASE2));
   g_signal_connect(G_OBJECT(phase3_check_button_ccc), "toggled", G_CALLBACK(set_state_from_button_ccc), GINT_TO_POINTER(BUTTONID_PHASE3));
@@ -4046,31 +3991,7 @@ void open_advanced_settings_dialog_ccc (void)
   gtk_entry_set_text (GTK_ENTRY (virtual_disk_device_name_text_ccc), advanced_settings_ccc.virtual_disk_device_name);
   update_advanced_button_settings_ccc();
 
-  if (direct_mode_ccc && superbyte_ccc[55] == 0x46)
-  {
-    gtk_widget_set_sensitive (GTK_WIDGET(pio_mode_checkbutton_ccc), TRUE);
-  }
-  else
-  {
-    gtk_widget_set_sensitive (GTK_WIDGET(pio_mode_checkbutton_ccc), FALSE);
-  }
-
-  if (superbyte_ccc[56] != 0x6b)
-  {
-    gtk_widget_set_sensitive (GTK_WIDGET(enable_rebuild_assist_checkbutton_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(enable_process_chunk_checkbutton_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(enable_read_twice_checkbutton_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(enable_scsi_write_checkbutton_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(enable_output_sector_size_checkbutton_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(driver_return_error_radio_button_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(driver_return_zeros_radio_button_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(driver_return_marked_radio_button_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(virtual_disk_device_name_text_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(driver_minimum_cluster_size_spinbutton_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(driver_io_scsi_only_checkbutton_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(use_physical_sector_size_for_virtual_checkbutton_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(primary_relay_on_error_radio_button_ccc), FALSE);
-  }
+  gtk_widget_set_sensitive (GTK_WIDGET(pio_mode_checkbutton_ccc), TRUE);
 
   gtk_window_set_title(GTK_WINDOW(dialog), curlang_ccc[LANGADVANCED]);
 
@@ -4235,10 +4156,6 @@ void open_timer_settings_dialog_ccc (void)
   if (!ahci_mode_ccc && !usb_mode_ccc)
   {
     gtk_widget_set_sensitive (GTK_WIDGET(hard_reset_time_spinbutton_ccc), FALSE);
-  }
-  if (superbyte_ccc[56] != 0x6b)
-  {
-    gtk_widget_set_sensitive (GTK_WIDGET(primary_relay_power_cycle_radio_button_ccc), FALSE);
   }
 
   gtk_window_set_title(GTK_WINDOW(dialog), curlang_ccc[LANGTIMERS]);

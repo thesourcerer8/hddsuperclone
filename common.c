@@ -459,18 +459,15 @@ int set_main_buffer_ccc(void)
     message_now_ccc(tempmessage_ccc);
     return (-1);
   }
-  if (superbyte_ccc[29] == 0x60)
+  if (ahci_mode_ccc && ccc_main_buffer_size_ccc > max_dma_size_ccc)
   {
-    if (ahci_mode_ccc && ccc_main_buffer_size_ccc > max_dma_size_ccc)
-    {
-      sprintf (tempmessage_ccc, "ERROR: Maximum AHCI buffer size (%lld) exceeded.\n", max_dma_size_ccc);
-      message_now_ccc(tempmessage_ccc);
-      return (-1);
-    }
-    if (direct_mode_ccc)
-    {
-      create_dma_table_ccc();
-    }
+    sprintf (tempmessage_ccc, "ERROR: Maximum AHCI buffer size (%lld) exceeded.\n", max_dma_size_ccc);
+    message_now_ccc(tempmessage_ccc);
+    return (-1);
+  }
+  if (direct_mode_ccc)
+  {
+    create_dma_table_ccc();
   }
   return (0);
 }
@@ -502,7 +499,7 @@ int create_dma_table_ccc(void)
         table_entry_count_ccc = max_entries;
         break;
       }
-      int n = (i*16) + superbyte_ccc[15];    //potential superbyte
+      int n = (i*16) + superbyte_ccc[15];
       uint32_t dword = buffer_physical_address_ccc[i];
       memcpy(table_buffer_ccc+n, &dword, 4);
       memset(table_buffer_ccc+n+4, 0, 8);
@@ -599,11 +596,11 @@ int create_dma_table_ccc(void)
       // if last page then mark it
       if (i == page_count - 1)
       {
-        c = superbyte_ccc[15];    //potential superbyte
+        c = superbyte_ccc[15];
       }
       else
       {
-        c = superbyte_ccc[11];    //potential superbyte
+        c = superbyte_ccc[11];
       }
       memcpy(table_buffer_ccc+7+(i*8), &c, 1);
       #ifdef DEBUG
