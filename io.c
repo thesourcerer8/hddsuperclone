@@ -2702,7 +2702,6 @@ int do_ata_dma_write_ccc(int command_type)
     set_number_variable_value_ccc("$data_transferred", 0);
     int fail_level = 0x0;
     int success = 1;
-    unsigned char c;
 
     // set device, this is important to do first to make sure the proper drive is selected
     set_device_ccc(reg_base_address_ccc, device_select_base_ccc);
