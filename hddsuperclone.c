@@ -10413,21 +10413,21 @@ long long set_additional_status_ccc(int retstat, int skip_info)
   long long additional_status = 0;
   if ( direct_mode_ccc || ((scsi_passthrough_ccc || ata_passthrough_ccc || usb_mode_ccc) && ata_return_valid_ccc && ata_identify_success_ccc) )
   {
-    additional_status = ((long long)retstat << 16) | ((long long)skip_info << 8) |  ((long long)ata_error_ccc << 48) | ((long long)ata_status_ccc << 40);
+    additional_status = ((unsigned long long)retstat << 16) | ((unsigned long long)skip_info << 8) |  ((unsigned long long)ata_error_ccc << 48) | ((unsigned long long)ata_status_ccc << 40);
   }
   else
   {
-    additional_status = ((long long)retstat << 16) | ((long long)skip_info << 8) | ((long long)sense_key_ccc << 56) | ((long long)asc_ccc << 48) | ((long long)ascq_ccc << 40);
+    additional_status = ((unsigned long long)retstat << 16) | ((unsigned long long)skip_info << 8) | ((unsigned long long)sense_key_ccc << 56) | ((unsigned long long)asc_ccc << 48) | ((unsigned long long)ascq_ccc << 40);
   }
   return additional_status;
 
   if (scsi_passthrough_ccc || usb_mode_ccc || (ata_passthrough_ccc && !ata_return_valid_ccc) )
   {
-    additional_status = ((long long)retstat << 16) | ((long long)skip_info << 8) | ((long long)sense_key_ccc << 56) | ((long long)asc_ccc << 48) | ((long long)ascq_ccc << 40);
+    additional_status = ((unsigned long long)retstat << 16) | ((unsigned long long)skip_info << 8) | ((unsigned long long)sense_key_ccc << 56) | ((unsigned long long)asc_ccc << 48) | ((unsigned long long)ascq_ccc << 40);
   }
   else
   {
-    additional_status = ((long long)retstat << 16) | ((long long)skip_info << 8) |  ((long long)ata_error_ccc << 48) | ((long long)ata_status_ccc << 40);
+    additional_status = ((unsigned long long)retstat << 16) | ((unsigned long long)skip_info << 8) |  ((unsigned long long)ata_error_ccc << 48) | ((unsigned long long)ata_status_ccc << 40);
   }
   return additional_status;
 }
