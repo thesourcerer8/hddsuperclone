@@ -4560,11 +4560,13 @@ int write_scratchpad_ccc(bool perform_check, unsigned int line_number, char *res
     if (fseeko(writefile, file_offset, SEEK_SET) != 0 )
     {
       fprintf(stderr, "Error seeking \'%s\' (%s).\n", file_name, strerror(errno));
+      fclose(writefile);
       return (-1);
     }
     if (fwrite(ccc_scratchpad_ccc + buffer_offset, 1, size, writefile) != size )
     {
       fprintf(stderr, "Error writing to \'%s\' (%s).\n", file_name, strerror(errno));
+      fclose(writefile);
       return (-1);
     }
 
@@ -4712,6 +4714,7 @@ int read_scratchpad_ccc(bool perform_check, unsigned int line_number, char *rest
     if (fseeko(readfile, 0, SEEK_END) != 0 )
     {
       fprintf(stderr, "Error seeking %s (%s).\n", file_name, strerror(errno));
+      fclose(readfile);
       return (-1);
     }
     long long file_size = ftello(readfile);
@@ -4726,11 +4729,13 @@ int read_scratchpad_ccc(bool perform_check, unsigned int line_number, char *rest
     if (fseeko(readfile, file_offset, SEEK_SET) != 0 )
     {
       fprintf(stderr, "Error seeking \'%s\' (%s).\n", file_name, strerror(errno));
+      fclose(readfile);
       return (-1);
     }
     if (fread(ccc_scratchpad_ccc + buffer_offset, 1, size, readfile) != size )
     {
       fprintf(stderr, "Error reading from \'%s\' (%s).\n", file_name, strerror(errno));
+      fclose(readfile);
       return (-1);
     }
 
@@ -6690,11 +6695,13 @@ int write_usbbuffer_ccc(bool perform_check, unsigned int line_number, char *rest
     if (fseeko(writefile, file_offset, SEEK_SET) != 0 )
     {
       fprintf(stderr, "Error seeking \'%s\' (%s).\n", file_name, strerror(errno));
+      fclose(writefile);
       return (-1);
     }
     if (fwrite(ccc_usbbuffer_ccc + buffer_offset, 1, size, writefile) != size )
     {
       fprintf(stderr, "Error writing to \'%s\' (%s).\n", file_name, strerror(errno));
+      fclose(writefile);
       return (-1);
     }
 
@@ -6836,6 +6843,7 @@ int read_usbbuffer_ccc(bool perform_check, unsigned int line_number, char *rest_
     if (fseeko(readfile, 0, SEEK_END) != 0 )
     {
       fprintf(stderr, "Error seeking %s (%s).\n", file_name, strerror(errno));
+      fclose(readfile);
       return (-1);
     }
     long long file_size = ftello(readfile);
@@ -6850,11 +6858,13 @@ int read_usbbuffer_ccc(bool perform_check, unsigned int line_number, char *rest_
     if (fseeko(readfile, file_offset, SEEK_SET) != 0 )
     {
       fprintf(stderr, "Error seeking \'%s\' (%s).\n", file_name, strerror(errno));
+      fclose(readfile);
       return (-1);
     }
     if (fread(ccc_usbbuffer_ccc + buffer_offset, 1, size, readfile) != size )
     {
       fprintf(stderr, "Error reading from \'%s\' (%s).\n", file_name, strerror(errno));
+      fclose(readfile);
       return (-1);
     }
 
