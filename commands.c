@@ -1619,12 +1619,12 @@ int setmainbuffer_ccc(bool perform_check, unsigned int line_number, char *rest_o
   int current_line = line_number+1;
   char *full_line;
   char input_text[MAX_LINE_LENGTH];
-  input_text[0]='\0';
+  memset(input_text,0,sizeof(input_text));
   if (command_line_ccc)
   {
     fprintf (stdout, "setbuffer> ");
     fflush(stdout);
-    full_line = fgets(input_text, sizeof input_text, stdin);
+    full_line = fgets(input_text,sizeof(input_text)-1, stdin);
   }
   else
   {
