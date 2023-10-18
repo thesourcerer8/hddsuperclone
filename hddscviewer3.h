@@ -415,7 +415,7 @@ int clear_error_message(void);
 
 int read_log_file(char *log_file);
 
-gint reload_file(void);
+gint reload_file(gpointer user_data);
 
 void set_autoupdate_timer(GtkWidget *w, gpointer data);
 
