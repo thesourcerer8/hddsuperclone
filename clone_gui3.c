@@ -2294,7 +2294,6 @@ void choose_source_ccc(void)
     }
 
 
-    int i;
     if (usb_mode_ccc)
     {
       for (i = 0; i < usb_device_count_ccc; i++)
