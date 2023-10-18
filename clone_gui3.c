@@ -2188,6 +2188,7 @@ void choose_source_ccc(void)
   }
   else
   {
+    int i;
     if (memory_used_ccc)
     {
       initialize_memory_ccc();
@@ -2213,7 +2214,6 @@ void choose_source_ccc(void)
 
     if (ahci_mode_ccc)
     {
-      int i;
       for (i = 0; i < device_count_ccc; i++)
       {
         char button_label[MAX_BUTTON_LABEL_SIZE] = "";
