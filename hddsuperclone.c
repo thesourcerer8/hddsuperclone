@@ -16849,6 +16849,7 @@ int rebuild_assist_map_heads_ccc (void)
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
+      fclose(headmap_debug_file);
       return -1;
     }
   }
