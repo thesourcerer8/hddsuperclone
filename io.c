@@ -3702,6 +3702,7 @@ int hba_reset_ccc(void)
         if(hba_mem_dev_ccc == -1)
         {
           fprintf (stderr, "unable to open /dev/mem\n");
+	  fclose(hba_debug_reset_file);
           return (-1);
         }
         const uint32_t hba_mem_address = hba_reset_address_ccc;
@@ -3722,6 +3723,8 @@ int hba_reset_ccc(void)
         if(hba_mem_pointer_ccc == MAP_FAILED)
         {
           fprintf (stderr, "HBA mem map failed\n");
+	  fclose(hba_debug_reset_file);
+	  close(hba_mem_dev_ccc);
           return (-1);
         }
         hba_virt_addr_ccc = (hba_mem_pointer_ccc + (hba_mem_address & page_mask));
@@ -3741,6 +3744,7 @@ int hba_reset_ccc(void)
             if(port_mem_dev_ccc == -1)
             {
               fprintf (stderr, "unable to open /dev/mem\n");
+	      fclose(hba_debug_reset_file);
               return (-1);
             }
             const uint32_t port_mem_address = (hba_reset_address_ccc + 0x100) + (0x80 * x);
@@ -3761,6 +3765,8 @@ int hba_reset_ccc(void)
             if(port_mem_pointer_ccc == MAP_FAILED)
             {
               fprintf (stderr, "Port mem map failed\n");
+	      fclose(hba_debug_reset_file);
+              close(port_mem_dev_ccc);
               return (-1);
             }
             port_virt_addr_ccc = (port_mem_pointer_ccc + (port_mem_address & page_mask));
