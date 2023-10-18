@@ -2602,7 +2602,7 @@ int add_to_domain(long long position, long long size)
   {
     //fprintf (debug_file,"while start position=%06llx  size=0x%06llx\n", position, size);
     block = find_domain_block(position);
-    if (block == -1)
+    if (block < 0)
     {
       strcpy (tempmessage, curlang[LANGDOMAINBLOCKNOTFOUND]);
       message_error(tempmessage);
@@ -2840,7 +2840,7 @@ int insert_domain_line(int line, long long position, long long size, long long s
 int find_domain_block(long long position)
 {
   int first = 0;
-  int last = domain_lines - 1;
+  int last = domain_lines>0?domain_lines - 1:0;
   int middle = (first + last) / 2;
   while (first <= last)
   {
@@ -2868,13 +2868,16 @@ int find_domain_block(long long position)
 int delete_domain_line(int line)
 {
   int i;
-  for (i = line; i < domain_lines; i++)
+  if(line>=0 && domain_lines>0)
   {
-    dposition[i] = dposition[i+1];
-    dsize[i] = dsize[i+1];
-    dstatus[i] = dstatus[i+1];
+    for (i = line; i < domain_lines; i++)
+    {
+      dposition[i] = dposition[i+1];
+      dsize[i] = dsize[i+1];
+      dstatus[i] = dstatus[i+1];
+    }
+    domain_lines--;
   }
-  domain_lines--;
   return (0);
 }
 
