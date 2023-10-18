@@ -1583,162 +1583,140 @@ int initialize_memory_ccc(void)
   real_buffer_size_ccc = MAX_BUFFER_SIZE;
   memory_failed_ccc = true;
   int attempt = 0;
+  if (usb_mode_ccc && !driver_memory_mapped_ccc)
   {
-    if (usb_mode_ccc && !driver_memory_mapped_ccc)
+    real_buffer_size_ccc = MAX_USB_BUFFER_SIZE;
+  }
+  while (attempt < 2)
+  {
+    attempt ++;
+    if (!quiet_ccc)
     {
-      real_buffer_size_ccc = MAX_USB_BUFFER_SIZE;
+      sprintf (tempmessage_ccc, "Initializing memory\n");
+      message_now_ccc(tempmessage_ccc);
     }
-    while (attempt < 2)
+
+    if (attempt == 2 && !driver_installed_ccc)
     {
-      attempt ++;
-      if (!quiet_ccc)
+      install_driver_ccc();
+    }
+
+    {
+      int multiplier = 1;
+      if (driver_installed_ccc && driver_memory_mapped_ccc)
       {
-        sprintf (tempmessage_ccc, "Initializing memory\n");
-        message_now_ccc(tempmessage_ccc);
+        multiplier = 4;
       }
-
-      if (attempt == 2 && !driver_installed_ccc)
-      {
-        install_driver_ccc();
-      }
-
-      {
-        int multiplier = 1;
-        if (driver_installed_ccc && driver_memory_mapped_ccc)
-        {
-          multiplier = 4;
-        }
-        max_dma_size_ccc = ((pagesize_ccc * multiplier) / 16) * pagesize_ccc;
-        if (ahci_mode_ccc)
-        {
-          max_dma_size_ccc = ( ((pagesize_ccc * multiplier) - 128) / 16 ) * pagesize_ccc;
-        }
-      }
-
-      padding_buffer_ccc = malloc(pagesize_ccc);
-      // initialize the table buffer
-      if (direct_mode_ccc)
-      {
-        return_value_ccc = set_table_buffer_ccc();
-        if (return_value_ccc != 0)
-        {
-          if (attempt < 2)
-          {
-            continue;
-          }
-          strcpy (tempmessage_ccc, curlang_ccc[LANGBUFFERADDRESSRANGE]);
-          message_error_ccc(tempmessage_ccc);
-          print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
-          clear_error_message_ccc();
-          return GENERAL_ERROR_RETURN_CODE;
-        }
-      }
-
-
-      // initialize the command list buffer
+      max_dma_size_ccc = ((pagesize_ccc * multiplier) / 16) * pagesize_ccc;
       if (ahci_mode_ccc)
       {
-        return_value_ccc = set_command_list_buffer_ccc();
-        if (return_value_ccc != 0)
+        max_dma_size_ccc = ( ((pagesize_ccc * multiplier) - 128) / 16 ) * pagesize_ccc;
+      }
+    }
+
+    padding_buffer_ccc = malloc(pagesize_ccc);
+    // initialize the table buffer
+    if (direct_mode_ccc)
+    {
+      return_value_ccc = set_table_buffer_ccc();
+      if (return_value_ccc != 0)
+      {
+        if (attempt < 2)
         {
-          if (attempt < 2)
-          {
-            continue;
-          }
-          strcpy (tempmessage_ccc, curlang_ccc[LANGBUFFERADDRESSRANGE]);
+          continue;
+        }
+        strcpy (tempmessage_ccc, curlang_ccc[LANGBUFFERADDRESSRANGE]);
+        message_error_ccc(tempmessage_ccc);
+        print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
+        clear_error_message_ccc();
+        return GENERAL_ERROR_RETURN_CODE;
+      }
+    }
+
+
+    // initialize the command list buffer
+    if (ahci_mode_ccc)
+    {
+      return_value_ccc = set_command_list_buffer_ccc();
+      if (return_value_ccc != 0)
+      {
+        if (attempt < 2)
+        {
+          continue;
+        }
+        strcpy (tempmessage_ccc, curlang_ccc[LANGBUFFERADDRESSRANGE]);
+        message_error_ccc(tempmessage_ccc);
+        print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
+        clear_error_message_ccc();
+        return GENERAL_ERROR_RETURN_CODE;
+      }
+    }
+
+
+    // initialize the FIS buffer
+    if (ahci_mode_ccc)
+    {
+      return_value_ccc = set_fis_buffer_ccc();
+      if (return_value_ccc != 0)
+      {
+        if (attempt < 2)
+        {
+          continue;
+        }
+        strcpy (tempmessage_ccc, curlang_ccc[LANGBUFFERADDRESSRANGE]);
+        message_error_ccc(tempmessage_ccc);
+        print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
+        clear_error_message_ccc();
+        return GENERAL_ERROR_RETURN_CODE;
+      }
+    }
+
+
+    // initialize main buffer
+    // create a buffer that is memory aligned with the pagesize
+    if (direct_mode_ccc)
+    {
+      return_value_ccc = get_buffer_physical_memory_locations_ccc();
+      if (return_value_ccc != 0)
+      {
+        if (attempt < 2)
+        {
+          continue;
+        }
+        exitcode_ccc = GENERAL_ERROR_EXIT_CODE;
+        return (return_value_ccc);
+      }
+    }
+    else
+    {
+      if (!driver_memory_mapped_ccc)
+      {
+        free (ccc_buffer_ccc);
+        ccc_buffer_ccc = valloc(real_buffer_size_ccc);
+        if (!ccc_buffer_ccc)
+        {
+          strcpy (tempmessage_ccc, curlang_ccc[LANGPOSIXMEMFAIL]);
+          message_error_ccc(tempmessage_ccc);
+          sprintf (tempmessage_ccc, " (%s)", strerror(errno));
           message_error_ccc(tempmessage_ccc);
           print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
           clear_error_message_ccc();
           return GENERAL_ERROR_RETURN_CODE;
-        }
-      }
-
-
-      // initialize the FIS buffer
-      if (ahci_mode_ccc)
-      {
-        return_value_ccc = set_fis_buffer_ccc();
-        if (return_value_ccc != 0)
-        {
-          if (attempt < 2)
-          {
-            continue;
-          }
-          strcpy (tempmessage_ccc, curlang_ccc[LANGBUFFERADDRESSRANGE]);
-          message_error_ccc(tempmessage_ccc);
-          print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
-          clear_error_message_ccc();
-          return GENERAL_ERROR_RETURN_CODE;
-        }
-      }
-
-
-      // initialize main buffer
-      // create a buffer that is memory aligned with the pagesize
-      if (direct_mode_ccc)
-      {
-        return_value_ccc = get_buffer_physical_memory_locations_ccc();
-        if (return_value_ccc != 0)
-        {
-          if (attempt < 2)
-          {
-            continue;
-          }
-          exitcode_ccc = GENERAL_ERROR_EXIT_CODE;
-          return (return_value_ccc);
         }
       }
       else
       {
-        if (!driver_memory_mapped_ccc)
-        {
-          free (ccc_buffer_ccc);
-          ccc_buffer_ccc = valloc(real_buffer_size_ccc);
-          if (!ccc_buffer_ccc)
-          {
-            strcpy (tempmessage_ccc, curlang_ccc[LANGPOSIXMEMFAIL]);
-            message_error_ccc(tempmessage_ccc);
-            sprintf (tempmessage_ccc, " (%s)", strerror(errno));
-            message_error_ccc(tempmessage_ccc);
-            print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
-            clear_error_message_ccc();
-            return GENERAL_ERROR_RETURN_CODE;
-          }
-        }
-        else
-        {
-          ccc_buffer_ccc = (char*) driver_main_data_buffer_address_ccc;
-        }
-        memset (ccc_buffer_ccc, 0, real_buffer_size_ccc);
+        ccc_buffer_ccc = (char*) driver_main_data_buffer_address_ccc;
       }
-      if (!quiet_ccc)
-      {
-        sprintf (tempmessage_ccc, "Memory initialized\n");
-        message_now_ccc(tempmessage_ccc);
-      }
-      attempt ++;
+      memset (ccc_buffer_ccc, 0, real_buffer_size_ccc);
     }
-  }
-  else
-  {
-    unsigned int align = pagesize_ccc;
-    free (ccc_buffer_ccc);
-    ccc_buffer_ccc = valloc(real_buffer_size_ccc);
-    if (posix_memalign(&ccc_buffer_ccc, align, real_buffer_size_ccc))
+    if (!quiet_ccc)
     {
-      strcpy (tempmessage_ccc, curlang_ccc[LANGPOSIXMEMFAIL]);
-      message_error_ccc(tempmessage_ccc);
-      sprintf (tempmessage_ccc, " (%s)", strerror(errno));
-      message_error_ccc(tempmessage_ccc);
-      print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
-      clear_error_message_ccc();
-      return GENERAL_ERROR_RETURN_CODE;
+      sprintf (tempmessage_ccc, "Memory initialized\n");
+      message_now_ccc(tempmessage_ccc);
     }
-    memset (ccc_buffer_ccc, 0, real_buffer_size_ccc);
+    attempt ++;
   }
-
-  //exit (0);
-
 
   // set the starting main buffer size
   ccc_main_buffer_size_ccc = 512;
