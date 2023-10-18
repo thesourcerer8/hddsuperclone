@@ -2933,7 +2933,7 @@ int check_log(void)
   }
 
   // get total size from last position
-  total_size = lposition[total_lines-1] + lsize[total_lines-1];
+  total_size = total_lines > 0 ? (lposition[total_lines-1] + lsize[total_lines-1]) : 0;
   sprintf (tempmessage, "total size = %lld\n", total_size);
   message_now(tempmessage);
 
