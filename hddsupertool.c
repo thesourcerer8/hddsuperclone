@@ -1410,7 +1410,7 @@ int read_script_file_ccc(char *script_file_ccc)
     for (n = 0; n < cols; n++)
     {
       // if we find end of line before the end then the line isn't too long
-      if (line[n] == '\n')
+      if (line[n] == '\0' || line[n] == '\n')
       {
         line_too_long = false;
         break;
