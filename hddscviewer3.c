@@ -905,14 +905,14 @@ static gboolean on_button_press(GtkWidget* widget, GdkEventButton *event, GdkWin
 
 
 
-static gboolean top_drawing_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
+static gboolean top_drawing_expose_event(__attribute__((unused)) GtkWidget *widget, __attribute__((unused)) GdkEventExpose *event, __attribute__((unused)) gpointer data)
 {
   redraw_top_drawing_area();
 
   // make the compiler happy and not complain about unused paramaters
-  widget = widget;
-  event = event;
-  data = data;
+  //widget = widget;
+  //event = event;
+  //data = data;
 
   return 0;
 }
