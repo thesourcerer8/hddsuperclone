@@ -16863,6 +16863,7 @@ int rebuild_assist_map_heads_ccc (void)
       message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
+    fclose(headmap_debug_file);
     return -1;
   }
   int highest_head = rebuild_assist_get_highest_head_ccc();
@@ -16874,6 +16875,7 @@ int rebuild_assist_map_heads_ccc (void)
       message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
+    fclose(headmap_debug_file);
     return -1;
   }
   unsigned char pattern_head[REBUILD_ASSIST_FIELD_LENGTH * HEAD_PATTERN_CHECK_COUNT];
@@ -17021,6 +17023,7 @@ int rebuild_assist_map_heads_ccc (void)
         print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
         clear_error_message_ccc();
         disable_rebuild_assist_ccc();
+	fclose(headmap_debug_file);
         return -1;
       }
       else
@@ -17472,6 +17475,7 @@ int rebuild_assist_map_heads_ccc (void)
   if (writefile == NULL)
   {
     fprintf (stdout, "Cannot open %s for writing (%s).\n", file_name, strerror(errno));
+    free(file_name);
     return -1;
   }
   fprintf (writefile, "# Headmap file create by %s %s\n", title_ccc, version_number_ccc);
@@ -17494,5 +17498,7 @@ int rebuild_assist_map_heads_ccc (void)
   mytime = time(NULL);
   fprintf (headmap_debug_file, "%s", ctime(&mytime));
   fclose (headmap_debug_file);
+  free(file_name);
+
   return 0;
 }
