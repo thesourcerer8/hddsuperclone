@@ -5881,8 +5881,9 @@ void help_html_ccc(void)
   if (pid == 0)
   {
     // make sure this exits and does not return
-    system("cp -f /usr/local/share/doc/hddsuperclone/hddsuperclone.html /tmp/");
-    system("sudo -E -H -P -u $(who | head -1 | awk '{print $1}') xdg-open /tmp/hddsuperclone.html > /dev/null 2>&1");
+    int res0=system("cp -f /usr/local/share/doc/hddsuperclone/hddsuperclone.html /tmp/");
+    int res1=system("sudo -E -H -P -u $(who | head -1 | awk '{print $1}') xdg-open /tmp/hddsuperclone.html > /dev/null 2>&1");
+    if(res0 || res1) exit(1);
     exit(0);
   }
 }
@@ -5899,8 +5900,9 @@ void help_text_ccc(void)
   if (pid == 0)
   {
     // make sure this exits and does not return
-    system("cp -f /usr/local/share/doc/hddsuperclone/hddsuperclone.txt /tmp/");
-    system("sudo -E -H -P -u $(who | head -1 | awk '{print $1}') xdg-open /tmp/hddsuperclone.txt > /dev/null 2>&1");
+    int res0=system("cp -f /usr/local/share/doc/hddsuperclone/hddsuperclone.txt /tmp/");
+    int res1=system("sudo -E -H -P -u $(who | head -1 | awk '{print $1}') xdg-open /tmp/hddsuperclone.txt > /dev/null 2>&1");
+    if(res0 || res1) exit(1);
     exit(0);
   }
 }
