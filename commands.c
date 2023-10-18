@@ -1647,7 +1647,7 @@ int setmainbuffer_ccc(bool perform_check, unsigned int line_number, char *rest_o
       break;
     }
     int length = strlen(raw_byte);
-    if (length == 0)
+    if (length <= 0)
     {
       current_line++;
       char *full_line;
@@ -2203,6 +2203,7 @@ int read_buffer_ccc(bool perform_check, unsigned int line_number, char *rest_of_
     if (fseeko(readfile, 0, SEEK_END) != 0 )
     {
       fprintf(stderr, "Error seeking %s (%s).\n", file_name, strerror(errno));
+      fclose(readfile);
       return (-1);
     }
     long long file_size = ftello(readfile);
@@ -2217,11 +2218,13 @@ int read_buffer_ccc(bool perform_check, unsigned int line_number, char *rest_of_
     if (fseeko(readfile, file_offset, SEEK_SET) != 0 )
     {
       fprintf(stderr, "Error seeking %s (%s).\n", file_name, strerror(errno));
+      fclose(readfile);
       return (-1);
     }
     if (fread(ccc_buffer_ccc + buffer_offset, 1, size, readfile) != size )
     {
       fprintf(stderr, "Error reading from %s (%s).\nAborting...\n", file_name, strerror(errno));
+      fclose(readfile);
       return (-1);
     }
 
@@ -5007,7 +5010,7 @@ int setmainscratchpad_ccc(bool perform_check, unsigned int line_number, char *re
   int current_line = line_number+1;
   char *full_line;
   char input_text[MAX_LINE_LENGTH];
-  input_text[0]='\0';
+  memset(input_text,0,sizeof(input_text));
   if (command_line_ccc)
   {
     fprintf (stdout, "setscratchpad> ");
@@ -5035,7 +5038,7 @@ int setmainscratchpad_ccc(bool perform_check, unsigned int line_number, char *re
       break;
     }
     int length = strlen(raw_byte);
-    if (length == 0)
+    if (length <= 0)
     {
       current_line++;
       char *full_line;
@@ -7059,12 +7062,12 @@ int set_usbbuffer_ccc(bool perform_check, unsigned int line_number, char *rest_o
       break;
     }
     int length = strlen(raw_byte);
-    if (length == 0)
+    if (length <= 0)
     {
       current_line++;
       char *full_line;
       char input_text[MAX_LINE_LENGTH];
-      input_text[0]='\0';
+      memset(input_text,0,sizeof(input_text));
       if (command_line_ccc)
       {
         fprintf (stdout, "setusbbuffer> ");
