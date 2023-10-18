@@ -2049,11 +2049,13 @@ int write_buffer_ccc(bool perform_check, unsigned int line_number, char *rest_of
     if (fseeko(writefile, file_offset, SEEK_SET) != 0 )
     {
       fprintf(stderr, "Error seeking %s (%s).\n", file_name, strerror(errno));
+      fclose(writefile);
       return (-1);
     }
     if (fwrite(ccc_buffer_ccc + buffer_offset, 1, size, writefile) != size )
     {
       fprintf(stderr, "Error writing to %s (%s).\nAborting...\n", file_name, strerror(errno));
+      fclose(writefile);
       return (-1);
     }
 
