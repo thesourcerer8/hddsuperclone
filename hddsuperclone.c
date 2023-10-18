@@ -5048,7 +5048,7 @@ int do_fill_ccc(int status, long long mask)
         {
           write_size = destination_sectors - current_position_ccc;
         }
-        int ret = ret = write_chunk_ccc(current_position_ccc, write_size);
+        int ret = write_chunk_ccc(current_position_ccc, write_size);
         if (ret)
         {
           // write error
