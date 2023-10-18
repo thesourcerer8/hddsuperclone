@@ -15916,6 +15916,7 @@ void disable_ports_ccc (void)
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
     fprintf (stdout, "Error opening /etc/default/grub_tmp (%s)\n", strerror(errno));
+    fclose(readfile);
     return;
   }
 
