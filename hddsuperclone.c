@@ -17194,10 +17194,11 @@ int rebuild_assist_map_heads_ccc (void)
     starting_average_size = starting_average_size / HEAD_PATTERN_CHECK_COUNT;
     fprintf (stdout, "pattern size=%06llx\n", starting_average_size);
     fprintf (headmap_debug_file, "pattern size=%06llx\n", starting_average_size);
-    fprintf (stdout, "average per head = %lld\n", (starting_average_size * 512) / heads_in_pattern);
-    fprintf (headmap_debug_file, "average per head = %lld\n", (starting_average_size * 512) / heads_in_pattern);
-
-
+    if(heads_in_pattern)
+    {
+      fprintf (stdout, "average per head = %lld\n", (starting_average_size * 512) / heads_in_pattern);
+      fprintf (headmap_debug_file, "average per head = %lld\n", (starting_average_size * 512) / heads_in_pattern);
+    }
 
 
     // populate head map with known good data
