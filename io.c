@@ -6400,7 +6400,7 @@ int find_all_devices_ccc(void)
       int x;
       for (x = 0; x < cols; x++)
       {
-        if (line[x] == '\n')
+        if (line[x] == '\0' || line[x] == '\n')
         {
           line[x] = '\0';
           break;
@@ -6454,7 +6454,7 @@ int find_all_devices_ccc(void)
       int x;
       for (x = 0; x < cols; x++)
       {
-        if (line[x] == '\n')
+        if (line[x] == '\0' || line[x] == '\n')
         {
           line[x] = '\0';
           break;
@@ -6511,7 +6511,7 @@ int find_all_devices_ccc(void)
       int x;
       for (x = 0; x < cols; x++)
       {
-        if (line[x] == '\n')
+        if (line[x] == '\0' || line[x] == '\n')
         {
           line[x] = '\0';
           break;
@@ -6577,7 +6577,7 @@ int find_bus_devices_ccc(char *driver)
     int x;
     for (x = 0; x < cols; x++)
     {
-      if (line[x] == '\n')
+      if (line[x] == '\0' || line[x] == '\n')
       {
         line[x] = '\0';
         break;
