@@ -13,6 +13,8 @@
 #include "common.h"
 #include "commands.h"
 
+#include "strncpy_wrapper.h"
+
 
 // function to either check or execute a command
 int execute_line_ccc(bool perform_check, unsigned int line_number, char *command, char *rest_of_line)
@@ -1617,12 +1619,12 @@ int setmainbuffer_ccc(bool perform_check, unsigned int line_number, char *rest_o
   int current_line = line_number+1;
   char *full_line;
   char input_text[MAX_LINE_LENGTH];
+  memset(input_text,0,sizeof(input_text));
   if (command_line_ccc)
   {
     fprintf (stdout, "setbuffer> ");
     fflush(stdout);
-    fgets(input_text, sizeof input_text, stdin);
-    full_line = input_text;
+    full_line = fgets(input_text,sizeof(input_text)-1, stdin);
   }
   else
   {
@@ -1645,17 +1647,17 @@ int setmainbuffer_ccc(bool perform_check, unsigned int line_number, char *rest_o
       break;
     }
     int length = strlen(raw_byte);
-    if (length == 0)
+    if (length <= 0)
     {
       current_line++;
       char *full_line;
       char input_text[MAX_LINE_LENGTH];
+      input_text[0]='\0';
       if (command_line_ccc)
       {
         fprintf (stdout, "setbuffer> ");
         fflush(stdout);
-        fgets(input_text, sizeof input_text, stdin);
-        full_line = input_text;
+        full_line = fgets(input_text, sizeof input_text, stdin);
       }
       else
       {
@@ -2047,11 +2049,13 @@ int write_buffer_ccc(bool perform_check, unsigned int line_number, char *rest_of
     if (fseeko(writefile, file_offset, SEEK_SET) != 0 )
     {
       fprintf(stderr, "Error seeking %s (%s).\n", file_name, strerror(errno));
+      fclose(writefile);
       return (-1);
     }
     if (fwrite(ccc_buffer_ccc + buffer_offset, 1, size, writefile) != size )
     {
       fprintf(stderr, "Error writing to %s (%s).\nAborting...\n", file_name, strerror(errno));
+      fclose(writefile);
       return (-1);
     }
 
@@ -2199,6 +2203,7 @@ int read_buffer_ccc(bool perform_check, unsigned int line_number, char *rest_of_
     if (fseeko(readfile, 0, SEEK_END) != 0 )
     {
       fprintf(stderr, "Error seeking %s (%s).\n", file_name, strerror(errno));
+      fclose(readfile);
       return (-1);
     }
     long long file_size = ftello(readfile);
@@ -2213,11 +2218,13 @@ int read_buffer_ccc(bool perform_check, unsigned int line_number, char *rest_of_
     if (fseeko(readfile, file_offset, SEEK_SET) != 0 )
     {
       fprintf(stderr, "Error seeking %s (%s).\n", file_name, strerror(errno));
+      fclose(readfile);
       return (-1);
     }
     if (fread(ccc_buffer_ccc + buffer_offset, 1, size, readfile) != size )
     {
       fprintf(stderr, "Error reading from %s (%s).\nAborting...\n", file_name, strerror(errno));
+      fclose(readfile);
       return (-1);
     }
 
@@ -4556,11 +4563,13 @@ int write_scratchpad_ccc(bool perform_check, unsigned int line_number, char *res
     if (fseeko(writefile, file_offset, SEEK_SET) != 0 )
     {
       fprintf(stderr, "Error seeking \'%s\' (%s).\n", file_name, strerror(errno));
+      fclose(writefile);
       return (-1);
     }
     if (fwrite(ccc_scratchpad_ccc + buffer_offset, 1, size, writefile) != size )
     {
       fprintf(stderr, "Error writing to \'%s\' (%s).\n", file_name, strerror(errno));
+      fclose(writefile);
       return (-1);
     }
 
@@ -4708,6 +4717,7 @@ int read_scratchpad_ccc(bool perform_check, unsigned int line_number, char *rest
     if (fseeko(readfile, 0, SEEK_END) != 0 )
     {
       fprintf(stderr, "Error seeking %s (%s).\n", file_name, strerror(errno));
+      fclose(readfile);
       return (-1);
     }
     long long file_size = ftello(readfile);
@@ -4722,11 +4732,13 @@ int read_scratchpad_ccc(bool perform_check, unsigned int line_number, char *rest
     if (fseeko(readfile, file_offset, SEEK_SET) != 0 )
     {
       fprintf(stderr, "Error seeking \'%s\' (%s).\n", file_name, strerror(errno));
+      fclose(readfile);
       return (-1);
     }
     if (fread(ccc_scratchpad_ccc + buffer_offset, 1, size, readfile) != size )
     {
       fprintf(stderr, "Error reading from \'%s\' (%s).\n", file_name, strerror(errno));
+      fclose(readfile);
       return (-1);
     }
 
@@ -4998,12 +5010,12 @@ int setmainscratchpad_ccc(bool perform_check, unsigned int line_number, char *re
   int current_line = line_number+1;
   char *full_line;
   char input_text[MAX_LINE_LENGTH];
+  memset(input_text,0,sizeof(input_text));
   if (command_line_ccc)
   {
     fprintf (stdout, "setscratchpad> ");
     fflush(stdout);
-    fgets(input_text, sizeof input_text, stdin);
-    full_line = input_text;
+    full_line = fgets(input_text, sizeof input_text, stdin);
   }
   else
   {
@@ -5026,17 +5038,17 @@ int setmainscratchpad_ccc(bool perform_check, unsigned int line_number, char *re
       break;
     }
     int length = strlen(raw_byte);
-    if (length == 0)
+    if (length <= 0)
     {
       current_line++;
       char *full_line;
       char input_text[MAX_LINE_LENGTH];
+      input_text[0]='\0';
       if (command_line_ccc)
       {
         fprintf (stdout, "setscratchpad> ");
         fflush(stdout);
-        fgets(input_text, sizeof input_text, stdin);
-        full_line = input_text;
+        full_line = fgets(input_text, sizeof input_text, stdin);
       }
       else
       {
@@ -6686,11 +6698,13 @@ int write_usbbuffer_ccc(bool perform_check, unsigned int line_number, char *rest
     if (fseeko(writefile, file_offset, SEEK_SET) != 0 )
     {
       fprintf(stderr, "Error seeking \'%s\' (%s).\n", file_name, strerror(errno));
+      fclose(writefile);
       return (-1);
     }
     if (fwrite(ccc_usbbuffer_ccc + buffer_offset, 1, size, writefile) != size )
     {
       fprintf(stderr, "Error writing to \'%s\' (%s).\n", file_name, strerror(errno));
+      fclose(writefile);
       return (-1);
     }
 
@@ -6832,6 +6846,7 @@ int read_usbbuffer_ccc(bool perform_check, unsigned int line_number, char *rest_
     if (fseeko(readfile, 0, SEEK_END) != 0 )
     {
       fprintf(stderr, "Error seeking %s (%s).\n", file_name, strerror(errno));
+      fclose(readfile);
       return (-1);
     }
     long long file_size = ftello(readfile);
@@ -6846,11 +6861,13 @@ int read_usbbuffer_ccc(bool perform_check, unsigned int line_number, char *rest_
     if (fseeko(readfile, file_offset, SEEK_SET) != 0 )
     {
       fprintf(stderr, "Error seeking \'%s\' (%s).\n", file_name, strerror(errno));
+      fclose(readfile);
       return (-1);
     }
     if (fread(ccc_usbbuffer_ccc + buffer_offset, 1, size, readfile) != size )
     {
       fprintf(stderr, "Error reading from \'%s\' (%s).\n", file_name, strerror(errno));
+      fclose(readfile);
       return (-1);
     }
 
@@ -7017,12 +7034,12 @@ int set_usbbuffer_ccc(bool perform_check, unsigned int line_number, char *rest_o
   int current_line = line_number+1;
   char *full_line;
   char input_text[MAX_LINE_LENGTH];
+  input_text[0]='\0';
   if (command_line_ccc)
   {
     fprintf (stdout, "setusbbuffer> ");
     fflush(stdout);
-    fgets(input_text, sizeof input_text, stdin);
-    full_line = input_text;
+    full_line = fgets(input_text, sizeof input_text, stdin);
   }
   else
   {
@@ -7045,17 +7062,17 @@ int set_usbbuffer_ccc(bool perform_check, unsigned int line_number, char *rest_o
       break;
     }
     int length = strlen(raw_byte);
-    if (length == 0)
+    if (length <= 0)
     {
       current_line++;
       char *full_line;
       char input_text[MAX_LINE_LENGTH];
+      memset(input_text,0,sizeof(input_text));
       if (command_line_ccc)
       {
         fprintf (stdout, "setusbbuffer> ");
         fflush(stdout);
-        fgets(input_text, sizeof input_text, stdin);
-        full_line = input_text;
+        full_line=fgets(input_text, sizeof input_text, stdin);
       }
       else
       {

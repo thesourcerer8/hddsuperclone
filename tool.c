@@ -51,13 +51,8 @@ int supertooltool_ccc (void)
       fprintf (stdout, "A) ATA Passthrough\n");
       fprintf (stdout, "S) SCSI Passthrough\n");
       fprintf (stdout, "D) Direct IDE\n");
-      if (superbyte_ccc[27] == 0x1e)
-      {
-        fprintf (stdout, "H) Direct AHCI\n");
-#ifdef GODMODE
-        fprintf (stdout, "U) USB\n");
-#endif
-      }
+      fprintf (stdout, "H) Direct AHCI\n");
+      fprintf (stdout, "U) USB (might be experimental)\n");
       fprintf (stdout, "Choose which mode > ");
       fflush(stdout);
       if ( fgets(input_text, sizeof input_text, stdin) != NULL )
@@ -91,7 +86,6 @@ int supertooltool_ccc (void)
           ahci_mode_ccc = true;
           break;
         }
-#ifdef GODMODE
         else if (strcasecmp(raw_value, "U") == 0)
         {
           ata_passthrough_ccc = false;
@@ -101,7 +95,6 @@ int supertooltool_ccc (void)
           usb_mode_ccc = true;
           break;
         }
-#endif
         else
         {
           fprintf (stderr, "Error! Choice \'%s\' is not valid.\n", raw_value);
@@ -109,31 +102,11 @@ int supertooltool_ccc (void)
       }
     }
   }
-  if (superbyte_ccc[27] == 0x1e)
+  max_dma_size_ccc = (pagesize_ccc / 8) * pagesize_ccc;
+  if (ahci_mode_ccc)
   {
-    max_dma_size_ccc = (pagesize_ccc / 8) * pagesize_ccc;
-    if (ahci_mode_ccc)
-    {
-      max_dma_size_ccc = ( (pagesize_ccc - 128) / 16 ) * pagesize_ccc;
-    }
+    max_dma_size_ccc = ( (pagesize_ccc - 128) / 16 ) * pagesize_ccc;
   }
-  else
-  {
-    if (direct_mode_ccc)
-    {
-      if (ahci_mode_ccc)
-      {
-        fprintf (stdout, "Direct AHCI mode is not allowed without a valid license.\n");
-        exit (0);
-      }
-    }
-    if (usb_mode_ccc)
-    {
-      fprintf (stdout, "USB mode is not allowed without a valid license.\n");
-      exit (0);
-    }
-  }
-
   return_value_ccc = initialize_tool_memory_ccc();
   if (return_value_ccc != 0)
   {
@@ -463,111 +436,94 @@ int initialize_tool_memory_ccc(void)
   }
 
   int attempt = 0;
-  if (superbyte_ccc[20] == 0x29)
+  while (attempt < 2)
   {
-    while (attempt < 2)
+    attempt ++;
+    if (!quiet_ccc)
     {
-      attempt ++;
-      if (!quiet_ccc)
-      {
-        fprintf (stdout, "Initializing memory\n");
-      }
-
-      if (attempt == 2 && !driver_installed_ccc)
-      {
-        install_driver_ccc();
-      }
-
-      // initialize the table buffer
-      if (direct_mode_ccc)
-      {
-        return_value_ccc = set_table_buffer_ccc();
-        if (return_value_ccc != 0)
-        {
-          if (attempt < 2)
-          {
-            continue;
-          }
-          fprintf (stderr, "Unable to get table buffer physical address in 32bit range\n");
-          return (-1);
-        }
-      }
-
-
-      // initialize the command list buffer
-      if (ahci_mode_ccc)
-      {
-        return_value_ccc = set_command_list_buffer_ccc();
-        if (return_value_ccc != 0)
-        {
-          if (attempt < 2)
-          {
-            continue;
-          }
-          fprintf (stderr, "Unable to get command list buffer physical address in 32bit range\n");
-          return (-1);
-        }
-      }
-
-
-      // initialize the FIS buffer
-      if (ahci_mode_ccc)
-      {
-        return_value_ccc = set_fis_buffer_ccc();
-        if (return_value_ccc != 0)
-        {
-          if (attempt < 2)
-          {
-            continue;
-          }
-          fprintf (stderr, "Unable to get FIS buffer physical address in 32bit range\n");
-          return (-1);
-        }
-      }
-
-
-      // initialize main buffer
-      // create a buffer that is memory aligned with the pagesize
-      if (direct_mode_ccc)
-      {
-        return_value_ccc = get_buffer_physical_memory_locations_ccc();
-        if (return_value_ccc != 0)
-        {
-          if (attempt < 2)
-          {
-            continue;
-          }
-          return (return_value_ccc);
-        }
-      }
-      else
-      {
-        unsigned int align = pagesize_ccc;
-        free (ccc_buffer_ccc);
-        if (posix_memalign(&ccc_buffer_ccc, align, real_buffer_size_ccc))
-        {
-          perror("posix_memalign failed");
-          return (-1);
-        }
-        memset (ccc_buffer_ccc, 0, real_buffer_size_ccc);
-      }
-      attempt ++;
+      fprintf (stdout, "Initializing memory\n");
     }
-  }
-  else
-  {
-    unsigned int align = pagesize_ccc;
-    free (ccc_buffer_ccc);
-    if (posix_memalign(&ccc_buffer_ccc, align, real_buffer_size_ccc))
+
+    if (attempt == 2 && !driver_installed_ccc)
     {
-      perror("posix_memalign failed");
-      return (-1);
+      install_driver_ccc();
     }
-    memset (ccc_buffer_ccc, 0, real_buffer_size_ccc);
+
+    // initialize the table buffer
+    if (direct_mode_ccc)
+    {
+      return_value_ccc = set_table_buffer_ccc();
+      if (return_value_ccc != 0)
+      {
+        if (attempt < 2)
+        {
+          continue;
+        }
+        fprintf (stderr, "Unable to get table buffer physical address in 32bit range\n");
+        return (-1);
+      }
+    }
+
+
+    // initialize the command list buffer
+    if (ahci_mode_ccc)
+    {
+      return_value_ccc = set_command_list_buffer_ccc();
+      if (return_value_ccc != 0)
+      {
+        if (attempt < 2)
+        {
+          continue;
+        }
+        fprintf (stderr, "Unable to get command list buffer physical address in 32bit range\n");
+        return (-1);
+      }
+    }
+
+
+    // initialize the FIS buffer
+    if (ahci_mode_ccc)
+    {
+      return_value_ccc = set_fis_buffer_ccc();
+      if (return_value_ccc != 0)
+      {
+        if (attempt < 2)
+        {
+          continue;
+        }
+        fprintf (stderr, "Unable to get FIS buffer physical address in 32bit range\n");
+        return (-1);
+      }
+    }
+
+
+    // initialize main buffer
+    // create a buffer that is memory aligned with the pagesize
+    if (direct_mode_ccc)
+    {
+      return_value_ccc = get_buffer_physical_memory_locations_ccc();
+      if (return_value_ccc != 0)
+      {
+        if (attempt < 2)
+        {
+          continue;
+        }
+        return (return_value_ccc);
+      }
+    }
+    else
+    {
+      unsigned int align = pagesize_ccc;
+      free (ccc_buffer_ccc);
+      if (posix_memalign(&ccc_buffer_ccc, align, real_buffer_size_ccc))
+      {
+        perror("posix_memalign failed");
+        return (-1);
+      }
+      memset (ccc_buffer_ccc, 0, real_buffer_size_ccc);
+    }
+    attempt ++;
   }
-
-  //exit (0);
-
 
   // set the starting main buffer size
   ccc_main_buffer_size_ccc = 512;
@@ -1839,10 +1795,10 @@ int compare_ccc(bool perform_check, char *rest_of_line)
 
   bool string_check = false;
   int variable1_type = 0;
-  char *string_variable1;
-  char *string_variable2;
-  long long variable1;
-  long long variable2;
+  char *string_variable1 = NULL;
+  char *string_variable2 = NULL;
+  long long variable1 = 0;
+  long long variable2 = 0;
   if (raw_variable1[0] == '$')
   {
     int var_type = check_variable_ccc(raw_variable1+1);

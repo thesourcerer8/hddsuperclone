@@ -5,6 +5,7 @@ This repository continues the work on HDDSuperClone that was originally develope
 You can find the original website and more information here:
 http://www.hddsuperclone.com/
 
+Videos about HDDSuperClone and it's many features: https://www.youtube.com/channel/UCXfHI8OX-KE_1-Tc9aCkQTQ/videos
 
 Other software that is used:
 * SMTP Client: https://github.com/somnisoft/smtp-client
@@ -22,6 +23,7 @@ The Live-CD is using the following software:
 
 
 Building:
+* sudo apt-get install git make gcc libusb-dev libgtk-3-dev libcurl4-openssl-dev texi2html help2man
 * git clone github.com/thesourcerer8/hddsuperclone
 * cd hddsuperclone
 * make

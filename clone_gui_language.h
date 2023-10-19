@@ -432,6 +432,7 @@
 #define LANGENABLERETRYCONNECTING 424
 #define LANGMAXREADRATE 425
 #define LANGDONTIDENTIFY 426
+#define LANGFAILEDTOCLEANDIR 427
 //#define
 //#define
 //#define
@@ -439,7 +440,7 @@
 
 
 // TODO MAKE SURE TO UPDATE COUNT EVERY TIME! it should be one more than last defined
-#define LANGCOUNT 427
+#define LANGCOUNT 428
 #define MAXLANGLENGTH 2048
 extern char enlang_ccc[LANGCOUNT][MAXLANGLENGTH];
 
@@ -457,8 +458,6 @@ int translate_language_ccc(char *fromlang, char *translang, char *language, char
 int translate_language_slow_ccc(char *fromlang, char *translang, char *language, char *native);
 
 char* get_translated_data_ccc(char *url_data);
-
-
 
 
 

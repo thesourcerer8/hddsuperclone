@@ -22,7 +22,7 @@ int main(void)
   int count = 0;
   int index = 0;
   char command[512];
-
+  int ret=0;
 
   n = scandir("hddscripts", &namelist, 0, alphasort);
   if (n < 0)
@@ -45,9 +45,17 @@ int main(void)
   free(namelist);
 
   strcpy (command, "cat hddsupertool-p1.texi > hddsupertool.texi");
-  system (command);
+  ret=system(command);
+  if(ret)
+  {
+    fprintf(stderr, "Return value of cat, this might indicate an error: %d\n",ret);
+  }
   char *newdirectory = "hddscripts";
-  chdir (newdirectory);
+  ret=chdir (newdirectory);
+  if(ret)
+  {
+    fprintf(stderr, "Could not change to the directory hddscripts, error-code: %d\n",ret);
+  }
   char *texifile = "../hddsupertool.texi";
   FILE *texi_file = fopen(texifile, "a");
   if (texi_file == NULL)
@@ -89,11 +97,13 @@ int main(void)
     count--;
   }
   fclose (texi_file);
-  chdir ("..");
+  ret=chdir ("..");
+  if(ret)
+  {
+    fprintf(stderr,"Could not change the directory to .. , error-code: %d\n",ret);
+  }
   strcpy (command, "cat hddsupertool-p2.texi >> hddsupertool.texi");
-  system (command);
-
-  return(0);
+  return(system (command));
 }
 
 

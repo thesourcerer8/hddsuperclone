@@ -15,6 +15,7 @@
 #include "hddsuperclone_driver.h"
 #include "hddsupertool_help.h"
 
+#include "strncpy_wrapper.h"
 
 // Function to handle ctrl-c
 void signal_callback_handler_ccc(int signum)
@@ -199,11 +200,6 @@ int main (int argc, char **argv)
   aggressive_driver_ccc = true;
   charater_device_driver_mode_ccc = false; // TODO make this an option normally false
   color_statusbar_ccc = false;
-  license_type_ccc = 0;
-  license_version_ccc = 0;
-  license_time_ccc = 0;
-  activation_type_ccc = 0;
-  activation_days_remaining_ccc = 0;
   running_analyze_ccc = 0;
   drive_locked_ccc = false;
   smart_supported_ccc = false;
@@ -366,26 +362,19 @@ int main (int argc, char **argv)
         break;
 
       case LICENSETYPE:
-        license_type_ccc = strtoull(optarg, NULL, 16);
         break;
 
       case LICENSEVERSION:
-        license_version_ccc = strtoull(optarg, NULL, 16);
         break;
 
       case LICENSETIME:
-        license_time_ccc = strtoull(optarg, NULL, 0);
         break;
 
       case MAKELICENSE:
-        //make_license_files_ccc (license_version_ccc, license_type_ccc, license_time_ccc, strtoull(optarg, NULL, 0));
         exit(0);
-        break;
 
       case LICENSEPROCESSACTIVE:
-        //process_active_licenses_ccc();
         exit(0);
-        break;
 
       case 'Q':
         quiet_ccc = true;
@@ -418,25 +407,13 @@ int main (int argc, char **argv)
         break;
 
       case RUN_SERVERP:
-#ifdef GODMODE
-        //start_serverp();
-#endif
         exit(0);
-        break;
 
       case COMMAND_SERVERP:
-#ifdef GODMODE
-        //send_serverp_command(optarg);
-#endif
         exit(0);
-        break;
 
       case MANUAL_CREATE:
-#ifdef GODMODE
-       //import_transaction_files();
-#endif
         exit(0);
-        break;
 
       case SUPERTOOL:
         superclone_ccc = false;
@@ -495,13 +472,11 @@ int main (int argc, char **argv)
       case TESTSKIP:
         test_skip_ccc(strtoul(optarg, NULL, 0));
         exit(0);
-        break;
 
       case TESTSKIPFAST:
         skip_fast_ccc = true;
         test_skip_ccc(strtoul(optarg, NULL, 0));
         exit(0);
-        break;
 
       case '?':
         // getopt_long already printed an error message.
@@ -763,14 +738,6 @@ int main (int argc, char **argv)
   superbyte_ccc[94] = 0x78;
   superbyte_ccc[95] = 0x08;
 
-#ifdef DEBUG
-  for (int i = 0; i < 96; i++)
-  {
-    //fprintf (stdout, "superbyte%d(%02x) = %02x\n", i, i, superbyte_ccc[i]);
-  }
-#endif
-
-
   // Check if root privilages
   if (geteuid())
   {
@@ -798,13 +765,6 @@ int main (int argc, char **argv)
   cleanup_ccc();
   return 0;
 }
-// end of main
-//******************************************************
-
-
-
-
-
 
 
 // time functions
@@ -898,6 +858,7 @@ if (domainfile_changed_ccc && domain_file_ccc != NULL)
   free (dposition_ccc);
   free (dsize_ccc);
   free (dstatus_ccc);
+  free (padding_buffer_ccc);
 
   if (enable_data_dump_ccc || enable_dump_identify_on_check_ccc)
   {
@@ -1207,16 +1168,16 @@ void release_devices_ccc (void)
   if (ahci_interrupt_changed_ccc)
   {
     // restore the interrupt settings
-    memcpy(port_virt_addr_ccc + superbyte_ccc[13], &interrupt_backup_ccc, 4);    //potential superbyte
+    memcpy(port_virt_addr_ccc + 0x14, &interrupt_backup_ccc, 4);    //potential superbyte
     ahci_interrupt_changed_ccc = false;
   }
 
   if (table_address_changed_ccc)
   {
-    outb(table_address_backup_ccc[0], bus_base_address_ccc+0+superbyte_ccc[0]);    //potential superbyte
-    outb(table_address_backup_ccc[1], bus_base_address_ccc+1+superbyte_ccc[0]);    //potential superbyte
-    outb(table_address_backup_ccc[2], bus_base_address_ccc+2+superbyte_ccc[0]);    //potential superbyte
-    outb(table_address_backup_ccc[3], bus_base_address_ccc+3+superbyte_ccc[0]);    //potential superbyte
+    outb(table_address_backup_ccc[0], bus_base_address_ccc+4);
+    outb(table_address_backup_ccc[1], bus_base_address_ccc+5);
+    outb(table_address_backup_ccc[2], bus_base_address_ccc+6);
+    outb(table_address_backup_ccc[3], bus_base_address_ccc+7);
     table_address_changed_ccc = false;
   }
 
@@ -1299,7 +1260,15 @@ void install_driver_ccc (void)
   sprintf (tempdir, "/tmp/hddsctemp%d", process_id_ccc);
   char command[256];
   sprintf (command, "rm -rf %s", tempdir);
-  system(command);
+  if (system(command))
+  {
+    sprintf (tempmessage_ccc, "%s", curlang_ccc[LANGFAILEDTOCLEANDIR]);
+    message_now_ccc(tempmessage_ccc);
+    message_error_ccc(tempmessage_ccc);
+    print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
+    clear_error_message_ccc();
+    //return;
+  }
   mkdir(tempdir, 0777);
   char name[256];
   sprintf (name, "%s/%s%d.c", tempdir, DRIVER_FILE_NAME, process_id_ccc);
@@ -1364,7 +1333,15 @@ void install_driver_ccc (void)
   }
 
   sprintf (command, "rm -rf %s", tempdir);
-  system(command);
+  if (system(command))
+  {
+    sprintf (tempmessage_ccc, "%s", curlang_ccc[LANGFAILEDTOCLEANDIR]);
+    message_now_ccc(tempmessage_ccc);
+    message_error_ccc(tempmessage_ccc);
+    print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
+    clear_error_message_ccc();
+    //return;
+  }
 
   if (map_driver_memory_ccc())
   {
@@ -1439,13 +1416,16 @@ void uninstall_driver_ccc (void)
 
 void fix_driver_memory_driver_ccc (void)
 {
-  system("sync");
-  system("echo 3 > /proc/sys/vm/drop_caches");
-  system("echo 1 > /proc/sys/vm/compact_memory");
-  strcpy (tempmessage_ccc, curlang_ccc[LANGOPERATIONSUCCEEDED]);
-  message_error_ccc(tempmessage_ccc);
-  print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGINFO], 0);
-  clear_error_message_ccc();
+  int res0=system("sync");
+  int res1=system("echo 3 > /proc/sys/vm/drop_caches");
+  int res2=system("echo 1 > /proc/sys/vm/compact_memory");
+  if(res0==0 && res1==0 && res2==0)
+  {
+    strcpy (tempmessage_ccc, curlang_ccc[LANGOPERATIONSUCCEEDED]);
+    message_error_ccc(tempmessage_ccc);
+    print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGINFO], 0);
+    clear_error_message_ccc();
+  }
 }
 
 
@@ -1603,164 +1583,140 @@ int initialize_memory_ccc(void)
   real_buffer_size_ccc = MAX_BUFFER_SIZE;
   memory_failed_ccc = true;
   int attempt = 0;
-  if (superbyte_ccc[20] == 0x29)
+  if (usb_mode_ccc && !driver_memory_mapped_ccc)
   {
-    if (usb_mode_ccc && !driver_memory_mapped_ccc)
+    real_buffer_size_ccc = MAX_USB_BUFFER_SIZE;
+  }
+  while (attempt < 2)
+  {
+    attempt ++;
+    if (!quiet_ccc)
     {
-      real_buffer_size_ccc = MAX_USB_BUFFER_SIZE;
+      sprintf (tempmessage_ccc, "Initializing memory\n");
+      message_now_ccc(tempmessage_ccc);
     }
-    while (attempt < 2)
+
+    if (attempt == 2 && !driver_installed_ccc)
     {
-      attempt ++;
-      if (!quiet_ccc)
+      install_driver_ccc();
+    }
+
+    {
+      int multiplier = 1;
+      if (driver_installed_ccc && driver_memory_mapped_ccc)
       {
-        sprintf (tempmessage_ccc, "Initializing memory\n");
-        message_now_ccc(tempmessage_ccc);
+        multiplier = 4;
       }
-
-      if (attempt == 2 && !driver_installed_ccc)
-      {
-        install_driver_ccc();
-      }
-
-      if (superbyte_ccc[27] == 0x1e)
-      {
-        int multiplier = 1;
-        if (driver_installed_ccc && driver_memory_mapped_ccc)
-        {
-          multiplier = 4;
-        }
-        max_dma_size_ccc = ((pagesize_ccc * multiplier) / 16) * pagesize_ccc;
-        if (ahci_mode_ccc)
-        {
-          max_dma_size_ccc = ( ((pagesize_ccc * multiplier) - 128) / 16 ) * pagesize_ccc;
-        }
-      }
-
-      padding_buffer_ccc = malloc(pagesize_ccc);
-      // initialize the table buffer
-      if (direct_mode_ccc)
-      {
-        return_value_ccc = set_table_buffer_ccc();
-        if (return_value_ccc != 0)
-        {
-          if (attempt < 2)
-          {
-            continue;
-          }
-          strcpy (tempmessage_ccc, curlang_ccc[LANGBUFFERADDRESSRANGE]);
-          message_error_ccc(tempmessage_ccc);
-          print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
-          clear_error_message_ccc();
-          return GENERAL_ERROR_RETURN_CODE;
-        }
-      }
-
-
-      // initialize the command list buffer
+      max_dma_size_ccc = ((pagesize_ccc * multiplier) / 16) * pagesize_ccc;
       if (ahci_mode_ccc)
       {
-        return_value_ccc = set_command_list_buffer_ccc();
-        if (return_value_ccc != 0)
+        max_dma_size_ccc = ( ((pagesize_ccc * multiplier) - 128) / 16 ) * pagesize_ccc;
+      }
+    }
+
+    padding_buffer_ccc = malloc(pagesize_ccc);
+    // initialize the table buffer
+    if (direct_mode_ccc)
+    {
+      return_value_ccc = set_table_buffer_ccc();
+      if (return_value_ccc != 0)
+      {
+        if (attempt < 2)
         {
-          if (attempt < 2)
-          {
-            continue;
-          }
-          strcpy (tempmessage_ccc, curlang_ccc[LANGBUFFERADDRESSRANGE]);
+          continue;
+        }
+        strcpy (tempmessage_ccc, curlang_ccc[LANGBUFFERADDRESSRANGE]);
+        message_error_ccc(tempmessage_ccc);
+        print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
+        clear_error_message_ccc();
+        return GENERAL_ERROR_RETURN_CODE;
+      }
+    }
+
+
+    // initialize the command list buffer
+    if (ahci_mode_ccc)
+    {
+      return_value_ccc = set_command_list_buffer_ccc();
+      if (return_value_ccc != 0)
+      {
+        if (attempt < 2)
+        {
+          continue;
+        }
+        strcpy (tempmessage_ccc, curlang_ccc[LANGBUFFERADDRESSRANGE]);
+        message_error_ccc(tempmessage_ccc);
+        print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
+        clear_error_message_ccc();
+        return GENERAL_ERROR_RETURN_CODE;
+      }
+    }
+
+
+    // initialize the FIS buffer
+    if (ahci_mode_ccc)
+    {
+      return_value_ccc = set_fis_buffer_ccc();
+      if (return_value_ccc != 0)
+      {
+        if (attempt < 2)
+        {
+          continue;
+        }
+        strcpy (tempmessage_ccc, curlang_ccc[LANGBUFFERADDRESSRANGE]);
+        message_error_ccc(tempmessage_ccc);
+        print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
+        clear_error_message_ccc();
+        return GENERAL_ERROR_RETURN_CODE;
+      }
+    }
+
+
+    // initialize main buffer
+    // create a buffer that is memory aligned with the pagesize
+    if (direct_mode_ccc)
+    {
+      return_value_ccc = get_buffer_physical_memory_locations_ccc();
+      if (return_value_ccc != 0)
+      {
+        if (attempt < 2)
+        {
+          continue;
+        }
+        exitcode_ccc = GENERAL_ERROR_EXIT_CODE;
+        return (return_value_ccc);
+      }
+    }
+    else
+    {
+      if (!driver_memory_mapped_ccc)
+      {
+        free (ccc_buffer_ccc);
+        ccc_buffer_ccc = valloc(real_buffer_size_ccc);
+        if (!ccc_buffer_ccc)
+        {
+          strcpy (tempmessage_ccc, curlang_ccc[LANGPOSIXMEMFAIL]);
+          message_error_ccc(tempmessage_ccc);
+          sprintf (tempmessage_ccc, " (%s)", strerror(errno));
           message_error_ccc(tempmessage_ccc);
           print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
           clear_error_message_ccc();
           return GENERAL_ERROR_RETURN_CODE;
-        }
-      }
-
-
-      // initialize the FIS buffer
-      if (ahci_mode_ccc)
-      {
-        return_value_ccc = set_fis_buffer_ccc();
-        if (return_value_ccc != 0)
-        {
-          if (attempt < 2)
-          {
-            continue;
-          }
-          strcpy (tempmessage_ccc, curlang_ccc[LANGBUFFERADDRESSRANGE]);
-          message_error_ccc(tempmessage_ccc);
-          print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
-          clear_error_message_ccc();
-          return GENERAL_ERROR_RETURN_CODE;
-        }
-      }
-
-
-      // initialize main buffer
-      // create a buffer that is memory aligned with the pagesize
-      if (direct_mode_ccc && superbyte_ccc[21] == 0xa6)
-      {
-        return_value_ccc = get_buffer_physical_memory_locations_ccc();
-        if (return_value_ccc != 0)
-        {
-          if (attempt < 2)
-          {
-            continue;
-          }
-          exitcode_ccc = GENERAL_ERROR_EXIT_CODE;
-          return (return_value_ccc);
         }
       }
       else
       {
-        if (!driver_memory_mapped_ccc)
-        {
-          free (ccc_buffer_ccc);
-          ccc_buffer_ccc = valloc(real_buffer_size_ccc);
-          if (!ccc_buffer_ccc)
-          {
-            strcpy (tempmessage_ccc, curlang_ccc[LANGPOSIXMEMFAIL]);
-            message_error_ccc(tempmessage_ccc);
-            sprintf (tempmessage_ccc, " (%s)", strerror(errno));
-            message_error_ccc(tempmessage_ccc);
-            print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
-            clear_error_message_ccc();
-            return GENERAL_ERROR_RETURN_CODE;
-          }
-        }
-        else
-        {
-          ccc_buffer_ccc = (char*) driver_main_data_buffer_address_ccc;
-        }
-        memset (ccc_buffer_ccc, 0, real_buffer_size_ccc);
+        ccc_buffer_ccc = (char*) driver_main_data_buffer_address_ccc;
       }
-      if (!quiet_ccc)
-      {
-        sprintf (tempmessage_ccc, "Memory initialized\n");
-        message_now_ccc(tempmessage_ccc);
-      }
-      attempt ++;
+      memset (ccc_buffer_ccc, 0, real_buffer_size_ccc);
     }
-  }
-  else
-  {
-    unsigned int align = pagesize_ccc;
-    free (ccc_buffer_ccc);
-    ccc_buffer_ccc = valloc(real_buffer_size_ccc);
-    if (posix_memalign(&ccc_buffer_ccc, align, real_buffer_size_ccc))
+    if (!quiet_ccc)
     {
-      strcpy (tempmessage_ccc, curlang_ccc[LANGPOSIXMEMFAIL]);
-      message_error_ccc(tempmessage_ccc);
-      sprintf (tempmessage_ccc, " (%s)", strerror(errno));
-      message_error_ccc(tempmessage_ccc);
-      print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
-      clear_error_message_ccc();
-      return GENERAL_ERROR_RETURN_CODE;
+      sprintf (tempmessage_ccc, "Memory initialized\n");
+      message_now_ccc(tempmessage_ccc);
     }
-    memset (ccc_buffer_ccc, 0, real_buffer_size_ccc);
+    attempt ++;
   }
-
-  //exit (0);
-
 
   // set the starting main buffer size
   ccc_main_buffer_size_ccc = 512;
@@ -2753,25 +2709,6 @@ int read_log_file_ccc(char *log_file)
   if (found_error)
   {
     total_lines_ccc = 0;
-  }
-
-  if (superbyte_ccc[56] != 0x6b)
-  {
-    // prevent pro settings from being set in config data
-    skip_fast_ccc = false;
-    mark_bad_head_ccc = false;
-    read_bad_head_ccc = true;
-    block_size_ccc = DEFAULT_BLOCK_SIZE;
-    //sector_size_ccc = DEFAULT_SECTOR_SIZE;
-    block_offset_ccc = 0;
-    max_read_rate_ccc = 0;
-    enable_process_chunk_ccc = false;
-    enable_read_twice_ccc = false;
-    enable_retry_connecting_ccc = false;
-    enable_scsi_write_ccc = false;
-    output_sector_size_adjustment_ccc = 0;
-    use_physical_sector_size_for_virtual_ccc = false;
-    use_rebuild_assist_ccc = false;
   }
 
   fclose(readfile);
@@ -4697,10 +4634,7 @@ int set_initial_data_from_log_ccc(int newproject)
     rate_count_ccc = 0;
     output_sector_size_adjustment_ccc = 0;
     min_skip_size_ccc = original_min_skip_size_ccc;
-    if (superbyte_ccc[56] == 0x6b)
-    {
-      enable_process_chunk_ccc = true;
-    }
+    enable_process_chunk_ccc = true;
   }
 
   if (read_size_ccc == -1  || read_size_ccc > (source_total_size_ccc - input_offset_ccc))
@@ -5114,7 +5048,7 @@ int do_fill_ccc(int status, long long mask)
         {
           write_size = destination_sectors - current_position_ccc;
         }
-        int ret = ret = write_chunk_ccc(current_position_ccc, write_size);
+        int ret = write_chunk_ccc(current_position_ccc, write_size);
         if (ret)
         {
           // write error
@@ -5972,7 +5906,7 @@ int insert_domain_line_ccc(int line, long long position, long long size, long lo
     }
   }
   int i;
-  for (i = domain_lines_ccc; i > line; i--)
+  for (i = domain_lines_ccc; i > line && i > 0; i--)
   {
     dposition_ccc[i] = dposition_ccc[i-1];
     dsize_ccc[i] = dsize_ccc[i-1];
@@ -6449,18 +6383,6 @@ int add_to_domain_ccc(long long position, long long size)
 
 int clone_forward_ccc(void)
 {
-  if (!generic_mode_ccc && superbyte_ccc[28] != 0x4f)
-  {
-    if (sector_size_ccc != DEFAULT_SECTOR_SIZE && sector_size_ccc != ADVANCED_SECTOR_SIZE)
-    {
-      sprintf (tempmessage_ccc, "%s: %d", curlang_ccc[LANGUNSUPPORTEDSECTORSIZE], sector_size_ccc);
-      message_error_ccc(tempmessage_ccc);
-      print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
-      clear_error_message_ccc();
-      sector_size_ccc = DEFAULT_SECTOR_SIZE;
-      return INPUT_DEVICE_ERROR_RETURN_CODE;
-    }
-  }
   int ret = 0;
   int rollover = 0;
   //fprintf (stdout, "currentpos= %lld currentstat=%lld\n", current_position_ccc, current_status_ccc);  //debug
@@ -6873,18 +6795,6 @@ int clone_forward_ccc(void)
 
 int clone_reverse_ccc(void)
 {
-  if (!generic_mode_ccc && superbyte_ccc[28] != 0x4f)
-  {
-    if (sector_size_ccc != DEFAULT_SECTOR_SIZE && sector_size_ccc != ADVANCED_SECTOR_SIZE)
-    {
-      sprintf (tempmessage_ccc, "%s: %d", curlang_ccc[LANGUNSUPPORTEDSECTORSIZE], sector_size_ccc);
-      message_error_ccc(tempmessage_ccc);
-      print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
-      clear_error_message_ccc();
-      sector_size_ccc = DEFAULT_SECTOR_SIZE;
-      return INPUT_DEVICE_ERROR_RETURN_CODE;
-    }
-  }
   int ret = 0;
   int rollover = 0;
   //fprintf (stdout, "currentpos= %lld currentstat=%lld\n", current_position_ccc, current_status_ccc);  //debug
@@ -7287,18 +7197,6 @@ int clone_reverse_ccc(void)
 
 int driver_clone_forward_ccc(long long start, long long small_end, long long big_end)
 {
-  if (!generic_mode_ccc && superbyte_ccc[28] != 0x4f)
-  {
-    if (sector_size_ccc != DEFAULT_SECTOR_SIZE && sector_size_ccc != ADVANCED_SECTOR_SIZE)
-    {
-      sprintf (tempmessage_ccc, "%s: %d", curlang_ccc[LANGUNSUPPORTEDSECTORSIZE], sector_size_ccc);
-      message_error_ccc(tempmessage_ccc);
-      print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
-      clear_error_message_ccc();
-      sector_size_ccc = DEFAULT_SECTOR_SIZE;
-      return INPUT_DEVICE_ERROR_RETURN_CODE;
-    }
-  }
   // if the destination is null then reset the log to always read from the source
   int no_destination = 0;
   if (strcmp(disk_2_ccc, "/dev/null") == 0)
@@ -9525,10 +9423,6 @@ int trim_reverse_ccc(int status_type, int status_mask, int new_status_type)
 
 int analyze_drive_ccc(int sections, int extended)
 {
-  if (extended && superbyte_ccc[61] != 0x6c)
-  {
-    return 0;
-  }
   if (drive_locked_ccc)
   {
     strcpy (tempmessage_ccc, curlang_ccc[LANGDRIVELOCKED]);
@@ -10519,21 +10413,21 @@ long long set_additional_status_ccc(int retstat, int skip_info)
   long long additional_status = 0;
   if ( direct_mode_ccc || ((scsi_passthrough_ccc || ata_passthrough_ccc || usb_mode_ccc) && ata_return_valid_ccc && ata_identify_success_ccc) )
   {
-    additional_status = ((long long)retstat << 16) | ((long long)skip_info << 8) |  ((long long)ata_error_ccc << 48) | ((long long)ata_status_ccc << 40);
+    additional_status = ((unsigned long long)retstat << 16) | ((unsigned long long)skip_info << 8) |  ((unsigned long long)ata_error_ccc << 48) | ((unsigned long long)ata_status_ccc << 40);
   }
   else
   {
-    additional_status = ((long long)retstat << 16) | ((long long)skip_info << 8) | ((long long)sense_key_ccc << 56) | ((long long)asc_ccc << 48) | ((long long)ascq_ccc << 40);
+    additional_status = ((unsigned long long)retstat << 16) | ((unsigned long long)skip_info << 8) | ((unsigned long long)sense_key_ccc << 56) | ((unsigned long long)asc_ccc << 48) | ((unsigned long long)ascq_ccc << 40);
   }
   return additional_status;
 
   if (scsi_passthrough_ccc || usb_mode_ccc || (ata_passthrough_ccc && !ata_return_valid_ccc) )
   {
-    additional_status = ((long long)retstat << 16) | ((long long)skip_info << 8) | ((long long)sense_key_ccc << 56) | ((long long)asc_ccc << 48) | ((long long)ascq_ccc << 40);
+    additional_status = ((unsigned long long)retstat << 16) | ((unsigned long long)skip_info << 8) | ((unsigned long long)sense_key_ccc << 56) | ((unsigned long long)asc_ccc << 48) | ((unsigned long long)ascq_ccc << 40);
   }
   else
   {
-    additional_status = ((long long)retstat << 16) | ((long long)skip_info << 8) |  ((long long)ata_error_ccc << 48) | ((long long)ata_status_ccc << 40);
+    additional_status = ((unsigned long long)retstat << 16) | ((unsigned long long)skip_info << 8) |  ((unsigned long long)ata_error_ccc << 48) | ((unsigned long long)ata_status_ccc << 40);
   }
   return additional_status;
 }
@@ -10797,7 +10691,7 @@ int write_chunk_ccc(long long position, int size)
 
   int sector_size_bak = sector_size_ccc;
   long long main_buffer_size_bak = ccc_main_buffer_size_ccc;
-  void* temp_buffer;
+  void* temp_buffer = NULL;
   if (output_sector_size_adjustment_ccc != 0)
   {
     // sanity check
@@ -10920,6 +10814,7 @@ int write_chunk_ccc(long long position, int size)
     ccc_main_buffer_size_ccc = main_buffer_size_bak;
     memcpy (ccc_buffer_ccc, temp_buffer, main_buffer_size_bak);    // this is needed if there are possible operations after the write
     free(temp_buffer);
+    temp_buffer=NULL;
   }
 
   if (driver_mode_ccc)
@@ -10940,6 +10835,7 @@ int write_chunk_ccc(long long position, int size)
     }
   }
 
+  if(temp_buffer!=NULL) free(temp_buffer);
   return 0;
 }
 
@@ -11234,19 +11130,91 @@ int process_chunk_ccc(int new_status_type, int retstat, int rsize, int skip_info
     fprintf (debug_file_ccc, "process_chunk newstatus=0x%x  retstat=0x%x  rsize=0x%x  skipinfo=0x%x\n", new_status_type, retstat, rsize, skip_info);
   }
 
-  if (superbyte_ccc[22] == 0xd1)
+  // if it is the first sector of the read then mark it as bad and mark the rest as needed
+  if (ata_lba_ccc == current_position_ccc)
   {
-    // if it is the first sector of the read then mark it as bad and mark the rest as needed
-    if (ata_lba_ccc == current_position_ccc)
+    int ret = change_chunk_status_ccc(current_position_ccc, block_size_ccc, BAD | additional_status | get_timing_byte_ccc(), FULL_MASK);
+    if (ret < 0)
     {
-      int ret = change_chunk_status_ccc(current_position_ccc, block_size_ccc, BAD | additional_status | get_timing_byte_ccc(), FULL_MASK);
+      return ret;
+    }
+    ret = change_chunk_status_ccc(current_position_ccc + block_size_ccc, rsize - block_size_ccc, new_status_type | additional_status | get_timing_byte_ccc(), FULL_MASK);
+    if (ret < 0)
+    {
+      return ret;
+    }
+    if (driver_mode_ccc)
+    {
+      long long kposition = current_position_ccc * (sector_size_ccc / KERNEL_SECTOR_SIZE);
+      long long koffset = kposition - read_ctrl_data_ccc(CTRL_KSECTOR_START);
+      long long ksize = rsize * (sector_size_ccc / KERNEL_SECTOR_SIZE);
+      if (koffset >= 0 && koffset + ksize <= DRIVER_TRANSFER_BUFFER_SIZE / KERNEL_SECTOR_SIZE)
+      {
+        memset(driver_transfer_buffer_address_ccc + (koffset * KERNEL_SECTOR_SIZE), 0, ksize * KERNEL_SECTOR_SIZE);
+        memset(driver_error_bitmap_address_ccc + koffset, 0x80, ksize);
+      }
+    }
+  }
+  else
+  {
+    // if not the first sector of the read then do a new read up to the reported error and recheck
+    int rsize2 = ata_lba_ccc - current_position_ccc;
+    int retstat2 = read_chunk_ccc(current_position_ccc, rsize2);
+    if (stop_signal_ccc)
+    {
+      return STOP_SIGNAL_RETURN_CODE;
+    }
+    // if read was successful then write the chunk, otherwise mark the whole chunk
+    if (!retstat2 && !(ata_status_ccc & 1) && sense_key_ccc < 2 && !usb_read_residue_ccc)
+    {
+      int ret = write_chunk_ccc(current_position_ccc, rsize2);
+      if (ret)
+      {
+        // write error
+        return ret;
+      }
+      ret = change_chunk_status_ccc(current_position_ccc, rsize2, FINISHED | get_timing_byte_ccc(), FULL_MASK);
+      if (ret < 0)
+      {
+        // error changing chunk
+        return ret;
+      }
+      // mark the reported bad sector as bad
+      ret = change_chunk_status_ccc(current_position_ccc + rsize2, block_size_ccc, BAD | additional_status | original_timing_byte, FULL_MASK);
       if (ret < 0)
       {
         return ret;
       }
-      ret = change_chunk_status_ccc(current_position_ccc + block_size_ccc, rsize - block_size_ccc, new_status_type | additional_status | get_timing_byte_ccc(), FULL_MASK);
+      // if there is leftover then mark it as new status type
+      int rsize3 = rsize - rsize2 - block_size_ccc;
+      if (rsize3 > 0)
+      {
+        ret = change_chunk_status_ccc(current_position_ccc + rsize2 + block_size_ccc, rsize3, new_status_type | additional_status | original_timing_byte, FULL_MASK);
+        if (ret < 0)
+        {
+          // error changing chunk
+          return ret;
+        }
+      }
+      if (driver_mode_ccc)
+      {
+        long long kposition = (current_position_ccc + rsize2) * (sector_size_ccc / KERNEL_SECTOR_SIZE);
+        long long koffset = kposition - read_ctrl_data_ccc(CTRL_KSECTOR_START);
+        long long ksize = (rsize3 + block_size_ccc) * (sector_size_ccc / KERNEL_SECTOR_SIZE);
+        if (koffset >= 0 && koffset + ksize <= DRIVER_TRANSFER_BUFFER_SIZE / KERNEL_SECTOR_SIZE)
+        {
+          memset(driver_transfer_buffer_address_ccc + (koffset * KERNEL_SECTOR_SIZE), 0, ksize * KERNEL_SECTOR_SIZE);
+          memset(driver_error_bitmap_address_ccc + koffset, 0x80, ksize);
+        }
+      }
+    }
+    else
+    {
+      // if it failed the second read attempt then process the whole chunk as normal read error
+      int ret = change_chunk_status_ccc(current_position_ccc, rsize, ((rsize > block_size_ccc || (retstat && dont_mark)) ? new_status_type : BAD) | additional_status | original_timing_byte, FULL_MASK);
       if (ret < 0)
       {
+        // error changing chunk
         return ret;
       }
       if (driver_mode_ccc)
@@ -11259,102 +11227,6 @@ int process_chunk_ccc(int new_status_type, int retstat, int rsize, int skip_info
           memset(driver_transfer_buffer_address_ccc + (koffset * KERNEL_SECTOR_SIZE), 0, ksize * KERNEL_SECTOR_SIZE);
           memset(driver_error_bitmap_address_ccc + koffset, 0x80, ksize);
         }
-      }
-    }
-    else
-    {
-      // if not the first sector of the read then do a new read up to the reported error and recheck
-      int rsize2 = ata_lba_ccc - current_position_ccc;
-      int retstat2 = read_chunk_ccc(current_position_ccc, rsize2);
-      if (stop_signal_ccc)
-      {
-        return STOP_SIGNAL_RETURN_CODE;
-      }
-      // if read was successful then write the chunk, otherwise mark the whole chunk
-      if (!retstat2 && !(ata_status_ccc & 1) && sense_key_ccc < 2 && !usb_read_residue_ccc)
-      {
-        int ret = write_chunk_ccc(current_position_ccc, rsize2);
-        if (ret)
-        {
-          // write error
-          return ret;
-        }
-        ret = change_chunk_status_ccc(current_position_ccc, rsize2, FINISHED | get_timing_byte_ccc(), FULL_MASK);
-        if (ret < 0)
-        {
-          // error changing chunk
-          return ret;
-        }
-        // mark the reported bad sector as bad
-        ret = change_chunk_status_ccc(current_position_ccc + rsize2, block_size_ccc, BAD | additional_status | original_timing_byte, FULL_MASK);
-        if (ret < 0)
-        {
-          return ret;
-        }
-        // if there is leftover then mark it as new status type
-        int rsize3 = rsize - rsize2 - block_size_ccc;
-        if (rsize3 > 0)
-        {
-          ret = change_chunk_status_ccc(current_position_ccc + rsize2 + block_size_ccc, rsize3, new_status_type | additional_status | original_timing_byte, FULL_MASK);
-          if (ret < 0)
-          {
-            // error changing chunk
-            return ret;
-          }
-        }
-        if (driver_mode_ccc)
-        {
-          long long kposition = (current_position_ccc + rsize2) * (sector_size_ccc / KERNEL_SECTOR_SIZE);
-          long long koffset = kposition - read_ctrl_data_ccc(CTRL_KSECTOR_START);
-          long long ksize = (rsize3 + block_size_ccc) * (sector_size_ccc / KERNEL_SECTOR_SIZE);
-          if (koffset >= 0 && koffset + ksize <= DRIVER_TRANSFER_BUFFER_SIZE / KERNEL_SECTOR_SIZE)
-          {
-            memset(driver_transfer_buffer_address_ccc + (koffset * KERNEL_SECTOR_SIZE), 0, ksize * KERNEL_SECTOR_SIZE);
-            memset(driver_error_bitmap_address_ccc + koffset, 0x80, ksize);
-          }
-        }
-      }
-      else
-      {
-        // if it failed the second read attempt then process the whole chunk as normal read error
-        int ret = change_chunk_status_ccc(current_position_ccc, rsize, ((rsize > block_size_ccc || (retstat && dont_mark)) ? new_status_type : BAD) | additional_status | original_timing_byte, FULL_MASK);
-        if (ret < 0)
-        {
-          // error changing chunk
-          return ret;
-        }
-        if (driver_mode_ccc)
-        {
-          long long kposition = current_position_ccc * (sector_size_ccc / KERNEL_SECTOR_SIZE);
-          long long koffset = kposition - read_ctrl_data_ccc(CTRL_KSECTOR_START);
-          long long ksize = rsize * (sector_size_ccc / KERNEL_SECTOR_SIZE);
-          if (koffset >= 0 && koffset + ksize <= DRIVER_TRANSFER_BUFFER_SIZE / KERNEL_SECTOR_SIZE)
-          {
-            memset(driver_transfer_buffer_address_ccc + (koffset * KERNEL_SECTOR_SIZE), 0, ksize * KERNEL_SECTOR_SIZE);
-            memset(driver_error_bitmap_address_ccc + koffset, 0x80, ksize);
-          }
-        }
-      }
-    }
-  }
-  else
-  {
-    // process the whole chunk as normal read error for free version
-    int ret = change_chunk_status_ccc(current_position_ccc, rsize, ((rsize > block_size_ccc || (retstat && dont_mark)) ? new_status_type : BAD) | additional_status | original_timing_byte, FULL_MASK);
-    if (ret < 0)
-    {
-      // error changing chunk
-      return ret;
-    }
-    if (driver_mode_ccc)
-    {
-      long long kposition = current_position_ccc * (sector_size_ccc / KERNEL_SECTOR_SIZE);
-      long long koffset = kposition - read_ctrl_data_ccc(CTRL_KSECTOR_START);
-      long long ksize = rsize * (sector_size_ccc / KERNEL_SECTOR_SIZE);
-      if (koffset >= 0 && koffset + ksize <= DRIVER_TRANSFER_BUFFER_SIZE / KERNEL_SECTOR_SIZE)
-      {
-        memset(driver_transfer_buffer_address_ccc + (koffset * KERNEL_SECTOR_SIZE), 0, ksize * KERNEL_SECTOR_SIZE);
-        memset(driver_error_bitmap_address_ccc + koffset, 0x80, ksize);
       }
     }
   }
@@ -12511,23 +12383,16 @@ int process_chs_ccc(long long position)
 
 int check_buffer_limit_ccc(void)
 {
-  if (superbyte_ccc[26] == 0xfa)
+  int multiplier = 1;
+  if (driver_installed_ccc && driver_memory_mapped_ccc)
   {
-    int multiplier = 1;
-    if (driver_installed_ccc && driver_memory_mapped_ccc)
-    {
-      multiplier = 4;
-    }
-    //max_dma_size_ccc = (pagesize_ccc / 8) * pagesize_ccc;
-    max_dma_size_ccc = ((pagesize_ccc * multiplier) / 16) * pagesize_ccc;    // limited to this to more match the ahci limit
-    if (ahci_mode_ccc)
-    {
-      max_dma_size_ccc = ( ((pagesize_ccc * multiplier) - 128) / 16 ) * pagesize_ccc;
-    }
+    multiplier = 4;
   }
-  else
+  //max_dma_size_ccc = (pagesize_ccc / 8) * pagesize_ccc;
+  max_dma_size_ccc = ((pagesize_ccc * multiplier) / 16) * pagesize_ccc;    // limited to this to more match the ahci limit
+  if (ahci_mode_ccc)
   {
-    max_dma_size_ccc = pagesize_ccc;
+    max_dma_size_ccc = ( ((pagesize_ccc * multiplier) - 128) / 16 ) * pagesize_ccc;
   }
   int max_size = 0;
   if (direct_mode_ccc)
@@ -12928,84 +12793,6 @@ char *get_future_date_ccc(long long days)
     strcpy (futuredate, tempbuffer);
     return futuredate;
   }
-
-
-
-
-
-
-// rotate funtions
-uint8_t rotl8_ccc(uint8_t value, int shift)
-{
-  return (value << shift) | (value >> (sizeof(value) * 8 - shift));
-}
-uint8_t rotr8_ccc(uint8_t value, int shift)
-{
-  return (value >> shift) | (value << (sizeof(value) * 8 - shift));
-}
-
-
-uint16_t rotl16_ccc(uint16_t value, int shift)
-{
-  return (value << shift) | (value >> (sizeof(value) * 8 - shift));
-}
-uint16_t rotr16_ccc(uint16_t value, int shift)
-{
-  return (value >> shift) | (value << (sizeof(value) * 8 - shift));
-}
-
-
-uint32_t rotl32_ccc(uint32_t value, int shift)
-{
-  return (value << shift) | (value >> (sizeof(value) * 8 - shift));
-}
-uint32_t rotr32_ccc(uint32_t value, int shift)
-{
-  return (value >> shift) | (value << (sizeof(value) * 8 - shift));
-}
-
-
-uint64_t rotl64_ccc(uint64_t value, int shift)
-{
-  return (value << shift) | (value >> (sizeof(value) * 8 - shift));
-}
-uint64_t rotr64_ccc(uint64_t value, int shift)
-{
-  return (value >> shift) | (value << (sizeof(value) * 8 - shift));
-}
-
-
-
-
-
-
-
-// function to get random value
-int get_random_value_ccc(int speed)
-{
-  struct timeval tvstart;
-  gettimeofday(&tvstart, NULL);
-  //printf("%ld.%06ld\n", tvstart.tv_sec, tvstart.tv_usec);
-  int random_value;
-  int i;
-  for (i = 0; i < speed; i++)
-  {
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    //printf("%ld.%06ld\n", tv.tv_sec, tv.tv_usec);
-    srand( (tv.tv_usec + 1000000 * tv.tv_sec) );
-    random_value = rand();
-    //fprintf (stdout, "random=%d\n", random_value);
-  }
-  struct timeval tvend;
-  gettimeofday(&tvend, NULL);
-  //printf("%ld.%06ld\n", tvend.tv_sec, tvend.tv_usec);
-
-  return (random_value);
-}
-
-
-
 
 
 int do_nanosleep_ccc(unsigned long long time)
@@ -13945,23 +13732,8 @@ int process_source_ccc(void)
     if (!data_read_from_log_ccc)
     {
       sector_size_ccc = bytes_per_sector_ccc;
-      if (superbyte_ccc[23] == 0x5b)
-      {
       block_size_ccc = logical_sectors_per_physical;
       block_offset_ccc = sector_offset;
-      }
-    }
-    if (!generic_mode_ccc && superbyte_ccc[28] != 0x4f)
-    {
-      if (sector_size_ccc != DEFAULT_SECTOR_SIZE && sector_size_ccc != ADVANCED_SECTOR_SIZE)
-      {
-        sprintf (tempmessage_ccc, "%s: %d", curlang_ccc[LANGUNSUPPORTEDSECTORSIZE], sector_size_ccc);
-        message_error_ccc(tempmessage_ccc);
-        print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
-        clear_error_message_ccc();
-        sector_size_ccc = DEFAULT_SECTOR_SIZE;
-        return INPUT_DEVICE_ERROR_RETURN_CODE;
-      }
     }
     //fprintf(stdout, "LBA supported= %d\n", lba_supported_ccc);    //debug
     memcpy(&c, identify_buffer_ccc+256, 1);  // word 128
@@ -14292,23 +14064,8 @@ int process_source_ccc(void)
     if (!data_read_from_log_ccc)
     {
       sector_size_ccc = blocksize;
-      if (superbyte_ccc[23] == 0x5b)
-      {
       block_size_ccc = logical_sectors_per_physical;
       block_offset_ccc = sector_offset;
-      }
-    }
-    if (!generic_mode_ccc && superbyte_ccc[28] != 0x4f)
-    {
-      if (sector_size_ccc != DEFAULT_SECTOR_SIZE && sector_size_ccc != ADVANCED_SECTOR_SIZE)
-      {
-        sprintf (tempmessage_ccc, "%s: %d", curlang_ccc[LANGUNSUPPORTEDSECTORSIZE], sector_size_ccc);
-        message_error_ccc(tempmessage_ccc);
-        print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
-        clear_error_message_ccc();
-        sector_size_ccc = DEFAULT_SECTOR_SIZE;
-        return INPUT_DEVICE_ERROR_RETURN_CODE;
-      }
     }
     if (scsi_check_read_commands_ccc())
     {
@@ -14385,24 +14142,8 @@ int process_source_ccc(void)
     if (!data_read_from_log_ccc)
     {
       sector_size_ccc = bytes_per_log_sec;
-      if (superbyte_ccc[23] == 0x5b)
-      {
       block_size_ccc = blocksize;
       block_offset_ccc = sector_offset;
-      }
-    }
-    if (!generic_mode_ccc && superbyte_ccc[28] != 0x4f)
-    {
-      if (sector_size_ccc != DEFAULT_SECTOR_SIZE && sector_size_ccc != ADVANCED_SECTOR_SIZE)
-      {
-        sprintf (tempmessage_ccc, "%s: %d", curlang_ccc[LANGUNSUPPORTEDSECTORSIZE], sector_size_ccc);
-        message_error_ccc(tempmessage_ccc);
-        print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
-        clear_error_message_ccc();
-        sector_size_ccc = DEFAULT_SECTOR_SIZE;
-        return INPUT_DEVICE_ERROR_RETURN_CODE;
-      }
-      sector_size_ccc = DEFAULT_SECTOR_SIZE;
     }
   }
   else
@@ -15522,34 +15263,14 @@ void set_mode_direct_ccc (void)
 {
   if (!direct_mode_ccc || ahci_mode_ccc)
   {
-    if (superbyte_ccc[24] == 0xb4)
+    clear_mode_ccc();
+    direct_mode_ccc = true;
+    clear_source_ccc();
+    update_mode_ccc();
+    // re-initialize memory after mode change
+    if (initialize_memory_ccc())
     {
-      clear_mode_ccc();
-      direct_mode_ccc = true;
-      clear_source_ccc();
-      update_mode_ccc();
-      // re-initialize memory after mode change
-      if (initialize_memory_ccc())
-      {
-        //set_mode_auto_passthrough_ccc();
-      }
-    }
-    else
-    {
-      clear_mode_ccc();
-      sprintf (tempmessage_ccc, "%s",  curlang_ccc[LANGDIRECTPIO]);
-      message_error_ccc(tempmessage_ccc);
-      //sprintf (tempmessage_ccc, "%s",  curlang_ccc[LANGDIRECTLIMITED]);
-      //message_error_ccc(tempmessage_ccc);
-      print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGINFO], 0);
-      clear_error_message_ccc();
-      limit_recovery_ccc = false;
-      direct_mode_ccc = true;
-      pio_mode_ccc = true;
-      clear_source_ccc();
-      update_mode_ccc();
-      // re-initialize memory after mode change
-      initialize_memory_ccc();
+      //set_mode_auto_passthrough_ccc();
     }
   }
 }
@@ -15560,18 +15281,15 @@ void set_mode_ahci_ccc (void)
 {
   if (!ahci_mode_ccc)
   {
-    if (superbyte_ccc[25] == 0x71)
+    clear_mode_ccc();
+    direct_mode_ccc = true;
+    ahci_mode_ccc = true;
+    clear_source_ccc();
+    update_mode_ccc();
+    // re-initialize memory after mode change
+    if (initialize_memory_ccc())
     {
-      clear_mode_ccc();
-      direct_mode_ccc = true;
-      ahci_mode_ccc = true;
-      clear_source_ccc();
-      update_mode_ccc();
-      // re-initialize memory after mode change
-      if (initialize_memory_ccc())
-      {
-        //set_mode_auto_passthrough_ccc();
-      }
+      //set_mode_auto_passthrough_ccc();
     }
   }
 }
@@ -15584,16 +15302,13 @@ void set_mode_usb_ccc (void)
 {
   if (!usb_mode_ccc || usb_allow_ata_ccc)
   {
-    if (superbyte_ccc[25] == 0x71)
-    {
-      clear_mode_ccc();
-      usb_mode_ccc = true;
-      usb_allow_ata_ccc = false;
-      clear_source_ccc();
-      update_mode_ccc();
-      // re-initialize memory after mode change
-      initialize_memory_ccc();
-    }
+    clear_mode_ccc();
+    usb_mode_ccc = true;
+    usb_allow_ata_ccc = false;
+    clear_source_ccc();
+    update_mode_ccc();
+    // re-initialize memory after mode change
+    initialize_memory_ccc();
   }
 }
 
@@ -15605,16 +15320,13 @@ void set_mode_usb_ata_ccc (void)
 {
   if (!usb_mode_ccc || !usb_allow_ata_ccc)
   {
-    if (superbyte_ccc[25] == 0x71)
-    {
-      clear_mode_ccc();
-      usb_mode_ccc = true;
-      usb_allow_ata_ccc = true;
-      clear_source_ccc();
-      update_mode_ccc();
-      // re-initialize memory after mode change
-      initialize_memory_ccc();
-    }
+    clear_mode_ccc();
+    usb_mode_ccc = true;
+    usb_allow_ata_ccc = true;
+    clear_source_ccc();
+    update_mode_ccc();
+    // re-initialize memory after mode change
+    initialize_memory_ccc();
   }
 }
 
@@ -16156,10 +15868,13 @@ void invoke_hba_reset_ccc (void)
 
 void disable_ports_ccc (void)
 {
-  system("cp -n /boot/grub/grub.cfg /boot/grub/grub_hddsc_original_bakup.cfg");
-  system("cp -n /etc/default/grub /etc/default/grub_hddsc_original_bakup");
-  system("cp -f /boot/grub/grub.cfg /boot/grub/grub_hddsc_last_bakup.cfg");
-  system("cp -f /etc/default/grub /etc/default/grub_hddsc_last_bakup");
+  int res0=system("cp -n /boot/grub/grub.cfg /boot/grub/grub_hddsc_original_bakup.cfg");
+  int res1=system("cp -n /etc/default/grub /etc/default/grub_hddsc_original_bakup");
+  int res2=system("cp -f /boot/grub/grub.cfg /boot/grub/grub_hddsc_last_bakup.cfg");
+  int res3=system("cp -f /etc/default/grub /etc/default/grub_hddsc_last_bakup");
+  if(res0 || res1 || res2 || res3)
+  {
+  }
   if (access("/boot/grub/grub_hddsc_original_bakup.cfg", F_OK ) == -1)
   {
     strcpy (tempmessage_ccc, curlang_ccc[LANGNOBACKUPFILE]);
@@ -16201,11 +15916,13 @@ void disable_ports_ccc (void)
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
     fprintf (stdout, "Error opening /etc/default/grub_tmp (%s)\n", strerror(errno));
+    fclose(readfile);
     return;
   }
 
   int maxlinelen = 65536;
   char line[maxlinelen];
+  memset(line,0,sizeof(line));
   char original_line[maxlinelen];
   char modified_line[maxlinelen];
   memset (original_line, 0, maxlinelen);
@@ -16215,7 +15932,7 @@ void disable_ports_ccc (void)
   while (fgets(line, sizeof line, readfile))
   {
     int n = 0;
-    while (line[n] != '\n' && line[n] != '\0' && n < maxlinelen)
+    while (line[n] != '\0' && line[n] != '\n' && n < maxlinelen)
     {
       if (strncmp(line+n, "GRUB_CMDLINE_LINUX_DEFAULT=\"", 28) == 0)
       {
@@ -16402,9 +16119,12 @@ void restore_ports_ccc (void)
 
 void disable_usb_mass_storage_ccc(void)
 {
-  system("cp -n /lib/modules/$(uname -r)/kernel/drivers/usb/storage/usb-storage.ko /root/usb-storage.ko.original");
-  system("cp -f /lib/modules/$(uname -r)/kernel/drivers/usb/storage/usb-storage.ko /root/usb-storage.ko.backup");
-
+  int res0=system("cp -n /lib/modules/$(uname -r)/kernel/drivers/usb/storage/usb-storage.ko /root/usb-storage.ko.original");
+  int res1=system("cp -f /lib/modules/$(uname -r)/kernel/drivers/usb/storage/usb-storage.ko /root/usb-storage.ko.backup");
+  if(res0 || res1)
+  {
+    // Perhaps it went wrong?
+  }
   if (access("/root/usb-storage.ko.original", F_OK ) == -1)
   {
     strcpy (tempmessage_ccc, curlang_ccc[LANGNOBACKUPFILE]);
@@ -16428,7 +16148,11 @@ void disable_usb_mass_storage_ccc(void)
 
   if (open_confirmation_dialog_ccc(curlang_ccc[LANGUSBMASSDISABLE]))
   {
-    system("modprobe -r usb-storage");
+    int res2=system("modprobe -r usb-storage");
+    if(res2)
+    {
+      // perhaps it went wrong?
+    }
     if (system("mv -fv /lib/modules/$(uname -r)/kernel/drivers/usb/storage/usb-storage.ko /root/usb-storage.ko"))
     {
       // error copying
@@ -17126,6 +16850,7 @@ int rebuild_assist_map_heads_ccc (void)
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
+      fclose(headmap_debug_file);
       return -1;
     }
   }
@@ -17138,6 +16863,7 @@ int rebuild_assist_map_heads_ccc (void)
       message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
+    fclose(headmap_debug_file);
     return -1;
   }
   int highest_head = rebuild_assist_get_highest_head_ccc();
@@ -17149,6 +16875,7 @@ int rebuild_assist_map_heads_ccc (void)
       message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
+    fclose(headmap_debug_file);
     return -1;
   }
   unsigned char pattern_head[REBUILD_ASSIST_FIELD_LENGTH * HEAD_PATTERN_CHECK_COUNT];
@@ -17296,6 +17023,7 @@ int rebuild_assist_map_heads_ccc (void)
         print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
         clear_error_message_ccc();
         disable_rebuild_assist_ccc();
+	fclose(headmap_debug_file);
         return -1;
       }
       else
@@ -17470,10 +17198,11 @@ int rebuild_assist_map_heads_ccc (void)
     starting_average_size = starting_average_size / HEAD_PATTERN_CHECK_COUNT;
     fprintf (stdout, "pattern size=%06llx\n", starting_average_size);
     fprintf (headmap_debug_file, "pattern size=%06llx\n", starting_average_size);
-    fprintf (stdout, "average per head = %lld\n", (starting_average_size * 512) / heads_in_pattern);
-    fprintf (headmap_debug_file, "average per head = %lld\n", (starting_average_size * 512) / heads_in_pattern);
-
-
+    if(heads_in_pattern)
+    {
+      fprintf (stdout, "average per head = %lld\n", (starting_average_size * 512) / heads_in_pattern);
+      fprintf (headmap_debug_file, "average per head = %lld\n", (starting_average_size * 512) / heads_in_pattern);
+    }
 
 
     // populate head map with known good data
@@ -17746,6 +17475,7 @@ int rebuild_assist_map_heads_ccc (void)
   if (writefile == NULL)
   {
     fprintf (stdout, "Cannot open %s for writing (%s).\n", file_name, strerror(errno));
+    free(file_name);
     return -1;
   }
   fprintf (writefile, "# Headmap file create by %s %s\n", title_ccc, version_number_ccc);
@@ -17768,5 +17498,7 @@ int rebuild_assist_map_heads_ccc (void)
   mytime = time(NULL);
   fprintf (headmap_debug_file, "%s", ctime(&mytime));
   fclose (headmap_debug_file);
+  free(file_name);
+
   return 0;
 }

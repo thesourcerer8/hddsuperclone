@@ -39,15 +39,13 @@ struct sg_io_hdr io_hdr;
 bool use_fpdma_ccc;
 bool wait_for_ds_bit_ccc;
 int driver_running_ccc;
-#define MAXLANGLENGTH 2048
-#define LANGCOUNT 427
 char curlang_ccc[LANGCOUNT][MAXLANGLENGTH];
 
 
 char *version_number_ccc;
 
 
-
+#include "strncpy_wrapper.h"
 
 
 
@@ -736,15 +734,15 @@ int do_usb_cmd_ccc(void)
   usb_csw_valid_ccc = 0;
   usb_tag_ccc++;
   memset (usbcbwbuffer_ccc, 0, USBCBW_BUFFER_SIZE);
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[71], passthrough_ccc.scsi_cmd, command_length_ccc);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[72], &command_length_ccc, 1);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[73], &usb_transfer_direction_ccc, 1);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[73] + 1, &usb_lun_ccc, 1);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[74], &usb_tag_ccc, 4);    //potential superbyte
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[71], passthrough_ccc.scsi_cmd, command_length_ccc);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[72], &command_length_ccc, 1);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[73], &usb_transfer_direction_ccc, 1);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[73] + 1, &usb_lun_ccc, 1);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[74], &usb_tag_ccc, 4);
   usb_transfer_length_ccc = ccc_main_buffer_size_ccc;
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[75], &usb_transfer_length_ccc, 4);    //potential superbyte
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[75], &usb_transfer_length_ccc, 4);
   uint32_t cbwsig = 0x43425355;
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[76], &cbwsig, 4);    //potential superbyte
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[76], &cbwsig, 4);
   cbw_timeout_ccc = usb_timeout_ccc;
   cbw_ret = do_usb_send_cbw_ccc(cbw_timeout_ccc);
   if (cbw_ret != USBCBW_BUFFER_SIZE)
@@ -887,14 +885,14 @@ int usb_get_sense_ccc(void)
   uint32_t csw_residue = 0;
   usb_tag_ccc++;
   memset (usbcbwbuffer_ccc, 0, USBCBW_BUFFER_SIZE);
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[71], passthrough_ccc.scsi_cmd, command_length_ccc);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[72], &command_length_ccc, 1);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[73], &usb_transfer_direction_ccc, 1);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[73] + 1, &usb_lun_ccc, 1);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[74], &usb_tag_ccc, 4);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[75], &usb_transfer_length_ccc, 4);    //potential superbyte
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[71], passthrough_ccc.scsi_cmd, command_length_ccc);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[72], &command_length_ccc, 1);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[73], &usb_transfer_direction_ccc, 1);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[73] + 1, &usb_lun_ccc, 1);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[74], &usb_tag_ccc, 4);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[75], &usb_transfer_length_ccc, 4);
   uint32_t cbwsig = 0x43425355;
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[76], &cbwsig, 4);    //potential superbyte
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[76], &cbwsig, 4);
   cbw_timeout_ccc = usb_timeout_ccc;
   cbw_ret = do_usb_send_cbw_ccc(cbw_timeout_ccc);
   if (cbw_ret != USBCBW_BUFFER_SIZE)
@@ -1127,14 +1125,14 @@ int usb_soft_hard_reset_ccc(unsigned char reset_type, int timeout)
   uint32_t csw_residue = 0;
   usb_tag_ccc++;
   memset (usbcbwbuffer_ccc, 0, USBCBW_BUFFER_SIZE);
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[71], passthrough_ccc.scsi_cmd, command_length_ccc);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[72], &command_length_ccc, 1);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[73], &usb_transfer_direction_ccc, 1);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[73] + 1, &usb_lun_ccc, 1);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[74], &usb_tag_ccc, 4);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[75], &usb_transfer_length_ccc, 4);    //potential superbyte
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[71], passthrough_ccc.scsi_cmd, command_length_ccc);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[72], &command_length_ccc, 1);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[73], &usb_transfer_direction_ccc, 1);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[73] + 1, &usb_lun_ccc, 1);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[74], &usb_tag_ccc, 4);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[75], &usb_transfer_length_ccc, 4);
   uint32_t cbwsig = 0x43425355;
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[76], &cbwsig, 4);    //potential superbyte
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[76], &cbwsig, 4);
   cbw_timeout_ccc = usb_timeout_ccc;
   cbw_ret = do_usb_send_cbw_ccc(cbw_timeout_ccc);
   if (cbw_ret != USBCBW_BUFFER_SIZE)
@@ -1221,14 +1219,14 @@ int usb_inquiry_ccc(int timeout)
   uint32_t csw_residue = 0;
   usb_tag_ccc++;
   memset (usbcbwbuffer_ccc, 0, USBCBW_BUFFER_SIZE);
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[71], passthrough_ccc.scsi_cmd, command_length_ccc);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[72], &command_length_ccc, 1);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[73], &usb_transfer_direction_ccc, 1);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[73] + 1, &usb_lun_ccc, 1);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[74], &usb_tag_ccc, 4);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[75], &usb_transfer_length_ccc, 4);    //potential superbyte
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[71], passthrough_ccc.scsi_cmd, command_length_ccc);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[72], &command_length_ccc, 1);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[73], &usb_transfer_direction_ccc, 1);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[73] + 1, &usb_lun_ccc, 1);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[74], &usb_tag_ccc, 4);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[75], &usb_transfer_length_ccc, 4);
   uint32_t cbwsig = 0x43425355;
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[76], &cbwsig, 4);    //potential superbyte
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[76], &cbwsig, 4);
   cbw_timeout_ccc = usb_timeout_ccc;
   cbw_ret = do_usb_send_cbw_ccc(cbw_timeout_ccc);
   if (cbw_ret != USBCBW_BUFFER_SIZE)
@@ -1340,14 +1338,14 @@ int usb_identify_ccc(int timeout)
   uint32_t csw_residue = 0;
   usb_tag_ccc++;
   memset (usbcbwbuffer_ccc, 0, USBCBW_BUFFER_SIZE);
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[71], passthrough_ccc.scsi_cmd, command_length_ccc);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[72], &command_length_ccc, 1);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[73], &usb_transfer_direction_ccc, 1);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[73] + 1, &usb_lun_ccc, 1);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[74], &usb_tag_ccc, 4);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[75], &usb_transfer_length_ccc, 4);    //potential superbyte
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[71], passthrough_ccc.scsi_cmd, command_length_ccc);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[72], &command_length_ccc, 1);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[73], &usb_transfer_direction_ccc, 1);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[73] + 1, &usb_lun_ccc, 1);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[74], &usb_tag_ccc, 4);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[75], &usb_transfer_length_ccc, 4);
   uint32_t cbwsig = 0x43425355;
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[76], &cbwsig, 4);    //potential superbyte
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[76], &cbwsig, 4);
   cbw_timeout_ccc = usb_timeout_ccc;
   cbw_ret = do_usb_send_cbw_ccc(cbw_timeout_ccc);
   if (cbw_ret != USBCBW_BUFFER_SIZE)
@@ -1469,14 +1467,14 @@ int usb_read_smart_ccc(int timeout, unsigned char reg[7])
   uint32_t csw_residue = 0;
   usb_tag_ccc++;
   memset (usbcbwbuffer_ccc, 0, USBCBW_BUFFER_SIZE);
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[71], passthrough_ccc.scsi_cmd, command_length_ccc);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[72], &command_length_ccc, 1);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[73], &usb_transfer_direction_ccc, 1);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[73] + 1, &usb_lun_ccc, 1);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[74], &usb_tag_ccc, 4);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[75], &usb_transfer_length_ccc, 4);    //potential superbyte
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[71], passthrough_ccc.scsi_cmd, command_length_ccc);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[72], &command_length_ccc, 1);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[73], &usb_transfer_direction_ccc, 1);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[73] + 1, &usb_lun_ccc, 1);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[74], &usb_tag_ccc, 4);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[75], &usb_transfer_length_ccc, 4);
   uint32_t cbwsig = 0x43425355;
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[76], &cbwsig, 4);    //potential superbyte
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[76], &cbwsig, 4);
   cbw_timeout_ccc = usb_timeout_ccc;
   cbw_ret = do_usb_send_cbw_ccc(cbw_timeout_ccc);
   if (cbw_ret != USBCBW_BUFFER_SIZE)
@@ -1614,14 +1612,14 @@ int usb_check_capacity_ccc(int timeout)
   uint32_t csw_residue = 0;
   usb_tag_ccc++;
   memset (usbcbwbuffer_ccc, 0, USBCBW_BUFFER_SIZE);
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[71], passthrough_ccc.scsi_cmd, command_length_ccc);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[72], &command_length_ccc, 1);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[73], &usb_transfer_direction_ccc, 1);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[73] + 1, &usb_lun_ccc, 1);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[74], &usb_tag_ccc, 4);    //potential superbyte
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[75], &usb_transfer_length_ccc, 4);    //potential superbyte
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[71], passthrough_ccc.scsi_cmd, command_length_ccc);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[72], &command_length_ccc, 1);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[73], &usb_transfer_direction_ccc, 1);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[73] + 1, &usb_lun_ccc, 1);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[74], &usb_tag_ccc, 4);
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[75], &usb_transfer_length_ccc, 4);
   uint32_t cbwsig = 0x43425355;
-  memcpy (usbcbwbuffer_ccc + superbyte_ccc[76], &cbwsig, 4);    //potential superbyte
+  memcpy (usbcbwbuffer_ccc + superbyte_ccc[76], &cbwsig, 4);
   cbw_timeout_ccc = usb_timeout_ccc;
   cbw_ret = do_usb_send_cbw_ccc(cbw_timeout_ccc);
   if (cbw_ret != USBCBW_BUFFER_SIZE)
@@ -2166,179 +2164,176 @@ int do_ata_pio_read_ccc(int command_type)
 
 int ahci_rw_ccc(int command_type, int write_bit)
 {
-  if (superbyte_ccc[30] == 0xd9)
+  set_number_variable_value_ccc("$data_transferred", 0);
+  int fail_level = 0x0;
+  int success = 1;
+  int what_changed = 0;
+
+  // clear any interrupt bits
+  ahci_interrupt_changed_ccc = true;
+  memset(port_virt_addr_ccc + superbyte_ccc[7], 0xff, 4);
+
+  // clear all error bits
+  memset(port_virt_addr_ccc + superbyte_ccc[18], 0xff, 4);
+
+  // wait for drive to be ready
+  return_value_ccc = wait_not_busy_or_drq_ccc(initial_busy_wait_time_ccc, 0);
+  //fprintf (stdout, "return from initial wait = %d\n", return_value_ccc);    //debug
+  if (stop_signal_ccc)
   {
-    set_number_variable_value_ccc("$data_transferred", 0);
-    int fail_level = 0x0;
-    int success = 1;
-    int what_changed = 0;
+    return STOP_SIGNAL_RETURN_CODE;
+  }
+  if (return_value_ccc != 0)
+  {
+    int status = do_soft_reset_ccc(0);
+    if (status)
+    {
+      success = 0;
+      fail_level = 0x20 + return_value_ccc;
+    }
+  }
 
-    // clear any interrupt bits
-    ahci_interrupt_changed_ccc = true;
-    memset(port_virt_addr_ccc + superbyte_ccc[7], 0xff, 4);    //potential superbyte
+  if (success)
+  {
+    #ifdef DEBUG
+    int i;
+    for (i = 0; i < 0x80; i+=4)
+    {
+      memcpy(&io_doubleword_ccc, port_virt_addr_ccc + i, 4);
+      //fprintf (stdout, "%x %08x\n", i, io_doubleword_ccc);  //debug
+    }
+    #endif
 
-    // clear all error bits
-    memset(port_virt_addr_ccc + superbyte_ccc[18], 0xff, 4);    //potential superbyte
+    // clear the command list
+    memset(command_list_buffer_ccc, 0, command_list_size_ccc);
+    // set the command FIS length, 5 dwords for h2d, also contains read/write bit
+    io_singlebyte_ccc = 5;
+    io_singlebyte_ccc = io_singlebyte_ccc | ((write_bit & 1) << 6);
+    memcpy(command_list_buffer_ccc, &io_singlebyte_ccc, 1);
 
-    // wait for drive to be ready
-    return_value_ccc = wait_not_busy_or_drq_ccc(initial_busy_wait_time_ccc, 0);
-    //fprintf (stdout, "return from initial wait = %d\n", return_value_ccc);    //debug
+    set_and_send_regs_ccc(command_type);    // this does not send for ahci
+
+
+    // set the start bit
+    enable_start_ccc(START_BIT_TIME);
+
+    if (wait_for_ds_bit_ccc)
+    {
+      // set the device status bit
+      io_doubleword_ccc = 1;
+      memcpy(port_virt_addr_ccc + superbyte_ccc[69], &io_doubleword_ccc, 4);
+    }
+
+    // set the command issue bit
+    enable_command_issue_ccc(COMMAND_BIT_TIME);
+
+    // wait while busy, if timeout do soft reset
+    return_value_ccc = wait_not_busy_or_drq_ccc(soft_reset_time_ccc + first_read_time_ccc, 1);
+    first_read_time_ccc = 0;
+    //fprintf (stdout, "return from wait = %d\n", return_value_ccc);    //debug
+    wait_for_ds_bit_ccc = false;
     if (stop_signal_ccc)
     {
       return STOP_SIGNAL_RETURN_CODE;
     }
     if (return_value_ccc != 0)
     {
-      int status = do_soft_reset_ccc(0);
-      if (status)
+      success = 0;
+      // if err was set for fpdma command then read the ncq error log
+      if (return_value_ccc == 4)
       {
-        success = 0;
-        fail_level = 0x20 + return_value_ccc;
+        //fprintf (stdout, "port status before ncq read log = 0x%08x\n", get_ahci_status_ccc());    //debug
+        //read_ncq_error_log_ccc();
+        //fprintf (stdout, "port status after ncq read log = 0x%08x\n", get_ahci_status_ccc());    //debug
       }
-    }
-
-    if (success)
-    {
-      #ifdef DEBUG
-      int i;
-      for (i = 0; i < 0x80; i+=4)
+      // only do reset if soft reset time exceeded, but not if general timeout or fault
+      else if (return_value_ccc == 1)
       {
-        memcpy(&io_doubleword_ccc, port_virt_addr_ccc + i, 4);
-        //fprintf (stdout, "%x %08x\n", i, io_doubleword_ccc);  //debug
-      }
-      #endif
-
-      // clear the command list
-      memset(command_list_buffer_ccc, 0, command_list_size_ccc);
-      // set the command FIS length, 5 dwords for h2d, also contains read/write bit
-      io_singlebyte_ccc = 5;
-      io_singlebyte_ccc = io_singlebyte_ccc | ((write_bit & 1) << 6);
-      memcpy(command_list_buffer_ccc, &io_singlebyte_ccc, 1);
-
-      set_and_send_regs_ccc(command_type);    // this does not send for ahci
-
-
-      // set the start bit
-      enable_start_ccc(START_BIT_TIME);
-
-      if (wait_for_ds_bit_ccc)
-      {
-        // set the device status bit
-        io_doubleword_ccc = 1;
-        memcpy(port_virt_addr_ccc + superbyte_ccc[69], &io_doubleword_ccc, 4);    //potential superbyte
-      }
-
-      // set the command issue bit
-      enable_command_issue_ccc(COMMAND_BIT_TIME);
-
-      // wait while busy, if timeout do soft reset
-      return_value_ccc = wait_not_busy_or_drq_ccc(soft_reset_time_ccc + first_read_time_ccc, 1);
-      first_read_time_ccc = 0;
-      //fprintf (stdout, "return from wait = %d\n", return_value_ccc);    //debug
-      wait_for_ds_bit_ccc = false;
-      if (stop_signal_ccc)
-      {
-        return STOP_SIGNAL_RETURN_CODE;
-      }
-      if (return_value_ccc != 0)
-      {
-        success = 0;
-        // if err was set for fpdma command then read the ncq error log
-        if (return_value_ccc == 4)
+        fail_level = 0x30 + return_value_ccc;
+        return_value_ccc = soft_reset_ccc(0);
+        if (return_value_ccc != 0)
         {
-          //fprintf (stdout, "port status before ncq read log = 0x%08x\n", get_ahci_status_ccc());    //debug
-          //read_ncq_error_log_ccc();
-          //fprintf (stdout, "port status after ncq read log = 0x%08x\n", get_ahci_status_ccc());    //debug
-        }
-        // only do reset if soft reset time exceeded, but not if general timeout or fault
-        else if (return_value_ccc == 1)
-        {
-          fail_level = 0x30 + return_value_ccc;
-          return_value_ccc = soft_reset_ccc(0);
-          if (return_value_ccc != 0)
-          {
-            fail_level = 0x40 + return_value_ccc;
-          }
-        }
-        // if it failed the change check and drive is hung then do reset
-        else if (return_value_ccc == 8)
-        {
-          what_changed = check_for_unwanted_changes_ccc();
-          return_value_ccc = wait_not_busy_or_drq_ccc(1000, 0);
-          if (return_value_ccc)
-          {
-            return_value_ccc = soft_reset_ccc(0);
-          }
-          fail_level = 0x80 + return_value_ccc;
-        }
-        else
-        {
-          fail_level = 0x50 + return_value_ccc;
+          fail_level = 0x40 + return_value_ccc;
         }
       }
-
-      // check for unwanted changes
-      if (success)
+      // if it failed the change check and drive is hung then do reset
+      else if (return_value_ccc == 8)
       {
         what_changed = check_for_unwanted_changes_ccc();
-        // get port status/error
-        unsigned int port_error = get_ahci_error_ccc();
-        if (port_error)
+        return_value_ccc = wait_not_busy_or_drq_ccc(1000, 0);
+        if (return_value_ccc)
         {
-          //what_changed = what_changed | 0x2000;
-          //memcpy(&io_byte_ccc[1], port_virt_addr_ccc + superbyte_ccc[8], 1);    // status    //potential superbyte
-          //memcpy(&io_byte_ccc[2], port_virt_addr_ccc + superbyte_ccc[9], 1);    // error    //potential superbyte
-          //sprintf (tempmessage_ccc, "port ERR = 0x%08x s/e=0x%02x/0x%02x fail=0x%04x changed=0x%04x\n", port_error, io_byte_ccc[1], io_byte_ccc[2], fail_level, what_changed);
-          sprintf (tempmessage_ccc, "port ERR = 0x%08x\n", port_error);
-          message_console_log_ccc(tempmessage_ccc, 0);
-          //fprintf (stdout, "port ERR = 0x%08x\n", port_error);
+          return_value_ccc = soft_reset_ccc(0);
         }
-        unsigned int port_status = get_ahci_status_ccc();
-        if (port_status && !use_fpdma_ccc)
-        {
-          //what_changed = what_changed | 0x2000;
-          //memcpy(&io_byte_ccc[1], port_virt_addr_ccc + superbyte_ccc[8], 1);    // status    //potential superbyte
-          //memcpy(&io_byte_ccc[2], port_virt_addr_ccc + superbyte_ccc[9], 1);    // error    //potential superbyte
-          //sprintf (tempmessage_ccc, "port DS = 0x%08x s/e=0x%02x/0x%02x fail=0x%04x changed=0x%04x\n", port_status, io_byte_ccc[1], io_byte_ccc[2], fail_level, what_changed);
-          sprintf (tempmessage_ccc, "port DS = 0x%08x\n", port_status);
-          message_console_log_ccc(tempmessage_ccc, 0);
-          //fprintf (stdout, "port DS = 0x%08x\n", port_status);
-        }
+        fail_level = 0x80 + return_value_ccc;
       }
-
+      else
+      {
+        fail_level = 0x50 + return_value_ccc;
+      }
     }
-    fail_level = fail_level + what_changed;
 
-    disable_start_ccc(START_BIT_TIME);
-
-    // clear any interrupt bits
-    ahci_interrupt_changed_ccc = true;
-    memset(port_virt_addr_ccc + superbyte_ccc[7], 0xff, 4);    //potential superbyte
-
-    // clear all error bits
-    memset(port_virt_addr_ccc + superbyte_ccc[18], 0xff, 4);    //potential superbyte
-
-    // get recent copy of status and error
-    memcpy(&io_byte_ccc[1], port_virt_addr_ccc + superbyte_ccc[8], 1);    // status    //potential superbyte
-    memcpy(&io_byte_ccc[2], port_virt_addr_ccc + superbyte_ccc[9], 1);    // error    //potential superbyte
-
-
+    // check for unwanted changes
     if (success)
     {
-      set_number_variable_value_ccc("$data_transferred", ccc_main_buffer_size_ccc);
+      what_changed = check_for_unwanted_changes_ccc();
+      // get port status/error
+      unsigned int port_error = get_ahci_error_ccc();
+      if (port_error)
+      {
+        //what_changed = what_changed | 0x2000;
+        //memcpy(&io_byte_ccc[1], port_virt_addr_ccc + superbyte_ccc[8], 1);    // status
+        //memcpy(&io_byte_ccc[2], port_virt_addr_ccc + superbyte_ccc[9], 1);    // error
+        //sprintf (tempmessage_ccc, "port ERR = 0x%08x s/e=0x%02x/0x%02x fail=0x%04x changed=0x%04x\n", port_error, io_byte_ccc[1], io_byte_ccc[2], fail_level, what_changed);
+        sprintf (tempmessage_ccc, "port ERR = 0x%08x\n", port_error);
+        message_console_log_ccc(tempmessage_ccc, 0);
+        //fprintf (stdout, "port ERR = 0x%08x\n", port_error);
+      }
+      unsigned int port_status = get_ahci_status_ccc();
+      if (port_status && !use_fpdma_ccc)
+      {
+        //what_changed = what_changed | 0x2000;
+        //memcpy(&io_byte_ccc[1], port_virt_addr_ccc + superbyte_ccc[8], 1);    // status
+        //memcpy(&io_byte_ccc[2], port_virt_addr_ccc + superbyte_ccc[9], 1);    // error
+        //sprintf (tempmessage_ccc, "port DS = 0x%08x s/e=0x%02x/0x%02x fail=0x%04x changed=0x%04x\n", port_status, io_byte_ccc[1], io_byte_ccc[2], fail_level, what_changed);
+        sprintf (tempmessage_ccc, "port DS = 0x%08x\n", port_status);
+        message_console_log_ccc(tempmessage_ccc, 0);
+        //fprintf (stdout, "port DS = 0x%08x\n", port_status);
+      }
     }
 
-    return_value_ccc = post_direct_ccc(command_type);
+  }
+  fail_level = fail_level + what_changed;
 
-    set_number_variable_value_ccc("$command_status", fail_level);
-    if (superclone_ccc)
-    {
-      return (fail_level);
-    }
-    else
-    {
-      return 0;
-    }
+  disable_start_ccc(START_BIT_TIME);
+
+  // clear any interrupt bits
+  ahci_interrupt_changed_ccc = true;
+  memset(port_virt_addr_ccc + superbyte_ccc[7], 0xff, 4);
+
+  // clear all error bits
+  memset(port_virt_addr_ccc + superbyte_ccc[18], 0xff, 4);
+
+  // get recent copy of status and error
+  memcpy(&io_byte_ccc[1], port_virt_addr_ccc + superbyte_ccc[8], 1);    // status
+  memcpy(&io_byte_ccc[2], port_virt_addr_ccc + superbyte_ccc[9], 1);    // error
+
+
+  if (success)
+  {
+    set_number_variable_value_ccc("$data_transferred", ccc_main_buffer_size_ccc);
+  }
+
+  return_value_ccc = post_direct_ccc(command_type);
+
+  set_number_variable_value_ccc("$command_status", fail_level);
+  if (superclone_ccc)
+  {
+    return (fail_level);
+  }
+  else
+  {
+    return 0;
   }
   return 0;
 }
@@ -2349,157 +2344,13 @@ int ahci_rw_ccc(int command_type, int write_bit)
 
 int do_ata_dma_read_ccc(int command_type)
 {
-  if (superbyte_ccc[31] == 0x9c)
+  if (ccc_main_buffer_size_ccc > max_dma_size_ccc)
   {
-    if (ccc_main_buffer_size_ccc > max_dma_size_ccc)
-    {
-      sprintf (tempmessage_ccc, "ERROR: Maximum DMA buffer size (%lld) exceeded.\n", max_dma_size_ccc);
-      if (superclone_ccc)
-      {
-        message_error_ccc(tempmessage_ccc);
-        print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 0);
-        clear_error_message_ccc();
-      }
-      else
-      {
-        message_now_ccc(tempmessage_ccc);
-      }
-      return (-1);
-    }
-    // ahci
-    if (ahci_mode_ccc)
-    {
-      return_value_ccc = ahci_rw_ccc(command_type, 0);
-      return (return_value_ccc);
-    }
-
-
-    // direct
-    else
-    {
-      set_number_variable_value_ccc("$data_transferred", 0);
-      int fail_level = 0x0;
-      int success = 1;
-      unsigned char c;
-
-      // set device, this is important to do first to make sure the proper drive is selected
-      set_device_ccc(reg_base_address_ccc, device_select_base_ccc);
-      // tell device not to send interrupts
-      outb(2, control_base_address_ccc);
-
-      // wait for drive to be ready
-      return_value_ccc = wait_not_busy_or_drq_ccc(initial_busy_wait_time_ccc, 0);
-      if (stop_signal_ccc)
-      {
-        return STOP_SIGNAL_RETURN_CODE;
-      }
-      if (return_value_ccc != 0)
-      {
-        return_value_ccc = soft_reset_ccc(0);
-      }
-      if (return_value_ccc != 0)
-      {
-        success = 0;
-        fail_level = 0x20 + return_value_ccc;
-      }
-      // do this again in case there was a reset event
-      // set device, this is important to do first to make sure the proper drive is selected
-      set_device_ccc(reg_base_address_ccc, device_select_base_ccc);
-      // tell device not to send interrupts
-      outb(2, control_base_address_ccc);
-
-      if (success)
-      {
-        // put table address into controler
-        set_table_address_ccc();
-
-        // Clear the Interrupt bit and Error bit in the Status register.
-        c = superbyte_ccc[1];    //potential superbyte
-        outb(c, bus_base_address_ccc+2);
-
-        // set the read/write bit to 1 (read)
-        c = superbyte_ccc[2];    //potential superbyte
-        outb(c, bus_base_address_ccc);
-
-        set_and_send_regs_ccc(command_type);
-
-        // set the start/stop bit
-        c = superbyte_ccc[3];    //potential superbyte
-        outb(c, bus_base_address_ccc);
-
-        // wait while busy or drq, if timeout do soft reset
-        return_value_ccc = wait_not_busy_or_drq_ccc(soft_reset_time_ccc + first_read_time_ccc, 0);
-        first_read_time_ccc = 0;
-        if (stop_signal_ccc)
-        {
-          return STOP_SIGNAL_RETURN_CODE;
-        }
-        if (return_value_ccc != 0)
-        {
-          success = 0;
-          // only do reset if soft reset time exceeded, but not if general timeout or fault
-          if (return_value_ccc == 1)
-          {
-            fail_level = 0x30 + return_value_ccc;
-            return_value_ccc = soft_reset_ccc(0);
-            if (return_value_ccc != 0)
-            {
-              fail_level = 0x40 + return_value_ccc;
-            }
-          }
-          else
-          {
-            fail_level = 0x50 + return_value_ccc;
-          }
-        }
-
-        // clear the start/stop bit
-        c = superbyte_ccc[2];    //potential superbyte
-        outb(c, bus_base_address_ccc);
-
-        // read the bus master status byte to flush cache and finalize transfer
-        io_byte_ccc[8] = inb(bus_base_address_ccc+2);
-
-        // Clear the Interrupt bit and Error bit in the Status register.
-        c = superbyte_ccc[1];    //potential superbyte
-        outb(c, bus_base_address_ccc+2);
-
-        //fprintf (stdout, "%02x\n", io_byte_ccc[8]);
-        set_number_variable_value_ccc("$bus_master_status", io_byte_ccc[8]);
-      }
-
-
-      if (success)
-      {
-        set_number_variable_value_ccc("$data_transferred", ccc_main_buffer_size_ccc);
-      }
-
-      return_value_ccc = post_direct_ccc(command_type);
-      // if success then check if still correct device
-      if (return_value_ccc && success)
-      {
-        fail_level = 0x70 + return_value_ccc;
-        success = 0;
-      }
-
-      set_number_variable_value_ccc("$command_status", fail_level);
-      if (superclone_ccc)
-      {
-        return (fail_level);
-      }
-      else
-      {
-        return 0;
-      }
-    }
-  }
-  else
-  {
-    sprintf (tempmessage_ccc, "ERROR: DMA not allowed in free version.\n");
+    sprintf (tempmessage_ccc, "ERROR: Maximum DMA buffer size (%lld) exceeded.\n", max_dma_size_ccc);
     if (superclone_ccc)
     {
       message_error_ccc(tempmessage_ccc);
-      print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
+      print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 0);
       clear_error_message_ccc();
     }
     else
@@ -2507,6 +2358,132 @@ int do_ata_dma_read_ccc(int command_type)
       message_now_ccc(tempmessage_ccc);
     }
     return (-1);
+  }
+  // ahci
+  if (ahci_mode_ccc)
+  {
+    return_value_ccc = ahci_rw_ccc(command_type, 0);
+    return (return_value_ccc);
+  }
+
+
+  // direct
+  else
+  {
+    set_number_variable_value_ccc("$data_transferred", 0);
+    int fail_level = 0x0;
+    int success = 1;
+    unsigned char c;
+
+    // set device, this is important to do first to make sure the proper drive is selected
+    set_device_ccc(reg_base_address_ccc, device_select_base_ccc);
+    // tell device not to send interrupts
+    outb(2, control_base_address_ccc);
+
+    // wait for drive to be ready
+    return_value_ccc = wait_not_busy_or_drq_ccc(initial_busy_wait_time_ccc, 0);
+    if (stop_signal_ccc)
+    {
+      return STOP_SIGNAL_RETURN_CODE;
+    }
+    if (return_value_ccc != 0)
+    {
+      return_value_ccc = soft_reset_ccc(0);
+    }
+    if (return_value_ccc != 0)
+    {
+      success = 0;
+      fail_level = 0x20 + return_value_ccc;
+    }
+    // do this again in case there was a reset event
+    // set device, this is important to do first to make sure the proper drive is selected
+    set_device_ccc(reg_base_address_ccc, device_select_base_ccc);
+    // tell device not to send interrupts
+    outb(2, control_base_address_ccc);
+
+    if (success)
+    {
+      // put table address into controler
+      set_table_address_ccc();
+
+      // Clear the Interrupt bit and Error bit in the Status register.
+      c = superbyte_ccc[1];
+      outb(c, bus_base_address_ccc+2);
+
+      // set the read/write bit to 1 (read)
+      c = superbyte_ccc[2];
+      outb(c, bus_base_address_ccc);
+
+      set_and_send_regs_ccc(command_type);
+
+      // set the start/stop bit
+      c = superbyte_ccc[3];
+      outb(c, bus_base_address_ccc);
+
+      // wait while busy or drq, if timeout do soft reset
+      return_value_ccc = wait_not_busy_or_drq_ccc(soft_reset_time_ccc + first_read_time_ccc, 0);
+      first_read_time_ccc = 0;
+      if (stop_signal_ccc)
+      {
+        return STOP_SIGNAL_RETURN_CODE;
+      }
+      if (return_value_ccc != 0)
+      {
+        success = 0;
+        // only do reset if soft reset time exceeded, but not if general timeout or fault
+        if (return_value_ccc == 1)
+        {
+          fail_level = 0x30 + return_value_ccc;
+          return_value_ccc = soft_reset_ccc(0);
+          if (return_value_ccc != 0)
+          {
+            fail_level = 0x40 + return_value_ccc;
+          }
+        }
+        else
+        {
+          fail_level = 0x50 + return_value_ccc;
+        }
+      }
+
+      // clear the start/stop bit
+      c = superbyte_ccc[2];
+      outb(c, bus_base_address_ccc);
+
+      // read the bus master status byte to flush cache and finalize transfer
+      io_byte_ccc[8] = inb(bus_base_address_ccc+2);
+
+      // Clear the Interrupt bit and Error bit in the Status register.
+      c = superbyte_ccc[1];
+      outb(c, bus_base_address_ccc+2);
+
+      //fprintf (stdout, "%02x\n", io_byte_ccc[8]);
+      set_number_variable_value_ccc("$bus_master_status", io_byte_ccc[8]);
+    }
+
+
+    if (success)
+    {
+      set_number_variable_value_ccc("$data_transferred", ccc_main_buffer_size_ccc);
+    }
+
+    return_value_ccc = post_direct_ccc(command_type);
+    // if success then check if still correct device
+    if (return_value_ccc && success)
+    {
+      fail_level = 0x70 + return_value_ccc;
+      success = 0;
+    }
+
+    set_number_variable_value_ccc("$command_status", fail_level);
+    if (superclone_ccc)
+    {
+      return (fail_level);
+    }
+    else
+    {
+      return 0;
+    }
   }
   return (0);
 }
@@ -2696,152 +2673,9 @@ int do_ata_pio_write_ccc(int command_type)
 
 int do_ata_dma_write_ccc(int command_type)
 {
-  if (superbyte_ccc[32] == 0x83)
+  if (ccc_main_buffer_size_ccc > max_dma_size_ccc)
   {
-    if (ccc_main_buffer_size_ccc > max_dma_size_ccc)
-    {
-      sprintf (tempmessage_ccc, "ERROR: Maximum DMA buffer size (%lld) exceeded.\n", max_dma_size_ccc);
-      if (superclone_ccc)
-      {
-        message_error_ccc(tempmessage_ccc);
-        print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
-        clear_error_message_ccc();
-      }
-      else
-      {
-        message_now_ccc(tempmessage_ccc);
-      }
-      return (-1);
-    }
-    // ahci
-    if (ahci_mode_ccc)
-    {
-      return_value_ccc = ahci_rw_ccc(command_type, 1);
-      return (return_value_ccc);
-    }
-
-
-    // ide
-    else
-    {
-      set_number_variable_value_ccc("$data_transferred", 0);
-      int fail_level = 0x0;
-      int success = 1;
-      unsigned char c;
-
-      // set device, this is important to do first to make sure the proper drive is selected
-      set_device_ccc(reg_base_address_ccc, device_select_base_ccc);
-      // tell device not to send interrupts
-      outb(2, control_base_address_ccc);
-
-      // wait for drive to be ready
-      return_value_ccc = wait_not_busy_or_drq_ccc(initial_busy_wait_time_ccc, 0);
-      if (stop_signal_ccc)
-      {
-        return STOP_SIGNAL_RETURN_CODE;
-      }
-      if (return_value_ccc != 0)
-      {
-        return_value_ccc = soft_reset_ccc(0);
-      }
-      if (return_value_ccc != 0)
-      {
-        success = 0;
-        fail_level = 0x10 + return_value_ccc;
-      }
-      // do this again in case there was a reset event
-      // set device, this is important to do first to make sure the proper drive is selected
-      set_device_ccc(reg_base_address_ccc, device_select_base_ccc);
-      // tell device not to send interrupts
-      outb(2, control_base_address_ccc);
-
-      if (success)
-      {
-        // put table address into controler
-        set_table_address_ccc();
-
-        // Clear the Interrupt bit and Error bit in the Status register.
-        c = superbyte_ccc[1];    //potential superbyte
-        outb(c, bus_base_address_ccc+2);
-
-        // set the read/write bit to 0 (write)
-        c = superbyte_ccc[4];    //potential superbyte
-        outb(c, bus_base_address_ccc);
-
-        set_and_send_regs_ccc(command_type);
-
-        // set the start/stop bit
-        c = superbyte_ccc[5];    //potential superbyte
-        outb(c, bus_base_address_ccc);
-
-        // wait while busy or drq, if timeout do soft reset
-        return_value_ccc = wait_not_busy_or_drq_ccc(soft_reset_time_ccc + first_read_time_ccc, 0);
-        first_read_time_ccc = 0;
-        if (stop_signal_ccc)
-        {
-          return STOP_SIGNAL_RETURN_CODE;
-        }
-        if (return_value_ccc != 0)
-        {
-          success = 0;
-          // only do reset if soft reset time exceeded, but not if general timeout or fault
-          if (return_value_ccc == 1)
-          {
-            fail_level = 0x30 + return_value_ccc;
-            return_value_ccc = soft_reset_ccc(0);
-            if (return_value_ccc != 0)
-            {
-              fail_level = 0x40 + return_value_ccc;
-            }
-          }
-          else
-          {
-            fail_level = 0x50 + return_value_ccc;
-          }
-        }
-
-        // clear the start/stop bit
-        c = superbyte_ccc[4];    //potential superbyte
-        outb(c, bus_base_address_ccc);
-
-        // read the bus master status byte to flush cache and finalize transfer
-        io_byte_ccc[8] = inb(bus_base_address_ccc+2);
-
-        // Clear the Interrupt bit and Error bit in the Status register.
-        c = superbyte_ccc[1];    //potential superbyte
-        outb(c, bus_base_address_ccc+2);
-
-        //fprintf (stdout, "%02x\n", io_byte_ccc[8]);
-        set_number_variable_value_ccc("$bus_master_status", io_byte_ccc[8]);
-      }
-
-      if (success)
-      {
-        set_number_variable_value_ccc("$data_transferred", ccc_main_buffer_size_ccc);
-      }
-
-      return_value_ccc = post_direct_ccc(command_type);
-      // if success then check if still correct device
-      if (return_value_ccc && success)
-      {
-        fail_level = 0x70 + return_value_ccc;
-        success = 0;
-      }
-
-      set_number_variable_value_ccc("$command_status", fail_level);
-      if (superclone_ccc)
-      {
-        return (fail_level);
-      }
-      else
-      {
-        return 0;
-      }
-    }
-  }
-  else
-  {
-    sprintf (tempmessage_ccc, "ERROR: DMA not allowed in free version.\n");
+    sprintf (tempmessage_ccc, "ERROR: Maximum DMA buffer size (%lld) exceeded.\n", max_dma_size_ccc);
     if (superclone_ccc)
     {
       message_error_ccc(tempmessage_ccc);
@@ -2853,6 +2687,125 @@ int do_ata_dma_write_ccc(int command_type)
       message_now_ccc(tempmessage_ccc);
     }
     return (-1);
+  }
+  // ahci
+  if (ahci_mode_ccc)
+  {
+    return_value_ccc = ahci_rw_ccc(command_type, 1);
+    return (return_value_ccc);
+  }
+
+
+  // ide
+  else
+  {
+    set_number_variable_value_ccc("$data_transferred", 0);
+    int fail_level = 0x0;
+    int success = 1;
+
+    // set device, this is important to do first to make sure the proper drive is selected
+    set_device_ccc(reg_base_address_ccc, device_select_base_ccc);
+    // tell device not to send interrupts
+    outb(2, control_base_address_ccc);
+
+    // wait for drive to be ready
+    return_value_ccc = wait_not_busy_or_drq_ccc(initial_busy_wait_time_ccc, 0);
+    if (stop_signal_ccc)
+    {
+      return STOP_SIGNAL_RETURN_CODE;
+    }
+    if (return_value_ccc != 0)
+    {
+      return_value_ccc = soft_reset_ccc(0);
+    }
+    if (return_value_ccc != 0)
+    {
+      success = 0;
+      fail_level = 0x10 + return_value_ccc;
+    }
+    // do this again in case there was a reset event
+    // set device, this is important to do first to make sure the proper drive is selected
+    set_device_ccc(reg_base_address_ccc, device_select_base_ccc);
+    // tell device not to send interrupts
+    outb(2, control_base_address_ccc);
+
+    if (success)
+    {
+      // put table address into controler
+      set_table_address_ccc();
+
+      // Clear the Interrupt bit and Error bit in the Status register.
+      outb(superbyte_ccc[1], bus_base_address_ccc+2);
+
+      // set the read/write bit to 0 (write)
+      outb(superbyte_ccc[4], bus_base_address_ccc);
+
+      set_and_send_regs_ccc(command_type);
+
+      // set the start/stop bit
+      outb(superbyte_ccc[5], bus_base_address_ccc);
+
+      // wait while busy or drq, if timeout do soft reset
+      return_value_ccc = wait_not_busy_or_drq_ccc(soft_reset_time_ccc + first_read_time_ccc, 0);
+      first_read_time_ccc = 0;
+      if (stop_signal_ccc)
+      {
+        return STOP_SIGNAL_RETURN_CODE;
+      }
+      if (return_value_ccc != 0)
+      {
+        success = 0;
+        // only do reset if soft reset time exceeded, but not if general timeout or fault
+        if (return_value_ccc == 1)
+        {
+          fail_level = 0x30 + return_value_ccc;
+          return_value_ccc = soft_reset_ccc(0);
+          if (return_value_ccc != 0)
+          {
+            fail_level = 0x40 + return_value_ccc;
+          }
+        }
+        else
+        {
+          fail_level = 0x50 + return_value_ccc;
+        }
+      }
+
+      // clear the start/stop bit
+      outb(superbyte_ccc[4], bus_base_address_ccc);
+
+      // read the bus master status byte to flush cache and finalize transfer
+      io_byte_ccc[8] = inb(bus_base_address_ccc+2);
+
+      // Clear the Interrupt bit and Error bit in the Status register.
+      outb(superbyte_ccc[1], bus_base_address_ccc+2);
+
+      //fprintf (stdout, "%02x\n", io_byte_ccc[8]);
+      set_number_variable_value_ccc("$bus_master_status", io_byte_ccc[8]);
+    }
+
+    if (success)
+    {
+      set_number_variable_value_ccc("$data_transferred", ccc_main_buffer_size_ccc);
+    }
+
+    return_value_ccc = post_direct_ccc(command_type);
+    // if success then check if still correct device
+    if (return_value_ccc && success)
+    {
+      fail_level = 0x70 + return_value_ccc;
+      success = 0;
+    }
+
+    set_number_variable_value_ccc("$command_status", fail_level);
+    if (superclone_ccc)
+    {
+      return (fail_level);
+    }
+    else
+    {
+      return 0;
+    }
   }
   return (0);
 }
@@ -2866,53 +2819,50 @@ int do_ata_dma_write_ccc(int command_type)
 
 int set_table_address_ccc(void)
 {
-  if (superbyte_ccc[33] == 0xb0)
+  // save current table address
+  table_address_backup_ccc[0] = inb(bus_base_address_ccc+0+4);
+  table_address_backup_ccc[1] = inb(bus_base_address_ccc+1+4);
+  table_address_backup_ccc[2] = inb(bus_base_address_ccc+2+4);
+  table_address_backup_ccc[3] = inb(bus_base_address_ccc+3+4);
+  table_address_changed_ccc = true;
+
+  // put table address into controler
+  unsigned char c;
+  c = table_physical_address_ccc;
+  outb(c, bus_base_address_ccc+0+4);
+  c = table_physical_address_ccc >> 8;
+  outb(c, bus_base_address_ccc+1+4);
+  c = table_physical_address_ccc >> 16;
+  outb(c, bus_base_address_ccc+2+4);
+  c = table_physical_address_ccc >> 24;
+  outb(c, bus_base_address_ccc+3+4);
+
+  #ifdef DEBUG
+  if (debug_ccc & DEBUG34)
   {
-    // save current table address
-    table_address_backup_ccc[0] = inb(bus_base_address_ccc+0+superbyte_ccc[0]);    //potential superbyte
-    table_address_backup_ccc[1] = inb(bus_base_address_ccc+1+superbyte_ccc[0]);    //potential superbyte
-    table_address_backup_ccc[2] = inb(bus_base_address_ccc+2+superbyte_ccc[0]);    //potential superbyte
-    table_address_backup_ccc[3] = inb(bus_base_address_ccc+3+superbyte_ccc[0]);    //potential superbyte
-    table_address_changed_ccc = true;
-
-    // put table address into controler
-    unsigned char c;
-    c = table_physical_address_ccc;
-    outb(c, bus_base_address_ccc+0+superbyte_ccc[0]);    //potential superbyte
-    c = table_physical_address_ccc >> 8;
-    outb(c, bus_base_address_ccc+1+superbyte_ccc[0]);    //potential superbyte
-    c = table_physical_address_ccc >> 16;
-    outb(c, bus_base_address_ccc+2+superbyte_ccc[0]);    //potential superbyte
-    c = table_physical_address_ccc >> 24;
-    outb(c, bus_base_address_ccc+3+superbyte_ccc[0]);    //potential superbyte
-
-    #ifdef DEBUG
-    if (debug_ccc & DEBUG34)
+    fprintf (stdout, "table_physical_address=0x%llx\n", table_physical_address_ccc);
+    int size = 512;
+    int i;
+    for (i = 0; i < size; i+=16)
     {
-      fprintf (stdout, "table_physical_address=0x%llx\n", table_physical_address_ccc);
-      int size = 512;
-      int i;
-      for (i = 0; i < size; i+=16)
+      fprintf (stdout, "%x: ", i);
+      unsigned char *c;
+      int n;
+      for (n=0; n < 16 && i+n < size; n++)
       {
-        fprintf (stdout, "%x: ", i);
-        unsigned char *c;
-        int n;
-        for (n=0; n < 16 && i+n < size; n++)
-        {
-          c = (unsigned char *)table_buffer_ccc+i+n;
-          fprintf (stdout, "%02x ", *c);
-        }
-        fprintf (stdout, "   ");
-        for (n=0; n < 16 && i+n < size; n++)
-        {
-          c = (unsigned char *)table_buffer_ccc+i+n;
-          fprintf (stdout, "%c", isprint(*c) ? *c : '.');
-        }
-        fprintf (stdout, "\n");
+        c = (unsigned char *)table_buffer_ccc+i+n;
+        fprintf (stdout, "%02x ", *c);
       }
+      fprintf (stdout, "   ");
+      for (n=0; n < 16 && i+n < size; n++)
+      {
+        c = (unsigned char *)table_buffer_ccc+i+n;
+        fprintf (stdout, "%c", isprint(*c) ? *c : '.');
+      }
+      fprintf (stdout, "\n");
     }
-    #endif
   }
+  #endif
 
   return (0);
 }
@@ -2923,14 +2873,11 @@ int set_table_address_ccc(void)
 
 int restore_table_address_ccc(void)
 {
-  if (superbyte_ccc[34] == 0x51)
-  {
-    outb(table_address_backup_ccc[0], bus_base_address_ccc+0+superbyte_ccc[0]);    //potential superbyte
-    outb(table_address_backup_ccc[1], bus_base_address_ccc+1+superbyte_ccc[0]);    //potential superbyte
-    outb(table_address_backup_ccc[2], bus_base_address_ccc+2+superbyte_ccc[0]);    //potential superbyte
-    outb(table_address_backup_ccc[3], bus_base_address_ccc+3+superbyte_ccc[0]);    //potential superbyte
-    table_address_changed_ccc = false;
-  }
+  outb(table_address_backup_ccc[0], bus_base_address_ccc+0+4);
+  outb(table_address_backup_ccc[1], bus_base_address_ccc+1+4);
+  outb(table_address_backup_ccc[2], bus_base_address_ccc+2+4);
+  outb(table_address_backup_ccc[3], bus_base_address_ccc+3+4);
+  table_address_changed_ccc = false;
   return (0);
 }
 
@@ -3048,268 +2995,265 @@ int soft_reset_ccc(int disk_fd)
     }
     if (ahci_mode_ccc)
     {
-      if (superbyte_ccc[35] == 0x26)
+      // ahci
+      #ifdef DEBUG
+      int i;
+      if (debug_ccc & DEBUG35)
       {
-        // ahci
-        #ifdef DEBUG
-        int i;
-        if (debug_ccc & DEBUG35)
+        //fprintf (stdout, "soft reset\n");  //debug
+        for (i = 0; i < 0x80; i+=4)
         {
-          //fprintf (stdout, "soft reset\n");  //debug
-          for (i = 0; i < 0x80; i+=4)
+          break;                                           //debug
+          memcpy(&io_doubleword_ccc, port_virt_addr_ccc + i, 4);
+          fprintf (stdout, "%x %08x ", i, io_doubleword_ccc);  //debug
+          int n;
+          for (n = 0; n < 32; n++)
           {
-            break;                                           //debug
-            memcpy(&io_doubleword_ccc, port_virt_addr_ccc + i, 4);
-            fprintf (stdout, "%x %08x ", i, io_doubleword_ccc);  //debug
-            int n;
-            for (n = 0; n < 32; n++)
+            if ( !(n % 8) )
             {
-              if ( !(n % 8) )
-              {
-                fprintf (stdout, " ");
-              }
-              if ((io_doubleword_ccc<<n) & 0x80000000)
-                fprintf (stdout, "1");
-              else
-                fprintf (stdout, "0");
+              fprintf (stdout, " ");
             }
-            fprintf (stdout, "\n");
+            if ((io_doubleword_ccc<<n) & 0x80000000)
+              fprintf (stdout, "1");
+            else
+              fprintf (stdout, "0");
           }
+          fprintf (stdout, "\n");
         }
-        #endif
+      }
+      #endif
+
+      // clear the start bit
+      uint8_t byte;
+      memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[10], 1);
+      byte = byte & 0xfe;
+      memcpy(port_virt_addr_ccc + superbyte_ccc[10], &byte, 1);
+
+      // set the buffer size to 0 for no data transfer
+      unsigned long long backup_buffer_size = ccc_main_buffer_size_ccc;
+      ccc_main_buffer_size_ccc = 0;
+      set_main_buffer_ccc();
+
+      int status = 0;
+
+      if (hard_reset_time_ccc == 0)
+      {
+        // if forced then do hard reset without soft reset
+        status = hard_reset_ccc(disk_fd);
+        did_hard_reset_ccc = 1;
+      }
+      else
+      {
+        // try soft reset first
+        // clear the command list
+        memset(command_list_buffer_ccc, 0, command_list_size_ccc);
+        // set the command FIS length, 5 dwords for h2d, also contains read/write bit
+        io_singlebyte_ccc = 5;
+        io_singlebyte_ccc = io_singlebyte_ccc | ((1) << 6);
+        memcpy(command_list_buffer_ccc, &io_singlebyte_ccc, 1);
+        // set the reset bit in the command fis
+        memset(command_list_buffer_ccc+1, 1, 1);
+
+        // clear the fis buffer
+        memset(fis_buffer_ccc, 0, fis_size_ccc);
+        // clear the command FIS
+        memset(table_buffer_ccc, 0, 0x80);
+        // set FIS type
+        memset(table_buffer_ccc, REG_H2D, 1);
+        // set type as control
+        memset(table_buffer_ccc+1, 0x00, 1);
+        // set the table entry length
+        uint16_t word = table_entry_count_ccc;
+        memcpy(command_list_buffer_ccc+2, &word, 2);
+        // set the command table address
+        uint64_t qword = table_physical_address_ccc;
+        memcpy(command_list_buffer_ccc+8, &qword, 8);
+
+        // set the soft reset control bit
+        memset(table_buffer_ccc+15, 4, 1);
+
+        // set the command list override bit
+        byte = byte | 8;
+        memcpy(port_virt_addr_ccc + superbyte_ccc[10], &byte, 1);
+        // wait for clo bit to be clear
+        int check_bit = 1;
+        unsigned long long start_time = get_elapsed_usec_ccc();
+        while (check_bit)
+        {
+          unsigned long long elapsed_time = get_elapsed_usec_ccc();
+          if (elapsed_time > start_time + COMMAND_LIST_OVERRIDE_TIME)
+          {
+            // if it exceeds general timeout then quit
+            break;
+          }
+          memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[10], 1);
+          check_bit = byte & 0x08;
+          // give the cpu a chance to do something else so we are not using 100%
+          do_nanosleep_ccc(1);
+        }
+
+        // make sure fis is running
+        enable_fis_ccc(FIS_BIT_TIME);
+
+        // set the start bit
+        enable_start_ccc(START_BIT_TIME);
+
+        // set the command issue bit
+        enable_command_issue_ccc(COMMAND_BIT_TIME);
+
+        do_nanosleep_ccc(500);
+
+        // clear the soft reset control bit
+        memset(table_buffer_ccc+15, 0, 1);
 
         // clear the start bit
-        uint8_t byte;
-        memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[10], 1);    //potential superbyte
-        byte = byte & 0xfe;
-        memcpy(port_virt_addr_ccc + superbyte_ccc[10], &byte, 1);    //potential superbyte
+        disable_start_ccc(START_BIT_TIME);
 
-        // set the buffer size to 0 for no data transfer
-        unsigned long long backup_buffer_size = ccc_main_buffer_size_ccc;
-        ccc_main_buffer_size_ccc = 0;
-        set_main_buffer_ccc();
-
-        int status = 0;
-
-        if (hard_reset_time_ccc == 0)
+        // set the command list override bit
+        byte = byte | 8;
+        memcpy(port_virt_addr_ccc + superbyte_ccc[10], &byte, 1);
+        // wait for clo bit to be clear
+        check_bit = 1;
+        start_time = get_elapsed_usec_ccc();
+        while (check_bit)
         {
-          // if forced then do hard reset without soft reset
+          unsigned long long elapsed_time = get_elapsed_usec_ccc();
+          if (elapsed_time > start_time + COMMAND_LIST_OVERRIDE_TIME)
+          {
+            // if it exceeds general timeout then quit
+            break;
+          }
+          memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[10], 1);
+          check_bit = byte & 0x08;
+          // give the cpu a chance to do something else so we are not using 100%
+          do_nanosleep_ccc(1);
+        }
+
+        // set the start bit
+        enable_start_ccc(START_BIT_TIME);
+
+        // set the command issue bit
+        enable_command_issue_ccc(COMMAND_BIT_TIME);
+
+        // wait for 1ms
+        do_nanosleep_ccc(1000000);
+
+        // clear the start bit
+        disable_start_ccc(START_BIT_TIME);
+
+        // wait for 1ms
+        do_nanosleep_ccc(1000000);
+
+        // reset the fis to make sure it updates
+        disable_fis_ccc(FIS_BIT_TIME);
+
+        // wait for 1ms
+        do_nanosleep_ccc(1000000);
+
+        // set addresses
+        uint64_t command_list_address = command_list_physical_address_ccc;
+        memcpy(port_virt_addr_ccc + superbyte_ccc[11], &command_list_address, 8);
+        uint64_t fis_address = fis_physical_address_ccc;
+        memcpy(port_virt_addr_ccc + superbyte_ccc[12], &fis_address, 8);
+        // wait for 1ms
+        do_nanosleep_ccc(1000000);
+
+        // make sure fis is running
+        enable_fis_ccc(FIS_BIT_TIME);
+
+        // wait for 1ms
+        do_nanosleep_ccc(1000000);
+
+        // if always wait for reset time then wait
+        if (always_wait_for_reset_timers_ccc)
+        {
+          unsigned long long rstart_time = get_elapsed_usec_ccc();
+          unsigned long long relapsed_time = get_elapsed_usec_ccc();
+          while ( (relapsed_time - rstart_time) < hard_reset_time_ccc)
+          {
+            do_nanosleep_ccc(1000000);
+            relapsed_time = get_elapsed_usec_ccc();
+            update_display_status_buttons_ccc(DISPLAY_STATUS_UPDATE_TIME);
+          }
+        }
+
+        // wait for device to be ready
+        status = wait_not_busy_or_drq_ccc(hard_reset_time_ccc, 0);
+        if (stop_signal_ccc)
+        {
+          return STOP_SIGNAL_RETURN_CODE;
+        }
+        if (status == 1)
+        {
+          sprintf (tempmessage_ccc, "timeout after soft reset\n");
+          message_console_log_ccc(tempmessage_ccc, 0);
+          // if it timed out then do hard reset
+          performing_reset_ccc = 1;
           status = hard_reset_ccc(disk_fd);
+          performing_reset_ccc = 0;
           did_hard_reset_ccc = 1;
+        }
+      }
+
+      // clear any interrupt bits
+      ahci_interrupt_changed_ccc = true;
+      memset(port_virt_addr_ccc + superbyte_ccc[7], 0xff, 4);
+
+      // get recent copy of status and error
+      memcpy(&io_byte_ccc[1], port_virt_addr_ccc + superbyte_ccc[8], 1);    // status
+      memcpy(&io_byte_ccc[2], port_virt_addr_ccc + superbyte_ccc[9], 1);    // error
+
+      post_direct_ccc(28);
+
+      // put the buffer size back
+      ccc_main_buffer_size_ccc = backup_buffer_size;
+      set_main_buffer_ccc();
+
+      if (1)
+      {
+        // perform steps to help with recovery after reset
+        // turn interupts off
+        memset(port_virt_addr_ccc + superbyte_ccc[13], 0x0, 4);
+        // wait for 1ms
+        do_nanosleep_ccc(1000000);
+        // clear the start bit
+        disable_start_ccc(START_BIT_TIME);
+        // wait for 1ms
+        do_nanosleep_ccc(1000000);
+        // clear the fis enable bit
+        disable_fis_ccc(FIS_BIT_TIME);
+        // wait for 1ms
+        do_nanosleep_ccc(1000000);
+        // set new addresses
+        uint64_t command_list_address = command_list_physical_address_ccc;
+        memcpy(port_virt_addr_ccc + superbyte_ccc[11], &command_list_address, 8);
+        uint64_t fis_address = fis_physical_address_ccc;
+        memcpy(port_virt_addr_ccc + superbyte_ccc[12], &fis_address, 8);
+        // wait for 1ms
+        do_nanosleep_ccc(1000000);
+        // set the fis enable bit
+        enable_fis_ccc(FIS_BIT_TIME);
+        // wait for 1ms
+        do_nanosleep_ccc(1000000);
+      }
+
+      // if it fails to identify after then bad status
+      performing_reset_ccc = 1;
+      if (!did_hard_reset_ccc && identify_device_ccc())
+      {
+        sprintf (tempmessage_ccc, "identify failed after soft reset\n");
+        message_console_log_ccc(tempmessage_ccc, 0);
+        if (did_hard_reset_ccc)
+        {
+          status = status | 4;
         }
         else
         {
-          // try soft reset first
-          // clear the command list
-          memset(command_list_buffer_ccc, 0, command_list_size_ccc);
-          // set the command FIS length, 5 dwords for h2d, also contains read/write bit
-          io_singlebyte_ccc = 5;
-          io_singlebyte_ccc = io_singlebyte_ccc | ((1) << 6);
-          memcpy(command_list_buffer_ccc, &io_singlebyte_ccc, 1);
-          // set the reset bit in the command fis
-          memset(command_list_buffer_ccc+1, 1, 1);
-
-          // clear the fis buffer
-          memset(fis_buffer_ccc, 0, fis_size_ccc);
-          // clear the command FIS
-          memset(table_buffer_ccc, 0, 0x80);
-          // set FIS type
-          memset(table_buffer_ccc, REG_H2D, 1);
-          // set type as control
-          memset(table_buffer_ccc+1, 0x00, 1);
-          // set the table entry length
-          uint16_t word = table_entry_count_ccc;
-          memcpy(command_list_buffer_ccc+2, &word, 2);
-          // set the command table address
-          uint64_t qword = table_physical_address_ccc;
-          memcpy(command_list_buffer_ccc+8, &qword, 8);
-
-          // set the soft reset control bit
-          memset(table_buffer_ccc+15, 4, 1);
-
-          // set the command list override bit
-          byte = byte | 8;
-          memcpy(port_virt_addr_ccc + superbyte_ccc[10], &byte, 1);    //potential superbyte
-          // wait for clo bit to be clear
-          int check_bit = 1;
-          unsigned long long start_time = get_elapsed_usec_ccc();
-          while (check_bit)
-          {
-            unsigned long long elapsed_time = get_elapsed_usec_ccc();
-            if (elapsed_time > start_time + COMMAND_LIST_OVERRIDE_TIME)
-            {
-              // if it exceeds general timeout then quit
-              break;
-            }
-            memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[10], 1);    //potential superbyte
-            check_bit = byte & 0x08;
-            // give the cpu a chance to do something else so we are not using 100%
-            do_nanosleep_ccc(1);
-          }
-
-          // make sure fis is running
-          enable_fis_ccc(FIS_BIT_TIME);
-
-          // set the start bit
-          enable_start_ccc(START_BIT_TIME);
-
-          // set the command issue bit
-          enable_command_issue_ccc(COMMAND_BIT_TIME);
-
-          do_nanosleep_ccc(500);
-
-          // clear the soft reset control bit
-          memset(table_buffer_ccc+15, 0, 1);
-
-          // clear the start bit
-          disable_start_ccc(START_BIT_TIME);
-
-          // set the command list override bit
-          byte = byte | 8;
-          memcpy(port_virt_addr_ccc + superbyte_ccc[10], &byte, 1);    //potential superbyte
-          // wait for clo bit to be clear
-          check_bit = 1;
-          start_time = get_elapsed_usec_ccc();
-          while (check_bit)
-          {
-            unsigned long long elapsed_time = get_elapsed_usec_ccc();
-            if (elapsed_time > start_time + COMMAND_LIST_OVERRIDE_TIME)
-            {
-              // if it exceeds general timeout then quit
-              break;
-            }
-            memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[10], 1);    //potential superbyte
-            check_bit = byte & 0x08;
-            // give the cpu a chance to do something else so we are not using 100%
-            do_nanosleep_ccc(1);
-          }
-
-          // set the start bit
-          enable_start_ccc(START_BIT_TIME);
-
-          // set the command issue bit
-          enable_command_issue_ccc(COMMAND_BIT_TIME);
-
-          // wait for 1ms
-          do_nanosleep_ccc(1000000);
-
-          // clear the start bit
-          disable_start_ccc(START_BIT_TIME);
-
-          // wait for 1ms
-          do_nanosleep_ccc(1000000);
-
-          // reset the fis to make sure it updates
-          disable_fis_ccc(FIS_BIT_TIME);
-
-          // wait for 1ms
-          do_nanosleep_ccc(1000000);
-
-          // set addresses
-          uint64_t command_list_address = command_list_physical_address_ccc;
-          memcpy(port_virt_addr_ccc + superbyte_ccc[11], &command_list_address, 8);    //potential superbyte
-          uint64_t fis_address = fis_physical_address_ccc;
-          memcpy(port_virt_addr_ccc + superbyte_ccc[12], &fis_address, 8);    //potential superbyte
-          // wait for 1ms
-          do_nanosleep_ccc(1000000);
-
-          // make sure fis is running
-          enable_fis_ccc(FIS_BIT_TIME);
-
-          // wait for 1ms
-          do_nanosleep_ccc(1000000);
-
-          // if always wait for reset time then wait
-          if (always_wait_for_reset_timers_ccc)
-          {
-            unsigned long long rstart_time = get_elapsed_usec_ccc();
-            unsigned long long relapsed_time = get_elapsed_usec_ccc();
-            while ( (relapsed_time - rstart_time) < hard_reset_time_ccc)
-            {
-              do_nanosleep_ccc(1000000);
-              relapsed_time = get_elapsed_usec_ccc();
-              update_display_status_buttons_ccc(DISPLAY_STATUS_UPDATE_TIME);
-            }
-          }
-
-          // wait for device to be ready
-          status = wait_not_busy_or_drq_ccc(hard_reset_time_ccc, 0);
-          if (stop_signal_ccc)
-          {
-            return STOP_SIGNAL_RETURN_CODE;
-          }
-          if (status == 1)
-          {
-            sprintf (tempmessage_ccc, "timeout after soft reset\n");
-            message_console_log_ccc(tempmessage_ccc, 0);
-            // if it timed out then do hard reset
-            performing_reset_ccc = 1;
-            status = hard_reset_ccc(disk_fd);
-            performing_reset_ccc = 0;
-            did_hard_reset_ccc = 1;
-          }
+          status = hard_reset_ccc(disk_fd);
         }
-
-        // clear any interrupt bits
-        ahci_interrupt_changed_ccc = true;
-        memset(port_virt_addr_ccc + superbyte_ccc[7], 0xff, 4);    //potential superbyte
-
-        // get recent copy of status and error
-        memcpy(&io_byte_ccc[1], port_virt_addr_ccc + superbyte_ccc[8], 1);    // status    //potential superbyte
-        memcpy(&io_byte_ccc[2], port_virt_addr_ccc + superbyte_ccc[9], 1);    // error    //potential superbyte
-
-        post_direct_ccc(28);
-
-        // put the buffer size back
-        ccc_main_buffer_size_ccc = backup_buffer_size;
-        set_main_buffer_ccc();
-
-        if (1)
-        {
-          // perform steps to help with recovery after reset
-          // turn interupts off
-          memset(port_virt_addr_ccc + superbyte_ccc[13], 0x0, 4);    //potential superbyte
-          // wait for 1ms
-          do_nanosleep_ccc(1000000);
-          // clear the start bit
-          disable_start_ccc(START_BIT_TIME);
-          // wait for 1ms
-          do_nanosleep_ccc(1000000);
-          // clear the fis enable bit
-          disable_fis_ccc(FIS_BIT_TIME);
-          // wait for 1ms
-          do_nanosleep_ccc(1000000);
-          // set new addresses
-          uint64_t command_list_address = command_list_physical_address_ccc;
-          memcpy(port_virt_addr_ccc + superbyte_ccc[11], &command_list_address, 8);    //potential superbyte
-          uint64_t fis_address = fis_physical_address_ccc;
-          memcpy(port_virt_addr_ccc + superbyte_ccc[12], &fis_address, 8);    //potential superbyte
-          // wait for 1ms
-          do_nanosleep_ccc(1000000);
-          // set the fis enable bit
-          enable_fis_ccc(FIS_BIT_TIME);
-          // wait for 1ms
-          do_nanosleep_ccc(1000000);
-        }
-
-        // if it fails to identify after then bad status
-        performing_reset_ccc = 1;
-        if (!did_hard_reset_ccc && identify_device_ccc())
-        {
-          sprintf (tempmessage_ccc, "identify failed after soft reset\n");
-          message_console_log_ccc(tempmessage_ccc, 0);
-          if (did_hard_reset_ccc)
-          {
-            status = status | 4;
-          }
-          else
-          {
-            status = hard_reset_ccc(disk_fd);
-          }
-        }
-        performing_reset_ccc = 0;
-        return (status);
       }
+      performing_reset_ccc = 0;
+      return (status);
     }
 
 
@@ -3448,7 +3392,7 @@ int hard_reset_ccc(int disk_fd)
     }
     else
     {
-      if (superbyte_ccc[36] == 0x6f)
+      if (1)
       {
         if (ahci_mode_ccc)
         {
@@ -3486,9 +3430,9 @@ int hard_reset_ccc(int disk_fd)
 
           // clear the start bit
           uint8_t byte;
-          memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[10], 1);    //potential superbyte
+          memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[10], 1);
           byte = byte & 0xfe;
-          memcpy(port_virt_addr_ccc + superbyte_ccc[10], &byte, 1);    //potential superbyte
+          memcpy(port_virt_addr_ccc + superbyte_ccc[10], &byte, 1);
 
           // set the buffer size to 0 for no data transfer
           unsigned long long backup_buffer_size = ccc_main_buffer_size_ccc;
@@ -3552,9 +3496,9 @@ int hard_reset_ccc(int disk_fd)
 
           // set addresses
           uint64_t command_list_address = command_list_physical_address_ccc;
-          memcpy(port_virt_addr_ccc + superbyte_ccc[11], &command_list_address, 8);    //potential superbyte
+          memcpy(port_virt_addr_ccc + superbyte_ccc[11], &command_list_address, 8);
           uint64_t fis_address = fis_physical_address_ccc;
-          memcpy(port_virt_addr_ccc + superbyte_ccc[12], &fis_address, 8);    //potential superbyte
+          memcpy(port_virt_addr_ccc + superbyte_ccc[12], &fis_address, 8);
 
           // wait for 1ms
           do_nanosleep_ccc(1000000);
@@ -3613,7 +3557,7 @@ int hard_reset_ccc(int disk_fd)
           {
             // perform steps to help with recovery after reset
             // turn interupts off
-            memset(port_virt_addr_ccc + superbyte_ccc[13], 0x0, 4);    //potential superbyte
+            memset(port_virt_addr_ccc + superbyte_ccc[13], 0x0, 4);
             // wait for 1ms
             do_nanosleep_ccc(1000000);
             // clear the start bit
@@ -3626,9 +3570,9 @@ int hard_reset_ccc(int disk_fd)
             do_nanosleep_ccc(1000000);
             // set new addresses
             uint64_t command_list_address = command_list_physical_address_ccc;
-            memcpy(port_virt_addr_ccc + superbyte_ccc[11], &command_list_address, 8);    //potential superbyte
+            memcpy(port_virt_addr_ccc + superbyte_ccc[11], &command_list_address, 8);
             uint64_t fis_address = fis_physical_address_ccc;
-            memcpy(port_virt_addr_ccc + superbyte_ccc[12], &fis_address, 8);    //potential superbyte
+            memcpy(port_virt_addr_ccc + superbyte_ccc[12], &fis_address, 8);
             // wait for 1ms
             do_nanosleep_ccc(1000000);
             // set the fis enable bit
@@ -3727,7 +3671,7 @@ int hba_reset_ccc(void)
   {
     if (ahci_mode_ccc)
     {
-      if (superbyte_ccc[42] == 0x20)
+      if (1)
       {
         if (hba_reset_address_ccc == 0)
         {
@@ -3758,6 +3702,7 @@ int hba_reset_ccc(void)
         if(hba_mem_dev_ccc == -1)
         {
           fprintf (stderr, "unable to open /dev/mem\n");
+	  fclose(hba_debug_reset_file);
           return (-1);
         }
         const uint32_t hba_mem_address = hba_reset_address_ccc;
@@ -3778,6 +3723,8 @@ int hba_reset_ccc(void)
         if(hba_mem_pointer_ccc == MAP_FAILED)
         {
           fprintf (stderr, "HBA mem map failed\n");
+	  fclose(hba_debug_reset_file);
+	  close(hba_mem_dev_ccc);
           return (-1);
         }
         hba_virt_addr_ccc = (hba_mem_pointer_ccc + (hba_mem_address & page_mask));
@@ -3797,6 +3744,7 @@ int hba_reset_ccc(void)
             if(port_mem_dev_ccc == -1)
             {
               fprintf (stderr, "unable to open /dev/mem\n");
+	      fclose(hba_debug_reset_file);
               return (-1);
             }
             const uint32_t port_mem_address = (hba_reset_address_ccc + 0x100) + (0x80 * x);
@@ -3817,6 +3765,8 @@ int hba_reset_ccc(void)
             if(port_mem_pointer_ccc == MAP_FAILED)
             {
               fprintf (stderr, "Port mem map failed\n");
+	      fclose(hba_debug_reset_file);
+              close(port_mem_dev_ccc);
               return (-1);
             }
             port_virt_addr_ccc = (port_mem_pointer_ccc + (port_mem_address & page_mask));
@@ -3865,12 +3815,12 @@ int hba_reset_ccc(void)
           fprintf (hba_debug_reset_file, "performing actual hba reset now\n");
           // set the hba reset bit
           uint8_t byte;
-          memcpy(&byte, hba_virt_addr_ccc + superbyte_ccc[68], 1);    // superbyte
+          memcpy(&byte, hba_virt_addr_ccc + superbyte_ccc[68], 1);
           byte = byte | 0x01;
-          memcpy(hba_virt_addr_ccc + superbyte_ccc[68], &byte, 1);    // superbyte
+          memcpy(hba_virt_addr_ccc + superbyte_ccc[68], &byte, 1);
 
           // wait for hba to reset
-          memcpy(&byte, hba_virt_addr_ccc + superbyte_ccc[68], 1);    // superbyte
+          memcpy(&byte, hba_virt_addr_ccc + superbyte_ccc[68], 1);
           byte = byte & 0x01;
           unsigned long long start_time = get_elapsed_usec_ccc();
           while (byte != 0)
@@ -3883,7 +3833,7 @@ int hba_reset_ccc(void)
               ret = -1;
               break;
             }
-            memcpy(&byte, hba_virt_addr_ccc + superbyte_ccc[68], 1);    // superbyte
+            memcpy(&byte, hba_virt_addr_ccc + superbyte_ccc[68], 1);
             byte = byte & 0x01;
             // give the cpu a chance to do something else so we are not using 100%
             do_nanosleep_ccc(1);
@@ -3891,13 +3841,13 @@ int hba_reset_ccc(void)
 
           // now put some things back the way they were before the computer knows what happened
           // first enable ahci
-          memcpy(&byte, hba_virt_addr_ccc + superbyte_ccc[70], 1);    // superbyte
+          memcpy(&byte, hba_virt_addr_ccc + superbyte_ccc[70], 1);
           byte = byte | 0x80;
-          memcpy(hba_virt_addr_ccc + superbyte_ccc[70], &byte, 1);    // superbyte
+          memcpy(hba_virt_addr_ccc + superbyte_ccc[70], &byte, 1);
           // enable hba interupts
-          memcpy(&byte, hba_virt_addr_ccc + superbyte_ccc[68], 1);    // superbyte
+          memcpy(&byte, hba_virt_addr_ccc + superbyte_ccc[68], 1);
           byte = byte | 0x02;
-          memcpy(hba_virt_addr_ccc + superbyte_ccc[68], &byte, 1);    // superbyte
+          memcpy(hba_virt_addr_ccc + superbyte_ccc[68], &byte, 1);
 
           // now cycle through the ports
           int x;
@@ -3940,14 +3890,14 @@ int hba_reset_ccc(void)
               }
               // clear port interrupt status
               uint32_t doubleword = 0;
-              memcpy(port_virt_addr_ccc + superbyte_ccc[7], &doubleword, 4);    // superbyte
+              memcpy(port_virt_addr_ccc + superbyte_ccc[7], &doubleword, 4);
               // clear error status
-              memcpy(port_virt_addr_ccc + superbyte_ccc[18], &doubleword, 4);    // superbyte
+              memcpy(port_virt_addr_ccc + superbyte_ccc[18], &doubleword, 4);
               // restore transitions and allowed speed (whole register is ok)
-              memcpy(&doubleword, port_backup[x] + superbyte_ccc[16], 4);    // superbyte
-              memcpy(port_virt_addr_ccc + superbyte_ccc[16], &doubleword, 4);    // superbyte
+              memcpy(&doubleword, port_backup[x] + superbyte_ccc[16], 4);
+              memcpy(port_virt_addr_ccc + superbyte_ccc[16], &doubleword, 4);
               // restore fis enable bit
-              byte = port_backup[x][superbyte_ccc[10]] & 0x10;    // superbyte
+              byte = port_backup[x][superbyte_ccc[10]] & 0x10;
               if (byte)
               {
                 if (enable_fis_ccc(FIS_BIT_TIME))
@@ -3977,9 +3927,9 @@ int hba_reset_ccc(void)
                 fprintf (stdout, "port %d com reset\n", x);
                 fprintf (hba_debug_reset_file, "port %d com reset\n", x);
                 // clear the start bit in case it is not clear
-                memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[10], 1);    //potential superbyte
+                memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[10], 1);
                 byte = byte & 0xfe;
-                memcpy(port_virt_addr_ccc + superbyte_ccc[10], &byte, 1);    //potential superbyte
+                memcpy(port_virt_addr_ccc + superbyte_ccc[10], &byte, 1);
 
                 // set the comreset bit in the Device Detection Initialization field
                 memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[16], 1);
@@ -4027,14 +3977,14 @@ int hba_reset_ccc(void)
 
               // clear port interrupt status
               doubleword = 0;
-              memcpy(port_virt_addr_ccc + superbyte_ccc[7], &doubleword, 4);    // superbyte
+              memcpy(port_virt_addr_ccc + superbyte_ccc[7], &doubleword, 4);
               // clear error status
-              memcpy(port_virt_addr_ccc + superbyte_ccc[18], &doubleword, 4);    // superbyte
+              memcpy(port_virt_addr_ccc + superbyte_ccc[18], &doubleword, 4);
               // restore transitions and allowed speed (whole register is ok)
-              memcpy(&doubleword, port_backup[x] + superbyte_ccc[16], 4);    // superbyte
-              memcpy(port_virt_addr_ccc + superbyte_ccc[16], &doubleword, 4);    // superbyte
+              memcpy(&doubleword, port_backup[x] + superbyte_ccc[16], 4);
+              memcpy(port_virt_addr_ccc + superbyte_ccc[16], &doubleword, 4);
               // restore fis enable bit
-              byte = port_backup[x][superbyte_ccc[10]] & 0x10;    // superbyte
+              byte = port_backup[x][superbyte_ccc[10]] & 0x10;
               if (byte)
               {
                 if (enable_fis_ccc(FIS_BIT_TIME))
@@ -4054,7 +4004,7 @@ int hba_reset_ccc(void)
                 fprintf (hba_debug_reset_file, "port %d fis was not enabled\n", x);
               }
               // restore start bit
-              byte = port_backup[x][superbyte_ccc[10]] & 0x01;    // superbyte
+              byte = port_backup[x][superbyte_ccc[10]] & 0x01;
               if (byte)
               {
                 if (enable_start_ccc(START_BIT_TIME))
@@ -4074,8 +4024,8 @@ int hba_reset_ccc(void)
                 fprintf (hba_debug_reset_file, "port %d start bit was not enabled\n", x);
               }
               // restore interrupt enable bits
-              memcpy(&doubleword, port_backup[x] + superbyte_ccc[13], 4);    // superbyte
-              memcpy(port_virt_addr_ccc + superbyte_ccc[13], &doubleword, 4);    // superbyte
+              memcpy(&doubleword, port_backup[x] + superbyte_ccc[13], 4);
+              memcpy(port_virt_addr_ccc + superbyte_ccc[13], &doubleword, 4);
 
               // if it is the chosen port, then wait for it to be not busy
               if (0 && port_reset_address_ccc == (hba_reset_address_ccc + 0x100) + (0x80 * x))
@@ -4435,7 +4385,7 @@ int dump_hba_port_fis_command_data_ccc(unsigned long long hba_address, unsigned 
     // fis data
     int data_size = 0x100;
     uint64_t address;
-    memcpy(&address, port_virt_addr + superbyte_ccc[12], 8);    //potential superbyte
+    memcpy(&address, port_virt_addr + superbyte_ccc[12], 8);
     fprintf (stdout, "fis data, address=%08llx\n", (unsigned long long)address);
     sprintf (temp_string, "fis data, address=%08llx\n", (unsigned long long)address);
     dump_info_to_filename_ccc (dump_filename, temp_string);
@@ -4491,7 +4441,7 @@ int dump_hba_port_fis_command_data_ccc(unsigned long long hba_address, unsigned 
     // command data
     int data_size = 0x400;
     uint64_t address;
-    memcpy(&address, port_virt_addr + superbyte_ccc[11], 8);    //potential superbyte
+    memcpy(&address, port_virt_addr + superbyte_ccc[11], 8);
     fprintf (stdout, "command list data, address=%08llx\n", (unsigned long long)address);
     sprintf (temp_string, "command list data, address=%08llx\n", (unsigned long long)address);
     dump_info_to_filename_ccc (dump_filename, temp_string);
@@ -4744,7 +4694,7 @@ int hba_test_ccc(void)
     // fis data
     int data_size = 0x100;
     uint64_t address;
-    memcpy(&address, port_virt_addr_ccc + superbyte_ccc[12], 8);    //potential superbyte
+    memcpy(&address, port_virt_addr_ccc + superbyte_ccc[12], 8);
     fprintf (stdout, "fis data at start, address=%08llx\n", (unsigned long long)address);
     fprintf (hba_debug_file, "fis data at start, address=%08llx\n", (unsigned long long)address);
     fflush(hba_debug_file);
@@ -4813,7 +4763,7 @@ int hba_test_ccc(void)
     // command data
     int data_size = 0x400;
     uint64_t address;
-    memcpy(&address, port_virt_addr_ccc + superbyte_ccc[11], 8);    //potential superbyte
+    memcpy(&address, port_virt_addr_ccc + superbyte_ccc[11], 8);
     fprintf (stdout, "command list data at start, address=%08llx\n", (unsigned long long)address);
     fprintf (hba_debug_file, "command list data at start, address=%08llx\n", (unsigned long long)address);
     fflush(hba_debug_file);
@@ -4978,16 +4928,16 @@ int hba_test_ccc(void)
 
 
   // backup current addresses
-  memcpy(&command_list_address_backup_ccc, port_virt_addr_ccc + superbyte_ccc[11], 8);    //potential superbyte
-  memcpy(&fis_address_backup_ccc, port_virt_addr_ccc + superbyte_ccc[12], 8);    //potential superbyte
+  memcpy(&command_list_address_backup_ccc, port_virt_addr_ccc + superbyte_ccc[11], 8);
+  memcpy(&fis_address_backup_ccc, port_virt_addr_ccc + superbyte_ccc[12], 8);
 
   // backup the interrupt settings
-  memcpy(&interrupt_backup_ccc, port_virt_addr_ccc + superbyte_ccc[13], 4);    //potential superbyte
+  memcpy(&interrupt_backup_ccc, port_virt_addr_ccc + superbyte_ccc[13], 4);
 
 
   // turn interupts off
   ahci_interrupt_changed_ccc = true;
-  memset(port_virt_addr_ccc + superbyte_ccc[13], 0x0, 4);    //potential superbyte
+  memset(port_virt_addr_ccc + superbyte_ccc[13], 0x0, 4);
 
   // wait for 1ms
   do_nanosleep_ccc(1000000);
@@ -5007,9 +4957,9 @@ int hba_test_ccc(void)
   // set new addresses
   ahci_address_changed_ccc = true;
   uint64_t command_list_address = command_list_physical_address_ccc;
-  memcpy(port_virt_addr_ccc + superbyte_ccc[11], &command_list_address, 8);    //potential superbyte
+  memcpy(port_virt_addr_ccc + superbyte_ccc[11], &command_list_address, 8);
   uint64_t fis_address = fis_physical_address_ccc;
-  memcpy(port_virt_addr_ccc + superbyte_ccc[12], &fis_address, 8);    //potential superbyte
+  memcpy(port_virt_addr_ccc + superbyte_ccc[12], &fis_address, 8);
 
   // wait for 1ms
   do_nanosleep_ccc(1000000);
@@ -5044,9 +4994,9 @@ int hba_test_ccc(void)
     fsync(ptf);
     // clear the start bit
     uint8_t byte;
-    memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[10], 1);    //potential superbyte
+    memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[10], 1);
     byte = byte & 0xfe;
-    memcpy(port_virt_addr_ccc + superbyte_ccc[10], &byte, 1);    //potential superbyte
+    memcpy(port_virt_addr_ccc + superbyte_ccc[10], &byte, 1);
 
     // set the buffer size to 0 for no data transfer
     unsigned long long backup_buffer_size = ccc_main_buffer_size_ccc;
@@ -5084,7 +5034,7 @@ int hba_test_ccc(void)
 
     // set the command list override bit
     byte = byte | 8;
-    memcpy(port_virt_addr_ccc + superbyte_ccc[10], &byte, 1);    //potential superbyte
+    memcpy(port_virt_addr_ccc + superbyte_ccc[10], &byte, 1);
     // wait for clo bit to be clear
     int check_bit = 1;
     unsigned long long start_time = get_elapsed_usec_ccc();
@@ -5096,7 +5046,7 @@ int hba_test_ccc(void)
         // if it exceeds general timeout then quit
         break;
       }
-      memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[10], 1);    //potential superbyte
+      memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[10], 1);
       check_bit = byte & 0x08;
       // give the cpu a chance to do something else so we are not using 100%
       do_nanosleep_ccc(1);
@@ -5121,7 +5071,7 @@ int hba_test_ccc(void)
 
     // set the command list override bit
     byte = byte | 8;
-    memcpy(port_virt_addr_ccc + superbyte_ccc[10], &byte, 1);    //potential superbyte
+    memcpy(port_virt_addr_ccc + superbyte_ccc[10], &byte, 1);
     // wait for clo bit to be clear
     check_bit = 1;
     start_time = get_elapsed_usec_ccc();
@@ -5133,7 +5083,7 @@ int hba_test_ccc(void)
         // if it exceeds general timeout then quit
         break;
       }
-      memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[10], 1);    //potential superbyte
+      memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[10], 1);
       check_bit = byte & 0x08;
       // give the cpu a chance to do something else so we are not using 100%
       do_nanosleep_ccc(1);
@@ -5168,7 +5118,7 @@ int hba_test_ccc(void)
 
     // clear any interrupt bits
     ahci_interrupt_changed_ccc = true;
-    memset(port_virt_addr_ccc + superbyte_ccc[7], 0xff, 4);    //potential superbyte
+    memset(port_virt_addr_ccc + superbyte_ccc[7], 0xff, 4);
 
     // put the buffer size back
     ccc_main_buffer_size_ccc = backup_buffer_size;
@@ -5189,9 +5139,9 @@ int hba_test_ccc(void)
     ptf = fileno(hba_debug_file);
     fsync(ptf);
     // clear the start bit in case it is not clear
-    memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[10], 1);    //potential superbyte
+    memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[10], 1);
     byte = byte & 0xfe;
-    memcpy(port_virt_addr_ccc + superbyte_ccc[10], &byte, 1);    //potential superbyte
+    memcpy(port_virt_addr_ccc + superbyte_ccc[10], &byte, 1);
 
     // set the comreset bit in the Device Detection Initialization field
     memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[16], 1);
@@ -5311,7 +5261,7 @@ int hba_test_ccc(void)
         fsync(ptf);
         break;
       }
-      memcpy(&io_doubleword_ccc, port_virt_addr_ccc + superbyte_ccc[8], 4);    //potential superbyte
+      memcpy(&io_doubleword_ccc, port_virt_addr_ccc + superbyte_ccc[8], 4);
       busy = io_doubleword_ccc & 0x80;
       drq = io_doubleword_ccc & 0x08;
       do_nanosleep_ccc(1);
@@ -5374,7 +5324,7 @@ int hba_test_ccc(void)
           fsync(ptf);
           break;
         }
-        memcpy(&io_doubleword_ccc, port_virt_addr_ccc + superbyte_ccc[8], 4);    //potential superbyte
+        memcpy(&io_doubleword_ccc, port_virt_addr_ccc + superbyte_ccc[8], 4);
         busy = io_doubleword_ccc & 0x80;
         drq = io_doubleword_ccc & 0x08;
         do_nanosleep_ccc(1);
@@ -5447,7 +5397,7 @@ int hba_test_ccc(void)
         // fis data
         int data_size = 0x100;
         uint64_t address;
-        memcpy(&address, port_virt_addr_ccc + superbyte_ccc[12], 8);    //potential superbyte
+        memcpy(&address, port_virt_addr_ccc + superbyte_ccc[12], 8);
         fprintf (stdout, "fis data after identify device, address=%08llx\n", (unsigned long long)address);
         fprintf (hba_debug_file, "fis data after identify device, address=%08llx\n", (unsigned long long)address);
         fflush(hba_debug_file);
@@ -5514,7 +5464,7 @@ int hba_test_ccc(void)
         // command data
         int data_size = 0x400;
         uint64_t address;
-        memcpy(&address, port_virt_addr_ccc + superbyte_ccc[11], 8);    //potential superbyte
+        memcpy(&address, port_virt_addr_ccc + superbyte_ccc[11], 8);
         fprintf (stdout, "command list data after identify device, address=%08llx\n", (unsigned long long)address);
         fprintf (hba_debug_file, "command list data after identify device, address=%08llx\n", (unsigned long long)address);
         fflush(hba_debug_file);
@@ -5681,14 +5631,14 @@ int hba_test_ccc(void)
     if (ahci_address_changed_ccc)
     {
       // restore addresses
-      memcpy(port_virt_addr_ccc + superbyte_ccc[11], &command_list_address_backup_ccc, 8);    //potential superbyte
-      memcpy(port_virt_addr_ccc + superbyte_ccc[12], &fis_address_backup_ccc, 8);    //potential superbyte
+      memcpy(port_virt_addr_ccc + superbyte_ccc[11], &command_list_address_backup_ccc, 8);
+      memcpy(port_virt_addr_ccc + superbyte_ccc[12], &fis_address_backup_ccc, 8);
       ahci_address_changed_ccc = false;
     }
     if (ahci_interrupt_changed_ccc)
     {
       // restore the interrupt settings
-      memcpy(port_virt_addr_ccc + superbyte_ccc[13], &interrupt_backup_ccc, 4);    //potential superbyte
+      memcpy(port_virt_addr_ccc + superbyte_ccc[13], &interrupt_backup_ccc, 4);
       ahci_interrupt_changed_ccc = false;
     }
     if (memory_mapped_ccc)
@@ -5776,16 +5726,16 @@ int hba_test_ccc(void)
     }
 
     // backup current addresses
-    memcpy(&command_list_address_backup_ccc, port_virt_addr_ccc + superbyte_ccc[11], 8);    //potential superbyte
-    memcpy(&fis_address_backup_ccc, port_virt_addr_ccc + superbyte_ccc[12], 8);    //potential superbyte
+    memcpy(&command_list_address_backup_ccc, port_virt_addr_ccc + superbyte_ccc[11], 8);
+    memcpy(&fis_address_backup_ccc, port_virt_addr_ccc + superbyte_ccc[12], 8);
 
     // backup the interrupt settings
-    memcpy(&interrupt_backup_ccc, port_virt_addr_ccc + superbyte_ccc[13], 4);    //potential superbyte
+    memcpy(&interrupt_backup_ccc, port_virt_addr_ccc + superbyte_ccc[13], 4);
 
 
     // turn interupts off
     ahci_interrupt_changed_ccc = true;
-    memset(port_virt_addr_ccc + superbyte_ccc[13], 0x0, 4);    //potential superbyte
+    memset(port_virt_addr_ccc + superbyte_ccc[13], 0x0, 4);
 
     // wait for 1ms
     do_nanosleep_ccc(1000000);
@@ -5805,9 +5755,9 @@ int hba_test_ccc(void)
     // set new addresses
     ahci_address_changed_ccc = true;
     uint64_t command_list_address = command_list_physical_address_ccc;
-    memcpy(port_virt_addr_ccc + superbyte_ccc[11], &command_list_address, 8);    //potential superbyte
+    memcpy(port_virt_addr_ccc + superbyte_ccc[11], &command_list_address, 8);
     uint64_t fis_address = fis_physical_address_ccc;
-    memcpy(port_virt_addr_ccc + superbyte_ccc[12], &fis_address, 8);    //potential superbyte
+    memcpy(port_virt_addr_ccc + superbyte_ccc[12], &fis_address, 8);
 
     // wait for 1ms
     do_nanosleep_ccc(1000000);
@@ -5851,7 +5801,7 @@ int hba_test_ccc(void)
           fsync(ptf);
           break;
         }
-        memcpy(&io_doubleword_ccc, port_virt_addr_ccc + superbyte_ccc[8], 4);    //potential superbyte
+        memcpy(&io_doubleword_ccc, port_virt_addr_ccc + superbyte_ccc[8], 4);
         busy = io_doubleword_ccc & 0x80;
         drq = io_doubleword_ccc & 0x08;
         do_nanosleep_ccc(1);
@@ -5914,7 +5864,7 @@ int hba_test_ccc(void)
             fsync(ptf);
             break;
           }
-          memcpy(&io_doubleword_ccc, port_virt_addr_ccc + superbyte_ccc[8], 4);    //potential superbyte
+          memcpy(&io_doubleword_ccc, port_virt_addr_ccc + superbyte_ccc[8], 4);
           busy = io_doubleword_ccc & 0x80;
           drq = io_doubleword_ccc & 0x08;
           do_nanosleep_ccc(1);
@@ -5993,15 +5943,15 @@ int hba_test_ccc(void)
   if (ahci_address_changed_ccc)
   {
     // restore addresses
-    memcpy(port_virt_addr_ccc + superbyte_ccc[11], &command_list_address_backup_ccc, 8);    //potential superbyte
-    memcpy(port_virt_addr_ccc + superbyte_ccc[12], &fis_address_backup_ccc, 8);    //potential superbyte
+    memcpy(port_virt_addr_ccc + superbyte_ccc[11], &command_list_address_backup_ccc, 8);
+    memcpy(port_virt_addr_ccc + superbyte_ccc[12], &fis_address_backup_ccc, 8);
     ahci_address_changed_ccc = false;
   }
 
   if (ahci_interrupt_changed_ccc)
   {
     // restore the interrupt settings
-    memcpy(port_virt_addr_ccc + superbyte_ccc[13], &interrupt_backup_ccc, 4);    //potential superbyte
+    memcpy(port_virt_addr_ccc + superbyte_ccc[13], &interrupt_backup_ccc, 4);
     ahci_interrupt_changed_ccc = false;
   }
 
@@ -6036,7 +5986,7 @@ int post_direct_ccc(int command_type)
 
   if (ahci_mode_ccc)
   {
-    if (superbyte_ccc[37] == 0xf5)
+    if (1)
     {
       // ahci
       // clear return data
@@ -6290,7 +6240,7 @@ int refresh_status_ccc(int disk_fd)
   {
     if (ahci_mode_ccc)
     {
-      if (superbyte_ccc[38] == 0x50)
+      if (1)
       {
         // ahci
         #ifdef DEBUG
@@ -6450,7 +6400,7 @@ int find_all_devices_ccc(void)
       int x;
       for (x = 0; x < cols; x++)
       {
-        if (line[x] == '\n')
+        if (line[x] == '\0' || line[x] == '\n')
         {
           line[x] = '\0';
           break;
@@ -6504,7 +6454,7 @@ int find_all_devices_ccc(void)
       int x;
       for (x = 0; x < cols; x++)
       {
-        if (line[x] == '\n')
+        if (line[x] == '\0' || line[x] == '\n')
         {
           line[x] = '\0';
           break;
@@ -6561,7 +6511,7 @@ int find_all_devices_ccc(void)
       int x;
       for (x = 0; x < cols; x++)
       {
-        if (line[x] == '\n')
+        if (line[x] == '\0' || line[x] == '\n')
         {
           line[x] = '\0';
           break;
@@ -6627,7 +6577,7 @@ int find_bus_devices_ccc(char *driver)
     int x;
     for (x = 0; x < cols; x++)
     {
-      if (line[x] == '\n')
+      if (line[x] == '\0' || line[x] == '\n')
       {
         line[x] = '\0';
         break;
@@ -6728,7 +6678,7 @@ int process_resources_ccc(unsigned long long *start, unsigned long long *end, un
 {
   if (ahci_mode_ccc)
   {
-    if (superbyte_ccc[39] == 0x0e)
+    if (1)
     {
       int i;
       if (verbose_ccc & DEBUG8)
@@ -7600,677 +7550,674 @@ int identify_device_direct_ccc(unsigned long long address, int select, int count
 
 int identify_device_ahci_ccc(int count)
 {
-  if (superbyte_ccc[40] == 0x05)
-  {
-    memset (ccc_buffer_ccc, 0, ccc_main_buffer_size_ccc);
+  memset (ccc_buffer_ccc, 0, ccc_main_buffer_size_ccc);
 
-    strcpy (model_ccc[count], "");
-    strcpy (serial_ccc[count], "");
+  strcpy (model_ccc[count], "");
+  strcpy (serial_ccc[count], "");
+
+  if (enable_data_dump_ccc)    // TODO this is for hba debug testing
+  {
+    char temp_string[256];
+    sprintf (temp_string, "dump before identify for port number %d\n", port_number_ccc[count]);
+    dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
+    int ret = dump_hba_port_fis_command_data_ccc(hba_address_ccc[count], port_address_ccc[count], 1, 1, 1, 1, 1);
+    if (ret)
+    {
+      strcpy (model_ccc[count], "error with data dump");
+      return (1);
+    }
+  }
+
+  if (port_signature_ccc[count] == 0xffffffff)
+  {
+    strcpy (model_ccc[count], "no device");
+    return (1);
+  }
+
+  else if (port_signature_ccc[count] == SATA_SIG_ATA)
+  {
+    int busy;
+    int drq;
+    int drdy;
+    strcpy (model_ccc[count], "sata device");
+    int port_mem_dev_ccc = open("/dev/mem", O_RDWR | O_SYNC);
+    if(port_mem_dev_ccc == -1)
+    {
+      sprintf (tempmessage_ccc, "unable to open /dev/mem\n");
+      message_now_ccc(tempmessage_ccc);
+      return (-1);
+    }
+    const uint32_t mem_address = port_address_ccc[count];
+    const uint32_t mem_size = 128;
+
+    uint32_t port_alloc_mem_size_ccc, page_mask, page_size;
+    void *port_mem_pointer_ccc;
+
+    page_size = pagesize_ccc;
+    port_alloc_mem_size_ccc = (((mem_size / page_size) + 1) * page_size);
+    page_mask = (page_size - 1);
+
+    port_mem_pointer_ccc = mmap(NULL,
+                                port_alloc_mem_size_ccc,
+                                PROT_READ | PROT_WRITE,
+                                MAP_SHARED,
+                                port_mem_dev_ccc,
+                                (mem_address & ~page_mask)
+    );
+
+    if(port_mem_pointer_ccc == MAP_FAILED)
+    {
+      sprintf (tempmessage_ccc, "mem map failed\n");
+      message_now_ccc(tempmessage_ccc);
+      return (0);
+    }
+    port_virt_addr_ccc = (port_mem_pointer_ccc + (mem_address & page_mask));
 
     if (enable_data_dump_ccc)    // TODO this is for hba debug testing
     {
       char temp_string[256];
-      sprintf (temp_string, "dump before identify for port number %d\n", port_number_ccc[count]);
+      sprintf (temp_string, "dump 1 for port number %d\n", port_number_ccc[count]);
       dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
-      int ret = dump_hba_port_fis_command_data_ccc(hba_address_ccc[count], port_address_ccc[count], 1, 1, 1, 1, 1);
-      if (ret)
-      {
-        strcpy (model_ccc[count], "error with data dump");
-        return (1);
-      }
+      unsigned char temp_buffer[0x80];
+      memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
+      dump_data_to_filename_binary_ccc(data_dump_filename_ccc, temp_buffer, 0x80, "Port data");
     }
 
-    if (port_signature_ccc[count] == 0xffffffff)
+    // check for busy or drq
+    memcpy(&io_doubleword_ccc, port_virt_addr_ccc + superbyte_ccc[8], 4);
+    busy = io_doubleword_ccc & 0x80;
+    drdy = io_doubleword_ccc & 0x40;
+    drq = io_doubleword_ccc & 0x08;
+    if (busy || drq)
     {
-      strcpy (model_ccc[count], "no device");
-      return (1);
-    }
-
-    else if (port_signature_ccc[count] == SATA_SIG_ATA)
-    {
-      int busy;
-      int drq;
-      int drdy;
-      strcpy (model_ccc[count], "sata device");
-      int port_mem_dev_ccc = open("/dev/mem", O_RDWR | O_SYNC);
-      if(port_mem_dev_ccc == -1)
-      {
-        sprintf (tempmessage_ccc, "unable to open /dev/mem\n");
-        message_now_ccc(tempmessage_ccc);
-        return (-1);
-      }
-      const uint32_t mem_address = port_address_ccc[count];
-      const uint32_t mem_size = 128;
-
-      uint32_t port_alloc_mem_size_ccc, page_mask, page_size;
-      void *port_mem_pointer_ccc;
-
-      page_size = pagesize_ccc;
-      port_alloc_mem_size_ccc = (((mem_size / page_size) + 1) * page_size);
-      page_mask = (page_size - 1);
-
-      port_mem_pointer_ccc = mmap(NULL,
-                                  port_alloc_mem_size_ccc,
-                                  PROT_READ | PROT_WRITE,
-                                  MAP_SHARED,
-                                  port_mem_dev_ccc,
-                                  (mem_address & ~page_mask)
-      );
-
-      if(port_mem_pointer_ccc == MAP_FAILED)
-      {
-        sprintf (tempmessage_ccc, "mem map failed\n");
-        message_now_ccc(tempmessage_ccc);
-        return (0);
-      }
-      port_virt_addr_ccc = (port_mem_pointer_ccc + (mem_address & page_mask));
-
-      if (enable_data_dump_ccc)    // TODO this is for hba debug testing
-      {
-        char temp_string[256];
-        sprintf (temp_string, "dump 1 for port number %d\n", port_number_ccc[count]);
-        dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
-        unsigned char temp_buffer[0x80];
-        memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
-        dump_data_to_filename_binary_ccc(data_dump_filename_ccc, temp_buffer, 0x80, "Port data");
-      }
-
-      // check for busy or drq
-      memcpy(&io_doubleword_ccc, port_virt_addr_ccc + superbyte_ccc[8], 4);
-      busy = io_doubleword_ccc & 0x80;
-      drdy = io_doubleword_ccc & 0x40;
-      drq = io_doubleword_ccc & 0x08;
-      if (busy || drq)
-      {
-        strcpy (model_ccc[count], "busy or drq");
-        device_present_ccc[count] = false;
-        char str[32];
-        sprintf(str, "e/s=%04x", io_doubleword_ccc);
-        strcpy (serial_ccc[count], str);
-        // close mapped memory
-        munmap(port_mem_pointer_ccc, port_alloc_mem_size_ccc);
-        close(port_mem_dev_ccc);
-        return (1);
-      }
-      else if (enable_dont_identify_on_choose_source_ccc)
-      {
-        strcpy (model_ccc[count], "error/status");
-        if (drdy)
-        {
-          strcpy (model_ccc[count], "ready");
-        }
-        char str[32];
-        sprintf(str, "e/s=%04x", io_doubleword_ccc);
-        strcpy (serial_ccc[count], str);
-        // close mapped memory
-        munmap(port_mem_pointer_ccc, port_alloc_mem_size_ccc);
-        close(port_mem_dev_ccc);
-        return (1);
-      }
-
-      #ifdef DEBUG
-      int i;
-      for (i = 0; i < 0x80; i+=4)
-      {
-        memcpy(&io_doubleword_ccc, port_virt_addr_ccc + i, 4);
-        //fprintf (stdout, "%x %08x\n", i, io_doubleword_ccc);  //debug
-      }
-      #endif
-
-      // backup the interrupt settings
-      memcpy(&interrupt_backup_ccc, port_virt_addr_ccc + superbyte_ccc[13], 4);    //potential superbyte
-      ahci_interrupt_changed_ccc = true;
-
-      // backup current addresses
-      memcpy(&command_list_address_backup_ccc, port_virt_addr_ccc + superbyte_ccc[11], 8);    //potential superbyte
-      memcpy(&fis_address_backup_ccc, port_virt_addr_ccc + superbyte_ccc[12], 8);    //potential superbyte
-      ahci_address_changed_ccc = true;
-      //fprintf (stdout, "command_list_address_backup_ccc= %016llx\n", command_list_address_backup_ccc);  //debug
-      //fprintf (stdout, "fis_address_backup_ccc= %016llx\n", fis_address_backup_ccc);  //debug
-
-      // clear the fis buffer
-      memset(fis_buffer_ccc, 0, fis_size_ccc);
-      // clear the command FIS
-      memset(table_buffer_ccc, 0, 0x80);
-      // set FIS type
-      memset(table_buffer_ccc, REG_H2D, 1);
-      // set type as command
-      memset(table_buffer_ccc+1, 0x80, 1);
-      // set the command register for identify device
-      memset(table_buffer_ccc+2, 0xec, 1);
-      if (enable_data_dump_ccc)
-      {
-        // set the count to 1
-        memset(table_buffer_ccc+12, 1, 1);
-        // set the control register value (something unknown)
-        memset(table_buffer_ccc+15, 0x08, 1);
-      }
-      // clear the command list
-      memset(command_list_buffer_ccc, 0, command_list_size_ccc);
-      // set the command FIS length, 5 dwords for h2d
-      memset(command_list_buffer_ccc, 5, 1);
-      // set the table entry length
-      uint16_t word = table_entry_count_ccc;
-      memcpy(command_list_buffer_ccc+2, &word, 2);
-      // set the command table address
-      uint64_t qword = table_physical_address_ccc;
-      memcpy(command_list_buffer_ccc+8, &qword, 8);
-
-      // turn interupts off
-      memset(port_virt_addr_ccc + superbyte_ccc[13], 0x0, 4);    //potential superbyte
-
-      // wait for 1ms
-      do_nanosleep_ccc(1000000);
-
-      if (enable_data_dump_ccc)    // TODO this is for hba debug testing
-      {
-        char temp_string[256];
-        sprintf (temp_string, "dump 2 for port number %d\n", port_number_ccc[count]);
-        dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
-        unsigned char temp_buffer[0x80];
-        memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
-        dump_data_to_filename_binary_ccc(data_dump_filename_ccc, temp_buffer, 0x80, "Port data");
-      }
-
-      // backup the start bit
-      uint8_t byte;
-      memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[10], 1);    //potential superbyte
-      start_bit_ccc = byte & 1;
-
-      // clear the start bit
-      disable_start_ccc(START_BIT_TIME);
-
-      // wait for 1ms
-      do_nanosleep_ccc(1000000);
-
-      if (enable_data_dump_ccc)    // TODO this is for hba debug testing
-      {
-        char temp_string[256];
-        sprintf (temp_string, "dump 3 for port number %d\n", port_number_ccc[count]);
-        dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
-        unsigned char temp_buffer[0x80];
-        memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
-        dump_data_to_filename_binary_ccc(data_dump_filename_ccc, temp_buffer, 0x80, "Port data");
-      }
-
-      // clear the fis enable bit
-      disable_fis_ccc(FIS_BIT_TIME);
-
-      // wait for 1ms
-      do_nanosleep_ccc(1000000);
-
-      if (enable_data_dump_ccc)    // TODO this is for hba debug testing
-      {
-        char temp_string[256];
-        sprintf (temp_string, "dump 4 for port number %d\n", port_number_ccc[count]);
-        dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
-        unsigned char temp_buffer[0x80];
-        memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
-        dump_data_to_filename_binary_ccc(data_dump_filename_ccc, temp_buffer, 0x80, "Port data");
-      }
-
-      // set new addresses
-      uint64_t command_list_address = command_list_physical_address_ccc;
-      memcpy(port_virt_addr_ccc + superbyte_ccc[11], &command_list_address, 8);    //potential superbyte
-      uint64_t fis_address = fis_physical_address_ccc;
-      memcpy(port_virt_addr_ccc + superbyte_ccc[12], &fis_address, 8);    //potential superbyte
-
-      // wait for 1ms
-      do_nanosleep_ccc(1000000);
-
-      if (enable_data_dump_ccc)    // TODO this is for hba debug testing
-      {
-        char temp_string[256];
-        sprintf (temp_string, "dump 5 for port number %d\n", port_number_ccc[count]);
-        dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
-        unsigned char temp_buffer[0x80];
-        memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
-        dump_data_to_filename_binary_ccc(data_dump_filename_ccc, temp_buffer, 0x80, "Port data");
-      }
-
-      // set the fis enable bit
-      enable_fis_ccc(FIS_BIT_TIME);
-
-      // wait for 1ms
-      do_nanosleep_ccc(1000000);
-
-      if (enable_data_dump_ccc)    // TODO this is for hba debug testing
-      {
-        char temp_string[256];
-        sprintf (temp_string, "dump 6 for port number %d\n", port_number_ccc[count]);
-        dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
-        unsigned char temp_buffer[0x80];
-        memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
-        dump_data_to_filename_binary_ccc(data_dump_filename_ccc, temp_buffer, 0x80, "Port data");
-      }
-
-      // set the start bit
-      enable_start_ccc(START_BIT_TIME);
-
-      // wait for 1ms
-      do_nanosleep_ccc(1000000);
-
-      if (enable_data_dump_ccc)    // TODO this is for hba debug testing
-      {
-        char temp_string[256];
-        sprintf (temp_string, "dump 7 for port number %d\n", port_number_ccc[count]);
-        dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
-        unsigned char temp_buffer[0x80];
-        memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
-        dump_data_to_filename_binary_ccc(data_dump_filename_ccc, temp_buffer, 0x80, "Port data");
-      }
-
-      // set the command issue bit
-      enable_command_issue_ccc(COMMAND_BIT_TIME);
-
-      if (enable_data_dump_ccc)    // TODO this is for hba debug testing
-      {
-        char temp_string[256];
-        sprintf (temp_string, "dump 8 for port number %d\n", port_number_ccc[count]);
-        dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
-        unsigned char temp_buffer[0x80];
-        memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
-        dump_data_to_filename_binary_ccc(data_dump_filename_ccc, temp_buffer, 0x80, "Port data");
-      }
-
-      // wait for it to complete
-      busy = 1;
-      drq = 1;
-      unsigned long long start_time = get_elapsed_usec_ccc();
-      bool timeout = false;
-      while (busy || drq)
-      {
-        unsigned long long elapsed_time = get_elapsed_usec_ccc();
-        if (elapsed_time > start_time + initial_busy_wait_time_ccc)
-        {
-          timeout = true;
-          break;
-        }
-        memcpy(&io_doubleword_ccc, port_virt_addr_ccc + superbyte_ccc[8], 4);    //potential superbyte
-        busy = io_doubleword_ccc & 0x80;
-        drq = io_doubleword_ccc & 0x08;
-        //fprintf (stdout, "e/s=%x\n", io_doubleword_ccc);  //debug
-        // give the cpu a chance to do something else so we are not using 100%
-        do_nanosleep_ccc(1);
-      }
-
-      if (enable_data_dump_ccc)
-      {
-        char temp_string[256];
-        sprintf (temp_string, "dump during identify for port number %d\n", port_number_ccc[count]);
-        dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
-        dump_hba_port_fis_command_data_ccc(hba_address_ccc[count], port_address_ccc[count], 1, 1, 1, 1, 1);
-      }
-
-      // clear the start bit
-      disable_start_ccc(START_BIT_TIME);
-
-      // wait for 1ms
-      do_nanosleep_ccc(1000000);
-
-      if (enable_data_dump_ccc)    // TODO this is for hba debug testing
-      {
-        char temp_string[256];
-        sprintf (temp_string, "dump 9 for port number %d\n", port_number_ccc[count]);
-        dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
-        unsigned char temp_buffer[0x80];
-        memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
-        dump_data_to_filename_binary_ccc(data_dump_filename_ccc, temp_buffer, 0x80, "Port data");
-      }
-
-      // clear the fis enable bit
-      disable_fis_ccc(FIS_BIT_TIME);
-
-      // wait for 1ms
-      do_nanosleep_ccc(1000000);
-
-      if (enable_data_dump_ccc)    // TODO this is for hba debug testing
-      {
-        char temp_string[256];
-        sprintf (temp_string, "dump 10 for port number %d\n", port_number_ccc[count]);
-        dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
-        unsigned char temp_buffer[0x80];
-        memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
-        dump_data_to_filename_binary_ccc(data_dump_filename_ccc, temp_buffer, 0x80, "Port data");
-      }
-
-      // restore addresses
-      memcpy(port_virt_addr_ccc + superbyte_ccc[11], &command_list_address_backup_ccc, 8);    //potential superbyte
-      memcpy(port_virt_addr_ccc + superbyte_ccc[12], &fis_address_backup_ccc, 8);    //potential superbyte
-      ahci_address_changed_ccc = false;
-
-      // wait for 1ms
-      do_nanosleep_ccc(1000000);
-
-      if (enable_data_dump_ccc)    // TODO this is for hba debug testing
-      {
-        char temp_string[256];
-        sprintf (temp_string, "dump 11 for port number %d\n", port_number_ccc[count]);
-        dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
-        unsigned char temp_buffer[0x80];
-        memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
-        dump_data_to_filename_binary_ccc(data_dump_filename_ccc, temp_buffer, 0x80, "Port data");
-      }
-
-      // set the fis enable bit
-      enable_fis_ccc(FIS_BIT_TIME);
-
-      // wait for 1ms
-      do_nanosleep_ccc(1000000);
-
-      if (enable_data_dump_ccc)    // TODO this is for hba debug testing
-      {
-        char temp_string[256];
-        sprintf (temp_string, "dump 12 for port number %d\n", port_number_ccc[count]);
-        dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
-        unsigned char temp_buffer[0x80];
-        memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
-        dump_data_to_filename_binary_ccc(data_dump_filename_ccc, temp_buffer, 0x80, "Port data");
-      }
-
-      // restore the start bit
-      if (start_bit_ccc)
-      {
-        enable_start_ccc(START_BIT_TIME);
-      }
-
-      // wait for 1ms
-      do_nanosleep_ccc(1000000);
-
-      if (enable_data_dump_ccc)    // TODO this is for hba debug testing
-      {
-        char temp_string[256];
-        sprintf (temp_string, "dump 13 for port number %d\n", port_number_ccc[count]);
-        dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
-        unsigned char temp_buffer[0x80];
-        memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
-        dump_data_to_filename_binary_ccc(data_dump_filename_ccc, temp_buffer, 0x80, "Port data");
-      }
-
-      // restore the interrupt settings
-      memcpy(port_virt_addr_ccc + superbyte_ccc[13], &interrupt_backup_ccc, 4);    //potential superbyte
-      ahci_interrupt_changed_ccc = false;
-
-      // wait for 1ms
-      do_nanosleep_ccc(1000000);
-
-      if (enable_data_dump_ccc)    // TODO this is for hba debug testing
-      {
-        char temp_string[256];
-        sprintf (temp_string, "dump 14 for port number %d\n", port_number_ccc[count]);
-        dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
-        unsigned char temp_buffer[0x80];
-        memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
-        dump_data_to_filename_binary_ccc(data_dump_filename_ccc, temp_buffer, 0x80, "Port data");
-      }
-
+      strcpy (model_ccc[count], "busy or drq");
+      device_present_ccc[count] = false;
+      char str[32];
+      sprintf(str, "e/s=%04x", io_doubleword_ccc);
+      strcpy (serial_ccc[count], str);
       // close mapped memory
       munmap(port_mem_pointer_ccc, port_alloc_mem_size_ccc);
       close(port_mem_dev_ccc);
-
-      #ifdef DEBUG
-      if (debug_ccc & DEBUG36)
-      {
-        for (i = 0; i < 256; i+=16)
-        {
-          fprintf (stdout, "%x: ", i);
-          unsigned char *c;
-          int n;
-          for (n=0; n < 16 && i+n < 512; n++)
-          {
-            c = (unsigned char *)fis_buffer_ccc+i+n;
-            fprintf (stdout, "%02x ", *c);
-          }
-          fprintf (stdout, "   ");
-          for (n=0; n < 16 && i+n < 512; n++)
-          {
-            c = (unsigned char *)fis_buffer_ccc+i+n;
-            fprintf (stdout, "%c", isprint(*c) ? *c : '.');
-          }
-          fprintf (stdout, "\n");
-        }
-      }
-
-      if (debug_ccc & DEBUG36)
-      {
-        for (i = 0; i < 256; i+=16)
-        {
-          fprintf (stdout, "%x: ", i);
-          unsigned char *c;
-          int n;
-          for (n=0; n < 16 && i+n < 512; n++)
-          {
-            c = (unsigned char *)table_buffer_ccc+i+n;
-            fprintf (stdout, "%02x ", *c);
-          }
-          fprintf (stdout, "   ");
-          for (n=0; n < 16 && i+n < 512; n++)
-          {
-            c = (unsigned char *)table_buffer_ccc+i+n;
-            fprintf (stdout, "%c", isprint(*c) ? *c : '.');
-          }
-          fprintf (stdout, "\n");
-        }
-      }
-
-      if (debug_ccc & DEBUG36)
-      {
-        for (i = 0; i < 128; i+=16)
-        {
-          fprintf (stdout, "%x: ", i);
-          unsigned char *c;
-          int n;
-          for (n=0; n < 16 && i+n < 512; n++)
-          {
-            c = (unsigned char *)command_list_buffer_ccc+i+n;
-            fprintf (stdout, "%02x ", *c);
-          }
-          fprintf (stdout, "   ");
-          for (n=0; n < 16 && i+n < 512; n++)
-          {
-            c = (unsigned char *)command_list_buffer_ccc+i+n;
-            fprintf (stdout, "%c", isprint(*c) ? *c : '.');
-          }
-          fprintf (stdout, "\n");
-        }
-      }
-      #endif
-
-      if (timeout)
-      {
-        strcpy (model_ccc[count], "timeout");
-        char str[32];
-        sprintf(str, "e/s=%04x", io_doubleword_ccc);
-        strcpy (serial_ccc[count], str);
-        return (1);
-      }
-      else
-      {
-        // check for error
-        if (io_doubleword_ccc & 0x0001)
-        {
-          strcpy (model_ccc[count], "error");
-          char str[32];
-          sprintf(str, "e/s=%04x", io_doubleword_ccc);
-          strcpy (serial_ccc[count], str);
-          return (1);
-        }
-      }
-
+      return (1);
     }
-
-
-
-    else if (port_signature_ccc[count] == SATA_SIG_ATAPI)
+    else if (enable_dont_identify_on_choose_source_ccc)
     {
-      strcpy (model_ccc[count], "satapi device");
-      return (2);
-    }
-    else if (port_signature_ccc[count] == SATA_SIG_SEMB)
-    {
-      strcpy (model_ccc[count], "enclosure management bridge");
-      return (2);
-    }
-    else if (port_signature_ccc[count] == SATA_SIG_PM)
-    {
-      strcpy (model_ccc[count], "port multiplier");
-      return (2);
-    }
-    else
-    {
-      strcpy (model_ccc[count], "unknown device");
-      return (2);
+      strcpy (model_ccc[count], "error/status");
+      if (drdy)
+      {
+        strcpy (model_ccc[count], "ready");
+      }
+      char str[32];
+      sprintf(str, "e/s=%04x", io_doubleword_ccc);
+      strcpy (serial_ccc[count], str);
+      // close mapped memory
+      munmap(port_mem_pointer_ccc, port_alloc_mem_size_ccc);
+      close(port_mem_dev_ccc);
+      return (1);
     }
 
-
+    #ifdef DEBUG
     int i;
-    if (verbose_ccc & DEBUG9)
+    for (i = 0; i < 0x80; i+=4)
     {
-      for (i = 0; i < 512; i+=16)
+      memcpy(&io_doubleword_ccc, port_virt_addr_ccc + i, 4);
+      //fprintf (stdout, "%x %08x\n", i, io_doubleword_ccc);  //debug
+    }
+    #endif
+
+    // backup the interrupt settings
+    memcpy(&interrupt_backup_ccc, port_virt_addr_ccc + superbyte_ccc[13], 4);
+    ahci_interrupt_changed_ccc = true;
+
+    // backup current addresses
+    memcpy(&command_list_address_backup_ccc, port_virt_addr_ccc + superbyte_ccc[11], 8);
+    memcpy(&fis_address_backup_ccc, port_virt_addr_ccc + superbyte_ccc[12], 8);
+    ahci_address_changed_ccc = true;
+    //fprintf (stdout, "command_list_address_backup_ccc= %016llx\n", command_list_address_backup_ccc);  //debug
+    //fprintf (stdout, "fis_address_backup_ccc= %016llx\n", fis_address_backup_ccc);  //debug
+
+    // clear the fis buffer
+    memset(fis_buffer_ccc, 0, fis_size_ccc);
+    // clear the command FIS
+    memset(table_buffer_ccc, 0, 0x80);
+    // set FIS type
+    memset(table_buffer_ccc, REG_H2D, 1);
+    // set type as command
+    memset(table_buffer_ccc+1, 0x80, 1);
+    // set the command register for identify device
+    memset(table_buffer_ccc+2, 0xec, 1);
+    if (enable_data_dump_ccc)
+    {
+      // set the count to 1
+      memset(table_buffer_ccc+12, 1, 1);
+      // set the control register value (something unknown)
+      memset(table_buffer_ccc+15, 0x08, 1);
+    }
+    // clear the command list
+    memset(command_list_buffer_ccc, 0, command_list_size_ccc);
+    // set the command FIS length, 5 dwords for h2d
+    memset(command_list_buffer_ccc, 5, 1);
+    // set the table entry length
+    uint16_t word = table_entry_count_ccc;
+    memcpy(command_list_buffer_ccc+2, &word, 2);
+    // set the command table address
+    uint64_t qword = table_physical_address_ccc;
+    memcpy(command_list_buffer_ccc+8, &qword, 8);
+
+    // turn interupts off
+    memset(port_virt_addr_ccc + superbyte_ccc[13], 0x0, 4);
+
+    // wait for 1ms
+    do_nanosleep_ccc(1000000);
+
+    if (enable_data_dump_ccc)    // TODO this is for hba debug testing
+    {
+      char temp_string[256];
+      sprintf (temp_string, "dump 2 for port number %d\n", port_number_ccc[count]);
+      dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
+      unsigned char temp_buffer[0x80];
+      memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
+      dump_data_to_filename_binary_ccc(data_dump_filename_ccc, temp_buffer, 0x80, "Port data");
+    }
+
+    // backup the start bit
+    uint8_t byte;
+    memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[10], 1);
+    start_bit_ccc = byte & 1;
+
+    // clear the start bit
+    disable_start_ccc(START_BIT_TIME);
+
+    // wait for 1ms
+    do_nanosleep_ccc(1000000);
+
+    if (enable_data_dump_ccc)    // TODO this is for hba debug testing
+    {
+      char temp_string[256];
+      sprintf (temp_string, "dump 3 for port number %d\n", port_number_ccc[count]);
+      dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
+      unsigned char temp_buffer[0x80];
+      memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
+      dump_data_to_filename_binary_ccc(data_dump_filename_ccc, temp_buffer, 0x80, "Port data");
+    }
+
+    // clear the fis enable bit
+    disable_fis_ccc(FIS_BIT_TIME);
+
+    // wait for 1ms
+    do_nanosleep_ccc(1000000);
+
+    if (enable_data_dump_ccc)    // TODO this is for hba debug testing
+    {
+      char temp_string[256];
+      sprintf (temp_string, "dump 4 for port number %d\n", port_number_ccc[count]);
+      dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
+      unsigned char temp_buffer[0x80];
+      memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
+      dump_data_to_filename_binary_ccc(data_dump_filename_ccc, temp_buffer, 0x80, "Port data");
+    }
+
+    // set new addresses
+    uint64_t command_list_address = command_list_physical_address_ccc;
+    memcpy(port_virt_addr_ccc + superbyte_ccc[11], &command_list_address, 8);
+    uint64_t fis_address = fis_physical_address_ccc;
+    memcpy(port_virt_addr_ccc + superbyte_ccc[12], &fis_address, 8);
+
+    // wait for 1ms
+    do_nanosleep_ccc(1000000);
+
+    if (enable_data_dump_ccc)    // TODO this is for hba debug testing
+    {
+      char temp_string[256];
+      sprintf (temp_string, "dump 5 for port number %d\n", port_number_ccc[count]);
+      dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
+      unsigned char temp_buffer[0x80];
+      memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
+      dump_data_to_filename_binary_ccc(data_dump_filename_ccc, temp_buffer, 0x80, "Port data");
+    }
+
+    // set the fis enable bit
+    enable_fis_ccc(FIS_BIT_TIME);
+
+    // wait for 1ms
+    do_nanosleep_ccc(1000000);
+
+    if (enable_data_dump_ccc)    // TODO this is for hba debug testing
+    {
+      char temp_string[256];
+      sprintf (temp_string, "dump 6 for port number %d\n", port_number_ccc[count]);
+      dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
+      unsigned char temp_buffer[0x80];
+      memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
+      dump_data_to_filename_binary_ccc(data_dump_filename_ccc, temp_buffer, 0x80, "Port data");
+    }
+
+    // set the start bit
+    enable_start_ccc(START_BIT_TIME);
+
+    // wait for 1ms
+    do_nanosleep_ccc(1000000);
+
+    if (enable_data_dump_ccc)    // TODO this is for hba debug testing
+    {
+      char temp_string[256];
+      sprintf (temp_string, "dump 7 for port number %d\n", port_number_ccc[count]);
+      dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
+      unsigned char temp_buffer[0x80];
+      memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
+      dump_data_to_filename_binary_ccc(data_dump_filename_ccc, temp_buffer, 0x80, "Port data");
+    }
+
+    // set the command issue bit
+    enable_command_issue_ccc(COMMAND_BIT_TIME);
+
+    if (enable_data_dump_ccc)    // TODO this is for hba debug testing
+    {
+      char temp_string[256];
+      sprintf (temp_string, "dump 8 for port number %d\n", port_number_ccc[count]);
+      dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
+      unsigned char temp_buffer[0x80];
+      memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
+      dump_data_to_filename_binary_ccc(data_dump_filename_ccc, temp_buffer, 0x80, "Port data");
+    }
+
+    // wait for it to complete
+    busy = 1;
+    drq = 1;
+    unsigned long long start_time = get_elapsed_usec_ccc();
+    bool timeout = false;
+    while (busy || drq)
+    {
+      unsigned long long elapsed_time = get_elapsed_usec_ccc();
+      if (elapsed_time > start_time + initial_busy_wait_time_ccc)
+      {
+        timeout = true;
+        break;
+      }
+      memcpy(&io_doubleword_ccc, port_virt_addr_ccc + superbyte_ccc[8], 4);
+      busy = io_doubleword_ccc & 0x80;
+      drq = io_doubleword_ccc & 0x08;
+      //fprintf (stdout, "e/s=%x\n", io_doubleword_ccc);  //debug
+      // give the cpu a chance to do something else so we are not using 100%
+      do_nanosleep_ccc(1);
+    }
+
+    if (enable_data_dump_ccc)
+    {
+      char temp_string[256];
+      sprintf (temp_string, "dump during identify for port number %d\n", port_number_ccc[count]);
+      dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
+      dump_hba_port_fis_command_data_ccc(hba_address_ccc[count], port_address_ccc[count], 1, 1, 1, 1, 1);
+    }
+
+    // clear the start bit
+    disable_start_ccc(START_BIT_TIME);
+
+    // wait for 1ms
+    do_nanosleep_ccc(1000000);
+
+    if (enable_data_dump_ccc)    // TODO this is for hba debug testing
+    {
+      char temp_string[256];
+      sprintf (temp_string, "dump 9 for port number %d\n", port_number_ccc[count]);
+      dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
+      unsigned char temp_buffer[0x80];
+      memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
+      dump_data_to_filename_binary_ccc(data_dump_filename_ccc, temp_buffer, 0x80, "Port data");
+    }
+
+    // clear the fis enable bit
+    disable_fis_ccc(FIS_BIT_TIME);
+
+    // wait for 1ms
+    do_nanosleep_ccc(1000000);
+
+    if (enable_data_dump_ccc)    // TODO this is for hba debug testing
+    {
+      char temp_string[256];
+      sprintf (temp_string, "dump 10 for port number %d\n", port_number_ccc[count]);
+      dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
+      unsigned char temp_buffer[0x80];
+      memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
+      dump_data_to_filename_binary_ccc(data_dump_filename_ccc, temp_buffer, 0x80, "Port data");
+    }
+
+    // restore addresses
+    memcpy(port_virt_addr_ccc + superbyte_ccc[11], &command_list_address_backup_ccc, 8);
+    memcpy(port_virt_addr_ccc + superbyte_ccc[12], &fis_address_backup_ccc, 8);
+    ahci_address_changed_ccc = false;
+
+    // wait for 1ms
+    do_nanosleep_ccc(1000000);
+
+    if (enable_data_dump_ccc)    // TODO this is for hba debug testing
+    {
+      char temp_string[256];
+      sprintf (temp_string, "dump 11 for port number %d\n", port_number_ccc[count]);
+      dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
+      unsigned char temp_buffer[0x80];
+      memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
+      dump_data_to_filename_binary_ccc(data_dump_filename_ccc, temp_buffer, 0x80, "Port data");
+    }
+
+    // set the fis enable bit
+    enable_fis_ccc(FIS_BIT_TIME);
+
+    // wait for 1ms
+    do_nanosleep_ccc(1000000);
+
+    if (enable_data_dump_ccc)    // TODO this is for hba debug testing
+    {
+      char temp_string[256];
+      sprintf (temp_string, "dump 12 for port number %d\n", port_number_ccc[count]);
+      dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
+      unsigned char temp_buffer[0x80];
+      memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
+      dump_data_to_filename_binary_ccc(data_dump_filename_ccc, temp_buffer, 0x80, "Port data");
+    }
+
+    // restore the start bit
+    if (start_bit_ccc)
+    {
+      enable_start_ccc(START_BIT_TIME);
+    }
+
+    // wait for 1ms
+    do_nanosleep_ccc(1000000);
+
+    if (enable_data_dump_ccc)    // TODO this is for hba debug testing
+    {
+      char temp_string[256];
+      sprintf (temp_string, "dump 13 for port number %d\n", port_number_ccc[count]);
+      dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
+      unsigned char temp_buffer[0x80];
+      memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
+      dump_data_to_filename_binary_ccc(data_dump_filename_ccc, temp_buffer, 0x80, "Port data");
+    }
+
+    // restore the interrupt settings
+    memcpy(port_virt_addr_ccc + superbyte_ccc[13], &interrupt_backup_ccc, 4);
+    ahci_interrupt_changed_ccc = false;
+
+    // wait for 1ms
+    do_nanosleep_ccc(1000000);
+
+    if (enable_data_dump_ccc)    // TODO this is for hba debug testing
+    {
+      char temp_string[256];
+      sprintf (temp_string, "dump 14 for port number %d\n", port_number_ccc[count]);
+      dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
+      unsigned char temp_buffer[0x80];
+      memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
+      dump_data_to_filename_binary_ccc(data_dump_filename_ccc, temp_buffer, 0x80, "Port data");
+    }
+
+    // close mapped memory
+    munmap(port_mem_pointer_ccc, port_alloc_mem_size_ccc);
+    close(port_mem_dev_ccc);
+
+    #ifdef DEBUG
+    if (debug_ccc & DEBUG36)
+    {
+      for (i = 0; i < 256; i+=16)
       {
         fprintf (stdout, "%x: ", i);
         unsigned char *c;
         int n;
         for (n=0; n < 16 && i+n < 512; n++)
         {
-          c = (unsigned char *)ccc_buffer_ccc+i+n;
+          c = (unsigned char *)fis_buffer_ccc+i+n;
           fprintf (stdout, "%02x ", *c);
         }
         fprintf (stdout, "   ");
         for (n=0; n < 16 && i+n < 512; n++)
         {
-          c = (unsigned char *)ccc_buffer_ccc+i+n;
+          c = (unsigned char *)fis_buffer_ccc+i+n;
           fprintf (stdout, "%c", isprint(*c) ? *c : '.');
         }
         fprintf (stdout, "\n");
       }
     }
 
-    char temp_model[41] = "";
-    char temp_serial[21] = "";
-    for (i = 0; i < 40; i += 2)
+    if (debug_ccc & DEBUG36)
     {
-      unsigned char *c = (unsigned char *)ccc_buffer_ccc+54+i+1;
-      unsigned char *d = (unsigned char *)ccc_buffer_ccc+54+i;
-      if ( isprint(*c) )
+      for (i = 0; i < 256; i+=16)
       {
-        temp_model[i] = *c;
-      }
-      else
-      {
-        temp_model[i] = '\0';
-      }
-      if ( isprint(*d) )
-      {
-        temp_model[i+1] = *d;
-      }
-      else
-      {
-        temp_model[i+1] = '\0';
+        fprintf (stdout, "%x: ", i);
+        unsigned char *c;
+        int n;
+        for (n=0; n < 16 && i+n < 512; n++)
+        {
+          c = (unsigned char *)table_buffer_ccc+i+n;
+          fprintf (stdout, "%02x ", *c);
+        }
+        fprintf (stdout, "   ");
+        for (n=0; n < 16 && i+n < 512; n++)
+        {
+          c = (unsigned char *)table_buffer_ccc+i+n;
+          fprintf (stdout, "%c", isprint(*c) ? *c : '.');
+        }
+        fprintf (stdout, "\n");
       }
     }
-    temp_model[40] = '\0';
-    for (i = 0; i < 20; i += 2)
+
+    if (debug_ccc & DEBUG36)
     {
-      unsigned char *c = (unsigned char *)ccc_buffer_ccc+20+i+1;
-      unsigned char *d = (unsigned char *)ccc_buffer_ccc+20+i;
-      if ( isprint(*c) )
+      for (i = 0; i < 128; i+=16)
       {
-        temp_serial[i] = *c;
-      }
-      else
-      {
-        temp_serial[i] = '\0';
-      }
-      if ( isprint(*d) )
-      {
-        temp_serial[i+1] = *d;
-      }
-      else
-      {
-        temp_serial[i+1] = '\0';
+        fprintf (stdout, "%x: ", i);
+        unsigned char *c;
+        int n;
+        for (n=0; n < 16 && i+n < 512; n++)
+        {
+          c = (unsigned char *)command_list_buffer_ccc+i+n;
+          fprintf (stdout, "%02x ", *c);
+        }
+        fprintf (stdout, "   ");
+        for (n=0; n < 16 && i+n < 512; n++)
+        {
+          c = (unsigned char *)command_list_buffer_ccc+i+n;
+          fprintf (stdout, "%c", isprint(*c) ? *c : '.');
+        }
+        fprintf (stdout, "\n");
       }
     }
-    temp_serial[20] = '\0';
+    #endif
 
-    char *found_model = trim_white_space_ccc(temp_model);
-    char *found_serial = trim_white_space_ccc(temp_serial);
-
-    strcpy (model_ccc[count], found_model);
-    strcpy (serial_ccc[count], found_serial);
-
-    uint16_t word;
-    uint32_t double_word;
-    uint64_t quad_word;
-    words_per_logical_sector_ccc = 256;
-    bytes_per_logical_sector_ccc = 512;
-    memcpy(&word, ccc_buffer_ccc+212, 2);
-    //check if word data is valid
-    if ((word & 0xc000) == 0x4000)
+    if (timeout)
     {
-      // check if sector size greater than 256 words
-      if (word & 0x1000)
-      {
-        memcpy(&double_word, ccc_buffer_ccc+234, 4);
-        words_per_logical_sector_ccc = double_word;
-      }
-    }
-    bytes_per_logical_sector_ccc = words_per_logical_sector_ccc * 2;
-    memcpy(&double_word, ccc_buffer_ccc+120, 4);
-    memcpy(&quad_word, ccc_buffer_ccc+200, 8);
-    unsigned char c;
-    // pick based on if extend 48 bit supported
-    memcpy(&c, ccc_buffer_ccc+167, 1);
-    if (c & 4)
-    {
-      drive_size_ccc[count] = (quad_word * bytes_per_logical_sector_ccc);
+      strcpy (model_ccc[count], "timeout");
+      char str[32];
+      sprintf(str, "e/s=%04x", io_doubleword_ccc);
+      strcpy (serial_ccc[count], str);
+      return (1);
     }
     else
     {
-      drive_size_ccc[count] = (double_word * bytes_per_logical_sector_ccc);
-    }
-
-    // check if lba is supported and if not get data from chs
-    memcpy(&c, ccc_buffer_ccc+99, 1);
-    if ( !(c & 2) )
-    {
-      bytes_per_logical_sector_ccc = 512;    // CHS should always be 512 bytes per sector
-      uint16_t word;
-      memcpy(&word, ccc_buffer_ccc+106, 2);
-      if (word & 1)
+      // check for error
+      if (io_doubleword_ccc & 0x0001)
       {
-        memcpy(&word, ccc_buffer_ccc+114, 2);
-        drive_size_ccc[count] = word << 16;
-        memcpy(&word, ccc_buffer_ccc+116, 2);
-        drive_size_ccc[count] = drive_size_ccc[count] + word;
-        drive_size_ccc[count] = drive_size_ccc[count] * bytes_per_logical_sector_ccc;
-      }
-      else
-      {
-        memcpy(&word, ccc_buffer_ccc+2, 2);
-        drive_size_ccc[count] = word;
-        memcpy(&word, ccc_buffer_ccc+6, 2);
-        drive_size_ccc[count] = drive_size_ccc[count] * word;
-        memcpy(&word, ccc_buffer_ccc+12, 2);
-        drive_size_ccc[count] = drive_size_ccc[count] * word;
-        drive_size_ccc[count] = drive_size_ccc[count] * bytes_per_logical_sector_ccc;
+        strcpy (model_ccc[count], "error");
+        char str[32];
+        sprintf(str, "e/s=%04x", io_doubleword_ccc);
+        strcpy (serial_ccc[count], str);
+        return (1);
       }
     }
-    drive_bytes_per_sector_ccc[count] = bytes_per_logical_sector_ccc;
 
-    device_type_ccc[count] = DEVICE_TYPE_AHCI;
-
-    if (enable_data_dump_ccc)
-    {
-      char temp_string[256];
-      sprintf (temp_string, "dump after identify for port number %d\n", port_number_ccc[count]);
-      dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
-      dump_hba_port_fis_command_data_ccc(hba_address_ccc[count], port_address_ccc[count], 1, 1, 1, 1, 1);
-      dump_data_to_filename_ccc(data_dump_filename_ccc, ccc_buffer_ccc, ccc_main_buffer_size_ccc, "Main buffer data");
-    }
-
-    memset (ccc_buffer_ccc, 0, ccc_main_buffer_size_ccc);
   }
+
+
+
+  else if (port_signature_ccc[count] == SATA_SIG_ATAPI)
+  {
+    strcpy (model_ccc[count], "satapi device");
+    return (2);
+  }
+  else if (port_signature_ccc[count] == SATA_SIG_SEMB)
+  {
+    strcpy (model_ccc[count], "enclosure management bridge");
+    return (2);
+  }
+  else if (port_signature_ccc[count] == SATA_SIG_PM)
+  {
+    strcpy (model_ccc[count], "port multiplier");
+    return (2);
+  }
+  else
+  {
+    strcpy (model_ccc[count], "unknown device");
+    return (2);
+  }
+
+
+  int i;
+  if (verbose_ccc & DEBUG9)
+  {
+    for (i = 0; i < 512; i+=16)
+    {
+      fprintf (stdout, "%x: ", i);
+      unsigned char *c;
+      int n;
+      for (n=0; n < 16 && i+n < 512; n++)
+      {
+        c = (unsigned char *)ccc_buffer_ccc+i+n;
+        fprintf (stdout, "%02x ", *c);
+      }
+      fprintf (stdout, "   ");
+      for (n=0; n < 16 && i+n < 512; n++)
+      {
+        c = (unsigned char *)ccc_buffer_ccc+i+n;
+        fprintf (stdout, "%c", isprint(*c) ? *c : '.');
+      }
+      fprintf (stdout, "\n");
+    }
+  }
+
+  char temp_model[41] = "";
+  char temp_serial[21] = "";
+  for (i = 0; i < 40; i += 2)
+  {
+    unsigned char *c = (unsigned char *)ccc_buffer_ccc+54+i+1;
+    unsigned char *d = (unsigned char *)ccc_buffer_ccc+54+i;
+    if ( isprint(*c) )
+    {
+      temp_model[i] = *c;
+    }
+    else
+    {
+      temp_model[i] = '\0';
+    }
+    if ( isprint(*d) )
+    {
+      temp_model[i+1] = *d;
+    }
+    else
+    {
+      temp_model[i+1] = '\0';
+    }
+  }
+  temp_model[40] = '\0';
+  for (i = 0; i < 20; i += 2)
+  {
+    unsigned char *c = (unsigned char *)ccc_buffer_ccc+20+i+1;
+    unsigned char *d = (unsigned char *)ccc_buffer_ccc+20+i;
+    if ( isprint(*c) )
+    {
+      temp_serial[i] = *c;
+    }
+    else
+    {
+      temp_serial[i] = '\0';
+    }
+    if ( isprint(*d) )
+    {
+      temp_serial[i+1] = *d;
+    }
+    else
+    {
+      temp_serial[i+1] = '\0';
+    }
+  }
+  temp_serial[20] = '\0';
+
+  char *found_model = trim_white_space_ccc(temp_model);
+  char *found_serial = trim_white_space_ccc(temp_serial);
+
+  strcpy (model_ccc[count], found_model);
+  strcpy (serial_ccc[count], found_serial);
+
+  uint16_t word;
+  uint32_t double_word;
+  uint64_t quad_word;
+  words_per_logical_sector_ccc = 256;
+  bytes_per_logical_sector_ccc = 512;
+  memcpy(&word, ccc_buffer_ccc+212, 2);
+  //check if word data is valid
+  if ((word & 0xc000) == 0x4000)
+  {
+    // check if sector size greater than 256 words
+    if (word & 0x1000)
+    {
+      memcpy(&double_word, ccc_buffer_ccc+234, 4);
+      words_per_logical_sector_ccc = double_word;
+    }
+  }
+  bytes_per_logical_sector_ccc = words_per_logical_sector_ccc * 2;
+  memcpy(&double_word, ccc_buffer_ccc+120, 4);
+  memcpy(&quad_word, ccc_buffer_ccc+200, 8);
+  unsigned char c;
+  // pick based on if extend 48 bit supported
+  memcpy(&c, ccc_buffer_ccc+167, 1);
+  if (c & 4)
+  {
+    drive_size_ccc[count] = (quad_word * bytes_per_logical_sector_ccc);
+  }
+  else
+  {
+    drive_size_ccc[count] = (double_word * bytes_per_logical_sector_ccc);
+  }
+
+  // check if lba is supported and if not get data from chs
+  memcpy(&c, ccc_buffer_ccc+99, 1);
+  if ( !(c & 2) )
+  {
+    bytes_per_logical_sector_ccc = 512;    // CHS should always be 512 bytes per sector
+    uint16_t word;
+    memcpy(&word, ccc_buffer_ccc+106, 2);
+    if (word & 1)
+    {
+      memcpy(&word, ccc_buffer_ccc+114, 2);
+      drive_size_ccc[count] = word << 16;
+      memcpy(&word, ccc_buffer_ccc+116, 2);
+      drive_size_ccc[count] = drive_size_ccc[count] + word;
+      drive_size_ccc[count] = drive_size_ccc[count] * bytes_per_logical_sector_ccc;
+    }
+    else
+    {
+      memcpy(&word, ccc_buffer_ccc+2, 2);
+      drive_size_ccc[count] = word;
+      memcpy(&word, ccc_buffer_ccc+6, 2);
+      drive_size_ccc[count] = drive_size_ccc[count] * word;
+      memcpy(&word, ccc_buffer_ccc+12, 2);
+      drive_size_ccc[count] = drive_size_ccc[count] * word;
+      drive_size_ccc[count] = drive_size_ccc[count] * bytes_per_logical_sector_ccc;
+    }
+  }
+  drive_bytes_per_sector_ccc[count] = bytes_per_logical_sector_ccc;
+
+  device_type_ccc[count] = DEVICE_TYPE_AHCI;
+
+  if (enable_data_dump_ccc)
+  {
+    char temp_string[256];
+    sprintf (temp_string, "dump after identify for port number %d\n", port_number_ccc[count]);
+    dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
+    dump_hba_port_fis_command_data_ccc(hba_address_ccc[count], port_address_ccc[count], 1, 1, 1, 1, 1);
+    dump_data_to_filename_ccc(data_dump_filename_ccc, ccc_buffer_ccc, ccc_main_buffer_size_ccc, "Main buffer data");
+  }
+
+  memset (ccc_buffer_ccc, 0, ccc_main_buffer_size_ccc);
   return (0);
 }
 
@@ -8736,7 +8683,7 @@ int choose_device_ccc(void)
 
   if (ahci_mode_ccc)
   {
-    if (superbyte_ccc[41] == 0xd4)
+    if (1)
     {
       // ahci
       char input_text[32];
@@ -9245,7 +9192,7 @@ int connect_source_disk_ccc(void)
   {
     if (ahci_mode_ccc)
     {
-      if (superbyte_ccc[42] == 0x20)
+      if (1)
       {
         if (enable_hba_test_on_connect_source_ccc)    // TODO this is debug for troubleshooting the hba and port
         {
@@ -9407,16 +9354,16 @@ int connect_source_disk_ccc(void)
           }
 
           // backup current addresses
-          memcpy(&command_list_address_backup_ccc, port_virt_addr_ccc + superbyte_ccc[11], 8);    //potential superbyte
-          memcpy(&fis_address_backup_ccc, port_virt_addr_ccc + superbyte_ccc[12], 8);    //potential superbyte
+          memcpy(&command_list_address_backup_ccc, port_virt_addr_ccc + superbyte_ccc[11], 8);
+          memcpy(&fis_address_backup_ccc, port_virt_addr_ccc + superbyte_ccc[12], 8);
 
           // backup the interrupt settings
-          memcpy(&interrupt_backup_ccc, port_virt_addr_ccc + superbyte_ccc[13], 4);    //potential superbyte
+          memcpy(&interrupt_backup_ccc, port_virt_addr_ccc + superbyte_ccc[13], 4);
 
 
           // turn interupts off
           ahci_interrupt_changed_ccc = true;
-          memset(port_virt_addr_ccc + superbyte_ccc[13], 0x0, 4);    //potential superbyte
+          memset(port_virt_addr_ccc + superbyte_ccc[13], 0x0, 4);
 
           // wait for 1ms
           do_nanosleep_ccc(1000000);
@@ -9436,9 +9383,9 @@ int connect_source_disk_ccc(void)
           // set new addresses
           ahci_address_changed_ccc = true;
           uint64_t command_list_address = command_list_physical_address_ccc;
-          memcpy(port_virt_addr_ccc + superbyte_ccc[11], &command_list_address, 8);    //potential superbyte
+          memcpy(port_virt_addr_ccc + superbyte_ccc[11], &command_list_address, 8);
           uint64_t fis_address = fis_physical_address_ccc;
-          memcpy(port_virt_addr_ccc + superbyte_ccc[12], &fis_address, 8);    //potential superbyte
+          memcpy(port_virt_addr_ccc + superbyte_ccc[12], &fis_address, 8);
 
           // wait for 1ms
           do_nanosleep_ccc(1000000);
@@ -9976,50 +9923,47 @@ int wait_not_busy_or_drq_ccc(unsigned long long time, int check)
     }
     if (ahci_mode_ccc)
     {
-      if (superbyte_ccc[43] == 0x3d)
+      // ahci
+      memcpy(&io_doubleword_ccc, port_virt_addr_ccc + superbyte_ccc[8], 4);
+      //fprintf (stdout, "%08x\n", io_doubleword_ccc);  //debug
+      busy = io_doubleword_ccc & 0x80;
+      drq = io_doubleword_ccc & 0x08;
+      err = io_doubleword_ccc & 0x01;
+      unsigned char current_status = io_doubleword_ccc;
+      unsigned char current_error = io_doubleword_ccc >> 8;
+      memcpy(&ata_error_ccc, &current_error, 1);
+      memcpy(&ata_status_ccc, &current_status, 1);
+      memcpy(&io_singlebyte_ccc, port_virt_addr_ccc + superbyte_ccc[69], 1);
+      if (io_singlebyte_ccc)
       {
-        // ahci
-        memcpy(&io_doubleword_ccc, port_virt_addr_ccc + superbyte_ccc[8], 4);
-        //fprintf (stdout, "%08x\n", io_doubleword_ccc);  //debug
-        busy = io_doubleword_ccc & 0x80;
-        drq = io_doubleword_ccc & 0x08;
-        err = io_doubleword_ccc & 0x01;
-        unsigned char current_status = io_doubleword_ccc;
-        unsigned char current_error = io_doubleword_ccc >> 8;
-        memcpy(&ata_error_ccc, &current_error, 1);
-        memcpy(&ata_status_ccc, &current_status, 1);
-        memcpy(&io_singlebyte_ccc, port_virt_addr_ccc + superbyte_ccc[69], 1);    //potential superbyte
-        if (io_singlebyte_ccc)
+        dscount++;
+      }
+      if (busy)
+      {
+        busycount++;
+      }
+      if (drq)
+      {
+        drqcount++;
+      }
+      if (err)
+      {
+        errcount++;
+      }
+      if (use_fpdma_ccc && wait_for_ds_bit_ccc && !performing_reset_ccc)
+      {
+        ncq = io_singlebyte_ccc & 1;
+        if (ncq)
         {
-          dscount++;
-        }
-        if (busy)
-        {
-          busycount++;
-        }
-        if (drq)
-        {
-          drqcount++;
+          ncqcount++;
         }
         if (err)
         {
-          errcount++;
+          //timeout = 4;
+          break;
         }
-        if (use_fpdma_ccc && wait_for_ds_bit_ccc && !performing_reset_ccc)
-        {
-          ncq = io_singlebyte_ccc & 1;
-          if (ncq)
-          {
-            ncqcount++;
-          }
-          if (err)
-          {
-            //timeout = 4;
-            break;
-          }
-        }
-        //fprintf (stdout, "busy=%d drq=%d err=%d ncq=%d\n", busy, drq, err, ncq);
       }
+      //fprintf (stdout, "busy=%d drq=%d err=%d ncq=%d\n", busy, drq, err, ncq);
     }
     else
     {
@@ -10100,55 +10044,52 @@ int wait_drdy_not_busy_or_drq_ccc(unsigned long long time, int check)
     }
     if (ahci_mode_ccc)
     {
-      if (superbyte_ccc[43] == 0x3d)
+      // ahci
+      memcpy(&io_doubleword_ccc, port_virt_addr_ccc + superbyte_ccc[8], 4);
+      //fprintf (stdout, "%08x\n", io_doubleword_ccc);  //debug
+      busy = io_doubleword_ccc & 0x80;
+      drdy = io_doubleword_ccc & 0x40;
+      drq = io_doubleword_ccc & 0x08;
+      err = io_doubleword_ccc & 0x01;
+      unsigned char current_status = io_doubleword_ccc;
+      unsigned char current_error = io_doubleword_ccc >> 8;
+      memcpy(&ata_error_ccc, &current_error, 1);
+      memcpy(&ata_status_ccc, &current_status, 1);
+      memcpy(&io_singlebyte_ccc, port_virt_addr_ccc + superbyte_ccc[69], 1);
+      if (io_singlebyte_ccc)
       {
-        // ahci
-        memcpy(&io_doubleword_ccc, port_virt_addr_ccc + superbyte_ccc[8], 4);
-        //fprintf (stdout, "%08x\n", io_doubleword_ccc);  //debug
-        busy = io_doubleword_ccc & 0x80;
-        drdy = io_doubleword_ccc & 0x40;
-        drq = io_doubleword_ccc & 0x08;
-        err = io_doubleword_ccc & 0x01;
-        unsigned char current_status = io_doubleword_ccc;
-        unsigned char current_error = io_doubleword_ccc >> 8;
-        memcpy(&ata_error_ccc, &current_error, 1);
-        memcpy(&ata_status_ccc, &current_status, 1);
-        memcpy(&io_singlebyte_ccc, port_virt_addr_ccc + superbyte_ccc[69], 1);    //potential superbyte
-        if (io_singlebyte_ccc)
+        dscount++;
+      }
+      if (busy)
+      {
+        busycount++;
+      }
+      if (!drdy)
+      {
+        drdycount++;
+      }
+      if (drq)
+      {
+        drqcount++;
+      }
+      if (err)
+      {
+        errcount++;
+      }
+      if (use_fpdma_ccc && wait_for_ds_bit_ccc && !performing_reset_ccc)
+      {
+        ncq = io_singlebyte_ccc & 1;
+        if (ncq)
         {
-          dscount++;
-        }
-        if (busy)
-        {
-          busycount++;
-        }
-        if (!drdy)
-        {
-          drdycount++;
-        }
-        if (drq)
-        {
-          drqcount++;
+          ncqcount++;
         }
         if (err)
         {
-          errcount++;
+          //timeout = 4;
+          break;
         }
-        if (use_fpdma_ccc && wait_for_ds_bit_ccc && !performing_reset_ccc)
-        {
-          ncq = io_singlebyte_ccc & 1;
-          if (ncq)
-          {
-            ncqcount++;
-          }
-          if (err)
-          {
-            //timeout = 4;
-            break;
-          }
-        }
-        //fprintf (stdout, "busy=%d drdy=%d drq=%d err=%d ncq=%d\n", busy, drdy, drq, err, ncq);
       }
+      //fprintf (stdout, "busy=%d drdy=%d drq=%d err=%d ncq=%d\n", busy, drdy, drq, err, ncq);
     }
     else
     {
@@ -10201,16 +10142,10 @@ int set_device_ccc(unsigned long long address, int device)
 
 int set_and_send_regs_ccc(int command_type)
 {
-  // leave this here for reference even though it does not do anything
-  if (0 && superbyte_ccc[44] == 0x88 && passthrough_ccc.direction == 1)
-  {
-    // check serial byte 9 at random
-  }
-
   // ahci
   if (ahci_mode_ccc)
   {
-    if (superbyte_ccc[45] == 0x33)
+    if (1)
     {
       // ahci
       // clear the fis buffer
@@ -10452,18 +10387,18 @@ int check_for_unwanted_changes_ccc(void)
 
   if (ahci_mode_ccc)
   {
-    if (superbyte_ccc[46] == 0x9b)
+    if (1)
     {
       uint32_t wtf;
       // check that interrupts are still turned off
-      memcpy(&wtf, port_virt_addr_ccc + superbyte_ccc[13], 4);    //potential superbyte
+      memcpy(&wtf, port_virt_addr_ccc + superbyte_ccc[13], 4);
       if (wtf)
       {
         changed_status = changed_status + 0x0100;
       }
 
       // check that start bit and fis enable are still on
-      memcpy(&wtf, port_virt_addr_ccc + superbyte_ccc[10], 4);     //potential superbyte
+      memcpy(&wtf, port_virt_addr_ccc + superbyte_ccc[10], 4);
       if ( !(wtf & 0x01) )
       {
         changed_status = changed_status + 0x0200;
@@ -10519,10 +10454,10 @@ int check_for_unwanted_changes_ccc(void)
   else
   {
     // ide
-    unsigned char ta1 = inb(bus_base_address_ccc+0+superbyte_ccc[0]);    //potential superbyte
-    unsigned char ta2 = inb(bus_base_address_ccc+1+superbyte_ccc[0]);    //potential superbyte
-    unsigned char ta3 = inb(bus_base_address_ccc+2+superbyte_ccc[0]);    //potential superbyte
-    unsigned char ta4 = inb(bus_base_address_ccc+3+superbyte_ccc[0]);    //potential superbyte
+    unsigned char ta1 = inb(bus_base_address_ccc+0+superbyte_ccc[0]);
+    unsigned char ta2 = inb(bus_base_address_ccc+1+superbyte_ccc[0]);
+    unsigned char ta3 = inb(bus_base_address_ccc+2+superbyte_ccc[0]);
+    unsigned char ta4 = inb(bus_base_address_ccc+3+superbyte_ccc[0]);
     unsigned char tpa1 = table_physical_address_ccc;
     unsigned char tpa2 = table_physical_address_ccc >> 8;
     unsigned char tpa3 = table_physical_address_ccc >> 16;
@@ -10545,12 +10480,9 @@ unsigned int get_ahci_error_ccc(void)
 {
   if (ahci_mode_ccc)
   {
-    if (superbyte_ccc[47] == 0x41)
-    {
-      uint32_t port_error;
-      memcpy(&port_error, port_virt_addr_ccc + superbyte_ccc[18], 4);    // port error
-      return port_error;
-    }
+    uint32_t port_error;
+    memcpy(&port_error, port_virt_addr_ccc + superbyte_ccc[18], 4);    // port error
+    return port_error;
   }
   return 0;
 }
@@ -10563,12 +10495,9 @@ unsigned int get_ahci_status_ccc(void)
 {
   if (ahci_mode_ccc)
   {
-    if (superbyte_ccc[47] == 0x41)
-    {
-      uint64_t port_status;
-      memcpy(&port_status, port_virt_addr_ccc + superbyte_ccc[18] + 4, 4);    // port status
-      return port_status;
-    }
+    uint64_t port_status;
+    memcpy(&port_status, port_virt_addr_ccc + superbyte_ccc[18] + 4, 4);    // port status
+    return port_status;
   }
   return 0;
 }
@@ -10580,37 +10509,30 @@ unsigned int get_ahci_status_ccc(void)
 int disable_fis_ccc(unsigned long long time)
 {
   int timeout = 0;
-  if (superbyte_ccc[48] == 0x0a)
-  {
-    uint8_t byte;
-    timeout = 0;
-    // clear the fis enable bit
-    memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[10], 1);    //potential superbyte
-    byte = byte & 0xef;
-    memcpy(port_virt_addr_ccc + superbyte_ccc[10], &byte, 1);
+  uint8_t byte;
+  timeout = 0;
+  // clear the fis enable bit
+  memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[10], 1);
+  byte = byte & 0xef;
+  memcpy(port_virt_addr_ccc + superbyte_ccc[10], &byte, 1);
 
-    // wait for fis running bit to clear
+  // wait for fis running bit to clear
+  memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[14], 1);
+  byte = byte & 0x40;
+  unsigned long long start_time = get_elapsed_usec_ccc();
+  while (byte)
+  {
+    unsigned long long elapsed_time = get_elapsed_usec_ccc();
+    if (elapsed_time > start_time + time)
+    {
+      // if it exceeds general timeout then quit
+      timeout = 1;
+      break;
+    }
     memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[14], 1);
     byte = byte & 0x40;
-    unsigned long long start_time = get_elapsed_usec_ccc();
-    while (byte)
-    {
-      unsigned long long elapsed_time = get_elapsed_usec_ccc();
-      if (elapsed_time > start_time + time)
-      {
-        // if it exceeds general timeout then quit
-        timeout = 1;
-        break;
-      }
-      memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[14], 1);
-      byte = byte & 0x40;
-      // give the cpu a chance to do something else so we are not using 100%
-      do_nanosleep_ccc(1);
-    }
-  }
-  else
-  {
-    timeout = 0;
+    // give the cpu a chance to do something else so we are not using 100%
+    do_nanosleep_ccc(1);
   }
   return (timeout);
 }
@@ -10622,37 +10544,30 @@ int disable_fis_ccc(unsigned long long time)
 int enable_fis_ccc(unsigned long long time)
 {
   int timeout = 0;
-  if (superbyte_ccc[49] == 0xd9)
-  {
-    uint8_t byte;
-    timeout = 0;
-    // set the fis enable bit
-    memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[10], 1);    //potential superbyte
-    byte = byte | 0x10;
-    memcpy(port_virt_addr_ccc + superbyte_ccc[10], &byte, 1);    //potential superbyte
+  uint8_t byte;
+  timeout = 0;
+  // set the fis enable bit
+  memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[10], 1);
+  byte = byte | 0x10;
+  memcpy(port_virt_addr_ccc + superbyte_ccc[10], &byte, 1);
 
-    // wait for fis running bit to set
-    memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[14], 1);    //potential superbyte
-    byte = byte & 0x40;
-    unsigned long long start_time = get_elapsed_usec_ccc();
-    while (!byte)
-    {
-      unsigned long long elapsed_time = get_elapsed_usec_ccc();
-      if (elapsed_time > start_time + time)
-      {
-        // if it exceeds general timeout then quit
-        timeout = 1;
-        break;
-      }
-      memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[14], 1);    //potential superbyte
-      byte = byte & 0x40;
-      // give the cpu a chance to do something else so we are not using 100%
-      do_nanosleep_ccc(1);
-    }
-  }
-  else
+  // wait for fis running bit to set
+  memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[14], 1);
+  byte = byte & 0x40;
+  unsigned long long start_time = get_elapsed_usec_ccc();
+  while (!byte)
   {
-    timeout = 0;
+    unsigned long long elapsed_time = get_elapsed_usec_ccc();
+    if (elapsed_time > start_time + time)
+    {
+      // if it exceeds general timeout then quit
+      timeout = 1;
+      break;
+    }
+    memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[14], 1);
+    byte = byte & 0x40;
+    // give the cpu a chance to do something else so we are not using 100%
+    do_nanosleep_ccc(1);
   }
   return (timeout);
 }
@@ -10664,37 +10579,30 @@ int enable_fis_ccc(unsigned long long time)
 int disable_start_ccc(unsigned long long time)
 {
   int timeout = 0;
-  if (superbyte_ccc[50] == 0x22)
-  {
-    uint8_t byte;
-    timeout = 0;
-    // clear the start bit
-    memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[10], 1);    //potential superbyte
-    byte = byte & 0xfe;
-    memcpy(port_virt_addr_ccc + superbyte_ccc[10], &byte, 1);    //potential superbyte
+  uint8_t byte;
+  timeout = 0;
+  // clear the start bit
+  memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[10], 1);
+  byte = byte & 0xfe;
+  memcpy(port_virt_addr_ccc + superbyte_ccc[10], &byte, 1);
 
-    // wait for command list running bit to clear
-    memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[14], 1);    //potential superbyte
-    byte = byte & 0x80;
-    unsigned long long start_time = get_elapsed_usec_ccc();
-    while (byte)
-    {
-      unsigned long long elapsed_time = get_elapsed_usec_ccc();
-      if (elapsed_time > start_time + time)
-      {
-        // if it exceeds general timeout then quit
-        timeout = 1;
-        break;
-      }
-      memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[14], 1);    //potential superbyte
-      byte = byte & 0x80;
-      // give the cpu a chance to do something else so we are not using 100%
-      do_nanosleep_ccc(1);
-    }
-  }
-  else
+  // wait for command list running bit to clear
+  memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[14], 1);
+  byte = byte & 0x80;
+  unsigned long long start_time = get_elapsed_usec_ccc();
+  while (byte)
   {
-    timeout = 0;
+    unsigned long long elapsed_time = get_elapsed_usec_ccc();
+    if (elapsed_time > start_time + time)
+    {
+      // if it exceeds general timeout then quit
+      timeout = 1;
+      break;
+    }
+    memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[14], 1);
+    byte = byte & 0x80;
+    // give the cpu a chance to do something else so we are not using 100%
+    do_nanosleep_ccc(1);
   }
   return (timeout);
 }
@@ -10706,37 +10614,30 @@ int disable_start_ccc(unsigned long long time)
 int enable_start_ccc(unsigned long long time)
 {
   int timeout = 0;
-  if (superbyte_ccc[51] == 0x4b)
-  {
-    uint8_t byte;
-    timeout = 0;
-    // set the start bit
-    memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[10], 1);    //potential superbyte
-    byte = byte | 0x01;
-    memcpy(port_virt_addr_ccc + superbyte_ccc[10], &byte, 1);    //potential superbyte
+  uint8_t byte;
+  timeout = 0;
+  // set the start bit
+  memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[10], 1);
+  byte = byte | 0x01;
+  memcpy(port_virt_addr_ccc + superbyte_ccc[10], &byte, 1);
 
-    // wait for command list running bit to set
-    memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[14], 1);    //potential superbyte
-    byte = byte & 0x80;
-    unsigned long long start_time = get_elapsed_usec_ccc();
-    while (!byte)
-    {
-      unsigned long long elapsed_time = get_elapsed_usec_ccc();
-      if (elapsed_time > start_time + time)
-      {
-        // if it exceeds general timeout then quit
-        timeout = 1;
-        break;
-      }
-      memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[14], 1);    //potential superbyte
-      byte = byte & 0x80;
-      // give the cpu a chance to do something else so we are not using 100%
-      do_nanosleep_ccc(1);
-    }
-  }
-  else
+  // wait for command list running bit to set
+  memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[14], 1);
+  byte = byte & 0x80;
+  unsigned long long start_time = get_elapsed_usec_ccc();
+  while (!byte)
   {
-    timeout = 0;
+    unsigned long long elapsed_time = get_elapsed_usec_ccc();
+    if (elapsed_time > start_time + time)
+    {
+      // if it exceeds general timeout then quit
+      timeout = 1;
+      break;
+    }
+    memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[14], 1);
+    byte = byte & 0x80;
+    // give the cpu a chance to do something else so we are not using 100%
+    do_nanosleep_ccc(1);
   }
   return (timeout);
 }
@@ -10748,36 +10649,29 @@ int enable_start_ccc(unsigned long long time)
 int enable_command_issue_ccc(unsigned long long time)
 {
   int timeout = 0;
-  if (superbyte_ccc[51] == 0x4b)
-  {
-    uint8_t byte;
-    timeout = 0;
-    // set the command issue bit
-    io_doubleword_ccc = 1;
-    memcpy(port_virt_addr_ccc + superbyte_ccc[6], &io_doubleword_ccc, 4);    //potential superbyte
+  uint8_t byte;
+  timeout = 0;
+  // set the command issue bit
+  io_doubleword_ccc = 1;
+  memcpy(port_virt_addr_ccc + superbyte_ccc[6], &io_doubleword_ccc, 4);
 
-    // wait for busy bit to set
-    memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[8], 1);    //potential superbyte
-    byte = byte & 0x80;
-    unsigned long long start_time = get_elapsed_usec_ccc();
-    while (!byte)
-    {
-      unsigned long long elapsed_time = get_elapsed_usec_ccc();
-      if (elapsed_time > start_time + time)
-      {
-        // if it exceeds general timeout then quit
-        timeout = 1;
-        break;
-      }
-      memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[14], 1);    //potential superbyte
-      byte = byte & 0x80;
-      // give the cpu a chance to do something else so we are not using 100%
-      do_nanosleep_ccc(1);
-    }
-  }
-  else
+  // wait for busy bit to set
+  memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[8], 1);
+  byte = byte & 0x80;
+  unsigned long long start_time = get_elapsed_usec_ccc();
+  while (!byte)
   {
-    timeout = 0;
+    unsigned long long elapsed_time = get_elapsed_usec_ccc();
+    if (elapsed_time > start_time + time)
+    {
+      // if it exceeds general timeout then quit
+      timeout = 1;
+      break;
+    }
+    memcpy(&byte, port_virt_addr_ccc + superbyte_ccc[14], 1);
+    byte = byte & 0x80;
+    // give the cpu a chance to do something else so we are not using 100%
+    do_nanosleep_ccc(1);
   }
   return (timeout);
 }
@@ -11040,74 +10934,75 @@ int write_rebuild_assist_log_ccc (unsigned char data[LOG_PAGE_SIZE])
 
 int start_driver_ccc (void)
 {
-  if (superbyte_ccc[57] == 0xcc)
+  sprintf (driver_device_name_ccc, "/proc/%s%d", MAIN_DRIVER_IOCTL_NAME, process_id_ccc);
+  if (main_driver_fd_ccc > 0)
   {
-    sprintf (driver_device_name_ccc, "/proc/%s%d", MAIN_DRIVER_IOCTL_NAME, process_id_ccc);
-    if (main_driver_fd_ccc > 0)
-    {
-      close(main_driver_fd_ccc);
-    }
-    main_driver_fd_ccc = open(driver_device_name_ccc, O_RDWR);
-    if (main_driver_fd_ccc == -1)
-    {
-      check_message_ccc = true;
-      strcpy (tempmessage_ccc, curlang_ccc[LANGUERROROPENINGDRIVER]);
-      message_error_ccc(tempmessage_ccc);
-      sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
-      message_error_ccc(tempmessage_ccc);
-      print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
-      clear_error_message_ccc();
-      return -1;
-    }
-
-    if (charater_device_driver_mode_ccc)
-    {
-      driver_control_data_ccc.command = START_FILE_COMMAND;
-    }
-    else
-    {
-      driver_control_data_ccc.command = START_DRIVE_COMMAND;
-    }
-    unsigned long request = IOCTL_CMD_HDDSC;
-    //strcpy(driver_control_data_ccc.buffer, virtual_driver_name_ccc);
-    strncpy(driver_control_data_ccc.name, virtual_driver_name_ccc, sizeof(driver_control_data_ccc.name));
-    //fprintf (stdout, "sizeofstructdata = %d\n", sizeof(driver_control_data_ccc));    // debug
-    int ret = ioctl(main_driver_fd_ccc, request, &driver_control_data_ccc);
-    if (ret < 0)
-    {
-      strcpy (tempmessage_ccc, curlang_ccc[LANGERRORSTARTINGDRIVER]);
-      message_error_ccc(tempmessage_ccc);
-      sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
-      message_error_ccc(tempmessage_ccc);
-      return -1;
-    }
-
-    if (charater_device_driver_mode_ccc)
-    {
-      // install the node
-      char command[256];
-      sprintf (command, "mknod /dev/%s c %d 0", virtual_driver_name_ccc, ret);
-      system(command);
-    }
-
-    // sleep for a few seconds before activating the driver to give it time to settle in
-    do_nanosleep_ccc(DRIVER_WAIT_TO_ACTIVATE_TIME);
-
-    driver_control_data_ccc.command = ACTIVATE_DRIVE_COMMAND;
-    request = IOCTL_CMD_HDDSC;
-    ret = ioctl(main_driver_fd_ccc, request, &driver_control_data_ccc);
-    if (ret < 0)
-    {
-      strcpy (tempmessage_ccc, curlang_ccc[LANGERRORSTARTINGDRIVER]);
-      message_error_ccc(tempmessage_ccc);
-      sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
-      message_error_ccc(tempmessage_ccc);
-      return -1;
-    }
-
     close(main_driver_fd_ccc);
-    driver_running_ccc = 1;
   }
+  main_driver_fd_ccc = open(driver_device_name_ccc, O_RDWR);
+  if (main_driver_fd_ccc == -1)
+  {
+    check_message_ccc = true;
+    strcpy (tempmessage_ccc, curlang_ccc[LANGUERROROPENINGDRIVER]);
+    message_error_ccc(tempmessage_ccc);
+    sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
+    message_error_ccc(tempmessage_ccc);
+    print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
+    clear_error_message_ccc();
+    return -1;
+  }
+
+  if (charater_device_driver_mode_ccc)
+  {
+    driver_control_data_ccc.command = START_FILE_COMMAND;
+  }
+  else
+  {
+    driver_control_data_ccc.command = START_DRIVE_COMMAND;
+  }
+  unsigned long request = IOCTL_CMD_HDDSC;
+  //strcpy(driver_control_data_ccc.buffer, virtual_driver_name_ccc);
+  strncpy(driver_control_data_ccc.name, virtual_driver_name_ccc, sizeof(driver_control_data_ccc.name));
+  //fprintf (stdout, "sizeofstructdata = %d\n", sizeof(driver_control_data_ccc));    // debug
+  int ret = ioctl(main_driver_fd_ccc, request, &driver_control_data_ccc);
+  if (ret < 0)
+  {
+    strcpy (tempmessage_ccc, curlang_ccc[LANGERRORSTARTINGDRIVER]);
+    message_error_ccc(tempmessage_ccc);
+    sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
+    message_error_ccc(tempmessage_ccc);
+    return -1;
+  }
+
+  if (charater_device_driver_mode_ccc)
+  {
+    // install the node
+    char command[256];
+    sprintf (command, "mknod /dev/%s c %d 0", virtual_driver_name_ccc, ret);
+    int sysres=system(command);
+    if(sysres)
+    {
+      //Creating the device node likely failed
+    }
+  }
+
+  // sleep for a few seconds before activating the driver to give it time to settle in
+  do_nanosleep_ccc(DRIVER_WAIT_TO_ACTIVATE_TIME);
+
+  driver_control_data_ccc.command = ACTIVATE_DRIVE_COMMAND;
+  request = IOCTL_CMD_HDDSC;
+  ret = ioctl(main_driver_fd_ccc, request, &driver_control_data_ccc);
+  if (ret < 0)
+  {
+    strcpy (tempmessage_ccc, curlang_ccc[LANGERRORSTARTINGDRIVER]);
+    message_error_ccc(tempmessage_ccc);
+    sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
+    message_error_ccc(tempmessage_ccc);
+    return -1;
+  }
+
+  close(main_driver_fd_ccc);
+  driver_running_ccc = 1;
   return 0;
 }
 
@@ -11117,70 +11012,70 @@ int start_driver_ccc (void)
 
 int stop_driver_ccc (void)
 {
-  if (superbyte_ccc[58] == 0x74)
+  sprintf (driver_device_name_ccc, "/proc/%s%d", MAIN_DRIVER_IOCTL_NAME, process_id_ccc);
+  if (main_driver_fd_ccc > 0)
   {
-    sprintf (driver_device_name_ccc, "/proc/%s%d", MAIN_DRIVER_IOCTL_NAME, process_id_ccc);
-    if (main_driver_fd_ccc > 0)
-    {
-      close(main_driver_fd_ccc);
-    }
-    main_driver_fd_ccc = open(driver_device_name_ccc, O_RDWR);
-    if (main_driver_fd_ccc == -1)
-    {
-      check_message_ccc = true;
-      strcpy (tempmessage_ccc, curlang_ccc[LANGUERROROPENINGDRIVER]);
-      message_error_ccc(tempmessage_ccc);
-      sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
-      message_error_ccc(tempmessage_ccc);
-      print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
-      clear_error_message_ccc();
-      return -1;
-    }
-    int error = 0;
-    if (charater_device_driver_mode_ccc)
-    {
-      driver_control_data_ccc.command = STOP_FILE_COMMAND;
-    }
-    else
-    {
-      driver_control_data_ccc.command = STOP_DRIVE_COMMAND;
-    }
-    unsigned long request = IOCTL_CMD_HDDSC;
-    int ret = ioctl(main_driver_fd_ccc, request, &driver_control_data_ccc);
-    if (ret < 0)
-    {
-      error = 1;
-      strcpy (tempmessage_ccc, curlang_ccc[LANGERRORSTOPINGDRIVER]);
-      message_error_ccc(tempmessage_ccc);
-      sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
-      message_error_ccc(tempmessage_ccc);
-    }
-
-    if (charater_device_driver_mode_ccc)
-    {
-      // remove the node
-      char command[256];
-      sprintf (command, "rm -f /dev/%s", virtual_driver_name_ccc);
-      system(command);
-    }
-
-    ret = close(main_driver_fd_ccc);
-    if (ret < 0)
-    {
-      error = 1;
-      strcpy (tempmessage_ccc, curlang_ccc[LANGERRORCLOSINGINGDRIVER]);
-      message_error_ccc(tempmessage_ccc);
-      sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
-      message_error_ccc(tempmessage_ccc);
-    }
-    if (error)
-    {
-      print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
-      clear_error_message_ccc();
-      return -1;
-    }
-    driver_running_ccc = 0;
+    close(main_driver_fd_ccc);
   }
+  main_driver_fd_ccc = open(driver_device_name_ccc, O_RDWR);
+  if (main_driver_fd_ccc == -1)
+  {
+    check_message_ccc = true;
+    strcpy (tempmessage_ccc, curlang_ccc[LANGUERROROPENINGDRIVER]);
+    message_error_ccc(tempmessage_ccc);
+    sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
+    message_error_ccc(tempmessage_ccc);
+    print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
+    clear_error_message_ccc();
+    return -1;
+  }
+  int error = 0;
+  if (charater_device_driver_mode_ccc)
+  {
+    driver_control_data_ccc.command = STOP_FILE_COMMAND;
+  }
+  else
+  {
+    driver_control_data_ccc.command = STOP_DRIVE_COMMAND;
+  }
+  unsigned long request = IOCTL_CMD_HDDSC;
+  int ret = ioctl(main_driver_fd_ccc, request, &driver_control_data_ccc);
+  if (ret < 0)
+  {
+    error = 1;
+    strcpy (tempmessage_ccc, curlang_ccc[LANGERRORSTOPINGDRIVER]);
+    message_error_ccc(tempmessage_ccc);
+    sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
+    message_error_ccc(tempmessage_ccc);
+  }
+
+  if (charater_device_driver_mode_ccc)
+  {
+    // remove the node
+    char command[256];
+    sprintf (command, "rm -f /dev/%s", virtual_driver_name_ccc);
+    if(system(command))
+    {
+      // Removing the device node likely failed
+    }
+  }
+
+  ret = close(main_driver_fd_ccc);
+  if (ret < 0)
+  {
+    error = 1;
+    strcpy (tempmessage_ccc, curlang_ccc[LANGERRORCLOSINGINGDRIVER]);
+    message_error_ccc(tempmessage_ccc);
+    sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
+    message_error_ccc(tempmessage_ccc);
+  }
+  if (error)
+  {
+    print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
+    clear_error_message_ccc();
+    return -1;
+  }
+  driver_running_ccc = 0;
   return 0;
 }
 
@@ -11219,109 +11114,106 @@ int check_driver_ccc (void)
 
 int map_driver_memory_ccc (void)
 {
-  if (superbyte_ccc[59] == 0x0c)
+  unmap_driver_memory_ccc();
+  int configfd;
+  driver_control_address_ccc = NULL;
+  driver_error_bitmap_address_ccc = NULL;
+  driver_transfer_buffer_address_ccc = NULL;
+  driver_memory_mapped_ccc = 0;
+
+  char name[256];
+  sprintf (name, "/proc/%s%d", MAIN_DRIVER_MMAP_NAME, process_id_ccc);
+  configfd = open(name, O_RDWR);
+  if(configfd < 0)
   {
-    unmap_driver_memory_ccc();
-    int configfd;
-    driver_control_address_ccc = NULL;
-    driver_error_bitmap_address_ccc = NULL;
-    driver_transfer_buffer_address_ccc = NULL;
-    driver_memory_mapped_ccc = 0;
-
-    char name[256];
-    sprintf (name, "/proc/%s%d", MAIN_DRIVER_MMAP_NAME, process_id_ccc);
-    configfd = open(name, O_RDWR);
-    if(configfd < 0)
-    {
-      sprintf (tempmessage_ccc, "Opening driver mapping file failed (%s)\n", strerror(errno));
-      message_error_ccc(tempmessage_ccc);
-      return -1;
-    }
-
-    driver_control_address_ccc = mmap(NULL, pagesize_ccc, PROT_READ|PROT_WRITE, MAP_SHARED, configfd, 0);
-    if (driver_control_address_ccc == MAP_FAILED)
-    {
-      sprintf (tempmessage_ccc, "Mapping driver memory failed (%s)\n", strerror(errno));
-      message_error_ccc(tempmessage_ccc);
-      return -1;
-    }
-
-    driver_error_bitmap_address_ccc = mmap(NULL, pagesize_ccc*2, PROT_READ|PROT_WRITE, MAP_SHARED, configfd, pagesize_ccc*1);
-    if (driver_error_bitmap_address_ccc == MAP_FAILED)
-    {
-      sprintf (tempmessage_ccc, "Mapping driver memory failed (%s)\n", strerror(errno));
-      message_error_ccc(tempmessage_ccc);
-      return -1;
-    }
-
-    driver_table_buffer_ccc = mmap(NULL, pagesize_ccc*4, PROT_READ|PROT_WRITE, MAP_SHARED, configfd, pagesize_ccc*3);
-    if (driver_table_buffer_ccc == MAP_FAILED)
-    {
-      sprintf (tempmessage_ccc, "Mapping driver memory failed (%s)\n", strerror(errno));
-      message_error_ccc(tempmessage_ccc);
-      return -1;
-    }
-
-    driver_command_list_buffer_ccc = mmap(NULL, pagesize_ccc, PROT_READ|PROT_WRITE, MAP_SHARED, configfd, pagesize_ccc*7);
-    if (driver_command_list_buffer_ccc == MAP_FAILED)
-    {
-      sprintf (tempmessage_ccc, "Mapping driver memory failed (%s)\n", strerror(errno));
-      message_error_ccc(tempmessage_ccc);
-      return -1;
-    }
-
-    driver_fis_buffer_ccc = mmap(NULL, pagesize_ccc, PROT_READ|PROT_WRITE, MAP_SHARED, configfd, pagesize_ccc*8);
-    if (driver_fis_buffer_ccc == MAP_FAILED)
-    {
-      sprintf (tempmessage_ccc, "Mapping driver memory failed (%s)\n", strerror(errno));
-      message_error_ccc(tempmessage_ccc);
-      return -1;
-    }
-
-    close(configfd);
-
-
-
-    sprintf (name, "/proc/%s%d", MAIN_DRIVER_MMAPTB_NAME, process_id_ccc);
-    configfd = open(name, O_RDWR);
-    if(configfd < 0)
-    {
-      sprintf (tempmessage_ccc, "Opening driver mapping file failed (%s)\n", strerror(errno));
-      message_error_ccc(tempmessage_ccc);
-      return -1;
-    }
-
-    driver_transfer_buffer_address_ccc = mmap(NULL, DRIVER_TRANSFER_BUFFER_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, configfd, 0);
-    if (driver_transfer_buffer_address_ccc == MAP_FAILED)
-    {
-      sprintf (tempmessage_ccc, "Mapping driver memory failed (%s)\n", strerror(errno));
-      message_error_ccc(tempmessage_ccc);
-      return -1;
-    }
-    close(configfd);
-
-
-
-    sprintf (name, "/proc/%s%d", MAIN_DRIVER_MMAPMDB_NAME, process_id_ccc);
-    configfd = open(name, O_RDWR);
-    if(configfd < 0)
-    {
-      sprintf (tempmessage_ccc, "Opening driver mapping file failed (%s)\n", strerror(errno));
-      message_error_ccc(tempmessage_ccc);
-      return -1;
-    }
-
-    driver_main_data_buffer_address_ccc = mmap(NULL, DRIVER_MAIN_DATA_BUFFER_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, configfd, 0);
-    if (driver_main_data_buffer_address_ccc == MAP_FAILED)
-    {
-      sprintf (tempmessage_ccc, "Mapping driver memory failed (%s)\n", strerror(errno));
-      message_error_ccc(tempmessage_ccc);
-      return -1;
-    }
-    close(configfd);
-
-    driver_memory_mapped_ccc = 1;
+    sprintf (tempmessage_ccc, "Opening driver mapping file failed (%s)\n", strerror(errno));
+    message_error_ccc(tempmessage_ccc);
+    return -1;
   }
+
+  driver_control_address_ccc = mmap(NULL, pagesize_ccc, PROT_READ|PROT_WRITE, MAP_SHARED, configfd, 0);
+  if (driver_control_address_ccc == MAP_FAILED)
+  {
+    sprintf (tempmessage_ccc, "Mapping driver memory failed (%s)\n", strerror(errno));
+    message_error_ccc(tempmessage_ccc);
+    return -1;
+  }
+
+  driver_error_bitmap_address_ccc = mmap(NULL, pagesize_ccc*2, PROT_READ|PROT_WRITE, MAP_SHARED, configfd, pagesize_ccc*1);
+  if (driver_error_bitmap_address_ccc == MAP_FAILED)
+  {
+    sprintf (tempmessage_ccc, "Mapping driver memory failed (%s)\n", strerror(errno));
+    message_error_ccc(tempmessage_ccc);
+    return -1;
+  }
+
+  driver_table_buffer_ccc = mmap(NULL, pagesize_ccc*4, PROT_READ|PROT_WRITE, MAP_SHARED, configfd, pagesize_ccc*3);
+  if (driver_table_buffer_ccc == MAP_FAILED)
+  {
+    sprintf (tempmessage_ccc, "Mapping driver memory failed (%s)\n", strerror(errno));
+    message_error_ccc(tempmessage_ccc);
+    return -1;
+  }
+
+  driver_command_list_buffer_ccc = mmap(NULL, pagesize_ccc, PROT_READ|PROT_WRITE, MAP_SHARED, configfd, pagesize_ccc*7);
+  if (driver_command_list_buffer_ccc == MAP_FAILED)
+  {
+    sprintf (tempmessage_ccc, "Mapping driver memory failed (%s)\n", strerror(errno));
+    message_error_ccc(tempmessage_ccc);
+    return -1;
+  }
+
+  driver_fis_buffer_ccc = mmap(NULL, pagesize_ccc, PROT_READ|PROT_WRITE, MAP_SHARED, configfd, pagesize_ccc*8);
+  if (driver_fis_buffer_ccc == MAP_FAILED)
+  {
+    sprintf (tempmessage_ccc, "Mapping driver memory failed (%s)\n", strerror(errno));
+    message_error_ccc(tempmessage_ccc);
+    return -1;
+  }
+
+  close(configfd);
+
+
+
+  sprintf (name, "/proc/%s%d", MAIN_DRIVER_MMAPTB_NAME, process_id_ccc);
+  configfd = open(name, O_RDWR);
+  if(configfd < 0)
+  {
+    sprintf (tempmessage_ccc, "Opening driver mapping file failed (%s)\n", strerror(errno));
+    message_error_ccc(tempmessage_ccc);
+    return -1;
+  }
+
+  driver_transfer_buffer_address_ccc = mmap(NULL, DRIVER_TRANSFER_BUFFER_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, configfd, 0);
+  if (driver_transfer_buffer_address_ccc == MAP_FAILED)
+  {
+    sprintf (tempmessage_ccc, "Mapping driver memory failed (%s)\n", strerror(errno));
+    message_error_ccc(tempmessage_ccc);
+    return -1;
+  }
+  close(configfd);
+
+
+
+  sprintf (name, "/proc/%s%d", MAIN_DRIVER_MMAPMDB_NAME, process_id_ccc);
+  configfd = open(name, O_RDWR);
+  if(configfd < 0)
+  {
+    sprintf (tempmessage_ccc, "Opening driver mapping file failed (%s)\n", strerror(errno));
+    message_error_ccc(tempmessage_ccc);
+    return -1;
+  }
+
+  driver_main_data_buffer_address_ccc = mmap(NULL, DRIVER_MAIN_DATA_BUFFER_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, configfd, 0);
+  if (driver_main_data_buffer_address_ccc == MAP_FAILED)
+  {
+    sprintf (tempmessage_ccc, "Mapping driver memory failed (%s)\n", strerror(errno));
+    message_error_ccc(tempmessage_ccc);
+    return -1;
+  }
+  close(configfd);
+
+  driver_memory_mapped_ccc = 1;
   return 0;
 }
 
@@ -11330,49 +11222,46 @@ int map_driver_memory_ccc (void)
 
 int unmap_driver_memory_ccc (void)
 {
-  if (superbyte_ccc[60] == 0xaa)
+  if (driver_control_address_ccc)
   {
-    if (driver_control_address_ccc)
-    {
-      munmap(driver_control_address_ccc, pagesize_ccc);
-      driver_control_address_ccc = NULL;
-    }
-    if (driver_error_bitmap_address_ccc)
-    {
-      munmap(driver_error_bitmap_address_ccc, pagesize_ccc*2);
-      driver_error_bitmap_address_ccc = NULL;
-    }
-    if (driver_table_buffer_ccc)
-    {
-      munmap(driver_table_buffer_ccc, pagesize_ccc*4);
-      driver_table_buffer_ccc = NULL;
-      table_buffer_ccc = NULL;
-    }
-    if (driver_command_list_buffer_ccc)
-    {
-      munmap(driver_command_list_buffer_ccc, pagesize_ccc);
-      driver_command_list_buffer_ccc = NULL;
-      command_list_buffer_ccc = NULL;
-    }
-    if (driver_fis_buffer_ccc)
-    {
-      munmap(driver_fis_buffer_ccc, pagesize_ccc);
-      driver_fis_buffer_ccc = NULL;
-      fis_buffer_ccc = NULL;
-    }
-    if (driver_transfer_buffer_address_ccc)
-    {
-      munmap(driver_transfer_buffer_address_ccc, DRIVER_TRANSFER_BUFFER_SIZE);
-      driver_transfer_buffer_address_ccc = NULL;
-    }
-    if (driver_main_data_buffer_address_ccc)
-    {
-      munmap(driver_main_data_buffer_address_ccc, DRIVER_TRANSFER_BUFFER_SIZE);
-      driver_main_data_buffer_address_ccc = NULL;
-      ccc_buffer_ccc = NULL;
-    }
-    driver_memory_mapped_ccc = 0;
+    munmap(driver_control_address_ccc, pagesize_ccc);
+    driver_control_address_ccc = NULL;
   }
+  if (driver_error_bitmap_address_ccc)
+  {
+    munmap(driver_error_bitmap_address_ccc, pagesize_ccc*2);
+    driver_error_bitmap_address_ccc = NULL;
+  }
+  if (driver_table_buffer_ccc)
+  {
+    munmap(driver_table_buffer_ccc, pagesize_ccc*4);
+    driver_table_buffer_ccc = NULL;
+    table_buffer_ccc = NULL;
+  }
+  if (driver_command_list_buffer_ccc)
+  {
+    munmap(driver_command_list_buffer_ccc, pagesize_ccc);
+    driver_command_list_buffer_ccc = NULL;
+    command_list_buffer_ccc = NULL;
+  }
+  if (driver_fis_buffer_ccc)
+  {
+    munmap(driver_fis_buffer_ccc, pagesize_ccc);
+    driver_fis_buffer_ccc = NULL;
+    fis_buffer_ccc = NULL;
+  }
+  if (driver_transfer_buffer_address_ccc)
+  {
+    munmap(driver_transfer_buffer_address_ccc, DRIVER_TRANSFER_BUFFER_SIZE);
+    driver_transfer_buffer_address_ccc = NULL;
+  }
+  if (driver_main_data_buffer_address_ccc)
+  {
+    munmap(driver_main_data_buffer_address_ccc, DRIVER_TRANSFER_BUFFER_SIZE);
+    driver_main_data_buffer_address_ccc = NULL;
+    ccc_buffer_ccc = NULL;
+  }
+  driver_memory_mapped_ccc = 0;
   return 0;
 }
 
@@ -11382,7 +11271,7 @@ int unmap_driver_memory_ccc (void)
 unsigned long long read_ctrl_data_ccc(int item)
 {
   unsigned long long value = 0;
-  memcpy(&value, driver_control_address_ccc + (item * superbyte_ccc[64]), superbyte_ccc[65]);    //potential superbyte
+  memcpy(&value, driver_control_address_ccc + (item * superbyte_ccc[64]), superbyte_ccc[65]);
   return value;
 }
 
@@ -11391,7 +11280,7 @@ unsigned long long read_ctrl_data_ccc(int item)
 
 void write_ctrl_data_ccc(int item, unsigned long long value)
 {
-  memcpy(driver_control_address_ccc + (item * superbyte_ccc[66]), &value, superbyte_ccc[67]);    //potential superbyte
+  memcpy(driver_control_address_ccc + (item * superbyte_ccc[66]), &value, superbyte_ccc[67]);
 }
 
 

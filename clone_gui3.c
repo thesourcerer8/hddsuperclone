@@ -8,7 +8,7 @@
 #include <config.h>
 #endif
 
-
+#include <string.h>
 #include "clone_gui_common.h"
 #include "clone_gui_common.c"
 #include "clone_gui3.h"
@@ -414,29 +414,6 @@ int start_gtk_ccc(int argc, char **argv, char *title, char *version)
 
   // set intial button states
   set_disconnected_ccc();
-  if (superbyte_ccc[52] != 0xf0)
-  {
-    gtk_widget_set_sensitive (GTK_WIDGET(ahcimi_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(usbmi_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(usbatami_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(agressive_driver_checkbutton_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(driver_mode1_button_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(driver_mode2_button_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(driver_mode3_button_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(driver_mode4_button_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(driver_mode5_button_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(installdrivermi_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(uninstalldrivermi_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(driveronlymi_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(disableportsmi_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(restoreportsmi_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(analyze_long_button_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(primaryrelaymi_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(chooseprimaryrelaymi_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(disableusbmassmi_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(restoreusbmassmi_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(adddomainmi_ccc), FALSE);
-  }
 
   set_mode_auto_passthrough_ccc();
 
@@ -1159,7 +1136,7 @@ int translate_language_slow_ccc(char *fromlang, char *translang, char *language,
     }
     //fprintf (stdout, "\n*****************************************************\n");
     //fprintf (stdout, "%s\n", new_lang_data);
-    if (strlen(new_lang_data) >= MAXLANGLENGTH)
+    if (strlen(new_lang_data) >= MAXLANGLENGTH-1)
     {
       fprintf (stdout, "Warning: language count %d exceeded max length and was truncated.\n", count);
       failure = 1;
@@ -1220,7 +1197,7 @@ int print_gui_error_message_ccc(char *message, char *title, int type)
   {
     GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     GtkWidget *dialog;
-    GtkDialogFlags message_type;
+    GtkMessageType message_type;
     if (type)
     {
       message_type = GTK_MESSAGE_WARNING;
@@ -1360,7 +1337,7 @@ static void file_import_sel_ccc( char *import_file )
     {
       if (firstline)
       {
-        strncpy (found_title, line, MAXLANGLENGTH - 1);
+        strlcpy (found_title, line, MAXLANGLENGTH - 1);
         firstline = 0;
       }
       else
@@ -2001,22 +1978,19 @@ static void load_domain_file_ccc( char *log_file )
 // Get the selected domain and load it
 static void add_domain_file_ccc( char *log_file )
 {
-  if (superbyte_ccc[63] == 0x25)
-  {
-    gtk_label_set_text(GTK_LABEL(main_label), "");
-    //g_print ("%s\n", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
-    printf ("%s\n",  log_file);
+  gtk_label_set_text(GTK_LABEL(main_label), "");
+  //g_print ("%s\n", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
+  printf ("%s\n",  log_file);
 
-    int ret = read_domain_add_file_ccc(log_file);
-    if (ret < 0)
-    {
-      strcpy (tempmessage_ccc, curlang_ccc[LANGLOGLOADERR]);
-      message_error_ccc(tempmessage_ccc);
-      print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
-      clear_error_message_ccc();
-    }
-    update_display_ccc(0);
+  int ret = read_domain_add_file_ccc(log_file);
+  if (ret < 0)
+  {
+    strcpy (tempmessage_ccc, curlang_ccc[LANGLOGLOADERR]);
+    message_error_ccc(tempmessage_ccc);
+    print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
+    clear_error_message_ccc();
   }
+  update_display_ccc(0);
 }
 
 
@@ -2214,6 +2188,7 @@ void choose_source_ccc(void)
   }
   else
   {
+    int i;
     if (memory_used_ccc)
     {
       initialize_memory_ccc();
@@ -2235,31 +2210,28 @@ void choose_source_ccc(void)
     gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (choose_source_scrolled_window_ccc), choose_source_vbox_ccc);
 
     GtkWidget *button[MAX_DEVICES];
+    for (i=0;i<MAX_DEVICES;i++) button[i]=NULL;
 
     if (ahci_mode_ccc)
     {
-      if (superbyte_ccc[53] == 0x8f)
+      for (i = 0; i < device_count_ccc; i++)
       {
-        int i;
-        for (i = 0; i < device_count_ccc; i++)
+        char button_label[MAX_BUTTON_LABEL_SIZE] = "";
+        if (verbose_ccc & DEBUG6)
         {
-          char button_label[MAX_BUTTON_LABEL_SIZE] = "";
-          if (verbose_ccc & DEBUG6)
-          {
-            sprintf (button_label, "%s %s %s %s %llx %d %llx (%lld) %s %s", device_driver_ccc[i], device_bus_ccc[i], device_reference_ccc[i], device_name_ccc[i], hba_address_ccc[i], port_number_ccc[i], port_address_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
-          }
-          else if (verbose_ccc & DEBUG5)
-          {
-            sprintf (button_label, "%s %s %llx %d %llx (%lld) %s %s", device_reference_ccc[i], device_name_ccc[i], hba_address_ccc[i], port_number_ccc[i], port_address_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
-          }
-          else
-          {
-            sprintf (button_label, "%s %s (%lld) %s %s", device_reference_ccc[i], device_name_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
-          }
-          button[i] = gtk_button_new_with_label(button_label);
-          gtk_button_set_alignment(GTK_BUTTON(button[i]), 0, .5);
-          g_signal_connect(button[i], "clicked", G_CALLBACK(get_source_from_button_ccc), GINT_TO_POINTER(i) );
+          sprintf (button_label, "%s %s %s %s %llx %d %llx (%lld) %s %s", device_driver_ccc[i], device_bus_ccc[i], device_reference_ccc[i], device_name_ccc[i], hba_address_ccc[i], port_number_ccc[i], port_address_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
         }
+        else if (verbose_ccc & DEBUG5)
+        {
+          sprintf (button_label, "%s %s %llx %d %llx (%lld) %s %s", device_reference_ccc[i], device_name_ccc[i], hba_address_ccc[i], port_number_ccc[i], port_address_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
+        }
+        else
+        {
+          sprintf (button_label, "%s %s (%lld) %s %s", device_reference_ccc[i], device_name_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
+        }
+        button[i] = gtk_button_new_with_label(button_label);
+        gtk_button_set_alignment(GTK_BUTTON(button[i]), 0, .5);
+        g_signal_connect(button[i], "clicked", G_CALLBACK(get_source_from_button_ccc), GINT_TO_POINTER(i) );
       }
     }
     else if (direct_mode_ccc)
@@ -2322,7 +2294,6 @@ void choose_source_ccc(void)
     }
 
 
-    int i;
     if (usb_mode_ccc)
     {
       for (i = 0; i < usb_device_count_ccc; i++)
@@ -3013,10 +2984,7 @@ void set_connected_ccc (void)
   gtk_widget_set_sensitive (GTK_WIDGET(clone_mode_button_ccc), driver_only_ccc ? FALSE : TRUE);
   gtk_widget_set_sensitive (GTK_WIDGET(analyze_button_ccc), TRUE);
   gtk_widget_set_sensitive (GTK_WIDGET(smart_button_ccc), TRUE);
-  if (superbyte_ccc[52] == 0xf0)
-  {
-    gtk_widget_set_sensitive (GTK_WIDGET(analyze_long_button_ccc), TRUE);
-  }
+  gtk_widget_set_sensitive (GTK_WIDGET(analyze_long_button_ccc), TRUE);
   if (driver_installed_ccc)
   {
     set_driver_mode_button_status_ccc(TRUE);
@@ -3040,11 +3008,8 @@ void set_disconnected_ccc (void)
   gtk_widget_set_sensitive (GTK_WIDGET(smart_button_ccc), FALSE);
   gtk_widget_set_sensitive (GTK_WIDGET(modemi_ccc), TRUE);
   gtk_widget_set_sensitive (GTK_WIDGET(drivesmi_ccc), TRUE);
-  if (superbyte_ccc[52] == 0xf0)
-  {
-    gtk_widget_set_sensitive (GTK_WIDGET(primaryrelaymi_ccc), TRUE);
-    gtk_widget_set_sensitive (GTK_WIDGET(chooseprimaryrelaymi_ccc), TRUE);
-  }
+  gtk_widget_set_sensitive (GTK_WIDGET(primaryrelaymi_ccc), TRUE);
+  gtk_widget_set_sensitive (GTK_WIDGET(chooseprimaryrelaymi_ccc), TRUE);
   gtk_widget_set_sensitive (GTK_WIDGET(soft_reset_button_ccc), FALSE);
   gtk_widget_set_sensitive (GTK_WIDGET(hard_reset_button_ccc), FALSE);
   gtk_widget_set_sensitive (GTK_WIDGET(clone_mode_button_ccc), FALSE);
@@ -3334,11 +3299,8 @@ void start_cloning_ccc (void)
   gtk_widget_set_sensitive (GTK_WIDGET(hard_reset_button_ccc), TRUE);
   gtk_widget_set_sensitive (GTK_WIDGET(analyze_button_ccc), TRUE);
   gtk_widget_set_sensitive (GTK_WIDGET(smart_button_ccc), TRUE);
-  if (superbyte_ccc[52] == 0xf0)
-  {
-    gtk_widget_set_sensitive (GTK_WIDGET(analyze_long_button_ccc), TRUE);
-    set_driver_mode_button_status_ccc(TRUE);
-  }
+  gtk_widget_set_sensitive (GTK_WIDGET(analyze_long_button_ccc), TRUE);
+  set_driver_mode_button_status_ccc(TRUE);
 
   if (ret && ret != STOP_SIGNAL_RETURN_CODE)
   {
@@ -3637,10 +3599,7 @@ void start_analyzing_ccc (void)
   gtk_widget_set_sensitive (GTK_WIDGET(hard_reset_button_ccc), TRUE);
   gtk_widget_set_sensitive (GTK_WIDGET(smart_button_ccc), TRUE);
   gtk_widget_set_sensitive (GTK_WIDGET(analyze_button_ccc), TRUE);
-  if (superbyte_ccc[52] == 0xf0)
-  {
-    gtk_widget_set_sensitive (GTK_WIDGET(analyze_long_button_ccc), TRUE);
-  }
+  gtk_widget_set_sensitive (GTK_WIDGET(analyze_long_button_ccc), TRUE);
   if (driver_installed_ccc)
   {
     set_driver_mode_button_status_ccc(TRUE);
@@ -3858,20 +3817,6 @@ void open_clone_settings_dialog_ccc (void)
   //gtk_button_set_label(GTK_BUTTON(), curlang_ccc[]);
   //gtk_label_set_text(GTK_LABEL(), curlang_ccc[]);
 
-  if (superbyte_ccc[54] != 0xc6)
-  {
-    gtk_widget_set_sensitive (GTK_WIDGET(markbad_check_button_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(readbad_check_button_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(rebuild_assist_check_button_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(skipfast_check_button_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(blocksize_spin_button_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(alignment_spinbutton_ccc), FALSE);
-    if (!generic_mode_ccc)
-    {
-      gtk_widget_set_sensitive (GTK_WIDGET(sectorsize_spinbutton_ccc), FALSE);
-    }
-  }
-
   g_signal_connect(G_OBJECT(phase1_check_button_ccc), "toggled", G_CALLBACK(set_state_from_button_ccc), GINT_TO_POINTER(BUTTONID_PHASE1));
   g_signal_connect(G_OBJECT(phase2_check_button_ccc), "toggled", G_CALLBACK(set_state_from_button_ccc), GINT_TO_POINTER(BUTTONID_PHASE2));
   g_signal_connect(G_OBJECT(phase3_check_button_ccc), "toggled", G_CALLBACK(set_state_from_button_ccc), GINT_TO_POINTER(BUTTONID_PHASE3));
@@ -4045,31 +3990,7 @@ void open_advanced_settings_dialog_ccc (void)
   gtk_entry_set_text (GTK_ENTRY (virtual_disk_device_name_text_ccc), advanced_settings_ccc.virtual_disk_device_name);
   update_advanced_button_settings_ccc();
 
-  if (direct_mode_ccc && superbyte_ccc[55] == 0x46)
-  {
-    gtk_widget_set_sensitive (GTK_WIDGET(pio_mode_checkbutton_ccc), TRUE);
-  }
-  else
-  {
-    gtk_widget_set_sensitive (GTK_WIDGET(pio_mode_checkbutton_ccc), FALSE);
-  }
-
-  if (superbyte_ccc[56] != 0x6b)
-  {
-    gtk_widget_set_sensitive (GTK_WIDGET(enable_rebuild_assist_checkbutton_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(enable_process_chunk_checkbutton_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(enable_read_twice_checkbutton_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(enable_scsi_write_checkbutton_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(enable_output_sector_size_checkbutton_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(driver_return_error_radio_button_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(driver_return_zeros_radio_button_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(driver_return_marked_radio_button_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(virtual_disk_device_name_text_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(driver_minimum_cluster_size_spinbutton_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(driver_io_scsi_only_checkbutton_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(use_physical_sector_size_for_virtual_checkbutton_ccc), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(primary_relay_on_error_radio_button_ccc), FALSE);
-  }
+  gtk_widget_set_sensitive (GTK_WIDGET(pio_mode_checkbutton_ccc), TRUE);
 
   gtk_window_set_title(GTK_WINDOW(dialog), curlang_ccc[LANGADVANCED]);
 
@@ -4234,10 +4155,6 @@ void open_timer_settings_dialog_ccc (void)
   if (!ahci_mode_ccc && !usb_mode_ccc)
   {
     gtk_widget_set_sensitive (GTK_WIDGET(hard_reset_time_spinbutton_ccc), FALSE);
-  }
-  if (superbyte_ccc[56] != 0x6b)
-  {
-    gtk_widget_set_sensitive (GTK_WIDGET(primary_relay_power_cycle_radio_button_ccc), FALSE);
   }
 
   gtk_window_set_title(GTK_WINDOW(dialog), curlang_ccc[LANGTIMERS]);
@@ -5828,21 +5745,8 @@ void about_ccc (void)
   strcpy (temp, "License type: PROPRIETARY ");
 #endif
   char temp2[256];
-  if (activation_type_ccc == 1)
-  {
-    sprintf (temp2, "(TEMPORARY VERSION)\n%d days remaining\n", activation_days_remaining_ccc);
-    strcat (temp, temp2);
-  }
-  else if (activation_type_ccc == 2)
-  {
-    sprintf (temp2, "(FULL VERSION)\n");
-    strcat (temp, temp2);
-  }
-  else
-  {
-    sprintf (temp2, "(FREE VERSION)\n");
-    strcat (temp, temp2);
-  }
+  sprintf (temp2, "(OPENSOURCE VERSION)\n");
+  strcat (temp, temp2);
   strcat (temp, "There is NO WARRANTY, to the extent permitted by law.");
 
 
@@ -5850,7 +5754,11 @@ void about_ccc (void)
 
   gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(dialog), "www.sdcomputingservice.com");
 
-  gtk_about_dialog_set_license(GTK_ABOUT_DIALOG(dialog), (char*)hddsuperclone_EULA_txt);
+  char eula[hddsuperclone_EULA_txt_len + 1];
+  memcpy(eula, hddsuperclone_EULA_txt, hddsuperclone_EULA_txt_len);
+  eula[hddsuperclone_EULA_txt_len] = '\0';
+
+  gtk_about_dialog_set_license(GTK_ABOUT_DIALOG(dialog), (char*)eula);
 
   gtk_dialog_run(GTK_DIALOG (dialog));
   gtk_widget_destroy(dialog);
@@ -5868,8 +5776,13 @@ void help_html_ccc(void)
   if (pid == 0)
   {
     // make sure this exits and does not return
-    system("cp -f /usr/local/share/doc/hddsuperclone/hddsuperclone.html /tmp/");
-    system("sudo -E -H -P -u $(who | head -1 | awk '{print $1}') xdg-open /tmp/hddsuperclone.html > /dev/null 2>&1");
+    if(system("cp -f /usr/local/share/doc/hddsuperclone/hddsuperclone.html /tmp/")==0)
+    {
+      if(system("sudo -E -H -P -u $(who | head -1 | awk '{print $1}') xdg-open /tmp/hddsuperclone.html > /dev/null 2>&1"))
+      {
+	exit(0);
+      }
+    }
     exit(0);
   }
 }
@@ -5886,8 +5799,13 @@ void help_text_ccc(void)
   if (pid == 0)
   {
     // make sure this exits and does not return
-    system("cp -f /usr/local/share/doc/hddsuperclone/hddsuperclone.txt /tmp/");
-    system("sudo -E -H -P -u $(who | head -1 | awk '{print $1}') xdg-open /tmp/hddsuperclone.txt > /dev/null 2>&1");
+    if(system("cp -f /usr/local/share/doc/hddsuperclone/hddsuperclone.txt /tmp/")==0)
+    {
+      if(system("sudo -E -H -P -u $(who | head -1 | awk '{print $1}') xdg-open /tmp/hddsuperclone.txt > /dev/null 2>&1"))
+      {
+	exit(0);
+      }
+    }
     exit(0);
   }
 }
@@ -5898,71 +5816,12 @@ void help_text_ccc(void)
 
 void activate_with_file_ccc(void)
 {
-  GtkWidget *dialog;
-  dialog = gtk_file_chooser_dialog_new (curlang_ccc[LANGLOADACTIVATIONFILE],
-                                        GTK_WINDOW(main_window_ccc),
-                                        GTK_FILE_CHOOSER_ACTION_OPEN,
-                                        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                                        GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
-                                        NULL);
-  if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
-  {
-    char *filename;
-    filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-    fprintf (stdout, "PLEASE WAIT: Processing activation  %s\n", filename);
-    int ret2 = 0;
-    int ret = get_and_install_license_ccc(filename, 0);
-    if (ret)
-    {
-      // if it failed then try forcing hard link
-      ret2 = get_and_install_license_ccc(filename, 1);
-    }
-    if (ret2)
-    {
-      strcpy (tempmessage_ccc, curlang_ccc[LANGACTIVATIONFAILED]);
-      message_error_ccc(tempmessage_ccc);
-      sprintf (tempmessage_ccc, "\n0x%08x", ret);
-      message_error_ccc(tempmessage_ccc);
-      sprintf (tempmessage_ccc, "\n0x%08x", ret2);
-      message_error_ccc(tempmessage_ccc);
-      print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
-      clear_error_message_ccc();
-    }
-    else
-    {
-      strcpy (tempmessage_ccc, curlang_ccc[LANGACTIVATIONSUCCESS]);
-      message_error_ccc(tempmessage_ccc);
-      print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGINFO], 0);
-      clear_error_message_ccc();
-    }
-    g_free (filename);
-  }
-  gtk_widget_destroy (dialog);
+  fprintf (stdout, "INFO: Activation is not necessary anymore.\n");
 }
-
-
-
-
 
 void remove_activation_ccc (void)
 {
-  if (open_confirmation_dialog_ccc (curlang_ccc[LANGCONFIRMREMOVEACTIVATION]))
-  {
-    if (delete_license_file_ccc())
-    {
-      strcpy (tempmessage_ccc, curlang_ccc[LANGOPERATIONFAILED]);
-      message_error_ccc(tempmessage_ccc);
-      print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGWARN], 1);
-      clear_error_message_ccc();
-    }
-    else
-    {
-      strcpy (tempmessage_ccc, curlang_ccc[LANGOPERATIONSUCCEEDED]);
-      message_error_ccc(tempmessage_ccc);
-      print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGINFO], 0);
-      clear_error_message_ccc();
-    }
-  }
+  // Not needed anymore
 }
 
 
@@ -6216,23 +6075,3 @@ void map_heads_ccc (void)
   }
 #endif
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

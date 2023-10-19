@@ -71,7 +71,7 @@ void* ccc_usbbuffer_ccc;
 char usbcbwbuffer_ccc[USBCBW_BUFFER_SIZE];
 char usbcswbuffer_ccc[USBCSW_BUFFER_SIZE];
 unsigned long long ccc_main_usbbuffer_size_ccc;
-void* padding_buffer_ccc;
+void* padding_buffer_ccc=NULL;
 unsigned char identify_buffer_ccc[IDENTIFY_BUFFER_SIZE];
 unsigned char ata_identify_buffer_ccc[IDENTIFY_BUFFER_SIZE];
 unsigned char read_capacity_buffer_ccc[512];
@@ -80,16 +80,11 @@ long long *number_variable_buffer_ccc;
 char **string_variable_pointer_ccc;
 char current_date_ccc[40];
 char current_time_ccc[40];
-unsigned char random_data_ccc[2048];
+
 
 unsigned char sbyte_ccc[16];
 
 unsigned char superbyte_ccc[1024];
-int license_type_ccc;
-int license_version_ccc;
-int license_time_ccc;
-int activation_type_ccc;
-int activation_days_remaining_ccc;
 int check_command_ccc;
 int check_read_ccc;
 int check_write_ccc;
@@ -339,6 +334,7 @@ rebuild_assist_log_data_ccc_type rebuild_assist_log_data_ccc;
 unsigned int total_script_lines_ccc;
 char **script_line_pointer_ccc;
 
+#include "strncpy_wrapper.h"
 
 int message_exit_ccc(char *message)
 {
@@ -463,18 +459,15 @@ int set_main_buffer_ccc(void)
     message_now_ccc(tempmessage_ccc);
     return (-1);
   }
-  if (superbyte_ccc[29] == 0x60)
+  if (ahci_mode_ccc && ccc_main_buffer_size_ccc > max_dma_size_ccc)
   {
-    if (ahci_mode_ccc && ccc_main_buffer_size_ccc > max_dma_size_ccc)
-    {
-      sprintf (tempmessage_ccc, "ERROR: Maximum AHCI buffer size (%lld) exceeded.\n", max_dma_size_ccc);
-      message_now_ccc(tempmessage_ccc);
-      return (-1);
-    }
-    if (direct_mode_ccc)
-    {
-      create_dma_table_ccc();
-    }
+    sprintf (tempmessage_ccc, "ERROR: Maximum AHCI buffer size (%lld) exceeded.\n", max_dma_size_ccc);
+    message_now_ccc(tempmessage_ccc);
+    return (-1);
+  }
+  if (direct_mode_ccc)
+  {
+    create_dma_table_ccc();
   }
   return (0);
 }
@@ -506,7 +499,7 @@ int create_dma_table_ccc(void)
         table_entry_count_ccc = max_entries;
         break;
       }
-      int n = (i*16) + superbyte_ccc[15];    //potential superbyte
+      int n = (i*16) + superbyte_ccc[15];
       uint32_t dword = buffer_physical_address_ccc[i];
       memcpy(table_buffer_ccc+n, &dword, 4);
       memset(table_buffer_ccc+n+4, 0, 8);
@@ -603,11 +596,11 @@ int create_dma_table_ccc(void)
       // if last page then mark it
       if (i == page_count - 1)
       {
-        c = superbyte_ccc[15];    //potential superbyte
+        c = superbyte_ccc[15];
       }
       else
       {
-        c = superbyte_ccc[11];    //potential superbyte
+        c = superbyte_ccc[11];
       }
       memcpy(table_buffer_ccc+7+(i*8), &c, 1);
       #ifdef DEBUG

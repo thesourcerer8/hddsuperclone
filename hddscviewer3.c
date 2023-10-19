@@ -905,14 +905,14 @@ static gboolean on_button_press(GtkWidget* widget, GdkEventButton *event, GdkWin
 
 
 
-static gboolean top_drawing_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
+static gboolean top_drawing_expose_event(__attribute__((unused)) GtkWidget *widget, __attribute__((unused)) GdkEventExpose *event, __attribute__((unused)) gpointer data)
 {
   redraw_top_drawing_area();
 
   // make the compiler happy and not complain about unused paramaters
-  widget = widget;
-  event = event;
-  data = data;
+  //widget = widget;
+  //event = event;
+  //data = data;
 
   return 0;
 }
@@ -1161,8 +1161,9 @@ void select_file(void)
 
 
 
-gint reload_file(void)
+gint reload_file(gpointer user_data)
 {
+  user_data=user_data;
   printf ("%s\n",  log_file);
   total_size = 0;
   int ret = read_log_file(log_file);
@@ -2277,7 +2278,7 @@ int check_log(void)
   }
 
   // get total size from last position
-  total_size = lposition[total_lines-1] + lsize[total_lines-1];
+  total_size = total_lines>0 ? lposition[total_lines-1] + lsize[total_lines-1] : 0;
   sprintf (tempmessage, "total size = %lld\n", total_size);
   message_now(tempmessage);
 
@@ -2569,7 +2570,7 @@ int print_gui_error_message(char *message, char *title, int type)
 {
   GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   GtkWidget *dialog;
-  GtkDialogFlags message_type;
+  GtkMessageType message_type;
   if (type)
   {
     message_type = GTK_MESSAGE_WARNING;
