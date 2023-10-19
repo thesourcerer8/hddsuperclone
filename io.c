@@ -213,13 +213,11 @@ int post_ioctl_ccc(void)
 
   if (descriptor && io_hdr.sb_len_wr > 21 && sensebuf[8] == 0x9 && sensebuf[9] == 0xc)
   {
-    int additional_sense_length = sensebuf[7];
-    unsigned char ata_return_descriptor[additional_sense_length];
-    int i;
-    for (i = 0; i < additional_sense_length; i ++)
-    {
-      memcpy(&ata_return_descriptor[i], &sensebuf[i+8], 1);
-    }
+    //the length of the sense buffer is specified by 1 byte, just allocate the max sense buffer size
+    unsigned char ata_return_descriptor[256];
+    unsigned char additional_sense_length = sensebuf[7];
+    memset(ata_return_descriptor, 0, sizeof(ata_return_descriptor));
+    memcpy(ata_return_descriptor, &sensebuf[8], additional_sense_length);
 
     set_number_variable_value_ccc("$ata_return_error", ata_return_descriptor[3]);
     int count = (ata_return_descriptor[4] << 8) + ata_return_descriptor[5];
@@ -1018,13 +1016,11 @@ int usb_get_sense_ccc(void)
 
   if (0 && descriptor && sensebuffer_size_ccc > 21 && raw_sense[8] == 0x9 && raw_sense[9] == 0xc)
   {
-    int additional_sense_length = raw_sense[7];
-    unsigned char ata_return_descriptor[additional_sense_length];
-    int i;
-    for (i = 0; i < additional_sense_length; i ++)
-    {
-      memcpy(&ata_return_descriptor[i], &raw_sense[i+8], 1);
-    }
+    //the length of the sense buffer is specified by 1 byte, just allocate the max sense buffer size
+    unsigned char ata_return_descriptor[256];
+    unsigned char additional_sense_length = raw_sense[7];
+    memset(ata_return_descriptor, 0, sizeof(ata_return_descriptor));
+    memcpy(ata_return_descriptor, &raw_sense[8], additional_sense_length);
 
     int count = (ata_return_descriptor[4] << 8) + ata_return_descriptor[5];
     long long lba = ((unsigned long long)ata_return_descriptor[10] << 48) + ((unsigned long long)ata_return_descriptor[8] << 32) + ((unsigned long long)ata_return_descriptor[6] << 24) + ((unsigned long long)ata_return_descriptor[11] << 16) + ((unsigned long long)ata_return_descriptor[9] << 8) + ata_return_descriptor[7];
@@ -9635,10 +9631,12 @@ int get_device_information_ccc(char *driver, char *bus, int bus_count, int devic
   pclose(fp);
 
   int host_found = 0;
-  char check_host[255];
+  char check_host[256];
+  memset(check_host, 0, sizeof(check_host));
   if (found_location)
   {
-    char command[255];
+    char command[256];
+    memset(command, 0, sizeof(command));
     strcpy (command, "ls -p /sys/bus/pci/drivers/");
     strcat (command, driver);
     strcat (command, "/");
