@@ -2887,19 +2887,9 @@ int do_soft_reset_ccc(int disk_fd)
   int status = 0;
   if (direct_mode_ccc)
   {
-    if (ahci_mode_ccc)
-    {
-      // ahci
-      status = soft_reset_ccc(0);
-      set_number_variable_value_ccc("$command_status", status);
-    }
-
-    else
-    {
-      // ide
-      status = soft_reset_ccc(0);
-      set_number_variable_value_ccc("$command_status", status);
-    }
+    //the following code is the same for ahci_mode_ccc and ide mode
+    status = soft_reset_ccc(0);
+    set_number_variable_value_ccc("$command_status", status);
   }
   else
   {
@@ -4598,6 +4588,7 @@ int hba_test_ccc(void)
   if(hba_mem_dev_ccc == -1)
   {
     fprintf (stderr, "unable to open /dev/mem\n");
+    fclose(hba_debug_file);
     return (-1);
   }
   const uint32_t hba_mem_address = hba_base_address_ccc;
@@ -4618,6 +4609,8 @@ int hba_test_ccc(void)
   if(hba_mem_pointer_ccc == MAP_FAILED)
   {
     fprintf (stderr, "HBA mem map failed\n");
+    fclose(hba_debug_file);
+    close(hba_mem_dev_ccc);
     return (-1);
   }
   hba_virt_addr_ccc = (hba_mem_pointer_ccc + (hba_mem_address & page_mask));
@@ -4628,6 +4621,8 @@ int hba_test_ccc(void)
   if(port_mem_dev_ccc == -1)
   {
     fprintf (stderr, "unable to open /dev/mem\n");
+    fclose(hba_debug_file);
+    close(hba_mem_dev_ccc);
     return (-1);
   }
   const uint32_t port_mem_address = port_base_address_ccc;
@@ -4648,6 +4643,9 @@ int hba_test_ccc(void)
   if(port_mem_pointer_ccc == MAP_FAILED)
   {
     fprintf (stderr, "Port mem map failed\n");
+    fclose(hba_debug_file);
+    close(hba_mem_dev_ccc);
+    close(port_mem_dev_ccc);
     return (-1);
   }
   port_virt_addr_ccc = (port_mem_pointer_ccc + (port_mem_address & page_mask));
@@ -4703,6 +4701,9 @@ int hba_test_ccc(void)
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
+      fclose(hba_debug_file);
+      close(hba_mem_dev_ccc);
+      close(port_mem_dev_ccc);
       return -1;
     }
 
@@ -4740,6 +4741,9 @@ int hba_test_ccc(void)
       message_error_ccc(tempmessage_ccc);
       sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
       message_error_ccc(tempmessage_ccc);
+      fclose(hba_debug_file);
+      close(hba_mem_dev_ccc);
+      close(port_mem_dev_ccc);
       return -1;
     }
 
