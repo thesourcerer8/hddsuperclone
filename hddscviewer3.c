@@ -897,7 +897,7 @@ static gboolean on_button_press(GtkWidget* widget, GdkEventButton *event, GdkWin
     }
   }
   (void) widget;
-  edge = edge;
+  (void) edge;
   return TRUE;
 }
 
