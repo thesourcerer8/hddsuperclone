@@ -1397,7 +1397,7 @@ int read_script_file_ccc(char *script_file_ccc)
   }
 
   char line[cols];
-
+  memset(line,0,sizeof(line));
   // offest the script 2 lines to allow for while statement at top
   // make sure the first 2 lines are empty
   strcpy (script_line_pointer_ccc[i], "\n");
