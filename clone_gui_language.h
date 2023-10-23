@@ -453,7 +453,7 @@ int copy_newlanguage_ccc(void);
 
 int translate_all_ccc(void);
 
-int translate_language_ccc(char *fromlang, char *translang, char *language, char *native);
+int translate_language_ccc(char *fromlang, char *translang, const char *language, const char *native);
 
 int translate_language_slow_ccc(char *fromlang, char *translang, const char *language, const char *native);
 

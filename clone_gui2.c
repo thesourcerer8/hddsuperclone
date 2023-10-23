@@ -438,8 +438,7 @@ int start_gtk_ccc(int argc, char **argv, char *title, char *version)
 
 int copy_enlanguage_ccc(void)
 {
-  int i;
-  for (i = 0; i < LANGCOUNT; i++)
+  for (int i = 0; i < LANGCOUNT; i++)
   {
     strcpy (curlang_ccc[i], enlang_ccc[i]);
   }
@@ -755,7 +754,7 @@ int translate_all_ccc(void)
 
 
 
-int translate_language_ccc(char *fromlang, char *translang, char *language, char *native)
+int translate_language_ccc(char *fromlang, char *translang, const char *language, const char *native)
 {
   int failure = 0;
   char return_data[1000000];
