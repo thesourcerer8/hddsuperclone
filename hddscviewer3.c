@@ -1163,7 +1163,7 @@ void select_file(void)
 
 gint reload_file(gpointer user_data)
 {
-  user_data=user_data;
+  (void) user_data;
   printf ("%s\n",  log_file);
   total_size = 0;
   int ret = read_log_file(log_file);
