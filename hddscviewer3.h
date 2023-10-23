@@ -88,7 +88,7 @@
 
 
 // TODO MAKE SURE TO UPDATE COUNT EVERY TIME! it should be one more than last defined
-#define LANGCOUNT 427
+#define LANGCOUNT 428
 #define MAXLANGLENGTH 2048
 char enlang[LANGCOUNT][MAXLANGLENGTH];
 char curlang[LANGCOUNT][MAXLANGLENGTH];
