@@ -9563,7 +9563,7 @@ int choose_target_ccc(void)
 
   if (choice > 0)
   {
-    free (disk_2_ccc);
+    if(disk_2_ccc!=NULL) free (disk_2_ccc);
     disk_2_ccc = malloc (sizeof drive_list_ccc[i]);
     memcpy (disk_2_ccc, drive_list_ccc[i], sizeof drive_list_ccc[i]);
     strcpy (current_destination_model_ccc, model_ccc[i]);
