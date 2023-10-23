@@ -3114,6 +3114,9 @@ char* get_translated_data(char *url_data)
   /* specify URL to get */
   curl_easy_setopt(curl_handle, CURLOPT_URL, url_data);
 
+  /* specify minimum TLS version */
+  curl_easy_setopt(curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
+
   /* send all data to this function  */
   curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
 
