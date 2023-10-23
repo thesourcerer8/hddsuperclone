@@ -1001,7 +1001,7 @@ char* get_translated_data_ccc(char *url_data)
   curl_easy_setopt(curl_handle, CURLOPT_URL, url_data);
 
   /* specify minimum TLS version */
-  curl_easy_setopt(curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
+  curl_easy_setopt(curl_handle, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
 
   /* send all data to this function  */
   curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
