@@ -512,7 +512,7 @@ int main (int argc, char **argv)
   superbyte_ccc[18] = 0x30;
   superbyte_ccc[19] = 0x0c;
 
-  sprintf (tempmessage_ccc, "GOD MODE ACTIVE\n");
+  snprintf (tempmessage_ccc, sizeof(tempmessage_ccc), "GOD MODE ACTIVE\n");
   message_now_ccc(tempmessage_ccc);
 #endif
 
@@ -2910,7 +2910,7 @@ int set_number_variable_value_ccc(char *raw_variable, long long value)
   }
   else if (return_value_ccc == 1)
   {
-    sprintf(temp_var, "%lld", value);
+    snprintf(temp_var, sizeof(temp_var), "%lld", value);
     int var_num = find_number_variable_ccc(var_name);
     return_value_ccc = set_number_variable_ccc(var_num, temp_var);
     if (return_value_ccc == -1)
@@ -2989,7 +2989,7 @@ int get_the_time_ccc(void)
   time_t curtime;
   curtime = tvCurrent_ccc.tv_sec;
   strftime(tempbuffer, 30, "%Y-%m-%d_%H.%M.%S", localtime(&curtime));
-  sprintf(current_date_ccc, "%s.%06ld", tempbuffer, tvCurrent_ccc.tv_usec);
+  snprintf(current_date_ccc, sizeof(current_date_ccc), "%s.%06ld", tempbuffer, tvCurrent_ccc.tv_usec);
   return_value_ccc = set_string_variable_value_ccc("$date", current_date_ccc);
   if (return_value_ccc != 0)
   {

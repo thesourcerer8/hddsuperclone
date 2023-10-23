@@ -72,7 +72,7 @@ int start_gtk_ccc(int argc, char **argv, char *title, char *version)
     set_data_dump_filename_ccc();
     char temp_string[256];
     dump_info_to_filename_ccc (data_dump_filename_ccc, "*****************************************************************\n");
-    sprintf (temp_string, "********** %s %s data dump file **********\n", title_ccc, version_number_ccc);
+    snprintf(temp_string, sizeof(temp_string), "********** %s %s data dump file **********\n", title_ccc, version_number_ccc);
     dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
   }
 
@@ -624,7 +624,7 @@ int translate_all_ccc(void)
     writefile = fopen(export_file, "w");
     if (writefile == NULL)
     {
-      sprintf (tempmessage_ccc, "%s: %s (%s)", curlang_ccc[LANGLANGEXPORTERR], export_file, strerror(errno));
+      snprintf (tempmessage_ccc, sizeof(tempmessage_ccc), "%s: %s (%s)", curlang_ccc[LANGLANGEXPORTERR], export_file, strerror(errno));
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
@@ -691,7 +691,7 @@ int translate_all_ccc(void)
       writefile = fopen(reverse_file, "w");
       if (writefile == NULL)
       {
-        sprintf (tempmessage_ccc, "%s: %s (%s)", curlang_ccc[LANGLANGEXPORTERR], reverse_file, strerror(errno));
+        snprintf (tempmessage_ccc, sizeof(tempmessage_ccc), "%s: %s (%s)", curlang_ccc[LANGLANGEXPORTERR], reverse_file, strerror(errno));
         message_error_ccc(tempmessage_ccc);
         print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
         clear_error_message_ccc();
@@ -718,7 +718,7 @@ int translate_all_ccc(void)
       writefile = fopen(all_file, "w");
       if (writefile == NULL)
       {
-        sprintf (tempmessage_ccc, "%s: %s (%s)", curlang_ccc[LANGLANGEXPORTERR], all_file, strerror(errno));
+        snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "%s: %s (%s)", curlang_ccc[LANGLANGEXPORTERR], all_file, strerror(errno));
         message_error_ccc(tempmessage_ccc);
         print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
         clear_error_message_ccc();
@@ -779,9 +779,9 @@ int translate_language_ccc(char *fromlang, char *translang, char *language, char
   }
   for (i = 0; i < LANGCOUNT; i++)
   {
-    sprintf(temp_data, "\n|__|%04d|__|\n", i);
+    snprintf(temp_data, sizeof(temp_data), "\n|__|%04d|__|\n", i);
     strcat(lang_data, temp_data);
-    sprintf(temp_data, "%s", curlang_ccc[i]);
+    smprintf(temp_data, sizeof(temp_data), "%s", curlang_ccc[i]);
     strcat(lang_data, temp_data);
     int linebyline = 0;
     if (strlen(lang_data) > 3000 || i == LANGCOUNT - 1 || linebyline)
@@ -958,7 +958,7 @@ int translate_language_ccc(char *fromlang, char *translang, char *language, char
   writefile = fopen(langfile, "w");
   if (writefile == NULL)
   {
-    sprintf (tempmessage_ccc, "%s: %s (%s)", curlang_ccc[LANGLANGEXPORTERR], langfile, strerror(errno));
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "%s: %s (%s)", curlang_ccc[LANGLANGEXPORTERR], langfile, strerror(errno));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -1063,7 +1063,7 @@ int translate_language_slow_ccc(char *fromlang, char *translang, char *language,
   {
     strcpy (lang_data, "");
     strcpy (new_data, "");
-    sprintf(temp_data, "%s", curlang_ccc[count]);
+    snprintf(temp_data, sizeof(temp_data), "%s", curlang_ccc[count]);
     strcat(lang_data, temp_data);
     int n;
     int len = strlen(lang_data);
@@ -1161,7 +1161,7 @@ int translate_language_slow_ccc(char *fromlang, char *translang, char *language,
   writefile = fopen(langfile, "w");
   if (writefile == NULL)
   {
-    sprintf (tempmessage_ccc, "%s: %s (%s)", curlang_ccc[LANGLANGEXPORTERR], langfile, strerror(errno));
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "%s: %s (%s)", curlang_ccc[LANGLANGEXPORTERR], langfile, strerror(errno));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -1259,7 +1259,7 @@ static void file_export_sel_ccc( char *export_file )
   writefile = fopen(export_file, "w");
   if (writefile == NULL)
   {
-    sprintf (tempmessage_ccc, "%s: %s (%s)", curlang_ccc[LANGLANGEXPORTERR], export_file, strerror(errno));
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "%s: %s (%s)", curlang_ccc[LANGLANGEXPORTERR], export_file, strerror(errno));
     message_error_ccc(tempmessage_ccc);
 //     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -1322,7 +1322,7 @@ static void file_import_sel_ccc( char *import_file )
   readfile = fopen(import_file, "r");
   if (readfile == NULL)
   {
-    sprintf (tempmessage_ccc, "%s: %s (%s)", curlang_ccc[LANGLANGIMPORTERR], import_file, strerror(errno));
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "%s: %s (%s)", curlang_ccc[LANGLANGIMPORTERR], import_file, strerror(errno));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -1381,7 +1381,7 @@ static void file_import_sel_ccc( char *import_file )
     if (count == found_count && count == LANGCOUNT - 1)
     {
       copy_newlanguage_ccc();
-      sprintf (tempmessage_ccc, "%s", curlang_ccc[LANGLANGCHANGESUCCESS]);
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "%s", curlang_ccc[LANGLANGCHANGESUCCESS]);
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGSUCCESS], 0);
       clear_error_message_ccc();
@@ -1389,7 +1389,7 @@ static void file_import_sel_ccc( char *import_file )
     else
     {
       fprintf (stdout, "count=%d found_count=%d LANGCOUNT=%d\n", count, found_count, LANGCOUNT-1);
-      sprintf (tempmessage_ccc, "%s", curlang_ccc[LANGLANGIMPORTERR2]);
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "%s", curlang_ccc[LANGLANGIMPORTERR2]);
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
@@ -1906,10 +1906,10 @@ static void load_ddrescue_log_file_ccc( char *log_file )
       ret = check_log_ccc();
       if (ret)
       {
-        sprintf (tempmessage_ccc, "There were errors found in the progress log file\n");
+        snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "There were errors found in the progress log file\n");
         message_now_ccc(tempmessage_ccc);
         ret2 = check_and_repair_log_ccc();
-        sprintf (tempmessage_ccc, "Checking the progress log file again to make sure it was fixed correctly.\n");
+        snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Checking the progress log file again to make sure it was fixed correctly.\n");
         message_now_ccc(tempmessage_ccc);
         ret = check_log_ccc();
         if (ret != 0 || ret2 != 0)
@@ -2178,7 +2178,7 @@ void choose_source_ccc(void)
         clear_source_ccc();
         strcpy (current_source_model_ccc, "");
         strcpy (current_source_serial_ccc, "");
-        sprintf (tempmessage_ccc, "%s", curlang_ccc[LANGSOURCEERROR]);
+        snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "%s", curlang_ccc[LANGSOURCEERROR]);
         message_error_ccc(tempmessage_ccc);
         print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
         clear_error_message_ccc();
@@ -2222,15 +2222,15 @@ void choose_source_ccc(void)
         char button_label[MAX_BUTTON_LABEL_SIZE] = "";
         if (verbose_ccc & DEBUG6)
         {
-          sprintf (button_label, "%s %s %s %s %llx %d %llx (%lld) %s %s", device_driver_ccc[i], device_bus_ccc[i], device_reference_ccc[i], device_name_ccc[i], hba_address_ccc[i], port_number_ccc[i], port_address_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
+          snprintf(button_label, sizeof(button_label), "%s %s %s %s %llx %d %llx (%lld) %s %s", device_driver_ccc[i], device_bus_ccc[i], device_reference_ccc[i], device_name_ccc[i], hba_address_ccc[i], port_number_ccc[i], port_address_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
         }
         else if (verbose_ccc & DEBUG5)
         {
-          sprintf (button_label, "%s %s %llx %d %llx (%lld) %s %s", device_reference_ccc[i], device_name_ccc[i], hba_address_ccc[i], port_number_ccc[i], port_address_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
+          snprintf(button_label, sizeof(button_label), "%s %s %llx %d %llx (%lld) %s %s", device_reference_ccc[i], device_name_ccc[i], hba_address_ccc[i], port_number_ccc[i], port_address_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
         }
         else
         {
-          sprintf (button_label, "%s %s (%lld) %s %s", device_reference_ccc[i], device_name_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
+          snprintf(button_label, sizeof(button_label), "%s %s (%lld) %s %s", device_reference_ccc[i], device_name_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
         }
         button[i] = gtk_button_new_with_label(button_label);
         gtk_button_set_alignment(GTK_BUTTON(button[i]), 0, .5);
@@ -2245,15 +2245,15 @@ void choose_source_ccc(void)
         char button_label[MAX_BUTTON_LABEL_SIZE] = "";
         if (verbose_ccc & DEBUG6)
         {
-          sprintf (button_label, "%s %s %s %s %llx %llx %llx %d (%lld) %s %s", device_driver_ccc[i], device_bus_ccc[i], device_reference_ccc[i], device_name_ccc[i], reg_address_ccc[i], control_address_ccc[i], bus_address_ccc[i], device_select_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
+          snprintf(button_label, sizeof(button_label), "%s %s %s %s %llx %llx %llx %d (%lld) %s %s", device_driver_ccc[i], device_bus_ccc[i], device_reference_ccc[i], device_name_ccc[i], reg_address_ccc[i], control_address_ccc[i], bus_address_ccc[i], device_select_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
         }
         else if (verbose_ccc & DEBUG5)
         {
-          sprintf (button_label, "%s %s %llx %llx %llx %d (%lld) %s %s", device_reference_ccc[i], device_name_ccc[i], reg_address_ccc[i], control_address_ccc[i], bus_address_ccc[i], device_select_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
+          snprintf(button_label, sizeof(button_label), "%s %s %llx %llx %llx %d (%lld) %s %s", device_reference_ccc[i], device_name_ccc[i], reg_address_ccc[i], control_address_ccc[i], bus_address_ccc[i], device_select_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
         }
         else
         {
-          sprintf (button_label, "%s %s (%lld) %s %s", device_reference_ccc[i], device_name_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
+          snprintf(button_label, sizeof(button_label), "%s %s (%lld) %s %s", device_reference_ccc[i], device_name_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
         }
         button[i] = gtk_button_new_with_label(button_label);
         gtk_button_set_alignment(GTK_BUTTON(button[i]), 0, .5);
@@ -2268,15 +2268,15 @@ void choose_source_ccc(void)
         char button_label[MAX_BUTTON_LABEL_SIZE] = "";
         if (verbose_ccc & DEBUG6)
         {
-          sprintf (button_label, "%d:%d %04x:%04x %02x %02x %d %s %s %s\n", usb_bus_real_number_ccc[i], usb_device_number_ccc[i], usb_vendor_id_ccc[i], usb_product_id_ccc[i], usb_bulk_in_endpoint_ccc[i], usb_bulk_out_endpoint_ccc[i], usb_mass_storage_ccc[i], usb_vendor_string_ccc[i], usb_product_string_ccc[i], usb_extra_id_string_ccc[i]);
+          snprintf(button_label, sizeof(button_label), "%d:%d %04x:%04x %02x %02x %d %s %s %s\n", usb_bus_real_number_ccc[i], usb_device_number_ccc[i], usb_vendor_id_ccc[i], usb_product_id_ccc[i], usb_bulk_in_endpoint_ccc[i], usb_bulk_out_endpoint_ccc[i], usb_mass_storage_ccc[i], usb_vendor_string_ccc[i], usb_product_string_ccc[i], usb_extra_id_string_ccc[i]);
         }
         else if (verbose_ccc & DEBUG5)
         {
-          sprintf (button_label, "%d:%d %04x:%04x %s %s %s\n", usb_bus_real_number_ccc[i], usb_device_number_ccc[i], usb_vendor_id_ccc[i], usb_product_id_ccc[i], usb_vendor_string_ccc[i], usb_product_string_ccc[i], usb_extra_id_string_ccc[i]);
+          snprintf(button_label, sizeof(button_label), "%d:%d %04x:%04x %s %s %s\n", usb_bus_real_number_ccc[i], usb_device_number_ccc[i], usb_vendor_id_ccc[i], usb_product_id_ccc[i], usb_vendor_string_ccc[i], usb_product_string_ccc[i], usb_extra_id_string_ccc[i]);
         }
         else
         {
-          sprintf (button_label, "%d:%d %04x:%04x %s %s\n", usb_bus_real_number_ccc[i], usb_device_number_ccc[i], usb_vendor_id_ccc[i], usb_product_id_ccc[i], usb_vendor_string_ccc[i], usb_product_string_ccc[i]);
+          snprintf(button_label, sizeof(button_label), "%d:%d %04x:%04x %s %s\n", usb_bus_real_number_ccc[i], usb_device_number_ccc[i], usb_vendor_id_ccc[i], usb_product_id_ccc[i], usb_vendor_string_ccc[i], usb_product_string_ccc[i]);
         }
         button[i] = gtk_button_new_with_label(button_label);
         gtk_button_set_alignment(GTK_BUTTON(button[i]), 0, .5);
@@ -2289,7 +2289,7 @@ void choose_source_ccc(void)
       for (i = 0; i < device_count_ccc; i++)
       {
         char button_label[MAX_BUTTON_LABEL_SIZE] = "";
-        sprintf (button_label, "%s (%lld) %s %s", drive_list_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
+        snprintf(button_label, sizeof(button_label), "%s (%lld) %s %s", drive_list_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
         button[i] = gtk_button_new_with_label(button_label);
         gtk_button_set_alignment(GTK_BUTTON(button[i]), 0, .5);
         g_signal_connect(button[i], "clicked", G_CALLBACK(get_source_from_button_ccc), GINT_TO_POINTER(i) );
@@ -2343,7 +2343,7 @@ void choose_source_ccc(void)
           clear_source_ccc();
           strcpy (current_source_model_ccc, "");
           strcpy (current_source_serial_ccc, "");
-          sprintf (tempmessage_ccc, "%s", curlang_ccc[LANGSOURCEERROR]);
+          snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "%s", curlang_ccc[LANGSOURCEERROR]);
           message_error_ccc(tempmessage_ccc);
           print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
           clear_error_message_ccc();
@@ -2354,7 +2354,7 @@ void choose_source_ccc(void)
           clear_source_ccc();
           strcpy (current_source_model_ccc, "");
           strcpy (current_source_serial_ccc, "");
-          sprintf (tempmessage_ccc, "%s", curlang_ccc[LANGSOURCEERROR]);
+          snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "%s", curlang_ccc[LANGSOURCEERROR]);
           message_error_ccc(tempmessage_ccc);
           print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
           clear_error_message_ccc();
@@ -2365,7 +2365,7 @@ void choose_source_ccc(void)
           clear_source_ccc();
           strcpy (current_source_model_ccc, "");
           strcpy (current_source_serial_ccc, "");
-          sprintf (tempmessage_ccc, "%s", curlang_ccc[LANGSOURCEERROR]);
+          snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "%s", curlang_ccc[LANGSOURCEERROR]);
           message_error_ccc(tempmessage_ccc);
           print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
           clear_error_message_ccc();
@@ -2411,7 +2411,7 @@ void choose_source_ccc(void)
         clear_source_ccc();
         strcpy (current_source_model_ccc, "");
         strcpy (current_source_serial_ccc, "");
-        sprintf (tempmessage_ccc, "%s", curlang_ccc[LANGSOURCEERROR]);
+        snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "%s", curlang_ccc[LANGSOURCEERROR]);
         message_error_ccc(tempmessage_ccc);
         print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
         clear_error_message_ccc();
@@ -2521,7 +2521,7 @@ void choose_destination_ccc(void)
     for (i = 0; i < device_count_ccc; i++)
     {
       char button_label[MAX_BUTTON_LABEL_SIZE] = "";
-      sprintf (button_label, "%s (%lld) %s %s", drive_list_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
+      snprintf(button_label, sizeof(button_label), "%s (%lld) %s %s", drive_list_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
       button[i] = gtk_button_new_with_label(button_label);
       gtk_button_set_alignment(GTK_BUTTON(button[i]), 0, .5);
       g_signal_connect(button[i], "clicked", G_CALLBACK(get_destination_from_button_ccc), GINT_TO_POINTER(i) );
@@ -2547,7 +2547,7 @@ void choose_destination_ccc(void)
       {
         fprintf (stdout, "error selecting destination, ret=%d\n", ret);
         clear_destination_ccc();
-        sprintf (tempmessage_ccc, "%s", curlang_ccc[LANGDESTINATIONERROR]);
+        snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "%s", curlang_ccc[LANGDESTINATIONERROR]);
         message_error_ccc(tempmessage_ccc);
         print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
         clear_error_message_ccc();
@@ -2640,7 +2640,7 @@ void choose_image_ccc (void)
       filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
       if ( access(filename, F_OK ) == 0 )
       {
-        sprintf (tempmessage_ccc, "   %s   \n%s", filename, curlang_ccc[LANGCONFIRMIMAGEFILE]);
+        snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "   %s   \n%s", filename, curlang_ccc[LANGCONFIRMIMAGEFILE]);
         if (!open_confirmation_dialog_ccc (tempmessage_ccc))
         {
           confirmed = 0;
@@ -3457,14 +3457,14 @@ void start_analyzing_ccc (void)
   good_percent = 100.0f * total_good_reads / total_read_attempts;
   bad_percent = 100.0f * total_bad_reads / total_read_attempts;
   slow_percent = 100.0f * total_slow_reads / total_read_attempts;
-  sprintf (tempmessage_ccc, "# %s = %f%%\n", curlang_ccc[LANGGOOD], good_percent);
+  snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "# %s = %f%%\n", curlang_ccc[LANGGOOD], good_percent);
   strcat (analyze_text_ccc, tempmessage_ccc);
-  sprintf (tempmessage_ccc, "# %s = %f%%\n", curlang_ccc[LANGBAD], bad_percent);
+  snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "# %s = %f%%\n", curlang_ccc[LANGBAD], bad_percent);
   strcat (analyze_text_ccc, tempmessage_ccc);
-  sprintf (tempmessage_ccc, "# %s = %f%%\n", curlang_ccc[LANGSLOW], slow_percent);
+  snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "# %s = %f%%\n", curlang_ccc[LANGSLOW], slow_percent);
   strcat (analyze_text_ccc, tempmessage_ccc);
 
-  sprintf (tempmessage_ccc, "#\n");
+  snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "#\n");
   strcat (analyze_text_ccc, tempmessage_ccc);
 
 
@@ -3496,7 +3496,7 @@ void start_analyzing_ccc (void)
     slow_variance_percent = 100.0f * slow_variance_count / slowsections;
   }
   slow_issue_percent = slow_issue_percent + slow_variance_percent;
-  sprintf (tempmessage_ccc, "# %s = %f%%\n", curlang_ccc[LANGSLOWRESPONDINGISSUE], slow_issue_percent);
+  snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "# %s = %f%%\n", curlang_ccc[LANGSLOWRESPONDINGISSUE], slow_issue_percent);
   strcat (analyze_text_ccc, tempmessage_ccc);
 
 
@@ -3527,7 +3527,7 @@ void start_analyzing_ccc (void)
   {
     partial_access_percent = partial_access_percent * 2.0f;
   }
-  sprintf (tempmessage_ccc, "# %s = %f%%\n", curlang_ccc[LANGPARTIALACCESSISSUE], partial_access_percent);
+  snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "# %s = %f%%\n", curlang_ccc[LANGPARTIALACCESSISSUE], partial_access_percent);
   strcat (analyze_text_ccc, tempmessage_ccc);
 
 
@@ -3544,16 +3544,16 @@ void start_analyzing_ccc (void)
     }
   }
   float bad_head_percent = 100.0f * bad_sections / sections;
-  sprintf (tempmessage_ccc, "# %s = %f%%\n", curlang_ccc[LANGBADORWEAKHEAD], bad_head_percent);
+  snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "# %s = %f%%\n", curlang_ccc[LANGBADORWEAKHEAD], bad_head_percent);
   strcat (analyze_text_ccc, tempmessage_ccc);
 
-  sprintf (tempmessage_ccc, "#\n");
+  snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "#\n");
   strcat (analyze_text_ccc, tempmessage_ccc);
 
 
   if (1)
   {
-    sprintf (tempmessage_ccc, "# (%d) %s", analyze_slow_total_reads_ccc, curlang_ccc[LANGVARIANCEREADTIMES]);
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "# (%d) %s", analyze_slow_total_reads_ccc, curlang_ccc[LANGVARIANCEREADTIMES]);
     strcat (analyze_text_ccc, tempmessage_ccc);
     int slowsections = MAXANALYZESLOW / 4;
     if (extended)
@@ -3564,26 +3564,26 @@ void start_analyzing_ccc (void)
     {
       if ((i % 8) == 0)
       {
-        sprintf (tempmessage_ccc, "\n#     ");
+        snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "\n#     ");
         strcat (analyze_text_ccc, tempmessage_ccc);
       }
-      sprintf (tempmessage_ccc, "%lld/%lld  ", analyze_slow_low_ccc[i]/1000, analyze_slow_high_ccc[i]/1000);
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "%lld/%lld  ", analyze_slow_low_ccc[i]/1000, analyze_slow_high_ccc[i]/1000);
       strcat (analyze_text_ccc, tempmessage_ccc);
     }
     strcat (analyze_text_ccc, "\n");
   }
 
-  sprintf (tempmessage_ccc, "#\n");
+  snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "#\n");
   strcat (analyze_text_ccc, tempmessage_ccc);
 
 
-  sprintf (tempmessage_ccc, "# %s   %s %d    %s %d    %s %d (%d)    %s %d    %s %lld    %s %lld    %s %lld", curlang_ccc[LANGZONES], curlang_ccc[LANGTOTAL], total_read_attempts, curlang_ccc[LANGGOOD], total_good_reads, curlang_ccc[LANGBAD], total_bad_reads, total_timeouts, curlang_ccc[LANGSLOW], total_slow_reads, curlang_ccc[LANGLOW], total_low_time/1000, curlang_ccc[LANGHIGH], total_high_time/1000, curlang_ccc[LANGAVERAGE], total_average_read_time/1000);
+  snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "# %s   %s %d    %s %d    %s %d (%d)    %s %d    %s %lld    %s %lld    %s %lld", curlang_ccc[LANGZONES], curlang_ccc[LANGTOTAL], total_read_attempts, curlang_ccc[LANGGOOD], total_good_reads, curlang_ccc[LANGBAD], total_bad_reads, total_timeouts, curlang_ccc[LANGSLOW], total_slow_reads, curlang_ccc[LANGLOW], total_low_time/1000, curlang_ccc[LANGHIGH], total_high_time/1000, curlang_ccc[LANGAVERAGE], total_average_read_time/1000);
   strcat (analyze_text_ccc, tempmessage_ccc);
 
 
   for (i = 0; i < sections; i++)
   {
-    sprintf (tempmessage_ccc,"\n# %s %d    %s %d    %s %d    %s %d (%d)    %s %d    %s %lld    %s %lld    %s %lld", curlang_ccc[LANGZONE], i, curlang_ccc[LANGTOTAL], analyze_read_attempts_ccc[i], curlang_ccc[LANGGOOD], analyze_good_reads_ccc[i], curlang_ccc[LANGBAD], analyze_bad_reads_ccc[i], analyze_timeouts_ccc[i], curlang_ccc[LANGSLOW], analyze_slow_reads_ccc[i], curlang_ccc[LANGLOW], analyze_low_time_ccc[i]/1000, curlang_ccc[LANGHIGH], analyze_high_time_ccc[i]/1000, curlang_ccc[LANGAVERAGE], average_read_time[i]/1000);
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc),"\n# %s %d    %s %d    %s %d    %s %d (%d)    %s %d    %s %lld    %s %lld    %s %lld", curlang_ccc[LANGZONE], i, curlang_ccc[LANGTOTAL], analyze_read_attempts_ccc[i], curlang_ccc[LANGGOOD], analyze_good_reads_ccc[i], curlang_ccc[LANGBAD], analyze_bad_reads_ccc[i], analyze_timeouts_ccc[i], curlang_ccc[LANGSLOW], analyze_slow_reads_ccc[i], curlang_ccc[LANGLOW], analyze_low_time_ccc[i]/1000, curlang_ccc[LANGHIGH], analyze_high_time_ccc[i]/1000, curlang_ccc[LANGAVERAGE], average_read_time[i]/1000);
     strcat (analyze_text_ccc, tempmessage_ccc);
   }
   fprintf (stdout, "%s", analyze_text_ccc);
@@ -4283,7 +4283,7 @@ int set_lun_dialog_ccc (int max_lun)
   g_object_unref(builder);
 
   char luninfo[256] = "";
-  sprintf (luninfo, "0 - %d", max_lun);
+  snprintf (luninfo, sizeof(luninfo), "0 - %d", max_lun);
   gtk_label_set_text(GTK_LABEL(select_lun_label_ccc), curlang_ccc[LANGSELECTLUN]);
   gtk_label_set_text(GTK_LABEL(select_lun_info_label_ccc), curlang_ccc[LANGSELECTLUNINFO]);
   gtk_label_set_text(GTK_LABEL(lun_values_label_ccc), curlang_ccc[LANGLUNVALUES]);
@@ -4631,11 +4631,11 @@ void update_ports_ccc (void)
     char temp[256];
     if (first)
     {
-      sprintf (temp, "%d:disable", port);
+      snprintf (temp, sizeof(temp), "%d:disable", port);
     }
     else
     {
-      sprintf (temp, ",%d:disable", port);
+      snprintf (temp, sizeof(temp), ",%d:disable", port);
     }
     strcat (new_ports_ccc, temp);
     first = 0;
@@ -4696,7 +4696,7 @@ void test_command_ccc (void)
     int signal = WTERMSIG(ret);
     strcpy (tempmessage_ccc, curlang_ccc[LANGCOMMANDFAILED]);
     message_error_ccc(tempmessage_ccc);
-    sprintf(tempmessage_ccc, " (%d / %d)", signal, status);
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), " (%d / %d)", signal, status);
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -4725,7 +4725,7 @@ void test_power_command_ccc (void)
     int signal = WTERMSIG(ret);
     strcpy (tempmessage_ccc, curlang_ccc[LANGCOMMANDFAILED]);
     message_error_ccc(tempmessage_ccc);
-    sprintf(tempmessage_ccc, " (%d / %d)", signal, status);
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), " (%d / %d)", signal, status);
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -5531,7 +5531,7 @@ void set_state_from_button_ccc (GtkWidget *widget, gpointer data)
       advanced_settings_ccc.enable_output_offset = button_status;
       if (previous_status != advanced_settings_ccc.enable_output_offset)
       {
-        sprintf (tempmessage_ccc, "%s", curlang_ccc[LANGREOPENADVANCED]);
+        snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "%s", curlang_ccc[LANGREOPENADVANCED]);
         message_error_ccc(tempmessage_ccc);
         print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGINFO], 0);
         clear_error_message_ccc();
@@ -5544,7 +5544,7 @@ void set_state_from_button_ccc (GtkWidget *widget, gpointer data)
       advanced_settings_ccc.enable_current_position = button_status;
       if (previous_status != advanced_settings_ccc.enable_current_position)
       {
-        sprintf (tempmessage_ccc, "%s", curlang_ccc[LANGREOPENADVANCED]);
+        snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "%s", curlang_ccc[LANGREOPENADVANCED]);
         message_error_ccc(tempmessage_ccc);
         print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGINFO], 0);
         clear_error_message_ccc();
@@ -5557,7 +5557,7 @@ void set_state_from_button_ccc (GtkWidget *widget, gpointer data)
       advanced_settings_ccc.enable_output_sector_size = button_status;
       if (previous_status != advanced_settings_ccc.enable_output_sector_size)
       {
-        sprintf (tempmessage_ccc, "%s", curlang_ccc[LANGREOPENADVANCED]);
+        snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "%s", curlang_ccc[LANGREOPENADVANCED]);
         message_error_ccc(tempmessage_ccc);
         print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGINFO], 0);
         clear_error_message_ccc();
@@ -5738,7 +5738,7 @@ void about_ccc (void)
   gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(dialog), title_ccc);
   gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(dialog), version_number_ccc);
   char temp [1024];
-  sprintf (temp, "Copyright (C) %s Scott Dwyer", copyright_year_ccc);
+  snprintf (temp, sizeof(temp), "Copyright (C) %s Scott Dwyer", copyright_year_ccc);
   gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog),temp);
 
 
@@ -5748,7 +5748,7 @@ void about_ccc (void)
   strcpy (temp, "License type: PROPRIETARY ");
 #endif
   char temp2[256];
-  sprintf (temp2, "(OPENSOURCE VERSION)\n");
+  snprintf (temp2, sizeof(temp2), "(OPENSOURCE VERSION)\n");
   strcat (temp, temp2);
   strcat (temp, "There is NO WARRANTY, to the extent permitted by law.");
 
@@ -5858,7 +5858,7 @@ void choose_primary_usb_ccc(void)
     if (usb_known_relay_ccc[i])
     {
       char button_label[MAX_BUTTON_LABEL_SIZE] = "";
-      sprintf (button_label, "%04x:%04x %s %s %s\n", usb_vendor_id_ccc[i], usb_product_id_ccc[i], usb_vendor_string_ccc[i], usb_product_string_ccc[i], usb_extra_id_string_ccc[i]);
+      snprintf(button_label, sizeof(button_label), "%04x:%04x %s %s %s\n", usb_vendor_id_ccc[i], usb_product_id_ccc[i], usb_vendor_string_ccc[i], usb_product_string_ccc[i], usb_extra_id_string_ccc[i]);
       button[i] = gtk_button_new_with_label(button_label);
       gtk_button_set_alignment(GTK_BUTTON(button[i]), 0, .5);
       g_signal_connect(button[i], "clicked", G_CALLBACK(get_usb_from_button_ccc), GINT_TO_POINTER(i) );
@@ -5879,7 +5879,7 @@ void choose_primary_usb_ccc(void)
     {
       fprintf (stdout, "error selecting usb, ret=%d\n", ret);
       clear_usbr1_ccc();
-      sprintf (tempmessage_ccc, "%s", curlang_ccc[LANGUSBERROR]);
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "%s", curlang_ccc[LANGUSBERROR]);
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
@@ -5889,7 +5889,7 @@ void choose_primary_usb_ccc(void)
       usbr1_chosen_ccc = 1;
       logfile_changed_ccc = true;
       char name[MAX_RELAY_NAME_LENGTH];
-      sprintf(name, "%04x:%04x %s %s %s\n", usbr1_vendor_id_ccc, usbr1_product_id_ccc, usbr1_vendor_string_ccc, usbr1_product_string_ccc, usbr1_extra_id_string_ccc);
+      snprintf(name, sizeof(name), "%04x:%04x %s %s %s\n", usbr1_vendor_id_ccc, usbr1_product_id_ccc, usbr1_vendor_string_ccc, usbr1_product_string_ccc, usbr1_extra_id_string_ccc);
       strcpy (primary_relay_settings_ccc.primary_relay_name, name);
       strcpy (primary_relay_name_ccc, name);
     }

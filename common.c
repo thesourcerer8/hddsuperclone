@@ -414,7 +414,7 @@ int message_console_log_ccc(char *message, unsigned long long level)
     if (enable_data_dump_ccc || enable_dump_identify_on_check_ccc)
     {
       char temp_string[1024];
-      sprintf (temp_string, "%s %s", current_time_ccc, message);
+      snprintf(temp_string, sizeof(temp_string), "%s %s", current_time_ccc, message);
       dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
     }
   }
@@ -448,20 +448,20 @@ int set_main_buffer_ccc(void)
   {
     if (ccc_main_buffer_size_ccc > MAX_USB_BUFFER_SIZE || ccc_main_buffer_size_ccc > real_buffer_size_ccc)
     {
-      sprintf (tempmessage_ccc, "ERROR: Maximum buffer size exceeded.\n");
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "ERROR: Maximum buffer size exceeded.\n");
       message_now_ccc(tempmessage_ccc);
       return (-1);
     }
   }
   else if (ccc_main_buffer_size_ccc > MAX_BUFFER_SIZE || ccc_main_buffer_size_ccc > real_buffer_size_ccc)
   {
-    sprintf (tempmessage_ccc, "ERROR: Maximum buffer size exceeded.\n");
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "ERROR: Maximum buffer size exceeded.\n");
     message_now_ccc(tempmessage_ccc);
     return (-1);
   }
   if (ahci_mode_ccc && ccc_main_buffer_size_ccc > max_dma_size_ccc)
   {
-    sprintf (tempmessage_ccc, "ERROR: Maximum AHCI buffer size (%lld) exceeded.\n", max_dma_size_ccc);
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "ERROR: Maximum AHCI buffer size (%lld) exceeded.\n", max_dma_size_ccc);
     message_now_ccc(tempmessage_ccc);
     return (-1);
   }
@@ -656,7 +656,7 @@ int set_table_buffer_ccc(void)
     {
       table_buffer_ccc = valloc(table_size_ccc);
       if(!table_buffer_ccc) {
-        sprintf (tempmessage_ccc, "posix_memalign failed (%s)", strerror(errno));
+        snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "posix_memalign failed (%s)", strerror(errno));
         message_now_ccc(tempmessage_ccc);
         return (-1);
       }
@@ -705,16 +705,16 @@ int get_table_physical_memory_location_ccc(void)
 
   int proc_id = getpid();
   //char command[255];
-  //sprintf (command, "cat /proc/%d/maps", proc_id);
+  //snprintf (command, sizeof(command), "cat /proc/%d/maps", proc_id);
   //fprintf (stdout, "%s\n", command);
   //system (command);
 
   char path[255];
-  sprintf (path, "/proc/%d/pagemap", proc_id);
+  snprintf (path, sizeof(path), "/proc/%d/pagemap", proc_id);
   pagemap_ccc = fopen(path, "rb");
   if(!pagemap_ccc)
   {
-    sprintf(tempmessage_ccc, "Error! Cannot open %s\n", path);
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Error! Cannot open %s\n", path);
     message_now_ccc(tempmessage_ccc);
     return -1;
   }
@@ -723,7 +723,7 @@ int get_table_physical_memory_location_ccc(void)
   //printf("Reading %s at 0x%llx\n", path, file_offset);
   int status = fseek(pagemap_ccc, file_offset, SEEK_SET);
   if(status){
-    sprintf (tempmessage_ccc, "Failed to do fseek! (%s)", strerror(errno));
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Failed to do fseek! (%s)", strerror(errno));
     message_now_ccc(tempmessage_ccc);
     return -1;
   }
@@ -802,7 +802,7 @@ int set_command_list_buffer_ccc(void)
     }
     else if (posix_memalign(&command_list_buffer_ccc, align, command_list_size_ccc))
     {
-      sprintf (tempmessage_ccc, "posix_memalign failed (%s)", strerror(errno));
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "posix_memalign failed (%s)", strerror(errno));
       message_now_ccc(tempmessage_ccc);
       return (-1);
     }
@@ -846,16 +846,16 @@ int get_command_list_physical_memory_location_ccc(void)
 
   int proc_id = getpid();
   //char command[255];
-  //sprintf (command, "cat /proc/%d/maps", proc_id);
+  //snprintf (command, sizeof(command), "cat /proc/%d/maps", proc_id);
   //fprintf (stdout, "%s\n", command);
   //system (command);
 
   char path[255];
-  sprintf (path, "/proc/%d/pagemap", proc_id);
+  snprintf (path, sizeof(path), "/proc/%d/pagemap", proc_id);
   pagemap_ccc = fopen(path, "rb");
   if(!pagemap_ccc)
   {
-    sprintf(tempmessage_ccc, "Error! Cannot open %s\n", path);
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Error! Cannot open %s\n", path);
     message_now_ccc(tempmessage_ccc);
     return -1;
   }
@@ -864,7 +864,7 @@ int get_command_list_physical_memory_location_ccc(void)
   //printf("Reading %s at 0x%llx\n", path, file_offset);
   int status = fseek(pagemap_ccc, file_offset, SEEK_SET);
   if(status){
-    sprintf (tempmessage_ccc, "Failed to do fseek! (%s)", strerror(errno));
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Failed to do fseek! (%s)", strerror(errno));
     message_now_ccc(tempmessage_ccc);
     return -1;
   }
@@ -942,7 +942,7 @@ int set_fis_buffer_ccc(void)
     }
     else if (posix_memalign(&fis_buffer_ccc, align, fis_size_ccc))
     {
-      sprintf (tempmessage_ccc, "posix_memalign failed (%s)", strerror(errno));
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "posix_memalign failed (%s)", strerror(errno));
       message_now_ccc(tempmessage_ccc);
       return (-1);
     }
@@ -985,16 +985,16 @@ int get_fis_physical_memory_location_ccc(void)
 
   int proc_id = getpid();
   //char command[255];
-  //sprintf (command, "cat /proc/%d/maps", proc_id);
+  //snprintf (command, sizeof(command), "cat /proc/%d/maps", proc_id);
   //fprintf (stdout, "%s\n", command);
   //system (command);
 
   char path[255];
-  sprintf (path, "/proc/%d/pagemap", proc_id);
+  snprintf (path, sizeof(path), "/proc/%d/pagemap", proc_id);
   pagemap_ccc = fopen(path, "rb");
   if(!pagemap_ccc)
   {
-    sprintf(tempmessage_ccc, "Error! Cannot open %s\n", path);
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Error! Cannot open %s\n", path);
     message_now_ccc(tempmessage_ccc);
     return -1;
   }
@@ -1003,7 +1003,7 @@ int get_fis_physical_memory_location_ccc(void)
   //printf("Reading %s at 0x%llx\n", path, file_offset);
   int status = fseek(pagemap_ccc, file_offset, SEEK_SET);
   if(status){
-    sprintf (tempmessage_ccc, "Failed to do fseek! (%s)", strerror(errno));
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Failed to do fseek! (%s)", strerror(errno));
     message_now_ccc(tempmessage_ccc);
     return -1;
   }
@@ -1080,7 +1080,7 @@ int get_buffer_physical_memory_locations_ccc(void)
     }
     else if (posix_memalign(&ccc_buffer_ccc, align, real_buffer_size_ccc))
     {
-      sprintf (tempmessage_ccc, "posix_memalign failed (%s)", strerror(errno));
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "posix_memalign failed (%s)", strerror(errno));
       message_now_ccc(tempmessage_ccc);
       return (-1);
     }
@@ -1098,16 +1098,16 @@ int get_buffer_physical_memory_locations_ccc(void)
 
     int proc_id = getpid();
     //char command[255];
-    //sprintf (command, "cat /proc/%d/maps", proc_id);
+    //snprintf (command, sizeof(command), "cat /proc/%d/maps", proc_id);
     //fprintf (stdout, "%s\n", command);
     //system (command);
 
     char path[255];
-    sprintf (path, "/proc/%d/pagemap", proc_id);
+    snprintf (path, sizeof(path), "/proc/%d/pagemap", proc_id);
     pagemap_ccc = fopen(path, "rb");
     if(!pagemap_ccc)
     {
-      sprintf(tempmessage_ccc, "Error! Cannot open %s\n", path);
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Error! Cannot open %s\n", path);
       message_now_ccc(tempmessage_ccc);
       return -1;
     }
@@ -1118,7 +1118,7 @@ int get_buffer_physical_memory_locations_ccc(void)
     //printf("Reading %s at 0x%llx\n", path, file_offset);    //debug
     int status = fseek(pagemap_ccc, file_offset, SEEK_SET);
     if(status){
-      sprintf (tempmessage_ccc, "Failed to do fseek! (%s)", strerror(errno));
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Failed to do fseek! (%s)", strerror(errno));
       message_now_ccc(tempmessage_ccc);
       return -1;
     }
@@ -1335,7 +1335,7 @@ int set_main_usb_buffer_ccc(void)
     {
       strcpy (tempmessage_ccc, curlang_ccc[LANGALLOCATEMEMERR]);
       message_error_ccc(tempmessage_ccc);
-      sprintf (tempmessage_ccc, " (%s)", strerror(errno));
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), " (%s)", strerror(errno));
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();

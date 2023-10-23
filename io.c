@@ -138,7 +138,7 @@ int post_ioctl_ccc(void)
         break;
 
       default:
-        sprintf (tempmessage_ccc, "\nbad (SG_IO) sense buffer response code from input device\n");
+        snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "\nbad (SG_IO) sense buffer response code from input device\n");
         if (superclone_ccc)
         {
           message_error_ccc(tempmessage_ccc);
@@ -147,7 +147,7 @@ int post_ioctl_ccc(void)
         {
           message_now_ccc(tempmessage_ccc);
         }
-        sprintf (tempmessage_ccc, "raw sense buffer: ");
+        snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "raw sense buffer: ");
         if (superclone_ccc)
         {
           message_error_ccc(tempmessage_ccc);
@@ -159,7 +159,7 @@ int post_ioctl_ccc(void)
         int i;
         for (i = 0; i < io_hdr.sb_len_wr; i++)
         {
-          sprintf (tempmessage_ccc, "%02x ", sensebuf[i]);
+          snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "%02x ", sensebuf[i]);
           if (superclone_ccc)
           {
             message_error_ccc(tempmessage_ccc);
@@ -169,7 +169,7 @@ int post_ioctl_ccc(void)
             message_now_ccc(tempmessage_ccc);
           }
         }
-        sprintf (tempmessage_ccc, "\n");
+        snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "\n");
         if (superclone_ccc)
         {
           message_error_ccc(tempmessage_ccc);
@@ -689,7 +689,7 @@ int do_scsi_cmd_ccc(int disk_fd)
     int ioctl_ret = ioctl(disk_fd, SG_IO, &io_hdr);
     if (ioctl_ret < 0)
     {
-      sprintf(tempmessage_ccc, "Error performing IO on input device (%s).\n", strerror(errno));
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Error performing IO on input device (%s).\n", strerror(errno));
       if (superclone_ccc)
       {
         check_message_ccc = true;
@@ -1085,11 +1085,11 @@ int usb_soft_hard_reset_ccc(unsigned char reset_type, int timeout)
   {
     if (reset_type == USB_RESET_TYPE_SOFT)
     {
-      sprintf (tempmessage_ccc, "usb soft reset\n");
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "usb soft reset\n");
     }
     else
     {
-      sprintf (tempmessage_ccc, "usb hard reset\n");
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "usb hard reset\n");
     }
     message_console_log_ccc(tempmessage_ccc, 0);
   }
@@ -1177,7 +1177,7 @@ int usb_soft_hard_reset_ccc(unsigned char reset_type, int timeout)
   {
     if (superclone_ccc && sense_key_ccc == 5)
     {
-      sprintf (tempmessage_ccc, "soft/hard reset illegal request\n");
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "soft/hard reset illegal request\n");
       message_console_log_ccc(tempmessage_ccc, 0);
     }
     return sense_key_ccc;
@@ -1739,7 +1739,7 @@ int do_ata28_cmd_ccc(int disk_fd)
     }
     else
     {
-      sprintf (tempmessage_ccc, "Error! Protocol and direction settings not correct for direct mode.\n");
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Error! Protocol and direction settings not correct for direct mode.\n");
       if (superclone_ccc)
       {
         message_error_ccc(tempmessage_ccc);
@@ -1782,7 +1782,7 @@ int do_ata28_cmd_ccc(int disk_fd)
     {
       if (identify_flag_ccc)
       {
-        sprintf(tempmessage_ccc, "Bad ioctl accessing input device(%s)", strerror(errno));
+        snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Bad ioctl accessing input device(%s)", strerror(errno));
         if (superclone_ccc)
         {
           message_error_ccc(tempmessage_ccc);
@@ -1797,7 +1797,7 @@ int do_ata28_cmd_ccc(int disk_fd)
       }
       else
       {
-        sprintf(tempmessage_ccc, "Error performing passthrough IO on input device (%s).\n", strerror(errno));
+        snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Error performing passthrough IO on input device (%s).\n", strerror(errno));
         if (superclone_ccc)
         {
           message_error_ccc(tempmessage_ccc);
@@ -1878,7 +1878,7 @@ int do_ata48_cmd_ccc(int disk_fd)
     }
     else
     {
-      sprintf (tempmessage_ccc, "Error! Protocol and direction settings not correct for direct mode.\n");
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Error! Protocol and direction settings not correct for direct mode.\n");
       if (superclone_ccc)
       {
         message_error_ccc(tempmessage_ccc);
@@ -1923,7 +1923,7 @@ int do_ata48_cmd_ccc(int disk_fd)
     int ioctl_ret = ioctl(disk_fd, SG_IO, &io_hdr);
     if (ioctl_ret < 0)
     {
-      sprintf(tempmessage_ccc, "Error performing passthrough IO on input device (%s).\n", strerror(errno));
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Error performing passthrough IO on input device (%s).\n", strerror(errno));
       if (superclone_ccc)
       {
         message_error_ccc(tempmessage_ccc);
@@ -2280,8 +2280,8 @@ int ahci_rw_ccc(int command_type, int write_bit)
         //what_changed = what_changed | 0x2000;
         //memcpy(&io_byte_ccc[1], port_virt_addr_ccc + superbyte_ccc[8], 1);    // status
         //memcpy(&io_byte_ccc[2], port_virt_addr_ccc + superbyte_ccc[9], 1);    // error
-        //sprintf (tempmessage_ccc, "port ERR = 0x%08x s/e=0x%02x/0x%02x fail=0x%04x changed=0x%04x\n", port_error, io_byte_ccc[1], io_byte_ccc[2], fail_level, what_changed);
-        sprintf (tempmessage_ccc, "port ERR = 0x%08x\n", port_error);
+        //snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "port ERR = 0x%08x s/e=0x%02x/0x%02x fail=0x%04x changed=0x%04x\n", port_error, io_byte_ccc[1], io_byte_ccc[2], fail_level, what_changed);
+        snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "port ERR = 0x%08x\n", port_error);
         message_console_log_ccc(tempmessage_ccc, 0);
         //fprintf (stdout, "port ERR = 0x%08x\n", port_error);
       }
@@ -2291,8 +2291,8 @@ int ahci_rw_ccc(int command_type, int write_bit)
         //what_changed = what_changed | 0x2000;
         //memcpy(&io_byte_ccc[1], port_virt_addr_ccc + superbyte_ccc[8], 1);    // status
         //memcpy(&io_byte_ccc[2], port_virt_addr_ccc + superbyte_ccc[9], 1);    // error
-        //sprintf (tempmessage_ccc, "port DS = 0x%08x s/e=0x%02x/0x%02x fail=0x%04x changed=0x%04x\n", port_status, io_byte_ccc[1], io_byte_ccc[2], fail_level, what_changed);
-        sprintf (tempmessage_ccc, "port DS = 0x%08x\n", port_status);
+        //snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "port DS = 0x%08x s/e=0x%02x/0x%02x fail=0x%04x changed=0x%04x\n", port_status, io_byte_ccc[1], io_byte_ccc[2], fail_level, what_changed);
+        snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "port DS = 0x%08x\n", port_status);
         message_console_log_ccc(tempmessage_ccc, 0);
         //fprintf (stdout, "port DS = 0x%08x\n", port_status);
       }
@@ -2342,7 +2342,7 @@ int do_ata_dma_read_ccc(int command_type)
 {
   if (ccc_main_buffer_size_ccc > max_dma_size_ccc)
   {
-    sprintf (tempmessage_ccc, "ERROR: Maximum DMA buffer size (%lld) exceeded.\n", max_dma_size_ccc);
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "ERROR: Maximum DMA buffer size (%lld) exceeded.\n", max_dma_size_ccc);
     if (superclone_ccc)
     {
       message_error_ccc(tempmessage_ccc);
@@ -2671,7 +2671,7 @@ int do_ata_dma_write_ccc(int command_type)
 {
   if (ccc_main_buffer_size_ccc > max_dma_size_ccc)
   {
-    sprintf (tempmessage_ccc, "ERROR: Maximum DMA buffer size (%lld) exceeded.\n", max_dma_size_ccc);
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "ERROR: Maximum DMA buffer size (%lld) exceeded.\n", max_dma_size_ccc);
     if (superclone_ccc)
     {
       message_error_ccc(tempmessage_ccc);
@@ -2976,7 +2976,7 @@ int soft_reset_ccc(int disk_fd)
   {
     if (superclone_ccc)
     {
-      sprintf (tempmessage_ccc, "soft reset\n");
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "soft reset\n");
       message_console_log_ccc(tempmessage_ccc, 0);
     }
     if (ahci_mode_ccc)
@@ -3171,7 +3171,7 @@ int soft_reset_ccc(int disk_fd)
         }
         if (status == 1)
         {
-          sprintf (tempmessage_ccc, "timeout after soft reset\n");
+          snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "timeout after soft reset\n");
           message_console_log_ccc(tempmessage_ccc, 0);
           // if it timed out then do hard reset
           performing_reset_ccc = 1;
@@ -3227,7 +3227,7 @@ int soft_reset_ccc(int disk_fd)
       performing_reset_ccc = 1;
       if (!did_hard_reset_ccc && identify_device_ccc())
       {
-        sprintf (tempmessage_ccc, "identify failed after soft reset\n");
+        snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "identify failed after soft reset\n");
         message_console_log_ccc(tempmessage_ccc, 0);
         if (did_hard_reset_ccc)
         {
@@ -3385,7 +3385,7 @@ int hard_reset_ccc(int disk_fd)
           // ahci
           if (superclone_ccc)
           {
-            sprintf (tempmessage_ccc, "hard reset\n");
+            snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "hard reset\n");
             message_console_log_ccc(tempmessage_ccc, 0);
           }
           #ifdef DEBUG
@@ -3517,7 +3517,7 @@ int hard_reset_ccc(int disk_fd)
 
           if (superclone_ccc && status)
           {
-            sprintf (tempmessage_ccc, "timeout after hard reset\n");
+            snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "timeout after hard reset\n");
             message_console_log_ccc(tempmessage_ccc, 0);
             status = call_command_on_power_cycle_ccc();
             did_power_cycle_ccc = 1;
@@ -3571,7 +3571,7 @@ int hard_reset_ccc(int disk_fd)
           performing_reset_ccc = 1;
           if (identify_device_ccc())
           {
-            sprintf (tempmessage_ccc, "identify failed after hard reset\n");
+            snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "identify failed after hard reset\n");
             message_console_log_ccc(tempmessage_ccc, 0);
             performing_reset_ccc = 0;
             if (did_power_cycle_ccc)
@@ -3672,7 +3672,7 @@ int hba_reset_ccc(void)
         mytime = time(NULL);
         fprintf (hba_debug_reset_file, "%s", ctime(&mytime));
 
-        sprintf (tempmessage_ccc, "HBA Reset\n");
+        snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "HBA Reset\n");
         message_console_log_ccc(tempmessage_ccc, 0);
 
         unsigned char hba_backup[0x30];
@@ -4350,7 +4350,7 @@ int dump_hba_port_fis_command_data_ccc(unsigned long long hba_address, unsigned 
   if (hba)
   {
     fprintf (stdout, "hba data, address=%08llx\n", hba_address);
-    sprintf (temp_string, "hba data, address=%08llx\n", hba_address);
+    snprintf(temp_string, sizeof(temp_string), "hba data, address=%08llx\n", hba_address);
     dump_info_to_filename_ccc (dump_filename, temp_string);
     memcpy(temp_hba_data, hba_virt_addr, 0x30);
     dump_hba_data_to_file_ccc(stdout, temp_hba_data, 0x30);
@@ -4359,7 +4359,7 @@ int dump_hba_port_fis_command_data_ccc(unsigned long long hba_address, unsigned 
   if (port)
   {
     fprintf (stdout, "port data, address=%08llx\n", port_address);
-    sprintf (temp_string, "port data, address=%08llx\n", port_address);
+    snprintf(temp_string, sizeof(temp_string), "port data, address=%08llx\n", port_address);
     dump_info_to_filename_ccc (dump_filename, temp_string);
     memcpy(temp_port_data, port_virt_addr, 0x80);
     dump_hba_data_to_file_ccc(stdout, temp_port_data, 0x80);
@@ -4373,14 +4373,14 @@ int dump_hba_port_fis_command_data_ccc(unsigned long long hba_address, unsigned 
     uint64_t address;
     memcpy(&address, port_virt_addr + superbyte_ccc[12], 8);
     fprintf (stdout, "fis data, address=%08llx\n", (unsigned long long)address);
-    sprintf (temp_string, "fis data, address=%08llx\n", (unsigned long long)address);
+    snprintf(temp_string, sizeof(temp_string), "fis data, address=%08llx\n", (unsigned long long)address);
     dump_info_to_filename_ccc (dump_filename, temp_string);
 
     //driver_buffer_ccc = malloc(DRIVER_TRANSFER_BUFFER_SIZE);
     memset(driver_control_data_ccc.buffer, 0, sizeof(driver_control_data_ccc.buffer));
     //driver_control_data_ccc.buffer = driver_buffer_ccc;
 
-    sprintf (driver_device_name_ccc, "/proc/%s%d", MAIN_DRIVER_IOCTL_NAME, process_id_ccc);
+    snprintf (driver_device_name_ccc, sizeof(driver_device_name_ccc), "/proc/%s%d", MAIN_DRIVER_IOCTL_NAME, process_id_ccc);
     if (main_driver_fd_ccc > 0)
     {
       close(main_driver_fd_ccc);
@@ -4391,7 +4391,7 @@ int dump_hba_port_fis_command_data_ccc(unsigned long long hba_address, unsigned 
       check_message_ccc = true;
       strcpy (tempmessage_ccc, curlang_ccc[LANGUERROROPENINGDRIVER]);
       message_error_ccc(tempmessage_ccc);
-      sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), " %s (%s)\n", driver_device_name_ccc, strerror(errno));
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
@@ -4408,7 +4408,7 @@ int dump_hba_port_fis_command_data_ccc(unsigned long long hba_address, unsigned 
     {
       strcpy (tempmessage_ccc, curlang_ccc[LANGERRORSTARTINGDRIVER]);
       message_error_ccc(tempmessage_ccc);
-      sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), " %s (%s)\n", driver_device_name_ccc, strerror(errno));
       message_error_ccc(tempmessage_ccc);
       return -1;
     }
@@ -4429,14 +4429,14 @@ int dump_hba_port_fis_command_data_ccc(unsigned long long hba_address, unsigned 
     uint64_t address;
     memcpy(&address, port_virt_addr + superbyte_ccc[11], 8);
     fprintf (stdout, "command list data, address=%08llx\n", (unsigned long long)address);
-    sprintf (temp_string, "command list data, address=%08llx\n", (unsigned long long)address);
+    snprintf(temp_string, sizeof(temp_string), "command list data, address=%08llx\n", (unsigned long long)address);
     dump_info_to_filename_ccc (dump_filename, temp_string);
 
     //driver_buffer_ccc = malloc(DRIVER_TRANSFER_BUFFER_SIZE);
     memset(driver_control_data_ccc.buffer, 0, sizeof(driver_control_data_ccc.buffer));
     //driver_control_data_ccc.buffer = driver_buffer_ccc;
 
-    sprintf (driver_device_name_ccc, "/proc/%s%d", MAIN_DRIVER_IOCTL_NAME, process_id_ccc);
+    snprintf (driver_device_name_ccc, sizeof(driver_device_name_ccc), "/proc/%s%d", MAIN_DRIVER_IOCTL_NAME, process_id_ccc);
     if (main_driver_fd_ccc > 0)
     {
       close(main_driver_fd_ccc);
@@ -4447,7 +4447,7 @@ int dump_hba_port_fis_command_data_ccc(unsigned long long hba_address, unsigned 
       check_message_ccc = true;
       strcpy (tempmessage_ccc, curlang_ccc[LANGUERROROPENINGDRIVER]);
       message_error_ccc(tempmessage_ccc);
-      sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), " %s (%s)\n", driver_device_name_ccc, strerror(errno));
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
@@ -4464,7 +4464,7 @@ int dump_hba_port_fis_command_data_ccc(unsigned long long hba_address, unsigned 
     {
       strcpy (tempmessage_ccc, curlang_ccc[LANGERRORSTARTINGDRIVER]);
       message_error_ccc(tempmessage_ccc);
-      sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), " %s (%s)\n", driver_device_name_ccc, strerror(errno));
       message_error_ccc(tempmessage_ccc);
       return -1;
     }
@@ -4492,7 +4492,7 @@ int dump_hba_port_fis_command_data_ccc(unsigned long long hba_address, unsigned 
       if (table_length == 0 || table_address == 0)
       {
         fprintf (stdout, "command table data %d is zero\n", i);
-        sprintf (temp_string, "command table data %d is zero\n", i);
+        snprintf(temp_string, sizeof(temp_string), "command table data %d is zero\n", i);
         dump_info_to_filename_ccc (dump_filename, temp_string);
       }
       else
@@ -4501,21 +4501,21 @@ int dump_hba_port_fis_command_data_ccc(unsigned long long hba_address, unsigned 
         if (data_size > 256)
         {
           fprintf (stdout, "command table data size is too big %d\n", data_size);
-          sprintf (temp_string, "command table data size is too big %d\n", data_size);
+          snprintf(temp_string, sizeof(temp_string), "command table data size is too big %d\n", data_size);
           dump_info_to_filename_ccc (dump_filename, temp_string);
           data_size = 256;
         }
         uint64_t address;
         address = table_address;
         fprintf (stdout, "command table data %d, address=%08llx\n", i, (unsigned long long)address);
-        sprintf (temp_string, "command table data %d, address=%08llx\n", i, (unsigned long long)address);
+        snprintf(temp_string, sizeof(temp_string), "command table data %d, address=%08llx\n", i, (unsigned long long)address);
         dump_info_to_filename_ccc (dump_filename, temp_string);
 
         //driver_buffer_ccc = malloc(DRIVER_TRANSFER_BUFFER_SIZE);
         memset(driver_control_data_ccc.buffer, 0, sizeof(driver_control_data_ccc.buffer));
         //driver_control_data_ccc.buffer = driver_buffer_ccc;
 
-        sprintf (driver_device_name_ccc, "/proc/%s%d", MAIN_DRIVER_IOCTL_NAME, process_id_ccc);
+        snprintf (driver_device_name_ccc, sizeof(driver_device_name_ccc), "/proc/%s%d", MAIN_DRIVER_IOCTL_NAME, process_id_ccc);
         if (main_driver_fd_ccc > 0)
         {
           close(main_driver_fd_ccc);
@@ -4526,7 +4526,7 @@ int dump_hba_port_fis_command_data_ccc(unsigned long long hba_address, unsigned 
           check_message_ccc = true;
           strcpy (tempmessage_ccc, curlang_ccc[LANGUERROROPENINGDRIVER]);
           message_error_ccc(tempmessage_ccc);
-          sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
+          snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), " %s (%s)\n", driver_device_name_ccc, strerror(errno));
           message_error_ccc(tempmessage_ccc);
           print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
           clear_error_message_ccc();
@@ -4542,7 +4542,7 @@ int dump_hba_port_fis_command_data_ccc(unsigned long long hba_address, unsigned 
         {
           strcpy (tempmessage_ccc, curlang_ccc[LANGERRORSTARTINGDRIVER]);
           message_error_ccc(tempmessage_ccc);
-          sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
+          snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), " %s (%s)\n", driver_device_name_ccc, strerror(errno));
           message_error_ccc(tempmessage_ccc);
           return -1;
         }
@@ -4711,7 +4711,7 @@ int hba_test_ccc(void)
     memset(driver_control_data_ccc.buffer, 0, sizeof(driver_control_data_ccc.buffer));
     //driver_control_data_ccc.buffer = driver_buffer_ccc;
 
-    sprintf (driver_device_name_ccc, "/proc/%s%d", MAIN_DRIVER_IOCTL_NAME, process_id_ccc);
+    snprintf (driver_device_name_ccc, sizeof(driver_device_name_ccc), "/proc/%s%d", MAIN_DRIVER_IOCTL_NAME, process_id_ccc);
     if (main_driver_fd_ccc > 0)
     {
       close(main_driver_fd_ccc);
@@ -4722,7 +4722,7 @@ int hba_test_ccc(void)
       check_message_ccc = true;
       strcpy (tempmessage_ccc, curlang_ccc[LANGUERROROPENINGDRIVER]);
       message_error_ccc(tempmessage_ccc);
-      sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), " %s (%s)\n", driver_device_name_ccc, strerror(errno));
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
@@ -4739,7 +4739,7 @@ int hba_test_ccc(void)
     {
       strcpy (tempmessage_ccc, curlang_ccc[LANGERRORSTARTINGDRIVER]);
       message_error_ccc(tempmessage_ccc);
-      sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), " %s (%s)\n", driver_device_name_ccc, strerror(errno));
       message_error_ccc(tempmessage_ccc);
       fclose(hba_debug_file);
       close(hba_mem_dev_ccc);
@@ -4783,7 +4783,7 @@ int hba_test_ccc(void)
     memset(driver_control_data_ccc.buffer, 0, sizeof(driver_control_data_ccc.buffer));
     //driver_control_data_ccc.buffer = driver_buffer_ccc;
 
-    sprintf (driver_device_name_ccc, "/proc/%s%d", MAIN_DRIVER_IOCTL_NAME, process_id_ccc);
+    snprintf (driver_device_name_ccc, sizeof(driver_device_name_ccc), "/proc/%s%d", MAIN_DRIVER_IOCTL_NAME, process_id_ccc);
     if (main_driver_fd_ccc > 0)
     {
       close(main_driver_fd_ccc);
@@ -4794,7 +4794,7 @@ int hba_test_ccc(void)
       check_message_ccc = true;
       strcpy (tempmessage_ccc, curlang_ccc[LANGUERROROPENINGDRIVER]);
       message_error_ccc(tempmessage_ccc);
-      sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), " %s (%s)\n", driver_device_name_ccc, strerror(errno));
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
@@ -4811,7 +4811,7 @@ int hba_test_ccc(void)
     {
       strcpy (tempmessage_ccc, curlang_ccc[LANGERRORSTARTINGDRIVER]);
       message_error_ccc(tempmessage_ccc);
-      sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), " %s (%s)\n", driver_device_name_ccc, strerror(errno));
       message_error_ccc(tempmessage_ccc);
       return -1;
     }
@@ -4879,7 +4879,7 @@ int hba_test_ccc(void)
         memset(driver_control_data_ccc.buffer, 0, sizeof(driver_control_data_ccc.buffer));
         //driver_control_data_ccc.buffer = driver_buffer_ccc;
 
-        sprintf (driver_device_name_ccc, "/proc/%s%d", MAIN_DRIVER_IOCTL_NAME, process_id_ccc);
+        snprintf (driver_device_name_ccc, sizeof(driver_device_name_ccc), "/proc/%s%d", MAIN_DRIVER_IOCTL_NAME, process_id_ccc);
         if (main_driver_fd_ccc > 0)
         {
           close(main_driver_fd_ccc);
@@ -4890,7 +4890,7 @@ int hba_test_ccc(void)
           check_message_ccc = true;
           strcpy (tempmessage_ccc, curlang_ccc[LANGUERROROPENINGDRIVER]);
           message_error_ccc(tempmessage_ccc);
-          sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
+          snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), " %s (%s)\n", driver_device_name_ccc, strerror(errno));
           message_error_ccc(tempmessage_ccc);
           print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
           clear_error_message_ccc();
@@ -4907,7 +4907,7 @@ int hba_test_ccc(void)
         {
           strcpy (tempmessage_ccc, curlang_ccc[LANGERRORSTARTINGDRIVER]);
           message_error_ccc(tempmessage_ccc);
-          sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
+          snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), " %s (%s)\n", driver_device_name_ccc, strerror(errno));
           message_error_ccc(tempmessage_ccc);
           return -1;
         }
@@ -5417,7 +5417,7 @@ int hba_test_ccc(void)
         memset(driver_control_data_ccc.buffer, 0, sizeof(driver_control_data_ccc.buffer));
         //driver_control_data_ccc.buffer = driver_buffer_ccc;
 
-        sprintf (driver_device_name_ccc, "/proc/%s%d", MAIN_DRIVER_IOCTL_NAME, process_id_ccc);
+        snprintf(driver_device_name_ccc, sizeof(driver_device_name_ccc), "/proc/%s%d", MAIN_DRIVER_IOCTL_NAME, process_id_ccc);
         if (main_driver_fd_ccc > 0)
         {
           close(main_driver_fd_ccc);
@@ -5428,7 +5428,7 @@ int hba_test_ccc(void)
           check_message_ccc = true;
           strcpy (tempmessage_ccc, curlang_ccc[LANGUERROROPENINGDRIVER]);
           message_error_ccc(tempmessage_ccc);
-          sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
+          snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), " %s (%s)\n", driver_device_name_ccc, strerror(errno));
           message_error_ccc(tempmessage_ccc);
           print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
           clear_error_message_ccc();
@@ -5445,7 +5445,7 @@ int hba_test_ccc(void)
         {
           strcpy (tempmessage_ccc, curlang_ccc[LANGERRORSTARTINGDRIVER]);
           message_error_ccc(tempmessage_ccc);
-          sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
+          snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), " %s (%s)\n", driver_device_name_ccc, strerror(errno));
           message_error_ccc(tempmessage_ccc);
           return -1;
         }
@@ -5484,7 +5484,7 @@ int hba_test_ccc(void)
         memset(driver_control_data_ccc.buffer, 0, sizeof(driver_control_data_ccc.buffer));
         //driver_control_data_ccc.buffer = driver_buffer_ccc;
 
-        sprintf (driver_device_name_ccc, "/proc/%s%d", MAIN_DRIVER_IOCTL_NAME, process_id_ccc);
+        snprintf(driver_device_name_ccc, sizeof(driver_device_name_ccc), "/proc/%s%d", MAIN_DRIVER_IOCTL_NAME, process_id_ccc);
         if (main_driver_fd_ccc > 0)
         {
           close(main_driver_fd_ccc);
@@ -5495,7 +5495,7 @@ int hba_test_ccc(void)
           check_message_ccc = true;
           strcpy (tempmessage_ccc, curlang_ccc[LANGUERROROPENINGDRIVER]);
           message_error_ccc(tempmessage_ccc);
-          sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
+          snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), " %s (%s)\n", driver_device_name_ccc, strerror(errno));
           message_error_ccc(tempmessage_ccc);
           print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
           clear_error_message_ccc();
@@ -5512,7 +5512,7 @@ int hba_test_ccc(void)
         {
           strcpy (tempmessage_ccc, curlang_ccc[LANGERRORSTARTINGDRIVER]);
           message_error_ccc(tempmessage_ccc);
-          sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
+          snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), " %s (%s)\n", driver_device_name_ccc, strerror(errno));
           message_error_ccc(tempmessage_ccc);
           return -1;
         }
@@ -5578,7 +5578,7 @@ int hba_test_ccc(void)
             memset(driver_control_data_ccc.buffer, 0, sizeof(driver_control_data_ccc.buffer));
             //driver_control_data_ccc.buffer = driver_buffer_ccc;
 
-            sprintf (driver_device_name_ccc, "/proc/%s%d", MAIN_DRIVER_IOCTL_NAME, process_id_ccc);
+            snprintf(driver_device_name_ccc, sizeof(driver_device_name_ccc), "/proc/%s%d", MAIN_DRIVER_IOCTL_NAME, process_id_ccc);
             if (main_driver_fd_ccc > 0)
             {
               close(main_driver_fd_ccc);
@@ -5589,7 +5589,7 @@ int hba_test_ccc(void)
               check_message_ccc = true;
               strcpy (tempmessage_ccc, curlang_ccc[LANGUERROROPENINGDRIVER]);
               message_error_ccc(tempmessage_ccc);
-              sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
+              snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), " %s (%s)\n", driver_device_name_ccc, strerror(errno));
               message_error_ccc(tempmessage_ccc);
               print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
               clear_error_message_ccc();
@@ -5606,7 +5606,7 @@ int hba_test_ccc(void)
             {
               strcpy (tempmessage_ccc, curlang_ccc[LANGERRORSTARTINGDRIVER]);
               message_error_ccc(tempmessage_ccc);
-              sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
+              snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), " %s (%s)\n", driver_device_name_ccc, strerror(errno));
               message_error_ccc(tempmessage_ccc);
               return -1;
             }
@@ -6210,7 +6210,7 @@ int post_direct_ccc(int command_type)
 
     else
     {
-      sprintf (tempmessage_ccc, "\n\nInternal error, post direct command type not valid\n\n");
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "\n\nInternal error, post direct command type not valid\n\n");
       if (superclone_ccc)
       {
         message_error_ccc(tempmessage_ccc);
@@ -6346,7 +6346,7 @@ int find_all_devices_ccc(void)
     find_all_usb_devices_ccc();
     return 0;
   }
-  sprintf (tempmessage_ccc, "Finding devices\n");
+  snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Finding devices\n");
   message_now_ccc(tempmessage_ccc);
   // clear the list
   int i;
@@ -6739,7 +6739,7 @@ int process_resources_ccc(unsigned long long *start, unsigned long long *end, un
 
       if(port_mem_dev_ccc == -1)
       {
-        sprintf (tempmessage_ccc, "unable to open /dev/mem\n");
+        snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "unable to open /dev/mem\n");
         message_now_ccc(tempmessage_ccc);
         return (0);
       }
@@ -6763,7 +6763,7 @@ int process_resources_ccc(unsigned long long *start, unsigned long long *end, un
 
       if(port_mem_pointer_ccc == MAP_FAILED)
       {
-        sprintf (tempmessage_ccc, "mem map failed\n");
+        snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "mem map failed\n");
         message_now_ccc(tempmessage_ccc);
         return (0);
       }
@@ -7306,7 +7306,7 @@ int identify_device_direct_ccc(unsigned long long address, int select, int count
     strcpy (model_ccc[count], "busy or drq");
     device_present_ccc[count] = false;
     char str[32];
-    sprintf(str, "s=%02x e=%02x", io_byte_ccc[7], io_byte_ccc[0]);
+    snprintf(str, sizeof(str), "s=%02x e=%02x", io_byte_ccc[7], io_byte_ccc[0]);
     strcpy (serial_ccc[count], str);
     ioperm (address, 8, 0);
     return (1);
@@ -7319,7 +7319,7 @@ int identify_device_direct_ccc(unsigned long long address, int select, int count
       strcpy (model_ccc[count], "ready");
     }
     char str[32];
-    sprintf(str, "s=%02x e=%02x", io_byte_ccc[7], io_byte_ccc[0]);
+    snprintf(str, sizeof(str), "s=%02x e=%02x", io_byte_ccc[7], io_byte_ccc[0]);
     strcpy (serial_ccc[count], str);
     ioperm (address, 8, 0);
     return (1);
@@ -7379,7 +7379,7 @@ int identify_device_direct_ccc(unsigned long long address, int select, int count
     io_byte_ccc[5] = inb(address+5);
     //fprintf (stdout, "no drq\n");
     char str[32];
-    sprintf(str, "no drq s=%02x lm=%02x lh=%02x", io_byte_ccc[7], io_byte_ccc[4], io_byte_ccc[5]);
+    snprintf(str, sizeof(str), "no drq s=%02x lm=%02x lh=%02x", io_byte_ccc[7], io_byte_ccc[4], io_byte_ccc[5]);
     strcpy (model_ccc[count], str);
     if (io_byte_ccc[4] == 0x0 && io_byte_ccc[5] == 0x0)
     {
@@ -7558,7 +7558,7 @@ int identify_device_ahci_ccc(int count)
   if (enable_data_dump_ccc)    // TODO this is for hba debug testing
   {
     char temp_string[256];
-    sprintf (temp_string, "dump before identify for port number %d\n", port_number_ccc[count]);
+    snprintf(temp_string, sizeof(temp_string), "dump before identify for port number %d\n", port_number_ccc[count]);
     dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
     int ret = dump_hba_port_fis_command_data_ccc(hba_address_ccc[count], port_address_ccc[count], 1, 1, 1, 1, 1);
     if (ret)
@@ -7583,7 +7583,7 @@ int identify_device_ahci_ccc(int count)
     int port_mem_dev_ccc = open("/dev/mem", O_RDWR | O_SYNC);
     if(port_mem_dev_ccc == -1)
     {
-      sprintf (tempmessage_ccc, "unable to open /dev/mem\n");
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "unable to open /dev/mem\n");
       message_now_ccc(tempmessage_ccc);
       return (-1);
     }
@@ -7607,7 +7607,7 @@ int identify_device_ahci_ccc(int count)
 
     if(port_mem_pointer_ccc == MAP_FAILED)
     {
-      sprintf (tempmessage_ccc, "mem map failed\n");
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "mem map failed\n");
       message_now_ccc(tempmessage_ccc);
       return (0);
     }
@@ -7616,7 +7616,7 @@ int identify_device_ahci_ccc(int count)
     if (enable_data_dump_ccc)    // TODO this is for hba debug testing
     {
       char temp_string[256];
-      sprintf (temp_string, "dump 1 for port number %d\n", port_number_ccc[count]);
+      snprintf(temp_string, sizeof(temp_string), "dump 1 for port number %d\n", port_number_ccc[count]);
       dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
       unsigned char temp_buffer[0x80];
       memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
@@ -7633,7 +7633,7 @@ int identify_device_ahci_ccc(int count)
       strcpy (model_ccc[count], "busy or drq");
       device_present_ccc[count] = false;
       char str[32];
-      sprintf(str, "e/s=%04x", io_doubleword_ccc);
+      snprintf(str, sizeof(str), "e/s=%04x", io_doubleword_ccc);
       strcpy (serial_ccc[count], str);
       // close mapped memory
       munmap(port_mem_pointer_ccc, port_alloc_mem_size_ccc);
@@ -7648,7 +7648,7 @@ int identify_device_ahci_ccc(int count)
         strcpy (model_ccc[count], "ready");
       }
       char str[32];
-      sprintf(str, "e/s=%04x", io_doubleword_ccc);
+      snprintf(str, sizeof(str), "e/s=%04x", io_doubleword_ccc);
       strcpy (serial_ccc[count], str);
       // close mapped memory
       munmap(port_mem_pointer_ccc, port_alloc_mem_size_ccc);
@@ -7713,7 +7713,7 @@ int identify_device_ahci_ccc(int count)
     if (enable_data_dump_ccc)    // TODO this is for hba debug testing
     {
       char temp_string[256];
-      sprintf (temp_string, "dump 2 for port number %d\n", port_number_ccc[count]);
+      snprintf(temp_string, sizeof(temp_string), "dump 2 for port number %d\n", port_number_ccc[count]);
       dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
       unsigned char temp_buffer[0x80];
       memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
@@ -7734,7 +7734,7 @@ int identify_device_ahci_ccc(int count)
     if (enable_data_dump_ccc)    // TODO this is for hba debug testing
     {
       char temp_string[256];
-      sprintf (temp_string, "dump 3 for port number %d\n", port_number_ccc[count]);
+      snprintf(temp_string, sizeof(temp_string), "dump 3 for port number %d\n", port_number_ccc[count]);
       dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
       unsigned char temp_buffer[0x80];
       memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
@@ -7750,7 +7750,7 @@ int identify_device_ahci_ccc(int count)
     if (enable_data_dump_ccc)    // TODO this is for hba debug testing
     {
       char temp_string[256];
-      sprintf (temp_string, "dump 4 for port number %d\n", port_number_ccc[count]);
+      snprintf(temp_string, sizeof(temp_string), "dump 4 for port number %d\n", port_number_ccc[count]);
       dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
       unsigned char temp_buffer[0x80];
       memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
@@ -7769,7 +7769,7 @@ int identify_device_ahci_ccc(int count)
     if (enable_data_dump_ccc)    // TODO this is for hba debug testing
     {
       char temp_string[256];
-      sprintf (temp_string, "dump 5 for port number %d\n", port_number_ccc[count]);
+      snprintf(temp_string, sizeof(temp_string), "dump 5 for port number %d\n", port_number_ccc[count]);
       dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
       unsigned char temp_buffer[0x80];
       memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
@@ -7785,7 +7785,7 @@ int identify_device_ahci_ccc(int count)
     if (enable_data_dump_ccc)    // TODO this is for hba debug testing
     {
       char temp_string[256];
-      sprintf (temp_string, "dump 6 for port number %d\n", port_number_ccc[count]);
+      snprintf(temp_string, sizeof(temp_string), "dump 6 for port number %d\n", port_number_ccc[count]);
       dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
       unsigned char temp_buffer[0x80];
       memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
@@ -7801,7 +7801,7 @@ int identify_device_ahci_ccc(int count)
     if (enable_data_dump_ccc)    // TODO this is for hba debug testing
     {
       char temp_string[256];
-      sprintf (temp_string, "dump 7 for port number %d\n", port_number_ccc[count]);
+      snprintf(temp_string, sizeof(temp_string), "dump 7 for port number %d\n", port_number_ccc[count]);
       dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
       unsigned char temp_buffer[0x80];
       memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
@@ -7814,7 +7814,7 @@ int identify_device_ahci_ccc(int count)
     if (enable_data_dump_ccc)    // TODO this is for hba debug testing
     {
       char temp_string[256];
-      sprintf (temp_string, "dump 8 for port number %d\n", port_number_ccc[count]);
+      snprintf(temp_string, sizeof(temp_string), "dump 8 for port number %d\n", port_number_ccc[count]);
       dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
       unsigned char temp_buffer[0x80];
       memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
@@ -7845,7 +7845,7 @@ int identify_device_ahci_ccc(int count)
     if (enable_data_dump_ccc)
     {
       char temp_string[256];
-      sprintf (temp_string, "dump during identify for port number %d\n", port_number_ccc[count]);
+      snprintf(temp_string, sizeof(temp_string), "dump during identify for port number %d\n", port_number_ccc[count]);
       dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
       dump_hba_port_fis_command_data_ccc(hba_address_ccc[count], port_address_ccc[count], 1, 1, 1, 1, 1);
     }
@@ -7859,7 +7859,7 @@ int identify_device_ahci_ccc(int count)
     if (enable_data_dump_ccc)    // TODO this is for hba debug testing
     {
       char temp_string[256];
-      sprintf (temp_string, "dump 9 for port number %d\n", port_number_ccc[count]);
+      snprintf(temp_string, sizeof(temp_string), "dump 9 for port number %d\n", port_number_ccc[count]);
       dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
       unsigned char temp_buffer[0x80];
       memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
@@ -7875,7 +7875,7 @@ int identify_device_ahci_ccc(int count)
     if (enable_data_dump_ccc)    // TODO this is for hba debug testing
     {
       char temp_string[256];
-      sprintf (temp_string, "dump 10 for port number %d\n", port_number_ccc[count]);
+      snprintf(temp_string, sizeof(temp_string), "dump 10 for port number %d\n", port_number_ccc[count]);
       dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
       unsigned char temp_buffer[0x80];
       memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
@@ -7893,7 +7893,7 @@ int identify_device_ahci_ccc(int count)
     if (enable_data_dump_ccc)    // TODO this is for hba debug testing
     {
       char temp_string[256];
-      sprintf (temp_string, "dump 11 for port number %d\n", port_number_ccc[count]);
+      snprintf(temp_string, sizeof(temp_string), "dump 11 for port number %d\n", port_number_ccc[count]);
       dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
       unsigned char temp_buffer[0x80];
       memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
@@ -7909,7 +7909,7 @@ int identify_device_ahci_ccc(int count)
     if (enable_data_dump_ccc)    // TODO this is for hba debug testing
     {
       char temp_string[256];
-      sprintf (temp_string, "dump 12 for port number %d\n", port_number_ccc[count]);
+      snprintf(temp_string, sizeof(temp_string), "dump 12 for port number %d\n", port_number_ccc[count]);
       dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
       unsigned char temp_buffer[0x80];
       memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
@@ -7928,7 +7928,7 @@ int identify_device_ahci_ccc(int count)
     if (enable_data_dump_ccc)    // TODO this is for hba debug testing
     {
       char temp_string[256];
-      sprintf (temp_string, "dump 13 for port number %d\n", port_number_ccc[count]);
+      snprintf(temp_string, sizeof(temp_string), "dump 13 for port number %d\n", port_number_ccc[count]);
       dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
       unsigned char temp_buffer[0x80];
       memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
@@ -7945,7 +7945,7 @@ int identify_device_ahci_ccc(int count)
     if (enable_data_dump_ccc)    // TODO this is for hba debug testing
     {
       char temp_string[256];
-      sprintf (temp_string, "dump 14 for port number %d\n", port_number_ccc[count]);
+      snprintf(temp_string, sizeof(temp_string), "dump 14 for port number %d\n", port_number_ccc[count]);
       dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
       unsigned char temp_buffer[0x80];
       memcpy(temp_buffer, port_virt_addr_ccc, 0x80);
@@ -8028,7 +8028,7 @@ int identify_device_ahci_ccc(int count)
     {
       strcpy (model_ccc[count], "timeout");
       char str[32];
-      sprintf(str, "e/s=%04x", io_doubleword_ccc);
+      snprintf(str, sizeof(str), "e/s=%04x", io_doubleword_ccc);
       strcpy (serial_ccc[count], str);
       return (1);
     }
@@ -8039,7 +8039,7 @@ int identify_device_ahci_ccc(int count)
       {
         strcpy (model_ccc[count], "error");
         char str[32];
-        sprintf(str, "e/s=%04x", io_doubleword_ccc);
+        snprintf(str, sizeof(str), "e/s=%04x", io_doubleword_ccc);
         strcpy (serial_ccc[count], str);
         return (1);
       }
@@ -8211,7 +8211,7 @@ int identify_device_ahci_ccc(int count)
   if (enable_data_dump_ccc)
   {
     char temp_string[256];
-    sprintf (temp_string, "dump after identify for port number %d\n", port_number_ccc[count]);
+    snprintf(temp_string, sizeof(temp_string), "dump after identify for port number %d\n", port_number_ccc[count]);
     dump_info_to_filename_ccc (data_dump_filename_ccc, temp_string);
     dump_hba_port_fis_command_data_ccc(hba_address_ccc[count], port_address_ccc[count], 1, 1, 1, 1, 1);
     dump_data_to_filename_ccc(data_dump_filename_ccc, ccc_buffer_ccc, ccc_main_buffer_size_ccc, "Main buffer data");
@@ -8256,7 +8256,7 @@ int identify_device_passthrough_ccc(char *name, int count)
   }
   if (disk_fd == -1)
   {
-    sprintf(error_string_ccc, "Error(%s)", strerror(errno));
+    snprintf(error_string_ccc, sizeof(error_string_ccc), "Error(%s)", strerror(errno));
     strncpy(model_ccc[count], error_string_ccc, 40);
     return (1);
   }
@@ -8274,7 +8274,7 @@ int identify_device_passthrough_ccc(char *name, int count)
     // check for usb result
     if (sense_key_ccc != 4 || asc_ccc != 0 || ascq_ccc != 0)
     {
-      sprintf(error_string_ccc, "sense-data %02x %02x %02x", sense_key_ccc, asc_ccc, ascq_ccc);
+      snprintf(error_string_ccc, sizeof(error_string_ccc), "sense-data %02x %02x %02x", sense_key_ccc, asc_ccc, ascq_ccc);
       strncpy(model_ccc[count], error_string_ccc, 40);
       return (3);
     }
@@ -8449,7 +8449,7 @@ int identify_device_scsi_ccc(char *name, int count)
   }
   if (disk_fd == -1)
   {
-    sprintf(error_string_ccc, "Error(%s)", strerror(errno));
+    snprintf(error_string_ccc, sizeof(error_string_ccc), "Error(%s)", strerror(errno));
     strncpy(model_ccc[count], error_string_ccc, 40);
     return (1);
   }
@@ -8468,7 +8468,7 @@ int identify_device_scsi_ccc(char *name, int count)
 
   if (sense_key_ccc > 1)
   {
-    sprintf(error_string_ccc, "sense-data %02x %02x %02x", sense_key_ccc, asc_ccc, ascq_ccc);
+    snprintf(error_string_ccc, sizeof(error_string_ccc), "sense-data %02x %02x %02x", sense_key_ccc, asc_ccc, ascq_ccc);
     strncpy(model_ccc[count], error_string_ccc, 40);
     close (disk_fd);
     return (3);
@@ -9028,7 +9028,7 @@ int choose_device_ccc(void)
         char raw_value[32];
         if (superclone_ccc)
         {
-          sprintf (tempmessage_ccc, "%s", curlang_ccc[LANGDRIVESAMECONTROLLER]);
+          snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "%s", curlang_ccc[LANGDRIVESAMECONTROLLER]);
           message_error_ccc(tempmessage_ccc);
           print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGWARN], 0);
           clear_error_message_ccc();
@@ -9066,7 +9066,7 @@ int choose_device_ccc(void)
         char raw_value[32];
         if (superclone_ccc)
         {
-          sprintf (tempmessage_ccc, "%s", curlang_ccc[LANGDRIVEISSLAVE]);
+          snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "%s", curlang_ccc[LANGDRIVEISSLAVE]);
           message_error_ccc(tempmessage_ccc);
           print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGWARN], 0);
           clear_error_message_ccc();
@@ -9104,7 +9104,7 @@ int choose_device_ccc(void)
     {
       if (superclone_ccc)
       {
-        sprintf (tempmessage_ccc, "%s", curlang_ccc[LANGDRIVEVISABLEOS]);
+        snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "%s", curlang_ccc[LANGDRIVEVISABLEOS]);
         message_error_ccc(tempmessage_ccc);
         print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGWARN], 0);
         clear_error_message_ccc();
@@ -9141,7 +9141,7 @@ int choose_device_ccc(void)
         {
           if (superclone_ccc)
           {
-            sprintf (tempmessage_ccc, "%s", curlang_ccc[LANGDRIVEVISABLEOS]);
+            snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "%s", curlang_ccc[LANGDRIVEVISABLEOS]);
             message_error_ccc(tempmessage_ccc);
             print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGWARN], 0);
             clear_error_message_ccc();
@@ -10206,7 +10206,7 @@ int set_and_send_regs_ccc(int command_type)
 
       else
       {
-        sprintf (tempmessage_ccc, "\n\nInternal error, send regs command type not valid\n\n");
+        snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "\n\nInternal error, send regs command type not valid\n\n");
         if (superclone_ccc)
         {
           message_error_ccc(tempmessage_ccc);
@@ -10360,7 +10360,7 @@ int set_and_send_regs_ccc(int command_type)
 
     else
     {
-      sprintf (tempmessage_ccc, "\n\nInternal error, send regs command type not valid\n\n");
+      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "\n\nInternal error, send regs command type not valid\n\n");
       if (superclone_ccc)
       {
         message_error_ccc(tempmessage_ccc);
@@ -10936,7 +10936,7 @@ int write_rebuild_assist_log_ccc (unsigned char data[LOG_PAGE_SIZE])
 
 int start_driver_ccc (void)
 {
-  sprintf (driver_device_name_ccc, "/proc/%s%d", MAIN_DRIVER_IOCTL_NAME, process_id_ccc);
+  snprintf(driver_device_name_ccc, sizeof(driver_device_name_ccc), "/proc/%s%d", MAIN_DRIVER_IOCTL_NAME, process_id_ccc);
   if (main_driver_fd_ccc > 0)
   {
     close(main_driver_fd_ccc);
@@ -10947,7 +10947,7 @@ int start_driver_ccc (void)
     check_message_ccc = true;
     strcpy (tempmessage_ccc, curlang_ccc[LANGUERROROPENINGDRIVER]);
     message_error_ccc(tempmessage_ccc);
-    sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), " %s (%s)\n", driver_device_name_ccc, strerror(errno));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -10971,7 +10971,7 @@ int start_driver_ccc (void)
   {
     strcpy (tempmessage_ccc, curlang_ccc[LANGERRORSTARTINGDRIVER]);
     message_error_ccc(tempmessage_ccc);
-    sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), " %s (%s)\n", driver_device_name_ccc, strerror(errno));
     message_error_ccc(tempmessage_ccc);
     return -1;
   }
@@ -10980,7 +10980,7 @@ int start_driver_ccc (void)
   {
     // install the node
     char command[256];
-    sprintf (command, "mknod /dev/%s c %d 0", virtual_driver_name_ccc, ret);
+    snprintf (command, sizeof(command), "mknod /dev/%s c %d 0", virtual_driver_name_ccc, ret);
     int sysres=system(command);
     if(sysres)
     {
@@ -10998,7 +10998,7 @@ int start_driver_ccc (void)
   {
     strcpy (tempmessage_ccc, curlang_ccc[LANGERRORSTARTINGDRIVER]);
     message_error_ccc(tempmessage_ccc);
-    sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), " %s (%s)\n", driver_device_name_ccc, strerror(errno));
     message_error_ccc(tempmessage_ccc);
     return -1;
   }
@@ -11014,7 +11014,7 @@ int start_driver_ccc (void)
 
 int stop_driver_ccc (void)
 {
-  sprintf (driver_device_name_ccc, "/proc/%s%d", MAIN_DRIVER_IOCTL_NAME, process_id_ccc);
+  snprintf(driver_device_name_ccc, sizeof(driver_device_name_ccc), "/proc/%s%d", MAIN_DRIVER_IOCTL_NAME, process_id_ccc);
   if (main_driver_fd_ccc > 0)
   {
     close(main_driver_fd_ccc);
@@ -11025,7 +11025,7 @@ int stop_driver_ccc (void)
     check_message_ccc = true;
     strcpy (tempmessage_ccc, curlang_ccc[LANGUERROROPENINGDRIVER]);
     message_error_ccc(tempmessage_ccc);
-    sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), " %s (%s)\n", driver_device_name_ccc, strerror(errno));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -11047,7 +11047,7 @@ int stop_driver_ccc (void)
     error = 1;
     strcpy (tempmessage_ccc, curlang_ccc[LANGERRORSTOPINGDRIVER]);
     message_error_ccc(tempmessage_ccc);
-    sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), " %s (%s)\n", driver_device_name_ccc, strerror(errno));
     message_error_ccc(tempmessage_ccc);
   }
 
@@ -11055,7 +11055,7 @@ int stop_driver_ccc (void)
   {
     // remove the node
     char command[256];
-    sprintf (command, "rm -f /dev/%s", virtual_driver_name_ccc);
+    snprintf (command, sizeof(command), "rm -f /dev/%s", virtual_driver_name_ccc);
     if(system(command))
     {
       // Removing the device node likely failed
@@ -11068,7 +11068,7 @@ int stop_driver_ccc (void)
     error = 1;
     strcpy (tempmessage_ccc, curlang_ccc[LANGERRORCLOSINGINGDRIVER]);
     message_error_ccc(tempmessage_ccc);
-    sprintf (tempmessage_ccc, " %s (%s)\n", driver_device_name_ccc, strerror(errno));
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), " %s (%s)\n", driver_device_name_ccc, strerror(errno));
     message_error_ccc(tempmessage_ccc);
   }
   if (error)
@@ -11101,7 +11101,7 @@ int reset_driver_timers_ccc (void)
 int check_driver_ccc (void)
 {
   char name[256];
-  sprintf (name, "/proc/%s%d", MAIN_DRIVER_IOCTL_NAME, process_id_ccc);
+  snprintf (name, sizeof(name), "/proc/%s%d", MAIN_DRIVER_IOCTL_NAME, process_id_ccc);
   int fd = open(name, O_RDWR);
   if (fd == -1)
   {
@@ -11124,11 +11124,11 @@ int map_driver_memory_ccc (void)
   driver_memory_mapped_ccc = 0;
 
   char name[256];
-  sprintf (name, "/proc/%s%d", MAIN_DRIVER_MMAP_NAME, process_id_ccc);
+  snprintf (name, sizeof(name), "/proc/%s%d", MAIN_DRIVER_MMAP_NAME, process_id_ccc);
   configfd = open(name, O_RDWR);
   if(configfd < 0)
   {
-    sprintf (tempmessage_ccc, "Opening driver mapping file failed (%s)\n", strerror(errno));
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Opening driver mapping file failed (%s)\n", strerror(errno));
     message_error_ccc(tempmessage_ccc);
     return -1;
   }
@@ -11136,7 +11136,7 @@ int map_driver_memory_ccc (void)
   driver_control_address_ccc = mmap(NULL, pagesize_ccc, PROT_READ|PROT_WRITE, MAP_SHARED, configfd, 0);
   if (driver_control_address_ccc == MAP_FAILED)
   {
-    sprintf (tempmessage_ccc, "Mapping driver memory failed (%s)\n", strerror(errno));
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Mapping driver memory failed (%s)\n", strerror(errno));
     message_error_ccc(tempmessage_ccc);
     return -1;
   }
@@ -11144,7 +11144,7 @@ int map_driver_memory_ccc (void)
   driver_error_bitmap_address_ccc = mmap(NULL, pagesize_ccc*2, PROT_READ|PROT_WRITE, MAP_SHARED, configfd, pagesize_ccc*1);
   if (driver_error_bitmap_address_ccc == MAP_FAILED)
   {
-    sprintf (tempmessage_ccc, "Mapping driver memory failed (%s)\n", strerror(errno));
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Mapping driver memory failed (%s)\n", strerror(errno));
     message_error_ccc(tempmessage_ccc);
     return -1;
   }
@@ -11152,7 +11152,7 @@ int map_driver_memory_ccc (void)
   driver_table_buffer_ccc = mmap(NULL, pagesize_ccc*4, PROT_READ|PROT_WRITE, MAP_SHARED, configfd, pagesize_ccc*3);
   if (driver_table_buffer_ccc == MAP_FAILED)
   {
-    sprintf (tempmessage_ccc, "Mapping driver memory failed (%s)\n", strerror(errno));
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Mapping driver memory failed (%s)\n", strerror(errno));
     message_error_ccc(tempmessage_ccc);
     return -1;
   }
@@ -11160,7 +11160,7 @@ int map_driver_memory_ccc (void)
   driver_command_list_buffer_ccc = mmap(NULL, pagesize_ccc, PROT_READ|PROT_WRITE, MAP_SHARED, configfd, pagesize_ccc*7);
   if (driver_command_list_buffer_ccc == MAP_FAILED)
   {
-    sprintf (tempmessage_ccc, "Mapping driver memory failed (%s)\n", strerror(errno));
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Mapping driver memory failed (%s)\n", strerror(errno));
     message_error_ccc(tempmessage_ccc);
     return -1;
   }
@@ -11168,7 +11168,7 @@ int map_driver_memory_ccc (void)
   driver_fis_buffer_ccc = mmap(NULL, pagesize_ccc, PROT_READ|PROT_WRITE, MAP_SHARED, configfd, pagesize_ccc*8);
   if (driver_fis_buffer_ccc == MAP_FAILED)
   {
-    sprintf (tempmessage_ccc, "Mapping driver memory failed (%s)\n", strerror(errno));
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Mapping driver memory failed (%s)\n", strerror(errno));
     message_error_ccc(tempmessage_ccc);
     return -1;
   }
@@ -11177,11 +11177,11 @@ int map_driver_memory_ccc (void)
 
 
 
-  sprintf (name, "/proc/%s%d", MAIN_DRIVER_MMAPTB_NAME, process_id_ccc);
+  snprintf (name, sizeof(name), "/proc/%s%d", MAIN_DRIVER_MMAPTB_NAME, process_id_ccc);
   configfd = open(name, O_RDWR);
   if(configfd < 0)
   {
-    sprintf (tempmessage_ccc, "Opening driver mapping file failed (%s)\n", strerror(errno));
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Opening driver mapping file failed (%s)\n", strerror(errno));
     message_error_ccc(tempmessage_ccc);
     return -1;
   }
@@ -11189,7 +11189,7 @@ int map_driver_memory_ccc (void)
   driver_transfer_buffer_address_ccc = mmap(NULL, DRIVER_TRANSFER_BUFFER_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, configfd, 0);
   if (driver_transfer_buffer_address_ccc == MAP_FAILED)
   {
-    sprintf (tempmessage_ccc, "Mapping driver memory failed (%s)\n", strerror(errno));
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Mapping driver memory failed (%s)\n", strerror(errno));
     message_error_ccc(tempmessage_ccc);
     return -1;
   }
@@ -11197,11 +11197,11 @@ int map_driver_memory_ccc (void)
 
 
 
-  sprintf (name, "/proc/%s%d", MAIN_DRIVER_MMAPMDB_NAME, process_id_ccc);
+  snprintf (name, sizeof(name), "/proc/%s%d", MAIN_DRIVER_MMAPMDB_NAME, process_id_ccc);
   configfd = open(name, O_RDWR);
   if(configfd < 0)
   {
-    sprintf (tempmessage_ccc, "Opening driver mapping file failed (%s)\n", strerror(errno));
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Opening driver mapping file failed (%s)\n", strerror(errno));
     message_error_ccc(tempmessage_ccc);
     return -1;
   }
@@ -11209,7 +11209,7 @@ int map_driver_memory_ccc (void)
   driver_main_data_buffer_address_ccc = mmap(NULL, DRIVER_MAIN_DATA_BUFFER_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, configfd, 0);
   if (driver_main_data_buffer_address_ccc == MAP_FAILED)
   {
-    sprintf (tempmessage_ccc, "Mapping driver memory failed (%s)\n", strerror(errno));
+    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Mapping driver memory failed (%s)\n", strerror(errno));
     message_error_ccc(tempmessage_ccc);
     return -1;
   }

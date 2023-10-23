@@ -2428,7 +2428,7 @@ int set_number_variable_value_ccc(char *raw_variable, long long value)
   }
   else if (return_value_ccc == 1)
   {
-    sprintf(temp_var, "%lld", value);
+    snprintf(temp_var, sizeof(temp_var), "%lld", value);
     int var_num = find_number_variable_ccc(var_name);
     return_value_ccc = set_number_variable_ccc(var_num, temp_var);
     if (return_value_ccc == -1)

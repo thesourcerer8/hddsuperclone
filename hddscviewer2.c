@@ -640,7 +640,7 @@ static gboolean on_button_press(GtkWidget* widget, GdkEventButton *event, GdkWin
     {
       mouse_x = event->x;
       mouse_y = event->y;
-      sprintf (tempmessage, "x=%d y=%d\n", mouse_x, mouse_y);
+      snprintf(tempmessage, sizeof(tempmessage), "x=%d y=%d\n", mouse_x, mouse_y);
       message_debug(tempmessage, 0);
       //redraw_main_drawing_area();
       gtk_widget_queue_draw(main_window);
@@ -694,7 +694,7 @@ static gboolean left_vbox_expose_event(GtkWidget *widget, GdkEventExpose *event,
 
 void getsize_main_window(GtkWidget *widget, GtkAllocation *allocation, void *data)
 {
-  sprintf (tempmessage, "main window width = %d, height = %d\n", allocation->width, allocation->height);
+  snprintf(tempmessage, sizeof(tempmessage), "main window width = %d, height = %d\n", allocation->width, allocation->height);
   message_debug(tempmessage, 0);
   main_window_width = allocation->width;
   main_window_height = allocation->height;
@@ -705,7 +705,7 @@ void getsize_main_window(GtkWidget *widget, GtkAllocation *allocation, void *dat
 
 void getsize_main_vbox(GtkWidget *widget, GtkAllocation *allocation, void *data)
 {
-  sprintf (tempmessage, "main_vbox width = %d, height = %d\n", allocation->width, allocation->height);
+  snprintf(tempmessage, sizeof(tempmessage), "main_vbox width = %d, height = %d\n", allocation->width, allocation->height);
   message_debug(tempmessage, 0);
   main_vbox_width = allocation->width;
   main_vbox_height = allocation->height;
@@ -716,7 +716,7 @@ void getsize_main_vbox(GtkWidget *widget, GtkAllocation *allocation, void *data)
 
 void getsize_main_hbox(GtkWidget *widget, GtkAllocation *allocation, void *data)
 {
-  sprintf (tempmessage, "main_hbox width = %d, height = %d\n", allocation->width, allocation->height);
+  snprintf(tempmessage, sizeof(tempmessage), "main_hbox width = %d, height = %d\n", allocation->width, allocation->height);
   message_debug(tempmessage, 0);
   main_hbox_width = allocation->width;
   main_hbox_height = allocation->height;
@@ -727,7 +727,7 @@ void getsize_main_hbox(GtkWidget *widget, GtkAllocation *allocation, void *data)
 
 void getsize_left_vbox(GtkWidget *widget, GtkAllocation *allocation, void *data)
 {
-  sprintf (tempmessage, "left_vbox width = %d, height = %d\n", allocation->width, allocation->height);
+  snprintf(tempmessage, sizeof(tempmessage), "left_vbox width = %d, height = %d\n", allocation->width, allocation->height);
   message_debug(tempmessage, 0);
   left_vbox_width = allocation->width;
  left_vbox_height = allocation->height;
@@ -738,7 +738,7 @@ void getsize_left_vbox(GtkWidget *widget, GtkAllocation *allocation, void *data)
 
 void getsize_right_vbox(GtkWidget *widget, GtkAllocation *allocation, void *data)
 {
-  sprintf (tempmessage, "right_vbox width = %d, height = %d\n", allocation->width, allocation->height);
+  snprintf(tempmessage, sizeof(tempmessage), "right_vbox width = %d, height = %d\n", allocation->width, allocation->height);
   message_debug(tempmessage, 0);
   right_vbox_width = allocation->width;
   right_vbox_height = allocation->height;
@@ -749,7 +749,7 @@ void getsize_right_vbox(GtkWidget *widget, GtkAllocation *allocation, void *data
 
 void getsize_top_hbox(GtkWidget *widget, GtkAllocation *allocation, void *data)
 {
-  sprintf (tempmessage, "top_hbox width = %d, height = %d\n", allocation->width, allocation->height);
+  snprintf(tempmessage, sizeof(tempmessage), "top_hbox width = %d, height = %d\n", allocation->width, allocation->height);
   message_debug(tempmessage, 0);
   top_hbox_width = allocation->width;
   top_hbox_height = allocation->height;
@@ -760,7 +760,7 @@ void getsize_top_hbox(GtkWidget *widget, GtkAllocation *allocation, void *data)
 
 void getsize_top_info_box(GtkWidget *widget, GtkAllocation *allocation, void *data)
 {
-  sprintf (tempmessage, "top_hbox width = %d, height = %d\n", allocation->width, allocation->height);
+  snprintf(tempmessage, sizeof(tempmessage), "top_hbox width = %d, height = %d\n", allocation->width, allocation->height);
   message_debug(tempmessage, 0);
   top_info_width = allocation->width;
   top_info_height = allocation->height;
@@ -771,7 +771,7 @@ void getsize_top_info_box(GtkWidget *widget, GtkAllocation *allocation, void *da
 
 void getsize_top_drawing_area(GtkWidget *widget, GtkAllocation *allocation, void *data)
 {
-  sprintf (tempmessage, "top_drawing_area width = %d, height = %d\n", allocation->width, allocation->height);
+  snprintf(tempmessage, sizeof(tempmessage), "top_drawing_area width = %d, height = %d\n", allocation->width, allocation->height);
   message_debug(tempmessage, 0);
   top_drawing_area_width = allocation->width;
   top_drawing_area_height = allocation->height;
@@ -782,7 +782,7 @@ void getsize_top_drawing_area(GtkWidget *widget, GtkAllocation *allocation, void
 
 void getsize_main_drawing_area(GtkWidget *widget, GtkAllocation *allocation, void *data)
 {
-  sprintf (tempmessage, "main drawing area width = %d, height = %d\n", allocation->width, allocation->height);
+  snprintf(tempmessage, sizeof(tempmessage), "main drawing area width = %d, height = %d\n", allocation->width, allocation->height);
   message_debug(tempmessage, 0);
   main_drawing_area_width = allocation->width;
   main_drawing_area_height = allocation->height;
@@ -793,7 +793,7 @@ void getsize_main_drawing_area(GtkWidget *widget, GtkAllocation *allocation, voi
 
 void getsize_main_drawing_vbox(GtkWidget *widget, GtkAllocation *allocation, void *data)
 {
-  sprintf (tempmessage, "main drawing vbox width = %d, height = %d\n", allocation->width, allocation->height);
+  snprintf(tempmessage, sizeof(tempmessage), "main drawing vbox width = %d, height = %d\n", allocation->width, allocation->height);
   message_debug(tempmessage, 0);
   main_drawing_vbox_width = allocation->width;
   main_drawing_vbox_height = allocation->height;
@@ -804,7 +804,7 @@ void getsize_main_drawing_vbox(GtkWidget *widget, GtkAllocation *allocation, voi
 
 void getsize_main_scrolled_window(GtkWidget *widget, GtkAllocation *allocation, void *data)
 {
-  sprintf (tempmessage, "main_scrolled_window width = %d, height = %d\n", allocation->width, allocation->height);
+  snprintf(tempmessage, sizeof(tempmessage), "main_scrolled_window width = %d, height = %d\n", allocation->width, allocation->height);
   message_debug(tempmessage, 0);
   main_scrolled_window_width = allocation->width;
   main_scrolled_window_height = allocation->height;
@@ -815,7 +815,7 @@ void getsize_main_scrolled_window(GtkWidget *widget, GtkAllocation *allocation, 
 
 void getsize_left_drawing_area(GtkWidget *widget, GtkAllocation *allocation, void *data)
 {
-  sprintf (tempmessage, "left drawing area width = %d, height = %d\n", allocation->width, allocation->height);
+  snprintf(tempmessage, sizeof(tempmessage), "left drawing area width = %d, height = %d\n", allocation->width, allocation->height);
   message_debug(tempmessage, 0);
   left_drawing_area_width = allocation->width;
   left_drawing_area_height = allocation->height;
@@ -853,14 +853,14 @@ static void file_ok_sel( GtkWidget *w, GtkFileSelection *fs )
 {
   (void) w;
   //g_print ("%s\n", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
-  sprintf (log_file, "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
+  snprintf (log_file, sizeof(log_file), "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
   printf ("%s\n",  log_file);
   gtk_widget_destroy(filew);
   total_size = 0;
   int ret = read_log_file(log_file);
   if (ret != 0)
   {
-    sprintf (tempmessage, "error processing log file\n");
+    snprintf(tempmessage, sizeof(tempmessage), "error processing log file\n");
     message_now(tempmessage);
   }
   else
@@ -868,7 +868,7 @@ static void file_ok_sel( GtkWidget *w, GtkFileSelection *fs )
     ret = check_log();
     if (ret != 0)
     {
-      sprintf (tempmessage, "there were errors found in the log file\n");
+      snprintf(tempmessage, sizeof(tempmessage), "there were errors found in the log file\n");
       message_now(tempmessage);
     }
   }
@@ -911,14 +911,14 @@ static void domain_ok_sel( GtkWidget *w, GtkFileSelection *fs )
 {
   (void) w;
   //g_print ("%s\n", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
-  sprintf (domain_file, "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
+  snprintf (domain_file, sizeof(domain_file), "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
   printf ("%s\n",  domain_file);
   gtk_widget_destroy(domainw);
   regular_domain = 1;
   int ret = read_domain_file(domain_file);
   if (ret != 0)
   {
-    sprintf (tempmessage, "error processing domain file\n");
+    snprintf(tempmessage, sizeof(tempmessage), "error processing domain file\n");
     message_now(tempmessage);
   }
   char tempchar[1048];
@@ -959,14 +959,14 @@ static void dmde_domain_ok_sel( GtkWidget *w, GtkFileSelection *fs )
 {
   (void) w;
   //g_print ("%s\n", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
-  sprintf (domain_file, "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
+  snprintf (domain_file, sizeof(domain_file), "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
   printf ("%s\n",  domain_file);
   gtk_widget_destroy(domainw);
   regular_domain = 0;
   int ret = read_domain_dmde_file(domain_file);
   if (ret != 0)
   {
-    sprintf (tempmessage, "error processing domain file\n");
+    snprintf(tempmessage, sizeof(tempmessage), "error processing domain file\n");
     message_now(tempmessage);
   }
   char tempchar[1048];
@@ -990,7 +990,7 @@ gboolean reload_file(__attribute__((unused)) gpointer user_data)
   int ret = read_log_file(log_file);
   if (ret != 0)
   {
-    sprintf (tempmessage, "error processing log file\n");
+    snprintf(tempmessage, sizeof(tempmessage), "error processing log file\n");
     message_now(tempmessage);
   }
   else
@@ -998,7 +998,7 @@ gboolean reload_file(__attribute__((unused)) gpointer user_data)
     ret = check_log();
     if (ret != 0)
     {
-      sprintf (tempmessage, "there were errors found in the log file\n");
+      snprintf(tempmessage, sizeof(tempmessage), "there were errors found in the log file\n");
       message_now(tempmessage);
     }
   }
@@ -1009,7 +1009,7 @@ gboolean reload_file(__attribute__((unused)) gpointer user_data)
     int ret = read_domain_file(domain_file);
     if (ret != 0)
     {
-      sprintf (tempmessage, "error processing domain file\n");
+      snprintf(tempmessage, sizeof(tempmessage), "error processing domain file\n");
       message_now(tempmessage);
     }
   }
@@ -1349,7 +1349,7 @@ void redraw_left_vbox(void)
 
   if (total_size > 0)
   {
-    sprintf (tempmessage, "redrawing left width = %d, height = %d\n", left_drawing_area_width, left_drawing_area_height);
+    snprintf(tempmessage, sizeof(tempmessage), "redrawing left width = %d, height = %d\n", left_drawing_area_width, left_drawing_area_height);
     message_debug(tempmessage, 0);
     int columns = left_drawing_area_width / left_square_size;
     int rows = left_drawing_area_height / left_square_size;
@@ -1403,7 +1403,7 @@ void redraw_left_vbox(void)
       count++;
       if (count > squares)
       {
-        sprintf (tempmessage, "left count out of range\n");
+        snprintf(tempmessage, sizeof(tempmessage), "left count out of range\n");
         message_debug(tempmessage, 0);
         break;
       }
@@ -1414,7 +1414,7 @@ void redraw_left_vbox(void)
         i++;
         if (i >= rows)
         {
-          sprintf (tempmessage, "left rows out of range\n");
+          snprintf(tempmessage, sizeof(tempmessage), "left rows out of range\n");
           message_debug(tempmessage, 0);
           break;
         }
@@ -1455,7 +1455,7 @@ void redraw_left_vbox(void)
 void change_main_resolution(GtkWidget *w, gpointer data)
 {
   (void) w;
-  sprintf (tempmessage, "%d\n", GPOINTER_TO_INT( data ) );
+  snprintf(tempmessage, sizeof(tempmessage), "%d\n", GPOINTER_TO_INT( data ) );
   message_debug(tempmessage, 0);
   main_square_size = GPOINTER_TO_INT( data );
   redraw_main_drawing_area();
@@ -1466,7 +1466,7 @@ void change_main_resolution(GtkWidget *w, gpointer data)
 void change_main_grid_size(GtkWidget *w, gpointer data)
 {
   (void) w;
-  sprintf (tempmessage, "%d\n", GPOINTER_TO_INT( data ) );
+  snprintf(tempmessage, sizeof(tempmessage), "%d\n", GPOINTER_TO_INT( data ) );
   message_debug(tempmessage, 0);
   main_grid_size = GPOINTER_TO_INT( data );
   redraw_main_drawing_area();
@@ -1504,10 +1504,10 @@ void redraw_main_drawing_area(void)
 
   if (total_size > 0)
   {
-    sprintf (tempmessage, "redrawing main width = %d, height = %d\n", main_drawing_area_width, main_drawing_area_height);
+    snprintf(tempmessage, sizeof(tempmessage), "redrawing main width = %d, height = %d\n", main_drawing_area_width, main_drawing_area_height);
     message_debug(tempmessage, 0);
     gdouble scroll_position = gtk_adjustment_get_value (GTK_ADJUSTMENT (gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (main_scrolled_window))));
-    sprintf (tempmessage, "scroll = %f\n",  scroll_position);
+    snprintf(tempmessage, sizeof(tempmessage), "scroll = %f\n",  scroll_position);
     message_debug(tempmessage, 0);
     int scroll_row_start = scroll_position / main_square_size;
     int scroll_row_end = scroll_row_start + (main_drawing_vbox_height / main_square_size);
@@ -1522,7 +1522,7 @@ void redraw_main_drawing_area(void)
       adjustment++;
       blocks_per_square = total_size / (squares - adjustment);
     }
-    sprintf (tempmessage, "total_size=%lld, squares*blocks_per_square=%lld\n", total_size, squares*blocks_per_square);
+    snprintf(tempmessage, sizeof(tempmessage), "total_size=%lld, squares*blocks_per_square=%lld\n", total_size, squares*blocks_per_square);
     message_debug(tempmessage, 0);
 
     int count = 0;
@@ -1640,7 +1640,7 @@ void redraw_main_drawing_area(void)
         count++;
         if (count > squares)
         {
-          sprintf (tempmessage, "main count out of range\n");
+          snprintf(tempmessage, sizeof(tempmessage), "main count out of range\n");
           message_debug(tempmessage, 0);
           break;
         }
@@ -1651,7 +1651,7 @@ void redraw_main_drawing_area(void)
           i++;
           if (i >= rows)
           {
-            sprintf (tempmessage, "main rows out of range\n");
+            snprintf(tempmessage, sizeof(tempmessage), "main rows out of range\n");
             message_debug(tempmessage, 0);
             break;
           }
@@ -1825,21 +1825,21 @@ int initialize_memory(void)
   lposition=malloc(sizeof(*lposition) * log_rows);
   if (lposition == NULL)
   {
-    sprintf (tempmessage, "Error allocating log memory (%s)\n", strerror(errno));
+    snprintf(tempmessage, sizeof(tempmessage), "Error allocating log memory (%s)\n", strerror(errno));
     message_now(tempmessage);
     return (-1);
   }
   lsize=malloc(sizeof(*lsize) * log_rows);
   if (lsize == NULL)
   {
-    sprintf (tempmessage, "Error allocating log memory (%s)\n", strerror(errno));
+    snprintf(tempmessage, sizeof(tempmessage), "Error allocating log memory (%s)\n", strerror(errno));
     message_now(tempmessage);
     return (-1);
   }
   lstatus=malloc(sizeof(*lstatus) * log_rows);
   if (lstatus == NULL)
   {
-    sprintf (tempmessage, "Error allocating log memory (%s)\n", strerror(errno));
+    snprintf(tempmessage, sizeof(tempmessage), "Error allocating log memory (%s)\n", strerror(errno));
     message_now(tempmessage);
     return (-1);
   }
@@ -1848,21 +1848,21 @@ int initialize_memory(void)
   dposition=malloc(sizeof(*dposition) * domain_rows);
   if (dposition == NULL)
   {
-    sprintf (tempmessage, "Error allocating domain memory (%s)\n", strerror(errno));
+    snprintf(tempmessage, sizeof(tempmessage), "Error allocating domain memory (%s)\n", strerror(errno));
     message_now(tempmessage);
     return (-1);
   }
   dsize=malloc(sizeof(*dsize) * domain_rows);
   if (dsize == NULL)
   {
-    sprintf (tempmessage, "Error allocating domain memory (%s)\n", strerror(errno));
+    snprintf(tempmessage, sizeof(tempmessage), "Error allocating domain memory (%s)\n", strerror(errno));
     message_now(tempmessage);
     return (-1);
   }
   dstatus=malloc(sizeof(*dstatus) * domain_rows);
   if (dstatus == NULL)
   {
-    sprintf (tempmessage, "Error allocating domain memory (%s)\n", strerror(errno));
+    snprintf(tempmessage, sizeof(tempmessage), "Error allocating domain memory (%s)\n", strerror(errno));
     message_now(tempmessage);
     return (-1);
   }
@@ -1881,7 +1881,7 @@ int increase_log_memory(int new_lines)
   temp_lposition = realloc(lposition, log_rows * sizeof(*lposition));
   if (temp_lposition == NULL)
   {
-    sprintf (tempmessage, "Error allocating log memory (%s)\n", strerror(errno));
+    snprintf(tempmessage, sizeof(tempmessage), "Error allocating log memory (%s)\n", strerror(errno));
     message_now(tempmessage);
     found_error = -2;
   }
@@ -1890,7 +1890,7 @@ int increase_log_memory(int new_lines)
   temp_lsize = realloc(lsize, log_rows * sizeof(*lsize));
   if (temp_lsize == NULL)
   {
-    sprintf (tempmessage, "Error allocating log memory (%s)\n", strerror(errno));
+    snprintf(tempmessage, sizeof(tempmessage), "Error allocating log memory (%s)\n", strerror(errno));
     message_now(tempmessage);
     found_error = -2;
   }
@@ -1899,7 +1899,7 @@ int increase_log_memory(int new_lines)
   temp_lstatus = realloc(lstatus, log_rows * sizeof(*lstatus));
   if (temp_lstatus == NULL)
   {
-    sprintf (tempmessage, "Error allocating log memory (%s)\n", strerror(errno));
+    snprintf(tempmessage, sizeof(tempmessage), "Error allocating log memory (%s)\n", strerror(errno));
     message_now(tempmessage);
     found_error = -2;
   }
@@ -1918,7 +1918,7 @@ int increase_domain_memory(int new_lines)
   temp_dposition = realloc(dposition, domain_rows * sizeof(*dposition));
   if (temp_dposition == NULL)
   {
-    sprintf (tempmessage, "Error allocating domain memory (%s)\n", strerror(errno));
+    snprintf(tempmessage, sizeof(tempmessage), "Error allocating domain memory (%s)\n", strerror(errno));
     message_now(tempmessage);
     found_error = -2;
   }
@@ -1927,7 +1927,7 @@ int increase_domain_memory(int new_lines)
   temp_dsize = realloc(dsize, domain_rows * sizeof(*dsize));
   if (temp_dsize == NULL)
   {
-    sprintf (tempmessage, "Error allocating domain memory (%s)\n", strerror(errno));
+    snprintf(tempmessage, sizeof(tempmessage), "Error allocating domain memory (%s)\n", strerror(errno));
     message_now(tempmessage);
     found_error = -2;
   }
@@ -1936,7 +1936,7 @@ int increase_domain_memory(int new_lines)
   temp_dstatus = realloc(dstatus, domain_rows * sizeof(*dstatus));
   if (temp_dstatus == NULL)
   {
-    sprintf (tempmessage, "Error allocating domain memory (%s)\n", strerror(errno));
+    snprintf(tempmessage, sizeof(tempmessage), "Error allocating domain memory (%s)\n", strerror(errno));
     message_now(tempmessage);
     found_error = -2;
   }
@@ -1953,7 +1953,7 @@ int read_log_file(char *log_file)
 {
   if (log_file == NULL)
   {
-    sprintf (tempmessage, "Error: No log file specified.\n");
+    snprintf(tempmessage, sizeof(tempmessage), "Error: No log file specified.\n");
     message_now(tempmessage);
     return (1);
   }
@@ -1962,7 +1962,7 @@ int read_log_file(char *log_file)
   readfile = fopen(log_file, "r");
   if (readfile == NULL)
   {
-    sprintf (tempmessage, "Cannot open %s for reading (%s).\n", log_file, strerror(errno));
+    snprintf(tempmessage, sizeof(tempmessage), "Cannot open %s for reading (%s).\n", log_file, strerror(errno));
     message_now(tempmessage);
     return (1);
   }
@@ -2006,9 +2006,9 @@ int read_log_file(char *log_file)
           current_position = strtoull(raw_position, &endptr, 0);
           if (*endptr)
           {
-            sprintf (tempmessage, "error processing position on line %d\n", real_line_number);
+            snprintf(tempmessage, sizeof(tempmessage), "error processing position on line %d\n", real_line_number);
             message_now(tempmessage);
-            sprintf (tempmessage, "line%d= %s", real_line_number, line);
+            snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
             message_now(tempmessage);
             found_error = 1;
           }
@@ -2041,18 +2041,18 @@ int read_log_file(char *log_file)
               }
               else
               {
-                sprintf (tempmessage, "error processing line %d, status not recognized\n", real_line_number);
+                snprintf(tempmessage, sizeof(tempmessage), "error processing line %d, status not recognized\n", real_line_number);
                 message_now(tempmessage);
-                sprintf (tempmessage, "line%d= %s", real_line_number, line);
+                snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
                 message_now(tempmessage);
                 found_error = -1;
               }
             }
             else
             {
-              sprintf (tempmessage, "error processing status on line %d\n", real_line_number);
+              snprintf(tempmessage, sizeof(tempmessage), "error processing status on line %d\n", real_line_number);
               message_now(tempmessage);
-              sprintf (tempmessage, "line%d= %s", real_line_number, line);
+              snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
               message_now(tempmessage);
               found_error = 1;
             }
@@ -2062,9 +2062,9 @@ int read_log_file(char *log_file)
         }
         else if (!found_current)
         {
-          sprintf (tempmessage, "error processing progress log file line %d, expecting current status\n", real_line_number);
+          snprintf(tempmessage, sizeof(tempmessage), "error processing progress log file line %d, expecting current status\n", real_line_number);
           message_now(tempmessage);
-          sprintf (tempmessage, "line%d= %s", real_line_number, line);
+          snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
           message_now(tempmessage);
           found_error = 1;
         }
@@ -2076,45 +2076,45 @@ int read_log_file(char *log_file)
           lposition[i] = strtoull(raw_position, &endptr, 0);
           if (*endptr)
           {
-            sprintf (tempmessage, "error processing position on line %d\n", real_line_number);
+            snprintf(tempmessage, sizeof(tempmessage), "error processing position on line %d\n", real_line_number);
             message_now(tempmessage);
-            sprintf (tempmessage, "line%d= %s", real_line_number, line);
+            snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
             message_now(tempmessage);
             found_error = 1;
           }
           lsize[i] = strtoull(raw_size, &endptr, 0);
           if (*endptr)
           {
-            sprintf (tempmessage, "error processing size on line %d\n", real_line_number);
+            snprintf(tempmessage, sizeof(tempmessage), "error processing size on line %d\n", real_line_number);
             message_now(tempmessage);
-            sprintf (tempmessage, "line%d= %s", real_line_number, line);
+            snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
             message_now(tempmessage);
             found_error = 1;
           }
           lstatus[i] = strtoll(raw_status, &endptr, 0);
           if (*endptr)
           {
-            sprintf (tempmessage, "error processing status on line %d\n", real_line_number);
+            snprintf(tempmessage, sizeof(tempmessage), "error processing status on line %d\n", real_line_number);
             message_now(tempmessage);
-            sprintf (tempmessage, "line%d= %s", real_line_number, line);
+            snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
             message_now(tempmessage);
             found_error = 1;
           }
           lstatus[i] += (strtoll(raw_info, &endptr, 0)) << 8;
           if (*endptr)
           {
-            sprintf (tempmessage, "error processing info on line %d\n", real_line_number);
+            snprintf(tempmessage, sizeof(tempmessage), "error processing info on line %d\n", real_line_number);
             message_now(tempmessage);
-            sprintf (tempmessage, "line%d= %s", real_line_number, line);
+            snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
             message_now(tempmessage);
             found_error = 1;
           }
           lstatus[i] += (strtoll(raw_errstat, &endptr, 0)) << 32;
           if (*endptr)
           {
-            sprintf (tempmessage, "error processing err/stat on line %d\n", real_line_number);
+            snprintf(tempmessage, sizeof(tempmessage), "error processing err/stat on line %d\n", real_line_number);
             message_now(tempmessage);
-            sprintf (tempmessage, "line%d= %s", real_line_number, line);
+            snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
             message_now(tempmessage);
             found_error = 1;
           }
@@ -2129,25 +2129,25 @@ int read_log_file(char *log_file)
           temp_position = strtoull(raw_position, &endptr, 0);
           if (*endptr)
           {
-            sprintf (tempmessage, "error processing position on line %d\n", real_line_number);
+            snprintf(tempmessage, sizeof(tempmessage), "error processing position on line %d\n", real_line_number);
             message_now(tempmessage);
-            sprintf (tempmessage, "line%d= %s", real_line_number, line);
+            snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
             message_now(tempmessage);
             found_error = -1;
           }
           temp_size = strtoull(raw_size, &endptr, 0);
           if (*endptr)
           {
-            sprintf (tempmessage, "error processing size on line %d\n", real_line_number);
+            snprintf(tempmessage, sizeof(tempmessage), "error processing size on line %d\n", real_line_number);
             message_now(tempmessage);
-            sprintf (tempmessage, "line%d= %s", real_line_number, line);
+            snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
             message_now(tempmessage);
             found_error = -1;
           }
           scanline = sscanf(raw_status, "%c %[^\n]", &temp_status, rest_of_line);
           if (scanline != 1)
           {
-            sprintf (tempmessage, "error processing status on line %d\n", real_line_number);
+            snprintf(tempmessage, sizeof(tempmessage), "error processing status on line %d\n", real_line_number);
             message_now(tempmessage);
             found_error = -1;
           }
@@ -2179,9 +2179,9 @@ int read_log_file(char *log_file)
             }
             else
             {
-              sprintf (tempmessage, "error processing line %d, status not recognized\n", real_line_number);
+              snprintf(tempmessage, sizeof(tempmessage), "error processing line %d, status not recognized\n", real_line_number);
               message_now(tempmessage);
-              sprintf (tempmessage, "line%d= %s", real_line_number, line);
+              snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
               message_now(tempmessage);
               found_error = -1;
             }
@@ -2197,9 +2197,9 @@ int read_log_file(char *log_file)
 
         else
         {
-          sprintf (tempmessage, "error processing progress log file line %d\n", real_line_number);
+          snprintf(tempmessage, sizeof(tempmessage), "error processing progress log file line %d\n", real_line_number);
           message_now(tempmessage);
-          sprintf (tempmessage, "line%d= %s", real_line_number, line);
+          snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
           message_now(tempmessage);
           found_error = 1;
         }
@@ -2241,7 +2241,7 @@ int read_domain_file(char *domain_file)
 {
   if (domain_file == NULL)
   {
-    sprintf (tempmessage, "Error: No domain file specified.\n");
+    snprintf(tempmessage, sizeof(tempmessage), "Error: No domain file specified.\n");
     message_now(tempmessage);
     return (1);
   }
@@ -2250,7 +2250,7 @@ int read_domain_file(char *domain_file)
   readfile = fopen(domain_file, "r");
   if (readfile == NULL)
   {
-    sprintf (tempmessage, "Cannot open %s for reading (%s).\n", domain_file, strerror(errno));
+    snprintf(tempmessage, sizeof(tempmessage), "Cannot open %s for reading (%s).\n", domain_file, strerror(errno));
     message_now(tempmessage);
     return (1);
   }
@@ -2302,45 +2302,45 @@ int read_domain_file(char *domain_file)
           dposition[i] = strtoull(raw_position, &endptr, 0);
           if (*endptr)
           {
-            sprintf (tempmessage, "error processing domain position on line %d\n", real_line_number);
+            snprintf(tempmessage, sizeof(tempmessage), "error processing domain position on line %d\n", real_line_number);
             message_now(tempmessage);
-            sprintf (tempmessage, "line%d= %s", real_line_number, line);
+            snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
             message_now(tempmessage);
             found_error = -1;
           }
           dsize[i] = strtoull(raw_size, &endptr, 0);
           if (*endptr)
           {
-            sprintf (tempmessage, "error processing domain size on line %d\n", real_line_number);
+            snprintf(tempmessage, sizeof(tempmessage), "error processing domain size on line %d\n", real_line_number);
             message_now(tempmessage);
-            sprintf (tempmessage, "line%d= %s", real_line_number, line);
+            snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
             message_now(tempmessage);
             found_error = -1;
           }
           dstatus[i] = strtoll(raw_status, &endptr, 0);
           if (*endptr)
           {
-            sprintf (tempmessage, "error processing domain status on line %d\n", real_line_number);
+            snprintf(tempmessage, sizeof(tempmessage), "error processing domain status on line %d\n", real_line_number);
             message_now(tempmessage);
-            sprintf (tempmessage, "line%d= %s", real_line_number, line);
+            snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
             message_now(tempmessage);
             found_error = -1;
           }
           dstatus[i] += (strtoll(raw_info, &endptr, 0)) << 8;
           if (*endptr)
           {
-            sprintf (tempmessage, "error processing domain info on line %d\n", real_line_number);
+            snprintf(tempmessage, sizeof(tempmessage), "error processing domain info on line %d\n", real_line_number);
             message_now(tempmessage);
-            sprintf (tempmessage, "line%d= %s", real_line_number, line);
+            snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
             message_now(tempmessage);
             found_error = -1;
           }
           dstatus[i] += (strtoll(raw_errstat, &endptr, 0)) << 32;
           if (*endptr)
           {
-            sprintf (tempmessage, "error processing domain err/stat on line %d\n", real_line_number);
+            snprintf(tempmessage, sizeof(tempmessage), "error processing domain err/stat on line %d\n", real_line_number);
             message_now(tempmessage);
-            sprintf (tempmessage, "line%d= %s", real_line_number, line);
+            snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
             message_now(tempmessage);
             found_error = -1;
           }
@@ -2355,25 +2355,25 @@ int read_domain_file(char *domain_file)
           temp_position = strtoull(raw_position, &endptr, 0);
           if (*endptr)
           {
-            sprintf (tempmessage, "error processing domain position on line %d\n", real_line_number);
+            snprintf(tempmessage, sizeof(tempmessage), "error processing domain position on line %d\n", real_line_number);
             message_now(tempmessage);
-            sprintf (tempmessage, "line%d= %s", real_line_number, line);
+            snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
             message_now(tempmessage);
             found_error = -1;
           }
           temp_size = strtoull(raw_size, &endptr, 0);
           if (*endptr)
           {
-            sprintf (tempmessage, "error processing domain size on line %d\n", real_line_number);
+            snprintf(tempmessage, sizeof(tempmessage), "error processing domain size on line %d\n", real_line_number);
             message_now(tempmessage);
-            sprintf (tempmessage, "line%d= %s", real_line_number, line);
+            snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
             message_now(tempmessage);
             found_error = -1;
           }
           scanline = sscanf(raw_status, "%c %[^\n]", &temp_status, rest_of_line);
           if (scanline != 1)
           {
-            sprintf (tempmessage, "error processing domain status on line %d\n", real_line_number);
+            snprintf(tempmessage, sizeof(tempmessage), "error processing domain status on line %d\n", real_line_number);
             message_now(tempmessage);
             found_error = -1;
           }
@@ -2405,9 +2405,9 @@ int read_domain_file(char *domain_file)
             }
             else
             {
-              sprintf (tempmessage, "error processing line %d, domain status not recognized\n", real_line_number);
+              snprintf(tempmessage, sizeof(tempmessage), "error processing line %d, domain status not recognized\n", real_line_number);
               message_now(tempmessage);
-              sprintf (tempmessage, "line%d= %s", real_line_number, line);
+              snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
               message_now(tempmessage);
               found_error = -1;
             }
@@ -2430,9 +2430,9 @@ int read_domain_file(char *domain_file)
 
         else
         {
-          sprintf (tempmessage, "error processing domain file line %d\n", real_line_number);
+          snprintf(tempmessage, sizeof(tempmessage), "error processing domain file line %d\n", real_line_number);
           message_now(tempmessage);
-          sprintf (tempmessage, "line%d= %s", real_line_number, line);
+          snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
           message_now(tempmessage);
           found_error = -1;
         }
@@ -2469,17 +2469,17 @@ int read_domain_dmde_file(char *dmde_file)
 {
   if (dmde_file == NULL)
   {
-    sprintf (tempmessage, "Error: No file specified.\n");
+    snprintf(tempmessage, sizeof(tempmessage), "Error: No file specified.\n");
     message_error(tempmessage);
     return (1);
   }
-  //sprintf (tempmessage, "Reading %s into memory...\n", dmde_file);    //debug
+  //snprintf(tempmessage, sizeof(tempmessage), "Reading %s into memory...\n", dmde_file);    //debug
 
   FILE *readfile;
   readfile = fopen(dmde_file, "r");
   if (readfile == NULL)
   {
-    sprintf (tempmessage, "Cannot open %s for reading (%s).\n", dmde_file, strerror(errno));
+    snprintf(tempmessage, sizeof(tempmessage), "Cannot open %s for reading (%s).\n", dmde_file, strerror(errno));
     message_error(tempmessage);
     return (1);
   }
@@ -2497,7 +2497,7 @@ int read_domain_dmde_file(char *dmde_file)
     found_error = 0;
     real_line_number++;
     // process the line here
-    //sprintf (tempmessage, "line%d= %s", real_line_number, line);    //debug
+    //snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);    //debug
     int scanline;
     long long temp_position = 0;
     long long temp_size = 0;
@@ -2518,9 +2518,9 @@ int read_domain_dmde_file(char *dmde_file)
         temp_position = strtoull(raw_position, &endptr, 0);
         if (*endptr)
         {
-          sprintf (tempmessage, "error processing position on line %d\n", real_line_number);
+          snprintf(tempmessage, sizeof(tempmessage), "error processing position on line %d\n", real_line_number);
           message_now(tempmessage);
-          sprintf (tempmessage, "line%d= %s", real_line_number, line);
+          snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
           message_now(tempmessage);
           found_error = -1;
           good = 0;
@@ -2528,9 +2528,9 @@ int read_domain_dmde_file(char *dmde_file)
         temp_size = strtoull(raw_size, &endptr, 0);
         if (*endptr)
         {
-          sprintf (tempmessage, "error processing size on line %d\n", real_line_number);
+          snprintf(tempmessage, sizeof(tempmessage), "error processing size on line %d\n", real_line_number);
           message_now(tempmessage);
-          sprintf (tempmessage, "line%d= %s", real_line_number, line);
+          snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
           message_now(tempmessage);
           found_error = -1;
           good = 0;
@@ -2549,9 +2549,9 @@ int read_domain_dmde_file(char *dmde_file)
           }
           if (position + size > total_size)
           {
-            sprintf (tempmessage, "end position greater than source size on line %d\n", real_line_number);
+            snprintf(tempmessage, sizeof(tempmessage), "end position greater than source size on line %d\n", real_line_number);
             message_now(tempmessage);
-            sprintf (tempmessage, "line%d= %s", real_line_number, line);
+            snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
             message_now(tempmessage);
             found_error = -1;
           }
@@ -2560,9 +2560,9 @@ int read_domain_dmde_file(char *dmde_file)
             int ret = add_to_domain(position, size);
             if (ret)
             {
-              sprintf (tempmessage, "error adding to domain from line %d\n", real_line_number);
+              snprintf(tempmessage, sizeof(tempmessage), "error adding to domain from line %d\n", real_line_number);
               message_now(tempmessage);
-              sprintf (tempmessage, "line%d= %s", real_line_number, line);
+              snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
               message_now(tempmessage);
               found_error = -1;
             }
@@ -2571,9 +2571,9 @@ int read_domain_dmde_file(char *dmde_file)
       }
       else
       {
-        sprintf (tempmessage, "format error on line %d\n", real_line_number);
+        snprintf(tempmessage, sizeof(tempmessage), "format error on line %d\n", real_line_number);
         message_now(tempmessage);
-        sprintf (tempmessage, "line%d= %s", real_line_number, line);
+        snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
         message_now(tempmessage);
         found_error = -1;
       }
@@ -2606,7 +2606,7 @@ int add_to_domain(long long position, long long size)
     {
       strcpy (tempmessage, curlang[LANGDOMAINBLOCKNOTFOUND]);
       message_error(tempmessage);
-      sprintf (tempmessage, "\nposition=%06llx  size=0x%06llx", position, size);
+      snprintf(tempmessage, sizeof(tempmessage), "\nposition=%06llx  size=0x%06llx", position, size);
       message_error(tempmessage);
       print_gui_error_message(error_message, curlang[LANGERROR], 1);
       clear_error_message();
@@ -2708,7 +2708,7 @@ int add_to_domain(long long position, long long size)
       {
         strcpy (tempmessage, curlang[LANGDOMAINBLOCKNOTFOUND]);
         message_error(tempmessage);
-        sprintf (tempmessage, "\nposition=%06llx  size=0x%06llx", position, size);
+        snprintf(tempmessage, sizeof(tempmessage), "\nposition=%06llx  size=0x%06llx", position, size);
         message_error(tempmessage);
         print_gui_error_message(error_message, curlang[LANGERROR], 1);
         clear_error_message();
@@ -2887,7 +2887,7 @@ int delete_domain_line(int line)
 
 int check_log(void)
 {
-  sprintf (tempmessage, "Checking progress log file...\n");
+  snprintf(tempmessage, sizeof(tempmessage), "Checking progress log file...\n");
   message_now(tempmessage);
   int i;
   int fail = 0;
@@ -2895,7 +2895,7 @@ int check_log(void)
   // check that first position is 0
   if (lposition[0] != 0)
   {
-    sprintf (tempmessage, "The first position is not 0\n");
+    snprintf(tempmessage, sizeof(tempmessage), "The first position is not 0\n");
     message_now(tempmessage);
     fail = 1;
   }
@@ -2905,28 +2905,28 @@ int check_log(void)
     // check if there is an overlap
     if ( (lposition[i] + lsize[i]) > lposition[i+1] )
     {
-      sprintf (tempmessage, "Overlap found on line %d\n", i+1);
+      snprintf(tempmessage, sizeof(tempmessage), "Overlap found on line %d\n", i+1);
       message_now(tempmessage);
       fail = 2;
     }
     // check if size is 0
     if (lsize[i] == 0)
     {
-      sprintf (tempmessage, "Size of 0 found on line %d\n", i+1);
+      snprintf(tempmessage, sizeof(tempmessage), "Size of 0 found on line %d\n", i+1);
       message_now(tempmessage);
       fail = 3;
     }
     // check if there is a gap
     if ( (lposition[i] + lsize[i]) < lposition[i+1])
     {
-      sprintf (tempmessage, "Gap found on line %d\n", i+1);
+      snprintf(tempmessage, sizeof(tempmessage), "Gap found on line %d\n", i+1);
       message_now(tempmessage);
       fail = 4;
     }
     // check if the next status is the same
     if (lstatus[i] == lstatus[i+1])
     {
-      sprintf (tempmessage, "Same status found on line %d\n", i+1);
+      snprintf(tempmessage, sizeof(tempmessage), "Same status found on line %d\n", i+1);
       message_now(tempmessage);
       fail = 5;
     }
@@ -2934,7 +2934,7 @@ int check_log(void)
 
   // get total size from last position
   total_size = total_lines > 0 ? (lposition[total_lines-1] + lsize[total_lines-1]) : 0;
-  sprintf (tempmessage, "total size = %lld\n", total_size);
+  snprintf(tempmessage, sizeof(tempmessage), "total size = %lld\n", total_size);
   message_now(tempmessage);
 
   return fail;
@@ -2945,7 +2945,7 @@ int check_log(void)
 
 int check_domain(void)
 {
-  sprintf (tempmessage, "Checking domain file...\n");
+  snprintf(tempmessage, sizeof(tempmessage), "Checking domain file...\n");
   message_now(tempmessage);
   int i;
   int fail = 0;
@@ -2954,7 +2954,7 @@ int check_domain(void)
     // check if there is an overlap
     if ( (dposition[i] + dsize[i]) > dposition[i+1] )
     {
-      sprintf (tempmessage, "Overlap found on domain line %d\n", i+1);
+      snprintf(tempmessage, sizeof(tempmessage), "Overlap found on domain line %d\n", i+1);
       message_now(tempmessage);
       fail = 2;
     }
@@ -2972,7 +2972,7 @@ int get_block_status(long long position, long long size)
   int line = find_block(position);
   if (line == -1)
   {
-    //sprintf (tempmessage, "Error: Position 0x%llx not found in progress log file\n", position);
+    //snprintf(tempmessage, sizeof(tempmessage), "Error: Position 0x%llx not found in progress log file\n", position);
     //message_now(tempmessage);
     return -1;
   }
@@ -3020,7 +3020,7 @@ int get_block_timing(long long position, long long size)
   int line = find_block(position);
   if (line == -1)
   {
-    //sprintf (tempmessage, "Error: Position 0x%llx not found in progress log file\n", position);
+    //snprintf(tempmessage, sizeof(tempmessage), "Error: Position 0x%llx not found in progress log file\n", position);
     //message_now(tempmessage);
     return -1;
   }
@@ -3074,7 +3074,7 @@ int get_block_information(long long position, long long size)
   int line = find_block(position);
   if (line == -1)
   {
-    //sprintf (tempmessage, "Error: Position 0x%llx not found in progress log file\n", position);
+    //snprintf(tempmessage, sizeof(tempmessage), "Error: Position 0x%llx not found in progress log file\n", position);
     //message_now(tempmessage);
     return -1;
   }
@@ -3106,11 +3106,11 @@ int get_block_information(long long position, long long size)
     }
     if (ddrescue_log)
     {
-      sprintf (tempchar, "0x%06llx \t0x%06llx \t%c\n", lposition[line], lsize[line], ddrstatus);
+      snprintf (tempchar, sizeof(tempchar), "0x%06llx \t0x%06llx \t%c\n", lposition[line], lsize[line], ddrstatus);
     }
     else
     {
-      sprintf (tempchar, "0x%06llx \t0x%06llx \t0x%llx \t0x%llx \t0x%llx\n", lposition[line], lsize[line], (lstatus[line] & STATUS_MASK), ((lstatus[line] & INFO_MASK) >> 8), (lstatus[line] >> 32) );
+      snprintf (tempchar, sizeof(tempchar), "0x%06llx \t0x%06llx \t0x%llx \t0x%llx \t0x%llx\n", lposition[line], lsize[line], (lstatus[line] & STATUS_MASK), ((lstatus[line] & INFO_MASK) >> 8), (lstatus[line] >> 32) );
     }
     strcat (lines, tempchar);
   }
@@ -3147,11 +3147,11 @@ int get_block_information(long long position, long long size)
         }
         if (ddrescue_log)
         {
-          sprintf (tempchar, "0x%06llx \t0x%06llx \t%c\n", lposition[line], lsize[line], ddrstatus);
+          snprintf (tempchar, sizeof(tempchar), "0x%06llx \t0x%06llx \t%c\n", lposition[line], lsize[line], ddrstatus);
         }
         else
         {
-          sprintf (tempchar, "0x%06llx \t0x%06llx \t0x%llx \t0x%llx \t0x%llx\n", lposition[line], lsize[line], (lstatus[line] & STATUS_MASK), ((lstatus[line] & INFO_MASK) >> 8), (lstatus[line] >> 32) );
+          snprintf (tempchar, sizeof(tempchar), "0x%06llx \t0x%06llx \t0x%llx \t0x%llx \t0x%llx\n", lposition[line], lsize[line], (lstatus[line] & STATUS_MASK), ((lstatus[line] & INFO_MASK) >> 8), (lstatus[line] >> 32) );
         }
         strcat (lines, tempchar);
       }
@@ -3175,23 +3175,23 @@ int get_block_information(long long position, long long size)
 
   char label[8092+(maxcount*sizeof(tempchar))];
   strcpy (label, "");
-  sprintf (tempchar, "0x%llx-0x%llx  (%lld-%lld)\n", position, (position + size) - 1, position, (position + size) - 1);
+  snprintf (tempchar, sizeof(tempchar), "0x%llx-0x%llx  (%lld-%lld)\n", position, (position + size) - 1, position, (position + size) - 1);
   strcat (label, tempchar);
-  sprintf (tempchar, "%s=%lld  ", curlang[LANGFINISHED], finished);
+  snprintf (tempchar, sizeof(tempchar), "%s=%lld  ", curlang[LANGFINISHED], finished);
   strcat (label, tempchar);
-  sprintf (tempchar, "%s=%lld\n", curlang[LANGBAD], bad);
+  snprintf(tempchar, sizeof(tempchar), "%s=%lld\n", curlang[LANGBAD], bad);
   strcat (label, tempchar);
-  sprintf (tempchar, "%s=%lld  ", curlang[LANGNONTRIED], nontried);
+  snprintf(tempchar, sizeof(tempchar), "%s=%lld  ", curlang[LANGNONTRIED], nontried);
   strcat (label, tempchar);
-  sprintf (tempchar, "%s=%lld\n", curlang[LANGNONTRIMMED], nontrimmed);
+  snprintf(tempchar, sizeof(tempchar), "%s=%lld\n", curlang[LANGNONTRIMMED], nontrimmed);
   strcat (label, tempchar);
-  sprintf (tempchar, "%s=%lld  ", curlang[LANGNONDIVIDED], nondivided);
+  snprintf(tempchar, sizeof(tempchar), "%s=%lld  ", curlang[LANGNONDIVIDED], nondivided);
   strcat (label, tempchar);
-  sprintf (tempchar, "%s=%lld\n", curlang[LANGNONSCRAPED], nonscraped);
+  snprintf(tempchar, sizeof(tempchar), "%s=%lld\n", curlang[LANGNONSCRAPED], nonscraped);
   strcat (label, tempchar);
-  sprintf (tempchar, "%s=%d  ", curlang[LANGAREAS], maxcount - chunk_count);
+  snprintf(tempchar, sizeof(tempchar), "%s=%d  ", curlang[LANGAREAS], maxcount - chunk_count);
   strcat (label, tempchar);
-  sprintf (tempchar, "%s=%lld\n", curlang[LANGTIMING], hightime);
+  snprintf(tempchar, sizeof(tempchar), "%s=%lld\n", curlang[LANGTIMING], hightime);
   strcat (label, tempchar);
   strcat (label, lines);
   //fprintf (stdout, "%s", label);
@@ -3603,7 +3603,7 @@ static void file_export_sel( GtkWidget *w, GtkFileSelection *fs )
   (void) w;
   //g_print ("%s\n", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
   char export_file[1024] = "";
-  sprintf (export_file, "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
+  snprintf (export_file, sizeof(export_file), "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
   printf ("%s\n",  export_file);
   gtk_widget_destroy(filelangex);
 
@@ -3611,7 +3611,7 @@ static void file_export_sel( GtkWidget *w, GtkFileSelection *fs )
   writefile = fopen(export_file, "w");
   if (writefile == NULL)
   {
-    sprintf (tempmessage, "%s: %s (%s)", curlang[LANGLANGEXPORTERR], export_file, strerror(errno));
+    snprintf(tempmessage, sizeof(tempmessage), "%s: %s (%s)", curlang[LANGLANGEXPORTERR], export_file, strerror(errno));
     message_error(tempmessage);
     print_gui_error_message(error_message, curlang[LANGERROR], 1);
     clear_error_message();
@@ -3673,7 +3673,7 @@ static void file_import_sel( char *import_file )
   readfile = fopen(import_file, "r");
   if (readfile == NULL)
   {
-    sprintf (tempmessage, "%s: %s (%s)", curlang[LANGLANGIMPORTERR], import_file, strerror(errno));
+    snprintf(tempmessage, sizeof(tempmessage), "%s: %s (%s)", curlang[LANGLANGIMPORTERR], import_file, strerror(errno));
     message_error(tempmessage);
     print_gui_error_message(error_message, curlang[LANGERROR], 1);
     clear_error_message();
@@ -3727,7 +3727,7 @@ static void file_import_sel( char *import_file )
     if (count == found_count && count == LANGCOUNT - 1)
     {
       copy_newlanguage();
-      sprintf (tempmessage, "%s", curlang[LANGLANGCHANGESUCCESS]);
+      snprintf(tempmessage, sizeof(tempmessage), "%s", curlang[LANGLANGCHANGESUCCESS]);
       message_error(tempmessage);
       print_gui_error_message(error_message, curlang[LANGSUCCESS], 0);
       clear_error_message();
@@ -3735,7 +3735,7 @@ static void file_import_sel( char *import_file )
     else
     {
       //fprintf (stdout, "count=%d found_count=%d LANGCOUNT=%d\n", count, found_count, LANGCOUNT-1);
-      sprintf (tempmessage, "%s", curlang[LANGLANGIMPORTERR2]);
+      snprintf(tempmessage, sizeof(tempmessage), "%s", curlang[LANGLANGIMPORTERR2]);
       message_error(tempmessage);
       print_gui_error_message(error_message, curlang[LANGERROR], 1);
       clear_error_message();
@@ -3792,7 +3792,7 @@ int translate_all(void)
     writefile = fopen(export_file, "w");
     if (writefile == NULL)
     {
-      sprintf (tempmessage, "%s: %s (%s)", curlang[LANGLANGEXPORTERR], export_file, strerror(errno));
+      snprintf(tempmessage, sizeof(tempmessage), "%s: %s (%s)", curlang[LANGLANGEXPORTERR], export_file, strerror(errno));
       message_error(tempmessage);
       print_gui_error_message(error_message, curlang[LANGERROR], 1);
       clear_error_message();
@@ -3859,7 +3859,7 @@ int translate_all(void)
       writefile = fopen(reverse_file, "w");
       if (writefile == NULL)
       {
-        sprintf (tempmessage, "%s: %s (%s)", curlang[LANGLANGEXPORTERR], reverse_file, strerror(errno));
+        snprintf(tempmessage, sizeof(tempmessage), "%s: %s (%s)", curlang[LANGLANGEXPORTERR], reverse_file, strerror(errno));
         message_error(tempmessage);
         print_gui_error_message(error_message, curlang[LANGERROR], 1);
         clear_error_message();
@@ -3886,7 +3886,7 @@ int translate_all(void)
       writefile = fopen(all_file, "w");
       if (writefile == NULL)
       {
-        sprintf (tempmessage, "%s: %s (%s)", curlang[LANGLANGEXPORTERR], all_file, strerror(errno));
+        snprintf(tempmessage, sizeof(tempmessage), "%s: %s (%s)", curlang[LANGLANGEXPORTERR], all_file, strerror(errno));
         message_error(tempmessage);
         print_gui_error_message(error_message, curlang[LANGERROR], 1);
         clear_error_message();
@@ -3943,9 +3943,9 @@ int translate_language(char *fromlang, char *translang, char *language, char *na
   int i;
   for (i = 0; i < LANGCOUNT; i++)
   {
-    sprintf(temp_data, "\n|_|%04d|_|\n", i);
+    snprintf(temp_data, sizeof(temp_data), "\n|_|%04d|_|\n", i);
     strcat(lang_data, temp_data);
-    sprintf(temp_data, "%s", curlang[i]);
+    snprintf(temp_data, sizeof(temp_data), "%s", curlang[i]);
     strcat(lang_data, temp_data);
     int linebyline = 0;
     if (strlen(lang_data) > 3000 || i == LANGCOUNT - 1 || linebyline)
@@ -4110,7 +4110,7 @@ int translate_language(char *fromlang, char *translang, char *language, char *na
   writefile = fopen(langfile, "w");
   if (writefile == NULL)
   {
-    sprintf (tempmessage, "%s: %s (%s)", curlang[LANGLANGEXPORTERR], langfile, strerror(errno));
+    snprintf(tempmessage, sizeof(tempmessage), "%s: %s (%s)", curlang[LANGLANGEXPORTERR], langfile, strerror(errno));
     message_error(tempmessage);
     print_gui_error_message(error_message, curlang[LANGERROR], 1);
     clear_error_message();
@@ -4219,7 +4219,7 @@ int translate_language_slow(char *fromlang, char *translang, char *language, cha
   {
     strcpy (lang_data, "");
     strcpy (new_data, "");
-    sprintf(temp_data, "%s", curlang[count]);
+    snprintf(temp_data, sizeof(temp_data), "%s", curlang[count]);
     strcat(lang_data, temp_data);
     int n;
     int len = strlen(lang_data);
@@ -4317,7 +4317,7 @@ int translate_language_slow(char *fromlang, char *translang, char *language, cha
   writefile = fopen(langfile, "w");
   if (writefile == NULL)
   {
-    sprintf (tempmessage, "%s: %s (%s)", curlang[LANGLANGEXPORTERR], langfile, strerror(errno));
+    snprintf(tempmessage, sizeof(tempmessage), "%s: %s (%s)", curlang[LANGLANGEXPORTERR], langfile, strerror(errno));
     message_error(tempmessage);
     print_gui_error_message(error_message, curlang[LANGERROR], 1);
     clear_error_message();
