@@ -455,7 +455,7 @@ int translate_all_ccc(void);
 
 int translate_language_ccc(char *fromlang, char *translang, char *language, char *native);
 
-int translate_language_slow_ccc(char *fromlang, char *translang, char *language, char *native);
+int translate_language_slow_ccc(char *fromlang, char *translang, const char *language, const char *native);
 
 char* get_translated_data_ccc(char *url_data);
 
