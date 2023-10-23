@@ -2428,7 +2428,7 @@ void get_source_from_button_ccc (GtkWidget *w, gpointer data)
 {
   new_source_ccc = GPOINTER_TO_INT( data );
   g_print ("selection=%d  \n", new_source_ccc);
-  w = w;
+  (void) w;
 }
 
 
@@ -2593,7 +2593,7 @@ void get_destination_from_button_ccc (GtkWidget *w, gpointer data)
 {
   new_destination_ccc = GPOINTER_TO_INT( data );
   g_print ("selection=%d  \n", new_destination_ccc);
-  w = w;
+  (void) w;
 }
 
 
@@ -2931,7 +2931,7 @@ gint display_status_update_action_ccc (gpointer data)
   //g_print ("timer\n");    //debug
   refresh_status_ccc(current_disk_ccc);
   update_gui_status_buttons_ccc();
-  data = data;
+  (void) data;
   return 1;
 }
 
@@ -5881,7 +5881,7 @@ void get_usb_from_button_ccc (GtkWidget *w, gpointer data)
 {
   new_usb_ccc = GPOINTER_TO_INT( data );
   g_print ("selection=%d  \n", new_usb_ccc);
-  w = w;
+  (void) w;
 }
 
 
