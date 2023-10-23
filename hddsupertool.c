@@ -1431,12 +1431,8 @@ int read_script_file_ccc(char *script_file_ccc)
       exit (1);
     }
 
-    strlcpy (script_line_pointer_ccc[i], line, sizeof(script_line_pointer_ccc[i]));
-
-    i++;
-
     // if used up allocated memory then increase it
-    if (i >= script_rows_ccc)
+    if (i >= script_rows_ccc-2)
     {
       script_rows_ccc += 1000;
       unsigned int i;
@@ -1461,6 +1457,10 @@ int read_script_file_ccc(char *script_file_ccc)
         script_line_pointer_ccc[i] = &script_line_buffer_ccc[i * cols];
       }
     }
+
+    strlcpy (script_line_pointer_ccc[i], line, sizeof(script_line_pointer_ccc[i]));
+    i++;
+
   }
   total_lines_ccc = i;
 
