@@ -781,7 +781,7 @@ int translate_language_ccc(char *fromlang, char *translang, char *language, char
   {
     snprintf(temp_data, sizeof(temp_data), "\n|__|%04d|__|\n", i);
     strcat(lang_data, temp_data);
-    smprintf(temp_data, sizeof(temp_data), "%s", curlang_ccc[i]);
+    snprintf(temp_data, sizeof(temp_data), "%s", curlang_ccc[i]);
     strcat(lang_data, temp_data);
     int linebyline = 0;
     if (strlen(lang_data) > 3000 || i == LANGCOUNT - 1 || linebyline)
