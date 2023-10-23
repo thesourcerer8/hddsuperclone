@@ -207,8 +207,6 @@ int start_gtk_ccc(int argc, char **argv, char *title, char *version)
   newdomainmi_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "newdomainmi"));
   savedomainmi_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "savedomainmi"));
   savedomainasmi_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "savedomainasmi"));
-  activatewithfilemi_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "activatewithfilemi"));
-  removeactivationmi_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "removeactivationmi"));
   disableportsmi_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "disableportsmi"));
   restoreportsmi_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "restoreportsmi"));
   displayidentifymi_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "displayidentifymi"));
@@ -273,8 +271,6 @@ int start_gtk_ccc(int argc, char **argv, char *title, char *version)
   gtk_menu_item_set_label(GTK_MENU_ITEM(newdomainmi_ccc), curlang_ccc[LANGNEWDOMAINFILE]);
   gtk_menu_item_set_label(GTK_MENU_ITEM(savedomainmi_ccc), curlang_ccc[LANGSAVEDOMAINFILE]);
   gtk_menu_item_set_label(GTK_MENU_ITEM(savedomainasmi_ccc), curlang_ccc[LANGSAVEDOMAINFILEAS]);
-  gtk_menu_item_set_label(GTK_MENU_ITEM(activatewithfilemi_ccc), curlang_ccc[LANGLOADACTIVATIONFILE]);
-  gtk_menu_item_set_label(GTK_MENU_ITEM(removeactivationmi_ccc), curlang_ccc[LANGREMOVEACTIVATION]);
   gtk_menu_item_set_label(GTK_MENU_ITEM(disableportsmi_ccc), curlang_ccc[LANGDISABLEPORTS]);
   gtk_menu_item_set_label(GTK_MENU_ITEM(restoreportsmi_ccc), curlang_ccc[LANGRESTOREPORTS]);
   gtk_menu_item_set_label(GTK_MENU_ITEM(displayidentifymi_ccc), curlang_ccc[LANGDISPLAYIDENTIFYRESULTS]);
@@ -5803,8 +5799,6 @@ void help_html_ccc(void)
 
 
 
-
-
 void help_text_ccc(void)
 {
   // fork here to prevent locking up due to opening as root
@@ -5819,26 +5813,6 @@ void help_text_ccc(void)
     exit(0);
   }
 }
-
-
-
-
-
-void activate_with_file_ccc(void)
-{
-  
-}
-
-
-
-
-
-void remove_activation_ccc (void)
-{
-  
-}
-
-
 
 
 

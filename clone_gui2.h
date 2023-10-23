@@ -159,8 +159,6 @@ GtkWidget *adddomainmi_ccc;
 GtkWidget *newdomainmi_ccc;
 GtkWidget *savedomainmi_ccc;
 GtkWidget *savedomainasmi_ccc;
-GtkWidget *activatewithfilemi_ccc;
-GtkWidget *removeactivationmi_ccc;
 GtkWidget *disableportsmi_ccc;
 GtkWidget *restoreportsmi_ccc;
 GtkWidget *displayidentifymi_ccc;

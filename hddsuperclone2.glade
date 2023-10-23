@@ -6010,24 +6010,6 @@
                         <signal name="activate" handler="help_text_ccc" swapped="no"/>
                       </object>
                     </child>
-                    <child>
-                      <object class="GtkMenuItem" id="activatewithfilemi">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">activate with file</property>
-                        <property name="use_underline">True</property>
-                        <signal name="activate" handler="activate_with_file_ccc" swapped="no"/>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkMenuItem" id="removeactivationmi">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">remove activation</property>
-                        <property name="use_underline">True</property>
-                        <signal name="activate" handler="remove_activation_ccc" swapped="no"/>
-                      </object>
-                    </child>
                   </object>
                 </child>
               </object>
