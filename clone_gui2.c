@@ -46,11 +46,11 @@ int start_gtk_ccc(int argc, char **argv, char *title, char *version)
   }
 
   char window_title[256];
-  strcpy (window_title, title);
+  strlcpy (window_title, title, sizeof(window_title));
   strcat (window_title, " ");
   strcat (window_title, version);
 
-  strcpy (program_title, "_");
+  strlcpy (program_title, "_", sizeof(program_title));
   strcat (program_title, title);
   strcat (program_title, "_");
   strcat (program_title, version);
@@ -436,7 +436,7 @@ int copy_enlanguage_ccc(void)
 {
   for (int i = 0; i < LANGCOUNT; i++)
   {
-    strcpy (curlang_ccc[i], enlang_ccc[i]);
+    strlcpy (curlang_ccc[i], enlang_ccc[i], sizeof(curlang_ccc[i]));
   }
   return 0;
 }
@@ -450,7 +450,7 @@ int copy_newlanguage_ccc(void)
   int i;
   for (i = 0; i < LANGCOUNT; i++)
   {
-    strcpy (curlang_ccc[i], newlang_ccc[i]);
+    strlcpy (curlang_ccc[i], newlang_ccc[i], sizeof(curlang_ccc[i]));
     //fprintf(stdout, "%d %s", i, newlang_ccc[i]);
   }
   return 0;
@@ -562,7 +562,7 @@ void get_data_dump_filename_ccc(void)
     char *filename;
     filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
     fprintf (stdout, "%s\n", filename);
-    strcpy (data_dump_filename_ccc, filename);
+    strlcpy (data_dump_filename_ccc, filename, sizeof(data_dump_filename_ccc));
     g_free (filename);
   }
   gtk_widget_destroy (dialog);
@@ -796,7 +796,7 @@ int translate_language_ccc(char *fromlang, char *translang, const char *language
       }
       //fprintf (stdout, "%s\n", new_data);
 
-      strcpy(url_data, "https://translate.googleapis.com/translate_a/single?client=gtx&sl=");
+      strlcpy(url_data, "https://translate.googleapis.com/translate_a/single?client=gtx&sl=", sizeof(url_data));
       strcat(url_data, fromlang);
       strcat(url_data, "&tl=");
       strcat(url_data, translang);
@@ -936,7 +936,7 @@ int translate_language_ccc(char *fromlang, char *translang, const char *language
   }
 
   char langfile[256];
-  strcpy (langfile, language);
+  strlcpy (langfile, language, sizeof(langfile));
   strcat (langfile, "(");
   strcat (langfile, native);
   strcat (langfile, ")");
@@ -1080,7 +1080,7 @@ int translate_language_slow_ccc(char *fromlang, char *translang, const char *lan
     }
     //fprintf (stdout, "%s\n", new_data);
 
-    strcpy(url_data, "https://translate.googleapis.com/translate_a/single?client=gtx&sl=");
+    strlcpy(url_data, "https://translate.googleapis.com/translate_a/single?client=gtx&sl=", sizeof(url_data));
     strcat(url_data, fromlang);
     strcat(url_data, "&tl=");
     strcat(url_data, translang);
@@ -1091,7 +1091,7 @@ int translate_language_slow_ccc(char *fromlang, char *translang, const char *lan
     do_nanosleep_ccc(TRANSLATETIMERSLOW);  // this is a timer to deal with google translator
     char *data = get_translated_data_ccc(url_data);
     //fprintf (stdout, "%s\n", data);
-    strcpy (return_data, data);
+    strlcpy (return_data, data, sizeof(return_data));
     //fprintf (stdout, "\n*****************************************************\n");
     //fprintf (stdout, "%s\n", return_data);
 
@@ -1144,7 +1144,7 @@ int translate_language_slow_ccc(char *fromlang, char *translang, const char *lan
 
 
   char langfile[256];
-  strcpy (langfile, language);
+  strlcpy (langfile, language, sizeof(langfile));
   strcat (langfile, "(");
   strcat (langfile, native);
   strcat (langfile, ")");
@@ -1360,7 +1360,7 @@ static void file_import_sel_ccc( char *import_file )
             }
           }
           found_count = new_count;
-          strcpy (newlang_ccc[found_count], "");
+          strlcpy (newlang_ccc[found_count], "", sizeof(newlang_ccc[found_count]));
           count++;
         }
         else if (found_count >= 0 && found_count < LANGCOUNT)
@@ -1406,7 +1406,7 @@ void select_file_ccc(void)
 {
   if (connected_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGSTILLCONNECTED]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGSTILLCONNECTED], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -1443,7 +1443,7 @@ void new_file_ccc(void)
 {
   if (connected_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGSTILLCONNECTED]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGSTILLCONNECTED], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -1480,7 +1480,7 @@ void new_domain_ccc(void)
 {
   if (connected_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGSTILLCONNECTED]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGSTILLCONNECTED], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -1515,14 +1515,14 @@ void select_ddrescue_file_ccc(void)
 {
   if (connected_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGSTILLCONNECTED]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGSTILLCONNECTED], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
   }
   else if (!new_project_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGCHOOSENEWPROJECT]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGCHOOSENEWPROJECT], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -1556,7 +1556,7 @@ void save_file_ccc(void)
 {
   if (!project_chosen_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGNOPROJECT]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGNOPROJECT], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -1566,7 +1566,7 @@ void save_file_ccc(void)
     return_value_ccc = write_logfile_ccc(log_file_ccc, 0);
     if (return_value_ccc)
     {
-      strcpy (tempmessage_ccc, curlang_ccc[LANGLOGWRITEERR]);
+      strlcpy (tempmessage_ccc, curlang_ccc[LANGLOGWRITEERR], sizeof(tempmessage_ccc));
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
@@ -1582,7 +1582,7 @@ void save_file_as_ccc(void)
 {
   if (!project_chosen_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGNOPROJECT]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGNOPROJECT], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -1605,7 +1605,7 @@ void save_file_as_ccc(void)
       return_value_ccc = write_logfile_ccc(filename, 0);
       if (return_value_ccc)
       {
-        strcpy (tempmessage_ccc, curlang_ccc[LANGLOGWRITEERR]);
+        strlcpy (tempmessage_ccc, curlang_ccc[LANGLOGWRITEERR], sizeof(tempmessage_ccc));
         message_error_ccc(tempmessage_ccc);
         print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
         clear_error_message_ccc();
@@ -1624,7 +1624,7 @@ void save_domain_ccc(void)
 {
   if (!project_chosen_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGNOPROJECT]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGNOPROJECT], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -1634,7 +1634,7 @@ void save_domain_ccc(void)
     return_value_ccc = write_domainfile_ccc(domain_file_ccc, 0);
     if (return_value_ccc)
     {
-      strcpy (tempmessage_ccc, curlang_ccc[LANGLOGWRITEERR]);
+      strlcpy (tempmessage_ccc, curlang_ccc[LANGLOGWRITEERR], sizeof(tempmessage_ccc));
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
@@ -1650,7 +1650,7 @@ void save_domain_as_ccc(void)
 {
   if (!project_chosen_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGNOPROJECT]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGNOPROJECT], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -1673,7 +1673,7 @@ void save_domain_as_ccc(void)
       return_value_ccc = write_domainfile_ccc(filename, 0);
       if (return_value_ccc)
       {
-        strcpy (tempmessage_ccc, curlang_ccc[LANGLOGWRITEERR]);
+        strlcpy (tempmessage_ccc, curlang_ccc[LANGLOGWRITEERR], sizeof(tempmessage_ccc));
         message_error_ccc(tempmessage_ccc);
         print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
         clear_error_message_ccc();
@@ -1692,7 +1692,7 @@ void export_ddrescue_file_ccc(void)
 {
   if (!project_chosen_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGNOPROJECT]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGNOPROJECT], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -1715,7 +1715,7 @@ void export_ddrescue_file_ccc(void)
       return_value_ccc = write_ddrescue_logfile_ccc(filename);
       if (return_value_ccc)
       {
-        strcpy (tempmessage_ccc, curlang_ccc[LANGLOGEXPORTERR]);
+        strlcpy (tempmessage_ccc, curlang_ccc[LANGLOGEXPORTERR], sizeof(tempmessage_ccc));
         message_error_ccc(tempmessage_ccc);
         print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
         clear_error_message_ccc();
@@ -1734,7 +1734,7 @@ void select_domain_ccc(void)
 {
   if (connected_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGSTILLCONNECTED]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGSTILLCONNECTED], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -1768,14 +1768,14 @@ void add_domain_ccc(void)
 {
   if (connected_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGSTILLCONNECTED]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGSTILLCONNECTED], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
   }
   else if (1 && !do_domain_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGNODOMAIN]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGNODOMAIN], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -1829,7 +1829,7 @@ static void load_log_file_ccc( char *log_file )
     int ret2 = 0;
     if (ret != 0)
     {
-      strcpy (tempmessage_ccc, curlang_ccc[LANGLOGLOADERR]);
+      strlcpy (tempmessage_ccc, curlang_ccc[LANGLOGLOADERR], sizeof(tempmessage_ccc));
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
@@ -1848,7 +1848,7 @@ static void load_log_file_ccc( char *log_file )
       check_log_size_ccc = 1;
       if (ret != 0 || ret2 != 0)
       {
-        strcpy (tempmessage_ccc, curlang_ccc[LANGLOGCHECKERR]);
+        strlcpy (tempmessage_ccc, curlang_ccc[LANGLOGCHECKERR], sizeof(tempmessage_ccc));
         message_error_ccc(tempmessage_ccc);
         print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGWARN], 1);
         clear_error_message_ccc();
@@ -1894,7 +1894,7 @@ static void load_ddrescue_log_file_ccc( char *log_file )
     int ret2 = 0;
     if (ret != 0)
     {
-      strcpy (tempmessage_ccc, curlang_ccc[LANGLOGLOADERR]);
+      strlcpy (tempmessage_ccc, curlang_ccc[LANGLOGLOADERR], sizeof(tempmessage_ccc));
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
@@ -1913,7 +1913,7 @@ static void load_ddrescue_log_file_ccc( char *log_file )
         ret = check_log_ccc();
         if (ret != 0 || ret2 != 0)
         {
-          strcpy (tempmessage_ccc, curlang_ccc[LANGLOGCHECKERR]);
+          strlcpy (tempmessage_ccc, curlang_ccc[LANGLOGCHECKERR], sizeof(tempmessage_ccc));
           message_error_ccc(tempmessage_ccc);
           print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGWARN], 1);
           clear_error_message_ccc();
@@ -1958,7 +1958,7 @@ static void load_domain_file_ccc( char *log_file )
     int ret = read_domain_file_ccc(domain_file_ccc);
     if (ret < 0)
     {
-      strcpy (tempmessage_ccc, curlang_ccc[LANGLOGLOADERR]);
+      strlcpy (tempmessage_ccc, curlang_ccc[LANGLOGLOADERR], sizeof(tempmessage_ccc));
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
@@ -1987,7 +1987,7 @@ static void add_domain_file_ccc( char *log_file )
   int ret = read_domain_add_file_ccc(log_file);
   if (ret < 0)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGLOGLOADERR]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGLOGLOADERR], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -2003,7 +2003,7 @@ void clear_domain_ccc(void)
 {
   if (connected_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGSTILLCONNECTED]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGSTILLCONNECTED], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -2096,21 +2096,21 @@ void choose_source_ccc(void)
   use_rebuild_assist_ccc = false;
   if (!project_chosen_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGNOPROJECT]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGNOPROJECT], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
   }
   else if (connected_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGSTILLCONNECTED]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGSTILLCONNECTED], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
   }
   else if (memory_failed_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGBUFFERADDRESSRANGE]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGBUFFERADDRESSRANGE], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -2131,7 +2131,7 @@ void choose_source_ccc(void)
       fprintf (stdout, "%s\n", filename);
       free (disk_1_ccc);
       disk_1_ccc = malloc (strlen(filename)+2);
-      strcpy (disk_1_ccc, filename);
+      strlcpy (disk_1_ccc, filename, sizeof(disk_1_ccc));
       g_free (filename);
       strcpy (current_source_model_ccc, "");
       strcpy (current_source_serial_ccc, "");
@@ -2156,7 +2156,7 @@ void choose_source_ccc(void)
           int ret = read_domain_file_ccc(domain_file_ccc);
           if (ret < 0)
           {
-            strcpy (tempmessage_ccc, curlang_ccc[LANGLOGLOADERR]);
+            strlcpy (tempmessage_ccc, curlang_ccc[LANGLOGLOADERR], sizeof(tempmessage_ccc));
             message_error_ccc(tempmessage_ccc);
             print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
             clear_error_message_ccc();
@@ -2388,7 +2388,7 @@ void choose_source_ccc(void)
           int ret = read_domain_file_ccc(domain_file_ccc);
           if (ret < 0)
           {
-            strcpy (tempmessage_ccc, curlang_ccc[LANGLOGLOADERR]);
+            strlcpy (tempmessage_ccc, curlang_ccc[LANGLOGLOADERR], sizeof(tempmessage_ccc));
             message_error_ccc(tempmessage_ccc);
             print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
             clear_error_message_ccc();
@@ -2459,14 +2459,14 @@ void choose_destination_ccc(void)
 {
   if (!project_chosen_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGNOPROJECT]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGNOPROJECT], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
   }
   else if (connected_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGSTILLCONNECTED]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGSTILLCONNECTED], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -2566,7 +2566,7 @@ void choose_destination_ccc(void)
             int ret = read_domain_file_ccc(domain_file_ccc);
             if (ret < 0)
             {
-              strcpy (tempmessage_ccc, curlang_ccc[LANGLOGLOADERR]);
+              strlcpy (tempmessage_ccc, curlang_ccc[LANGLOGLOADERR], sizeof(tempmessage_ccc));
               message_error_ccc(tempmessage_ccc);
               print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
               clear_error_message_ccc();
@@ -2608,14 +2608,14 @@ void choose_image_ccc (void)
 {
   if (!project_chosen_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGNOPROJECT]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGNOPROJECT], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
   }
   else if (connected_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGSTILLCONNECTED]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGSTILLCONNECTED], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -2646,9 +2646,9 @@ void choose_image_ccc (void)
       if (confirmed)
       {
         fprintf (stdout, "%s\n", filename);
-        free (disk_2_ccc);
+        if(disk_2_ccc!=NULL) free (disk_2_ccc);
         disk_2_ccc = malloc (strlen(filename)+2);
-        strcpy (disk_2_ccc, filename);
+        strlcpy (disk_2_ccc, filename, sizeof(disk_2_ccc));
         destination_chosen_ccc = 1;
         destination_size_valid_ccc = 0;
         strcpy (current_destination_model_ccc, "");
@@ -2666,7 +2666,7 @@ void choose_image_ccc (void)
             int ret = read_domain_file_ccc(domain_file_ccc);
             if (ret < 0)
             {
-              strcpy (tempmessage_ccc, curlang_ccc[LANGLOGLOADERR]);
+              strlcpy (tempmessage_ccc, curlang_ccc[LANGLOGLOADERR], sizeof(tempmessage_ccc));
               message_error_ccc(tempmessage_ccc);
               print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
               clear_error_message_ccc();
@@ -2699,14 +2699,14 @@ void choose_null_ccc (void)
 {
   if (!project_chosen_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGNOPROJECT]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGNOPROJECT], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
   }
   else if (connected_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGSTILLCONNECTED]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGSTILLCONNECTED], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -2716,8 +2716,8 @@ void choose_null_ccc (void)
       fprintf (stdout, "/dev/null\n");
       free (disk_2_ccc);
       disk_2_ccc = malloc (16);
-      strcpy (disk_2_ccc, "/dev/null");
-      strcpy (current_destination_model_ccc, curlang_ccc[LANGNODESTINATION]);
+      strlcpy (disk_2_ccc, "/dev/null", sizeof(disk_2_ccc));
+      strlcpy (current_destination_model_ccc, curlang_ccc[LANGNODESTINATION], sizeof(current_destination_model_ccc));
       strcpy (current_destination_serial_ccc, "");
       logfile_changed_ccc = true;
       update_display_ccc(0);
@@ -2740,7 +2740,7 @@ void connect_devices_ccc (void)
   }
   if (memory_failed_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGBUFFERADDRESSRANGE]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGBUFFERADDRESSRANGE], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -2759,7 +2759,7 @@ void connect_devices_ccc (void)
     }
     if (new_project_ccc && !fill_mode_ccc)
     {
-      strcpy (tempmessage_ccc, curlang_ccc[LANGMISSINGSOURCE]);
+      strlcpy (tempmessage_ccc, curlang_ccc[LANGMISSINGSOURCE], sizeof(tempmessage_ccc));
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
@@ -2767,7 +2767,7 @@ void connect_devices_ccc (void)
     }
     else if (ret || ret2)
     {
-      strcpy (tempmessage_ccc, curlang_ccc[LANGLOGCHECKERR]);
+      strlcpy (tempmessage_ccc, curlang_ccc[LANGLOGCHECKERR], sizeof(tempmessage_ccc));
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
@@ -2775,7 +2775,7 @@ void connect_devices_ccc (void)
     }
     else if (driver_only_ccc && !driver_installed_ccc)
     {
-      strcpy (tempmessage_ccc, curlang_ccc[LANGMISSINGDRIVER]);
+      strlcpy (tempmessage_ccc, curlang_ccc[LANGMISSINGDRIVER], sizeof(tempmessage_ccc));
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
@@ -2786,7 +2786,7 @@ void connect_devices_ccc (void)
       if (open_target_destination_ccc())
       {
         release_devices_ccc();
-        strcpy (tempmessage_ccc, curlang_ccc[LANGCONNECTIONERR]);
+        strlcpy (tempmessage_ccc, curlang_ccc[LANGCONNECTIONERR], sizeof(tempmessage_ccc));
         message_error_ccc(tempmessage_ccc);
         print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
         clear_error_message_ccc();
@@ -2794,7 +2794,7 @@ void connect_devices_ccc (void)
       }
       else
       {
-        //strcpy (tempmessage_ccc, curlang_ccc[LANGCONNECTED]);
+        //strlcpy (tempmessage_ccc, curlang_ccc[LANGCONNECTED], sizeof(tempmessage_ccc));
         //message_error_ccc(tempmessage_ccc);
         //print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGSUCCESS], 0);
         //clear_error_message_ccc();
@@ -2817,7 +2817,7 @@ void connect_devices_ccc (void)
     }
     if (check_same_device_ccc())
     {
-      strcpy (tempmessage_ccc, curlang_ccc[LANGSAMEDEVICE]);
+      strlcpy (tempmessage_ccc, curlang_ccc[LANGSAMEDEVICE], sizeof(tempmessage_ccc));
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
@@ -2825,7 +2825,7 @@ void connect_devices_ccc (void)
     }
     else if (ret || ret2)
     {
-      strcpy (tempmessage_ccc, curlang_ccc[LANGLOGCHECKERR]);
+      strlcpy (tempmessage_ccc, curlang_ccc[LANGLOGCHECKERR], sizeof(tempmessage_ccc));
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
@@ -2836,7 +2836,7 @@ void connect_devices_ccc (void)
       if (connect_source_disk_ccc() || open_target_destination_ccc())
       {
         release_devices_ccc();
-        strcpy (tempmessage_ccc, curlang_ccc[LANGCONNECTIONERR]);
+        strlcpy (tempmessage_ccc, curlang_ccc[LANGCONNECTIONERR], sizeof(tempmessage_ccc));
         message_error_ccc(tempmessage_ccc);
         print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
         clear_error_message_ccc();
@@ -2844,7 +2844,7 @@ void connect_devices_ccc (void)
       }
       else
       {
-        //strcpy (tempmessage_ccc, curlang_ccc[LANGCONNECTED]);
+        //strlcpy (tempmessage_ccc, curlang_ccc[LANGCONNECTED], sizeof(tempmessage_ccc));
         //message_error_ccc(tempmessage_ccc);
         //print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGSUCCESS], 0);
         //clear_error_message_ccc();
@@ -2853,7 +2853,7 @@ void connect_devices_ccc (void)
           fprintf (stdout, "Warning! Destination is smaller than souce.\n");
           fprintf (stdout, "Source size= %lld\n", source_total_size_ccc);
           fprintf (stdout, "Target size= %lld\n", target_total_size_ccc);
-          strcpy (tempmessage_ccc, curlang_ccc[LANGDESTINATIONTOOSMALL]);
+          strlcpy (tempmessage_ccc, curlang_ccc[LANGDESTINATIONTOOSMALL], sizeof(tempmessage_ccc));
           message_error_ccc(tempmessage_ccc);
           print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGWARN], 1);
           clear_error_message_ccc();
@@ -2868,26 +2868,26 @@ void connect_devices_ccc (void)
   {
     if (!project_chosen_ccc)
     {
-      strcpy (tempmessage_ccc, curlang_ccc[LANGMISSINGPROJECT]);
+      strlcpy (tempmessage_ccc, curlang_ccc[LANGMISSINGPROJECT], sizeof(tempmessage_ccc));
       message_error_ccc(tempmessage_ccc);
     }
     if (!source_chosen_ccc && !(fill_mode_ccc || driver_only_ccc))
     {
-      strcpy (tempmessage_ccc, curlang_ccc[LANGMISSINGSOURCE]);
+      strlcpy (tempmessage_ccc, curlang_ccc[LANGMISSINGSOURCE], sizeof(tempmessage_ccc));
       message_error_ccc(tempmessage_ccc);
     }
     if (!destination_chosen_ccc)
     {
-      strcpy (tempmessage_ccc, curlang_ccc[LANGMISSINGDESTINATION]);
+      strlcpy (tempmessage_ccc, curlang_ccc[LANGMISSINGDESTINATION], sizeof(tempmessage_ccc));
       message_error_ccc(tempmessage_ccc);
     }
-    strcpy (tempmessage_ccc, curlang_ccc[LANGDONTCONNECT]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGDONTCONNECT], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
     if (!relaycheck)
     {
-      strcpy (tempmessage_ccc, curlang_ccc[LANGNORELAYCHOSEN]);
+      strlcpy (tempmessage_ccc, curlang_ccc[LANGNORELAYCHOSEN], sizeof(tempmessage_ccc));
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
@@ -2947,7 +2947,7 @@ void disconnect_devices_ccc (void)
 {
   release_devices_ccc();
   connected_ccc = 0;
-  //strcpy (tempmessage_ccc, curlang_ccc[LANGDISCONNECTED]);
+  //strlcpy (tempmessage_ccc, curlang_ccc[LANGDISCONNECTED], sizeof(tempmessage_ccc));
   //message_error_ccc(tempmessage_ccc);
   //print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGSUCCESS], 0);
   //clear_error_message_ccc();
@@ -2966,7 +2966,7 @@ void set_connected_ccc (void)
   if (driver_mode_ccc && (strcmp(disk_2_ccc, "/dev/null") == 0) )
   {
     clear_error_message_ccc();
-    strcpy (tempmessage_ccc, curlang_ccc[LANGWARNINGNULLDRIVER]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGWARNINGNULLDRIVER], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGWARN], 0);
     clear_error_message_ccc();
@@ -3197,7 +3197,7 @@ void check_driver_null_condition_ccc (void)
   if (disk_2_ccc != NULL && driver_mode_ccc == 0 && (strcmp(disk_2_ccc, "/dev/null") == 0) )
   {
     clear_error_message_ccc();
-    strcpy (tempmessage_ccc, curlang_ccc[LANGWARNINGNULLDRIVER]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGWARNINGNULLDRIVER], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGWARN], 0);
     clear_error_message_ccc();
@@ -4014,10 +4014,10 @@ void open_advanced_settings_dialog_ccc (void)
     advanced_settings_ccc.driver_minimum_cluster_size = gtk_spin_button_get_value(GTK_SPIN_BUTTON(driver_minimum_cluster_size_spinbutton_ccc));
     const gchar *entry_text;
     entry_text = gtk_entry_get_text (GTK_ENTRY (command_to_call_text_ccc));
-    strcpy (advanced_settings_ccc.command_to_call, entry_text);
+    strlcpy (advanced_settings_ccc.command_to_call, entry_text, sizeof(advanced_settings_ccc.command_to_call));
     const gchar *entry_text2;
     entry_text2 = gtk_entry_get_text (GTK_ENTRY (virtual_disk_device_name_text_ccc));
-    strcpy (advanced_settings_ccc.virtual_disk_device_name, entry_text2);
+    strlcpy (advanced_settings_ccc.virtual_disk_device_name, entry_text2, sizeof(advanced_settings_ccc.virtual_disk_device_name));
     update_advanced_settings_ccc();
     logfile_changed_ccc = true;
   }
@@ -4188,7 +4188,7 @@ void open_timer_settings_dialog_ccc (void)
 
     const gchar *entry_text;
     entry_text = gtk_entry_get_text (GTK_ENTRY (power_command_to_call_text_ccc));
-    strcpy (timer_settings_ccc.power_command_to_call, entry_text);
+    strlcpy (timer_settings_ccc.power_command_to_call, entry_text, sizeof(timer_settings_ccc.power_command_to_call));
     update_timer_settings_ccc();
     logfile_changed_ccc = true;
   }
@@ -4226,7 +4226,7 @@ int open_ports_dialog_ccc (char *current_ports)
 
   strcpy (new_ports_ccc, "");
   char portsinfo[4096] = "";
-  strcpy (portsinfo, curlang_ccc[LANGDISABLEPORTSINFO1]);
+  strlcpy (portsinfo, curlang_ccc[LANGDISABLEPORTSINFO1], sizeof(portsinfo));
   strcat (portsinfo, curlang_ccc[LANGDISABLEPORTSINFO2]);
   gtk_label_set_text(GTK_LABEL(disable_ports_info_label_ccc), portsinfo);
   gtk_label_set_text(GTK_LABEL(disable_ports_label_ccc), curlang_ccc[LANGDISABLEPORTS]);
@@ -4433,7 +4433,7 @@ void do_test_primary_relay_ccc (void)
 {
   if (!usbr1_chosen_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGNORELAYCHOSEN]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGNORELAYCHOSEN], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -4465,7 +4465,7 @@ void do_test_primary_relay_ccc (void)
   g_print ("activate primary relay\n");
   if (activate_primary_relay_ccc())
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGUSBRELAYERROR]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGUSBRELAYERROR], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -4486,7 +4486,7 @@ void do_test_primary_relay_ccc (void)
     g_print ("deactivate primary relay\n");
     if (deactivate_primary_relay_ccc())
     {
-      strcpy (tempmessage_ccc, curlang_ccc[LANGUSBRELAYERROR]);
+      strlcpy (tempmessage_ccc, curlang_ccc[LANGUSBRELAYERROR], sizeof(tempmessage_ccc));
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
@@ -4507,7 +4507,7 @@ void do_test_primary_relay_ccc (void)
     }
     g_print ("\n");
     g_print ("relay test complete\n");
-    strcpy (tempmessage_ccc, curlang_ccc[LANGOPERATIONSUCCEEDED]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGOPERATIONSUCCEEDED], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGINFO], 0);
     clear_error_message_ccc();
@@ -4540,7 +4540,7 @@ int cycle_primary_relay_ccc(void)
 {
   if (!usbr1_chosen_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGNORELAYCHOSEN]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGNORELAYCHOSEN], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -4550,7 +4550,7 @@ int cycle_primary_relay_ccc(void)
   g_print ("activate primary relay ");
   if (activate_primary_relay_ccc())
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGUSBRELAYERROR]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGUSBRELAYERROR], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -4568,7 +4568,7 @@ int cycle_primary_relay_ccc(void)
   g_print ("deactivate and wait ");
   if (deactivate_primary_relay_ccc())
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGUSBRELAYERROR]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGUSBRELAYERROR], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -4596,7 +4596,7 @@ void update_ports_ccc (void)
   char line[256];
   char rawport[16][256];
   strncpy (line, entry_text, 255);
-  strcpy (new_ports_ccc, "libata.force=");
+  strlcpy (new_ports_ccc, "libata.force=", sizeof(new_ports_ccc));
   int first = 1;
   int count = 0;
   int scanline = sscanf(line, "%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s", rawport[0], rawport[1], rawport[2], rawport[3], rawport[4], rawport[5], rawport[6], rawport[7], rawport[8], rawport[9], rawport[10], rawport[11], rawport[12], rawport[13], rawport[14], rawport[15]);
@@ -4667,7 +4667,7 @@ void test_command_ccc (void)
   {
     int status = WEXITSTATUS(ret);
     int signal = WTERMSIG(ret);
-    strcpy (tempmessage_ccc, curlang_ccc[LANGCOMMANDFAILED]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGCOMMANDFAILED], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), " (%d / %d)", signal, status);
     message_error_ccc(tempmessage_ccc);
@@ -4676,7 +4676,7 @@ void test_command_ccc (void)
   }
   else
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGCOMMANDCOMPLETED]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGCOMMANDCOMPLETED], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGINFO], 0);
     clear_error_message_ccc();
@@ -4696,7 +4696,7 @@ void test_power_command_ccc (void)
   {
     int status = WEXITSTATUS(ret);
     int signal = WTERMSIG(ret);
-    strcpy (tempmessage_ccc, curlang_ccc[LANGCOMMANDFAILED]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGCOMMANDFAILED], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), " (%d / %d)", signal, status);
     message_error_ccc(tempmessage_ccc);
@@ -4705,7 +4705,7 @@ void test_power_command_ccc (void)
   }
   else
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGCOMMANDCOMPLETED]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGCOMMANDCOMPLETED], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGINFO], 0);
     clear_error_message_ccc();
@@ -5579,7 +5579,7 @@ void do_reset_status_ccc(void)
 {
   if (!project_chosen_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGNOPROJECT]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGNOPROJECT], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -5614,7 +5614,7 @@ void do_reset_log_status_ccc(void)
 {
   if (!project_chosen_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGNOPROJECT]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGNOPROJECT], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -5667,7 +5667,7 @@ void do_repair_log_ccc(void)
 {
   if (!project_chosen_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGNOPROJECT]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGNOPROJECT], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -5699,7 +5699,7 @@ void do_repair_log_ccc(void)
     int ret = check_and_repair_log_ccc();
     if (check_log_ccc() || ret)
     {
-      strcpy (tempmessage_ccc, curlang_ccc[LANGLOGCHECKERR]);
+      strlcpy (tempmessage_ccc, curlang_ccc[LANGLOGCHECKERR], sizeof(tempmessage_ccc));
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
@@ -5724,7 +5724,7 @@ void about_ccc (void)
   char temp [1024];
   snprintf (temp, sizeof(temp), "Copyright (C) %s Scott Dwyer", copyright_year_ccc);
   gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog),temp);
-  strcpy (temp, "License type: PROPRIETARY (GOD MODE) ");
+  strlcpy (temp, "License type: PROPRIETARY (GOD MODE) ", sizeof(temp));
   snprintf (temp, sizeof(temp), "(FULL VERSION)\n");
   strcat (temp, "There is NO WARRANTY, to the extent permitted by law.");
   gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(dialog), temp);
@@ -5833,8 +5833,8 @@ void choose_primary_usb_ccc(void)
       logfile_changed_ccc = true;
       char name[MAX_RELAY_NAME_LENGTH];
       snprintf(name, sizeof(name), "%04x:%04x %s %s %s\n", usbr1_vendor_id_ccc, usbr1_product_id_ccc, usbr1_vendor_string_ccc, usbr1_product_string_ccc, usbr1_extra_id_string_ccc);
-      strcpy (primary_relay_settings_ccc.primary_relay_name, name);
-      strcpy (primary_relay_name_ccc, name);
+      strlcpy (primary_relay_settings_ccc.primary_relay_name, name, sizeof(primary_relay_settings_ccc.primary_relay_name));
+      strlcpy (primary_relay_name_ccc, name, sizeof(primary_relay_name_ccc));
     }
     update_display_ccc(0);
   }
@@ -5871,7 +5871,7 @@ void do_activate_primary_relay_ccc(void)
 {
   if (!usbr1_chosen_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGNORELAYCHOSEN]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGNORELAYCHOSEN], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -5902,7 +5902,7 @@ void do_activate_primary_relay_ccc(void)
   g_print ("activate primary relay\n");
   if (activate_primary_relay_ccc())
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGUSBRELAYERROR]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGUSBRELAYERROR], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -5937,7 +5937,7 @@ void do_deactivate_primary_relay_ccc(void)
 {
   if (!usbr1_chosen_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGNORELAYCHOSEN]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGNORELAYCHOSEN], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -5968,7 +5968,7 @@ void do_deactivate_primary_relay_ccc(void)
   g_print ("deactivate primary relay\n");
   if (deactivate_primary_relay_ccc())
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGUSBRELAYERROR]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGUSBRELAYERROR], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -6003,7 +6003,7 @@ void do_activate_primary_relay_main_ccc(void)
 {
   if (!usbr1_chosen_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGNORELAYCHOSEN]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGNORELAYCHOSEN], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -6012,7 +6012,7 @@ void do_activate_primary_relay_main_ccc(void)
   g_print ("activate primary relay\n");
   if (activate_primary_relay_ccc())
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGUSBRELAYERROR]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGUSBRELAYERROR], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -6027,7 +6027,7 @@ void do_deactivate_primary_relay_main_ccc(void)
 {
   if (!usbr1_chosen_ccc)
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGNORELAYCHOSEN]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGNORELAYCHOSEN], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -6036,7 +6036,7 @@ void do_deactivate_primary_relay_main_ccc(void)
   g_print ("deactivate primary relay\n");
   if (deactivate_primary_relay_ccc())
   {
-    strcpy (tempmessage_ccc, curlang_ccc[LANGUSBRELAYERROR]);
+    strlcpy (tempmessage_ccc, curlang_ccc[LANGUSBRELAYERROR], sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -6052,7 +6052,7 @@ void map_heads_ccc (void)
 #ifdef GODMODE
   if (!connected_ccc)
   {
-    strcpy (tempmessage_ccc, "you must be connected to map heads");
+    strlcpy (tempmessage_ccc, "you must be connected to map heads", sizeof(tempmessage_ccc));
     message_error_ccc(tempmessage_ccc);
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
@@ -6061,7 +6061,7 @@ void map_heads_ccc (void)
   {
     if (rebuild_assist_map_heads_ccc())
     {
-      strcpy (tempmessage_ccc, "error mapping heads");
+      strlcpy (tempmessage_ccc, "error mapping heads", sizeof(tempmessage_ccc));
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
