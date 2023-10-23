@@ -475,7 +475,7 @@ int set_language_ccc(void)
 
   gint handler_id1 = g_signal_connect(G_OBJECT(language_window_ccc), "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
-  GtkWidget *box = gtk_vbox_new (FALSE, 0);
+  GtkWidget *box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (language_window_ccc), box);
 
   GtkWidget *enbutton = gtk_button_new_with_label("Continue");
@@ -521,7 +521,7 @@ int set_data_dump_filename_ccc(void)
 
   gint handler_id1 = g_signal_connect(G_OBJECT(language_window_ccc), "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
-  GtkWidget *box = gtk_vbox_new (FALSE, 0);
+  GtkWidget *box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (language_window_ccc), box);
 
   GtkWidget *enbutton = gtk_button_new_with_label("Continue");
@@ -2211,7 +2211,7 @@ void choose_source_ccc(void)
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (choose_source_scrolled_window_ccc), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     gtk_box_pack_start (GTK_BOX (GTK_DIALOG(choose_source_dialog_window_ccc)->vbox), choose_source_scrolled_window_ccc, TRUE, TRUE, 0);
 
-    choose_source_vbox_ccc = gtk_vbox_new (FALSE, 0);
+    choose_source_vbox_ccc = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (choose_source_scrolled_window_ccc), choose_source_vbox_ccc);
 
     GtkWidget *button[MAX_DEVICES];
@@ -2513,7 +2513,7 @@ void choose_destination_ccc(void)
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (choose_destination_scrolled_window_ccc), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     gtk_box_pack_start (GTK_BOX (GTK_DIALOG(choose_destination_dialog_window_ccc)->vbox), choose_destination_scrolled_window_ccc, TRUE, TRUE, 0);
 
-    choose_destination_vbox_ccc = gtk_vbox_new (FALSE, 0);
+    choose_destination_vbox_ccc = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (choose_destination_scrolled_window_ccc), choose_destination_vbox_ccc);
 
     GtkWidget *button[MAX_DEVICES];
@@ -5857,7 +5857,7 @@ void choose_primary_usb_ccc(void)
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (choose_usb_scrolled_window_ccc), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG(choose_usb_dialog_window_ccc)->vbox), choose_usb_scrolled_window_ccc, TRUE, TRUE, 0);
 
-  choose_usb_vbox_ccc = gtk_vbox_new (FALSE, 0);
+  choose_usb_vbox_ccc = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (choose_usb_scrolled_window_ccc), choose_usb_vbox_ccc);
 
   GtkWidget *button[MAX_USB_DEVICES];

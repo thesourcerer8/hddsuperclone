@@ -164,7 +164,7 @@ int main (int argc, char **argv)
 
   //gtk_container_set_border_width (GTK_CONTAINER (main_window), 2);
 
-  //main_vbox = gtk_vbox_new (FALSE, 0);
+  //main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   //gtk_container_add (GTK_CONTAINER (main_window), main_vbox);
   main_vbox = GTK_WIDGET (gtk_builder_get_object (builder, "main_vbox"));
 
@@ -486,7 +486,7 @@ int main (int argc, char **argv)
 
 
   // left vbox
-  //left_vbox = gtk_vbox_new (FALSE, 0);
+  //left_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   left_vbox = GTK_WIDGET (gtk_builder_get_object (builder, "left_vbox"));
   g_signal_connect(left_vbox, "size-allocate", G_CALLBACK(getsize_left_vbox), NULL);
   //gtk_widget_set_size_request (GTK_WIDGET (left_vbox), 100, -1);
@@ -503,7 +503,7 @@ int main (int argc, char **argv)
 
 
   // right vbox
-  //right_vbox = gtk_vbox_new (FALSE, 0);
+  //right_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   right_vbox = GTK_WIDGET (gtk_builder_get_object (builder, "right_vbox"));
   g_signal_connect(right_vbox, "size-allocate", G_CALLBACK(getsize_right_vbox), NULL);
   //gtk_container_set_border_width (GTK_CONTAINER (right_vbox), 2);
@@ -517,7 +517,7 @@ int main (int argc, char **argv)
   //gtk_container_set_border_width (GTK_CONTAINER (top_hbox), 2);
   //gtk_box_pack_start (GTK_BOX (right_vbox), top_hbox, FALSE, FALSE, 0);
 
-  //top_info_box = gtk_vbox_new (FALSE, 0);
+  //top_info_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   top_info_box = GTK_WIDGET (gtk_builder_get_object (builder, "top_info_box"));
   g_signal_connect(top_info_box, "size-allocate", G_CALLBACK(getsize_top_info_box), NULL);
   //gtk_widget_set_size_request (GTK_WIDGET (top_info_box), -1, 100);
@@ -538,7 +538,7 @@ int main (int argc, char **argv)
 
 
   // main drawing vbox
-  //main_drawing_vbox = gtk_vbox_new (FALSE, 0);
+  //main_drawing_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   main_drawing_vbox = GTK_WIDGET (gtk_builder_get_object (builder, "main_drawing_vbox"));
   g_signal_connect(main_drawing_vbox, "size-allocate", G_CALLBACK(getsize_main_drawing_vbox), NULL);
   //gtk_container_set_border_width (GTK_CONTAINER (main_drawing_vbox), 2);
@@ -2530,7 +2530,7 @@ int set_language(void)
 
   gint handler_id1 = g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
-  GtkWidget *box = gtk_vbox_new (FALSE, 0);
+  GtkWidget *box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (window), box);
 
   GtkWidget *enbutton = gtk_button_new_with_label("Continue");
