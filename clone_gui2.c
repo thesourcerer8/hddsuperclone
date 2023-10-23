@@ -220,7 +220,7 @@ int start_gtk_ccc(int argc, char **argv, char *title, char *version)
   restoreusbmassmi_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "restoreusbmassmi"));
   activate_primary_relay_button_main_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "activate_primary_relay_button_main"));
   deactivate_primary_relay_button_main_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "deactivate_primary_relay_button_main"));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
+  // = GTK_WIDGET (gtk_builder_get_object (builder, "")); // template
 
 
   gtk_menu_item_set_label(GTK_MENU_ITEM(filemi_ccc), curlang_ccc[LANGFILE]);
@@ -284,7 +284,7 @@ int start_gtk_ccc(int argc, char **argv, char *title, char *version)
   gtk_menu_item_set_label(GTK_MENU_ITEM(restoreusbmassmi_ccc), curlang_ccc[LANGRESTOREUSBMASS]);
   gtk_button_set_label(GTK_BUTTON(activate_primary_relay_button_main_ccc), curlang_ccc[LANGACTIVATEMAIN]);
   gtk_button_set_label(GTK_BUTTON(deactivate_primary_relay_button_main_ccc), curlang_ccc[LANGDEACTIVATEMAIN]);
-  //gtk_menu_item_set_label(GTK_MENU_ITEM(), curlang_ccc[]);
+  //gtk_menu_item_set_label(GTK_MENU_ITEM(), curlang_ccc[]); // template
 
   main_label = GTK_WIDGET (gtk_builder_get_object (builder, "main_label"));
 
@@ -304,7 +304,7 @@ int start_gtk_ccc(int argc, char **argv, char *title, char *version)
   driver_mode5_button_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "driver_mode5_button"));
   soft_reset_button_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "soft_reset_button"));
   hard_reset_button_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "hard_reset_button"));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
+  // = GTK_WIDGET (gtk_builder_get_object (builder, "")); // template
 
   gtk_button_set_label(GTK_BUTTON(connect_button_ccc), curlang_ccc[LANGCONNECT]);
   gtk_button_set_label(GTK_BUTTON(disconnect_button_ccc), curlang_ccc[LANGDISCONNECT]);
@@ -322,7 +322,7 @@ int start_gtk_ccc(int argc, char **argv, char *title, char *version)
   gtk_button_set_label(GTK_BUTTON(driver_mode5_button_ccc), curlang_ccc[LANGDRIVERMODE5BUTTON]);
   gtk_button_set_label(GTK_BUTTON(soft_reset_button_ccc), curlang_ccc[LANGHARDRESETBUTTON]);
   gtk_button_set_label(GTK_BUTTON(hard_reset_button_ccc), curlang_ccc[LANGSOFTRESETBUTTON]);
-  //gtk_button_set_label(GTK_BUTTON(), curlang_ccc[]);
+  //gtk_button_set_label(GTK_BUTTON(), curlang_ccc[]); // template
 
 
 
@@ -359,7 +359,7 @@ int start_gtk_ccc(int argc, char **argv, char *title, char *version)
   gtk_label_set_text(GTK_LABEL(label_retrypasses_ccc), curlang_ccc[LANGRETRYPASSESLABEL]);
   gtk_label_set_text(GTK_LABEL(label_drivermode_ccc), curlang_ccc[LANGDRIVERMODE]);
   gtk_label_set_text(GTK_LABEL(data_drivermode_ccc), curlang_ccc[LANGCLONEMODE]);
-  //gtk_label_set_text(GTK_LABEL(), curlang_ccc[]);
+  //gtk_label_set_text(GTK_LABEL(), curlang_ccc[]); // template
 
 
 
@@ -3089,10 +3089,7 @@ void update_gui_display_ccc (void)
   gtk_label_set_text(GTK_LABEL(data_filled_ccc), display_output_ccc.totalfilled);
   gtk_label_set_text(GTK_LABEL(data_retried_ccc), display_output_ccc.retried);
   gtk_label_set_text(GTK_LABEL(data_retrypasses_ccc), display_output_ccc.retrypasses);
-  //gtk_label_set_text(GTK_LABEL(), display_output_ccc.);
-  //gtk_label_set_text(GTK_LABEL(), display_output_ccc.);
-  //gtk_label_set_text(GTK_LABEL(), display_output_ccc.);
-  //gtk_label_set_text(GTK_LABEL(), display_output_ccc.);
+  //gtk_label_set_text(GTK_LABEL(), display_output_ccc.); // template
 
 
   update_status_buttons_ccc();
@@ -3633,8 +3630,7 @@ void display_analyze_results_ccc(void)
   GtkWidget *dialog = GTK_WIDGET (gtk_builder_get_object (builder, "analyze_results_dialog"));
   GtkWidget *analyze_results_data_label = GTK_WIDGET (gtk_builder_get_object (builder, "analyze_results_data_label"));
   //GtkWidget *analyze_results_box_label = GTK_WIDGET (gtk_builder_get_object (builder, "analyze_results_box_label"));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
+  // = GTK_WIDGET (gtk_builder_get_object (builder, "")); // template
   g_object_unref(builder);
 
   gtk_label_set_text(GTK_LABEL(analyze_results_data_label), analyze_text_ccc);
@@ -3679,8 +3675,7 @@ void display_smart_data_ccc(void)
   GtkWidget *dialog = GTK_WIDGET (gtk_builder_get_object (builder, "smart_results_dialog"));
   GtkWidget *smart_results_data_label = GTK_WIDGET (gtk_builder_get_object (builder, "smart_results_data_label"));
   //GtkWidget *smart_results_box_label = GTK_WIDGET (gtk_builder_get_object (builder, "smart_results_box_label"));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
+  // = GTK_WIDGET (gtk_builder_get_object (builder, "")); // template
   g_object_unref(builder);
 
   gtk_label_set_text(GTK_LABEL(smart_results_data_label), smart_data_text_ccc);
@@ -3708,8 +3703,7 @@ void display_identify_data_ccc(void)
   GtkWidget *dialog = GTK_WIDGET (gtk_builder_get_object (builder, "identify_results_dialog"));
   GtkWidget *smart_results_data_label = GTK_WIDGET (gtk_builder_get_object (builder, "identify_results_data_label"));
   //GtkWidget *smart_results_box_label = GTK_WIDGET (gtk_builder_get_object (builder, "smart_results_box_label"));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
+  // = GTK_WIDGET (gtk_builder_get_object (builder, "")); // template
   g_object_unref(builder);
 
   gtk_label_set_text(GTK_LABEL(smart_results_data_label), identify_device_raw_text_ccc);
@@ -3787,12 +3781,7 @@ void open_clone_settings_dialog_ccc (void)
   alignment_spinbutton_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "alignment_spinbutton"));
   maxreadrate_button_label_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "maxreadrate_button_label"));
   maxreadrate_spinbutton_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "maxreadrate_spinbutton"));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
+  // = GTK_WIDGET (gtk_builder_get_object (builder, "")); // template
   g_object_unref(builder);
 
   gtk_label_set_text(GTK_LABEL(phase_control_label_ccc), curlang_ccc[LANGPHASECONTROLLABEL]);
@@ -3923,9 +3912,7 @@ void open_advanced_settings_dialog_ccc (void)
   driver_minimum_cluster_size_button_label_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "driver_minimum_cluster_size_button_label"));
   driver_minimum_cluster_size_spinbutton_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "driver_minimum_cluster_size_spinbutton"));
   use_color_statusbar_checkbutton_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "use_color_statusbar_checkbutton"));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
+  // = GTK_WIDGET (gtk_builder_get_object (builder, "")); // template
   g_object_unref(builder);
 
   gtk_button_set_label(GTK_BUTTON(no_log_backup_checkbutton_ccc), curlang_ccc[LANGNOLOGBACKUP]);
@@ -3962,8 +3949,8 @@ void open_advanced_settings_dialog_ccc (void)
   gtk_label_set_text(GTK_LABEL(driver_minimum_cluster_size_button_label_ccc), curlang_ccc[LANGVIRTUALMINCLUSTER]);
   gtk_label_set_text(GTK_LABEL(virtual_disk_device_name_label_ccc), curlang_ccc[LANGVIRTUALNAME]);
   gtk_button_set_label(GTK_BUTTON(use_color_statusbar_checkbutton_ccc), curlang_ccc[LANGUSECOLORSTATUSBAR]);
-  //gtk_button_set_label(GTK_BUTTON(), curlang_ccc[]);
-  //gtk_label_set_text(GTK_LABEL(), curlang_ccc[]);
+  //gtk_button_set_label(GTK_BUTTON(), curlang_ccc[]); // template
+  //gtk_label_set_text(GTK_LABEL(), curlang_ccc[]); // template
 
   if (!advanced_settings_ccc.enable_output_offset)
   {
@@ -4094,8 +4081,7 @@ void open_timer_settings_dialog_ccc (void)
   enable_usb_soft_reset_checkbutton_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "enable_usb_soft_reset_checkbutton"));
   enable_usb_hard_reset_checkbutton_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "enable_usb_hard_reset_checkbutton"));
   enable_usb_port_reset_checkbutton_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "enable_usb_port_reset_checkbutton"));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
+  // = GTK_WIDGET (gtk_builder_get_object (builder, "")); // template
   g_object_unref(builder);
 
   gtk_label_set_text(GTK_LABEL(timer_settings_label_ccc), "");
@@ -4126,11 +4112,8 @@ void open_timer_settings_dialog_ccc (void)
   gtk_button_set_label(GTK_BUTTON(enable_usb_soft_reset_checkbutton_ccc), curlang_ccc[LANGENABLEUSBSOFTRESET]);
   gtk_button_set_label(GTK_BUTTON(enable_usb_hard_reset_checkbutton_ccc), curlang_ccc[LANGENABLEUSBHARDRESET]);
   gtk_button_set_label(GTK_BUTTON(enable_usb_port_reset_checkbutton_ccc), curlang_ccc[LANGENABLEUSBPORTRESET]);
-
   //gtk_button_set_label(GTK_BUTTON(), curlang_ccc[]);
   //gtk_label_set_text(GTK_LABEL(), curlang_ccc[]);
-
-
 
   gtk_entry_set_max_length (GTK_ENTRY (power_command_to_call_text_ccc), MAX_CALL_LENGTH);
 
@@ -4238,9 +4221,7 @@ int open_ports_dialog_ccc (char *current_ports)
   updated_ports_label_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "updated_ports_label"));
   updated_ports_info_label_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "updated_ports_info_label"));
   update_ports_button_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "update_ports_button"));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
+  // = GTK_WIDGET (gtk_builder_get_object (builder, "")); // template
   g_object_unref(builder);
 
   strcpy (new_ports_ccc, "");
@@ -4291,9 +4272,7 @@ int set_lun_dialog_ccc (int max_lun)
   lun_values_info_label_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "lun_values_info_label"));
   set_current_lun_label_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "set_current_lun_label"));
   current_lun_spinbutton_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "current_lun_spinbutton"));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
+  // = GTK_WIDGET (gtk_builder_get_object (builder, "")); // template
   g_object_unref(builder);
 
   char luninfo[256] = "";
@@ -4368,10 +4347,7 @@ void open_primary_relay_dialog_ccc (void)
   test_primary_relay_button_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "test_primary_relay_button"));
   activate_primary_relay_button_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "activate_primary_relay_button"));
   deactivate_primary_relay_button_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "deactivate_primary_relay_button"));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
+  // = GTK_WIDGET (gtk_builder_get_object (builder, "")); // template
   g_object_unref(builder);
 
   gtk_label_set_text(GTK_LABEL(primary_relay_settings_label_ccc), "");
@@ -4401,17 +4377,12 @@ void open_primary_relay_dialog_ccc (void)
   gtk_button_set_label(GTK_BUTTON(test_primary_relay_button_ccc), curlang_ccc[LANGTESTRELAYBUTTON]);
   gtk_button_set_label(GTK_BUTTON(activate_primary_relay_button_ccc), curlang_ccc[LANGACTIVATE]);
   gtk_button_set_label(GTK_BUTTON(deactivate_primary_relay_button_ccc), curlang_ccc[LANGDEACTIVATE]);
-
-
   //gtk_button_set_label(GTK_BUTTON(), curlang_ccc[]);
   //gtk_label_set_text(GTK_LABEL(), curlang_ccc[]);
-
-
 
   //gtk_entry_set_max_length (GTK_ENTRY (power_command_to_call_text_ccc), MAX_CALL_LENGTH);
 
   //g_signal_connect(G_OBJECT(phase_timers_checkbutton_ccc), "toggled", G_CALLBACK(set_state_from_button_ccc), GINT_TO_POINTER(BUTTONID_PHASETIMERS));
-
 
   load_primary_relay_settings_ccc();
   gtk_label_set_text(GTK_LABEL(data_current_relay_board_a_ccc), primary_relay_settings_ccc.primary_relay_name);
@@ -4430,10 +4401,6 @@ void open_primary_relay_dialog_ccc (void)
   gtk_widget_destroy(dialog);
   update_display_ccc(0);
 }
-
-
-
-
 
 void update_primary_relay_settings_from_buttons_ccc (void)
 {
@@ -4459,8 +4426,6 @@ void update_primary_relay_settings_from_buttons_ccc (void)
   // = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON());
   // = gtk_spin_button_get_value(GTK_SPIN_BUTTON());
 }
-
-
 
 
 
@@ -4571,8 +4536,6 @@ void do_test_primary_relay_ccc (void)
 
 
 
-
-
 int cycle_primary_relay_ccc(void)
 {
   if (!usbr1_chosen_ccc)
@@ -4625,8 +4588,6 @@ int cycle_primary_relay_ccc(void)
 
 
 
-
-
 void update_ports_ccc (void)
 {
   const gchar *entry_text;
@@ -4676,9 +4637,7 @@ int open_confirmation_dialog_ccc (char *message)
   gtk_builder_connect_signals(builder, NULL);
   GtkWidget *dialog = GTK_WIDGET (gtk_builder_get_object (builder, "confirmation_dialog"));
   confirmation_box_label_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "confirmation_box_label"));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
-  // = GTK_WIDGET (gtk_builder_get_object (builder, ""));
+  // = GTK_WIDGET (gtk_builder_get_object (builder, "")); // template
   g_object_unref(builder);
 
   gtk_label_set_text(GTK_LABEL(confirmation_box_label_ccc), message);
@@ -5200,9 +5159,9 @@ void update_clone_button_settings_ccc (void)
   gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(maxreadrate_spinbutton_ccc), gtk_adjustment_ccc);
   gtk_spin_button_set_value(GTK_SPIN_BUTTON(maxreadrate_spinbutton_ccc), clone_settings_ccc.max_read_rate / 1000);
 
-  //gtk_adjustment_ccc = (GtkAdjustment *) gtk_adjustment_new (0, 1, 1, 1, 1, 0);
-  //gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(), gtk_adjustment_ccc);
-  //gtk_spin_button_set_value(GTK_SPIN_BUTTON(), clone_settings_ccc.);
+  //gtk_adjustment_ccc = (GtkAdjustment *) gtk_adjustment_new (0, 1, 1, 1, 1, 0); // template
+  //gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(), gtk_adjustment_ccc); // template
+  //gtk_spin_button_set_value(GTK_SPIN_BUTTON(), clone_settings_ccc.); // template
 
 }
 
@@ -5349,7 +5308,7 @@ void update_timer_button_settings_ccc (void)
   gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (enable_usb_port_reset_checkbutton_ccc), timer_settings_ccc.usb_port_reset_enabled);
 
 
-  //gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (), timer_settings_ccc. );
+  //gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (), timer_settings_ccc. ); // template
 
   //gtk_adjustment_ccc = (GtkAdjustment *) gtk_adjustment_new (0, 1, 1, 1, 1, 0);
   //gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(), gtk_adjustment_ccc);
@@ -6110,23 +6069,5 @@ void map_heads_ccc (void)
   }
 #endif
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
