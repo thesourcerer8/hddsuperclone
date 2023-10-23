@@ -10736,6 +10736,7 @@ int write_chunk_ccc(long long position, int size)
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
+      if(temp_buffer!=NULL) free(temp_buffer);
       return OUTPUT_DEVICE_ERROR_RETURN_CODE;
     }
     else if (sense_key_ccc > 1)
@@ -10746,6 +10747,7 @@ int write_chunk_ccc(long long position, int size)
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
+      if(temp_buffer!=NULL) free(temp_buffer);
       return OUTPUT_DEVICE_ERROR_RETURN_CODE;
     }
     else if (io_host_status_ccc)
@@ -10756,6 +10758,7 @@ int write_chunk_ccc(long long position, int size)
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
+      if(temp_buffer!=NULL) free(temp_buffer);
       return OUTPUT_DEVICE_ERROR_RETURN_CODE;
     }
     long long end_time = get_elapsed_usec_ccc();
@@ -10768,6 +10771,7 @@ int write_chunk_ccc(long long position, int size)
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
+      if(temp_buffer!=NULL) free(temp_buffer);
       return OUTPUT_DEVICE_ERROR_RETURN_CODE;
     }
   }
@@ -10782,6 +10786,7 @@ int write_chunk_ccc(long long position, int size)
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
+      if(temp_buffer!=NULL) free(temp_buffer);
       return OUTPUT_DEVICE_ERROR_RETURN_CODE;
     }
     ret = write(disk2_fd_ccc, ccc_buffer_ccc, size * sector_size_ccc);
@@ -10793,6 +10798,7 @@ int write_chunk_ccc(long long position, int size)
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
+      if(temp_buffer!=NULL) free(temp_buffer);
       return OUTPUT_DEVICE_ERROR_RETURN_CODE;
     }
     else if (ret != size * sector_size_ccc)
@@ -10803,6 +10809,7 @@ int write_chunk_ccc(long long position, int size)
       message_error_ccc(tempmessage_ccc);
       print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
       clear_error_message_ccc();
+      if(temp_buffer!=NULL) free(temp_buffer);
       return OUTPUT_DEVICE_ERROR_RETURN_CODE;
     }
   }
