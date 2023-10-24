@@ -50,7 +50,7 @@ long long error_level_ccc;
 unsigned char exitcode_ccc;
 FILE *debug_file_ccc;
 char *disk_1_ccc;
-char *disk_2_ccc;
+char *disk_2_ccc=NULL;
 char *script_file_ccc;
 char current_script_ccc[MAX_LINE_LENGTH];
 int print_error_message_ccc;

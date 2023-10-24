@@ -2643,8 +2643,7 @@ void choose_image_ccc (void)
       {
         fprintf (stdout, "%s\n", filename);
         free (disk_2_ccc);
-        disk_2_ccc = malloc (strlen(filename)+2);
-        strcpy (disk_2_ccc, filename);
+        disk_2_ccc = strdup(filename);
         destination_chosen_ccc = 1;
         destination_size_valid_ccc = 0;
         strcpy (current_destination_model_ccc, "");
@@ -2711,8 +2710,7 @@ void choose_null_ccc (void)
   {
       fprintf (stdout, "/dev/null\n");
       free (disk_2_ccc);
-      disk_2_ccc = malloc (16);
-      strcpy (disk_2_ccc, "/dev/null");
+      disk_2_ccc = strdup("/dev/null");
       strcpy (current_destination_model_ccc, curlang_ccc[LANGNODESTINATION]);
       strcpy (current_destination_serial_ccc, "");
       logfile_changed_ccc = true;
@@ -3034,6 +3032,7 @@ void clear_destination_ccc (void)
   destination_chosen_ccc = 0;
   if (disk_2_ccc != NULL)
   {
+    free(disk_2_ccc);
     disk_2_ccc = NULL;
   }
   strcpy (current_destination_model_ccc, "");

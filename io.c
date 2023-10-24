@@ -9515,7 +9515,8 @@ int choose_target_ccc(void)
         }
         else if (strcasecmp(raw_value, "N") == 0)
         {
-          disk_2_ccc = "/dev/null";
+          free(disk_2_ccc);
+          disk_2_ccc = strdup("/dev/null");
           break;
         }
         else if (strcasecmp(raw_value, "I") == 0)
@@ -9524,6 +9525,7 @@ int choose_target_ccc(void)
           fflush(stdout);
           if ( fgets(input_text, sizeof input_text, stdin) != NULL )
           {
+            free(disk_2_ccc);
             disk_2_ccc = malloc (sizeof input_text);
             memset (disk_2_ccc, 0, sizeof input_text);
             sscanf(input_text, "%[^\n]", disk_2_ccc);
@@ -9563,7 +9565,7 @@ int choose_target_ccc(void)
 
   if (choice > 0)
   {
-    if(disk_2_ccc!=NULL) free (disk_2_ccc);
+    free(disk_2_ccc);
     disk_2_ccc = malloc (sizeof drive_list_ccc[i]);
     memcpy (disk_2_ccc, drive_list_ccc[i], sizeof drive_list_ccc[i]);
     strcpy (current_destination_model_ccc, model_ccc[i]);
