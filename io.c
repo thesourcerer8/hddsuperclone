@@ -6821,7 +6821,7 @@ int process_resources_ccc(unsigned long long *start, unsigned long long *end, un
     int success = 1;
     // new fixed method of memory mapping ports
     int fixed_method = 1;
-    if (fixed_method)
+    if (fixed_method && count>=4)
     {
       potential_chan0_reg = start[0];
       potential_chan0_con = start[1];
@@ -9009,7 +9009,7 @@ int choose_device_ccc(void)
       // if odd
       if (device_select_ccc[check_choice])
       {
-        if (device_present_ccc[check_choice-1] || device_visable_ccc[check_choice-1])
+        if (check_choice>0 && (device_present_ccc[check_choice-1] || device_visable_ccc[check_choice-1]))
         {
           same_controller = 1;
         }
