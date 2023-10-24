@@ -6830,7 +6830,7 @@ int process_resources_ccc(unsigned long long *start, unsigned long long *end, un
       potential_chan0_bus = start[4];
       potential_chan1_bus = start[4] + 8;
     }
-    else
+    else if(count>=4)
     {
       // we expect a io_byte_ccc size pattern of 8, 1 or 4, 8, 1 or 4, 16
       i = 0;
@@ -6896,6 +6896,10 @@ int process_resources_ccc(unsigned long long *start, unsigned long long *end, un
         //fprintf (stdout, "fail5\n");
         success = 0;
       }
+    }
+    else
+    {
+      success=0;
     }
 
     if (success)
