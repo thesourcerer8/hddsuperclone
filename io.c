@@ -6394,6 +6394,7 @@ int find_all_devices_ccc(void)
     char list[cols][rows];
     int i;
     char line[cols];
+    memset(line,0,sizeof(line));
     i = 0;
     while (fgets(line, sizeof line, fp))
     {
@@ -6448,6 +6449,7 @@ int find_all_devices_ccc(void)
     int cols = 255;
     int i;
     char line[cols];
+    memset(line,0,sizeof(line));
     i = 0;
     while (fgets(line, sizeof line, fp))
     {
@@ -6505,6 +6507,7 @@ int find_all_devices_ccc(void)
     int cols = 255;
     int i;
     char line[cols];
+    memset(line,0,sizeof(line));
     i = 0;
     while (fgets(line, sizeof line, fp))
     {
@@ -6571,6 +6574,7 @@ int find_bus_devices_ccc(char *driver)
   char list[cols][rows];
   int i;
   char line[cols];
+  memset(line,0,sizeof(line));
   i = 0;
   while (fgets(line, sizeof line, fp))
   {
@@ -9601,6 +9605,7 @@ int get_device_information_ccc(char *driver, char *bus, int bus_count, int devic
   int cols = 255;
   int i;
   char line[cols];
+  memset(line,0,sizeof(line));
   i = 0;
   while (fgets(line, sizeof line, fp))
   {
