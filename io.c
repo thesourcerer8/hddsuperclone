@@ -6692,7 +6692,7 @@ int process_resources_ccc(unsigned long long *start, unsigned long long *end, un
       unsigned long long potential_hba_end;
       // new fixed method of memory mapping ports, the 6th in the list should be the hba
       int fixed_method = 1;
-      if (fixed_method)
+      if (fixed_method && count>=5)
       {
         potential_hba_start = start[5];
         potential_hba_end = end[5];
