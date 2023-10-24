@@ -6804,12 +6804,12 @@ int process_resources_ccc(unsigned long long *start, unsigned long long *end, un
 
   else
   {
-    unsigned long long potential_chan0_reg;
-    unsigned long long potential_chan0_con;
-    unsigned long long potential_chan0_bus;
-    unsigned long long potential_chan1_reg;
-    unsigned long long potential_chan1_con;
-    unsigned long long potential_chan1_bus;
+    unsigned long long potential_chan0_reg=0;
+    unsigned long long potential_chan0_con=0;
+    unsigned long long potential_chan0_bus=0;
+    unsigned long long potential_chan1_reg=0;
+    unsigned long long potential_chan1_con=0;
+    unsigned long long potential_chan1_bus=0;
     int i;
     if (verbose_ccc & DEBUG8)
     {
