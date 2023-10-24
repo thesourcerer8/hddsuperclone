@@ -690,6 +690,8 @@ print_logical_sector_sizes (int fd, unsigned int current_lss)
 	__u8 d[512] = {0,};
 	int i, found = 0, rc, found_byte_lss = 0, found_word_lss = 0, lss_is_bytes = 0;
 
+	if (fd == -1)
+		return;
 	rc = get_log_page_data(fd, 0x2f, 0, d);
 	if (rc)
 		return;

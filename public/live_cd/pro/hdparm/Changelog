@@ -1,3 +1,7 @@
+hdparm-9.65:
+	- Another --Istdin fix: cannot read log pages when no device specified
+hdparm-9.64:
+	- fix truncated output buf with --Istdin
 hdparm-9.63:
 	- new --sanitize-overwrite-passes flag, courtesy Michal Grzedzicki.
 	- "Plurals patch" from Martin Guy.

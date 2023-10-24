@@ -1,4 +1,4 @@
-.TH HDPARM 8 "Jan 2022" "Version 9.63"
+.TH HDPARM 8 "Sep 2022" "Version 9.65"
 
 .SH NAME
 hdparm \- get/set SATA/IDE device parameters
@@ -303,6 +303,9 @@ drives which may give media errors with the standard mechanism.
 When
 .B --Istdin
 is used, it must be the *only* parameter given.
+Note that some information will be incomplete, as the drive LOG PAGES are unavailable when
+.B --Istdin
+is used.
 .TP
 .I --Istdout
 This option dumps the drive's identify data in hex to stdout,

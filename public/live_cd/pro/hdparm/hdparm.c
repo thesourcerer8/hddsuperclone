@@ -2,7 +2,7 @@
  * hdparm.c - Command line interface to get/set hard disk parameters.
  *          - by Mark Lord (C) 1994-2022 -- freely distributable.
  */
-#define HDPARM_VERSION "v9.63"
+#define HDPARM_VERSION "v9.65"
 
 #define _LARGEFILE64_SOURCE /*for lseek64*/
 #define _BSD_SOURCE	/* for strtoll() */
@@ -25,7 +25,9 @@
 #include <sys/mman.h>
 #include <sys/user.h>
 #include <linux/types.h>
+#ifndef FSCONFIG_SET_FLAG
 #include <linux/fs.h>
+#endif
 #include <linux/major.h>
 #include <endian.h>
 #include <asm/byteorder.h>
@@ -2955,6 +2957,7 @@ identify_from_stdin (void)
 		}
 	} while (wc < 256);
 	putchar('\n');
+	id = sbuf;  /* necessary for --Istdin:  identify() needs id[] */
 	identify(-1, sbuf);
 	return;
 eof:
