@@ -9663,25 +9663,21 @@ int get_device_information_ccc(char *driver, char *bus, int bus_count, int devic
     FILE *fp = popen(command, "r");
     int cols = 255;
     char line[cols];
-    while (fgets(line, sizeof line, fp))
+    if(fgets(line, sizeof line, fp)==NULL) line[0]=0;
+    for (int x = 0; x < cols; x++)
     {
-      int x;
-      for (x = 0; x < cols; x++)
+      if (line[x] == '\0' || line[x] == '\n')
       {
-        if (line[x] == '\n')
-        {
-          line[x] = '\0';
-          break;
-        }
+        line[x] = '\0';
+        break;
       }
-      //fprintf (stdout, "%s\n", line);  //debug
-      if (strcmp(line, "") != 0)
-      {
-        //fprintf (stdout, "found host\n");  //debug
-        strcpy(check_host, line);
-        host_found = 1;
-      }
-      break;
+    }
+    //fprintf (stdout, "%s\n", line);  //debug
+    if (strcmp(line, "") != 0)
+    {
+      //fprintf (stdout, "found host\n");  //debug
+      strcpy(check_host, line);
+      host_found = 1;
     }
     pclose(fp);
   }
