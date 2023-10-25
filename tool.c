@@ -973,7 +973,6 @@ int read_script_file_ccc(char *script_file_ccc)
     if (i >= script_rows_ccc)
     {
       script_rows_ccc += 1000;
-      unsigned int i;
       script_line_buffer_ccc = realloc(script_line_buffer_ccc, script_rows_ccc * cols * sizeof(*script_line_buffer_ccc));
       if (script_line_buffer_ccc == NULL)
       {
@@ -990,9 +989,9 @@ int read_script_file_ccc(char *script_file_ccc)
         return (3);
       }
 
-      for (i = 0; i < script_rows_ccc; ++i)
+      for (int j = 0; j < script_rows_ccc; ++j)
       {
-        script_line_pointer_ccc[i] = &script_line_buffer_ccc[i * cols];
+        script_line_pointer_ccc[j] = &script_line_buffer_ccc[j * cols];
       }
     }
   }
