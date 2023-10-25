@@ -12438,7 +12438,7 @@ int check_buffer_limit_ccc(void)
     else
     {
       char line[20];
-      fgets(line, sizeof line, file_pointer);
+      if(fgets(line, sizeof line, file_pointer)==NULL) line[0]=0;
       fclose(file_pointer);
       long long max_sectors_kb = strtoull(line, NULL, 0);
       max_size = (max_sectors_kb*1024)/sector_size_ccc;
@@ -13219,7 +13219,7 @@ int open_target_destination_ccc(void)
       strcpy (command, "mount | grep ' / '|cut -d' ' -f 1");
       FILE *fp = popen(command, "r");
       char line[255];
-      fgets(line, sizeof line, fp);
+      if(fgets(line, sizeof line, fp)==NULL) line[0]=0;
       pclose(fp);
       if (strncmp(disk_2_ccc, line, 8) == 0)
       {
@@ -13352,7 +13352,7 @@ int open_source_disk_ccc(void)
       snprintf(command, sizeof(command), "mount | grep %s", disk_1_ccc);
       FILE *fp = popen(command, "r");
       char line[255];
-      fgets(line, sizeof line, fp);
+      if(fgets(line, sizeof line, fp)==NULL) line[0]=0;
       pclose(fp);
       if (strncmp(disk_1_ccc, line, 8) == 0)
       {
@@ -14079,7 +14079,7 @@ int process_source_ccc(void)
     FILE *fp = popen(command, "r");
     int cols = 255;
     char line[cols];
-    fgets(line, sizeof line, fp);
+    if(fgets(line, sizeof line, fp)==NULL) line[0]=0;
     pclose(fp);
     char name[cols];
     char model[cols];
