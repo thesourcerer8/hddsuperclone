@@ -989,7 +989,7 @@ int read_script_file_ccc(char *script_file_ccc)
         return (3);
       }
 
-      for (int j = 0; j < script_rows_ccc; ++j)
+      for (unsigned int j = 0; j < script_rows_ccc; ++j)
       {
         script_line_pointer_ccc[j] = &script_line_buffer_ccc[j * cols];
       }
