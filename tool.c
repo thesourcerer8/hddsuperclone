@@ -978,6 +978,7 @@ int read_script_file_ccc(char *script_file_ccc)
       if (script_line_buffer_ccc == NULL)
       {
         fprintf (stderr, "Error allocating memory (%s)\n", strerror(errno));
+	fclose(readfile);
         return (3);
       }
 
@@ -985,6 +986,7 @@ int read_script_file_ccc(char *script_file_ccc)
       if (script_line_pointer_ccc == NULL)
       {
         fprintf (stderr, "Error allocating memory (%s)\n", strerror(errno));
+	fclose(readfile);
         return (3);
       }
 
