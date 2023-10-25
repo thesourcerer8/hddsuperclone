@@ -9663,6 +9663,7 @@ int get_device_information_ccc(char *driver, char *bus, int bus_count, int devic
     FILE *fp = popen(command, "r");
     int cols = 255;
     char line[cols];
+    memset(line,0,sizeof(line));
     if(fgets(line, sizeof line, fp)==NULL) line[0]=0;
     for (int x = 0; x < cols; x++)
     {
