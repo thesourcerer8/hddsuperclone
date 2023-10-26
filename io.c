@@ -9726,17 +9726,20 @@ int get_device_information_ccc(char *driver, char *bus, int bus_count, int devic
         }
         //char temp = line[n-2];
         //int device_compare = strtol(&temp, NULL, 0);
-        int device_compare = line[n-2] - '0';
-        if (device == device_compare)
-        {
-          //fprintf (stdout, "found target %s %s %c %d %d \n", check_location, line, temp, device, device_compare);  //debug
-          strcpy (check_target, line);
-          strcat (device_reference_ccc[current_device_count], ".0");
-          strncat (device_reference_ccc[current_device_count], &line[n-2], 1);
-          device_visable_ccc[current_device_count] = true;
-          target_found = 1;
-          break;
-        }
+	if(n>=2) // This is necessary to prevent a buffer underrun with accessing line[n-2] but I am not sure whether this is the right way to do it.
+	{
+          int device_compare = line[n-2] - '0';
+          if (device == device_compare)
+          {
+            //fprintf (stdout, "found target %s %s %c %d %d \n", check_location, line, temp, device, device_compare);  //debug
+            strcpy (check_target, line);
+            strcat (device_reference_ccc[current_device_count], ".0");
+            strncat (device_reference_ccc[current_device_count], &line[n-2], 1);
+            device_visable_ccc[current_device_count] = true;
+            target_found = 1;
+            break;
+          }
+	}
       }
     }
     pclose(fp);
