@@ -9700,12 +9700,13 @@ int get_device_information_ccc(char *driver, char *bus, int bus_count, int devic
     FILE *fp = popen(command, "r");
     int cols = 255;
     char line[cols];
+    memset(line,0,sizeof(line));
     while (fgets(line, sizeof line, fp))
     {
       int x;
       for (x = 0; x < cols; x++)
       {
-        if (line[x] == '\n')
+        if (line[x]=='\0' || line[x] == '\n')
         {
           line[x] = '\0';
           break;
@@ -9763,12 +9764,13 @@ int get_device_information_ccc(char *driver, char *bus, int bus_count, int devic
     FILE *fp = popen(command, "r");
     int cols = 255;
     char line[cols];
+    memset(line,0,sizeof(line));
     while (fgets(line, sizeof line, fp))
     {
       int x;
       for (x = 0; x < cols; x++)
       {
-        if (line[x] == '\n')
+        if (line[x] == '\0' || line[x] == '\n')
         {
           line[x] = '\0';
           break;
@@ -9803,12 +9805,13 @@ int get_device_information_ccc(char *driver, char *bus, int bus_count, int devic
     FILE *fp = popen(command, "r");
     int cols = 255;
     char line[cols];
+    memset(line,0,sizeof(line));
     while (fgets(line, sizeof line, fp))
     {
       int x;
       for (x = 0; x < cols; x++)
       {
-        if (line[x] == '\n')
+        if (line[x]=='\0' || line[x] == '\n')
         {
           line[x] = '\0';
           break;
@@ -9824,10 +9827,6 @@ int get_device_information_ccc(char *driver, char *bus, int bus_count, int devic
     }
     pclose(fp);
   }
-
-
-
-
 
 
   return (0);
