@@ -470,8 +470,9 @@ int main (int argc, char **argv)
   {
     fprintf (debug_file_ccc, "%s debug file created at ", title);
     time_t mytime;
+    char timebuf[30];
     mytime = time(NULL);
-    fprintf (debug_file_ccc, "%s", ctime(&mytime));
+    fprintf (debug_file_ccc, "%s", ctime_r(&mytime,timebuf));
     fprintf (debug_file_ccc, "disk_1 = %s\n", disk_1_ccc);
     fprintf (debug_file_ccc, "script_file = %s\n", script_file_ccc);
   }

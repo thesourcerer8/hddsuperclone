@@ -3669,8 +3669,9 @@ int hba_reset_ccc(void)
         FILE *hba_debug_reset_file = fopen("hba_reset_debug.log", "w");
         fprintf (hba_debug_reset_file, "%s %s hba debug reset file created at ", title_ccc, version_number_ccc);
         time_t mytime;
+	char timebuf[30];
         mytime = time(NULL);
-        fprintf (hba_debug_reset_file, "%s", ctime(&mytime));
+        fprintf (hba_debug_reset_file, "%s", ctime_r(&mytime,timebuf));
 
         snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "HBA Reset\n");
         message_console_log_ccc(tempmessage_ccc, 0);
@@ -4573,8 +4574,9 @@ int hba_test_ccc(void)
   FILE *hba_debug_file = fopen("hba_debug.log", "w");
   fprintf (hba_debug_file, "%s %s hba debug file created at ", title_ccc, version_number_ccc);
   time_t mytime;
+  char timebuf[30];
   mytime = time(NULL);
-  fprintf (hba_debug_file, "%s", ctime(&mytime));
+  fprintf (hba_debug_file, "%s", ctime_r(&mytime,timebuf));
   fprintf (stdout, "driver control data size %d\n", (int)sizeof(driver_control_data_ccc));
   fprintf (stderr, "driver control data size %d\n", (int)sizeof(driver_control_data_ccc));
   fprintf (hba_debug_file, "driver control data size %d\n", (int)sizeof(driver_control_data_ccc));
