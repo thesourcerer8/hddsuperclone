@@ -1191,8 +1191,9 @@ void dump_data_to_filename_binary_ccc(char *filename, unsigned char *data, int s
 {
   FILE *file = fopen(filename, "a");
   time_t mytime;
+  char timebuf[30];
   mytime = time(NULL);
-  fprintf (file, "******dump data ****** %d %s %s", size, description, ctime(&mytime));
+  fprintf (file, "******dump data ****** %d %s %s", size, description, ctime_r(&mytime,timebuf));
   if (size % 4)
   {
     fprintf (file, "warning, size of data not evenly dividable by 4\n");
@@ -1231,8 +1232,9 @@ void dump_data_to_filename_ccc(char *filename, void* buffer, int size, char *des
   unsigned char *data = buffer;
   FILE *file = fopen(filename, "a");
   time_t mytime;
+  char timebuf[30];
   mytime = time(NULL);
-  fprintf (file, "****** dump data ****** %d %s %s", size, description, ctime(&mytime));
+  fprintf (file, "****** dump data ****** %d %s %s", size, description, ctime_r(&mytime,timebuf));
   if (size % 16)
   {
     fprintf (file, "warning, size of data not evenly dividable by 16\n");
@@ -1256,8 +1258,11 @@ void dump_data_to_filename_ccc(char *filename, void* buffer, int size, char *des
     }
     fprintf (file, "\n");
   }
-  int fp = fileno(file);
-  fsync(fp);
+  if(file!=NULL)
+  {
+    int fp = fileno(file);
+    fsync(fp);
+  }
   fclose(file);
 }
 
@@ -1269,8 +1274,9 @@ void dump_info_to_filename_ccc(char *filename, char *info)
 {
   FILE *file = fopen(filename, "a");
   time_t mytime;
+  char timebuf[30];
   mytime = time(NULL);
-  fprintf (file, "****** dump info ****** %s", ctime(&mytime));
+  fprintf (file, "****** dump info ****** %s", ctime_r(&mytime,timebuf));
   fprintf (file, "%s", info);
   int fp = fileno(file);
   fsync(fp);
