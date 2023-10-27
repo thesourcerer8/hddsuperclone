@@ -2184,7 +2184,6 @@ void choose_source_ccc(void)
   }
   else
   {
-    int i;
     if (memory_used_ccc)
     {
       initialize_memory_ccc();
@@ -2206,11 +2205,11 @@ void choose_source_ccc(void)
     gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (choose_source_scrolled_window_ccc), choose_source_vbox_ccc);
 
     GtkWidget *button[MAX_DEVICES];
-    for (i=0;i<MAX_DEVICES;i++) button[i]=NULL;
+    for (int i=0;i<MAX_DEVICES;i++) button[i]=NULL;
 
     if (ahci_mode_ccc)
     {
-      for (i = 0; i < device_count_ccc; i++)
+      for (int i = 0; i < device_count_ccc; i++)
       {
         char button_label[MAX_BUTTON_LABEL_SIZE] = "";
         if (verbose_ccc & DEBUG6)
@@ -2232,80 +2231,77 @@ void choose_source_ccc(void)
     }
     else if (direct_mode_ccc)
     {
-      int i;
-      for (i = 0; i < device_count_ccc; i++)
+      for (int j = 0; j < device_count_ccc; j++)
       {
         char button_label[MAX_BUTTON_LABEL_SIZE] = "";
         if (verbose_ccc & DEBUG6)
         {
-          snprintf(button_label, sizeof(button_label), "%s %s %s %s %llx %llx %llx %d (%lld) %s %s", device_driver_ccc[i], device_bus_ccc[i], device_reference_ccc[i], device_name_ccc[i], reg_address_ccc[i], control_address_ccc[i], bus_address_ccc[i], device_select_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
+          snprintf(button_label, sizeof(button_label), "%s %s %s %s %llx %llx %llx %d (%lld) %s %s", device_driver_ccc[j], device_bus_ccc[j], device_reference_ccc[j], device_name_ccc[j], reg_address_ccc[j], control_address_ccc[j], bus_address_ccc[j], device_select_ccc[j], drive_size_ccc[j], model_ccc[j], serial_ccc[j]);
         }
         else if (verbose_ccc & DEBUG5)
         {
-          snprintf(button_label, sizeof(button_label), "%s %s %llx %llx %llx %d (%lld) %s %s", device_reference_ccc[i], device_name_ccc[i], reg_address_ccc[i], control_address_ccc[i], bus_address_ccc[i], device_select_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
+          snprintf(button_label, sizeof(button_label), "%s %s %llx %llx %llx %d (%lld) %s %s", device_reference_ccc[j], device_name_ccc[j], reg_address_ccc[j], control_address_ccc[j], bus_address_ccc[j], device_select_ccc[j], drive_size_ccc[j], model_ccc[j], serial_ccc[j]);
         }
         else
         {
-          snprintf(button_label, sizeof(button_label), "%s %s (%lld) %s %s", device_reference_ccc[i], device_name_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
+          snprintf(button_label, sizeof(button_label), "%s %s (%lld) %s %s", device_reference_ccc[j], device_name_ccc[j], drive_size_ccc[j], model_ccc[j], serial_ccc[j]);
         }
-        button[i] = gtk_button_new_with_label(button_label);
-        gtk_button_set_alignment(GTK_BUTTON(button[i]), 0, .5);
-        g_signal_connect(button[i], "clicked", G_CALLBACK(get_source_from_button_ccc), GINT_TO_POINTER(i) );
+        button[j] = gtk_button_new_with_label(button_label);
+        gtk_button_set_alignment(GTK_BUTTON(button[j]), 0, .5);
+        g_signal_connect(button[j], "clicked", G_CALLBACK(get_source_from_button_ccc), GINT_TO_POINTER(j) );
       }
     }
     else if (usb_mode_ccc)
     {
-      int i;
-      for (i = 0; i < usb_device_count_ccc; i++)
+      for (int j = 0; j < usb_device_count_ccc; j++)
       {
         char button_label[MAX_BUTTON_LABEL_SIZE] = "";
         if (verbose_ccc & DEBUG6)
         {
-          snprintf(button_label, sizeof(button_label), "%d:%d %04x:%04x %02x %02x %d %s %s %s\n", usb_bus_real_number_ccc[i], usb_device_number_ccc[i], usb_vendor_id_ccc[i], usb_product_id_ccc[i], usb_bulk_in_endpoint_ccc[i], usb_bulk_out_endpoint_ccc[i], usb_mass_storage_ccc[i], usb_vendor_string_ccc[i], usb_product_string_ccc[i], usb_extra_id_string_ccc[i]);
+          snprintf(button_label, sizeof(button_label), "%d:%d %04x:%04x %02x %02x %d %s %s %s\n", usb_bus_real_number_ccc[j], usb_device_number_ccc[j], usb_vendor_id_ccc[j], usb_product_id_ccc[j], usb_bulk_in_endpoint_ccc[j], usb_bulk_out_endpoint_ccc[j], usb_mass_storage_ccc[j], usb_vendor_string_ccc[j], usb_product_string_ccc[j], usb_extra_id_string_ccc[j]);
         }
         else if (verbose_ccc & DEBUG5)
         {
-          snprintf(button_label, sizeof(button_label), "%d:%d %04x:%04x %s %s %s\n", usb_bus_real_number_ccc[i], usb_device_number_ccc[i], usb_vendor_id_ccc[i], usb_product_id_ccc[i], usb_vendor_string_ccc[i], usb_product_string_ccc[i], usb_extra_id_string_ccc[i]);
+          snprintf(button_label, sizeof(button_label), "%d:%d %04x:%04x %s %s %s\n", usb_bus_real_number_ccc[j], usb_device_number_ccc[j], usb_vendor_id_ccc[j], usb_product_id_ccc[j], usb_vendor_string_ccc[j], usb_product_string_ccc[j], usb_extra_id_string_ccc[j]);
         }
         else
         {
-          snprintf(button_label, sizeof(button_label), "%d:%d %04x:%04x %s %s\n", usb_bus_real_number_ccc[i], usb_device_number_ccc[i], usb_vendor_id_ccc[i], usb_product_id_ccc[i], usb_vendor_string_ccc[i], usb_product_string_ccc[i]);
+          snprintf(button_label, sizeof(button_label), "%d:%d %04x:%04x %s %s\n", usb_bus_real_number_ccc[j], usb_device_number_ccc[j], usb_vendor_id_ccc[j], usb_product_id_ccc[j], usb_vendor_string_ccc[j], usb_product_string_ccc[j]);
         }
-        button[i] = gtk_button_new_with_label(button_label);
-        gtk_button_set_alignment(GTK_BUTTON(button[i]), 0, .5);
-        g_signal_connect(button[i], "clicked", G_CALLBACK(get_usb_from_button_ccc), GINT_TO_POINTER(i) );
+        button[j] = gtk_button_new_with_label(button_label);
+        gtk_button_set_alignment(GTK_BUTTON(button[j]), 0, .5);
+        g_signal_connect(button[j], "clicked", G_CALLBACK(get_usb_from_button_ccc), GINT_TO_POINTER(j) );
       }
     }
     else
     {
-      int i;
-      for (i = 0; i < device_count_ccc; i++)
+      for (int j = 0; j < device_count_ccc; j++)
       {
         char button_label[MAX_BUTTON_LABEL_SIZE] = "";
-        snprintf(button_label, sizeof(button_label), "%s (%lld) %s %s", drive_list_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
-        button[i] = gtk_button_new_with_label(button_label);
-        gtk_button_set_alignment(GTK_BUTTON(button[i]), 0, .5);
-        g_signal_connect(button[i], "clicked", G_CALLBACK(get_source_from_button_ccc), GINT_TO_POINTER(i) );
+        snprintf(button_label, sizeof(button_label), "%s (%lld) %s %s", drive_list_ccc[j], drive_size_ccc[j], model_ccc[j], serial_ccc[j]);
+        button[j] = gtk_button_new_with_label(button_label);
+        gtk_button_set_alignment(GTK_BUTTON(button[j]), 0, .5);
+        g_signal_connect(button[j], "clicked", G_CALLBACK(get_source_from_button_ccc), GINT_TO_POINTER(j) );
       }
     }
 
 
     if (usb_mode_ccc)
     {
-      for (i = 0; i < usb_device_count_ccc; i++)
+      for (int k = 0; k < usb_device_count_ccc; k++)
       {
-        if ( (verbose_ccc & DEBUG6) || (verbose_ccc & DEBUG5) || usb_mass_storage_ccc[i])
+        if ( (verbose_ccc & DEBUG6) || (verbose_ccc & DEBUG5) || usb_mass_storage_ccc[k])
         {
-          gtk_box_pack_start (GTK_BOX (choose_source_vbox_ccc), button[i], FALSE, FALSE, 0);
+          gtk_box_pack_start (GTK_BOX (choose_source_vbox_ccc), button[k], FALSE, FALSE, 0);
         }
       }
 
     }
     else
     {
-      for (i = 0; i < device_count_ccc; i++)
+      for (int k = 0; k < device_count_ccc; k++)
       {
-        gtk_box_pack_start (GTK_BOX (choose_source_vbox_ccc), button[i], FALSE, FALSE, 0);
+        gtk_box_pack_start (GTK_BOX (choose_source_vbox_ccc), button[k], FALSE, FALSE, 0);
       }
 
     }
