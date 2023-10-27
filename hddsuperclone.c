@@ -512,7 +512,8 @@ int main (int argc, char **argv)
     fprintf (debug_file_ccc, "%s debug file created at ", title_ccc);
     time_t mytime;
     mytime = time(NULL);
-    fprintf (debug_file_ccc, "%s", ctime(&mytime));
+    char timebuf4[30];
+    fprintf (debug_file_ccc, "%s", ctime_r(&mytime,timebuf4));
     fprintf (debug_file_ccc, "disk_1 = %s\n", disk_1_ccc);
     fprintf (debug_file_ccc, "script_file = %s\n", log_file_ccc);
   }
@@ -16829,7 +16830,8 @@ int rebuild_assist_map_heads_ccc (void)
   fprintf (headmap_debug_file, "%s %s headmap debug file created at ", title_ccc, version_number_ccc);
   time_t mytime;
   mytime = time(NULL);
-  fprintf (headmap_debug_file, "%s", ctime(&mytime));
+  char timebuf[30];
+  fprintf (headmap_debug_file, "%s", ctime_r(&mytime,timebuf));
 
   int brute_force = 0;
 
@@ -17477,7 +17479,8 @@ int rebuild_assist_map_heads_ccc (void)
   fprintf (writefile, "# Headmap file create by %s %s\n", title_ccc, version_number_ccc);
   //time_t mytime;
   mytime = time(NULL);
-  fprintf (writefile, "# %s", ctime(&mytime));
+  char timebuf2[30];
+  fprintf (writefile, "# %s", ctime_r(&mytime,timebuf2));
   fprintf (writefile, "# head \tstart     \tend     \tsize     \tstatus\n");
   int line_number;
   for (line_number = 0; line_number < head_map_line_ccc; line_number++)
@@ -17492,7 +17495,8 @@ int rebuild_assist_map_heads_ccc (void)
   disable_rebuild_assist_ccc();
   fprintf (headmap_debug_file, "%s %s headmap debug file ended at ", title_ccc, version_number_ccc);
   mytime = time(NULL);
-  fprintf (headmap_debug_file, "%s", ctime(&mytime));
+  char timebuf3[30];
+  fprintf (headmap_debug_file, "%s", ctime_r(&mytime,timebuf3));
   fclose (headmap_debug_file);
   free(file_name);
 
