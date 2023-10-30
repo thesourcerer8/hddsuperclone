@@ -1418,7 +1418,7 @@ void redraw_top_drawing_area(void)
 
 
 
-void change_left_resolution(GtkWidget *w, gpointer data)
+void change_left_resolution(const GtkWidget *w, gpointer data)
 {
   g_print( "%d\n", GPOINTER_TO_INT( data ) );
   left_square_size = GPOINTER_TO_INT( data );
@@ -1553,7 +1553,7 @@ void redraw_left_vbox(void)
 
 
 
-void change_main_resolution(GtkWidget *w, gpointer data)
+void change_main_resolution(const GtkWidget *w, gpointer data)
 {
   snprintf(tempmessage, sizeof(tempmessage), "%d\n", GPOINTER_TO_INT( data ) );
   message_debug(tempmessage, 0);
@@ -1564,7 +1564,7 @@ void change_main_resolution(GtkWidget *w, gpointer data)
 
 
 
-void change_main_grid_size(GtkWidget *w, gpointer data)
+void change_main_grid_size(const GtkWidget *w, gpointer data)
 {
   snprintf(tempmessage, sizeof(tempmessage), "%d\n", GPOINTER_TO_INT( data ) );
   message_debug(tempmessage, 0);
@@ -2784,7 +2784,7 @@ int translate_all(void)
       fprintf (stdout, "translating %d\n", i/3);
       char *translang = languages[i+1];
       char *language = languages[i];
-      char *native = languages[i+2];
+      const char *native = languages[i+2];
       copy_enlanguage();
       if ( translate_language("en", translang, language, native) )
       {
