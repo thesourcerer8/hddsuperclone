@@ -1262,8 +1262,8 @@ void dump_data_to_filename_ccc(char *filename, void* buffer, int size, char *des
   {
     int fp = fileno(file);
     fsync(fp);
+    fclose(file);
   }
-  fclose(file);
 }
 
 
