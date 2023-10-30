@@ -15871,6 +15871,7 @@ void disable_ports_ccc (void)
   int res3=system("cp -f /etc/default/grub /etc/default/grub_hddsc_last_bakup");
   if(res0 || res1 || res2 || res3)
   {
+    // We aren't sure about the return values
   }
   if (access("/boot/grub/grub_hddsc_original_bakup.cfg", F_OK ) == -1)
   {
