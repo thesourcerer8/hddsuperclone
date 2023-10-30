@@ -905,7 +905,7 @@ static gboolean on_button_press(const GtkWidget* widget, GdkEventButton *event, 
 
 
 
-static gboolean top_drawing_expose_event(const GtkWidget *widget, GdkEventExpose *event, gpointer data)
+static gboolean top_drawing_expose_event(const GtkWidget *widget, const GdkEventExpose *event, gpointer data)
 {
   redraw_top_drawing_area();
 
@@ -917,7 +917,7 @@ static gboolean top_drawing_expose_event(const GtkWidget *widget, GdkEventExpose
 }
 
 
-static gboolean main_drawing_expose_event(const GtkWidget *widget, GdkEventExpose *event, gpointer data)
+static gboolean main_drawing_expose_event(const GtkWidget *widget, const GdkEventExpose *event, gpointer data)
 {
   redraw_main_drawing_area();
 
@@ -930,7 +930,7 @@ static gboolean main_drawing_expose_event(const GtkWidget *widget, GdkEventExpos
 }
 
 
-static gboolean left_vbox_expose_event(const GtkWidget *widget, GdkEventExpose *event, gpointer data)
+static gboolean left_vbox_expose_event(const GtkWidget *widget, const GdkEventExpose *event, gpointer data)
 {
   redraw_left_vbox();
 
