@@ -347,7 +347,7 @@ void help(void);
 
 void version(void);
 
-gint update_action (const gpointer data);
+gint update_action (gconstpointer data);
 
 void update_size_variables(void);
 

@@ -3824,7 +3824,7 @@ int translate_all(void)
       fprintf (stdout, "translating %d\n", i/3);
       char *translang = languages[i+1];
       char *language = languages[i];
-      char *native = languages[i+2];
+      const char *native = languages[i+2];
       copy_enlanguage();
       if ( translate_language("en", translang, language, native) )
       {
@@ -4248,7 +4248,7 @@ int translate_language_slow(char *fromlang, char *translang, const char *languag
 
     fprintf (stdout, "%d %s to %s  ", count, fromlang, translang);
     do_nanosleep(TRANSLATETIMERSLOW);  // this is a timer to deal with google translator
-    char *data = get_translated_data(url_data);
+    const char *data = get_translated_data(url_data);
     //fprintf (stdout, "%s\n", data);
     strcpy (return_data, data);
     //fprintf (stdout, "\n*****************************************************\n");

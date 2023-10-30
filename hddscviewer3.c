@@ -581,7 +581,7 @@ int main (int argc, char **argv)
 
 
 
-gint update_action (const gpointer data)
+gint update_action (gconstpointer data)
 {
   update_size_variables();
   compare_size_variables();
