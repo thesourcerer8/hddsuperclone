@@ -646,7 +646,7 @@ int translate_all_ccc(void)
       fprintf (stdout, "translating %d of %d\n", i/3, total_language_items/3);
       char *translang = languages_ccc[i+1];
       char *language = languages_ccc[i];
-      char *native = languages_ccc[i+2];
+      const char *native = languages_ccc[i+2];
       copy_enlanguage_ccc();
       if ( translate_language_ccc("en", translang, language, native) )
       {
