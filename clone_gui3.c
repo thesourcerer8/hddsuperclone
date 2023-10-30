@@ -623,9 +623,8 @@ int translate_all_ccc(void)
       clear_error_message_ccc();
     }
     fprintf(writefile, "%s", program_title);
-    unsigned int i;
     unsigned int n;
-    for (i = 0; i < LANGCOUNT; i++)
+    for (unsigned int i = 0; i < LANGCOUNT; i++)
     {
       fprintf(writefile, "\n|__|%04d|__|\n", i);
       fprintf(writefile, "%s", enlang_ccc[i]);
@@ -644,12 +643,12 @@ int translate_all_ccc(void)
       fprintf (stdout, "\n*****************************************************\n");
       return -1;
     }
-    for (i = 0; i < total_language_items; i+=3)
+    for (unsigne int i = 0; i < total_language_items; i+=3)
     {
       fprintf (stdout, "translating %d of %d\n", i/3, total_language_items/3);
       char *translang = languages_ccc[i+1];
       char *language = languages_ccc[i];
-      char *native = languages_ccc[i+2];
+      const char *native = languages_ccc[i+2];
       copy_enlanguage_ccc();
       if ( translate_language_ccc("en", translang, language, native) )
       {
@@ -765,12 +764,11 @@ int translate_language_ccc(char *fromlang, char *translang, const char *language
   strcpy (lang_data, "");
   strcpy (new_data, "");
   strcpy (return_data, "");
-  int i;
-  for (i = 0; i < LANGCOUNT; i++)
+  for (int i = 0; i < LANGCOUNT; i++)
   {
     strcpy (newlang_ccc[i], "");
   }
-  for (i = 0; i < LANGCOUNT; i++)
+  for (int i = 0; i < LANGCOUNT; i++)
   {
     snprintf(temp_data, sizeof(temp_data), "\n|__|%04d|__|\n", i);
     strcat(lang_data, temp_data);
@@ -779,9 +777,8 @@ int translate_language_ccc(char *fromlang, char *translang, const char *language
     int linebyline = 0;
     if (strlen(lang_data) > 3000 || i == LANGCOUNT - 1 || linebyline)
     {
-      int n;
       int len = strlen(lang_data);
-      for (n = 0; n < len; n++)
+      for (int n = 0; n < len; n++)
       {
         char c = lang_data[n];
         if (c == ' ')
@@ -821,7 +818,7 @@ int translate_language_ccc(char *fromlang, char *translang, const char *language
   strcpy (new_lang_data, "");
   int return_length = strlen(return_data);
   int bracket_depth = 0;
-  for (i = 0; i < return_length; i++)
+  for (int i = 0; i < return_length; i++)
   {
     if (return_data[i] == '[')
     {
@@ -1051,16 +1048,14 @@ int translate_language_slow_ccc(char *fromlang, char *translang, const char *lan
   strcpy (lang_data, "");
   strcpy (new_data, "");
   strcpy (return_data, "");
-  int count;
-  for (count = 0; count < LANGCOUNT; count++)
+  for (int count = 0; count < LANGCOUNT; count++)
   {
     strcpy (lang_data, "");
     strcpy (new_data, "");
     snprintf(temp_data, sizeof(temp_data), "%s", curlang_ccc[count]);
     strcat(lang_data, temp_data);
-    int n;
     int len = strlen(lang_data);
-    for (n = 0; n < len; n++)
+    for (int n = 0; n < len; n++)
     {
       char c = lang_data[n];
       if (c == ' ')
@@ -1095,8 +1090,7 @@ int translate_language_slow_ccc(char *fromlang, char *translang, const char *lan
 
     strcpy (new_lang_data, "");
     int return_length = strlen(return_data);
-    int i;
-    for (i = 0; i < return_length; i++)
+    for (int i = 0; i < return_length; i++)
     {
       if (return_data[i] == '[')
       {
@@ -1161,8 +1155,7 @@ int translate_language_slow_ccc(char *fromlang, char *translang, const char *lan
   }
 
   fprintf(writefile, "%s", program_title);
-  int i;
-  for (i = 0; i < LANGCOUNT; i++)
+  for (int i = 0; i < LANGCOUNT; i++)
   {
     fprintf(writefile, "\n|__|%04d|__|\n", i);
     fprintf(writefile, "%s", newlang_ccc[i]);
@@ -1259,8 +1252,7 @@ static void file_export_sel_ccc( char *export_file )
   }
 
   fprintf(writefile, "%s", program_title);
-  int i;
-  for (i = 0; i < LANGCOUNT; i++)
+  for (int i = 0; i < LANGCOUNT; i++)
   {
     fprintf(writefile, "\n|__|%04d|__|\n", i);
     fprintf(writefile, "%s", enlang_ccc[i]);
