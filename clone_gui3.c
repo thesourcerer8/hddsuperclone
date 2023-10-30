@@ -623,7 +623,6 @@ int translate_all_ccc(void)
       clear_error_message_ccc();
     }
     fprintf(writefile, "%s", program_title);
-    unsigned int n;
     for (unsigned int i = 0; i < LANGCOUNT; i++)
     {
       fprintf(writefile, "\n|__|%04d|__|\n", i);
@@ -659,7 +658,7 @@ int translate_all_ccc(void)
       }
       if (translate_ccc == 80009)
       {
-        for (n = 0; n < LANGCOUNT; n++)
+        for (unsigned int n = 0; n < LANGCOUNT; n++)
         {
           strcpy (alllang[i/3][n], newlang_ccc[n]);
         }
@@ -671,7 +670,7 @@ int translate_all_ccc(void)
           fprintf (stdout, "\n*****************************************************\n");
           translate_failed = 1;
         }
-        for (n = 0; n < LANGCOUNT; n++)
+        for (unsigned int n = 0; n < LANGCOUNT; n++)
         {
           strcpy (reverselang[i/3][n], newlang_ccc[n]);
         }
