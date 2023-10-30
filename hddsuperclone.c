@@ -1615,7 +1615,7 @@ int initialize_memory_ccc(void)
       }
     }
 
-    padding_buffer_ccc = malloc(pagesize_ccc);
+    if(padding_buffer_ccc==NULL) padding_buffer_ccc = malloc(pagesize_ccc);
     // initialize the table buffer
     if (direct_mode_ccc)
     {
