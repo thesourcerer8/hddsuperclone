@@ -581,7 +581,7 @@ int main (int argc, char **argv)
 
 
 
-gint update_action (gpointer data)
+gint update_action (const gpointer data)
 {
   update_size_variables();
   compare_size_variables();
@@ -881,7 +881,7 @@ void compare_size_variables(void)
 
 
 
-static gboolean on_button_press(GtkWidget* widget, GdkEventButton *event, GdkWindowEdge edge)
+static gboolean on_button_press(const GtkWidget* widget, GdkEventButton *event, GdkWindowEdge edge)
 {
   if (event->type == GDK_BUTTON_PRESS)
   {
@@ -905,20 +905,19 @@ static gboolean on_button_press(GtkWidget* widget, GdkEventButton *event, GdkWin
 
 
 
-static gboolean top_drawing_expose_event(__attribute__((unused)) GtkWidget *widget, __attribute__((unused)) GdkEventExpose *event, __attribute__((unused)) gpointer data)
+static gboolean top_drawing_expose_event(const GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
   redraw_top_drawing_area();
 
   // make the compiler happy and not complain about unused paramaters
-  //(void) widget;
-  //(void) event;
-  //(void) data;
-
+  (void) widget;
+  (void) event;
+  (void) data;
   return 0;
 }
 
 
-static gboolean main_drawing_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
+static gboolean main_drawing_expose_event(const GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
   redraw_main_drawing_area();
 
@@ -931,7 +930,7 @@ static gboolean main_drawing_expose_event(GtkWidget *widget, GdkEventExpose *eve
 }
 
 
-static gboolean left_vbox_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
+static gboolean left_vbox_expose_event(const GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
   redraw_left_vbox();
 

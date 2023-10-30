@@ -347,19 +347,19 @@ void help(void);
 
 void version(void);
 
-gint update_action (gpointer data);
+gint update_action (const gpointer data);
 
 void update_size_variables(void);
 
 void compare_size_variables(void);
 
-static gboolean on_button_press(GtkWidget* widget, GdkEventButton *event, GdkWindowEdge edge);
+static gboolean on_button_press(const GtkWidget* widget, GdkEventButton *event, GdkWindowEdge edge);
 
-static gboolean main_drawing_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data);
+static gboolean main_drawing_expose_event(const GtkWidget *widget, GdkEventExpose *event, gpointer data);
 
-static gboolean left_vbox_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data);
+static gboolean left_vbox_expose_event(const GtkWidget *widget, GdkEventExpose *event, gpointer data);
 
-static gboolean top_drawing_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data);
+static gboolean top_drawing_expose_event(const GtkWidget *widget, GdkEventExpose *event, gpointer data);
 
 void getsize_main_window(GtkWidget *widget, GtkAllocation *allocation, void *data);
 
