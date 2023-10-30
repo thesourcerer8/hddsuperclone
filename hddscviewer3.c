@@ -3170,16 +3170,14 @@ int translate_language_slow(char *fromlang, char *translang, const char *languag
   strcpy (lang_data, "");
   strcpy (new_data, "");
   strcpy (return_data, "");
-  int count;
-  for (count = 0; count < LANGCOUNT; count++)
+  for (int count = 0; count < LANGCOUNT; count++)
   {
     strcpy (lang_data, "");
     strcpy (new_data, "");
     snprintf(temp_data, sizeof(temp_data), "%s", curlang[count]);
     strcat(lang_data, temp_data);
-    int n;
     int len = strlen(lang_data);
-    for (n = 0; n < len; n++)
+    for (int n = 0; n < len; n++)
     {
       char c = lang_data[n];
       if (c == ' ')
@@ -3214,8 +3212,7 @@ int translate_language_slow(char *fromlang, char *translang, const char *languag
 
     strcpy (new_lang_data, "");
     int return_length = strlen(return_data);
-    int i;
-    for (i = 0; i < return_length; i++)
+    for (int i = 0; i < return_length; i++)
     {
       if (return_data[i] == '[')
       {
@@ -3280,8 +3277,7 @@ int translate_language_slow(char *fromlang, char *translang, const char *languag
   }
 
   fprintf(writefile, "%s", program_title);
-  int i;
-  for (i = 0; i < LANGCOUNT; i++)
+  for (int i = 0; i < LANGCOUNT; i++)
   {
     fprintf(writefile, "\n|_|%d|_|\n", i);
     fprintf(writefile, "%s", newlang[i]);
@@ -3300,8 +3296,7 @@ int translate_language_slow(char *fromlang, char *translang, const char *languag
 
 int copy_enlanguage(void)
 {
-  int i;
-  for (i = 0; i < LANGCOUNT; i++)
+  for (int i = 0; i < LANGCOUNT; i++)
   {
     strcpy (curlang[i], enlang[i]);
   }
@@ -3314,8 +3309,7 @@ int copy_enlanguage(void)
 
 int copy_newlanguage(void)
 {
-  int i;
-  for (i = 0; i < LANGCOUNT; i++)
+  for (int i = 0; i < LANGCOUNT; i++)
   {
     strcpy (curlang[i], newlang[i]);
     //fprintf(stdout, "%d %s", i, newlang[i]);
