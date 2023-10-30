@@ -1087,7 +1087,7 @@ int translate_language_slow_ccc(char *fromlang, char *translang, const char *lan
 
     fprintf (stdout, "%d %s to %s  ", count, fromlang, translang);
     do_nanosleep_ccc(TRANSLATETIMERSLOW);  // this is a timer to deal with google translator
-    char *data = get_translated_data_ccc(url_data);
+    const char *data = get_translated_data_ccc(url_data);
     //fprintf (stdout, "%s\n", data);
     strlcpy (return_data, data, sizeof(return_data));
     //fprintf (stdout, "\n*****************************************************\n");
