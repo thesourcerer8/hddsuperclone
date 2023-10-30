@@ -361,29 +361,29 @@ static gboolean left_vbox_expose_event(const GtkWidget *widget, GdkEventExpose *
 
 static gboolean top_drawing_expose_event(const GtkWidget *widget, GdkEventExpose *event, gpointer data);
 
-void getsize_main_window(GtkWidget *widget, GtkAllocation *allocation, void *data);
+void getsize_main_window(const GtkWidget *widget, GtkAllocation *allocation, const void *data);
 
-void getsize_main_vbox(GtkWidget *widget, GtkAllocation *allocation, void *data);
+void getsize_main_vbox(const GtkWidget *widget, GtkAllocation *allocation, const void *data);
 
-void getsize_main_hbox(GtkWidget *widget, GtkAllocation *allocation, void *data);
+void getsize_main_hbox(const GtkWidget *widget, GtkAllocation *allocation, const void *data);
 
-void getsize_left_vbox(GtkWidget *widget, GtkAllocation *allocation, void *data);
+void getsize_left_vbox(const GtkWidget *widget, GtkAllocation *allocation, const void *data);
 
-void getsize_right_vbox(GtkWidget *widget, GtkAllocation *allocation, void *data);
+void getsize_right_vbox(const GtkWidget *widget, GtkAllocation *allocation, const void *data);
 
-void getsize_top_hbox(GtkWidget *widget, GtkAllocation *allocation, void *data);
+void getsize_top_hbox(const GtkWidget *widget, GtkAllocation *allocation, const void *data);
 
-void getsize_top_info_box(GtkWidget *widget, GtkAllocation *allocation, void *data);
+void getsize_top_info_box(const GtkWidget *widget, GtkAllocation *allocation, const void *data);
 
-void getsize_top_drawing_area(GtkWidget *widget, GtkAllocation *allocation, void *data);
+void getsize_top_drawing_area(const GtkWidget *widget, GtkAllocation *allocation, const void *data);
 
-void getsize_main_drawing_area(GtkWidget *widget, GtkAllocation *allocation, void *data);
+void getsize_main_drawing_area(const GtkWidget *widget, GtkAllocation *allocation, const void *data);
 
-void getsize_left_drawing_area(GtkWidget *widget, GtkAllocation *allocation, void *data);
+void getsize_left_drawing_area(const GtkWidget *widget, GtkAllocation *allocation, const void *data);
 
-void getsize_main_drawing_vbox(GtkWidget *widget, GtkAllocation *allocation, void *data);
+void getsize_main_drawing_vbox(const GtkWidget *widget, GtkAllocation *allocation, const void *data);
 
-void getsize_main_scrolled_window(GtkWidget *widget, GtkAllocation *allocation, void *data);
+void getsize_main_scrolled_window(const GtkWidget *widget, GtkAllocation *allocation, const void *data);
 
 void change_main_resolution(GtkWidget *w, gpointer data);
 

@@ -943,7 +943,7 @@ static gboolean left_vbox_expose_event(const GtkWidget *widget, GdkEventExpose *
 }
 
 
-void getsize_main_window(GtkWidget *widget, GtkAllocation *allocation, void *data)
+void getsize_main_window(const GtkWidget *widget, GtkAllocation *allocation, const void *data)
 {
   snprintf(tempmessage, sizeof(tempmessage), "main window width = %d, height = %d\n", allocation->width, allocation->height);
   message_debug(tempmessage, 0);
@@ -957,7 +957,7 @@ void getsize_main_window(GtkWidget *widget, GtkAllocation *allocation, void *dat
   (void) data;
 }
 
-void getsize_main_vbox(GtkWidget *widget, GtkAllocation *allocation, void *data)
+void getsize_main_vbox(const GtkWidget *widget, GtkAllocation *allocation, const void *data)
 {
   snprintf(tempmessage, sizeof(tempmessage), "main_vbox width = %d, height = %d\n", allocation->width, allocation->height);
   message_debug(tempmessage, 0);
@@ -971,7 +971,7 @@ void getsize_main_vbox(GtkWidget *widget, GtkAllocation *allocation, void *data)
   (void) data;
 }
 
-void getsize_main_hbox(GtkWidget *widget, GtkAllocation *allocation, void *data)
+void getsize_main_hbox(const GtkWidget *widget, GtkAllocation *allocation, const void *data)
 {
   snprintf(tempmessage, sizeof(tempmessage), "main_hbox width = %d, height = %d\n", allocation->width, allocation->height);
   message_debug(tempmessage, 0);
@@ -985,7 +985,7 @@ void getsize_main_hbox(GtkWidget *widget, GtkAllocation *allocation, void *data)
   (void) data;
 }
 
-void getsize_left_vbox(GtkWidget *widget, GtkAllocation *allocation, void *data)
+void getsize_left_vbox(const GtkWidget *widget, GtkAllocation *allocation, const void *data)
 {
   snprintf(tempmessage, sizeof(tempmessage), "left_vbox width = %d, height = %d\n", allocation->width, allocation->height);
   message_debug(tempmessage, 0);
@@ -999,7 +999,7 @@ void getsize_left_vbox(GtkWidget *widget, GtkAllocation *allocation, void *data)
   (void) data;
 }
 
-void getsize_right_vbox(GtkWidget *widget, GtkAllocation *allocation, void *data)
+void getsize_right_vbox(const GtkWidget *widget, GtkAllocation *allocation, const void *data)
 {
   snprintf(tempmessage, sizeof(tempmessage), "right_vbox width = %d, height = %d\n", allocation->width, allocation->height);
   message_debug(tempmessage, 0);
@@ -1013,7 +1013,7 @@ void getsize_right_vbox(GtkWidget *widget, GtkAllocation *allocation, void *data
   (void) data;
 }
 
-void getsize_top_hbox(GtkWidget *widget, GtkAllocation *allocation, void *data)
+void getsize_top_hbox(const GtkWidget *widget, GtkAllocation *allocation, const void *data)
 {
   snprintf(tempmessage, sizeof(tempmessage), "top_hbox width = %d, height = %d\n", allocation->width, allocation->height);
   message_debug(tempmessage, 0);
@@ -1027,7 +1027,7 @@ void getsize_top_hbox(GtkWidget *widget, GtkAllocation *allocation, void *data)
   (void) data;
 }
 
-void getsize_top_info_box(GtkWidget *widget, GtkAllocation *allocation, void *data)
+void getsize_top_info_box(const GtkWidget *widget, GtkAllocation *allocation, const void *data)
 {
   snprintf(tempmessage, sizeof(tempmessage), "top_hbox width = %d, height = %d\n", allocation->width, allocation->height);
   message_debug(tempmessage, 0);
@@ -1041,7 +1041,7 @@ void getsize_top_info_box(GtkWidget *widget, GtkAllocation *allocation, void *da
   (void) data;
 }
 
-void getsize_top_drawing_area(GtkWidget *widget, GtkAllocation *allocation, void *data)
+void getsize_top_drawing_area(const GtkWidget *widget, GtkAllocation *allocation, const void *data)
 {
   snprintf(tempmessage, sizeof(tempmessage), "top_drawing_area width = %d, height = %d\n", allocation->width, allocation->height);
   message_debug(tempmessage, 0);
@@ -1055,7 +1055,7 @@ void getsize_top_drawing_area(GtkWidget *widget, GtkAllocation *allocation, void
   (void) data;
 }
 
-void getsize_main_drawing_area(GtkWidget *widget, GtkAllocation *allocation, void *data)
+void getsize_main_drawing_area(const GtkWidget *widget, GtkAllocation *allocation, const void *data)
 {
   snprintf(tempmessage, sizeof(tempmessage), "main drawing area width = %d, height = %d\n", allocation->width, allocation->height);
   message_debug(tempmessage, 0);
@@ -1069,7 +1069,7 @@ void getsize_main_drawing_area(GtkWidget *widget, GtkAllocation *allocation, voi
   (void) data;
 }
 
-void getsize_main_drawing_vbox(GtkWidget *widget, GtkAllocation *allocation, void *data)
+void getsize_main_drawing_vbox(const GtkWidget *widget, GtkAllocation *allocation, const void *data)
 {
   snprintf(tempmessage, sizeof(tempmessage), "main drawing vbox width = %d, height = %d\n", allocation->width, allocation->height);
   message_debug(tempmessage, 0);
@@ -1083,7 +1083,7 @@ void getsize_main_drawing_vbox(GtkWidget *widget, GtkAllocation *allocation, voi
   (void) data;
 }
 
-void getsize_main_scrolled_window(GtkWidget *widget, GtkAllocation *allocation, void *data)
+void getsize_main_scrolled_window(const GtkWidget *widget, GtkAllocation *allocation, const void *data)
 {
   snprintf(tempmessage, sizeof(tempmessage), "main_scrolled_window width = %d, height = %d\n", allocation->width, allocation->height);
   message_debug(tempmessage, 0);
@@ -1097,7 +1097,7 @@ void getsize_main_scrolled_window(GtkWidget *widget, GtkAllocation *allocation, 
   (void) data;
 }
 
-void getsize_left_drawing_area(GtkWidget *widget, GtkAllocation *allocation, void *data)
+void getsize_left_drawing_area(const GtkWidget *widget, GtkAllocation *allocation, const void *data)
 {
   snprintf(tempmessage, sizeof(tempmessage), "left drawing area width = %d, height = %d\n", allocation->width, allocation->height);
   message_debug(tempmessage, 0);
