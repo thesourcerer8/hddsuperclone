@@ -563,7 +563,7 @@ void display_identify_data_ccc(void);
 
 void choose_primary_usb_ccc(void);
 
-void get_usb_from_button_ccc (GtkWidget *w, gpointer data);
+void get_usb_from_button_ccc (const GtkWidget *w, gpointer data);
 
 void clear_usbr1_ccc (void);
 

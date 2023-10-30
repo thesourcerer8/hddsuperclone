@@ -5869,7 +5869,7 @@ void choose_primary_usb_ccc(void)
 
 
 
-void get_usb_from_button_ccc (GtkWidget *w, gpointer data)
+void get_usb_from_button_ccc (const GtkWidget *w, gpointer data)
 {
   new_usb_ccc = GPOINTER_TO_INT( data );
   g_print ("selection=%d  \n", new_usb_ccc);
