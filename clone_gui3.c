@@ -2581,7 +2581,7 @@ void choose_destination_ccc(void)
 
 
 
-void get_destination_from_button_ccc (GtkWidget *w, gpointer data)
+void get_destination_from_button_ccc (const GtkWidget *w, gpointer data)
 {
   new_destination_ccc = GPOINTER_TO_INT( data );
   g_print ("selection=%d  \n", new_destination_ccc);
