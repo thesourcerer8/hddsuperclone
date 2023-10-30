@@ -2240,7 +2240,8 @@ void choose_source_ccc(void)
           snprintf(button_label, sizeof(button_label), "%s %s (%lld) %s %s", device_reference_ccc[j], device_name_ccc[j], drive_size_ccc[j], model_ccc[j], serial_ccc[j]);
         }
         button[j] = gtk_button_new_with_label(button_label);
-        gtk_button_set_alignment(GTK_BUTTON(button[j]), 0, .5);
+        gtk_widget_set_halign(button[j],GTK_ALIGN_START);
+        gtk_widget_set_valign(button[j],GTK_ALIGN_CENTER);
         g_signal_connect(button[j], "clicked", G_CALLBACK(get_source_from_button_ccc), GINT_TO_POINTER(j) );
       }
     }
@@ -2262,7 +2263,8 @@ void choose_source_ccc(void)
           snprintf(button_label, sizeof(button_label), "%d:%d %04x:%04x %s %s\n", usb_bus_real_number_ccc[j], usb_device_number_ccc[j], usb_vendor_id_ccc[j], usb_product_id_ccc[j], usb_vendor_string_ccc[j], usb_product_string_ccc[j]);
         }
         button[j] = gtk_button_new_with_label(button_label);
-        gtk_button_set_alignment(GTK_BUTTON(button[j]), 0, .5);
+        gtk_widget_set_halign(button[j],GTK_ALIGN_START);
+        gtk_widget_set_valign(button[j],GTK_ALIGN_CENTER);
         g_signal_connect(button[j], "clicked", G_CALLBACK(get_usb_from_button_ccc), GINT_TO_POINTER(j) );
       }
     }
@@ -2273,7 +2275,8 @@ void choose_source_ccc(void)
         char button_label[MAX_BUTTON_LABEL_SIZE] = "";
         snprintf(button_label, sizeof(button_label), "%s (%lld) %s %s", drive_list_ccc[j], drive_size_ccc[j], model_ccc[j], serial_ccc[j]);
         button[j] = gtk_button_new_with_label(button_label);
-        gtk_button_set_alignment(GTK_BUTTON(button[j]), 0, .5);
+        gtk_widget_set_halign(button[j],GTK_ALIGN_START);
+        gtk_widget_set_valign(button[j],GTK_ALIGN_CENTER);
         g_signal_connect(button[j], "clicked", G_CALLBACK(get_source_from_button_ccc), GINT_TO_POINTER(j) );
       }
     }
@@ -2505,7 +2508,8 @@ void choose_destination_ccc(void)
       char button_label[MAX_BUTTON_LABEL_SIZE] = "";
       snprintf(button_label, sizeof(button_label), "%s (%lld) %s %s", drive_list_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
       button[i] = gtk_button_new_with_label(button_label);
-      gtk_button_set_alignment(GTK_BUTTON(button[i]), 0, .5);
+      gtk_widget_set_halign(button[i],GTK_ALIGN_START);
+      gtk_widget_set_valign(button[i],GTK_ALIGN_CENTER);
       g_signal_connect(button[i], "clicked", G_CALLBACK(get_destination_from_button_ccc), GINT_TO_POINTER(i) );
     }
 
@@ -5824,7 +5828,8 @@ void choose_primary_usb_ccc(void)
       char button_label[MAX_BUTTON_LABEL_SIZE] = "";
       snprintf(button_label, sizeof(button_label), "%04x:%04x %s %s %s\n", usb_vendor_id_ccc[i], usb_product_id_ccc[i], usb_vendor_string_ccc[i], usb_product_string_ccc[i], usb_extra_id_string_ccc[i]);
       button[i] = gtk_button_new_with_label(button_label);
-      gtk_button_set_alignment(GTK_BUTTON(button[i]), 0, .5);
+      gtk_widget_set_halign(button[i],GTK_ALIGN_START);
+      gtk_widget_set_valign(button[i],GTK_ALIGN_CENTER);
       g_signal_connect(button[i], "clicked", G_CALLBACK(get_usb_from_button_ccc), GINT_TO_POINTER(i) );
       gtk_box_pack_start (GTK_BOX (choose_usb_vbox_ccc), button[i], FALSE, FALSE, 0);
     }
