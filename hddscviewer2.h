@@ -517,9 +517,9 @@ static void file_import_sel( char *import_file );
 
 int translate_all(void);
 
-int translate_language(char *fromlang, char *translang, char *language, char *native);
+int translate_language(char *fromlang, char *translang, const char *language, const char *native);
 
-int translate_language_slow(char *fromlang, char *translang, char *language, char *native);
+int translate_language_slow(char *fromlang, char *translang, const char *language, const char *native);
 
 char* get_translated_data(char *url_data);
 

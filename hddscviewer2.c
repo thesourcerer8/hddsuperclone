@@ -3928,7 +3928,7 @@ int translate_all(void)
 
 
 
-int translate_language(char *fromlang, char *translang, char *language, char *native)
+int translate_language(char *fromlang, char *translang, const char *language, const char *native)
 {
   int failure = 0;
   char return_data[1000000];
@@ -3979,7 +3979,7 @@ int translate_language(char *fromlang, char *translang, char *language, char *na
 
       fprintf (stdout, "%d %s to %s  ", i, fromlang, translang);
       do_nanosleep(TRANSLATETIMERFAST);  // this is a timer to deal with google translator
-      char *data = get_translated_data(url_data);
+      const char *data = get_translated_data(url_data);
       //fprintf (stdout, "%s\n", data);
       strcat (return_data, data);
       strcpy (lang_data, "");
@@ -4202,7 +4202,7 @@ char* get_translated_data(char *url_data)
 
 
 
-int translate_language_slow(char *fromlang, char *translang, char *language, char *native)
+int translate_language_slow(char *fromlang, char *translang, const char *language, const char *native)
 {
   int failure = 0;
   char return_data[65536];
@@ -4214,16 +4214,14 @@ int translate_language_slow(char *fromlang, char *translang, char *language, cha
   strcpy (lang_data, "");
   strcpy (new_data, "");
   strcpy (return_data, "");
-  int count;
-  for (count = 0; count < LANGCOUNT; count++)
+  for (int count = 0; count < LANGCOUNT; count++)
   {
     strcpy (lang_data, "");
     strcpy (new_data, "");
     snprintf(temp_data, sizeof(temp_data), "%s", curlang[count]);
     strcat(lang_data, temp_data);
-    int n;
     int len = strlen(lang_data);
-    for (n = 0; n < len; n++)
+    for (int n = 0; n < len; n++)
     {
       char c = lang_data[n];
       if (c == ' ')
@@ -4258,8 +4256,7 @@ int translate_language_slow(char *fromlang, char *translang, char *language, cha
 
     strcpy (new_lang_data, "");
     int return_length = strlen(return_data);
-    int i;
-    for (i = 0; i < return_length; i++)
+    for (int i = 0; i < return_length; i++)
     {
       if (return_data[i] == '[')
       {
@@ -4324,8 +4321,7 @@ int translate_language_slow(char *fromlang, char *translang, char *language, cha
   }
 
   fprintf(writefile, "%s", program_title);
-  int i;
-  for (i = 0; i < LANGCOUNT; i++)
+  for (int i = 0; i < LANGCOUNT; i++)
   {
     fprintf(writefile, "\n|_|%d|_|\n", i);
     fprintf(writefile, "%s", newlang[i]);
@@ -4333,7 +4329,6 @@ int translate_language_slow(char *fromlang, char *translang, char *language, cha
 
   fclose(writefile);
   chmod(langfile, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
-
 
   return failure;
 }
