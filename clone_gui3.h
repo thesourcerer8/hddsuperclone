@@ -497,7 +497,7 @@ void get_source_from_button_ccc (GtkWidget *widget, gpointer data);
 
 void choose_destination_ccc(void);
 
-void get_destination_from_button_ccc (GtkWidget *widget, gpointer data);
+void get_destination_from_button_ccc (const GtkWidget *widget, gpointer data);
 
 void choose_image_ccc (void);
 
@@ -541,7 +541,7 @@ void about_ccc (void);
 
 void start_display_status_update_timer_ccc (void);
 
-gint display_status_update_action_ccc (gpointer data);
+gint display_status_update_action_ccc (const gpointer data);
 
 void set_driver_mode_button_status_ccc (bool active);
 
