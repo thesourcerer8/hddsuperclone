@@ -1053,16 +1053,14 @@ int translate_language_slow_ccc(char *fromlang, char *translang, const char *lan
   strcpy (lang_data, "");
   strcpy (new_data, "");
   strcpy (return_data, "");
-  int count;
-  for (count = 0; count < LANGCOUNT; count++)
+  for (int count = 0; count < LANGCOUNT; count++)
   {
     strcpy (lang_data, "");
     strcpy (new_data, "");
     snprintf(temp_data, sizeof(temp_data), "%s", curlang_ccc[count]);
     strcat(lang_data, temp_data);
-    int n;
     int len = strlen(lang_data);
-    for (n = 0; n < len; n++)
+    for (int n = 0; n < len; n++)
     {
       char c = lang_data[n];
       if (c == ' ')
@@ -1097,8 +1095,7 @@ int translate_language_slow_ccc(char *fromlang, char *translang, const char *lan
 
     strcpy (new_lang_data, "");
     int return_length = strlen(return_data);
-    int i;
-    for (i = 0; i < return_length; i++)
+    for (int i = 0; i < return_length; i++)
     {
       if (return_data[i] == '[')
       {
@@ -1163,8 +1160,7 @@ int translate_language_slow_ccc(char *fromlang, char *translang, const char *lan
   }
 
   fprintf(writefile, "%s", program_title);
-  int i;
-  for (i = 0; i < LANGCOUNT; i++)
+  for (int i = 0; i < LANGCOUNT; i++)
   {
     fprintf(writefile, "\n|__|%04d|__|\n", i);
     fprintf(writefile, "%s", newlang_ccc[i]);
