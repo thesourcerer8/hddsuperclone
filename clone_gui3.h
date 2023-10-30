@@ -541,7 +541,7 @@ void about_ccc (void);
 
 void start_display_status_update_timer_ccc (void);
 
-gint display_status_update_action_ccc (const gpointer data);
+gint display_status_update_action_ccc (gpointer data);
 
 void set_driver_mode_button_status_ccc (bool active);
 

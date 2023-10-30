@@ -2911,7 +2911,7 @@ void stop_display_status_update_timer_ccc (void)
 
 
 
-gint display_status_update_action_ccc (const gpointer data)
+gint display_status_update_action_ccc (gpointer data)
 {
   if (fill_mode_ccc || !connected_ccc || running_clone_ccc || !display_status_timer_running_ccc)
   {
