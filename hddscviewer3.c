@@ -2888,7 +2888,7 @@ int translate_all(void)
 
 
 
-int translate_language(char *fromlang, char *translang, char *language, char *native)
+int translate_language(char *fromlang, char *translang, const char *language, const char *native)
 {
   int failure = 0;
   char return_data[100000];
@@ -3158,7 +3158,7 @@ char* get_translated_data(char *url_data)
 
 
 
-int translate_language_slow(char *fromlang, char *translang, char *language, char *native)
+int translate_language_slow(char *fromlang, char *translang, const char *language, const char *native)
 {
   int failure = 0;
   char return_data[65536];
