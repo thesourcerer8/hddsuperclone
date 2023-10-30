@@ -643,7 +643,7 @@ int translate_all_ccc(void)
       fprintf (stdout, "\n*****************************************************\n");
       return -1;
     }
-    for (unsigne int i = 0; i < total_language_items; i+=3)
+    for (unsigned int i = 0; i < total_language_items; i+=3)
     {
       fprintf (stdout, "translating %d of %d\n", i/3, total_language_items/3);
       char *translang = languages_ccc[i+1];
@@ -689,15 +689,15 @@ int translate_all_ccc(void)
         clear_error_message_ccc();
       }
       fprintf(writefile, "\"%s\", ", "English");
-      for (i = 0; i < total_language_items; i+=3)
+      for (unsigned int i = 0; i < total_language_items; i+=3)
       {
         fprintf(writefile, "\"%s\", ", languages_ccc[i]);
       }
       fprintf(writefile, "\n");
-      for (n = 0; n < LANGCOUNT; n++)
+      for (int n = 0; n < LANGCOUNT; n++)
       {
         fprintf(writefile, "\"%s\", ", enlang_ccc[n]);
-        for (i = 0; i < (total_language_items/3); i++)
+        for (unsigned int i = 0; i < (total_language_items/3); i++)
         {
           fprintf(writefile, "\"%s\", ", reverselang[i][n]);
         }
@@ -716,15 +716,15 @@ int translate_all_ccc(void)
         clear_error_message_ccc();
       }
       fprintf(writefile, "\"%s\", ", "English");
-      for (i = 0; i < total_language_items; i+=3)
+      for (unsigned int i = 0; i < total_language_items; i+=3)
       {
         fprintf(writefile, "\"%s\", ", languages_ccc[i]);
       }
       fprintf(writefile, "\n");
-      for (n = 0; n < LANGCOUNT; n++)
+      for (int n = 0; n < LANGCOUNT; n++)
       {
         fprintf(writefile, "\"%s\", ", enlang_ccc[n]);
-        for (i = 0; i < (total_language_items/3); i++)
+        for (unsigned int i = 0; i < (total_language_items/3); i++)
         {
           fprintf(writefile, "\"%s\", ", alllang[i][n]);
         }
@@ -955,7 +955,7 @@ int translate_language_ccc(char *fromlang, char *translang, const char *language
   }
 
   fprintf(writefile, "%s", program_title);
-  for (i = 0; i < LANGCOUNT; i++)
+  for (int i = 0; i < LANGCOUNT; i++)
   {
     fprintf(writefile, "\n|__|%04d|__|\n", i);
     fprintf(writefile, "%s", newlang_ccc[i]);
