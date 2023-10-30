@@ -2217,7 +2217,8 @@ void choose_source_ccc(void)
           snprintf(button_label, sizeof(button_label), "%s %s (%lld) %s %s", device_reference_ccc[i], device_name_ccc[i], drive_size_ccc[i], model_ccc[i], serial_ccc[i]);
         }
         button[i] = gtk_button_new_with_label(button_label);
-        gtk_button_set_alignment(GTK_BUTTON(button[i]), 0, .5);
+        gtk_widget_set_halign(button[i],GTK_ALIGN_START);
+        gtk_widget_set_valign(button[i],GTK_ALIGN_CENTER);
         g_signal_connect(button[i], "clicked", G_CALLBACK(get_source_from_button_ccc), GINT_TO_POINTER(i) );
       }
     }
