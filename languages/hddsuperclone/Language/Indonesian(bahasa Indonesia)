@@ -1,4 +1,4 @@
-_HDDSuperClone_2.3.1_20220115_
+_HDDSuperClone_2.4.0_20240216_
 |__|0000|__|
 Mengajukan
 |__|0001|__|
@@ -6,19 +6,19 @@ Berhenti
 |__|0002|__|
 Proyek terbuka
 |__|0003|__|
-Muat file proyek (kemajuan)
+Muat file proyek (kemajuan).
 |__|0004|__|
 Kesalahan!
 |__|0005|__|
 Peringatan
 |__|0006|__|
-Kesalahan saat memproses file log!
+Terjadi kesalahan saat memproses berkas log!
 File log tidak dimuat.
 
 |__|0007|__|
-File log memiliki kesalahan!
+File log mengalami kesalahan!
 File log perlu diperbaiki sebelum dapat digunakan.
-Silakan merujuk pesan konsol untuk informasi lebih lanjut.
+Silakan rujuk pesan konsol untuk informasi lebih lanjut.
 
 |__|0008|__|
 Bahasa
@@ -31,7 +31,7 @@ Tidak dapat membuka file untuk menulis
 |__|0012|__|
 Tidak dapat membuka file untuk dibaca
 |__|0013|__|
-Kesalahan saat memproses file bahasa yang diimpor
+Terjadi kesalahan saat memproses file bahasa yang diimpor
 |__|0014|__|
 Bahasa berhasil diubah!
 |__|0015|__|
@@ -39,7 +39,7 @@ Kesuksesan!
 |__|0016|__|
 Proyek baru
 |__|0017|__|
-File proyek baru (kemajuan)
+File proyek baru (kemajuan).
 |__|0018|__|
 Pilihan
 |__|0019|__|
@@ -54,26 +54,26 @@ Kesalahan memilih tujuan
 Pilih Gambar Tujuan
 |__|0024|__|
 PERINGATAN: Drive ini juga tersedia untuk OS!
-Itu terlalu berbahaya, dan kemungkinan besar akan mengakibatkan komputer crash!
+Itu terlalu berbahaya, dan kemungkinan besar akan menyebabkan kerusakan komputer!
 Pastikan untuk mengikuti petunjuk tentang cara menyembunyikan drive!
 
 |__|0025|__|
 PERINGATAN: Perangkat yang dipilih adalah budak pada pengontrol!
-Ini tidak selalu bekerja seperti yang diharapkan!
-Itu bisa sangat berbahaya, dan bisa mengakibatkan hilangnya data (atau lebih buruk)!
-Disarankan agar perangkat menjadi master di pengontrol!
+Ini tidak selalu berjalan sesuai harapan!
+Hal ini bisa sangat berbahaya, dan dapat mengakibatkan hilangnya data (atau lebih buruk lagi)!
+Disarankan agar perangkat menjadi master pada pengontrol!
 
 |__|0026|__|
-PERINGATAN: Mungkin ada drive lain pada pengontrol yang sama!
-Anda seharusnya TIDAK PERNAH bekerja dengan drive saat drive lain berada di pengontrol yang sama!
-Itu bisa sangat berbahaya, dan bisa mengakibatkan hilangnya data (atau lebih buruk)!
+PERINGATAN: Kemungkinan ada drive lain pada pengontrol yang sama!
+Anda TIDAK PERNAH bekerja dengan drive ketika drive lain berada di pengontrol yang sama!
+Hal ini bisa sangat berbahaya, dan dapat mengakibatkan hilangnya data (atau lebih buruk lagi)!
 
 |__|0027|__|
 Anda harus memilih proyek terlebih dahulu.
 |__|0028|__|
 Menyetir
 |__|0029|__|
-File gambar
+Berkas gambar
 |__|0030|__|
 NULL (Tidak ada tujuan)
 |__|0031|__|
@@ -99,7 +99,7 @@ Perangkat sekarang terhubung
 |__|0041|__|
 Perangkat sekarang terputus
 |__|0042|__|
-Sumber dan Tujuan tidak boleh perangkat yang sama
+Sumber dan Tujuan tidak boleh merupakan perangkat yang sama
 |__|0043|__|
 Tidak ada proyek yang dipilih
 
@@ -110,7 +110,7 @@ Tidak ada sumber yang dipilih
 Tidak ada tujuan yang dipilih
 
 |__|0046|__|
-Drive
+berkendara
 |__|0047|__|
 Mode
 |__|0048|__|
@@ -146,13 +146,13 @@ Fase 4
 |__|0062|__|
 Membagi
 |__|0063|__|
-Bagi 2
+Bagilah 2
 |__|0064|__|
-Pangkas (menggantikan pembagian)
+Pangkas (mengganti pembagian)
 |__|0065|__|
 Mengikis
 |__|0066|__|
-Tandai Kepala Buruk
+Tandai Kepala yang Buruk
 |__|0067|__|
 Baca Kepala Buruk
 |__|0068|__|
@@ -162,11 +162,11 @@ Lewati Cepat
 |__|0070|__|
 Kontrol Fase
 |__|0071|__|
-Coba lagi
+Percobaan ulang
 |__|0072|__|
 Ukuran cluster (LBA)
 |__|0073|__|
-Masukan Offset (LBA)
+Perimbangan Masukan (LBA)
 |__|0074|__|
 Ukuran (LBA)
 |__|0075|__|
@@ -176,15 +176,15 @@ Lewati Ukuran (LBA) fase-1-2-3
 |__|0077|__|
 Ukuran Lewati Maks (LBA) fase-1-2
 |__|0078|__|
-Lewati Ambang Batas (md) fase-1-2
+Lewati Ambang Batas (ms) fase-1-2
 |__|0079|__|
 Tingkat Lewati (kB/s) fase-3
 |__|0080|__|
-Keluar pada fase Lambat (kB/s)-1-2
+Keluar pada Lambat (kB/s) fase-1-2
 |__|0081|__|
-Keluar pada Waktu Lambat (dtk) fase-1-2
+Keluar pada Waktu Lambat (detik) fase-1-2
 |__|0082|__|
-Kesalahan menulis file log kemajuan
+Terjadi kesalahan saat menulis file log kemajuan
 |__|0083|__|
 Simpan File Proyek Sebagai
 |__|0084|__|
@@ -194,28 +194,28 @@ Simpan proyek sebagai
 |__|0086|__|
 Peralatan
 |__|0087|__|
-Setel Ulang Status Saat Ini
+Atur Ulang Status Saat Ini
 |__|0088|__|
-Oke
+OKE
 |__|0089|__|
 Membatalkan
 |__|0090|__|
-Ini akan mengatur ulang status log saat ini ke Phase1,
+Ini akan mengatur ulang status log saat ini ke Fase1,
 dan posisi saat ini ke 0,
-dan reset semua lewati data
+dan atur ulang semua data yang dilewati
 |__|0091|__|
-Atur Ulang Log
+Setel Ulang Log
 |__|0092|__|
 Ini akan mengatur ulang posisi ke 0,
-status saat ini menjadi tidak dicoba,
+status saat ini menjadi belum mencoba,
 dan akan mengubah semua blok yang belum selesai
-di log ke status non-mencoba.
+di log ke status belum dicoba.
 Ini juga akan mengatur ulang semua data yang dilewati.
 |__|0093|__|
-Perbaikan Log
+Catatan Perbaikan
 |__|0094|__|
-Ini akan memperbaiki log kemajuan saat ini di memori.
-Disarankan untuk membuat salinan cadangan dari log sebelum memperbaiki.
+Ini akan memperbaiki kemajuan log in memori saat ini.
+Disarankan untuk membuat salinan cadangan log sebelum melakukan perbaikan.
 |__|0095|__|
 Isi Nol
 |__|0096|__|
@@ -225,11 +225,11 @@ Muat File Domain
 |__|0098|__|
 Anda harus memulai proyek baru sebelum mengimpor file log ddrescue
 |__|0099|__|
-Impor file ddrescue log (peta)
+Impor file log penyelamatan (peta).
 |__|0100|__|
-Ekspor file log ddrescue (peta)
+Ekspor file log penyelamatan (peta).
 |__|0101|__|
-Kesalahan saat mengekspor file ddrescue log (peta)
+Terjadi kesalahan saat mengekspor file log ddrescue (peta).
 |__|0102|__|
 Proyek
 |__|0103|__|
@@ -239,7 +239,7 @@ Tujuan (Semua data akan ditimpa!)
 |__|0105|__|
 Domain
 |__|0106|__|
-Total LBA
+Jumlah LBA
 |__|0107|__|
 LBA untuk membaca
 |__|0108|__|
@@ -255,7 +255,7 @@ Status terkini
 |__|0113|__|
 Tarif saat ini
 |__|0114|__|
-Tarif terbaru
+Tarif terkini
 |__|0115|__|
 Tarif total
 |__|0116|__|
@@ -267,7 +267,7 @@ Lewati lari
 |__|0119|__|
 Lewati pengaturan ulang
 |__|0120|__|
-Ukuran terakhir dijalankan
+Ukuran pengoperasian terakhir
 |__|0121|__|
 Selesai
 |__|0122|__|
@@ -283,25 +283,25 @@ Buruk
 |__|0127|__|
 Pratinjau data
 |__|0128|__|
-Saat ini / Terbaru / Terpanjang
+Saat Ini / Terbaru / Terpanjang
 |__|0129|__|
 Dipenuhi
 |__|0130|__|
-Dicoba lagi
+Mencoba lagi
 |__|0131|__|
-Kartu coba lagi yang tersisa
+Percobaan ulang yang tersisa berhasil lolos
 |__|0132|__|
 Hapus Domain
 |__|0133|__|
-Kesalahan menulis file log cadangan
+Terjadi kesalahan saat menulis file log cadangan
 |__|0134|__|
 Informasi
 |__|0135|__|
 Keluar karena kecepatan baca yang lambat
 |__|0136|__|
-Kesalahan program internal, Posisi tidak ditemukan dalam file log yang sedang berlangsung
+Kesalahan program internal, Posisi tidak ditemukan dalam file log kemajuan
 |__|0137|__|
-Kesalahan program internal, domain memeriksa posisi yang dikembalikan di luar jangkauan
+Kesalahan program internal, pemeriksaan domain mengembalikan posisi di luar jangkauan
 |__|0138|__|
 Pemeriksaan domain pemrosesan kesalahan program internal
 |__|0139|__|
@@ -313,23 +313,23 @@ Kesalahan: Tidak dapat mencari tujuan
 |__|0142|__|
 Kesalahan: Tidak dapat memperoleh ukuran tujuan
 |__|0143|__|
-Kesalahan: Sumber terdeteksi dipasang
+Kesalahan: Sumber terdeteksi untuk dipasang
 |__|0144|__|
 Disarankan untuk meng-unmount semua partisi pada sumbernya.
-Anda dapat menggunakan opsi --force untuk tetap menggunakan sumbernya (tidak disarankan).
+Anda tetap dapat menggunakan opsi --force untuk menggunakan sumbernya (tidak disarankan).
 |__|0145|__|
 Kesalahan: Tidak dapat membuka sumber
 |__|0146|__|
-Gagal melakukan perintah identifikasi perangkat
+Gagal menjalankan perintah identifikasi perangkat
 |__|0147|__|
 
 Status / Kesalahan
 |__|0148|__|
-Kesalahan host IO selama identifikasi
+Kesalahan Host IO saat identifikasi
 |__|0149|__|
-Kesalahan: Perintah Kapasitas Baca gagal dengan data indera
+Kesalahan: Perintah Kapasitas Baca gagal dengan data indra
 |__|0150|__|
-Kesalahan host IO selama kapasitas
+Kesalahan IO host selama kapasitas
 |__|0151|__|
 Kesalahan: Ukuran sumber tidak valid
 |__|0152|__|
@@ -337,9 +337,9 @@ Kesalahan: Ukuran baca melampaui ujung perangkat
 |__|0153|__|
 Kesalahan: Kesalahan perangkat terdeteksi pada sumber
 |__|0154|__|
-Host IO error saat membaca sumber
+Kesalahan Host IO saat membaca sumber
 |__|0155|__|
-Bacaan mode langsung versi gratis mencapai batas 10 persen
+Versi gratis mode baca langsung mencapai batas 10 persen
 |__|0156|__|
 Kesalahan: Tidak dapat menulis ke tujuan
 |__|0157|__|
@@ -353,40 +353,40 @@ Drive sumber tidak merespons dengan benar untuk mengidentifikasi perintah
 |__|0161|__|
 Drive sumber merespons dengan kesalahan untuk mengidentifikasi perintah
 |__|0162|__|
-Kesalahan host IO selama identifikasi drive sumber
+Kesalahan Host IO selama identifikasi drive sumber
 |__|0163|__|
-Drive sumber tidak merespons dengan benar untuk membaca perintah kapasitas
+Drive sumber tidak merespons dengan benar terhadap perintah kapasitas baca
 |__|0164|__|
-Kesalahan host IO selama perintah kapasitas sumber
+Kesalahan Host IO selama perintah kapasitas sumber
 |__|0165|__|
-Drive sumber melaporkan ukuran/ukuran yang salah diubah
+Drive sumber melaporkan ukuran yang salah/ukuran diubah
 |__|0166|__|
-Kesalahan mengubah status potongan, blokir tidak ditemukan
+Terjadi kesalahan saat mengubah status potongan, blok tidak ditemukan
 |__|0167|__|
-Kesalahan mengubah status potongan, tidak ada di dalam blok
+Terjadi kesalahan saat mengubah status potongan, tidak ada dalam blok
 |__|0168|__|
 Penyelamatan selesai menggunakan pengaturan saat ini
 |__|0169|__|
 Kesalahan mengalokasikan memori
 |__|0170|__|
 Tidak bisa mendapatkan alamat fisik buffer dalam rentang 32 bit.
-Silakan coba Memulai Pengandar Disk Virtual.
+Silakan coba Memulai Driver Disk Virtual.
 
-Alternatifnya adalah mencoba memilih mode lagi (beralih ke mode berbeda dan kembali), atau restart program.
+Alternatifnya adalah mencoba memilih mode lagi (beralih ke mode lain dan kembali), atau memulai ulang program.
 |__|0171|__|
 posix_memalign gagal
 |__|0172|__|
-KESALAHAN: Ukuran papan gores maksimum terlampaui
+KESALAHAN: Ukuran maksimum papan gores terlampaui
 |__|0173|__|
 KESALAHAN: Ukuran sensebuffer maksimum terlampaui
 |__|0174|__|
-Jangan buat log cadangan
+Jangan membuat log cadangan
 |__|0175|__|
-Paksa akses disk yang dipasang (tidak disarankan)
+Paksa akses disk yang terpasang (tidak disarankan)
 |__|0176|__|
-Aktifkan perubahan output offset (gunakan dengan hati-hati)
+Aktifkan perubahan offset keluaran (gunakan dengan hati-hati)
 |__|0177|__|
-Output Offset (nilai default adalah -1, ikuti input offset)
+Output Offset (nilai default adalah -1, ikuti offset input)
 |__|0178|__|
 Anda harus membuka kembali pengaturan lanjutan agar perubahan ini dapat diterapkan
 |__|0179|__|
@@ -394,11 +394,11 @@ Tindakan yang harus dilakukan pada kesalahan drive utama:
 |__|0180|__|
 Hentikan kloning dengan pesan kesalahan
 |__|0181|__|
-perintah panggilan:
+Perintah panggilan:
 |__|0182|__|
 Drive masih tidak responsif setelah panggilan perintah
 |__|0183|__|
-Perintah yang dipanggil gagal dengan sinyal / status keluar
+Perintah yang dipanggil gagal dengan sinyal keluar/status
 |__|0184|__|
 Perintah tes
 |__|0185|__|
@@ -406,23 +406,23 @@ Perintah selesai secara normal
 |__|0186|__|
 Kesalahan menghitung CHS, nilai di luar batas
 |__|0187|__|
-Dinonaktifkan (lebih aman jika terjadi pemadaman listrik)
+Disabled (lebih aman jika terjadi pemadaman listrik)
 |__|0188|__|
 Diaktifkan (lebih cepat)
 |__|0189|__|
-Buffer tulis Sistem Operasi (harus terputus agar berlaku)
+Buffer tulis Sistem Operasi (harus terputus agar dapat diterapkan)
 |__|0190|__|
 Membantu
 |__|0191|__|
 Tentang
 |__|0192|__|
-Pengaturan Timer
+Pengaturan Pengatur Waktu
 |__|0193|__|
-Pengaturan timer ini hanya untuk mode Direct IDE dan Direct AHCI.
-Mereka tidak berpengaruh dengan mode passthrough.
+Pengaturan pengatur waktu ini hanya untuk mode Direct IDE dan Direct AHCI.
+Mereka tidak berpengaruh pada mode passthrough.
 
 |__|0194|__|
-Waktu tunggu awal sibuk (ms)
+Waktu tunggu sibuk awal (ms)
 |__|0195|__|
 Waktu tunggu sibuk (ms)
 |__|0196|__|
@@ -430,7 +430,7 @@ Waktu reset lunak (ms)
 |__|0197|__|
 Waktu hard reset (ms)
 |__|0198|__|
-Setel ulang waktu tunggu (md)
+Setel ulang batas waktu (md)
 |__|0199|__|
 Batas waktu umum (md)
 |__|0200|__|
@@ -439,7 +439,7 @@ Tindakan untuk mengatur ulang batas waktu
 Tidak melakukan apapun
 |__|0202|__|
 Ujungnya tidak sama dengan ukuran drive!
-Ukuran laporan file log sebesar
+File log melaporkan ukuran
 |__|0203|__|
 ,
 tetapi sumber memiliki ukuran
@@ -448,25 +448,25 @@ tetapi sumber memiliki ukuran
 Apakah Anda yakin ini adalah file log kemajuan yang benar untuk drive ini?
 
 |__|0205|__|
-Paksa pengontrol / budak yang sama (tidak disarankan)
+Paksa pengontrol/budak yang sama (tidak disarankan)
 |__|0206|__|
 Modus PIO
 |__|0207|__|
 Pengatur waktu fase (pengatur waktu soft reset)
 |__|0208|__|
-Fase 1-2 waktu reset (ms)
+Waktu reset fase 1-2 (ms)
 |__|0209|__|
-Waktu reset fase 3 (md)
+Waktu reset fase 3 (ms)
 |__|0210|__|
 Waktu reset fase 4 (ms)
 |__|0211|__|
-Pangkas/Bagi waktu reset (md)
+Waktu reset Pangkas/Bagi (ms)
 |__|0212|__|
 Bagi 2 waktu reset (ms)
 |__|0213|__|
-Mengikis waktu reset (ms)
+Waktu reset kikis (ms)
 |__|0214|__|
-Aktifkan penghitung waktu fase
+Aktifkan pengatur waktu fase
 |__|0215|__|
 Perangkat blok generik
 |__|0216|__|
@@ -481,13 +481,13 @@ ukuran sumber adalah
 |__|0220|__|
 File sumber umum
 |__|0221|__|
-Keselarasan offset (LBA)
+Penyelarasan offset (LBA)
 |__|0222|__|
 Ukuran sektor (byte)
 |__|0223|__|
-Coba lagi waktu reset (ms)
+Coba lagi waktu reset (md)
 |__|0224|__|
-Aktifkan menggunakan ATA return untuk menandai bad sector
+Aktifkan penggunaan ATA return untuk menandai bad sector
 |__|0225|__|
 Aktifkan log fase
 |__|0226|__|
@@ -497,21 +497,21 @@ Mode
 Maya
 Modus 1
 |__|0228|__|
-Kloning/Mode Pengemudi
+Mode Klon/Pengemudi
 |__|0229|__|
 Klon
 |__|0230|__|
 Modus 1
 |__|0231|__|
-Kesalahan membuka driver disk virtual
+Kesalahan saat membuka driver disk virtual
 |__|0232|__|
-Kesalahan menghentikan driver disk virtual
+Kesalahan saat menghentikan driver disk virtual
 |__|0233|__|
 Kesalahan saat menutup driver disk virtual
 |__|0234|__|
 Kesalahan memulai driver disk virtual
 |__|0235|__|
-Kesalahan: Offset tidak diizinkan dalam mode driver
+Kesalahan: Offset tidak diperbolehkan dalam mode driver
 |__|0236|__|
 Kesalahan buffer driver internal
 |__|0237|__|
@@ -537,9 +537,9 @@ Modus 5
 |__|0245|__|
 Modus 5
 |__|0246|__|
-Kesalahan: Ukuran sektor ganjil tidak diizinkan dalam mode driver
+Kesalahan: Ukuran sektor ganjil tidak diperbolehkan dalam mode driver
 |__|0247|__|
-Kesalahan: Batas waktu atau kesalahan driver
+Kesalahan: Batas waktu atau kesalahan pengemudi
 |__|0248|__|
 Lembut
 Mengatur ulang
@@ -552,9 +552,9 @@ Menggunakan mode driver dengan tujuan null akan menghapus log kemajuan saat ini.
 Setelah Anda mengklik Mulai, log akan dihapus.
 Jika Anda ingin menyimpan log saat ini, putuskan sambungan dan buat salinannya.
 |__|0251|__|
-Mulai Driver Disk Virtual
+Mulai Pengandar Disk Virtual
 |__|0252|__|
-Hentikan Driver Disk Virtual
+Hentikan Pengandar Disk Virtual
 |__|0253|__|
 Lompatan lambat
 |__|0254|__|
@@ -577,7 +577,7 @@ Aktivasi gagal
 Aktivasi Berhasil.
 Anda harus memulai ulang program agar perubahan diterapkan.
 |__|0263|__|
-Konfirmasi Operasi
+Konfirmasikan Operasi
 |__|0264|__|
 Apakah Anda ingin menghapus aktivasi?
 |__|0265|__|
@@ -586,11 +586,11 @@ Hapus Aktivasi
 Operasi gagal
 
 |__|0267|__|
-Operasi berhasil diselesaikan
+Operasi selesai dengan sukses
 
 |__|0268|__|
 Kesalahan! 
-Disk terkunci keamanan!
+Disk terkunci keamanannya!
 |__|0269|__|
 Nonaktifkan Port
 |__|0270|__|
@@ -603,8 +603,8 @@ Peringatan!
 Jika Anda menonaktifkan port untuk drive sistem operasi,
 sistem tidak akan bisa boot!
 |__|0273|__|
-Masukkan port yang ingin Anda nonaktifkan sebagai bilangan bulat yang dipisahkan oleh spasi.
-Sebaiknya nomor port diurutkan dari terendah ke tertinggi.
+Masukkan port yang ingin Anda nonaktifkan sebagai bilangan bulat dipisahkan dengan spasi.
+Sebaiknya nomor port diurutkan dari terendah hingga tertinggi.
 Anda dapat menemukan informasi port dengan mencantumkan drive sumber dalam mode AHCI.
 
 |__|0274|__|
@@ -618,40 +618,40 @@ Perbarui port
 |__|0278|__|
 Kesalahan: Penyalinan file gagal
 |__|0279|__|
-Kesalahan: Pembaruan GRUB gagal
+Kesalahan: Gagal memperbarui GRUB
 |__|0280|__|
 Lihat keluaran konsol terminal untuk informasi lebih lanjut
 |__|0281|__|
-Kesalahan: Tidak dapat menemukan garis di GRUB
+Kesalahan: Tidak dapat menemukan baris di GRUB
 |__|0282|__|
-Anda akan membuat perubahan pada konfigurasi startup.
+Anda akan melakukan perubahan pada konfigurasi startup.
 Reboot akan diperlukan agar perubahan diterapkan.
 |__|0283|__|
 Kembalikan konfigurasi port startup asli
 |__|0284|__|
 Aktifkan penulisan SCSI ke tujuan (untuk ukuran sektor ganjil)
 |__|0285|__|
-Aktifkan penyesuaian ukuran sektor keluaran
+Aktifkan penyesuaian ukuran sektor output
 |__|0286|__|
-Penyesuaian ukuran sektor keluaran
+Penyesuaian ukuran sektor output
 |__|0287|__|
 Opsi keluaran Driver Perangkat Disk Virtual untuk kesalahan baca
 |__|0288|__|
-Kembalikan kesalahan baca (standar)
+Kesalahan pembacaan kembali (standar)
 |__|0289|__|
-Kembalikan data yang diisi nol
+Kembalikan data yang terisi nol
 |__|0290|__|
-Tandai kembali data yang terisi
+Data yang diisi tanda pengembalian
 |__|0291|__|
-Ukuran baca minimum cluster Disk Virtual (mode 3)
+Ukuran baca klaster minimum Disk Virtual (mode 3)
 |__|0292|__|
 Nama perangkat Disk Virtual
 |__|0293|__|
-Driver perangkat disk virtual tidak berjalan
+Pengandar perangkat disk virtual tidak berjalan
 |__|0294|__|
 Hapus Tujuan
 |__|0295|__|
-Anda akan menghapus semua data di tempat tujuan!
+Anda akan menghapus semua data di tujuan!
 Apakah Anda yakin ingin menghapus semua data?
 |__|0296|__|
 Menganalisa
@@ -666,9 +666,9 @@ Menganggur
 |__|0301|__|
 Pemangkasan
 |__|0302|__|
-Pembagian 1
+Membagi 1
 |__|0303|__|
-Pembagian 2
+Membagi 2
 |__|0304|__|
 Menggores
 |__|0305|__|
@@ -706,16 +706,16 @@ Driver sudah terinstall dan aktif
 Memori driver sekarang terhubung
 
 |__|0321|__|
-Kesalahan saat menghubungkan ke memori driver
+Kesalahan saat menyambung ke memori driver
 
 |__|0322|__|
 Tidak dapat dibuka untuk menulis
 |__|0323|__|
-Membuat gagal, lihat konsol untuk informasi lebih lanjut
+Gagal melakukan, lihat konsol untuk informasi lebih lanjut
 |__|0324|__|
 Gagal menginstal modul driver, lihat konsol untuk informasi lebih lanjut
 |__|0325|__|
-Penginstalan driver berhasil
+Pemasangan driver berhasil
 
 |__|0326|__|
 Gagal menghapus modul driver, lihat konsol untuk informasi lebih lanjut
@@ -741,14 +741,14 @@ Rata-rata
 |__|0336|__|
 Zona
 |__|0337|__|
-Tampilkan Hasil Analisis
+Menampilkan Hasil Analisa
 |__|0338|__|
-Kesalahan: Lewati Setel ulang terdeteksi. 
-Pengaturan mungkin perlu diubah.
-Lewati ukuran mungkin terlalu rendah atau terlalu tinggi.
-Drive mungkin memiliki masalah lambat yang menyebabkan terlalu banyak lompatan lambat.
+Kesalahan: Lewati Reset terdeteksi. 
+Pengaturannya mungkin perlu diubah.
+Ukuran lompatan mungkin terlalu rendah atau terlalu tinggi.
+Drive mungkin mengalami masalah lambat yang menyebabkan terlalu banyak lompatan lambat.
 Jika Anda menerima pesan ini dengan sangat cepat, mungkin pesan tersebut tidak membaca data apa pun.
-Silakan merujuk ke manual instruksi untuk informasi lebih lanjut.
+Silakan referensi instruksi manual untuk informasi lebih lanjut.
 |__|0339|__|
 Instruksi Manual HTML
 |__|0340|__|
@@ -758,7 +758,7 @@ Kesalahan: SMART tidak diaktifkan pada perangkat ini
 |__|0342|__|
 Kesalahan: Tidak dapat membaca data SMART dari perangkat
 |__|0343|__|
-Indo
+PENGENAL
 |__|0344|__|
 Bendera
 |__|0345|__|
@@ -781,46 +781,46 @@ Tampilkan Hasil SMART
 File gambar saat ini ada.
 Ini akan melanjutkan pemulihan menggunakan file gambar ini.
 |__|0354|__|
-Gunakan ukuran sektor fisik sebagai logis untuk disk virtual
+Gunakan ukuran sektor fisik sebagai logika untuk disk virtual
 |__|0355|__|
 Lambat
-Sopir
+Pengemudi
 |__|0356|__|
 Gunakan warna tombol di bilah status bawah
 |__|0357|__|
-Instruksi Manual TEKS
+TEKS Instruksi Manual
 |__|0358|__|
 Pengaturan Relai Utama
 |__|0359|__|
-Pengaturan papan relai utama
+Pengaturan papan relai primer
 |__|0360|__|
 Papan relai saat ini
 |__|0361|__|
-Pilih Papan Relay Utama
+Pilih Papan Relai Utama
 |__|0362|__|
 Kondisi aktivasi
 |__|0363|__|
-Relai energi 1
+Berikan energi pada relai 1
 |__|0364|__|
-Relai energi 2
+Berikan energi pada relai 2
 |__|0365|__|
-Relai energi 3
+Berikan energi pada relai 3
 |__|0366|__|
-Relai energi 4
+Berikan energi pada relai 4
 |__|0367|__|
-Relai energi 5
+Berikan energi pada relai 5
 |__|0368|__|
-Relai energi 6
+Berikan energi pada relai 6
 |__|0369|__|
-Relai energi 7
+Berikan energi pada relai 7
 |__|0370|__|
-Beri energi relai 8
+Berikan energi pada relai 8
 |__|0371|__|
 Kondisi penonaktifan
 |__|0372|__|
-Waktu aktivasi (dtk)
+Waktu aktivasi (detik)
 |__|0373|__|
-Waktu tunda pasca aktivasi (dtk)
+Waktu tunda pasca aktivasi (detik)
 |__|0374|__|
 Uji operasi relai
 |__|0375|__|
@@ -834,19 +834,19 @@ Kesalahan pengoperasian relai, lihat konsol untuk informasi lebih lanjut
 |__|0379|__|
 Kesalahan: Tidak ada relai yang dipilih
 |__|0380|__|
-Aktifkan relai utama
+Aktifkan relai primer
 |__|0381|__|
-Aktifkan relai utama
+Aktifkan relai primer
 |__|0382|__|
 Aktifkan (Matikan)
 |__|0383|__|
-Nonaktifkan (Daya Hidup)
+Nonaktifkan (Hidupkan)
 |__|0384|__|
 Ukuran sektor ini tidak didukung untuk mode yang dipilih dalam versi gratis.
 Mode generik adalah satu-satunya mode dalam versi gratis yang memungkinkan ukuran sektor berbeda dari 512 atau 4096.
 
 |__|0385|__|
-Penyelamatan gagal selesai
+Penyelamatan gagal diselesaikan
 |__|0386|__|
 Penyelamatan telah berhenti sebelum selesai.
 Kode berhenti \u003d
@@ -859,11 +859,11 @@ Pilihan reset USB
 |__|0390|__|
 Aktifkan reset massal USB
 |__|0391|__|
-Aktifkan soft reset USB
+Aktifkan reset lunak USB
 |__|0392|__|
 Aktifkan hard reset USB
 |__|0393|__|
-Aktifkan reset port USB
+Aktifkan pengaturan ulang port USB
 |__|0394|__|
 Anda akan menonaktifkan driver penyimpanan massal USB,
 setelah itu tidak ada perangkat penyimpanan USB yang akan terdeteksi oleh sistem operasi.
@@ -875,10 +875,10 @@ Nonaktifkan driver penyimpanan massal USB
 Pulihkan driver penyimpanan massal USB
 |__|0398|__|
 Peringatan! 
-Tujuan lebih kecil dari sumber.
-Beberapa data mungkin tidak disalin.
+Tujuan lebih kecil dari sumbernya.
+Beberapa data mungkin tidak dapat disalin.
 |__|0399|__|
-Aktifkan baca dua kali pada waktu habis
+Aktifkan baca dua kali saat batas waktu habis
 |__|0400|__|
 USB ATA langsung
 |__|0401|__|
@@ -886,54 +886,55 @@ Tambahkan ke Domain dari file byte DMDE
 |__|0402|__|
 Kesalahan: Domain tidak aktif atau tidak ada file domain yang dimuat
 |__|0403|__|
-Selalu tunggu pengatur waktu reset
+Selalu menunggu pengatur waktu reset
 |__|0404|__|
-Aktifkan perubahan posisi saat ini (dapat memengaruhi algoritme lompat)
+Aktifkan perubahan posisi saat ini (dapat mempengaruhi algoritma skipping)
 |__|0405|__|
-Hanya Virtual Disk IO SCSI
+Disk Virtual IO SCSI saja
 |__|0406|__|
 Lambat
 |__|0407|__|
-Masalah Firmware yang Merespon Lambat
+Masalah Firmware Respons Lambat
 |__|0408|__|
-Masalah Akses Sebagian
+Masalah Akses Parsial
 |__|0409|__|
 Kepala Buruk Atau Lemah
 |__|0410|__|
 Diperpanjang
 Menganalisa
 |__|0411|__|
-Aktifkan Rebuild Assist
+Aktifkan Bantuan Pembangunan Kembali
 |__|0412|__|
-Membangun kembali Bantuan
+Bantuan Pembangunan Kembali
 |__|0413|__|
-Rebuild assist hanya berfungsi dalam mode AHCI langsung
+Bantuan pembangunan kembali hanya berfungsi dalam mode AHCI langsung
 |__|0414|__|
-Bantuan pembuatan ulang tidak didukung pada perangkat ini
+Bantuan pembangunan kembali tidak didukung pada perangkat ini
 |__|0415|__|
-Kesalahan saat menonaktifkan bantuan pembangunan kembali
+Terjadi kesalahan saat menonaktifkan bantuan pembangunan kembali
 |__|0416|__|
-Kesalahan saat mengaktifkan bantuan pembangunan kembali
+Terjadi kesalahan saat mengaktifkan bantuan pembangunan kembali
 |__|0417|__|
-Pilih Unit Logika
+Pilih Unit Logis
 |__|0418|__|
 Perangkat ini memiliki lebih dari 1 unit logis.
-Silakan pilih unit logis mana.
+Silakan pilih unit logika yang mana.
 |__|0419|__|
-Unit Logika yang Mungkin
+Unit Logis yang Mungkin
 |__|0420|__|
-Tetapkan Unit Logika
+Tetapkan Unit Logis
 |__|0421|__|
 Matikan
 |__|0422|__|
 Nyalakan
 |__|0423|__|
-Perbaiki Kesalahan Memori Driver
+Perbaiki Kesalahan Memori Pengemudi
 |__|0424|__|
-Coba sambungkan lagi pada kegagalan setelah siklus daya relai
+Coba sambungkan kembali jika terjadi kegagalan setelah siklus daya relai
 |__|0425|__|
-Kecepatan baca maksimum (kB/dtk)
+Kecepatan baca maksimum (kB/s)
 |__|0426|__|
-Jangan lakukan identifikasi saat mencantumkan perangkat sumber
+Jangan melakukan identifikasi saat membuat daftar perangkat sumber
 |__|0427|__|
-Failed to clean the temporary directory
+Gagal membersihkan direktori sementara
+
