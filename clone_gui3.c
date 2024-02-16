@@ -65,6 +65,8 @@ int start_gtk_ccc(int argc, char **argv, char *title, char *version)
     exit(0);
   }
 
+  fprintf(stderr,"Info: Language of the system: %s\n",getenv("LANG"));
+
   set_language_ccc();
 
   if (enable_data_dump_ccc || enable_dump_identify_on_check_ccc)
@@ -732,6 +734,7 @@ int translate_all_ccc(void)
       fclose(writefile);
       chmod(all_file, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
     }
+    free(alllang);
   }
   if (translate_failed)
   {
@@ -1084,6 +1087,7 @@ int translate_language_slow_ccc(char *fromlang, char *translang, const char *lan
     const char *data = get_translated_data_ccc(url_data);
     //fprintf (stdout, "%s\n", data);
     strcpy (return_data, data);
+    free(data);
     //fprintf (stdout, "\n*****************************************************\n");
     //fprintf (stdout, "%s\n", return_data);
 
