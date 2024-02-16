@@ -1,46 +1,69 @@
 #Make sure the prerequisite software is installed for unpacking and repacking the image. Open a terminal and run:
 #sudo apt-get install squashfs-tools genisoimage
 
-#set the working directory location
+echo set the working directory location
 #don't add a / at the end here, that is taken care of in rest of the script
 eval directory="~/live_cd"
 #set the path to the source ISO
 eval sourceiso="~/live_cd/xubuntu-18.04.5-desktop-amd64.iso"
 #set the output ISO name (and path)
 eval outputiso="~/live_cd/xubuntu-18.04.5-desktop-hddlive"
+#eval sourceiso="~/live_cd/xubuntu-22.04.3-desktop-amd64.iso"
+##set the output ISO name (and path)
+#eval outputiso="~/live_cd/xubuntu-22.04.3-desktop-hddlive"
+#set the git repo directory
+eval repodir="~/hddsupertool"
 #set the changelog file
-eval changelogfile="~/hddsupertool/public/live_cd/changelog"
+eval changelogfile="$repodir/public/live_cd/changelog"
 #set the version file
-eval versionfile="~/hddsupertool/public/live_cd/version"
+eval versionfile="$repodir/public/live_cd/version"
 
-# A few things in case the build was aborted
+
+echo "DEV1:"
+ls -la /dev
+
+echo A few things in case the build was aborted
 sudo umount $directory/custom-img/mntiso
 sudo umount $directory/custom-img/edit/dev
 
-# Remove any files from previous build
+echo "DEV2:"
+ls -la /dev
+
+
+
+echo Remove any files from previous build
 sudo rm -rf $directory/custom-img
 sudo rm $outputiso
 sudo rm $directory/changelog.txt
 
-#Create a fresh folder to begin work.
+echo Create a fresh folder to begin work.
 mkdir -p $directory/custom-img
 cd $directory/custom-img
 
-#Next, extract the contents of disc image.
+echo Next, extract the contents of disc image.
 mkdir mntiso
 sudo mount -o loop $sourceiso mntiso
 mkdir extract
 sudo rsync --exclude=/casper/filesystem.squashfs -a mntiso/ extract
 
-#Extract the filesystem with the following commands:
+echo Extract the filesystem with the following commands:
 sudo unsquashfs mntiso/casper/filesystem.squashfs
 sudo mv squashfs-root edit
 
-#You’re going to need network access from within the chroot environment to download and install updated/new packages. Copy resolv.conf from your system into the freshly unpacked fs.
+echo You’re going to need network access from within the chroot environment to download and install updated/new packages. Copy resolv.conf from your system into the freshly unpacked fs.
+sudo mkdir edit/etc
 sudo cp /etc/resolv.conf edit/etc/
 
-#Mount a few important working directories, and perform a few commands will make sure that everything goes smoothly while modifying packages:
+echo "DEV3:"
+ls -la /dev
+
+echo Mount a few important working directories, and perform a few commands will make sure that everything goes smoothly while modifying packages:
 sudo mount --bind /dev/ edit/dev
+
+echo "DEV4:"
+ls -la /dev
+
+
 sudo chroot edit /bin/bash -c "mount -t proc none /proc"
 sudo chroot edit /bin/bash -c "mount -t sysfs none /sys"
 sudo chroot edit /bin/bash -c "mount -t devpts none /dev/pts"
@@ -50,20 +73,21 @@ sudo chroot edit /bin/bash -c "dbus-uuidgen > /var/lib/dbus/machine-id"
 sudo chroot edit /bin/bash -c "dpkg-divert --local --rename --add /sbin/initctl"
 sudo chroot edit /bin/bash -c "ln -s /bin/true /sbin/initctl"
 
-# copy any files needed to the home directory of the edit
-sudo cp -R ~/hddsupertool/public/live_cd/pro/* $directory/custom-img/edit/home
+echo copy any files needed to the home directory of the edit
+sudo cp -R $repodir/public/live_cd/pro/* $directory/custom-img/edit/home
+sudo cp -R $repodir $directory/custom-img/edit/home/compile
 
-# change the isolinux.cfg file to change the timer
+echo change the isolinux.cfg file to change the timer
 sudo sed -i -e 's/timeout.*/timeout 500/' $directory/custom-img/extract/isolinux/isolinux.cfg
 
-# change the gfxboot.cfg file so the menu shows
+echo change the gfxboot.cfg file so the menu shows
 sudo sed -i -e 's/hidden-timeout/timeout-hidden/g' $directory/custom-img/extract/isolinux/gfxboot.cfg
 
-# change the txt.cfg file to change the install menu item to our own
+echo change the txt.cfg file to change the install menu item to our own
 sudo sed -i -e 's/menu label ^Install Xubuntu/menu label ^HDDLiveCD disable ataX easy boot edit, just change X/g' $directory/custom-img/extract/isolinux/txt.cfg
 sudo sed -i -e 's|append  file=/cdrom/preseed/xubuntu.seed boot=casper only-ubiquity initrd=/casper/initrd quiet splash ---|append  file=/cdrom/preseed/xubuntu.seed boot=casper initrd=/casper/initrd quiet splash --- libata.force=X:disable|g' $directory/custom-img/extract/isolinux/txt.cfg
 
-# extract the bootlogo file as it needs to be changed to match changes above
+echo extract the bootlogo file as it needs to be changed to match changes above
 sudo mkdir -p $directory/custom-img/temp/boot
 sudo mkdir -p $directory/custom-img/temp/files
 sudo chmod 777 $directory/custom-img/temp/boot
@@ -71,22 +95,22 @@ sudo cp -f $directory/custom-img/extract/isolinux/bootlogo $directory/custom-img
 cd $directory/custom-img/temp/files
 sudo cpio -i < bootlogo
 sudo rm -f bootlogo
-# make changes here
+echo make changes here
 sudo sed -i -e 's/hidden-timeout/timeout-hidden/g' gfxboot.cfg
 sudo sed -i -e 's/timeout.*/timeout 500/' isolinux.cfg
 sudo sed -i -e 's/menu label ^Install Xubuntu/menu label ^HDDLiveCD disable ataX easy boot edit, just change X/g' txt.cfg
 sudo sed -i -e 's|append  file=/cdrom/preseed/xubuntu.seed boot=casper only-ubiquity initrd=/casper/initrd quiet splash ---|append  file=/cdrom/preseed/xubuntu.seed boot=casper initrd=/casper/initrd quiet splash --- libata.force=X:disable|g' txt.cfg
-# recreate the bootlogo file
+echo recreate the bootlogo file
 sudo ls | sudo cpio -o > ../boot/bootlogo
 sudo chmod 444 ../boot/bootlogo
 sudo cp -f ../boot/bootlogo $directory/custom-img/extract/isolinux/bootlogo
-# back to working directory
+echo back to working directory
 cd $directory/custom-img
 
-# remove the desktop icon for installing the os
+echo remove the desktop icon for installing the os
 sudo rm -f $directory/custom-img/edit/usr/share/applications/ubiquity.desktop
 
-# This next section allows for adding automated commands to run within chroot
+echo This next section allows for adding automated commands to run within chroot
 cat << 'EOF' > $directory/custom-img/custom-commands.sh
 ###############################################################
 ###############################################################
@@ -118,6 +142,12 @@ apt-get install libusb-0.1 -y
 apt-get install bless -y
 apt-get install wxhexeditor -y
 apt-get install nvme-cli -y
+apt-get install pcmanfm -y
+apt-get install libbsd-dev -y
+apt-get install libusb-dev -y
+apt-get install pkg-config -y
+apt-get install libgtk-3-dev -y
+apt-get install libcurl4-openssl-dev -y
 
 cd home
 chmod -R 755 *
@@ -160,21 +190,28 @@ chmod 755 xubuntu/Desktop/Terminal.desktop
 chmod 755 xubuntu/Desktop/DMDE.desktop
 chmod 755 xubuntu/Desktop/DisableScreensaver.desktop
 
-# disable automount for pcmanfm (LXDE)
+echo "disable automount for pcmanfm (LXDE)"
 sed -i -e 's/mount_on_startup=1/mount_on_startup=0/g' /etc/xdg/pcmanfm/default/pcmanfm.conf
 sed -i -e 's/mount_removable=1/mount_removable=0/g' /etc/xdg/pcmanfm/default/pcmanfm.conf
 sed -i -e 's/autorun=1/autorun=0/g' /etc/xdg/pcmanfm/default/pcmanfm.conf
+echo "we are trying both in the default and in the ubuntu directory, error messages for not exisiting files for one of these can be ignored"
 sed -i -e 's/mount_on_startup=1/mount_on_startup=0/g' /etc/xdg/pcmanfm/xubuntu/pcmanfm.conf
 sed -i -e 's/mount_removable=1/mount_removable=0/g' /etc/xdg/pcmanfm/xubuntu/pcmanfm.conf
 sed -i -e 's/autorun=1/autorun=0/g' /etc/xdg/pcmanfm/xubuntu/pcmanfm.conf
 
-#disable automount for thunar (XFCE)
+echo "disable automount for thunar (XFCE)"
 sed -z 's/<property name="automount-media" type="empty">\n    <property name="enabled" type="bool" value="true"/<property name="automount-media" type="empty">\n    <property name="enabled" type="bool" value="false"/' -i /etc/xdg/xdg-xubuntu/xfce4/xfconf/xfce-perchannel-xml/thunar-volman.xml
 sed -z 's/<property name="automount-drives" type="empty">\n    <property name="enabled" type="bool" value="true"/<property name="automount-drives" type="empty">\n    <property name="enabled" type="bool" value="false"/' -i /etc/xdg/xdg-xubuntu/xfce4/xfconf/xfce-perchannel-xml/thunar-volman.xml
 sed -z 's/<property name="autobrowse" type="empty">\n    <property name="enabled" type="bool" value="true"/<property name="autobrowse" type="empty">\n    <property name="enabled" type="bool" value="false"/' -i /etc/xdg/xdg-xubuntu/xfce4/xfconf/xfce-perchannel-xml/thunar-volman.xml
 sed -z 's/<property name="automount-media" type="empty">\n    <property name="enabled" type="bool" value="true"/<property name="automount-media" type="empty">\n    <property name="enabled" type="bool" value="false"/' -i /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/thunar-volman.xml
 sed -z 's/<property name="automount-drives" type="empty">\n    <property name="enabled" type="bool" value="true"/<property name="automount-drives" type="empty">\n    <property name="enabled" type="bool" value="false"/' -i /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/thunar-volman.xml
 sed -z 's/<property name="autobrowse" type="empty">\n    <property name="enabled" type="bool" value="true"/<property name="autobrowse" type="empty">\n    <property name="enabled" type="bool" value="false"/' -i /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/thunar-volman.xml
+
+
+cd /home/compile
+make clean
+make
+make install
 
 ###############################################################
 ###### PUT YOUR CUSTOMIZATION COMMANDS IN THE AREA ABOVE ######
@@ -186,7 +223,7 @@ sudo chroot edit /bin/bash -c "chmod 755 custom-commands.sh"
 sudo chroot edit /bin/bash -c "./custom-commands.sh"
 sudo chroot edit /bin/bash -c "rm -f custom-commands.sh"
 
-# Now we will open a chroot command prompt for any commands that you wish to enter manually
+echo Now we will open a chroot command prompt for any commands that you wish to enter manually
 echo
 echo "*************************************"
 echo "You are now in chroot of the ISO."
@@ -194,9 +231,9 @@ echo "You can now run customization commands."
 echo "When done type 'exit' and the build will continue."
 echo "*************************************"
 echo
-#sudo chroot edit
+sudo chroot edit
 
-#You are almost there! Time to clean up:
+echo You are almost there! Time to clean up:
 sudo chroot edit /bin/bash -c "apt-get autoremove && apt-get autoclean"
 sudo chroot edit /bin/bash -c "rm -rf /tmp/* ~/.bash_history"
 sudo chroot edit /bin/bash -c "rm /var/lib/dbus/machine-id"
@@ -207,7 +244,10 @@ sudo chroot edit /bin/bash -c "umount /sys"
 sudo chroot edit /bin/bash -c "umount /dev/pts"
 sudo umount edit/dev
 
-#These final steps will actually produce the ISO.
+echo "DEV5:"
+ls -la /dev
+
+echo These final steps will actually produce the ISO.
 #Generate a new file manifest:
 sudo chmod +w extract/casper/filesystem.manifest
 sudo chroot edit dpkg-query -W --showformat='${Package} ${Version}n' > filesystem.manifest
@@ -216,27 +256,27 @@ sudo cp extract/casper/filesystem.manifest extract/casper/filesystem.manifest-de
 sudo sed -i '/ubiquity/d' extract/casper/filesystem.manifest-desktop
 sudo sed -i '/casper/d' extract/casper/filesystem.manifest-desktop
 
-#Compress the filesystem:
+echo Compress the filesystem:
 #sudo mksquashfs edit extract/casper/filesystem.squashfs -b 1048576
 sudo mksquashfs edit extract/casper/filesystem.squashfs -b 1M -comp xz -Xdict-size 100%
 
-#Update filesystem size (needed by the installer):
+echo "Update filesystem size (needed by the installer):"
 printf $(sudo du -sx --block-size=1 edit | cut -f1) | sudo tee extract/casper/filesystem.size
 echo
 
-#Delete the old md5sum:
+echo Delete the old md5sum:
 cd extract
 sudo rm md5sum.txt
 
-#…and generate a fresh one:
+echo …and generate a fresh one:
 sudo su -c "find -type f -print0 | sudo xargs -0 md5sum | grep -v isolinux/boot.cat > md5sum.txt"
 
-#And finally, create the ISO.
+echo And finally, create the ISO.
 sudo genisoimage -D -r -V "$IMAGE_NAME" -cache-inodes -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o $outputiso .
 sudo umount $directory/custom-img/mntiso
 
-# Set some variables
-version=$(head -1 ~/hddsupertool/public/live_cd/version)
+echo Set some variables
+version=$(head -1 $repodir/public/live_cd/version)
 if [ "$(uname -m | grep '64')" != "" ]; then
   arch="x64"
 else
@@ -244,12 +284,12 @@ else
 fi
 size="$(stat -c %s $outputiso | numfmt --to=si)"
 
-# Rename the iso
+echo Rename the iso
 newiso=$outputiso.$version.$arch.$size.iso
 sudo rm $newiso
 sudo mv $outputiso $newiso
 
-#create a checksum file for the iso, nice to have if you plan on sharing it
+echo create a checksum file for the iso, nice to have if you plan on sharing it
 sudo rm $newiso.checksum.txt
 echo "md5sum:" > $newiso.checksum.txt
 md5sum -b $newiso >> $newiso.checksum.txt
@@ -257,6 +297,7 @@ echo "" >> $newiso.checksum.txt
 echo "sha1sum:" >> $newiso.checksum.txt
 sha1sum -b $newiso >> $newiso.checksum.txt
 
-#Copy the changelog
+echo Copy the changelog
 cp  $changelogfile $directory/changelog.txt
 
+echo "Done. For testing it you can run: qemu-system-x86_64 -cdrom $newiso -m 2048"
