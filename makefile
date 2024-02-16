@@ -13,11 +13,12 @@ endif
 
 CC= gcc
 ifneq (,$(findstring k,$(MAKEFLAGS)))
-CFLAGS = -Wall -Wextra -O0 -g3 -rdynamic -lbsd
+CFLAGS = -Wall -Wextra -O0 -g3 -rdynamic
 else
-CFLAGS = -Wall -Wextra -O2 -g3 -rdynamic -lbsd -fno-omit-frame-pointer -fsanitize=address,undefined -Wno-deprecated-declarations
+CFLAGS = -Wall -Wextra -O2 -g3 -rdynamic -fno-omit-frame-pointer -fsanitize=address,undefined -Wno-deprecated-declarations
 endif
 USBFLAGS = -lusb
+BSDFLAGS = -lbsd
 CURLFLAGS = -DUSE_CURL -lcurl
 GTKFLAGS = `pkg-config --cflags --libs gtk+-$(GTKVER).0`
 PROG00 = hddsupertool
@@ -47,7 +48,7 @@ viewer: $(PROG30)
 
 $(PROG00) : $(PROG00).c
 	xxd -i $(PROG00)_help.txt $(PROG00)_help.h
-	$(CC) $(CFLAGS) $(PROG00).c $(PROG01).c $(PROG02).c $(PROG03).c $(PROG05).c -o $(PROG00) $(CURLFLAGS) $(USBFLAGS)
+	$(CC) $(CFLAGS) $(PROG00).c $(PROG01).c $(PROG02).c $(PROG03).c $(PROG05).c -o $(PROG00) $(CURLFLAGS) $(USBFLAGS) $(BSDFLAGS)
 	help2man ./$(PROG00) > $(PROG00).1
 	sudo ./$(PROG12)
 	makeinfo $(PROG00).texi
@@ -55,7 +56,7 @@ $(PROG00) : $(PROG00).c
 	makeinfo $(PROG00).texi --plaintext -o $(PROG00).txt
 
 $(PROG12) : $(PROG12).c
-	$(CC) $(CFLAGS) $(PROG12).c -o $(PROG12)
+	$(CC) $(CFLAGS) $(PROG12).c -o $(PROG12) $(BSDFLAGS)
 
 $(PROG20) : $(PROG20).c clone_gui3.c
 	xxd -i $(PROG00)_help.txt $(PROG00)_help.h
@@ -64,7 +65,7 @@ $(PROG20) : $(PROG20).c clone_gui3.c
 	cp -f public/base/$(PROG20)/EULA $(PROG20)_EULA.txt
 	xxd -i $(PROG20)_EULA.txt $(PROG20)_EULA.h
 	xxd -i $(driverdir)$(PROG20)_driver.c $(PROG20)_driver.h
-	$(CC) $(CFLAGS) $(PROG20).c $(PROG01).c $(PROG02).c $(PROG04).c $(PROG05).c $(PROG03).c $(PROG21).c $(PROG22).c -o $(PROG20) $(GTKFLAGS) $(CURLFLAGS) $(USBFLAGS)
+	$(CC) $(CFLAGS) $(PROG20).c $(PROG01).c $(PROG02).c $(PROG04).c $(PROG05).c $(PROG03).c $(PROG21).c $(PROG22).c -o $(PROG20) $(GTKFLAGS) $(CURLFLAGS) $(USBFLAGS) $(BSDFLAGS)
 	sudo ./$(PROG12)
 	makeinfo $(PROG00).texi
 	makeinfo $(PROG00).texi --html --no-split
@@ -78,7 +79,7 @@ $(PROG20) : $(PROG20).c clone_gui3.c
 
 $(PROG30) : $(PROG30)$(GTKVER).c
 	xxd -i $(PROG30)$(GTKVER).glade $(PROG30)$(GTKVER)_glade.h
-	$(CC) $(CFLAGS) $(PROG30)$(GTKVER).c -o $(PROG30) $(GTKFLAGS) $(CURLFLAGS)
+	$(CC) $(CFLAGS) $(PROG30)$(GTKVER).c -o $(PROG30) $(GTKFLAGS) $(CURLFLAGS) $(BSDFLAGS)
 	$(OFFICEVER) --headless --convert-to txt:Text hddscviewer.odt
 	$(OFFICEVER) --headless --convert-to html:HTML hddscviewer.odt
 	$(OFFICEVER) --headless --convert-to pdf:writer_pdf_Export hddscviewer.odt
