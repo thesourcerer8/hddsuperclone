@@ -43,8 +43,8 @@ char *scripts_version_number = "1.9_20190413";
 int main (int argc, char **argv)
 {
   title_ccc = "HDDSuperClone";
-  version_number_ccc = "2.3.3_20220430";
-  copyright_year_ccc = "2022";
+  version_number_ccc = "2.4.0_20240216";
+  copyright_year_ccc = "2024";
 
 
   // Register ctrl-c signal and signal handler
