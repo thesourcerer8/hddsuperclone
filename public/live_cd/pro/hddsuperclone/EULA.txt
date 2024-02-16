@@ -3,74 +3,9 @@ LICENSE AGREEMENT for HDDSUPERCLONE
 This End-User License Agreement ("EULA") is a legal agreement between you
 (either an individual or a single entity) and SCOTT DWYER for HDDSUPERCLONE
 later referred to as 'SOFTWARE'. By installing, copying, or otherwise using the
-SOFTWARE you agree to be bound by the terms of this EULA. If you do not agree
-to the terms of this EULA, do not install or use the SOFTWARE.
+SOFTWARE you agree to be bound by the terms of this EULA.
 
-The SOFTWARE is licensed, not sold. Copyright laws and international copyright
-treaties, as well as other intellectual property laws and treaties protect the
-SOFTWARE.
-
-THERE ARE NO REFUNDS AFTER PURCHASING THE FULL PROFESSIONAL VERSION OF THE
-SOFTWARE. IT IS YOUR RESPONSIBILITY TO USE THE FREE VERSION OF THE SOFTWARE,
-AND READ ALL THE DOCUMENTATION TO GET A FULL UNDERSTANDING OF THE CAPABILITIES
-OF THE SOFTWARE TO DETERMIN IF THE PROFESSIONAL VERSION IS CAPABLE OF
-PERFORMING THE DESIRED OPERATION.
-
-1. GRANT OF LICENSE.
-(a) FREE VERSION. You may use the limited featured FREE SOFTWARE without charge
-for non commercial use. You may use the FREE SOFTWARE on an unlimited number of
-computers for non commercial use. The SOFTWARE is considered in use on a
-computer when it is loaded into temporary memory or installed into permanent
-memory. You must pay the license fee and register your copy to get the
-professional version of the product that provides extra features. You must also
-pay the license fee and register your copy if you use the SOFTWARE
-commercially.
-
-(b) PROFESSIONAL VERSION. After you have purchased the license for the
-SOFTWARE, and have received the SOFTWARE activation, you are licensed to use
-the PROFESSIONAL VERSION of the SOFTWARE on up to 3 computers. You must
-purchase additional licenses to use the SOFTWARE on more than the allowed
-number of computers. The PROFESSIONAL VERSION of the SOFTWARE is considered in
-use on a computer when it is loaded into temporary memory or installed into
-permanent memory, and the PROFESSIONAL VERSION has been activated with a
-license on that computer.
-
-2. RESTRICTIONS. You may not reverse engineer, decompile, or disassemble the
-SOFTWARE. You may not rent, lease, or lend the SOFTWARE. Any license activation
-key or file for the SOFTWARE may not be redistributed, shared, or published in
-any way. You may not transfer ownership of a license for the SOFTWARE without
-the express written consent of SCOTT DWYER.
-
-3. TERMINATION. Without prejudice to any other rights, SCOTT DWYER may
-terminate this EULA if you fail to comply with the terms and conditions of this
-EULA. In such event, you must destroy all copies of the SOFTWARE.
-
-4. COPYRIGHT. The SOFTWARE is protected by copyright law and international
-treaty provisions. You acknowledge that no title to the intellectual property
-in the SOFTWARE is transferred to you. You further acknowledge that title and
-full ownership rights to the SOFTWARE will remain the exclusive property of
-SCOTT DWYER and you will not acquire any rights to the SOFTWARE except as
-expressly set forth in this license. You agree that any copies of the SOFTWARE
-will contain the same proprietary notices which appear on and in the SOFTWARE.
-
-5. NO WARRANTY. THE SOFTWARE AND ANY RELATED DOCUMENTATION IS PROVIDED "AS IS"
-WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING, WITHOUT
-LIMITATION, THE IMPLIED WARRANTIES OR MERCHANTABILITY, FITNESS FOR A PARTICULAR
-PURPOSE, OR NONINFRINGEMENT. THE ENTIRE RISK ARISING OUT OF USE OR PERFORMANCE
-OF THE SOFTWARE REMAINS WITH YOU.
-
-6. LIMITATION OF LIABILITY. SCOTT DWYER grants the license to the SOFTWARE
-hereunder and the END USER accepts the use hereof on an "AS IS" and "WITH ALL
-FAULTS" basis.  Furthermore, the END USER understands and agrees that IN NO
-EVENT WILL SCOTT DWYER BE LIABLE TO LICENSEE FOR SPECIAL OR CONSEQUENTIAL
-DAMAGES which might arise out of or in connection with the performance or
-non-performance of this agreement or of the SOFTWARE hereunder, even if SCOTT
-DWYER has been advised of the possibility of such damages, INCLUDING, BUT NOT
-LIMITED TO, LOST DATA OR EQUIPEMENT FAILURE due to errors, inaccuracies,
-omissions, incompleteness or insufficiency of the SOFTWARE, nor for the
-usefulness of the SOFTWARE to the END USER. In no event shall SCOTT DWYER'S
-liability related to any of the SOFTWARE exceed the license fees, if any,
-actually paid by you for the SOFTWARE. SCOTT DWYER shall not be liable for any
-damages whatsoever arising out of or related to the use of or inability to use
-the SOFTWARE, including but not limited to direct, indirect, special,
-incidental, or consequential damages.
+// Copyright (C) 2015-2022 Scott Dwyer.
+// You may use/distribute/modify this freely, under the terms of
+// the GNU General Public License version 2 or later version.
+// This software is distributed WITHOUT ANY WARRANTY.
