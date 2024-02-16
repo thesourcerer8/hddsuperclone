@@ -935,4 +935,5 @@ Wiederholen Sie den Verbindungsaufbau bei einem Fehler nach dem Aus- und Wiedere
 Max. Leserate (kB/s)
 |__|0426|__|
 Führen Sie beim Auflisten von Quellgeräten keine Identifizierung durch
-
+|__|0427|__|
+Failed to clean the temporary directory

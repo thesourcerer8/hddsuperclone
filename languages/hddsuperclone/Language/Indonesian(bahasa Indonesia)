@@ -935,4 +935,5 @@ Coba sambungkan lagi pada kegagalan setelah siklus daya relai
 Kecepatan baca maksimum (kB/dtk)
 |__|0426|__|
 Jangan lakukan identifikasi saat mencantumkan perangkat sumber
-
+|__|0427|__|
+Failed to clean the temporary directory

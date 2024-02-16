@@ -935,4 +935,5 @@ Virtual Disk IO SCSI فقط
 أقصى معدل قراءة (كيلو بايت / ثانية)
 |__|0426|__|
 لا تقم بتحديد الهوية عند سرد الأجهزة المصدر
-
+|__|0427|__|
+Failed to clean the temporary directory

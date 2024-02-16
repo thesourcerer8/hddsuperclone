@@ -935,4 +935,5 @@ USB 重置选项
 最大读取速率 (kB/s)
 |__|0426|__|
 列出源设备时不执行识别
-
+|__|0427|__|
+Failed to clean the temporary directory

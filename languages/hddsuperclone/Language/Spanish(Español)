@@ -935,4 +935,5 @@ Vuelva a intentar conectarse en caso de falla después del ciclo de encendido de
 Velocidad máxima de lectura (kB/s)
 |__|0426|__|
 No realice la identificación al enumerar los dispositivos de origen
-
+|__|0427|__|
+Failed to clean the temporary directory

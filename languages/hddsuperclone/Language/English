@@ -931,3 +931,5 @@ Retry connecting on failure after relay power cycle
 Max read rate (kB/s)
 |__|0426|__|
 Do not perform identify when listing source devices
+|__|0427|__|
+Failed to clean the temporary directory

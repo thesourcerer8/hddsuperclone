@@ -935,4 +935,5 @@ Riprovare a connettersi in caso di errore dopo il ciclo di alimentazione del rel
 Velocità di lettura massima (kB/s)
 |__|0426|__|
 Non eseguire l'identificazione quando si elencano i dispositivi di origine
-
+|__|0427|__|
+Failed to clean the temporary directory

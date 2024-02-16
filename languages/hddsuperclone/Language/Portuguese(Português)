@@ -935,4 +935,5 @@ Tente conectar novamente em caso de falha após o ciclo de alimentação do rel�
 Taxa máxima de leitura (kB/s)
 |__|0426|__|
 Não execute a identificação ao listar os dispositivos de origem
-
+|__|0427|__|
+Failed to clean the temporary directory

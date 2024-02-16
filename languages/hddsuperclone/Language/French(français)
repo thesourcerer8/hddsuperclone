@@ -935,4 +935,5 @@ Réessayez de vous connecter en cas d'échec après le cycle d'alimentation du r
 Taux de lecture maximal (ko/s)
 |__|0426|__|
 Ne pas effectuer d'identification lors de la liste des appareils sources
-
+|__|0427|__|
+Failed to clean the temporary directory
