@@ -16,7 +16,7 @@ fi
 ./cleanpublicclone.sh
 make clean
 make
-sudo make installall
+sudo make install
 if [ "$FAST" = "false" ]; then
   rm -f ./languages/hddsuperclone/Language/*
   cp ./languages/hddsuperclone/Translated/* ./languages/hddsuperclone/Language/
@@ -121,3 +121,4 @@ cd ..
 ./cleanpro.sh
 make clean
 chmod -R 777 public/files_for_posting/hddsuperclone
+
