@@ -630,7 +630,7 @@ char * languages_ccc[] = {
 //    "Frisian","fy","Frysk",
 //    "Galician","gl","galego",
 //    "Georgian","ka","ქართული",
-    "German","de","Deutsche",
+    "German","de","Deutsch",
 //    "Greek","el","Ελληνικά",
 //    "Gujarati","gu","ગુજરાતી",
 //    "Haitian Creole","ht","kreyòl ayisyen",
