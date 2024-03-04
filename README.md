@@ -23,8 +23,8 @@ The Live-CD is using the following software:
 
 
 Building:
-* sudo apt-get install git make gcc libusb-dev libgtk-3-dev libcurl4-openssl-dev texi2html help2man
-* git clone github.com/thesourcerer8/hddsuperclone
+* sudo apt-get install git make gcc libusb-dev libgtk-3-dev libcurl4-openssl-dev libbsd-dev texi2html help2man
+* git clone https://github.com/thesourcerer8/hddsuperclone
 * cd hddsuperclone
 * make
 * sudo ./hddsuperclone
