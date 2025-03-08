@@ -7,13 +7,11 @@
 #include <linux/module.h>
 #include <linux/moduleparam.h>
 #include <linux/init.h>
-
 #include <linux/kernel.h>
 #include <linux/fs.h>
 #include <linux/errno.h>
 #include <linux/types.h>
 #include <linux/vmalloc.h>
-#include <linux/genhd.h>
 #include <linux/blkdev.h>
 #include <linux/hdreg.h>
 #include <linux/delay.h>
@@ -38,6 +36,10 @@
 #endif
 
 #include <linux/version.h>
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5,19,0)
+#include <linux/genhd.h>
+#endif
 
 #define KERNEL_SECTOR_SIZE (SECTOR_SIZE)
 #define DRIVER_CONTROL_BUFFER_SIZE 131072    // make sure to adjust with page power
@@ -1377,7 +1379,11 @@ static void unregister_data_drive(void)
   put_disk(data_device.gd);
   unregister_blkdev(data_major_num, data_device.device_name);
   data_major_num = 0;
+  #if LINUX_VERSION_CODE < KERNEL_VERSION(5,17,0)
   blk_cleanup_queue(data_queue);
+  #else
+  blk_mq_destroy_queue(data_queue);
+  #endif
   #if LINUX_VERSION_CODE >= KERNEL_VERSION(5,0,0)
   blk_mq_free_tag_set(&data_device.tag_set);
   #endif
@@ -1602,7 +1608,9 @@ static long process_ioctl(struct file *f, const unsigned cmd, const unsigned lon
         data_major_num = 0;
         goto out;
       }
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,15,0)
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,17,0)
+      data_device.gd = blk_alloc_disk(NUMA_NO_NODE);
+#elif LINUX_VERSION_CODE >= KERNEL_VERSION(5,15,0)
       // Needed for Kernel 5.15
       data_device.gd = __alloc_disk_node(data_queue, NUMA_NO_NODE, &super_bio_compl_lkclass);
 #else
