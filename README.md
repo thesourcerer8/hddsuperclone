@@ -1,5 +1,5 @@
 # hddsuperclone
-HDDSuperClone, HDDSuperTool
+HDDSuperClone, HDDSuperTool, HDDSCViewer
 
 This repository continues the work on HDDSuperClone that was originally developed by (C) 2015-2022 Scott Dwyer and released under the GPL2 in 2022.
 You can find the original website and more information here:
@@ -21,10 +21,23 @@ The Live-CD is using the following software:
 * hdparm: https://sourceforge.net/projects/hdparm/
 * isolinux: https://wiki.syslinux.org/wiki/index.php?title=ISOLINUX
 
+Dependencies:
+ - xxd - to embed kernel driver code and glade ui file into program
+ - build-essential - C compiler toolchain
+ - libusb-dev - USB direct mode cloning
+ - libgtk-3-dev - GTK+ user interface
+ - libbsd-dev - used for safe string manipulation functions
+ - linux-headers-<architecture> - used for building the AHCI / virtual disk kernel module
+ - libcurl4-openssl-dev - (optional) for creating translation files using an online translation service
+ - texinfo - for building documentation
+ - help2man - for building documentation
+ - libreoffice-common - for building documentation
 
 Building:
-* sudo apt-get install git make gcc libusb-dev libgtk-3-dev libcurl4-openssl-dev libbsd-dev texi2html help2man
-* git clone https://github.com/thesourcerer8/hddsuperclone
-* cd hddsuperclone
-* make
-* sudo ./hddsuperclone
+```shell
+sudo apt-get install git build-essential linux-headers-amd64 libusb-dev libgtk-3-dev libcurl4-openssl-dev libbsd-dev texinfo help2man xxd libreoffice-common
+git clone https://github.com/thesourcerer8/hddsuperclone
+cd hddsuperclone
+make
+sudo ./hddsuperclone
+```
