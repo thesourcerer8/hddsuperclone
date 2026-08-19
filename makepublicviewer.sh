@@ -103,6 +103,9 @@ rm -fr $fullname
 #echo "" >> $fullname.tar.gz.checksum
 #echo "sha1sum:" >> $fullname.tar.gz.checksum
 #sha1sum -b $fullname.tar.gz >> $fullname.tar.gz.checksum
+
+sudo gem install fpm
+
 fpm -s dir -t deb -m "$maintainer" -C ./installers/pro --name $name --version $version --iteration 1 --depends "$libcdepends $libcver" --depends "$gtklibdepends" --depends "$cairolibdepends" --description "HDDSCViewer - A grahpical progress log viewer for HDDSuperClone." --url "http://www.sdcomputingservice.com" --vendor "sdcomputingservice" --license "FREEWARE" --before-install hddscviewer-uninstall.sh
 fpm -s dir -t rpm -m "$maintainer" -C ./installers/pro --name $name --version $version --iteration 1 --depends "$glibdepends $libcver" --depends "$ggtklibdepends" --depends "$gcairolibdepends" --description "HDDSCViewer - A grahpical progress log viewer for HDDSuperClone." --url "http://www.sdcomputingservice.com" --vendor "sdcomputingservice" --license "FREEWARE" --before-install hddscviewer-uninstall.sh
 

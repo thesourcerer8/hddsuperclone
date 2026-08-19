@@ -106,6 +106,9 @@ rm -fr $fullname
 #echo "" >> $fullname.tar.gz.checksum
 #echo "sha1sum:" >> $fullname.tar.gz.checksum
 #sha1sum -b $fullname.tar.gz >> $fullname.tar.gz.checksum
+
+sudo gem install fpm
+
 fpm -s dir -t deb -m "$maintainer" -C ./installers/pro --name $name --version $version --iteration 1 --depends "$libcdepends $libcver" --description "HDDSuperClone - An advanced hard drive cloning/imaging tool." --url "http://www.sdcomputingservice.com" --vendor "sdcomputingservice" --license "PROPRIETARY" --before-install hddsuperclone-uninstall.sh
 fpm -s dir -t rpm -m "$maintainer" -C ./installers/pro --name $name --version $version --iteration 1 --depends "$glibdepends $libcver" --description "HDDSuperClone - An advanced hard drive cloning/imaging tool." --url "http://www.sdcomputingservice.com" --vendor "sdcomputingservice" --license "PROPRIETARY" --before-install hddsuperclone-uninstall.sh
 
