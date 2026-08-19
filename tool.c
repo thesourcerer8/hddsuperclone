@@ -10,6 +10,8 @@
 
 #include "common.h"
 #include "tool.h"
+#include "util.h"
+//TODO: convert the rest of this file to the new logging system
 
 unsigned int script_rows_ccc = 1000;
 unsigned int number_variable_rows_ccc = 100;
@@ -97,7 +99,7 @@ int supertooltool_ccc (void)
         }
         else
         {
-          fprintf (stderr, "Error! Choice \'%s\' is not valid.\n", raw_value);
+          ERROR("Error! Choice \'%s\' is not valid.\n", raw_value);
         }
       }
     }
@@ -190,14 +192,14 @@ int supertooltool_ccc (void)
         // if ahci then check to make sure addresses were all set
         if (hba_base_address_ccc == 0 || port_base_address_ccc == 0)
         {
-          fprintf (stderr, "Error: Port addresses not set for AHCI mode.\n");
+          ERROR("Error: Port addresses not set for AHCI mode.\n");
           supertool_cleanup_ccc();
           exit (1);
         }
         long long calculated = port_base_address_ccc - (hba_base_address_ccc + 0x100 + (port_number_base_ccc * 0x80));
         if (calculated != 0)
         {
-          fprintf (stderr, "Error: Port number does not match address for AHCI mode.\n");
+          ERROR("Error: Port number does not match address for AHCI mode.\n");
           supertool_cleanup_ccc();
           exit (1);
         }
@@ -208,7 +210,7 @@ int supertooltool_ccc (void)
         // if direct io then check to make sure addresses were all set
         if (reg_base_address_ccc == 0 || control_base_address_ccc == 0 || bus_base_address_ccc == 0)
         {
-          fprintf (stderr, "Error: Port addresses not set for direct IO mode.\n");
+          ERROR("Error: Port addresses not set for direct IO mode.\n");
           supertool_cleanup_ccc();
           exit (1);
         }
@@ -221,7 +223,7 @@ int supertooltool_ccc (void)
       if (disk_1_ccc == NULL)
       {
         //find_all_devices_ccc();
-        fprintf (stderr, "Error: Target not set for passthrough mode.\n");
+        ERROR("Error: Drive not set for passthrough mode.\n");
         supertool_cleanup_ccc();
         exit (1);
       }
@@ -358,7 +360,7 @@ void supertool_cleanup_ccc(void)
   end_time_ccc = time(NULL);
   if (!quiet_ccc)
   {
-    fprintf (stdout, "Total program run time = %ld seconds\n", end_time_ccc - start_time_ccc);
+    INFO("Total program run time = %ld seconds\n", end_time_ccc - start_time_ccc);
   }
 }
 

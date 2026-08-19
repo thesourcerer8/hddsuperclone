@@ -15,7 +15,7 @@
 #include "common.h"
 #include "hddsuperclone3_glade.h"
 
-
+#include "util.h"
 
 
 
@@ -46,6 +46,7 @@ int start_gtk_ccc(int argc, char **argv, char *title, char *version)
     return -1;
   }
 
+  //TODO: convert to snprintf
   char window_title[256];
   strcpy (window_title, title);
   strcat (window_title, " ");
@@ -65,7 +66,7 @@ int start_gtk_ccc(int argc, char **argv, char *title, char *version)
     exit(0);
   }
 
-  fprintf(stderr,"Info: Language of the system: %s\n",getenv("LANG"));
+  INFO("Language of the system: %s",getenv("LANG"));
 
   set_language_ccc();
 
@@ -82,13 +83,15 @@ int start_gtk_ccc(int argc, char **argv, char *title, char *version)
   GError *err = NULL; // It is mandatory to initialize to NULL
   if(0 == gtk_builder_add_from_string (builder, (const gchar *)hddsuperclone3_glade, hddsuperclone3_glade_len, &err))
   {
-    fprintf(stderr, "Error adding build from file. Error: %s\n", err->message);
+    ERROR("Error adding build from string. Error: %s", err->message);
+    //TODO: should this exit?
   }
 
   main_window_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "window_main"));
   if (NULL == main_window_ccc)
   {
-    fprintf(stderr, "Object error: window_main \n");
+    ERROR("Object error: window_main");
+    //TODO: should this exit?
   }
 
   bottom_status_bar_ccc = GTK_WIDGET (gtk_builder_get_object (builder, "bottom_status_bar"));
@@ -568,7 +571,7 @@ void get_data_dump_filename_ccc(void)
   {
     char *filename;
     filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-    fprintf (stdout, "%s\n", filename);
+    INFO("Selected file: %s\n", filename);
     strcpy (data_dump_filename_ccc, filename);
     g_free (filename);
   }
@@ -588,7 +591,7 @@ static size_t WriteMemoryCallback(void *contents, size_t size, size_t nmemb, voi
   mem->memory = realloc(mem->memory, mem->size + realsize + 1);
   if(mem->memory == NULL) {
     /* out of memory! */
-    printf("not enough memory (realloc returned NULL)\n");
+    ERROR("not enough memory (realloc returned NULL)\n");
     return 0;
   }
 
@@ -635,13 +638,7 @@ int translate_all_ccc(void)
 
     if (total_language_items % 3)
     {
-      fprintf (stdout, "\n*****************************************************\n");
-      fprintf (stdout, "\n*****************************************************\n");
-      fprintf (stdout, "\n*****************************************************\n");
-      fprintf (stdout, "language count not dividable by 3\n");
-      fprintf (stdout, "\n*****************************************************\n");
-      fprintf (stdout, "\n*****************************************************\n");
-      fprintf (stdout, "\n*****************************************************\n");
+      ERROR("language count (%d) not dividable by 3", total_language_items);
       return -1;
     }
     for (unsigned int i = 0; i < total_language_items; i+=3)
@@ -653,9 +650,7 @@ int translate_all_ccc(void)
       copy_enlanguage_ccc();
       if ( translate_language_ccc("en", translang, language, native) )
       {
-        fprintf (stdout, "\n*****************************************************\n");
-        fprintf (stdout, "Failed to translate to %s\n", language);
-        fprintf (stdout, "\n*****************************************************\n");
+        ERROR("Failed to translate to %s\n", language);
         translate_failed = 1;
       }
       if (translate_ccc == 80009)
@@ -667,9 +662,7 @@ int translate_all_ccc(void)
         copy_newlanguage_ccc();
         if (translate_language_ccc(translang, "en", language, "english") )
         {
-          fprintf (stdout, "\n*****************************************************\n");
-          fprintf (stdout, "Failed to reverse translate %s\n", language);
-          fprintf (stdout, "\n*****************************************************\n");
+          ERROR("Failed to reverse translate %s", language);
           translate_failed = 1;
         }
         for (unsigned int n = 0; n < LANGCOUNT; n++)
@@ -738,13 +731,7 @@ int translate_all_ccc(void)
   }
   if (translate_failed)
   {
-    fprintf (stdout, "\n*****************************************************\n");
-    fprintf (stdout, "\n*****************************************************\n");
-    fprintf (stdout, "\n*****************************************************\n");
-    fprintf (stdout, "Failed to translate\n");
-    fprintf (stdout, "\n*****************************************************\n");
-    fprintf (stdout, "\n*****************************************************\n");
-    fprintf (stdout, "\n*****************************************************\n");
+    ERROR("Failed to translate");
     return -1;
   }
   return 0;
@@ -900,7 +887,7 @@ int translate_language_ccc(char *fromlang, char *translang, const char *language
       }
       else
       {
-        fprintf (stdout, "Warning: language count %d not valid.\n", new_count);
+        WARN("language count %d not valid.", new_count);
         failure = 1;
       }
     }
@@ -912,7 +899,7 @@ int translate_language_ccc(char *fromlang, char *translang, const char *language
       //fprintf (stdout, "%s\n", newlang_ccc[found_count]);
       if (MAXLANGLENGTH - l < strlen(line))
       {
-        fprintf (stdout, "Warning: language count %d exceeded max length and was truncated.\n", found_count);
+        WARN("language count %d exceeded max length and was truncated.", found_count);
         failure = 1;
       }
     }
@@ -923,11 +910,11 @@ int translate_language_ccc(char *fromlang, char *translang, const char *language
   count--;
   if (count == found_count && count == LANGCOUNT - 1)
   {
-    // do noting
+    // do nothing, TODO: refactor
   }
   else
   {
-    fprintf (stdout, "FAILED count=%d found_count=%d LANGCOUNT=%d\n", count, found_count, LANGCOUNT-1);
+    ERROR("FAILED count=%d found_count=%d LANGCOUNT=%d", count, found_count, LANGCOUNT-1);
     failure = 1;
   }
 
@@ -1012,11 +999,11 @@ char* get_translated_data_ccc(char *url_data)
   /* check for errors */
   if(res != CURLE_OK)
   {
-    fprintf(stdout, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
+    ERROR("curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
   }
   else
   {
-    fprintf(stdout, "%lu bytes retrieved\n", (long)chunk.size);
+    INFO("%lu bytes retrieved\n", (long)chunk.size);
     //printf("%s\n", chunk.memory);
   }
 
@@ -1082,7 +1069,7 @@ int translate_language_slow_ccc(char *fromlang, char *translang, const char *lan
     strcat(url_data, "&dt=t&q=");
     strcat(url_data, new_data);
 
-    fprintf (stdout, "%d %s to %s  ", count, fromlang, translang);
+    INFO("translating message #%d '%s' to '%s'", count, fromlang, translang);
     do_nanosleep_ccc(TRANSLATETIMERSLOW);  // this is a timer to deal with google translator
     char *data = get_translated_data_ccc(url_data);
     //fprintf (stdout, "%s\n", data);
@@ -1131,7 +1118,7 @@ int translate_language_slow_ccc(char *fromlang, char *translang, const char *lan
     //fprintf (stdout, "%s\n", new_lang_data);
     if (strlen(new_lang_data) >= MAXLANGLENGTH-1)
     {
-      fprintf (stdout, "Warning: language count %d exceeded max length and was truncated.\n", count);
+      WARN("language count %d exceeded max length and was truncated.", count);
       failure = 1;
     }
     strcpy (newlang_ccc[count], new_lang_data);
@@ -1230,7 +1217,7 @@ void export_language_file_ccc(void)
   {
     char *filename;
     filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-    fprintf (stdout, "%s\n", filename);
+    INFO("User selected file '%s'", filename);
     file_export_sel_ccc(filename);
     g_free (filename);
   }
@@ -1292,7 +1279,7 @@ void import_language_file_ccc(void)
   {
     char *filename;
     filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-    fprintf (stdout, "%s\n", filename);
+    INFO("User selected file '%s'", filename);
     file_import_sel_ccc(filename);
     g_free (filename);
   }
@@ -1416,7 +1403,7 @@ void select_file_ccc(void)
       project_chosen_ccc = 0;
       char *filename;
       filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-      fprintf (stdout, "%s\n", filename);
+      INFO("User selected file '%s'", filename);
       load_log_file_ccc(filename);
       g_free (filename);
     }
@@ -1453,7 +1440,7 @@ void new_file_ccc(void)
       clear_destination_ccc();
       char *filename;
       filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-      fprintf (stdout, "%s\n", filename);
+      INFO("User selected file '%s'", filename);
       new_log_file_ccc(filename);
       g_free (filename);
     }
@@ -1488,7 +1475,7 @@ void new_domain_ccc(void)
     {
       char *filename;
       filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-      fprintf (stdout, "%s\n", filename);
+      INFO("User selected file '%s'", filename);
       new_domain_file_ccc(filename);
       g_free (filename);
     }
@@ -1529,7 +1516,7 @@ void select_ddrescue_file_ccc(void)
     {
       char *filename;
       filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-      fprintf (stdout, "%s\n", filename);
+      INFO("User selected file '%s'", filename);
       load_ddrescue_log_file_ccc(filename);
       g_free (filename);
     }
@@ -1590,7 +1577,7 @@ void save_file_as_ccc(void)
     {
       char *filename;
       filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-      fprintf (stdout, "%s\n", filename);
+      INFO("User selected file '%s'", filename);
       return_value_ccc = write_logfile_ccc(filename, 0);
       if (return_value_ccc)
       {
@@ -1658,7 +1645,7 @@ void save_domain_as_ccc(void)
     {
       char *filename;
       filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-      fprintf (stdout, "%s\n", filename);
+      INFO("User selected file '%s'", filename);
       return_value_ccc = write_domainfile_ccc(filename, 0);
       if (return_value_ccc)
       {
@@ -1700,7 +1687,7 @@ void export_ddrescue_file_ccc(void)
     {
       char *filename;
       filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-      fprintf (stdout, "%s\n", filename);
+      INFO("User selected file '%s'", filename);
       return_value_ccc = write_ddrescue_logfile_ccc(filename);
       if (return_value_ccc)
       {
@@ -1741,7 +1728,7 @@ void select_domain_ccc(void)
     {
       char *filename;
       filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-      fprintf (stdout, "%s\n", filename);
+      INFO("User selected file '%s'", filename);
       load_domain_file_ccc(filename);
       g_free (filename);
     }
@@ -1782,7 +1769,7 @@ void add_domain_ccc(void)
     {
       char *filename;
       filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-      fprintf (stdout, "%s\n", filename);
+      INFO("User selected file '%s'", filename);
       //load_domain_file_ccc(filename);
       add_domain_file_ccc(filename);
       g_free (filename);
@@ -1803,7 +1790,7 @@ static void load_log_file_ccc( char *log_file )
   log_file_ccc = malloc (1024);
   memset (log_file_ccc, 0, 1024);
   strncpy (log_file_ccc, log_file, 1024);
-  printf ("%s\n",  log_file_ccc);
+  INFO("Reading log file '%s'", log_file_ccc);
 
   // initialize memory
   return_value_ccc = initialize_logfile_memory_ccc();
@@ -1868,7 +1855,7 @@ static void load_ddrescue_log_file_ccc( char *log_file )
   ddilog_file_ccc = malloc (1024);
   memset (ddilog_file_ccc, 0, 1024);
   strncpy (ddilog_file_ccc, log_file, 1024);
-  printf ("%s\n",  ddilog_file_ccc);
+  INFO("Reading ddrescue log file '%s'", ddilog_file_ccc);
 
   // initialize memory
   return_value_ccc = initialize_logfile_memory_ccc();
@@ -1933,7 +1920,7 @@ static void load_domain_file_ccc( char *log_file )
   //g_print ("%s\n", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
   clear_domain_ccc();
   strncpy (domain_file_ccc, log_file, 1024);
-  printf ("%s\n",  domain_file_ccc);
+  INFO("Reading domain file '%s'", domain_file_ccc);
 
   // initialize memory
   return_value_ccc = initialize_domainfile_memory_ccc();
@@ -1971,7 +1958,7 @@ static void add_domain_file_ccc( char *log_file )
 {
   gtk_label_set_text(GTK_LABEL(main_label), "");
   //g_print ("%s\n", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
-  printf ("%s\n",  log_file);
+  INFO("Adding domain file '%s'", log_file);
 
   int ret = read_domain_add_file_ccc(log_file);
   if (ret < 0)
@@ -2021,7 +2008,7 @@ static void new_log_file_ccc( char *log_file )
   log_file_ccc = malloc (1024);
   memset (log_file_ccc, 0, 1024);
   strncpy (log_file_ccc, log_file, 1024);
-  printf ("%s\n",  log_file_ccc);
+  INFO("Creating new log file '%s'", log_file_ccc);
 
   clear_domain_ccc();
   strncpy (domain_file_ccc, log_file_ccc, 1016);
@@ -2058,7 +2045,7 @@ static void new_domain_file_ccc( char *log_file )
 {
   clear_domain_ccc();
   strncpy (domain_file_ccc, log_file, 1024);
-  printf ("%s\n",  domain_file_ccc);
+  INFO("Creating new domain file '%s'", domain_file_ccc);
 
   // initialize memory
   return_value_ccc = initialize_domainfile_memory_ccc();
@@ -2117,7 +2104,7 @@ void choose_source_ccc(void)
     {
       char *filename;
       filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-      fprintf (stdout, "%s\n", filename);
+      INFO("User selected file '%s'", filename);
       free (disk_1_ccc);
       disk_1_ccc = malloc (strlen(filename)+2);
       strcpy (disk_1_ccc, filename);
@@ -2139,7 +2126,7 @@ void choose_source_ccc(void)
         clear_domain_ccc();
         strncpy (domain_file_ccc, log_file_ccc, 1016);
         strcat (domain_file_ccc, ".domain");
-        printf ("%s\n",  domain_file_ccc);
+        INFO("Domain file '%s'", domain_file_ccc);
         if( access( domain_file_ccc, F_OK ) != -1 )
         {
           int ret = read_domain_file_ccc(domain_file_ccc);
@@ -2162,7 +2149,7 @@ void choose_source_ccc(void)
       }
       else
       {
-        fprintf (stdout, "error selecting source\n");
+        ERROR("error selecting source");
         clear_source_ccc();
         strcpy (current_source_model_ccc, "");
         strcpy (current_source_serial_ccc, "");
@@ -2372,7 +2359,7 @@ void choose_source_ccc(void)
         clear_domain_ccc();
         strncpy (domain_file_ccc, log_file_ccc, 1016);
         strcat (domain_file_ccc, ".domain");
-        printf ("%s\n",  domain_file_ccc);
+        INFO("Domain file '%s'", domain_file_ccc);
         if( access( domain_file_ccc, F_OK ) != -1 )
         {
           int ret = read_domain_file_ccc(domain_file_ccc);
@@ -2395,7 +2382,7 @@ void choose_source_ccc(void)
       }
       else
       {
-        fprintf (stdout, "error selecting source\n");
+        ERROR("error selecting source");
         clear_source_ccc();
         strcpy (current_source_model_ccc, "");
         strcpy (current_source_serial_ccc, "");
@@ -2422,7 +2409,7 @@ void choose_source_ccc(void)
 void get_source_from_button_ccc (GtkWidget *w, gpointer data)
 {
   new_source_ccc = GPOINTER_TO_INT( data );
-  g_print ("selection=%d  \n", new_source_ccc);
+  INFO("Selected source %d", new_source_ccc);
   (void) w;
 }
 
@@ -2534,7 +2521,7 @@ void choose_destination_ccc(void)
       generic_mode_ccc = generic_mode_ccc_bak;
       if (ret)
       {
-        fprintf (stdout, "error selecting destination, ret=%d\n", ret);
+        ERROR("error selecting destination, choose_target_ccc() returned %d", ret);
         clear_destination_ccc();
         snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "%s", curlang_ccc[LANGDESTINATIONERROR]);
         message_error_ccc(tempmessage_ccc);
@@ -2552,7 +2539,7 @@ void choose_destination_ccc(void)
           clear_domain_ccc();
           strncpy (domain_file_ccc, log_file_ccc, 1016);
           strcat (domain_file_ccc, ".domain");
-          printf ("%s\n",  domain_file_ccc);
+          INFO("Domain file '%s'", domain_file_ccc);
           if( access( domain_file_ccc, F_OK ) != -1 )
           {
             int ret = read_domain_file_ccc(domain_file_ccc);
@@ -2588,7 +2575,7 @@ void choose_destination_ccc(void)
 void get_destination_from_button_ccc (const GtkWidget *w, gpointer data)
 {
   new_destination_ccc = GPOINTER_TO_INT( data );
-  g_print ("selection=%d  \n", new_destination_ccc);
+  INFO("Selected destination index %d", new_destination_ccc);
   (void) w;
 }
 
@@ -2637,7 +2624,7 @@ void choose_image_ccc (void)
       }
       if (confirmed)
       {
-        fprintf (stdout, "%s\n", filename);
+        INFO("Selected image file '%s'", filename);
         free (disk_2_ccc);
         disk_2_ccc = strdup(filename);
         destination_chosen_ccc = 1;
@@ -2651,7 +2638,7 @@ void choose_image_ccc (void)
           clear_domain_ccc();
           strncpy (domain_file_ccc, log_file_ccc, 1016);
           strcat (domain_file_ccc, ".domain");
-          printf ("%s\n",  domain_file_ccc);
+          INFO("Domain file '%s'", domain_file_ccc);
           if( access( domain_file_ccc, F_OK ) != -1 )
           {
             int ret = read_domain_file_ccc(domain_file_ccc);
@@ -2704,16 +2691,16 @@ void choose_null_ccc (void)
   }
   else
   {
-      fprintf (stdout, "/dev/null\n");
-      free (disk_2_ccc);
-      disk_2_ccc = strdup("/dev/null");
-      strcpy (current_destination_model_ccc, curlang_ccc[LANGNODESTINATION]);
-      strcpy (current_destination_serial_ccc, "");
-      logfile_changed_ccc = true;
-      update_display_ccc(0);
-      //gtk_label_set_text(GTK_LABEL(main_label), display_message_ccc);
-      destination_chosen_ccc = 1;
-      destination_size_valid_ccc = 0;
+    INFO("Selected /dev/null as destination");
+    free (disk_2_ccc);
+    disk_2_ccc = strdup("/dev/null");
+    strcpy (current_destination_model_ccc, curlang_ccc[LANGNODESTINATION]);
+    strcpy (current_destination_serial_ccc, "");
+    logfile_changed_ccc = true;
+    update_display_ccc(0);
+    //gtk_label_set_text(GTK_LABEL(main_label), display_message_ccc);
+    destination_chosen_ccc = 1;
+    destination_size_valid_ccc = 0;
   }
 }
 
@@ -2840,9 +2827,9 @@ void connect_devices_ccc (void)
         //clear_error_message_ccc();
         if (!enable_scsi_write_ccc && destination_size_valid_ccc && source_total_size_ccc > target_total_size_ccc)
         {
-          fprintf (stdout, "Warning! Destination is smaller than souce.\n");
-          fprintf (stdout, "Source size= %lld\n", source_total_size_ccc);
-          fprintf (stdout, "Target size= %lld\n", target_total_size_ccc);
+          WARN("Destination is smaller than source");
+          WARN("Source size= %lld", source_total_size_ccc);
+          WARN("Target size= %lld", target_total_size_ccc);
           strcpy (tempmessage_ccc, curlang_ccc[LANGDESTINATIONTOOSMALL]);
           message_error_ccc(tempmessage_ccc);
           print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGWARN], 1);
@@ -3614,7 +3601,7 @@ void display_analyze_results_ccc(void)
   GError *err = NULL; // It is mandatory to initialize to NULL
   if(0 == gtk_builder_add_from_string (builder, (const gchar *)hddsuperclone3_glade, hddsuperclone3_glade_len, &err))
   {
-    fprintf(stderr, "Error adding build from file. Error: %s\n", err->message);
+    ERROR("Error adding build from file. '%s'\n", err->message);
   }
   gtk_builder_connect_signals(builder, NULL);
   GtkWidget *dialog = GTK_WIDGET (gtk_builder_get_object (builder, "analyze_results_dialog"));
@@ -3644,7 +3631,7 @@ void get_smart_data_ccc(void)
   int ret = extract_smart_data_ccc();
   if (ret == 0)
   {
-    fprintf (stdout, "%s", smart_data_text_ccc);
+    INFO("SMART data: %s\n", smart_data_text_ccc);
     display_smart_data_ccc();
   }
   logfile_changed_ccc = true;
@@ -3660,7 +3647,7 @@ void display_smart_data_ccc(void)
   GError *err = NULL; // It is mandatory to initialize to NULL
   if(0 == gtk_builder_add_from_string (builder, (const gchar *)hddsuperclone3_glade, hddsuperclone3_glade_len, &err))
   {
-    fprintf(stderr, "Error adding build from file. Error: %s\n", err->message);
+    ERROR("Error adding build from file. '%s'\n", err->message);
   }
   gtk_builder_connect_signals(builder, NULL);
   GtkWidget *dialog = GTK_WIDGET (gtk_builder_get_object (builder, "smart_results_dialog"));
@@ -3689,7 +3676,7 @@ void display_identify_data_ccc(void)
   GError *err = NULL; // It is mandatory to initialize to NULL
   if(0 == gtk_builder_add_from_string (builder, (const gchar *)hddsuperclone3_glade, hddsuperclone3_glade_len, &err))
   {
-    fprintf(stderr, "Error adding build from file. Error: %s\n", err->message);
+    ERROR("Error adding build from file. '%s'\n", err->message);
   }
   gtk_builder_connect_signals(builder, NULL);
   GtkWidget *dialog = GTK_WIDGET (gtk_builder_get_object (builder, "identify_results_dialog"));
@@ -3728,7 +3715,7 @@ void open_clone_settings_dialog_ccc (void)
   GError *err = NULL; // It is mandatory to initialize to NULL
   if(0 == gtk_builder_add_from_string (builder, (const gchar *)hddsuperclone3_glade, hddsuperclone3_glade_len, &err))
   {
-    fprintf(stderr, "Error adding build from file. Error: %s\n", err->message);
+    ERROR("Error adding build from file. '%s'\n", err->message);
   }
   gtk_builder_connect_signals(builder, NULL);
   GtkWidget *dialog = GTK_WIDGET (gtk_builder_get_object (builder, "clone_settings_dialog"));
@@ -3860,7 +3847,7 @@ void open_advanced_settings_dialog_ccc (void)
   GError *err = NULL; // It is mandatory to initialize to NULL
   if(0 == gtk_builder_add_from_string (builder, (const gchar *)hddsuperclone3_glade, hddsuperclone3_glade_len, &err))
   {
-    fprintf(stderr, "Error adding build from file. Error: %s\n", err->message);
+    ERROR("Error adding build from file. '%s'\n", err->message);
   }
   gtk_builder_connect_signals(builder, NULL);
   GtkWidget *dialog = GTK_WIDGET (gtk_builder_get_object (builder, "advanced_settings_dialog"));
@@ -4022,7 +4009,7 @@ void open_timer_settings_dialog_ccc (void)
   GError *err = NULL; // It is mandatory to initialize to NULL
   if(0 == gtk_builder_add_from_string (builder, (const gchar *)hddsuperclone3_glade, hddsuperclone3_glade_len, &err))
   {
-    fprintf(stderr, "Error adding build from file. Error: %s\n", err->message);
+    ERROR("Error adding build from file. '%s'\n", err->message);
   }
   gtk_builder_connect_signals(builder, NULL);
   GtkWidget *dialog = GTK_WIDGET (gtk_builder_get_object (builder, "timer_settings_dialog"));
@@ -4199,7 +4186,7 @@ int open_ports_dialog_ccc (char *current_ports)
   GError *err = NULL; // It is mandatory to initialize to NULL
   if(0 == gtk_builder_add_from_string (builder, (const gchar *)hddsuperclone3_glade, hddsuperclone3_glade_len, &err))
   {
-    fprintf(stderr, "Error adding build from file. Error: %s\n", err->message);
+    ERROR("Error adding build from file. Error: %s\n", err->message);
   }
   gtk_builder_connect_signals(builder, NULL);
   GtkWidget *dialog = GTK_WIDGET (gtk_builder_get_object (builder, "disable_ports_dialog"));
@@ -4255,7 +4242,7 @@ int set_lun_dialog_ccc (int max_lun)
   GError *err = NULL; // It is mandatory to initialize to NULL
   if(0 == gtk_builder_add_from_string (builder, (const gchar *)hddsuperclone3_glade, hddsuperclone3_glade_len, &err))
   {
-    fprintf(stderr, "Error adding build from file. Error: %s\n", err->message);
+    ERROR("Error adding build from file. Error: %s\n", err->message);
   }
   gtk_builder_connect_signals(builder, NULL);
   GtkWidget *dialog = GTK_WIDGET (gtk_builder_get_object (builder, "select_lun_dialog"));
@@ -4292,7 +4279,7 @@ int set_lun_dialog_ccc (int max_lun)
     usb_lun_ccc = gtk_spin_button_get_value(GTK_SPIN_BUTTON(current_lun_spinbutton_ccc));
     usb_lun_set_ccc = 1;
     ret = 0;
-    fprintf (stdout, "lun=%d\n", usb_lun_ccc);
+    INFO("lun=%d\n", usb_lun_ccc);
   }
   gtk_widget_destroy(dialog);
   return ret;
@@ -4308,7 +4295,7 @@ void open_primary_relay_dialog_ccc (void)
   GError *err = NULL; // It is mandatory to initialize to NULL
   if(0 == gtk_builder_add_from_string (builder, (const gchar *)hddsuperclone3_glade, hddsuperclone3_glade_len, &err))
   {
-    fprintf(stderr, "Error adding build from file. Error: %s\n", err->message);
+    ERROR("Error adding build from file. Error: %s\n", err->message);
   }
   gtk_builder_connect_signals(builder, NULL);
   GtkWidget *dialog = GTK_WIDGET (gtk_builder_get_object (builder, "primary_relay_settings_dialog"));
@@ -4471,7 +4458,7 @@ void do_test_primary_relay_ccc (void)
   update_primary_relay_settings_from_buttons_ccc();
   update_primary_relay_settings_ccc();
 
-  g_print ("activate primary relay\n");
+  INFO("Activate primary relay\n");
   if (activate_primary_relay_ccc())
   {
     strcpy (tempmessage_ccc, curlang_ccc[LANGUSBRELAYERROR]);
@@ -4506,7 +4493,7 @@ void do_test_primary_relay_ccc (void)
   // wait for delay time
   if (!error)
   {
-    g_print ("wait for delay time\n");
+    INFO("wait for delay time\n");
     unsigned int i;
     for (i = primary_relay_settings_ccc.primary_relay_delay_time; i > 0 ; i--)
     {
@@ -4558,7 +4545,7 @@ int cycle_primary_relay_ccc(void)
     return -1;
   }
 
-  g_print ("activate primary relay ");
+  INFO("activate primary relay ");
   if (activate_primary_relay_ccc())
   {
     strcpy (tempmessage_ccc, curlang_ccc[LANGUSBRELAYERROR]);
@@ -4592,7 +4579,7 @@ int cycle_primary_relay_ccc(void)
     g_print ("%d ", i);
     do_nanosleep_ccc(1000000000);
   }
-  g_print ("done\n");
+  INFO("done\n");
 
   return 0;
 }
@@ -4645,7 +4632,7 @@ int open_confirmation_dialog_ccc (char *message)
   GError *err = NULL; // It is mandatory to initialize to NULL
   if(0 == gtk_builder_add_from_string (builder, (const gchar *)hddsuperclone3_glade, hddsuperclone3_glade_len, &err))
   {
-    fprintf(stderr, "Error adding build from file. Error: %s\n", err->message);
+    ERROR("Error adding build from file. Error: %s\n", err->message);
   }
   gtk_builder_connect_signals(builder, NULL);
   GtkWidget *dialog = GTK_WIDGET (gtk_builder_get_object (builder, "confirmation_dialog"));
@@ -5372,16 +5359,8 @@ void update_primary_relay_button_settings_ccc (void)
 
 void set_agressive_driver_status_from_button_ccc (void)
 {
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(agressive_driver_checkbutton_ccc)))
-  {
-    aggressive_driver_ccc = TRUE;
-    //fprintf (stdout, "agressive mode on\n");    //debug
-  }
-  else
-  {
-    aggressive_driver_ccc = FALSE;
-    //fprintf (stdout, "agressive mode off\n");    //debug
-  }
+  aggressive_driver_ccc = !!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(agressive_driver_checkbutton_ccc));
+  INFO("Aggressive mode %s", aggressive_driver_ccc ? "enabled" : "disabled");
 }
 
 
@@ -5564,10 +5543,8 @@ void set_state_from_button_ccc (GtkWidget *widget, gpointer data)
       advanced_settings_ccc.color_statusbar = button_status;
       break;
 
-
-
     default:
-      g_print ("Unknown button %d", data_pointer);
+      WARN("Unknown button %d", data_pointer);
       break;
   }
 }
@@ -5600,7 +5577,7 @@ void do_reset_status_ccc(void)
 
   if (result == GTK_RESPONSE_ACCEPT)
   {
-    g_print ("resetting status\n");
+    INFO("resetting status\n");
     reset_current_status_ccc();
     logfile_changed_ccc = true;
     update_display_ccc(0);
@@ -5636,7 +5613,7 @@ void do_reset_log_status_ccc(void)
 
   if (result == GTK_RESPONSE_ACCEPT)
   {
-    g_print ("resetting log\n");
+    INFO("resetting log\n");
     reset_log_status_ccc();
     update_display_ccc(0);
     // check log and if same status found then repair it
@@ -5690,7 +5667,7 @@ void do_repair_log_ccc(void)
 
   if (result == GTK_RESPONSE_ACCEPT)
   {
-    g_print ("repairing log\n");
+    INFO("repairing log\n");
     if (source_chosen_ccc)
     {
       check_log_size_ccc = 1;
@@ -5719,7 +5696,7 @@ void do_repair_log_ccc(void)
 
 
 
-
+//TODO: refactor, there is only one version now
 void about_ccc (void)
 {
   GtkWidget *dialog = gtk_about_dialog_new();
@@ -5758,7 +5735,7 @@ void about_ccc (void)
 
 
 
-
+//TODO: add fork/exec function to util.h
 void help_html_ccc(void)
 {
   // fork here to prevent locking up due to opening as root
@@ -5849,7 +5826,7 @@ void choose_primary_usb_ccc(void)
     int ret = choose_usb_relay_ccc();
     if (ret)
     {
-      fprintf (stdout, "error selecting usb, ret=%d\n", ret);
+      ERROR("error selecting usb, ret=%d", ret);
       clear_usbr1_ccc();
       snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "%s", curlang_ccc[LANGUSBERROR]);
       message_error_ccc(tempmessage_ccc);
@@ -5876,7 +5853,7 @@ void choose_primary_usb_ccc(void)
 void get_usb_from_button_ccc (const GtkWidget *w, gpointer data)
 {
   new_usb_ccc = GPOINTER_TO_INT( data );
-  g_print ("selection=%d  \n", new_usb_ccc);
+  INFO("selection=%d  \n", new_usb_ccc);
   (void) w;
 }
 
@@ -5928,7 +5905,7 @@ void do_activate_primary_relay_ccc(void)
   update_primary_relay_settings_from_buttons_ccc();
   update_primary_relay_settings_ccc();
 
-  g_print ("activate primary relay\n");
+  INFO("activate primary relay\n");
   if (activate_primary_relay_ccc())
   {
     strcpy (tempmessage_ccc, curlang_ccc[LANGUSBRELAYERROR]);
@@ -5994,7 +5971,7 @@ void do_deactivate_primary_relay_ccc(void)
   update_primary_relay_settings_from_buttons_ccc();
   update_primary_relay_settings_ccc();
 
-  g_print ("deactivate primary relay\n");
+  INFO("deactivate primary relay\n");
   if (deactivate_primary_relay_ccc())
   {
     strcpy (tempmessage_ccc, curlang_ccc[LANGUSBRELAYERROR]);
@@ -6030,6 +6007,7 @@ void do_deactivate_primary_relay_ccc(void)
 
 void map_heads_ccc (void)
 {
+  //TODO: remove all GODMODE references, the open source version has all features enabled
 #ifdef GODMODE
   if (!connected_ccc)
   {

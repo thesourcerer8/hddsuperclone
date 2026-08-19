@@ -12,6 +12,7 @@
 #include <unistd.h>
 #include <dirent.h>
 
+#include "util.h"
 
 char name[256][256];
 
@@ -48,19 +49,19 @@ int main(void)
   ret=system(command);
   if(ret)
   {
-    fprintf(stderr, "Return value of cat, this might indicate an error: %d\n",ret);
+    ERROR("Cat failed, error-code: %d",ret);
   }
   char *newdirectory = "hddscripts";
   ret=chdir (newdirectory);
   if(ret)
   {
-    fprintf(stderr, "Could not change to the directory hddscripts, error-code: %d\n",ret);
+    ERROR("chdir('%s') failed, error-code: %d", newdirectory, ret);
   }
   char *texifile = "../hddsupertool.texi";
   FILE *texi_file = fopen(texifile, "a");
   if (texi_file == NULL)
   {
-    fprintf(stderr, "Cannot open %s for writing (%s).\nAborting...\n", texifile, strerror(errno));
+    ERROR("Cannot open %s for writing (%s)", texifile, strerror(errno));
     exit (1);
   }
   while( count > 0 )
@@ -69,17 +70,18 @@ int main(void)
     //fprintf(stdout, "@example\n");
     fprintf(texi_file, "\n\n%s\n",name[index]);
     fprintf(texi_file, "@example\n");
+    //TODO: change to snprintf()
     strcpy (command, "../hddsuperclone --tool -Q -t /dev/zero -f ");
     strcat(command, name[index]);
     strcat(command, " help=1 printhelp=1");
-    fprintf (stdout, "%s\n", command);
+    INFO("command: %s", command);
 
     FILE *fp;
     char path[1035];
     /* Open the command for reading. */
     fp = popen(command, "r");
     if (fp == NULL) {
-      printf("Failed to run command\n" );
+      ERROR("Failed to run command '%s'", command);
       exit(1);
     }
     /* Read the output a line at a time - output it. */
@@ -100,47 +102,10 @@ int main(void)
   ret=chdir ("..");
   if(ret)
   {
-    fprintf(stderr,"Could not change the directory to .. , error-code: %d\n",ret);
+    ERROR("chdir('..') failed, error-code: %d", ret);
   }
   strcpy (command, "cat hddsupertool-p2.texi >> hddsupertool.texi");
   return(system (command));
 }
 
 
-
-
-/*
-#include <dirent.h>
-#include <stdio.h>
-
-char name[256][256];
-
-int main(void)
-{
-  DIR           *d;
-  struct dirent *dir;
-  int count = 0;
-  int index = 0;
-  d = opendir(".");
-  if (d)
-  {
-    while ((dir = readdir(d)) != NULL)
-    {
-      printf("%s\n", dir->d_name);
-      strcpy(name[count],dir->d_name);
-      count++;
-    }
-
-    closedir(d);
-  }
-
-  while( count > 0 )
-  {
-      printf("The directory list is %s\r\n",name[index]);
-      index++;
-      count--;
-  }
-
-  return(0);
-}
-*/

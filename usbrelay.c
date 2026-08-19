@@ -12,6 +12,8 @@
 #include "common.h"
 #include "usbrelay.h"
 #include "clone_gui_common.h"
+#include "strncpy_wrapper.h"
+#include "util.h"
 
 
 unsigned long long primary_relay_delay_time_ccc;
@@ -19,13 +21,11 @@ unsigned long long primary_relay_activation_time_ccc;
 char primary_relay_name_ccc[MAX_RELAY_NAME_LENGTH];
 primary_relay_settings_ccc_type primary_relay_settings_ccc;
 
-#include "strncpy_wrapper.h"
 
 
 int find_all_usb_devices_ccc(void)
 {
-  snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Finding USB devices\n");
-  message_now_ccc(tempmessage_ccc);
+  INFO("Finding USB devices");
   // clear the list
   for (int i = 0; i < MAX_USB_DEVICES; i++)
   {
@@ -67,7 +67,7 @@ int find_all_usb_devices_ccc(void)
       struct usb_dev_handle *dev_handle;
       if ( ( dev_handle = usb_open(dev) ) == NULL )
       {
-        fprintf (stdout, "Failed to open device bus %d device %d (%s)\n", usb_bus_number_ccc[usb_device_count_ccc], usb_device_number_ccc[usb_device_count_ccc], strerror(errno));
+        ERROR("Failed to open device bus %d device %d (%s)", usb_bus_number_ccc[usb_device_count_ccc], usb_device_number_ccc[usb_device_count_ccc], strerror(errno));
         continue;
       }
 
@@ -82,7 +82,7 @@ int find_all_usb_devices_ccc(void)
       }
       else
       {
-        fprintf (stdout, "Error: Unnable to get vendor string %04x:%04x (%s)\n", usb_vendor_id_ccc[usb_device_count_ccc], usb_product_id_ccc[usb_device_count_ccc], strerror(errno));
+        ERROR("Failed to get vendor string %04x:%04x (%s)", usb_vendor_id_ccc[usb_device_count_ccc], usb_product_id_ccc[usb_device_count_ccc], strerror(errno));
       }
 
       rval = usb_get_string_simple(dev_handle, dev->descriptor.iProduct, buffer, sizeof(buffer));
@@ -92,7 +92,7 @@ int find_all_usb_devices_ccc(void)
       }
       else
       {
-        fprintf (stdout, "Error: Unable to get product string %04x:%04x (%s)\n", usb_vendor_id_ccc[usb_device_count_ccc], usb_product_id_ccc[usb_device_count_ccc], strerror(errno));
+        ERROR("Failed to get product string %04x:%04x (%s)", usb_vendor_id_ccc[usb_device_count_ccc], usb_product_id_ccc[usb_device_count_ccc], strerror(errno));
       }
 
       rval = usb_get_string_simple(dev_handle, dev->descriptor.iSerialNumber, buffer, sizeof(buffer));
@@ -102,7 +102,7 @@ int find_all_usb_devices_ccc(void)
       }
       else
       {
-        fprintf (stdout, "Error: Unable to get serial string %04x:%04x (%s)\n", usb_vendor_id_ccc[usb_device_count_ccc], usb_product_id_ccc[usb_device_count_ccc], strerror(errno));
+        ERROR("Failed to get serial string %04x:%04x (%s)", usb_vendor_id_ccc[usb_device_count_ccc], usb_product_id_ccc[usb_device_count_ccc], strerror(errno));
       }
 
       // if the device is known to have an extra id or serial then get it
@@ -124,7 +124,7 @@ int find_all_usb_devices_ccc(void)
         }
         else
         {
-          fprintf (stdout, "Failed to get special id %04x:%04x, %d (%s)\n", usb_vendor_id_ccc[usb_device_count_ccc], usb_product_id_ccc[usb_device_count_ccc], bytesreceived, strerror(errno));
+          ERROR("Failed to get special id %04x:%04x, %d (%s)", usb_vendor_id_ccc[usb_device_count_ccc], usb_product_id_ccc[usb_device_count_ccc], bytesreceived, strerror(errno));
         }
         // if it is a known usb relay then mark it
         usb_known_relay_ccc[usb_device_count_ccc] = 1;
@@ -186,7 +186,7 @@ int find_all_usb_devices_ccc(void)
 
       if ( usb_close(dev_handle) )
       {
-        fprintf (stdout, "Failed to close device bus %d device %d (%s)\n", usb_bus_number_ccc[usb_device_count_ccc], usb_device_number_ccc[usb_device_count_ccc], strerror(errno));
+        ERROR("Failed to close device bus %d device %d (%s)", usb_bus_number_ccc[usb_device_count_ccc], usb_device_number_ccc[usb_device_count_ccc], strerror(errno));
       }
 
       usb_device_count_ccc++;
@@ -252,11 +252,11 @@ int choose_usb_relay_ccc(void)
           choice = strtol(raw_value, &endptr, 0);
           if (*endptr)
           {
-            fprintf (stderr, "Error! Choice \'%s\' was unable to processed.\n", raw_value);
+            ERROR("Error processing value \'%s\'.", raw_value);
           }
           else if (choice < 1 || choice > usb_device_count_ccc)
           {
-            fprintf (stderr, "Error! Choice %d is out of range.\n", choice);
+            ERROR("Error: Value %d is out of range.", choice);
           }
           else
           {
@@ -274,7 +274,7 @@ int choose_usb_relay_ccc(void)
   int i = choice - 1;
   if (verbose_ccc & DEBUG6)
   {
-    fprintf (stdout, "choice=%d %d:%d %04x:%04x %s %s %s\n", i+1, usb_bus_real_number_ccc[i], usb_device_number_ccc[i], usb_vendor_id_ccc[i], usb_product_id_ccc[i], usb_vendor_string_ccc[i], usb_product_string_ccc[i], usb_extra_id_string_ccc[i]);
+    INFO("choice=%d %d:%d %04x:%04x %s %s %s", i+1, usb_bus_real_number_ccc[i], usb_device_number_ccc[i], usb_vendor_id_ccc[i], usb_product_id_ccc[i], usb_vendor_string_ccc[i], usb_product_string_ccc[i], usb_extra_id_string_ccc[i]);
   }
 
   usbr1_bus_number_ccc = usb_bus_number_ccc[i];
@@ -307,7 +307,7 @@ int choose_usb_relay_ccc(void)
       {
         if ( ( usbr1_dev_handle_ccc = usb_open(dev) ) == NULL )
         {
-          fprintf (stdout, "Failed to open device bus %d device %d (%s)\n", usbr1_bus_number_ccc, usbr1_device_number_ccc, strerror(errno));
+          ERROR("Failed to open device bus %d device %d (%s)", usbr1_bus_number_ccc, usbr1_device_number_ccc, strerror(errno));
           usbr1_dev_handle_ccc = NULL;
           return -1;
         }
@@ -315,7 +315,7 @@ int choose_usb_relay_ccc(void)
 
         if (usbr1_vendor_id_ccc != dev->descriptor.idVendor || usbr1_product_id_ccc != dev->descriptor.idProduct)
         {
-          fprintf (stdout, "ID does not match what was chosen (wanted %04x:%04x, found %04x:%04x\n", usbr1_vendor_id_ccc, usbr1_product_id_ccc, dev->descriptor.idVendor, dev->descriptor.idProduct);
+          ERROR("ID does not match what was chosen (wanted %04x:%04x, found %04x:%04x", usbr1_vendor_id_ccc, usbr1_product_id_ccc, dev->descriptor.idVendor, dev->descriptor.idProduct);
           usb_close(usbr1_dev_handle_ccc);
           usbr1_dev_handle_ccc = NULL;
           return -1;
@@ -324,7 +324,7 @@ int choose_usb_relay_ccc(void)
         int status = usb_detach_kernel_driver_np(usbr1_dev_handle_ccc, 0);
         if (status && (errno != ENODATA))
         {
-          fprintf (stdout, "Failed to detach device: (%s)\n", strerror(errno));
+          ERROR("Failed to detach device (%s)", strerror(errno));
           usb_close(usbr1_dev_handle_ccc);
           usbr1_dev_handle_ccc = NULL;
           return -1;
@@ -333,7 +333,7 @@ int choose_usb_relay_ccc(void)
         status = usb_set_configuration(usbr1_dev_handle_ccc, 1);
         if (status)
         {
-          fprintf (stdout, "Failed to set configuration: (%s)\n", strerror(errno));
+          ERROR("Failed to set configuration (%s)", strerror(errno));
           usb_close(usbr1_dev_handle_ccc);
           usbr1_dev_handle_ccc = NULL;
           return -1;
@@ -342,7 +342,7 @@ int choose_usb_relay_ccc(void)
         status = usb_claim_interface(usbr1_dev_handle_ccc, 0);
         if (status)
         {
-          fprintf (stdout, "Failed to claim interface: (%s)\n", strerror(errno));
+          ERROR("Failed to claim interface (%s)", strerror(errno));
           usb_close(usbr1_dev_handle_ccc);
           usbr1_dev_handle_ccc = NULL;
           return -1;
@@ -351,7 +351,7 @@ int choose_usb_relay_ccc(void)
       }
     }
   }
-  fprintf (stdout, "Interface connected\n");
+  INFO("Interface connected");
   return 0;
 }
 
@@ -400,11 +400,11 @@ int choose_usb_device_ccc(void)
           choice = strtol(raw_value, &endptr, 0);
           if (*endptr)
           {
-            fprintf (stderr, "Error! Choice \'%s\' was unable to processed.\n", raw_value);
+            ERROR("Error processing value \'%s\'.", raw_value);
           }
           else if (choice < 1 || choice > usb_device_count_ccc)
           {
-            fprintf (stderr, "Error! Choice %d is out of range.\n", choice);
+            ERROR("Error: Value %d is out of range.", choice);
           }
           else
           {
@@ -422,13 +422,12 @@ int choose_usb_device_ccc(void)
   int i = choice - 1;
   if (verbose_ccc & DEBUG6)
   {
-    fprintf (stdout, "choice=%d %d:%d %04x:%04x %d %s %s %s\n", i+1, usb_bus_real_number_ccc[i], usb_device_number_ccc[i], usb_vendor_id_ccc[i], usb_product_id_ccc[i], usb_mass_storage_ccc[i], usb_vendor_string_ccc[i], usb_product_string_ccc[i], usb_extra_id_string_ccc[i]);
+    INFO("choice=%d %d:%d %04x:%04x %d %d %s %s %s", i+1, usb_bus_real_number_ccc[i], usb_device_number_ccc[i], usb_vendor_id_ccc[i], usb_product_id_ccc[i], usb_bulk_in_endpoint_ccc[i], usb_bulk_out_endpoint_ccc[i], usb_vendor_string_ccc[i], usb_product_string_ccc[i], usb_extra_id_string_ccc[i]);
   }
 
   if (superclone_ccc && !usb_mass_storage_ccc[i])
   {
-    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Error: USB device is not mass storage.\n");
-    message_error_ccc(tempmessage_ccc);
+    ERROR("USB device is not mass storage.");
     print_gui_error_message_ccc(error_message_ccc, curlang_ccc[LANGERROR], 1);
     clear_error_message_ccc();
     return -1;
@@ -490,7 +489,7 @@ int connect_usbd1_ccc(void)
         {
           if ( ( usbd1_dev_handle_ccc = usb_open(dev) ) == NULL )
           {
-            fprintf (stdout, "Failed to open device bus %d device %d (%s)\n", usbd1_bus_number_ccc, usbd1_device_number_ccc, strerror(errno));
+            ERROR("Failed to open device bus %d device %d (%s)", usbd1_bus_number_ccc, usbd1_device_number_ccc, strerror(errno));
             usbd1_dev_handle_ccc = NULL;
             return -1;
           }
@@ -506,7 +505,7 @@ int connect_usbd1_ccc(void)
           }
           else
           {
-            fprintf (stdout, "Error: Unnable to get vendor string (%s)\n", strerror(errno));
+            ERROR("Failed to get vendor string (%s)", strerror(errno));
           }
 
           rval = usb_get_string_simple(usbd1_dev_handle_ccc, dev->descriptor.iProduct, buffer, sizeof(buffer));
@@ -516,12 +515,12 @@ int connect_usbd1_ccc(void)
           }
           else
           {
-            fprintf (stdout, "Error: Unable to get product string (%s)\n", strerror(errno));
+            ERROR("Failed to get product string (%s)", strerror(errno));
           }
 
           if (usbd1_vendor_id_ccc != dev->descriptor.idVendor || usbd1_product_id_ccc != dev->descriptor.idProduct || strcmp(usbd1_vendor_string_ccc, vendorstring) || strcmp(usbd1_product_string_ccc, productstring))
           {
-            fprintf (stdout, "ID does not match what was chosen:\nwanted %04x:%04x %s %s\nfound %04x:%04x %s %s\n", usbd1_vendor_id_ccc, usbd1_product_id_ccc, usbd1_vendor_string_ccc, usbd1_product_string_ccc, dev->descriptor.idVendor, dev->descriptor.idProduct, vendorstring, productstring);
+            ERROR("ID does not match what was chosen:\nwanted %04x:%04x %s %s\nfound %04x:%04x %s %s", usbd1_vendor_id_ccc, usbd1_product_id_ccc, usbd1_vendor_string_ccc, usbd1_product_string_ccc, dev->descriptor.idVendor, dev->descriptor.idProduct, vendorstring, productstring);
             usb_close(usbd1_dev_handle_ccc);
             usbd1_dev_handle_ccc = NULL;
             return -1;
@@ -532,7 +531,7 @@ int connect_usbd1_ccc(void)
           int status = usb_detach_kernel_driver_np(usbd1_dev_handle_ccc, 0);
           if (status && (errno != ENODATA))
           {
-            fprintf (stdout, "Failed to detach device: (%s)\n", strerror(errno));
+            ERROR("Failed to detach device (%s)", strerror(errno));
             usb_close(usbd1_dev_handle_ccc);
             usbd1_dev_handle_ccc = NULL;
             return -1;
@@ -541,7 +540,7 @@ int connect_usbd1_ccc(void)
           status = usb_set_configuration(usbd1_dev_handle_ccc, 1);
           if (status)
           {
-            fprintf (stdout, "Failed to set configuration: (%s)\n", strerror(errno));
+            ERROR("Failed to set configuration (%s)", strerror(errno));
             usb_close(usbd1_dev_handle_ccc);
             usbd1_dev_handle_ccc = NULL;
             return -1;
@@ -550,7 +549,7 @@ int connect_usbd1_ccc(void)
           status = usb_claim_interface(usbd1_dev_handle_ccc, 0);
           if (status)
           {
-            fprintf (stdout, "Failed to claim interface: (%s)\n", strerror(errno));
+            ERROR("Failed to claim interface (%s)", strerror(errno));
             usb_close(usbd1_dev_handle_ccc);
             usbd1_dev_handle_ccc = NULL;
             return -1;
@@ -568,11 +567,11 @@ int connect_usbd1_ccc(void)
   }
   if (found_device)
   {
-    fprintf (stdout, "Interface connected\n");
+    INFO("Interface connected");
   }
   else
   {
-    fprintf (stdout, "Device not found\n");
+    ERROR("Device not found");
     return -1;
   }
   int max_lun = usb_get_max_lun_ccc(initial_busy_wait_time_ccc / 1000);
@@ -582,7 +581,7 @@ int connect_usbd1_ccc(void)
     {
       usb_close(usbd1_dev_handle_ccc);
       usbd1_dev_handle_ccc = NULL;
-      fprintf (stdout, "Choosing LUN canceled\n");
+      WARN("Choosing LUN canceled");
       return -1;
     }
   }
@@ -636,12 +635,12 @@ int do_send_usbr_control_msg_ccc(int requesttype, int request, int value, int in
 
   if (ret < 0)
   {
-    fprintf (stdout, "USB control message error %d (%s)\n", ret, strerror(abs(ret)));
+    ERROR("USB control message error %d (%s)", ret, strerror(abs(ret)));
     status = 1;
   }
   else if (ret != (int)ccc_main_usbbuffer_size_ccc)
   {
-    fprintf (stdout, "USB control message short return %d\n", ret);
+    ERROR("USB control message short return %d != %llu", ret, ccc_main_usbbuffer_size_ccc);
     status = 1;
   }
   return status;
@@ -661,12 +660,12 @@ int do_send_usbr_interrupt_write_ccc(int endpointout)
 
   if (ret < 0)
   {
-    fprintf (stdout, "USB interrupt write error %d (%s)\n", ret, strerror(abs(ret)));
+    ERROR("USB interrupt write error %d (%s)", ret, strerror(abs(ret)));
     status = 1;
   }
   else if (ret != (int)ccc_main_usbbuffer_size_ccc)
   {
-    fprintf (stdout, "USB interrupt write short return %d\n", ret);
+    ERROR("USB interrupt write short return %d != %llu", ret, ccc_main_usbbuffer_size_ccc);
     status = 1;
   }
   return status;
@@ -686,12 +685,12 @@ int do_send_usbr_interrupt_read_ccc(int endpointin)
 
   if (ret < 0)
   {
-    fprintf (stdout, "USB interrupt read error %d (%s)\n", ret, strerror(abs(ret)));
+    ERROR("USB interrupt read error %d (%s)", ret, strerror(abs(ret)));
     status = 1;
   }
   else if (ret != (int)ccc_main_usbbuffer_size_ccc)
   {
-    fprintf (stdout, "USB interrupt read short return %d\n", ret);
+    ERROR("USB interrupt read short return %d != %llu", ret, ccc_main_usbbuffer_size_ccc);
     status = 1;
   }
   return status;
@@ -716,12 +715,12 @@ int do_send_usbd_control_msg_ccc(int requesttype, int request, int value, int in
 
   if (ret < 0)
   {
-    fprintf (stdout, "USB control message error %d (%s)\n", ret, strerror(abs(ret)));
+    ERROR("USB control message error %d (%s)", ret, strerror(abs(ret)));
     status = 1;
   }
   else if (ret != (int)ccc_main_usbbuffer_size_ccc)
   {
-    fprintf (stdout, "USB control message short return %d\n", ret);
+    ERROR("USB control message short return %d != %llu", ret, ccc_main_usbbuffer_size_ccc);
     status = 1;
   }
   if (superclone_ccc)
@@ -742,10 +741,10 @@ int do_usb_read_sense_ccc(int timeout)
 
   if (debug_ccc & DEBUG19)
   {
-    fprintf (stdout, "endpointin=%x size=%lld timeout=%d\n", usbd1_bulk_in_endpoint_ccc, sensebuffer_size_ccc, timeout);
+    INFO("endpointin=%x size=%lld timeout=%d", usbd1_bulk_in_endpoint_ccc, sensebuffer_size_ccc, timeout);
     int i;
     int size = sensebuffer_size_ccc;
-    for (i = 0; i < size; i+=16)
+    for (i = 0; i < size; i+=16) //TODO: add hexdump() function to util.c
     {
       fprintf (stdout, "%x: ", i);
       unsigned char *c;
@@ -767,12 +766,12 @@ int do_usb_read_sense_ccc(int timeout)
 
   if (ret < 0)
   {
-    fprintf (stdout, "USB sense read error %d (%s)\n", ret, strerror(abs(ret)));
+    ERROR("USB sense read error %d (%s)", ret, strerror(abs(ret)));
     reset_usb_endpoint_in_ccc();
   }
   else if (ret != (int)sensebuffer_size_ccc)
   {
-    fprintf (stdout, "USB sense read short return %d\n", ret);
+    ERROR("USB sense read short return %d != %llu", ret, sensebuffer_size_ccc);
     reset_usb_endpoint_in_ccc();
   }
   if (superclone_ccc)
@@ -793,10 +792,10 @@ int do_usb_raw_read_ccc(int timeout)
 
   if (debug_ccc & DEBUG19)
   {
-    fprintf (stdout, "endpointin=%x size=%lld timeout=%d\n", usbd1_bulk_in_endpoint_ccc, ccc_main_usbbuffer_size_ccc, timeout);
+    INFO("endpointin=%x size=%lld timeout=%d", usbd1_bulk_in_endpoint_ccc, ccc_main_usbbuffer_size_ccc, timeout);
     int i;
     int size = ccc_main_usbbuffer_size_ccc;
-    for (i = 0; i < size; i+=16)
+    for (i = 0; i < size; i+=16) //TODO: add hexdump() function to util.c
     {
       fprintf (stdout, "%x: ", i);
       unsigned char *c;
@@ -821,12 +820,12 @@ int do_usb_raw_read_ccc(int timeout)
 
   if (ret < 0)
   {
-    fprintf (stdout, "USB raw read error %d (%s)\n", ret, strerror(abs(ret)));
+    ERROR("USB raw read error %d (%s)", ret, strerror(abs(ret)));
     reset_usb_endpoint_in_ccc();
   }
   else if (ret != (int)ccc_main_usbbuffer_size_ccc)
   {
-    fprintf (stdout, "USB raw read short return %d\n", ret);
+    ERROR("USB raw read short return %d != %llu", ret, ccc_main_usbbuffer_size_ccc);
     reset_usb_endpoint_in_ccc();
   }
   if (superclone_ccc)
@@ -844,10 +843,10 @@ int do_usb_raw_write_ccc(int timeout)
 {
   if (debug_ccc & DEBUG19)
   {
-    fprintf (stdout, "endpointout=%x size=%lld timeout=%d\n", usbd1_bulk_out_endpoint_ccc, ccc_main_usbbuffer_size_ccc, timeout);
+    INFO("endpointout=%x size=%lld timeout=%d", usbd1_bulk_out_endpoint_ccc, ccc_main_usbbuffer_size_ccc, timeout);
     int i;
     int size = ccc_main_usbbuffer_size_ccc;
-    for (i = 0; i < size; i+=16)
+    for (i = 0; i < size; i+=16) //TODO: add hexdump() function to util.c
     {
       fprintf (stdout, "%x: ", i);
       unsigned char *c;
@@ -875,12 +874,12 @@ int do_usb_raw_write_ccc(int timeout)
 
   if (ret < 0)
   {
-    fprintf (stdout, "USB raw write error %d (%s)\n", ret, strerror(abs(ret)));
+    ERROR("USB raw write error %d (%s)", ret, strerror(abs(ret)));
     reset_usb_endpoint_out_ccc();
   }
   else if (ret != (int)ccc_main_usbbuffer_size_ccc)
   {
-    fprintf (stdout, "USB raw write short return %d\n", ret);
+    ERROR("USB raw write short return %d != %llu", ret, ccc_main_usbbuffer_size_ccc);
     reset_usb_endpoint_out_ccc();
   }
   if (superclone_ccc)
@@ -901,10 +900,10 @@ int usb_read_data_ccc(int timeout)
 
   if (debug_ccc & DEBUG19)
   {
-    fprintf (stdout, "endpointin=%x size=%lld timeout=%d\n", usbd1_bulk_in_endpoint_ccc, ccc_main_buffer_size_ccc, timeout);
+    INFO("endpointin=%x size=%lld timeout=%d", usbd1_bulk_in_endpoint_ccc, ccc_main_buffer_size_ccc, timeout);
     int i;
     int size = ccc_main_buffer_size_ccc;
-    for (i = 0; i < size; i+=16)
+    for (i = 0; i < size; i+=16) //TODO: add hexdump() function to util.c
     {
       fprintf (stdout, "%x: ", i);
       unsigned char *c;
@@ -926,12 +925,12 @@ int usb_read_data_ccc(int timeout)
 
   if (ret < 0)
   {
-    fprintf (stdout, "USB raw read error %d (%s)\n", ret, strerror(abs(ret)));
+    ERROR("USB raw read error %d (%s)", ret, strerror(abs(ret)));
     reset_usb_endpoint_in_ccc();
   }
   else if (ret != (int)ccc_main_buffer_size_ccc)
   {
-    fprintf (stdout, "USB raw read short return %d\n", ret);
+    ERROR("USB raw read short return %d != %llu", ret, ccc_main_buffer_size_ccc);
     reset_usb_endpoint_in_ccc();
   }
   return ret;
@@ -945,10 +944,10 @@ int usb_write_data_ccc(int timeout)
 {
   if (debug_ccc & DEBUG19)
   {
-    fprintf (stdout, "endpointout=%x size=%lld timeout=%d\n", usbd1_bulk_out_endpoint_ccc, ccc_main_buffer_size_ccc, timeout);
+    INFO("endpointout=%x size=%lld timeout=%d", usbd1_bulk_out_endpoint_ccc, ccc_main_buffer_size_ccc, timeout);
     int i;
     int size = ccc_main_buffer_size_ccc;
-    for (i = 0; i < size; i+=16)
+    for (i = 0; i < size; i+=16) //TODO: add hexdump() function to util.c
     {
       fprintf (stdout, "%x: ", i);
       unsigned char *c;
@@ -973,12 +972,12 @@ int usb_write_data_ccc(int timeout)
 
   if (ret < 0)
   {
-    fprintf (stdout, "USB raw write error %d (%s)\n", ret, strerror(abs(ret)));
+    ERROR("USB raw write error %d (%s)", ret, strerror(abs(ret)));
     reset_usb_endpoint_out_ccc();
   }
   else if (ret != (int)ccc_main_buffer_size_ccc)
   {
-    fprintf (stdout, "USB raw write short return %d\n", ret);
+    ERROR("USB raw write short return %d != %llu", ret, ccc_main_buffer_size_ccc);
     reset_usb_endpoint_out_ccc();
   }
   if (superclone_ccc)
@@ -996,10 +995,10 @@ int do_usb_send_cbw_ccc(int timeout)
 {
   if (debug_ccc & DEBUG19)
   {
-    fprintf (stdout, "endpointout=%x size=%d timeout=%d\n", usbd1_bulk_out_endpoint_ccc, USBCBW_BUFFER_SIZE, timeout);
+    INFO("endpointout=%x size=%lld timeout=%d", usbd1_bulk_out_endpoint_ccc, USBCBW_BUFFER_SIZE, timeout);
     int i;
     int size = USBCBW_BUFFER_SIZE;
-    for (i = 0; i < size; i+=16)
+    for (i = 0; i < size; i+=16) //TODO: add hexdum() function to util.c
     {
       fprintf (stdout, "%x: ", i);
       unsigned char *c;
@@ -1024,12 +1023,12 @@ int do_usb_send_cbw_ccc(int timeout)
 
   if (ret < 0)
   {
-    fprintf (stdout, "USB send cbw error %d (%s)\n", ret, strerror(abs(ret)));
+    ERROR("USB send cbw error %d (%s)", ret, strerror(abs(ret)));
     reset_usb_endpoint_out_ccc();
   }
   else if (ret != USBCBW_BUFFER_SIZE)
   {
-    fprintf (stdout, "USB send cbw short return %d\n", ret);
+    ERROR("USB send cbw short return %d != %llu", ret, USBCBW_BUFFER_SIZE);
     reset_usb_endpoint_out_ccc();
   }
   return ret;
@@ -1047,10 +1046,10 @@ int do_usb_receive_csw_ccc(int timeout)
 
   if (debug_ccc & DEBUG19)
   {
-    fprintf (stdout, "endpointin=%x size=%d timeout=%d\n", usbd1_bulk_in_endpoint_ccc, USBCSW_BUFFER_SIZE, timeout);
+    INFO("endpointin=%x size=%lld timeout=%d", usbd1_bulk_in_endpoint_ccc, USBCSW_BUFFER_SIZE, timeout);
     int i;
     int size = USBCSW_BUFFER_SIZE;
-    for (i = 0; i < size; i+=16)
+    for (i = 0; i < size; i+=16) //TODO: add hexdump() function to util.c
     {
       fprintf (stdout, "%x: ", i);
       unsigned char *c;
@@ -1072,12 +1071,12 @@ int do_usb_receive_csw_ccc(int timeout)
 
   if (ret < 0)
   {
-    fprintf (stdout, "USB raw read error %d (%s)\n", ret, strerror(abs(ret)));
+    ERROR("USB receive csw error %d (%s)", ret, strerror(abs(ret)));
     reset_usb_endpoint_in_ccc();
   }
   else if (ret != USBCSW_BUFFER_SIZE)
   {
-    fprintf (stdout, "USB raw read short return %d\n", ret);
+    ERROR("USB receive csw short return %d != %llu", ret, USBCSW_BUFFER_SIZE);
     reset_usb_endpoint_in_ccc();
   }
   return ret;
@@ -1091,6 +1090,8 @@ int usb_get_max_lun_ccc(int timeout)
 {
   if (superclone_ccc)
     {
+      INFO("usb get max lun");
+      //TODO: will removing this have side-effects? message_console_log changes behavior based on global variables and writes to a file
       snprintf (tempmessage_ccc, sizeof(tempmessage_ccc), "usb get max lun\n");
       message_console_log_ccc(tempmessage_ccc, 0);
     }
@@ -1103,10 +1104,10 @@ int usb_get_max_lun_ccc(int timeout)
   int ret = usb_control_msg(usbd1_dev_handle_ccc, requesttype, request, value, index, &buffer, buffsize, timeout);
   if (ret < 0)
   {
-    fprintf (stdout, "USB control message error %d (%s)\n", ret, strerror(abs(ret)));
+    ERROR("USB control message error %d (%s)", ret, strerror(abs(ret)));
     return -1;
   }
-  fprintf (stdout, "Max LUN = %d\n", buffer);
+  INFO("Max LUN = %d", buffer); 
 
   return buffer;
 }
@@ -1126,12 +1127,12 @@ int check_usb_endpoint_in_ccc(int timeout)
   int ret = usb_control_msg(usbd1_dev_handle_ccc, requesttype, request, value, index, buffer, buffsize, timeout);
   if (ret < 0)
   {
-    fprintf (stdout, "USB control message error %d (%s)\n", ret, strerror(abs(ret)));
+    ERROR("USB control message error %d (%s)", ret, strerror(abs(ret)));
     return -1;
   }
   else if (ret != buffsize)
   {
-    fprintf (stdout, "USB control message short return %d\n", ret);
+    ERROR("USB control message short return %d != %d", ret, buffsize);
     return -1;
   }
   uint16_t status;
@@ -1155,12 +1156,12 @@ int check_usb_endpoint_out_ccc(int timeout)
   int ret = usb_control_msg(usbd1_dev_handle_ccc, requesttype, request, value, index, buffer, buffsize, timeout);
   if (ret < 0)
   {
-    fprintf (stdout, "USB control message error %d (%s)\n", ret, strerror(abs(ret)));
+    ERROR("USB control message error %d (%s)", ret, strerror(abs(ret)));
     return -1;
   }
   else if (ret != buffsize)
   {
-    fprintf (stdout, "USB control message short return %d\n", ret);
+    ERROR("USB control message short return %d != %d", ret, buffsize);
     return -1;
   }
   uint16_t status;
@@ -1175,11 +1176,11 @@ int check_usb_endpoint_out_ccc(int timeout)
 
 int reset_usb_endpoint_in_ccc(void)
 {
-  fprintf (stdout, "USB endpoint in reset\n");
+  INFO("USB endpoint in reset");
   int ret = usb_clear_halt(usbd1_dev_handle_ccc, usbd1_bulk_in_endpoint_ccc);
   if (ret < 0)
   {
-    fprintf (stdout, "USB clear halt error %d (%s)\n", ret, strerror(abs(ret)));
+    ERROR("USB clear halt error %d (%s)", ret, strerror(abs(ret)));
   }
 
   return ret;
@@ -1191,11 +1192,11 @@ int reset_usb_endpoint_in_ccc(void)
 
 int reset_usb_endpoint_out_ccc(void)
 {
-  fprintf (stdout, "USB endpoint out reset\n");
+  INFO("USB endpoint out reset");
   int ret = usb_clear_halt(usbd1_dev_handle_ccc, usbd1_bulk_out_endpoint_ccc);
   if (ret < 0)
   {
-    fprintf (stdout, "USB clear halt error %d (%s)\n", ret, strerror(abs(ret)));
+    ERROR("USB clear halt error %d (%s)", ret, strerror(abs(ret)));
   }
 
   return ret;
@@ -1242,7 +1243,7 @@ int usb_auto_endpoint_reset(int timeout)
 
 int usb_reset_recovery_ccc(int timeout)
 {
-  fprintf (stdout, "USB Reset Recovery\n");
+  INFO("USB Reset Recovery");
   usb_bulk_only_reset_ccc(timeout);
   reset_usb_endpoint_in_ccc();
   reset_usb_endpoint_out_ccc();
@@ -1269,7 +1270,7 @@ int usb_bulk_only_reset_ccc(int timeout)
   int ret = usb_control_msg(usbd1_dev_handle_ccc, requesttype, request, value, index, buffer, buffsize, timeout);
   if (ret < 0)
   {
-    fprintf (stdout, "USB control message error %d (%s)\n", ret, strerror(abs(ret)));
+    ERROR("USB control message error %d (%s)", ret, strerror(abs(ret)));
     return -1;
   }
 
@@ -1293,25 +1294,25 @@ int do_usb_reset_ccc(void)
   set_number_variable_value_ccc("$usb_return_error", errno);
   if (ret)
   {
-    fprintf (stdout, "USB reset error status/errno %d/%d (%s/%s)\n", ret, errno, strerror(abs(ret)), strerror(errno));
+    ERROR("USB reset error status/errno %d/%d (%s/%s)", ret, errno, strerror(abs(ret)), strerror(errno));
   }
 
   ret = usb_detach_kernel_driver_np(usbd1_dev_handle_ccc, 0);
   if (ret && (errno != ENODATA))
   {
-    fprintf (stdout, "Failed to detach device: status/errno %d/%d (%s/%s)\n", ret, errno, strerror(abs(ret)), strerror(errno));
+    ERROR("Failed to detach device status/errno %d/%d (%s/%s)", ret, errno, strerror(abs(ret)), strerror(errno));
   }
 
   ret = usb_set_configuration(usbd1_dev_handle_ccc, 1);
   if (ret)
   {
-    fprintf (stdout, "Failed to set configuration: status/errno %d/%d (%s/%s)\n", ret, errno, strerror(abs(ret)), strerror(errno));
+    ERROR("Failed to set configuration status/errno %d/%d (%s/%s)", ret, errno, strerror(abs(ret)), strerror(errno));
   }
 
   ret = usb_claim_interface(usbd1_dev_handle_ccc, 0);
   if (ret)
   {
-    fprintf (stdout, "Failed to claim interface: status/errno %d/%d (%s/%s)\n", ret, errno, strerror(abs(ret)), strerror(errno));
+    ERROR("Failed to claim interface status/errno %d/%d (%s/%s)", ret, errno, strerror(abs(ret)), strerror(errno));
   }
   return 0;
 }
@@ -1322,8 +1323,7 @@ int do_usb_reset_ccc(void)
 
 void load_primary_relay_settings_ccc (void)
 {
-  fprintf (stdout, "loading primary relay settings\n");
-
+  INFO("loading primary relay settings");
   primary_relay_settings_ccc.activate_primary_relay1 = activate_primary_relay1_ccc;
   primary_relay_settings_ccc.activate_primary_relay2 = activate_primary_relay2_ccc;
   primary_relay_settings_ccc.activate_primary_relay3 = activate_primary_relay3_ccc;
@@ -1343,7 +1343,6 @@ void load_primary_relay_settings_ccc (void)
   primary_relay_settings_ccc.primary_relay_activation_time = primary_relay_activation_time_ccc;
   primary_relay_settings_ccc.primary_relay_delay_time = primary_relay_delay_time_ccc;
   strcpy (primary_relay_settings_ccc.primary_relay_name, primary_relay_name_ccc);
-
 }
 
 
@@ -1352,8 +1351,7 @@ void load_primary_relay_settings_ccc (void)
 
 void update_primary_relay_settings_ccc (void)
 {
-  fprintf (stdout, "updating primary relay settings\n");
-
+  INFO("updating primary relay settings");
   activate_primary_relay1_ccc = primary_relay_settings_ccc.activate_primary_relay1;
   activate_primary_relay2_ccc = primary_relay_settings_ccc.activate_primary_relay2;
   activate_primary_relay3_ccc = primary_relay_settings_ccc.activate_primary_relay3;
@@ -1362,7 +1360,6 @@ void update_primary_relay_settings_ccc (void)
   activate_primary_relay6_ccc = primary_relay_settings_ccc.activate_primary_relay6;
   activate_primary_relay7_ccc = primary_relay_settings_ccc.activate_primary_relay7;
   activate_primary_relay8_ccc = primary_relay_settings_ccc.activate_primary_relay8;
-
   deactivate_primary_relay1_ccc = primary_relay_settings_ccc.deactivate_primary_relay1;
   deactivate_primary_relay2_ccc = primary_relay_settings_ccc.deactivate_primary_relay2;
   deactivate_primary_relay3_ccc = primary_relay_settings_ccc.deactivate_primary_relay3;
@@ -1371,11 +1368,9 @@ void update_primary_relay_settings_ccc (void)
   deactivate_primary_relay6_ccc = primary_relay_settings_ccc.deactivate_primary_relay6;
   deactivate_primary_relay7_ccc = primary_relay_settings_ccc.deactivate_primary_relay7;
   deactivate_primary_relay8_ccc = primary_relay_settings_ccc.deactivate_primary_relay8;
-
   primary_relay_activation_time_ccc = primary_relay_settings_ccc.primary_relay_activation_time;
   primary_relay_delay_time_ccc = primary_relay_settings_ccc.primary_relay_delay_time;
   strcpy (primary_relay_name_ccc, primary_relay_settings_ccc.primary_relay_name);
-
 }
 
 
@@ -1472,7 +1467,7 @@ int activate_primary_relay_ccc(void)
     ccc_main_usbbuffer_size_ccc = 8;
     if ( set_main_usb_buffer_ccc() )
     {
-      fprintf (stdout, "Error setting usb buffer\n");
+      ERROR("Error setting usb buffer");
       return -1;
     }
 
@@ -1497,7 +1492,7 @@ int activate_primary_relay_ccc(void)
     memcpy (ccc_usbbuffer_ccc, &tempbuffer, 8);
     if ( do_send_usbr_control_msg_ccc(requesttype, request, value, index) )
     {
-      fprintf (stdout, "Error sending usb control message\n");
+      ERROR("Error sending usb control message");
       return -1;
     }
     // relay 2
@@ -1513,7 +1508,7 @@ int activate_primary_relay_ccc(void)
     memcpy (ccc_usbbuffer_ccc, &tempbuffer, 8);
     if ( do_send_usbr_control_msg_ccc(requesttype, request, value, index) )
     {
-      fprintf (stdout, "Error sending usb control message\n");
+      ERROR("Error sending usb control message");
       return -1;
     }
     // relay 3
@@ -1529,7 +1524,7 @@ int activate_primary_relay_ccc(void)
     memcpy (ccc_usbbuffer_ccc, &tempbuffer, 8);
     if ( do_send_usbr_control_msg_ccc(requesttype, request, value, index) )
     {
-      fprintf (stdout, "Error sending usb control message\n");
+      ERROR("Error sending usb control message");
       return -1;
     }
     // relay 4
@@ -1545,7 +1540,7 @@ int activate_primary_relay_ccc(void)
     memcpy (ccc_usbbuffer_ccc, &tempbuffer, 8);
     if ( do_send_usbr_control_msg_ccc(requesttype, request, value, index) )
     {
-      fprintf (stdout, "Error sending usb control message\n");
+      ERROR("Error sending usb control message");
       return -1;
     }
     // relay 5
@@ -1561,7 +1556,7 @@ int activate_primary_relay_ccc(void)
     memcpy (ccc_usbbuffer_ccc, &tempbuffer, 8);
     if ( do_send_usbr_control_msg_ccc(requesttype, request, value, index) )
     {
-      fprintf (stdout, "Error sending usb control message\n");
+      ERROR("Error sending usb control message");
       return -1;
     }
     // relay 6
@@ -1577,7 +1572,7 @@ int activate_primary_relay_ccc(void)
     memcpy (ccc_usbbuffer_ccc, &tempbuffer, 8);
     if ( do_send_usbr_control_msg_ccc(requesttype, request, value, index) )
     {
-      fprintf (stdout, "Error sending usb control message\n");
+      ERROR("Error sending usb control message");
       return -1;
     }
     // relay 7
@@ -1593,7 +1588,7 @@ int activate_primary_relay_ccc(void)
     memcpy (ccc_usbbuffer_ccc, &tempbuffer, 8);
     if ( do_send_usbr_control_msg_ccc(requesttype, request, value, index) )
     {
-      fprintf (stdout, "Error sending usb control message\n");
+      ERROR("Error sending usb control message");
       return -1;
     }
     // relay 8
@@ -1609,7 +1604,7 @@ int activate_primary_relay_ccc(void)
     memcpy (ccc_usbbuffer_ccc, &tempbuffer, 8);
     if ( do_send_usbr_control_msg_ccc(requesttype, request, value, index) )
     {
-      fprintf (stdout, "Error sending usb control message\n");
+      ERROR("Error sending usb control message");
       return -1;
     }
   }
@@ -1622,7 +1617,7 @@ int activate_primary_relay_ccc(void)
     }
     if ( set_main_usb_buffer_ccc() )
     {
-      fprintf (stdout, "Error setting usb buffer\n");
+      ERROR("Error setting usb buffer");
       return -1;
     }
     memset (ccc_usbbuffer_ccc, 0, ccc_main_usbbuffer_size_ccc);
@@ -1647,12 +1642,12 @@ int activate_primary_relay_ccc(void)
     memcpy (ccc_usbbuffer_ccc, &tempbuffer, 1);
     if ( do_send_usbr_interrupt_write_ccc(0x01) )
     {
-      fprintf (stdout, "Error sending usb interrupt write\n");
+      ERROR("Error sending usb interrupt write");
       return -1;
     }
     if ( do_send_usbr_interrupt_read_ccc(0x81) )
     {
-      fprintf (stdout, "Error sending usb interrupt write\n");
+      ERROR("Error sending usb interrupt write");
       return -1;
     }
 
@@ -1670,12 +1665,12 @@ int activate_primary_relay_ccc(void)
       memcpy (ccc_usbbuffer_ccc, &tempbuffer, 1);
       if ( do_send_usbr_interrupt_write_ccc(0x01) )
       {
-        fprintf (stdout, "Error sending usb interrupt write\n");
+        ERROR("Error sending usb interrupt write");
         return -1;
       }
       if ( do_send_usbr_interrupt_read_ccc(0x81) )
       {
-        fprintf (stdout, "Error sending usb interrupt write\n");
+        ERROR("Error sending usb interrupt write");
         return -1;
       }
     }
@@ -1694,19 +1689,19 @@ int activate_primary_relay_ccc(void)
       memcpy (ccc_usbbuffer_ccc, &tempbuffer, 1);
       if ( do_send_usbr_interrupt_write_ccc(0x01) )
       {
-        fprintf (stdout, "Error sending usb interrupt write\n");
+        ERROR("Error sending usb interrupt write");
         return -1;
       }
       if ( do_send_usbr_interrupt_read_ccc(0x81) )
       {
-        fprintf (stdout, "Error sending usb interrupt write\n");
+        ERROR("Error sending usb interrupt write");
         return -1;
       }
     }
   }
   else
   {
-    fprintf (stdout, "Error: USB relay ID not recognized\n");
+    ERROR("USB relay ID not recognized");
     return -1;
   }
   return 0;
@@ -1727,7 +1722,7 @@ int deactivate_primary_relay_ccc(void)
     ccc_main_usbbuffer_size_ccc = 8;
     if ( set_main_usb_buffer_ccc() )
     {
-      fprintf (stdout, "Error setting usb buffer\n");
+      ERROR("Error setting usb buffer");
       return -1;
     }
 
@@ -1752,7 +1747,7 @@ int deactivate_primary_relay_ccc(void)
     memcpy (ccc_usbbuffer_ccc, &tempbuffer, 8);
     if ( do_send_usbr_control_msg_ccc(requesttype, request, value, index) )
     {
-      fprintf (stdout, "Error sending usb control message\n");
+      ERROR("Error sending usb control message");
       return -1;
     }
     // relay 2
@@ -1768,7 +1763,7 @@ int deactivate_primary_relay_ccc(void)
     memcpy (ccc_usbbuffer_ccc, &tempbuffer, 8);
     if ( do_send_usbr_control_msg_ccc(requesttype, request, value, index) )
     {
-      fprintf (stdout, "Error sending usb control message\n");
+      ERROR("Error sending usb control message");
       return -1;
     }
     // relay 3
@@ -1784,7 +1779,7 @@ int deactivate_primary_relay_ccc(void)
     memcpy (ccc_usbbuffer_ccc, &tempbuffer, 8);
     if ( do_send_usbr_control_msg_ccc(requesttype, request, value, index) )
     {
-      fprintf (stdout, "Error sending usb control message\n");
+      ERROR("Error sending usb control message");
       return -1;
     }
     // relay 4
@@ -1800,7 +1795,7 @@ int deactivate_primary_relay_ccc(void)
     memcpy (ccc_usbbuffer_ccc, &tempbuffer, 8);
     if ( do_send_usbr_control_msg_ccc(requesttype, request, value, index) )
     {
-      fprintf (stdout, "Error sending usb control message\n");
+      ERROR("Error sending usb control message");
       return -1;
     }
     // relay 5
@@ -1816,7 +1811,7 @@ int deactivate_primary_relay_ccc(void)
     memcpy (ccc_usbbuffer_ccc, &tempbuffer, 8);
     if ( do_send_usbr_control_msg_ccc(requesttype, request, value, index) )
     {
-      fprintf (stdout, "Error sending usb control message\n");
+      ERROR("Error sending usb control message");
       return -1;
     }
     // relay 6
@@ -1832,7 +1827,7 @@ int deactivate_primary_relay_ccc(void)
     memcpy (ccc_usbbuffer_ccc, &tempbuffer, 8);
     if ( do_send_usbr_control_msg_ccc(requesttype, request, value, index) )
     {
-      fprintf (stdout, "Error sending usb control message\n");
+      ERROR("Error sending usb control message");
       return -1;
     }
     // relay 7
@@ -1848,7 +1843,7 @@ int deactivate_primary_relay_ccc(void)
     memcpy (ccc_usbbuffer_ccc, &tempbuffer, 8);
     if ( do_send_usbr_control_msg_ccc(requesttype, request, value, index) )
     {
-      fprintf (stdout, "Error sending usb control message\n");
+      ERROR("Error sending usb control message");
       return -1;
     }
     // relay 8
@@ -1864,7 +1859,7 @@ int deactivate_primary_relay_ccc(void)
     memcpy (ccc_usbbuffer_ccc, &tempbuffer, 8);
     if ( do_send_usbr_control_msg_ccc(requesttype, request, value, index) )
     {
-      fprintf (stdout, "Error sending usb control message\n");
+      ERROR("Error sending usb control message");
       return -1;
     }
   }
@@ -1877,7 +1872,7 @@ int deactivate_primary_relay_ccc(void)
     }
     if ( set_main_usb_buffer_ccc() )
     {
-      fprintf (stdout, "Error setting usb buffer\n");
+      ERROR("Error setting usb buffer");
       return -1;
     }
     memset (ccc_usbbuffer_ccc, 0, ccc_main_usbbuffer_size_ccc);
@@ -1902,12 +1897,12 @@ int deactivate_primary_relay_ccc(void)
     memcpy (ccc_usbbuffer_ccc, &tempbuffer, 1);
     if ( do_send_usbr_interrupt_write_ccc(0x01) )
     {
-      fprintf (stdout, "Error sending usb interrupt write\n");
+      ERROR("Error sending usb interrupt write");
       return -1;
     }
     if ( do_send_usbr_interrupt_read_ccc(0x81) )
     {
-      fprintf (stdout, "Error sending usb interrupt write\n");
+      ERROR("Error sending usb interrupt write");
       return -1;
     }
 
@@ -1925,12 +1920,12 @@ int deactivate_primary_relay_ccc(void)
       memcpy (ccc_usbbuffer_ccc, &tempbuffer, 1);
       if ( do_send_usbr_interrupt_write_ccc(0x01) )
       {
-        fprintf (stdout, "Error sending usb interrupt write\n");
+        ERROR("Error sending usb interrupt write");
         return -1;
       }
       if ( do_send_usbr_interrupt_read_ccc(0x81) )
       {
-        fprintf (stdout, "Error sending usb interrupt write\n");
+        ERROR("Error sending usb interrupt write");
         return -1;
       }
     }
@@ -1949,35 +1944,21 @@ int deactivate_primary_relay_ccc(void)
       memcpy (ccc_usbbuffer_ccc, &tempbuffer, 1);
       if ( do_send_usbr_interrupt_write_ccc(0x01) )
       {
-        fprintf (stdout, "Error sending usb interrupt write\n");
+        ERROR("Error sending usb interrupt write");
         return -1;
       }
       if ( do_send_usbr_interrupt_read_ccc(0x81) )
       {
-        fprintf (stdout, "Error sending usb interrupt write\n");
+        ERROR("Error sending usb interrupt write");
         return -1;
       }
     }
   }
   else
   {
-    fprintf (stdout, "Error: USB relay ID not recognized\n");
+    ERROR("USB relay ID not recognized");
     return -1;
   }
   return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

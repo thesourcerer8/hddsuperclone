@@ -16,7 +16,7 @@
 #include "hddsuperclone2_glade.h"
 
 #include "strncpy_wrapper.h"
-
+#include "util.h"
 
 
 int start_gtk_ccc(int argc, char **argv, char *title, char *version)

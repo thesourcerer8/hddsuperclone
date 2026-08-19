@@ -7,6 +7,7 @@
 #include "common.h"
 #include "clone_gui_language.h"
 #include "io.h"
+#include "util.h"
 
 time_t start_time_ccc, end_time_ccc;
 struct timeval tvBegin_ccc, tvEnd_ccc, tvDiff_ccc, tvCurrent_ccc;
@@ -338,7 +339,7 @@ char **script_line_pointer_ccc;
 
 int message_exit_ccc(char *message)
 {
-  if (debug_ccc > 0)
+  if (debug_ccc > 0) //TODO: merge debug messages into logging system
   {
     fprintf (debug_file_ccc, "%s", message);
   }
@@ -387,7 +388,7 @@ int message_display_ccc(char *message)
 
 
 
-
+//TODO: remove this function once logging overhaul is complete
 int message_now_ccc(char *message)
 {
   fprintf (stdout, "%s", message);
@@ -406,7 +407,7 @@ int message_console_log_ccc(char *message, unsigned long long level)
   get_the_time_ccc();
   if (level == 0 || (level & verbose_ccc))
   {
-    fprintf (stdout, "%s %s", current_time_ccc, message);
+    INFO("%s %s", current_time_ccc, message);
     if (debug_ccc)
     {
       fprintf (debug_file_ccc, "%s %s", current_time_ccc, message);
@@ -431,9 +432,9 @@ int message_debug_ccc(char *message, unsigned long long level)
   {
     fprintf (debug_file_ccc, "%s %s", current_time_ccc, message);
   }
-  if (verbose_ccc & level)
+  if (verbose_ccc & level) //TODO: verbose not needed?
   {
-    fprintf (stdout, "%s %s", current_time_ccc, message);
+    INFO("%s %s", current_time_ccc, message);
   }
   return 0;
 }
@@ -448,21 +449,18 @@ int set_main_buffer_ccc(void)
   {
     if (ccc_main_buffer_size_ccc > MAX_USB_BUFFER_SIZE || ccc_main_buffer_size_ccc > real_buffer_size_ccc)
     {
-      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "ERROR: Maximum buffer size exceeded.\n");
-      message_now_ccc(tempmessage_ccc);
+      ERROR("Maximum buffer size exceeded. %llu > min(%llu, %llu)", ccc_main_buffer_size_ccc, MAX_USB_BUFFER_SIZE, real_buffer_size_ccc);
       return (-1);
     }
   }
   else if (ccc_main_buffer_size_ccc > MAX_BUFFER_SIZE || ccc_main_buffer_size_ccc > real_buffer_size_ccc)
   {
-    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "ERROR: Maximum buffer size exceeded.\n");
-    message_now_ccc(tempmessage_ccc);
+    ERROR("Maximum buffer size exceeded. %llu > min(%llu, %llu)", ccc_main_buffer_size_ccc, MAX_BUFFER_SIZE, real_buffer_size_ccc);
     return (-1);
   }
   if (ahci_mode_ccc && ccc_main_buffer_size_ccc > max_dma_size_ccc)
   {
-    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "ERROR: Maximum AHCI buffer size (%lld) exceeded.\n", max_dma_size_ccc);
-    message_now_ccc(tempmessage_ccc);
+    ERROR("Maximum AHCI buffer size exceeded. %llu > %llu", ccc_main_buffer_size_ccc, max_dma_size_ccc);
     return (-1);
   }
   if (direct_mode_ccc)
@@ -523,10 +521,10 @@ int create_dma_table_ccc(void)
       //fprintf (stdout, "write_size=%d\n", write_size);
       dword = (write_size - 1);
       memcpy(table_buffer_ccc+12+n, &dword, 4);
-      #ifdef DEBUG
-      if (debug_ccc & DEBUG33)
+      #ifdef DEBUG //TODO: DEBUG macro can be removed
+      if (debug_ccc & DEBUG33) //TODO: debug_ccc can be removed not that logging is controllable
       {
-        int i;
+        int i; //TODO: add hexdump() utility function
         for (i = 0; i < 16; i++)
         {
           unsigned char *c;
@@ -608,7 +606,7 @@ int create_dma_table_ccc(void)
       {
         int i;
         for (i = 0; i < 8; i++)
-        {
+        { //TODO: add hexdump() utility function
           unsigned char *c;
           c = (unsigned char *)table_buffer_ccc+i;
           fprintf (stdout, "tb%02x ", *c);
@@ -656,8 +654,7 @@ int set_table_buffer_ccc(void)
     {
       table_buffer_ccc = valloc(table_size_ccc);
       if(!table_buffer_ccc) {
-        snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "posix_memalign failed (%s)", strerror(errno));
-        message_now_ccc(tempmessage_ccc);
+        ERROR("valloc failed with message %s", strerror(errno));
         return (-1);
       }
     }
@@ -709,13 +706,12 @@ int get_table_physical_memory_location_ccc(void)
   //fprintf (stdout, "%s\n", command);
   //system (command);
 
-  char path[255];
+  char path[255]; //TODO: add util_fopenf() function to open path build from format string
   snprintf (path, sizeof(path), "/proc/%d/pagemap", proc_id);
   pagemap_ccc = fopen(path, "rb");
   if(!pagemap_ccc)
   {
-    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Error! Cannot open %s\n", path);
-    message_now_ccc(tempmessage_ccc);
+    ERROR("Cannot open '%s'", path);
     return -1;
   }
 
@@ -723,8 +719,7 @@ int get_table_physical_memory_location_ccc(void)
   //printf("Reading %s at 0x%llx\n", path, file_offset);
   int status = fseek(pagemap_ccc, file_offset, SEEK_SET);
   if(status){
-    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Failed to do fseek! (%s)", strerror(errno));
-    message_now_ccc(tempmessage_ccc);
+    ERROR("Failed to fseek! (%s)", strerror(errno));
     return -1;
   }
 
@@ -752,7 +747,7 @@ int get_table_physical_memory_location_ccc(void)
 #ifdef DEBUG
       if (debug_ccc & DEBUG34)
       {
-        fprintf (stdout, "table_physical_address=0x%llx\n", table_physical_address_ccc);
+        INFO("table_physical_address=0x%llx", table_physical_address_ccc);
       }
 #endif
       if (table_physical_address_ccc > 0xffffffff)
@@ -760,7 +755,7 @@ int get_table_physical_memory_location_ccc(void)
 #ifdef DEBUG
         if (debug_ccc & DEBUG34)
         {
-          fprintf (stdout, "table_physical_address=0x%llx is out of range\n", table_physical_address_ccc);
+          WARN("table_physical_address=0x%llx is out of range", table_physical_address_ccc);
         }
 #endif
         out_of_range++;
@@ -850,13 +845,12 @@ int get_command_list_physical_memory_location_ccc(void)
   //fprintf (stdout, "%s\n", command);
   //system (command);
 
-  char path[255];
+  char path[255]; //TODO: add util_fopenf() function to open path build from format string
   snprintf (path, sizeof(path), "/proc/%d/pagemap", proc_id);
   pagemap_ccc = fopen(path, "rb");
   if(!pagemap_ccc)
   {
-    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Error! Cannot open %s\n", path);
-    message_now_ccc(tempmessage_ccc);
+    ERROR("Cannot open '%s'", path);
     return -1;
   }
 
@@ -864,8 +858,7 @@ int get_command_list_physical_memory_location_ccc(void)
   //printf("Reading %s at 0x%llx\n", path, file_offset);
   int status = fseek(pagemap_ccc, file_offset, SEEK_SET);
   if(status){
-    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Failed to do fseek! (%s)", strerror(errno));
-    message_now_ccc(tempmessage_ccc);
+    ERROR("Failed to fseek! (%s)", strerror(errno));
     return -1;
   }
 
@@ -893,7 +886,7 @@ int get_command_list_physical_memory_location_ccc(void)
 #ifdef DEBUG
       if (debug_ccc & DEBUG34)
       {
-        fprintf (stdout, "command_list_physical_address=0x%llx\n", command_list_physical_address_ccc);
+        INFO("command_list_physical_address=0x%llx", command_list_physical_address_ccc);
       }
 #endif
       if (command_list_physical_address_ccc > 0xffffffff)
@@ -901,7 +894,7 @@ int get_command_list_physical_memory_location_ccc(void)
 #ifdef DEBUG
         if (debug_ccc & DEBUG34)
         {
-          fprintf (stdout, "command_list_physical_address=0x%llx is out of range\n", command_list_physical_address_ccc);
+          WARN("command_list_physical_address=0x%llx is out of range", command_list_physical_address_ccc);
         }
 #endif
         out_of_range++;
@@ -942,8 +935,7 @@ int set_fis_buffer_ccc(void)
     }
     else if (posix_memalign(&fis_buffer_ccc, align, fis_size_ccc))
     {
-      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "posix_memalign failed (%s)", strerror(errno));
-      message_now_ccc(tempmessage_ccc);
+      ERROR("posix_memalign failed with message '%s'", strerror(errno));
       return (-1);
     }
     memset (fis_buffer_ccc, 0, fis_size_ccc);
@@ -989,13 +981,12 @@ int get_fis_physical_memory_location_ccc(void)
   //fprintf (stdout, "%s\n", command);
   //system (command);
 
-  char path[255];
+  char path[255]; //TODO: add util_fopenf() function to open path build from format string
   snprintf (path, sizeof(path), "/proc/%d/pagemap", proc_id);
   pagemap_ccc = fopen(path, "rb");
   if(!pagemap_ccc)
   {
-    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Error! Cannot open %s\n", path);
-    message_now_ccc(tempmessage_ccc);
+    ERROR("Cannot open '%s'", path);
     return -1;
   }
 
@@ -1003,8 +994,7 @@ int get_fis_physical_memory_location_ccc(void)
   //printf("Reading %s at 0x%llx\n", path, file_offset);
   int status = fseek(pagemap_ccc, file_offset, SEEK_SET);
   if(status){
-    snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Failed to do fseek! (%s)", strerror(errno));
-    message_now_ccc(tempmessage_ccc);
+    ERROR("Failed to fseek! (%s)", strerror(errno));
     return -1;
   }
 
@@ -1032,7 +1022,7 @@ int get_fis_physical_memory_location_ccc(void)
 #ifdef DEBUG
       if (debug_ccc & DEBUG34)
       {
-        fprintf (stdout, "fis_physical_address=0x%llx\n", fis_physical_address_ccc);
+        INFO("fis_physical_address=0x%llx", fis_physical_address_ccc);
       }
 #endif
       if (fis_physical_address_ccc > 0xffffffff)
@@ -1040,7 +1030,7 @@ int get_fis_physical_memory_location_ccc(void)
 #ifdef DEBUG
         if (debug_ccc & DEBUG34)
         {
-          fprintf (stdout, "fis_physical_address=0x%llx is out of range\n", fis_physical_address_ccc);
+          WARN("fis_physical_address=0x%llx is out of range", fis_physical_address_ccc);
         }
 #endif
         out_of_range++;
@@ -1080,8 +1070,7 @@ int get_buffer_physical_memory_locations_ccc(void)
     }
     else if (posix_memalign(&ccc_buffer_ccc, align, real_buffer_size_ccc))
     {
-      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "posix_memalign failed (%s)", strerror(errno));
-      message_now_ccc(tempmessage_ccc);
+      ERROR("posix_memalign failed with message '%s'", strerror(errno));
       return (-1);
     }
     memset (ccc_buffer_ccc, 0, real_buffer_size_ccc);
@@ -1102,13 +1091,12 @@ int get_buffer_physical_memory_locations_ccc(void)
     //fprintf (stdout, "%s\n", command);
     //system (command);
 
-    char path[255];
+    char path[255]; //TODO: add util_fopenf() function to open path build from format string
     snprintf (path, sizeof(path), "/proc/%d/pagemap", proc_id);
     pagemap_ccc = fopen(path, "rb");
     if(!pagemap_ccc)
     {
-      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Error! Cannot open %s\n", path);
-      message_now_ccc(tempmessage_ccc);
+      INFO("Cannot open '%s'", path);
       return -1;
     }
 
@@ -1118,8 +1106,7 @@ int get_buffer_physical_memory_locations_ccc(void)
     //printf("Reading %s at 0x%llx\n", path, file_offset);    //debug
     int status = fseek(pagemap_ccc, file_offset, SEEK_SET);
     if(status){
-      snprintf(tempmessage_ccc, sizeof(tempmessage_ccc), "Failed to do fseek! (%s)", strerror(errno));
-      message_now_ccc(tempmessage_ccc);
+      ERROR("Failed to fseek! (%s)", strerror(errno));
       return -1;
     }
 
@@ -1150,7 +1137,7 @@ int get_buffer_physical_memory_locations_ccc(void)
 #ifdef DEBUG
         if ((debug_ccc & DEBUG34) && count < (int)(max_dma_size_ccc / pagesize_ccc) )
         {
-          fprintf (stdout, "buffer_physical_address[%d]=0x%llx\n", count, buffer_physical_address_ccc[count]);
+          INFO("buffer_physical_address[%d]=0x%llx", count, buffer_physical_address_ccc[count]);
         }
 #endif
         if (buffer_physical_address_ccc[count] > 0xffffffff && count < (int)(max_dma_size_ccc / pagesize_ccc) )
@@ -1158,7 +1145,7 @@ int get_buffer_physical_memory_locations_ccc(void)
 #ifdef DEBUG
           if (debug_ccc & DEBUG34)
           {
-            fprintf (stdout, "buffer_physical_address[%d]=0x%llx is out of range\n", count, buffer_physical_address_ccc[count]);
+            WARN("buffer_physical_address[%d]=0x%llx is out of range", count, buffer_physical_address_ccc[count]);
           }
 #endif
           out_of_range++;
@@ -1241,7 +1228,7 @@ void dump_data_to_filename_ccc(char *filename, void* buffer, int size, char *des
   }
   int i;
   for (i = 0; i < size; i+=16)
-  {
+  { //TODO: add hexdump() utility function
     fprintf (file, "%x: ", i);
     unsigned char *c;
     int n;
@@ -1329,7 +1316,7 @@ int set_main_usb_buffer_ccc(void)
     }
     else
     {
-      fprintf (stderr, "ERROR: Maximum USB buffer size exceeded.\n");
+      ERROR("Maximum USB buffer size exceeded.");
     }
     return GENERAL_ERROR_RETURN_CODE;
   }
@@ -1348,7 +1335,7 @@ int set_main_usb_buffer_ccc(void)
     }
     else
     {
-      fprintf (stderr, "Error allocating memory (%s)\n", strerror(errno));
+      ERROR("Error allocating memory (%s)", strerror(errno));
     }
     return GENERAL_ERROR_RETURN_CODE;
   }
@@ -1357,7 +1344,6 @@ int set_main_usb_buffer_ccc(void)
 
 
 
-#if 1
 int set_rebuild_assist_enabled_ccc (void)
 {
   if (!ahci_mode_ccc)
@@ -1408,44 +1394,42 @@ int set_rebuild_assist_enabled_ccc (void)
   }
 
   read_rebuild_assist_log_ccc();
-  if (1)
+  int i;
+
+  //TODO: refactor for INFO() macro
+  fprintf (stdout, "flags=%02x length=%02x mask=", rebuild_assist_log_data_ccc.flags, rebuild_assist_log_data_ccc.length);
+  for (i = 0; i < rebuild_assist_log_data_ccc.length; i++) //TODO: add hexdump() utility function
   {
-    int i;
-    fprintf (stdout, "flags=%02x length=%02x mask=", rebuild_assist_log_data_ccc.flags, rebuild_assist_log_data_ccc.length);
-    for (i = 0; i < rebuild_assist_log_data_ccc.length; i++)
+    fprintf (stdout, "%02x", rebuild_assist_log_data_ccc.mask[i]);
+  }
+  fprintf (stdout, " disabled=");
+  for (i = 0; i < rebuild_assist_log_data_ccc.length; i++)
+  {
+    fprintf (stdout, "%02x", rebuild_assist_log_data_ccc.disabled[i]);
+  }
+  fprintf (stdout, "\n");
+  int head = 0;
+  while ((head / 8) < rebuild_assist_element_length_ccc)
+  {
+    int bytenumber = head / 8;
+    int byteremainder = head % 8;
+    int checkmask = rebuild_assist_log_data_ccc.mask[bytenumber] >> byteremainder;
+    checkmask = checkmask & 1;
+    int disabled = rebuild_assist_log_data_ccc.disabled[bytenumber] >> byteremainder;
+    disabled  = disabled  & 1;
+    if (checkmask && disabled)
     {
-      fprintf (stdout, "%02x", rebuild_assist_log_data_ccc.mask[i]);
+      fprintf (stdout, "head %d is disabled\n", head);
     }
-    fprintf (stdout, " disabled=");
-    for (i = 0; i < rebuild_assist_log_data_ccc.length; i++)
+    else if (checkmask)
     {
-      fprintf (stdout, "%02x", rebuild_assist_log_data_ccc.disabled[i]);
+      fprintf (stdout, "head %d is enabled\n", head);
     }
-    fprintf (stdout, "\n");
-    int head = 0;
-    while ((head / 8) < rebuild_assist_element_length_ccc)
-    {
-      int bytenumber = head / 8;
-      int byteremainder = head % 8;
-      int checkmask = rebuild_assist_log_data_ccc.mask[bytenumber] >> byteremainder;
-      checkmask = checkmask & 1;
-      int disabled = rebuild_assist_log_data_ccc.disabled[bytenumber] >> byteremainder;
-      disabled  = disabled  & 1;
-      if (checkmask && disabled)
-      {
-        fprintf (stdout, "head %d is disabled\n", head);
-      }
-      else if (checkmask)
-      {
-        fprintf (stdout, "head %d is enabled\n", head);
-      }
-      head++;
-    }
+    head++;
   }
 
   return 0;
 }
-#endif
 
 
 int disable_rebuild_assist_ccc(void)
@@ -1460,17 +1444,17 @@ int disable_rebuild_assist_ccc(void)
   ret = write_rebuild_assist_log_ccc (data);
   if (ret)
   {
-    fprintf (stdout, "failed to disable rebuild assist, return=%d\n", ret);
+    ERROR("failed to disable rebuild assist, return=%d", ret);
     return ret;
   }
   if (ata_status_ccc & 1)
   {
-    fprintf (stdout, "error disabling rebuild assist, status=%02x error=%02x\n", ata_status_ccc, ata_error_ccc);
+    ERROR("error disabling rebuild assist, status=%02x error=%02x", ata_status_ccc, ata_error_ccc);
     return -1;
   }
   read_rebuild_assist_log_ccc();
   use_fpdma_ccc = false;
-  fprintf (stdout, "rebuild assist disabled\n");
+  INFO("rebuild assist disabled");
   return 0;
 }
 
@@ -1483,21 +1467,21 @@ int enable_rebuild_assist_ccc(void)
   int ret = write_rebuild_assist_log_ccc (data);
   if (ret)
   {
-    fprintf (stdout, "failed to enable rebuild assist, return=0x%x\n", ret);
+    ERROR("failed to enable rebuild assist, return=%d", ret);
     return ret;
   }
   if (ata_status_ccc & 1)
   {
-    fprintf (stdout, "error enabling rebuild assist, status=%02x error=%02x\n", ata_status_ccc, ata_error_ccc);
+    ERROR("error enabling rebuild assist, status=%02x error=%02x", ata_status_ccc, ata_error_ccc);
     return -1;
   }
   ret = read_rebuild_assist_log_ccc();
   if (ret || ata_status_ccc & 1)
   {
-    fprintf (stdout, "failed to read rebuild assist log, return=%d status=0x%02x error=0x%02x\n", ret, ata_status_ccc, ata_error_ccc);
+    ERROR("failed to read rebuild assist log, return=%d status=0x%02x error=0x%02x", ret, ata_status_ccc, ata_error_ccc);
   }
   use_fpdma_ccc = true;
-  fprintf (stdout, "rebuild assist enabled\n");
+  INFO("rebuild assist enabled");
   return 0;
 }
 
@@ -1516,13 +1500,13 @@ int rebuild_assist_disable_head_ccc (int head)
   checkmask = checkmask & 1;
   if (!checkmask)
   {
-    fprintf (stdout, "invalid head for rebuild assist\n");
+    ERROR("invalid head for rebuild assist");
     return -1;
   }
   int byteplacement = 8 + rebuild_assist_element_length_ccc + bytenumber;
   if (byteplacement >= LOG_PAGE_SIZE)
   {
-    fprintf (stdout, "internal error, byte placement out of bounds\n");
+    ERROR("internal error, byte placement out of bounds %d > %d", byteplacement, LOG_PAGE_SIZE);
     return -1;
   }
   int bytedata = 1 << byteremainder;
@@ -1531,34 +1515,32 @@ int rebuild_assist_disable_head_ccc (int head)
   int ret = write_rebuild_assist_log_ccc (data);
   if (ret)
   {
-    fprintf (stdout, "failed to disable head, return=0x%x\n", ret);
+    ERROR("failed to disable head, return=%d", ret);
     return ret;
   }
   if (ata_status_ccc & 1)
   {
-    fprintf (stdout, "error disabling head, status=%02x error=%02x\n", ata_status_ccc, ata_error_ccc);
+    ERROR("error disabling head, status=%02x error=%02x", ata_status_ccc, ata_error_ccc);
     return -1;
   }
 
-  if (0)
+  //TODO: add hexdump() utility function
+  fprintf (stdout, "rebuild assist write log data\n");
+  int i;
+  for (i = 0; i < 32; i+=16)
   {
-    fprintf (stdout, "rebuild assist write log data\n");
-    int i;
-    for (i = 0; i < 32; i+=16)
+    fprintf (stdout, "%x: ", i);
+    int n;
+    for (n=0; n < 16 && i+n < 32; n++)
     {
-      fprintf (stdout, "%x: ", i);
-      int n;
-      for (n=0; n < 16 && i+n < 32; n++)
-      {
-        fprintf (stdout, "%02x ", data[i+n]);
-      }
-      fprintf (stdout, "   ");
-      for (n=0; n < 16 && i+n < 32; n++)
-      {
-        fprintf (stdout, "%c", isprint(data[i+n]) ? data[i+n] : '.');
-      }
-      fprintf (stdout, "\n");
+      fprintf (stdout, "%02x ", data[i+n]);
     }
+    fprintf (stdout, "   ");
+    for (n=0; n < 16 && i+n < 32; n++)
+    {
+      fprintf (stdout, "%c", isprint(data[i+n]) ? data[i+n] : '.');
+    }
+    fprintf (stdout, "\n");
   }
 
   return 0;

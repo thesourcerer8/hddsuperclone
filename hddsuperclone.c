@@ -16,6 +16,8 @@
 #include "hddsupertool_help.h"
 
 #include "strncpy_wrapper.h"
+#include "util.h"
+//TODO: convert this file to the new logging system
 
 // Function to handle ctrl-c
 void signal_callback_handler_ccc(int signum)
@@ -1591,10 +1593,9 @@ int initialize_memory_ccc(void)
   while (attempt < 2)
   {
     attempt ++;
-    if (!quiet_ccc)
+    if (!quiet_ccc) //TODO: remove quiet_ccc global variable now that logging levels are controllable
     {
-      snprintf (tempmessage_ccc, sizeof(tempmessage_ccc), "Initializing memory\n");
-      message_now_ccc(tempmessage_ccc);
+      INFO("Initializing memory");
     }
 
     if (attempt == 2 && !driver_installed_ccc)
@@ -1713,8 +1714,7 @@ int initialize_memory_ccc(void)
     }
     if (!quiet_ccc)
     {
-      snprintf (tempmessage_ccc, sizeof(tempmessage_ccc), "Memory initialized\n");
-      message_now_ccc(tempmessage_ccc);
+      INFO("Memory Initialized");
     }
     attempt ++;
   }

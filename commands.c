@@ -14,6 +14,7 @@
 #include "commands.h"
 
 #include "strncpy_wrapper.h"
+#include "util.h"
 
 
 // function to either check or execute a command

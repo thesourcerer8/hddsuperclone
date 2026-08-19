@@ -11,7 +11,8 @@
 #include "common.h"
 #include "hddsupertool.h"
 #include "hddsupertool_help.h"
-
+#include "strncpy_wrapper.h"
+#include "util.h"
 
 
 char *title = "hddsupertool";
@@ -54,7 +55,6 @@ unsigned int total_string_variables_ccc;
 
 bool forced_exit_ccc=false;
 
-#include "strncpy_wrapper.h"
 
 
 // Function to handle ctrl-c
@@ -63,10 +63,10 @@ void signal_callback_handler_ccc(int signum)
   (void) signum;
   if (!critical_process_ccc)
   {
-  fprintf(stderr, "\nTerminated by user\n");
-  forced_exit_ccc = true;
-  cleanup_ccc();
-  exit(signum);
+    INFO("Terminated by user");
+    forced_exit_ccc = true;
+    cleanup_ccc();
+    exit(signum);
   }
   pending_exit_ccc = true;
 }
@@ -118,7 +118,7 @@ int main (int argc, char **argv)
   pagesize_ccc = getpagesize();
   if (pagesize_ccc > 8192)
   {
-    fprintf (stderr, "Internal Error, pagesize too great\n");
+    ERROR("Internal Error, pagesize too great %u > 8192", pagesize_ccc);
     exit (1);
   }
   direct_mode_ccc = false;
@@ -146,7 +146,7 @@ int main (int argc, char **argv)
   ata_return_valid_ccc = 1;
 
 
-
+//TODO: should we drfine FULLVERSION in conditional.h?
 #ifdef FULLVERSION
   // get executable file name and current directory path
   if (getcwd(start_working_directory_ccc, sizeof(start_working_directory_ccc)) == NULL)
@@ -335,7 +335,7 @@ int main (int argc, char **argv)
         break;
 
       default:
-        fprintf (stderr, "Error processing command line options\n");
+        ERROR("Unknown command line argument");
         exit (1);
     }
   }
@@ -350,11 +350,11 @@ int main (int argc, char **argv)
       command_line_error = true;
       if ((argc - optind) < arguments_required)
       {
-        fprintf (stderr, "Error: too few arguments\n");
+        ERROR("Too few arguments");
       }
       if ((argc - optind) > arguments_required)
       {
-        fprintf (stderr, "Error: too many arguments\n");
+        ERROR("Too many arguments");
       }
     }
   }
@@ -367,11 +367,11 @@ int main (int argc, char **argv)
       command_line_error = true;
       if ((argc - optind) < arguments_required)
       {
-        fprintf (stderr, "Error: too few arguments\n");
+        ERROR("Too few arguments");
       }
       if ((argc - optind) > arguments_required)
       {
-        fprintf (stderr, "Error: too many arguments\n");
+        ERROR("Too many arguments");
       }
     }
 
@@ -384,21 +384,23 @@ int main (int argc, char **argv)
 
     if (argument_count_ccc > MAX_ARGUMENTS)
     {
-      fprintf (stderr, "ERROR! Number of arguments exceeded the maximum of %d.\n", MAX_ARGUMENTS);
+      ERROR("Number of arguments (%d) exceeded the maximum of %d", argument_count_ccc, MAX_ARGUMENTS);
       exit (1);
     }
 
     if (verbose_ccc > 0)
     {
       unsigned int c;
-      for (c = 0; c < argument_count_ccc; c++)
-        fprintf (stdout, "argument%d= %s\n", c+1, argument_ccc[c]);
+      for (c = 0; c < argument_count_ccc; c++) {
+        INFO("argument%d= %s", c+1, argument_ccc[c]);
+      }
     }
     if (debug_ccc > 0)
     {
       unsigned int c;
-      for (c = 0; c < argument_count_ccc; c++)
+      for (c = 0; c < argument_count_ccc; c++) {
         fprintf (debug_file_ccc, "argument%d= %s\n", c+1, argument_ccc[c]);
+      }
     }
   }
 
@@ -410,11 +412,11 @@ int main (int argc, char **argv)
       command_line_error = true;
       if ((argc - optind) < arguments_required)
       {
-        fprintf (stderr, "Error: too few arguments\n");
+        ERROR("Too few arguments");
       }
       if ((argc - optind) > arguments_required)
       {
-        fprintf (stderr, "Error: too many arguments\n");
+        ERROR("Too many arguments");
       }
     }
 
@@ -427,21 +429,23 @@ int main (int argc, char **argv)
 
     if (argument_count_ccc > MAX_ARGUMENTS)
     {
-      fprintf (stderr, "ERROR! Number of arguments exceeded the maximum of %d.\n", MAX_ARGUMENTS);
+      ERROR("Number of arguments (%d) exceeded the maximum of %d", argument_count_ccc, MAX_ARGUMENTS);
       exit (1);
     }
 
     if (verbose_ccc > 0)
     {
       unsigned int c;
-      for (c = 0; c < argument_count_ccc; c++)
-        fprintf (stdout, "argument%d= %s\n", c+1, argument_ccc[c]);
+      for (c = 0; c < argument_count_ccc; c++) {
+        INFO("argument%d= %s", c+1, argument_ccc[c]);
+      }
     }
     if (debug_ccc > 0)
     {
       unsigned int c;
-      for (c = 0; c < argument_count_ccc; c++)
+      for (c = 0; c < argument_count_ccc; c++) {
         fprintf (debug_file_ccc, "argument%d= %s\n", c+1, argument_ccc[c]);
+      }
     }
   }
 
@@ -450,8 +454,7 @@ int main (int argc, char **argv)
   // exit on command line error
   if (command_line_error)
   {
-    fprintf (stderr, "%s: Both disk and script must be specified.\n", title);
-    fprintf (stderr, "Try '%s --help' for more information.\n", title);
+    ERROR("Both disk and script must be specified. Try %s --help for more information.", title);
     exit (3);
   }
 
@@ -461,7 +464,7 @@ int main (int argc, char **argv)
     debug_file_ccc = fopen(debugfile_ccc, "w");
     if (debug_file_ccc == NULL)
     {
-      fprintf(stderr, "Cannot open %s for writing (%s).\nAborting...\n", debugfile_ccc, strerror(errno));
+      ERROR("Cannot open %s for writing (%s).", debugfile_ccc, strerror(errno));
       exit (4);
     }
   }
@@ -485,13 +488,13 @@ int main (int argc, char **argv)
 
   if (!quiet_ccc)
   {
-    fprintf (stdout, "%s %s\n", title, version_number);
+    INFO("%s %s", title, version_number);
 #ifdef DEBUG
-    fprintf (stdout, "DEBUG version\n");
+    INFO("DEBUG version");
 #endif
   }
 
-#ifdef GODMODE
+#ifdef GODMODE //TODO: remove godmode define
   superbyte_ccc[0] = 0x04;
   superbyte_ccc[1] = 0x06;
   superbyte_ccc[2] = 0x08;
@@ -513,8 +516,7 @@ int main (int argc, char **argv)
   superbyte_ccc[18] = 0x30;
   superbyte_ccc[19] = 0x0c;
 
-  snprintf (tempmessage_ccc, sizeof(tempmessage_ccc), "GOD MODE ACTIVE\n");
-  message_now_ccc(tempmessage_ccc);
+  INFO("GOD MODE ACTIVE");
 #endif
 
   max_dma_size_ccc = (pagesize_ccc / 8) * pagesize_ccc;
@@ -544,7 +546,7 @@ int main (int argc, char **argv)
     // Check if root privilages
     if (geteuid())
     {
-      fprintf (stderr, "Root privilages not detected! This program must be run as root.\n");
+      ERROR("Root privilages not detected! This program must be run as root.");
       cleanup_ccc();
       exit (1);
     }
@@ -599,14 +601,14 @@ int main (int argc, char **argv)
         // if ahci then check to make sure addresses were all set
         if (hba_base_address_ccc == 0 || port_base_address_ccc == 0)
         {
-          fprintf (stderr, "Error: Port addresses not set for AHCI mode.\n");
+          ERROR("Port addresses not set for AHCI mode.");
           cleanup_ccc();
           exit (1);
         }
         long long calculated = port_base_address_ccc - (hba_base_address_ccc + 0x100 + (port_number_base_ccc * 0x80));
         if (calculated != 0)
         {
-          fprintf (stderr, "Error: Port number does not match address for AHCI mode.\n");
+          ERROR("Port number does not match address for AHCI mode.");
           cleanup_ccc();
           exit (1);
         }
@@ -617,7 +619,7 @@ int main (int argc, char **argv)
         // if direct io then check to make sure addresses were all set
         if (reg_base_address_ccc == 0 || control_base_address_ccc == 0 || bus_base_address_ccc == 0)
         {
-          fprintf (stderr, "Error: Port addresses not set for direct IO mode.\n");
+          ERROR("Port addresses not set for direct IO mode.");
           cleanup_ccc();
           exit (1);
         }
@@ -638,7 +640,7 @@ int main (int argc, char **argv)
       if (disk_1_ccc == NULL)
       {
         find_all_devices_ccc();
-        fprintf (stderr, "Error: Target not set for passthrough mode.\n");
+        ERROR("No target drive specified for passthrough mode.");
         cleanup_ccc();
         exit (1);
       }
@@ -818,7 +820,7 @@ void cleanup_ccc(void)
   end_time_ccc = time(NULL);
   if (!quiet_ccc)
   {
-    fprintf (stdout, "Total program run time = %ld seconds\n", end_time_ccc - start_time_ccc);
+    INFO("Total program run time = %ld seconds", end_time_ccc - start_time_ccc);
   }
 }
 
@@ -853,16 +855,16 @@ int initialize_memory_ccc(void)
   total_number_variables_ccc = 0;
   unsigned int cols = MAX_VARIABLE_LENGTH;
   unsigned int i;
-  number_variable_name_buffer_ccc = malloc(number_variable_rows_ccc * cols * sizeof(*number_variable_name_buffer_ccc));
+  number_variable_name_buffer_ccc = malloc(number_variable_rows_ccc * cols * sizeof(*number_variable_name_buffer_ccc)); //TODO: add an xmalloc() function to util.c?
   if (number_variable_name_buffer_ccc == NULL)
   {
-    fprintf (stderr, "Error allocating memory (%s)\n", strerror(errno));
+    ERROR("Error allocating memory (%s)", strerror(errno));
     return (-1);
   }
   number_variable_name_pointer_ccc = malloc(number_variable_rows_ccc * sizeof(*number_variable_name_pointer_ccc));
   if (number_variable_name_pointer_ccc == NULL)
   {
-    fprintf (stderr, "Error allocating memory (%s)\n", strerror(errno));
+    ERROR("Error allocating memory (%s)", strerror(errno));
     return (-1);
   }
   for (i = 0; i < number_variable_rows_ccc; ++i)
@@ -873,7 +875,7 @@ int initialize_memory_ccc(void)
   number_variable_buffer_ccc = malloc(number_variable_rows_ccc * sizeof(*number_variable_buffer_ccc));
   if (number_variable_buffer_ccc == NULL)
   {
-    fprintf (stderr, "Error allocating memory (%s)\n", strerror(errno));
+    ERROR("Error allocating memory (%s)", strerror(errno));
     return (-1);
   }
 
@@ -883,13 +885,13 @@ int initialize_memory_ccc(void)
   string_variable_name_buffer_ccc = malloc(string_variable_rows_ccc * cols * sizeof(*string_variable_name_buffer_ccc));
   if (string_variable_name_buffer_ccc == NULL)
   {
-    fprintf (stderr, "Error allocating memory (%s)\n", strerror(errno));
+    ERROR("Error allocating memory (%s)", strerror(errno));
     return (-1);
   }
   string_variable_name_pointer_ccc = malloc(string_variable_rows_ccc * sizeof(*string_variable_name_pointer_ccc));
   if (string_variable_name_pointer_ccc == NULL)
   {
-    fprintf (stderr, "Error allocating memory (%s)\n", strerror(errno));
+    ERROR("Error allocating memory (%s)", strerror(errno));
     return (-1);
   }
   for (i = 0; i < string_variable_rows_ccc; ++i)
@@ -900,13 +902,13 @@ int initialize_memory_ccc(void)
   string_variable_buffer_ccc = malloc(string_variable_rows_ccc * cols * sizeof(*string_variable_buffer_ccc));
   if (string_variable_buffer_ccc == NULL)
   {
-    fprintf (stderr, "Error allocating memory (%s)\n", strerror(errno));
+    ERROR("Error allocating memory (%s)", strerror(errno));
     return (-1);
   }
   string_variable_pointer_ccc = malloc(string_variable_rows_ccc * sizeof(*string_variable_pointer_ccc));
   if (string_variable_pointer_ccc == NULL)
   {
-    fprintf (stderr, "Error allocating memory (%s)\n", strerror(errno));
+    ERROR("Error allocating memory (%s)", strerror(errno));
     return (-1);
   }
   for (i = 0; i < string_variable_rows_ccc; ++i)
@@ -916,7 +918,7 @@ int initialize_memory_ccc(void)
 
   if (!quiet_ccc)
   {
-    fprintf (stdout, "Initializing memory\n");
+    INFO("Initializing memory");
   }
 
   // initialize the table buffer
@@ -925,7 +927,7 @@ int initialize_memory_ccc(void)
     return_value_ccc = set_table_buffer_ccc();
     if (return_value_ccc != 0)
     {
-      fprintf (stderr, "Unable to get table buffer physical address in 32bit range\n");
+      ERROR("Unable to get table buffer physical address in 32bit range");
       return (-1);
     }
   }
@@ -937,7 +939,7 @@ int initialize_memory_ccc(void)
     return_value_ccc = set_command_list_buffer_ccc();
     if (return_value_ccc != 0)
     {
-      fprintf (stderr, "Unable to get command list buffer physical address in 32bit range\n");
+      ERROR("Unable to get command list buffer physical address in 32bit range");
       return (-1);
     }
   }
@@ -949,7 +951,7 @@ int initialize_memory_ccc(void)
     return_value_ccc = set_fis_buffer_ccc();
     if (return_value_ccc != 0)
     {
-      fprintf (stderr, "Unable to get FIS buffer physical address in 32bit range\n");
+      ERROR("Unable to get FIS buffer physical address in 32bit range");
       return (-1);
     }
   }
@@ -971,7 +973,7 @@ int initialize_memory_ccc(void)
     free (ccc_buffer_ccc);
     if (posix_memalign(&ccc_buffer_ccc, align, real_buffer_size_ccc))
     {
-      perror("posix_memalign failed");
+      ERROR("posix_memalign failed message '%s'", strerror(errno));
       return (-1);
     }
     memset (ccc_buffer_ccc, 0, real_buffer_size_ccc);
@@ -1020,13 +1022,13 @@ int increase_number_variable_memory_ccc(void)
   number_variable_name_buffer_ccc = realloc(number_variable_name_buffer_ccc, number_variable_rows_ccc * cols * sizeof(*number_variable_name_buffer_ccc));
   if (number_variable_name_buffer_ccc == NULL)
   {
-    fprintf (stderr, "Error allocating memory (%s)\n", strerror(errno));
+    ERROR("Error allocating memory (%s)", strerror(errno));
     return (-1);
   }
   number_variable_name_pointer_ccc = realloc(number_variable_name_pointer_ccc, number_variable_rows_ccc * sizeof(*number_variable_name_pointer_ccc));
   if (number_variable_name_pointer_ccc == NULL)
   {
-    fprintf (stderr, "Error allocating memory (%s)\n", strerror(errno));
+    ERROR("Error allocating memory (%s)", strerror(errno));
     return (-1);
   }
   for (i = 0; i < number_variable_rows_ccc; ++i)
@@ -1037,7 +1039,7 @@ int increase_number_variable_memory_ccc(void)
   number_variable_buffer_ccc = realloc(number_variable_buffer_ccc, number_variable_rows_ccc * sizeof(*number_variable_buffer_ccc));
   if (number_variable_buffer_ccc == NULL)
   {
-    fprintf (stderr, "Error allocating memory (%s)\n", strerror(errno));
+    ERROR("Error allocating memory (%s)", strerror(errno));
     return (-1);
   }
   return (0);
@@ -1058,13 +1060,13 @@ int increase_string_variable_memory_ccc(void)
   string_variable_name_buffer_ccc = realloc(string_variable_name_buffer_ccc, string_variable_rows_ccc * cols * sizeof(*string_variable_name_buffer_ccc));
   if (string_variable_name_buffer_ccc == NULL)
   {
-    fprintf (stderr, "Error allocating memory (%s)\n", strerror(errno));
+    ERROR("Error allocating memory (%s)", strerror(errno));
     return (-1);
   }
   string_variable_name_pointer_ccc = realloc(string_variable_name_pointer_ccc, string_variable_rows_ccc * sizeof(*string_variable_name_pointer_ccc));
   if (string_variable_name_pointer_ccc == NULL)
   {
-    fprintf (stderr, "Error allocating memory (%s)\n", strerror(errno));
+    ERROR("Error allocating memory (%s)", strerror(errno));
     return (-1);
   }
   for (i = 0; i < string_variable_rows_ccc; ++i)
@@ -1075,13 +1077,13 @@ int increase_string_variable_memory_ccc(void)
   string_variable_buffer_ccc = realloc(string_variable_buffer_ccc, string_variable_rows_ccc * cols * sizeof(*string_variable_buffer_ccc));
   if (string_variable_buffer_ccc == NULL)
   {
-    fprintf (stderr, "Error allocating memory (%s)\n", strerror(errno));
+    ERROR("Error allocating memory (%s)", strerror(errno));
     return (-1);
   }
   string_variable_pointer_ccc = realloc(string_variable_pointer_ccc, string_variable_rows_ccc * sizeof(*string_variable_pointer_ccc));
   if (string_variable_pointer_ccc == NULL)
   {
-    fprintf (stderr, "Error allocating memory (%s)\n", strerror(errno));
+    ERROR("Error allocating memory (%s)", strerror(errno));
     return (-1);
   }
   for (i = 0; i < string_variable_rows_ccc; ++i)
@@ -1101,14 +1103,14 @@ int set_main_scratchpad_ccc(void)
 {
   if (ccc_main_scratchpad_size_ccc > MAX_SCRATCHPAD_SIZE)
   {
-    fprintf (stderr, "ERROR: Maximum scratchpad size exceeded.\n");
+    ERROR("Maximum scratchpad size exceeded.");
     return (-1);
   }
   free (ccc_scratchpad_ccc);
   ccc_scratchpad_ccc = calloc(ccc_main_scratchpad_size_ccc, 1);
   if (ccc_scratchpad_ccc == NULL)
   {
-    fprintf (stderr, "Error allocating memory (%s)\n", strerror(errno));
+    ERROR("Error allocating memory (%s)", strerror(errno)); 
     return (-1);
   }
   return (0);
@@ -1124,14 +1126,14 @@ int set_sense_buffer_ccc(void)
 {
   if (sensebuffer_size_ccc > MAX_SENSEBUFFER_SIZE)
   {
-    fprintf (stderr, "ERROR: Maximum sensebuffer size exceeded.\n");
+    ERROR("Maximum sensebuffer size exceeded. %llu > %d", sensebuffer_size_ccc, MAX_SENSEBUFFER_SIZE); 
     return (-1);
   }
   free (sensebuffer_ccc);
   sensebuffer_ccc = calloc(sensebuffer_size_ccc, 1);
   if (sensebuffer_ccc == NULL)
   {
-    fprintf (stderr, "Error allocating memory (%s)\n", strerror(errno));
+    ERROR("Error allocating memory (%s)", strerror(errno));
     return (-1);
   }
   return (0);
@@ -1187,7 +1189,7 @@ int process_arguments_ccc(void)
   {
     if (verbose_ccc > 0)
     {
-      fprintf (stdout, "argument%d= %s\n", c+1, argument_ccc[c]);
+      INFO("argument%d= %s", c+1, argument_ccc[c]);
     }
     if (debug_ccc > 0)
     {
@@ -1235,7 +1237,7 @@ int process_arguments_ccc(void)
           return_value_ccc = check_variable_ccc(var_name);
           if (return_value_ccc != 0)
           {
-            fprintf (stderr, "Error! Argument \'%s\' has been declared more than once in the command line.\n", var_name);
+            ERROR("Argument \'%s\' has been declared more than once in the command line.", var_name);
             cleanup_ccc();
             exit (1);
           }
@@ -1243,7 +1245,7 @@ int process_arguments_ccc(void)
           var_num = find_number_variable_ccc(var_name);
           if (var_num == -1)
           {
-            fprintf (stderr, "Error! Unable to find agrument variable \'%s\' after setting it.\n", var_name);
+            ERROR("Unable to find agrument variable \'%s\' after setting it.", var_name);
             cleanup_ccc();
             exit (1);
           }
@@ -1251,7 +1253,7 @@ int process_arguments_ccc(void)
             return_value_ccc = set_number_variable_ccc(var_num, variable);
           if (return_value_ccc == -1)
           {
-            fprintf (stderr, "Error! Number variable \'%s\' value \'%s\' was unable to be completely processed.\n", var_name, variable);
+            ERROR("Number variable \'%s\' value \'%s\' was unable to be completely processed.", var_name, variable);
             cleanup_ccc();
             exit (1);
           }
@@ -1263,7 +1265,7 @@ int process_arguments_ccc(void)
           return_value_ccc = check_variable_ccc(var_name);
           if (return_value_ccc != 0)
           {
-            fprintf (stderr, "Error! Argument \'%s\' has been declared more than once in the command line.\n", var_name);
+            ERROR("Argument \'%s\' has been declared more than once in the command line.", var_name);
             cleanup_ccc();
             exit (1);
           }
@@ -1271,7 +1273,7 @@ int process_arguments_ccc(void)
           var_num = find_string_variable_ccc(var_name);
           if (var_num == -1)
           {
-            fprintf (stderr, "Error! Unable to find agrument variable \'%s\' after setting it.\n", var_name);
+            ERROR("Unable to find agrument variable \'%s\' after setting it.", var_name);
             cleanup_ccc();
             exit (1);
           }
@@ -1279,7 +1281,7 @@ int process_arguments_ccc(void)
             return_value_ccc = set_string_variable_ccc(var_num, variable);
           if (return_value_ccc == -1)
           {
-            fprintf (stderr, "Error! Number variable \'%s\' value \'%s\' was unable to be completely processed.\n", var_name, variable);
+            ERROR("String variable \'%s\' value \'%s\' was unable to be completely processed.", var_name, variable);
             cleanup_ccc();
             exit (1);
           }
@@ -1290,7 +1292,7 @@ int process_arguments_ccc(void)
     //fprintf (stdout, "\n");
     if (var_type == '\0')
     {
-      fprintf (stderr, "Error processing argument \'%s\'\n", current_argument);
+      ERROR("Error processing argument \'%s\'", current_argument);
       cleanup_ccc();
       exit (1);
     }
@@ -1319,13 +1321,13 @@ int read_script_file_ccc(char *script_file_ccc)
     script_line_buffer_ccc = malloc(script_rows_ccc * cols * sizeof(*script_line_buffer_ccc));
     if (script_line_buffer_ccc == NULL)
     {
-      fprintf (stderr, "Error allocating memory (%s)\n", strerror(errno));
+      ERROR("Error allocating memory (%s)", strerror(errno));
       return (-1);
     }
     script_line_pointer_ccc = malloc(script_rows_ccc * sizeof(*script_line_pointer_ccc));
     if (script_line_pointer_ccc == NULL)
     {
-      fprintf (stderr, "Error allocating memory (%s)\n", strerror(errno));
+      ERROR("Error allocating memory (%s)", strerror(errno));
       return (-1);
     }
     for (i = 0; i < script_rows_ccc; ++i)
@@ -1356,7 +1358,7 @@ int read_script_file_ccc(char *script_file_ccc)
       }
       else
       {
-        fprintf (stdout, "Error: No script file specified and hddmenu not found.\n");
+        ERROR("No script file specified and hddmenu not found.");
         return (1);
       }
     }
@@ -1386,14 +1388,14 @@ int read_script_file_ccc(char *script_file_ccc)
 
   if (verbose_ccc > 0)
   {
-    fprintf (stdout, "Reading %s into memory...\n", full_script_path_ccc);
+    INFO("Reading %s into memory...", full_script_path_ccc);
   }
 
   FILE *readfile;
   readfile = fopen(full_script_path_ccc, "r");
   if (readfile == NULL)
   {
-    fprintf(stderr, "Cannot open %s for reading (%s).\n", full_script_path_ccc, strerror(errno));
+    ERROR("Cannot open %s for reading (%s).", full_script_path_ccc, strerror(errno));
     return (1);
   }
 
@@ -1428,7 +1430,7 @@ int read_script_file_ccc(char *script_file_ccc)
     }
     if (line_too_long)
     {
-      fprintf (stderr, "ERROR! Line %d of %s is too long.\n", i-1, script_file_ccc);
+      ERROR("Line %d of %s is too long.", i-1, script_file_ccc);
       exit (1);
     }
 
@@ -1439,7 +1441,7 @@ int read_script_file_ccc(char *script_file_ccc)
       script_line_buffer_ccc = realloc(script_line_buffer_ccc, script_rows_ccc * cols * sizeof(*script_line_buffer_ccc));
       if (script_line_buffer_ccc == NULL)
       {
-        fprintf (stderr, "Error allocating memory (%s)\n", strerror(errno));
+        ERROR("Error allocating memory (%s)", strerror(errno));
 	fclose(readfile);
         return (3);
       }
@@ -1447,8 +1449,8 @@ int read_script_file_ccc(char *script_file_ccc)
       script_line_pointer_ccc = realloc(script_line_pointer_ccc, script_rows_ccc * sizeof(*script_line_pointer_ccc));
       if (script_line_pointer_ccc == NULL)
       {
-        fprintf (stderr, "Error allocating memory (%s)\n", strerror(errno));
-	fclose(readfile);
+        ERROR("Error allocating memory (%s)", strerror(errno));
+	      fclose(readfile);
         return (3);
       }
 
@@ -1469,7 +1471,7 @@ int read_script_file_ccc(char *script_file_ccc)
     unsigned int n;
     for (n = 2; n < total_lines_ccc; n++)
     {
-      fprintf (stdout, "line%d= %s", n-1, script_line_pointer_ccc[n]);
+      INFO("line%d= %s", n-1, script_line_pointer_ccc[n]);
     }
   }
   if (debug_ccc > 1)
@@ -1493,13 +1495,13 @@ int read_script_file_ccc(char *script_file_ccc)
 // function to write the script back to file after indentation cleanup
 int write_file_ccc(char *script_file_ccc)
 {
-  fprintf (stdout, "Overwriting %s with new indentation...\n", script_file_ccc);
+  INFO("Overwriting %s with new indentation...", script_file_ccc);
 
   FILE *writefile;
   writefile = fopen(script_file_ccc, "w");
   if (writefile == NULL)
   {
-    fprintf(stderr, "Cannot open %s for writing (%s).\n", script_file_ccc, strerror(errno));
+    ERROR("Cannot open %s for writing (%s).", script_file_ccc, strerror(errno));
     return (1);
   }
 
@@ -1533,11 +1535,11 @@ int process_lines_ccc(void)
   {
     if (do_indentation_ccc)
     {
-      fprintf (stdout, "Performing indentation cleanup...\n");
+      INFO("Performing indentation cleanup...");
     }
     else
     {
-      fprintf (stdout, "Checking script for errors...\n");
+      INFO("Checking script for errors...");
     }
   }
   for (line_number = 0; line_number < total_lines_ccc; line_number++)
@@ -1551,7 +1553,7 @@ int process_lines_ccc(void)
     {
       if (verbose_ccc > 1)
       {
-        fprintf (stdout, "command%d=%s  arguments=%s\n", line_number-1, command, rest_of_line);
+        INFO("command%d=%s  arguments=%s", line_number-1, command, rest_of_line);
       }
       if (debug_ccc > 1)
       {
@@ -1642,7 +1644,7 @@ int process_lines_ccc(void)
           {
             if (i + n >= MAX_LINE_LENGTH)
             {
-              fprintf (stderr, "Indentation exceeded maximum line length on line %d. Exiting without saving...\n", line_number+1);
+              ERROR("Indentation exceeded maximum line length on line %d. Exiting without saving...", line_number+1);
               cleanup_ccc();
               exit (1);
             }
@@ -1651,7 +1653,7 @@ int process_lines_ccc(void)
         }
         if (strlen(command) + strlen(rest_of_line) + strlen(new_line) +2 >= MAX_LINE_LENGTH)
         {
-          fprintf (stderr, "Line %d is too long with new indentation. Exiting without saving...\n", line_number+1);
+          ERROR("Line %d is too long with new indentation. Exiting without saving...", line_number+1);
           cleanup_ccc();
           exit (1);
         }
@@ -1674,14 +1676,14 @@ int process_lines_ccc(void)
         {
           if (return_value_ccc == -99)
           {
-            fprintf (stdout, "Command not supported by current license type. Exiting...\n");
+            ERROR("Command not supported by current license type. Exiting...");
             cleanup_ccc();
             exit (1);
           }
           else
           {
-            fprintf (stdout, "%s", script_line_pointer_ccc[line_number]);
-            fprintf (stdout, "There was an error processing the script \'%s\'. Exiting...\n", script_file_ccc);
+            ERROR("%s", script_line_pointer_ccc[line_number]);
+            ERROR("There was an error processing the script \'%s\'. Exiting...", script_file_ccc);
             cleanup_ccc();
             exit (1);
           }
@@ -1692,15 +1694,15 @@ int process_lines_ccc(void)
 
   if (!do_indentation_ccc && if_statement_level_ccc != 0)
   {
-    fprintf (stderr, "\nError: IF count does not match ENDIF count (too many IF),\n");
-    fprintf (stdout, "There was an error processing the script \'%s\'. Exiting...\n", script_file_ccc);
+    ERROR("IF count does not match ENDIF count (too many IF).");
+    ERROR("There was an error processing the script \'%s\'. Exiting...", script_file_ccc);
     cleanup_ccc();
     exit (1);
   }
   if (!do_indentation_ccc && while_statement_level_ccc != 0)
   {
-    fprintf (stderr, "\nError: WHILE count does not match DONE count (too many WHILE),\n");
-    fprintf (stdout, "There was an error processing the script \'%s\'. Exiting...\n", script_file_ccc);
+    ERROR("WHILE count does not match DONE count (too many WHILE).");
+    ERROR("There was an error processing the script \'%s\'. Exiting...", script_file_ccc);
     cleanup_ccc();
     exit (1);
   }
@@ -1710,7 +1712,7 @@ int process_lines_ccc(void)
   {
     if (verbose_ccc > 0)
     {
-      fprintf (stdout, "Running script...\n");
+      INFO("Running script...");
     }
     // reset the starting main buffer size in case it was changed during checking
     ccc_main_buffer_size_ccc = 512;
@@ -1733,7 +1735,7 @@ int process_lines_ccc(void)
       disk1_fd_ccc = open (disk_1_ccc, O_RDWR | O_NONBLOCK);
       if (disk1_fd_ccc == -1)
       {
-        fprintf(stderr, "Error: Unable to open %s (%s).\n", disk_1_ccc, strerror(errno));
+        ERROR("Unable to open %s (%s).", disk_1_ccc, strerror(errno));
         return (-1);
       }
     }
@@ -1755,7 +1757,7 @@ int process_lines_ccc(void)
       {
         if (verbose_ccc > 1)
         {
-          fprintf (stdout, "command%d= %s\n", line_number-1, command);
+          INFO("command%d= %s", line_number-1, command);
         }
         if (debug_ccc > 1)
         {
@@ -1776,8 +1778,8 @@ int process_lines_ccc(void)
           {
 	    if (!quiet_ccc)
             {
-              fprintf (stdout, "Script reached PREVIOUSSCRIPT command at line %d, exiting normally...\n", line_number-1);
-	    }
+              INFO("Script reached PREVIOUSSCRIPT command at line %d, exiting normally...", line_number-1);
+	          }
             return (0);
           }
           // check if script hit an exit or end command
@@ -1785,28 +1787,28 @@ int process_lines_ccc(void)
           {
 	    if (!quiet_ccc)
             {
-              fprintf (stdout, "Script reached EXIT command at line %d, exiting normally...\n", line_number-1);
-	    }
+              INFO("Script reached EXIT command at line %d, exiting normally...", line_number-1);
+	          }
             return (0);
           }
           else if (return_value_ccc == -100)
           {
 	    if (!quiet_ccc)
             {
-              fprintf (stdout, "Script reached END command at line %d, exiting normally...\n", line_number-1);
-	    }
+              INFO("Script reached END command at line %d, exiting normally...", line_number-1);
+	          }
             return (0);
           }
-          else if (return_value_ccc == -99)
+          else if (return_value_ccc == -99) //TODO: this should never happen in the opensource version
           {
-            fprintf (stdout, "Command not supported by current license type. Exiting...\n");
+            ERROR("Command not supported by current license type. Exiting...");
             cleanup_ccc();
             exit (1);
           }
           else
           {
-            fprintf (stdout, "%s", script_line_pointer_ccc[line_number]);
-            fprintf (stdout, "There was an error processing the script \'%s\'. Exiting...\n", script_file_ccc);
+            ERROR("%s", script_line_pointer_ccc[line_number]);
+            ERROR("There was an error processing the script \'%s\'. Exiting...", script_file_ccc);
             cleanup_ccc();
             exit (1);
           }
@@ -1822,7 +1824,7 @@ int process_lines_ccc(void)
   }
   if (!do_indentation_ccc)
   {
-    fprintf (stdout, "End of script reached, exiting normally...\n");
+    INFO("Reached end of script. Exiting normally...");
   }
   return (0);
 }
@@ -1840,7 +1842,7 @@ int disk_reopen_ccc(void)
     disk1_fd_ccc = open (disk_1_ccc, O_RDWR | O_NONBLOCK);
     if (disk1_fd_ccc == -1)
     {
-      fprintf(stderr, "Error: Unable to open %s (%s).\n", disk_1_ccc, strerror(errno));
+      ERROR("Unable to open %s (%s).", disk_1_ccc, strerror(errno));
       return (-1);
     }
     current_disk_ccc = disk1_fd_ccc;
@@ -1869,7 +1871,7 @@ int process_command_line_ccc(void)
     disk1_fd_ccc = open (disk_1_ccc, O_RDWR | O_NONBLOCK);
     if (disk1_fd_ccc == -1)
     {
-      fprintf(stderr, "Error: Unable to open %s (%s).\n", disk_1_ccc, strerror(errno));
+      ERROR("Unable to open %s (%s).", disk_1_ccc, strerror(errno));
       return (-1);
     }
   }
@@ -1980,7 +1982,7 @@ int check_arguments_ccc(char *var_name)
     {
       if (verbose_ccc > 0)
       {
-        fprintf (stdout, "argument%d= %s\n", c+1, argument_ccc[c]);
+        INFO("argument%d= %s", c+1, argument_ccc[c]);
       }
       if (debug_ccc > 0)
       {
@@ -2119,7 +2121,7 @@ int set_number_variable_ccc(int var_num, char *raw_value)
   int err_num = find_number_variable_ccc("error_level");
   if (err_num < 0)
   {
-    fprintf (stderr, "\nError: Unable to locate internal variable \'error_level\',\n");
+    ERROR("Unable to locate internal variable \'error_level\'. Exiting...");
     return (-1);
   }
   number_variable_buffer_ccc[err_num] = error_level_ccc;
@@ -2238,14 +2240,7 @@ int compare_ccc(bool perform_check, char *rest_of_line)
   int scanline = sscanf(rest_of_line, "%s %s %s %[^\n]", raw_variable1, condition, raw_variable2, leftover);
   if (scanline != 3)
   {
-    if (scanline < 3)
-    {
-      fprintf (stderr, "\nError: Not enough arguments,\n");
-    }
-    if (scanline > 3)
-    {
-      fprintf (stderr, "\nError: Too many arguments,\n");
-    }
+    ERROR("Argument count %d is incorrect for comparison statement. Expected 3 arguments.", scanline);
     return (-1);
   }
 
@@ -2277,7 +2272,7 @@ int compare_ccc(bool perform_check, char *rest_of_line)
   }
   else
   {
-    fprintf (stderr, "\nError: Unknown condition operator \'%s\',\n", condition);
+    ERROR("Unknown condition operator \'%s\'.", condition);
     return (-1);
   }
 
@@ -2293,7 +2288,7 @@ int compare_ccc(bool perform_check, char *rest_of_line)
     variable1_type = var_type;
     if (var_type == 0)
     {
-      fprintf (stderr, "\nError: Variable \'%s\' not found,\n", raw_variable1);
+      ERROR("Variable \'%s\' not found.", raw_variable1);
       return (-1);
     }
     else if (var_type == 1)
@@ -2301,7 +2296,7 @@ int compare_ccc(bool perform_check, char *rest_of_line)
       int var_num = find_number_variable_ccc(raw_variable1+1);
       if (var_num < 0)
       {
-        fprintf (stderr, "\nError: Variable \'%s\' not found,\n", raw_variable1);
+        ERROR("Variable \'%s\' not found.", raw_variable1);
         return (-1);
       }
       variable1 = number_variable_buffer_ccc[var_num];
@@ -2312,14 +2307,14 @@ int compare_ccc(bool perform_check, char *rest_of_line)
       int var_num = find_string_variable_ccc(raw_variable1+1);
       if (var_num < 0)
       {
-        fprintf (stderr, "\nError: Variable \'%s\' not found,\n", raw_variable1);
+        ERROR("Variable \'%s\' not found.", raw_variable1);\
         return (-1);
       }
       string_variable1 = get_string_variable_value_ccc(raw_variable1);
     }
     else
     {
-      fprintf (stderr, "\nError: Variable \'%s\' is wrong type,\n", raw_variable1);
+      ERROR("Variable \'%s\' is wrong type.", raw_variable1);
       return (-1);
     }
   }
@@ -2339,7 +2334,7 @@ int compare_ccc(bool perform_check, char *rest_of_line)
     int var_type = check_variable_ccc(raw_variable2+1);
     if (var_type == 0)
     {
-      fprintf (stderr, "\nError: Variable \'%s\' not found,\n", raw_variable2);
+      ERROR("Variable \'%s\' not found.", raw_variable2);
       return (-1);
     }
     else if (var_type == 1 && !string_check)
@@ -2347,7 +2342,7 @@ int compare_ccc(bool perform_check, char *rest_of_line)
       int var_num = find_number_variable_ccc(raw_variable2+1);
       if (var_num < 0)
       {
-        fprintf (stderr, "\nError: Variable \'%s\' not found,\n", raw_variable2);
+        ERROR("Variable \'%s\' not found.", raw_variable2);
         return (-1);
       }
       variable2 = number_variable_buffer_ccc[var_num];
@@ -2358,14 +2353,14 @@ int compare_ccc(bool perform_check, char *rest_of_line)
       int var_num = find_string_variable_ccc(raw_variable2+1);
       if (var_num < 0)
       {
-        fprintf (stderr, "\nError: Variable \'%s\' not found,\n", raw_variable2);
+        ERROR("Variable \'%s\' not found.", raw_variable2);
         return (-1);
       }
       string_variable2 = get_string_variable_value_ccc(raw_variable2);
     }
     else
     {
-      fprintf (stderr, "\nError: Variable \'%s\' is wrong or different type,\n", raw_variable2);
+      ERROR("Variable \'%s\' is wrong type.", raw_variable2);
       return (-1);
     }
   }
@@ -2377,7 +2372,7 @@ int compare_ccc(bool perform_check, char *rest_of_line)
       variable2 = strtoll(raw_variable2, &endptr, 0);
       if (*endptr)
       {
-        fprintf (stderr, "\nError: Variable \'%s\' is wrong or different type,\n", raw_variable2);
+        ERROR("Variable \'%s\' is wrong type.", raw_variable2);
         return (-1);
       }
     }
@@ -2386,7 +2381,7 @@ int compare_ccc(bool perform_check, char *rest_of_line)
       string_variable2 = raw_variable2;
       if (variable1_type != 2)
       {
-        fprintf (stderr, "\nError: Variable \'%s\' is wrong or different type,\n", raw_variable2);
+        ERROR("Variable \'%s\' is wrong type.", raw_variable2);
         return (-1);
       }
     }
@@ -2394,8 +2389,8 @@ int compare_ccc(bool perform_check, char *rest_of_line)
 
   if (string_check && (operator != 1 && operator != 2))
   {
-    fprintf (stderr, "\nError: Improper operator '%s' for comparing strings,\n", condition);
-    fprintf (stderr, "Only '=' or '!=' are allowed when comparing strings,\n");
+    ERROR("Improper operator '%s' for comparing strings.", condition);
+    ERROR("Only '=' or '!=' are allowed when comparing strings.");
     return (-1);
   }
 
@@ -2465,7 +2460,7 @@ int compare_ccc(bool perform_check, char *rest_of_line)
           break;
 
         default:
-          fprintf (stderr, "\nUnknown error processing conditional statement,\n");
+          ERROR("Unknown operator \'%d\'.", operator);
           return (-1);
       }
     }
@@ -2506,13 +2501,13 @@ long long math_ccc(char *raw_value)
       return_value_ccc = check_variable_ccc(var_name);
       if (return_value_ccc < 1)
       {
-        fprintf (stderr, "\nError: Variable \'%s\' not found,\n", part1);
+        ERROR("Variable \'%s\' not found.", part1);
         error_level_ccc = 1;
         return (0);
       }
       else if (return_value_ccc != 1)
       {
-        fprintf (stderr, "\nError: Variable \'%s\' is wrong type (expecting number variable),\n", part1);
+        ERROR("Variable \'%s\' is wrong type (expecting number variable).", part1);
         error_level_ccc = 1;
         return (0);
       }
@@ -2529,7 +2524,7 @@ long long math_ccc(char *raw_value)
       value = strtoull(part1, &endptr, 0);
       if (*endptr)
       {
-        fprintf (stderr, "Error performing math on \'%s\'\n", part1);
+        ERROR("Error processing value \'%s\'.", part1);
         error_level_ccc = 1;
         return (0);
       }
@@ -2547,13 +2542,13 @@ long long math_ccc(char *raw_value)
       return_value_ccc = check_variable_ccc(var_name);
       if (return_value_ccc < 1)
       {
-        fprintf (stderr, "\nError: Variable \'%s\' not found,\n", part1);
+        ERROR("Variable \'%s\' not found.", part1);
         error_level_ccc = 1;
         return (0);
       }
       else if (return_value_ccc != 2)
       {
-        fprintf (stderr, "\nError: Variable \'%s\' is wrong type (expecting string variable),\n", part1);
+        ERROR("Variable \'%s\' is wrong type (expecting string variable).", part1);
         error_level_ccc = 1;
         return (0);
       }
@@ -2571,13 +2566,13 @@ long long math_ccc(char *raw_value)
           return_value_ccc = check_variable_ccc(var_name);
           if (return_value_ccc < 1)
           {
-            fprintf (stderr, "\nError: Variable \'%s\' not found,\n", part2);
+            ERROR("Variable \'%s\' not found.", part2);
             error_level_ccc = 1;
             return (0);
           }
           else if (return_value_ccc != 1)
           {
-            fprintf (stderr, "\nError: Variable \'%s\' is wrong type (expecting number variable),\n", part2);
+            ERROR("Variable \'%s\' is wrong type (expecting number variable).", part2);
             error_level_ccc = 1;
             return (0);
           }
@@ -2592,7 +2587,7 @@ long long math_ccc(char *raw_value)
           string_count = strtoll(part2, &endptr, 0);
           if (*endptr)
           {
-           fprintf (stderr, "\nError extracing number from \'%s\'\n", part2);
+            ERROR("Error extracing number from \'%s\'.", part2);
             error_level_ccc = 1;
             return (0);
           }
@@ -2600,7 +2595,7 @@ long long math_ccc(char *raw_value)
 
         if (string_count > MAX_LINE_LENGTH / 2)
         {
-          fprintf (stderr, "\nError: string count \'%s\' too high (max=%d)\n", part2, MAX_LINE_LENGTH / 2);
+          ERROR("String count \'%s\' too high (max=%d).", part2, MAX_LINE_LENGTH / 2);
           error_level_ccc = 1;
           return (0);
         }
@@ -2616,7 +2611,7 @@ long long math_ccc(char *raw_value)
           {
             if (verbose_ccc > 1)
             {
-              fprintf (stderr, "Error: No string found at count \'%s\'\n", part2);
+              ERROR("Error: No string found at count \'%s\'", part2);
             }
             if (debug_ccc > 1)
             {
@@ -2640,7 +2635,7 @@ long long math_ccc(char *raw_value)
         {
           if (verbose_ccc > 0)
           {
-            fprintf (stderr, "Error processing value \'%s\' from \'%s\'\n",string_result, part1);
+            ERROR("Error processing value \'%s\' from \'%s\'.", string_result, part1);
           }
           if (debug_ccc > 0)
           {
@@ -2656,7 +2651,7 @@ long long math_ccc(char *raw_value)
     }
     else
     {
-      fprintf (stderr, "Error performing math on \'%s\'\n", part1);
+      ERROR("Error: Variable \'%s\' not found.", part1);
       error_level_ccc = 1;
       return (0);
     }
@@ -2672,13 +2667,13 @@ long long math_ccc(char *raw_value)
       return_value_ccc = check_variable_ccc(var_name);
       if (return_value_ccc < 1)
       {
-        fprintf (stderr, "\nError: Variable \'%s\' not found,\n", part1);
+        ERROR("Variable \'%s\' not found.", part1);
         error_level_ccc = 1;
         return (0);
       }
       else if (return_value_ccc != 1)
       {
-        fprintf (stderr, "\nError: Variable \'%s\' is wrong type (expecting number variable),\n", part1);
+        ERROR("Variable \'%s\' is wrong type (expecting number variable).", part1);
         error_level_ccc = 1;
         return (0);
       }
@@ -2694,7 +2689,7 @@ long long math_ccc(char *raw_value)
       value1 = strtoull(part1, &endptr, 0);
       if (*endptr)
       {
-        fprintf (stderr, "Error performing math on \'%s\'\n", part1);
+        ERROR("Error performing math on \'%s\'.", part1);
         error_level_ccc = 1;
         return (0);
       }
@@ -2707,13 +2702,13 @@ long long math_ccc(char *raw_value)
       return_value_ccc = check_variable_ccc(var_name);
       if (return_value_ccc < 1)
       {
-        fprintf (stderr, "\nError: Variable \'%s\' not found,\n", part3);
+        ERROR("Variable \'%s\' not found.", part3);
         error_level_ccc = 1;
         return (0);
       }
       else if (return_value_ccc != 1)
       {
-        fprintf (stderr, "\nError: Variable \'%s\' is wrong type (expecting number variable),\n", part3);
+        ERROR("Variable \'%s\' is wrong type (expecting number variable).", part3);
         error_level_ccc = 1;
         return (0);
       }
@@ -2729,7 +2724,7 @@ long long math_ccc(char *raw_value)
       value2 = strtoull(part3, &endptr, 0);
       if (*endptr)
       {
-        fprintf (stderr, "Error performing math on \'%s\'\n", part3);
+        ERROR("Error performing math on \'%s\'.", part3);
         error_level_ccc = 1;
         return (0);
       }
@@ -2787,7 +2782,7 @@ long long math_ccc(char *raw_value)
     }
     else
     {
-      fprintf (stderr, "Error: Unknown operator \'%s\'\n", part2);
+      ERROR("Unknown operator \'%s\'.", part2);
       error_level_ccc = 1;
       return (0);
     }
@@ -2812,14 +2807,14 @@ long long get_number_variable_value_ccc(char *raw_variable)
   int scanline = sscanf(raw_variable+1, "%s [^\n]", var_name);
   if (scanline != 1)
   {
-    fprintf (stderr, "\nError processing variable \'%s\',\n", raw_variable);
+    ERROR("Error processing variable \'%s\'.", raw_variable);
     return_value_ccc = -1;
     return (-1);
   }
   return_value_ccc = check_variable_ccc(var_name);
   if (return_value_ccc < 1)
   {
-    fprintf (stderr, "\nError: Variable \'%s\' not found,\n", var_name);
+    ERROR("Variable \'%s\' not found.", var_name);
     return_value_ccc = -1;
     return (-1);
   }
@@ -2831,7 +2826,7 @@ long long get_number_variable_value_ccc(char *raw_variable)
   }
   else
   {
-    fprintf (stderr, "\nError: Variable \'%s\' is wrong type,\n", var_name);
+    ERROR("Variable \'%s\' is wrong type.", var_name);
     return_value_ccc = -1;
     return (-1);
   }
@@ -2855,14 +2850,14 @@ char *get_string_variable_value_ccc(char *raw_variable)
   int scanline = sscanf(raw_variable+1, "%s [^\n]", var_name);
   if (scanline != 1)
   {
-    fprintf (stderr, "\nError processing variable \'%s\',\n", raw_variable);
+    ERROR("Error processing variable \'%s\'.", raw_variable);
     return_value_ccc = -1;
     return ("");
   }
   return_value_ccc = check_variable_ccc(var_name);
   if (return_value_ccc < 1)
   {
-    fprintf (stderr, "\nError: Variable \'%s\' not found,\n", var_name);
+    ERROR("Variable \'%s\' not found.", var_name);
     return_value_ccc = -1;
     return ("");
   }
@@ -2874,7 +2869,7 @@ char *get_string_variable_value_ccc(char *raw_variable)
   }
   else
   {
-    fprintf (stderr, "\nError: Variable \'%s\' is wrong type,\n", var_name);
+    ERROR("Variable \'%s\' is wrong type.", var_name);
     return_value_ccc = -1;
     return ("");
   }
@@ -2899,14 +2894,14 @@ int set_number_variable_value_ccc(char *raw_variable, long long value)
   int scanline = sscanf(raw_variable+1, "%s [^\n]", var_name);
   if (scanline != 1)
   {
-    fprintf (stderr, "\nError processing variable \'%s\',\n", raw_variable);
+    ERROR("Error processing variable \'%s\'.", raw_variable);
     return_value_ccc = -1;
     return (-1);
   }
   return_value_ccc = check_variable_ccc(var_name);
   if (return_value_ccc < 1)
   {
-    fprintf (stderr, "\nError: Variable \'%s\' not found,\n", var_name);
+    ERROR("Variable \'%s\' not found.", var_name);
     return_value_ccc = -1;
     return (-1);
   }
@@ -2917,14 +2912,14 @@ int set_number_variable_value_ccc(char *raw_variable, long long value)
     return_value_ccc = set_number_variable_ccc(var_num, temp_var);
     if (return_value_ccc == -1)
     {
-      fprintf (stderr, "Error! Variable \'%s\' value \'%s\' was unable to be completely processed,\n", var_name, temp_var);
+      ERROR("Variable \'%s\' value \'%s\' was unable to be completely processed.", var_name, temp_var);
       return (-1);
     }
     return (0);
   }
   else
   {
-    fprintf (stderr, "\nError: Variable \'%s\' is wrong type,\n", var_name);
+    ERROR("Variable \'%s\' is wrong type.", var_name);
     return_value_ccc = -1;
     return (-1);
   }
@@ -2947,13 +2942,13 @@ int set_string_variable_value_ccc(char *raw_variable, char *value)
   int scanline = sscanf(raw_variable+1, "%s [^\n]", var_name);
   if (scanline != 1)
   {
-    fprintf (stderr, "\nError processing variable \'%s\',\n", raw_variable);
+    ERROR("Error processing variable \'%s\'.", raw_variable);
     return (-1);
   }
   return_value_ccc = check_variable_ccc(var_name);
   if (return_value_ccc < 1)
   {
-    fprintf (stderr, "\nError: Variable \'%s\' not found,\n", var_name);
+    ERROR("Variable \'%s\' not found.", var_name);
     return (-1);
   }
   else if (return_value_ccc == 2)
@@ -2964,7 +2959,7 @@ int set_string_variable_value_ccc(char *raw_variable, char *value)
   }
   else
   {
-    fprintf (stderr, "\nError: Variable \'%s\' is wrong type,\n", var_name);
+    ERROR("Variable \'%s\' is wrong type.", var_name);
     return (-1);
   }
   // we should never make it this far down unless stupid programming error
@@ -3137,12 +3132,8 @@ int print_gui_error_message_ccc(char *message, char *title, int type)
 
 int set_lun_dialog_ccc (int max_lun)
 {
-  printf("We have to set the LUN, the maximum value is %d. Which LUN do you want?\n",max_lun);
-  printf("This function is only implemented in the GUI. Now we are choosing 0 by default.\n");
+  INFO("We have to set the LUN, the maximum value is %d. Which LUN do you want?", max_lun);
+  INFO("This function is only implemented in the GUI. Now we are choosing 0 by default.");
   return 0;
 }
-
-
-
-
 

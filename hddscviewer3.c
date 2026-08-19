@@ -11,7 +11,7 @@
 #include "hddscviewer3.h"
 #include "hddscviewer3_glade.h"
 
-
+#include "util.h"
 
 char *title = "HDDSCViewer";
 char *version_number = "0.8.beta_20190901";
@@ -23,6 +23,7 @@ int copyright_year = 2019;
 
 int main (int argc, char **argv)
 {
+  //TODO: change to snprintf()
   char window_title[256];
   strcpy (window_title, title);
   strcat (window_title, " ");
@@ -86,7 +87,7 @@ int main (int argc, char **argv)
         break;
 
       default:
-        fprintf (stdout, "Unknown error processing command line options\n");
+        ERROR("Unknown error processing command line options");
         command_line_error = true;
     }
   }
@@ -98,11 +99,11 @@ int main (int argc, char **argv)
     command_line_error = true;
     if ((argc - optind) < arguments_required)
     {
-      fprintf (stdout, "Error: too few arguments\n");
+      ERROR("Too few arguments");
     }
     if ((argc - optind) > arguments_required)
     {
-      fprintf (stdout, "Error: too many arguments\n");
+      ERROR("Too many arguments");
     }
   }
 
@@ -110,8 +111,7 @@ int main (int argc, char **argv)
   // exit on command line error
   if (command_line_error)
   {
-    fprintf (stdout, "%s: Command line error.\n", title);
-    fprintf (stdout, "Try '%s --help' for more information.\n", title);
+    ERROR("Command line error, try '%s --help' for more information", title);
     exit(1);
   }
 
@@ -143,13 +143,15 @@ int main (int argc, char **argv)
   GError *err = NULL; // It is mandatory to initialize to NULL
   if(0 == gtk_builder_add_from_string (builder, (const gchar *)hddscviewer3_glade, hddscviewer3_glade_len, &err))
   {
-    fprintf(stderr, "Error adding build from file. Error: %s\n", err->message);
+    ERROR("Error adding build from string. Error: %s", err->message);
+    //TODO: exit?
   }
 
   main_window = GTK_WIDGET (gtk_builder_get_object (builder, "main_window"));
   if (NULL == main_window)
   {
-    fprintf(stderr, "Object error: main_window \n");
+    ERROR("Object error: main_window");
+    //TODO: exit?
   }
   gtk_builder_connect_signals(builder, NULL);
   //main_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -631,200 +633,175 @@ void compare_size_variables(void)
   int left_changed = 0;
   if (last_main_window_width != main_window_width)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "main_window width = %d\n", main_window_width);
-    message_debug(tempmessage, 0);
+    INFO("main_window width = %d", main_window_width);
     main_changed = 1;
     top_changed = 1;
     left_changed = 1;
   }
   if (last_main_window_height != main_window_height)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "main_window height = %d\n", main_window_height);
-    message_debug(tempmessage, 0);
+    INFO("main_window height = %d", main_window_height);
     main_changed = 1;
     top_changed = 1;
     left_changed = 1;
   }
   if (last_main_vbox_width != main_vbox_width)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "main_vbox width = %d\n", main_vbox_width);
-    message_debug(tempmessage, 0);
+    INFO("main_vbox width = %d", main_vbox_width);
     main_changed = 1;
     top_changed = 1;
     left_changed = 1;
   }
   if (last_main_vbox_height != main_vbox_height)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "main_vbox height = %d\n", main_vbox_height);
-    message_debug(tempmessage, 0);
+    INFO("main_vbox height = %d", main_vbox_height);
     main_changed = 1;
     top_changed = 1;
     left_changed = 1;
   }
   if (last_main_hbox_width != main_hbox_width)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "main_hbox width = %d\n", main_hbox_width);
-    message_debug(tempmessage, 0);
+    INFO("main_hbox width = %d", main_hbox_width);
     main_changed = 1;
     top_changed = 1;
     left_changed = 1;
   }
   if (last_main_hbox_height != main_hbox_height)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "main_hbox height = %d\n", main_hbox_height);
-    message_debug(tempmessage, 0);
+    INFO("main_hbox height = %d", main_hbox_height);
     main_changed = 1;
     top_changed = 1;
     left_changed = 1;
   }
   if (last_left_vbox_width != left_vbox_width)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "left_vbox width = %d\n", left_vbox_width);
-    message_debug(tempmessage, 0);
+    INFO("left_vbox width = %d", left_vbox_width);
     //main_changed = 1;
     //top_changed = 1;
     left_changed = 1;
   }
   if (last_left_vbox_height != left_vbox_height)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "left_vbox height = %d\n", left_vbox_height);
-    message_debug(tempmessage, 0);
+    INFO("left_vbox height = %d", left_vbox_height);
     main_changed = 1;
     //top_changed = 1;
     //left_changed = 1;
   }
   if (last_right_vbox_width != right_vbox_width)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "right_vbox width = %d\n", right_vbox_width);
-    message_debug(tempmessage, 0);
+    INFO("right_vbox width = %d", right_vbox_width);
     main_changed = 1;
     //top_changed = 1;
     //left_changed = 1;
   }
   if (last_right_vbox_height != right_vbox_height)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "right_vbox height = %d\n", right_vbox_height);
-    message_debug(tempmessage, 0);
+    INFO("right_vbox height = %d", right_vbox_height);
     main_changed = 1;
     top_changed = 1;
     left_changed = 1;
   }
   if (last_top_hbox_width != top_hbox_width)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "top_hbox width = %d\n", top_hbox_width);
-    message_debug(tempmessage, 0);
+    INFO("top_hbox width = %d", top_hbox_width);
     //main_changed = 1;
     top_changed = 1;
     //left_changed = 1;
   }
   if (last_top_hbox_height != top_hbox_height)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "top_hbox height = %d\n", top_hbox_height);
-    message_debug(tempmessage, 0);
+    INFO("top_hbox height = %d", top_hbox_height);
     //main_changed = 1;
     top_changed = 1;
     //left_changed = 1;
   }
   if (last_top_info_box_width != top_info_box_width)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "top_info_box width = %d\n", top_info_box_width);
-    message_debug(tempmessage, 0);
+    INFO("top_info_box width = %d", top_info_box_width);
     //main_changed = 1;
     top_changed = 1;
     //left_changed = 1;
   }
   if (last_top_info_box_height != top_info_box_height)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "top_info_box height = %d\n", top_info_box_height);
-    message_debug(tempmessage, 0);
+    INFO("top_info_box height = %d", top_info_box_height);
     //main_changed = 1;
     top_changed = 1;
     //left_changed = 1;
   }
   if (last_top_drawing_area_width != top_drawing_area_width)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "top_drawing_area width = %d\n", top_drawing_area_width);
-    message_debug(tempmessage, 0);
+    INFO("top_drawing_area width = %d", top_drawing_area_width);
     //main_changed = 1;
     top_changed = 1;
     //left_changed = 1;
   }
   if (last_top_drawing_area_height != top_drawing_area_height)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "top_drawing_area height = %d\n", top_drawing_area_height);
-    message_debug(tempmessage, 0);
+    INFO("top_drawing_area height = %d", top_drawing_area_height);
     //main_changed = 1;
     top_changed = 1;
     //left_changed = 1;
   }
   if (last_main_drawing_area_width != main_drawing_area_width)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "main_drawing_area width = %d\n", main_drawing_area_width);
-    message_debug(tempmessage, 0);
+    INFO("main_drawing_area width = %d", main_drawing_area_width);
     main_changed = 1;
     //top_changed = 1;
     //left_changed = 1;
   }
   if (last_main_drawing_area_height != main_drawing_area_height)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "main_drawing_area height = %d\n", main_drawing_area_height);
-    message_debug(tempmessage, 0);
+    INFO("main_drawing_area height = %d", main_drawing_area_height);
     main_changed = 1;
     //top_changed = 1;
     //left_changed = 1;
   }
   if (last_left_drawing_area_width != left_drawing_area_width)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "left_drawing_area width = %d\n", left_drawing_area_width);
-    message_debug(tempmessage, 0);
+    INFO("left_drawing_area width = %d", left_drawing_area_width);
     //main_changed = 1;
     //top_changed = 1;
     left_changed = 1;
   }
   if (last_left_drawing_area_height != left_drawing_area_height)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "left_drawing_area height = %d\n", left_drawing_area_height);
-    message_debug(tempmessage, 0);
+    INFO("left_drawing_area height = %d", left_drawing_area_height);
     //main_changed = 1;
     //top_changed = 1;
     left_changed = 1;
   }
   if (last_main_scrolled_window_width != main_scrolled_window_width)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "main_scrolled_window width = %d\n", main_scrolled_window_width);
-    message_debug(tempmessage, 0);
+    INFO("main_scrolled_window width = %d", main_scrolled_window_width);
     main_changed = 1;
     //top_changed = 1;
     //left_changed = 1;
   }
   if (last_main_scrolled_window_height != main_scrolled_window_height)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "main_scrolled_window height = %d\n", main_scrolled_window_height);
-    message_debug(tempmessage, 0);
+    INFO("main_scrolled_window height = %d", main_scrolled_window_height);
     main_changed = 1;
     //top_changed = 1;
     //left_changed = 1;
   }
   if (last_main_drawing_vbox_width != main_drawing_vbox_width)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "main_drawing_vbox width = %d\n", main_drawing_vbox_width);
-    message_debug(tempmessage, 0);
+    INFO("main_drawing_vbox width = %d", main_drawing_vbox_width);
     main_changed = 1;
     //top_changed = 1;
     //left_changed = 1;
   }
   if (last_main_drawing_vbox_height != main_drawing_vbox_height)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "main_drawing_vbox height = %d\n", main_drawing_vbox_height);
-    message_debug(tempmessage, 0);
+    INFO("main_drawing_vbox height = %d", main_drawing_vbox_height);
     main_changed = 1;
     //top_changed = 1;
     //left_changed = 1;
   }
   if (last_scroll_position != scroll_position)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "scroll position = %f\n", scroll_position);
-    message_debug(tempmessage, 0);
+    INFO("scroll position = %f", scroll_position);
     main_changed = 1;
     //top_changed = 1;
     //left_changed = 1;
@@ -870,8 +847,7 @@ void compare_size_variables(void)
   }
   if (redraw_count > 0)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "redraw count = %d\n", redraw_count);
-    message_debug(tempmessage, 0);
+    INFO("redraw count = %d", redraw_count);
     gtk_widget_queue_draw(main_drawing_area);
     redraw_count--;
   }
@@ -889,8 +865,7 @@ static gboolean on_button_press(const GtkWidget* widget, GdkEventButton *event, 
     {
       mouse_x = event->x;
       mouse_y = event->y;
-      snprintf(tempmessage, sizeof(tempmessage), "x=%d y=%d\n", mouse_x, mouse_y);
-      message_debug(tempmessage, 0);
+      INFO("mouse click position x=%d y=%d", mouse_x, mouse_y);
       //redraw_main_drawing_area();
       gtk_widget_queue_draw(main_drawing_area);
       //gtk_widget_queue_draw(main_window);
@@ -945,8 +920,7 @@ static gboolean left_vbox_expose_event(const GtkWidget *widget, const GdkEventEx
 
 void getsize_main_window(const GtkWidget *widget, const GtkAllocation *allocation, const void *data)
 {
-  snprintf(tempmessage, sizeof(tempmessage), "main window width = %d, height = %d\n", allocation->width, allocation->height);
-  message_debug(tempmessage, 0);
+  INFO("main window width = %d, height = %d", allocation->width, allocation->height);
   main_window_width = allocation->width;
   main_window_height = allocation->height;
   gtk_widget_queue_draw(top_drawing_area);
@@ -959,8 +933,7 @@ void getsize_main_window(const GtkWidget *widget, const GtkAllocation *allocatio
 
 void getsize_main_vbox(const GtkWidget *widget, const GtkAllocation *allocation, const void *data)
 {
-  snprintf(tempmessage, sizeof(tempmessage), "main_vbox width = %d, height = %d\n", allocation->width, allocation->height);
-  message_debug(tempmessage, 0);
+  INFO("main_vbox width = %d, height = %d", allocation->width, allocation->height);
   main_vbox_width = allocation->width;
   main_vbox_height = allocation->height;
   gtk_widget_queue_draw(top_drawing_area);
@@ -973,8 +946,7 @@ void getsize_main_vbox(const GtkWidget *widget, const GtkAllocation *allocation,
 
 void getsize_main_hbox(const GtkWidget *widget, const GtkAllocation *allocation, const void *data)
 {
-  snprintf(tempmessage, sizeof(tempmessage), "main_hbox width = %d, height = %d\n", allocation->width, allocation->height);
-  message_debug(tempmessage, 0);
+  INFO("main_hbox width = %d, height = %d", allocation->width, allocation->height);
   main_hbox_width = allocation->width;
   main_hbox_height = allocation->height;
   gtk_widget_queue_draw(top_drawing_area);
@@ -987,8 +959,7 @@ void getsize_main_hbox(const GtkWidget *widget, const GtkAllocation *allocation,
 
 void getsize_left_vbox(const GtkWidget *widget, const GtkAllocation *allocation, const void *data)
 {
-  snprintf(tempmessage, sizeof(tempmessage), "left_vbox width = %d, height = %d\n", allocation->width, allocation->height);
-  message_debug(tempmessage, 0);
+  INFO("left_vbox width = %d, height = %d", allocation->width, allocation->height);
   left_vbox_width = allocation->width;
   left_vbox_height = allocation->height;
   gtk_widget_queue_draw(top_drawing_area);
@@ -1001,8 +972,7 @@ void getsize_left_vbox(const GtkWidget *widget, const GtkAllocation *allocation,
 
 void getsize_right_vbox(const GtkWidget *widget, const GtkAllocation *allocation, const void *data)
 {
-  snprintf(tempmessage, sizeof(tempmessage), "right_vbox width = %d, height = %d\n", allocation->width, allocation->height);
-  message_debug(tempmessage, 0);
+  INFO("right_vbox width = %d, height = %d", allocation->width, allocation->height);
   right_vbox_width = allocation->width;
   right_vbox_height = allocation->height;
   gtk_widget_queue_draw(top_drawing_area);
@@ -1015,8 +985,7 @@ void getsize_right_vbox(const GtkWidget *widget, const GtkAllocation *allocation
 
 void getsize_top_hbox(const GtkWidget *widget, const GtkAllocation *allocation, const void *data)
 {
-  snprintf(tempmessage, sizeof(tempmessage), "top_hbox width = %d, height = %d\n", allocation->width, allocation->height);
-  message_debug(tempmessage, 0);
+  INFO("top_hbox width = %d, height = %d", allocation->width, allocation->height);
   top_hbox_width = allocation->width;
   top_hbox_height = allocation->height;
   gtk_widget_queue_draw(top_drawing_area);
@@ -1029,8 +998,7 @@ void getsize_top_hbox(const GtkWidget *widget, const GtkAllocation *allocation, 
 
 void getsize_top_info_box(const GtkWidget *widget, const GtkAllocation *allocation, const void *data)
 {
-  snprintf(tempmessage, sizeof(tempmessage), "top_hbox width = %d, height = %d\n", allocation->width, allocation->height);
-  message_debug(tempmessage, 0);
+  INFO("top_info_box width = %d, height = %d", allocation->width, allocation->height);
   top_info_box_width = allocation->width;
   top_info_box_height = allocation->height;
   gtk_widget_queue_draw(top_drawing_area);
@@ -1043,8 +1011,7 @@ void getsize_top_info_box(const GtkWidget *widget, const GtkAllocation *allocati
 
 void getsize_top_drawing_area(const GtkWidget *widget, const GtkAllocation *allocation, const void *data)
 {
-  snprintf(tempmessage, sizeof(tempmessage), "top_drawing_area width = %d, height = %d\n", allocation->width, allocation->height);
-  message_debug(tempmessage, 0);
+  INFO("top_drawing_area width = %d, height = %d", allocation->width, allocation->height);
   top_drawing_area_width = allocation->width;
   top_drawing_area_height = allocation->height;
   gtk_widget_queue_draw(top_drawing_area);
@@ -1057,8 +1024,7 @@ void getsize_top_drawing_area(const GtkWidget *widget, const GtkAllocation *allo
 
 void getsize_main_drawing_area(const GtkWidget *widget, const GtkAllocation *allocation, const void *data)
 {
-  snprintf(tempmessage, sizeof(tempmessage), "main drawing area width = %d, height = %d\n", allocation->width, allocation->height);
-  message_debug(tempmessage, 0);
+  INFO("main drawing area width = %d, height = %d", allocation->width, allocation->height);
   main_drawing_area_width = allocation->width;
   main_drawing_area_height = allocation->height;
   gtk_widget_queue_draw(top_drawing_area);
@@ -1071,8 +1037,7 @@ void getsize_main_drawing_area(const GtkWidget *widget, const GtkAllocation *all
 
 void getsize_main_drawing_vbox(const GtkWidget *widget, const GtkAllocation *allocation, const void *data)
 {
-  snprintf(tempmessage, sizeof(tempmessage), "main drawing vbox width = %d, height = %d\n", allocation->width, allocation->height);
-  message_debug(tempmessage, 0);
+  INFO("main drawing vbox width = %d, height = %d", allocation->width, allocation->height);
   main_drawing_vbox_width = allocation->width;
   main_drawing_vbox_height = allocation->height;
   gtk_widget_queue_draw(top_drawing_area);
@@ -1085,8 +1050,7 @@ void getsize_main_drawing_vbox(const GtkWidget *widget, const GtkAllocation *all
 
 void getsize_main_scrolled_window(const GtkWidget *widget, const GtkAllocation *allocation, const void *data)
 {
-  snprintf(tempmessage, sizeof(tempmessage), "main_scrolled_window width = %d, height = %d\n", allocation->width, allocation->height);
-  message_debug(tempmessage, 0);
+  INFO("main_scrolled_window width = %d, height = %d", allocation->width, allocation->height);
   main_scrolled_window_width = allocation->width;
   main_scrolled_window_height = allocation->height;
   gtk_widget_queue_draw(top_drawing_area);
@@ -1099,8 +1063,7 @@ void getsize_main_scrolled_window(const GtkWidget *widget, const GtkAllocation *
 
 void getsize_left_drawing_area(const GtkWidget *widget, const GtkAllocation *allocation, const void *data)
 {
-  snprintf(tempmessage, sizeof(tempmessage), "left drawing area width = %d, height = %d\n", allocation->width, allocation->height);
-  message_debug(tempmessage, 0);
+  INFO("left drawing area width = %d, height = %d", allocation->width, allocation->height);
   left_drawing_area_width = allocation->width;
   left_drawing_area_height = allocation->height;
   gtk_widget_queue_draw(top_drawing_area);
@@ -1129,22 +1092,20 @@ void select_file(void)
     char *filename;
     filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
     snprintf(log_file, sizeof(log_file), "%s", filename);
-    printf ("%s\n",  log_file);
+    INFO("selected file: '%s'", log_file);
     g_free (filename);
     total_size = 0;
     int ret = read_log_file(log_file);
     if (ret != 0)
     {
-      snprintf(tempmessage, sizeof(tempmessage), "error processing log file\n");
-      message_now(tempmessage);
+      ERROR("error processing log file");
     }
     else
     {
       ret = check_log();
       if (ret != 0)
       {
-        snprintf(tempmessage, sizeof(tempmessage), "there were errors found in the log file\n");
-        message_now(tempmessage);
+        ERROR("there were errors found in the log file");
       }
     }
     //redraw_left_vbox();
@@ -1163,21 +1124,19 @@ void select_file(void)
 gint reload_file(gpointer user_data)
 {
   (void) user_data;
-  printf ("%s\n",  log_file);
+  INFO("reloading file: '%s'", log_file);
   total_size = 0;
   int ret = read_log_file(log_file);
   if (ret != 0)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "error processing log file\n");
-    message_now(tempmessage);
+    ERROR("error processing log file");
   }
   else
   {
     ret = check_log();
     if (ret != 0)
     {
-      snprintf(tempmessage, sizeof(tempmessage), "there were errors found in the log file\n");
-      message_now(tempmessage);
+      ERROR("there were errors found in the log file");
     }
   }
   //redraw_left_vbox();
@@ -1420,7 +1379,7 @@ void redraw_top_drawing_area(void)
 
 void change_left_resolution(const GtkWidget *w, gpointer data)
 {
-  g_print( "%d\n", GPOINTER_TO_INT( data ) );
+  INFO("%d\n", GPOINTER_TO_INT( data ) );
   left_square_size = GPOINTER_TO_INT( data );
   redraw_left_vbox();
   (void) w;
@@ -1450,8 +1409,7 @@ void redraw_left_vbox(void)
 
   if (total_size > 0)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "redrawing left width = %d, height = %d\n", left_drawing_area_width, left_drawing_area_height);
-    message_debug(tempmessage, 0);
+    INFO("redrawing left width = %d, height = %d", left_drawing_area_width, left_drawing_area_height);
     int columns = left_drawing_area_width / left_square_size;
     int rows = left_drawing_area_height / left_square_size;
     int squares = columns * rows;
@@ -1504,8 +1462,7 @@ void redraw_left_vbox(void)
       count++;
       if (count > squares)
       {
-        snprintf(tempmessage, sizeof(tempmessage), "left count out of range\n");
-        message_debug(tempmessage, 0);
+        ERROR("count out of range: %d > %d", count, squares);
         break;
       }
       n++;
@@ -1515,8 +1472,7 @@ void redraw_left_vbox(void)
         i++;
         if (i >= rows)
         {
-          snprintf(tempmessage, sizeof(tempmessage), "left rows out of range\n");
-          message_debug(tempmessage, 0);
+          ERROR("i out of range: %d > %d", i, rows);
           break;
         }
       }
@@ -1555,8 +1511,7 @@ void redraw_left_vbox(void)
 
 void change_main_resolution(const GtkWidget *w, gpointer data)
 {
-  snprintf(tempmessage, sizeof(tempmessage), "%d\n", GPOINTER_TO_INT( data ) );
-  message_debug(tempmessage, 0);
+  INFO("%d\n", GPOINTER_TO_INT( data ) );
   main_square_size = GPOINTER_TO_INT( data );
   redraw_main_drawing_area();
   (void) w;
@@ -1566,8 +1521,7 @@ void change_main_resolution(const GtkWidget *w, gpointer data)
 
 void change_main_grid_size(const GtkWidget *w, gpointer data)
 {
-  snprintf(tempmessage, sizeof(tempmessage), "%d\n", GPOINTER_TO_INT( data ) );
-  message_debug(tempmessage, 0);
+  INFO("%d\n", GPOINTER_TO_INT( data ) );
   main_grid_size = GPOINTER_TO_INT( data );
   redraw_main_drawing_area();
   (void) w;
@@ -1605,8 +1559,7 @@ void redraw_main_drawing_area(void)
 
   if (total_size > 0)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "redrawing main width = %d, height = %d, scroll = %f\n", main_drawing_area_width, main_drawing_area_height, scroll_position);
-    message_debug(tempmessage, 0);
+    INFO("redrawing main width = %d, height = %d, scroll = %f", main_drawing_area_width, main_drawing_area_height, scroll_position);
     scroll_position = gtk_adjustment_get_value (GTK_ADJUSTMENT (gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (main_scrolled_window))));
     int scroll_row_start = scroll_position / main_square_size;
     int scroll_row_end = scroll_row_start + (main_drawing_vbox_height / main_square_size);
@@ -1621,8 +1574,8 @@ void redraw_main_drawing_area(void)
       adjustment++;
       blocks_per_square = total_size / (squares - adjustment);
     }
-    snprintf(tempmessage, sizeof(tempmessage), "total_size=%lld, squares*blocks_per_square=%lld\n", total_size, squares*blocks_per_square);
-    message_debug(tempmessage, 0);
+    
+    INFO("total_size=%lld, squares*blocks_per_square=%lld\n", total_size, squares*blocks_per_square);
 
     int count = 0;
     int i = 0;
@@ -1711,8 +1664,7 @@ void redraw_main_drawing_area(void)
         count++;
         if (count > squares)
         {
-          snprintf(tempmessage, sizeof(tempmessage), "main count out of range\n");
-          message_debug(tempmessage, 0);
+          ERROR("count out of range: %d > %d", count, squares);
           break;
         }
         n++;
@@ -1722,8 +1674,7 @@ void redraw_main_drawing_area(void)
           i++;
           if (i >= rows)
           {
-            snprintf(tempmessage, sizeof(tempmessage), "main rows out of range\n");
-            message_debug(tempmessage, 0);
+            ERROR("i out of range: %d > %d", i, rows);
             break;
           }
         }
@@ -1771,7 +1722,7 @@ void redraw_main_drawing_area(void)
           cairo_set_source_rgb(cr, r, g, b);
           cairo_rectangle(cr, (n * main_square_size) + spot_adjust, (i * main_square_size) + spot_adjust, spot_size, spot_size);
           cairo_fill(cr);
-          fprintf (stdout, "0x%llx - 0x%llx\n", blocks_per_square * count, (blocks_per_square * (count+1) ) - 1);
+          INFO("0x%llx - 0x%llx", blocks_per_square * count, (blocks_per_square * (count+1) ) - 1);
           mouse_x_old = mouse_x;
           mouse_y_old = mouse_y;
         }
@@ -1892,22 +1843,19 @@ int initialize_memory(void)
   lposition=malloc(sizeof(*lposition) * log_rows);
   if (lposition == NULL)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "Error allocating log memory (%s)\n", strerror(errno));
-    message_now(tempmessage);
+    ERROR("Error allocating log memory (%s)", strerror(errno));
     return (-1);
   }
   lsize=malloc(sizeof(*lsize) * log_rows);
   if (lsize == NULL)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "Error allocating log memory (%s)\n", strerror(errno));
-    message_now(tempmessage);
+    ERROR("Error allocating log memory (%s)", strerror(errno));
     return (-1);
   }
   lstatus=malloc(sizeof(*lstatus) * log_rows);
   if (lstatus == NULL)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "Error allocating log memory (%s)\n", strerror(errno));
-    message_now(tempmessage);
+    ERROR("Error allocating log memory (%s)", strerror(errno));
     return (-1);
   }
   return 0;
@@ -1924,8 +1872,7 @@ int increase_log_memory(int new_lines)
   temp_lposition = realloc(lposition, log_rows * sizeof(*lposition));
   if (temp_lposition == NULL)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "Error allocating log memory (%s)\n", strerror(errno));
-    message_now(tempmessage);
+    ERROR("Error allocating log memory (%s)", strerror(errno));
     found_error = -2;
   }
   lposition = temp_lposition;
@@ -1933,8 +1880,7 @@ int increase_log_memory(int new_lines)
   temp_lsize = realloc(lsize, log_rows * sizeof(*lsize));
   if (temp_lsize == NULL)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "Error allocating log memory (%s)\n", strerror(errno));
-    message_now(tempmessage);
+    ERROR("Error allocating log memory (%s)", strerror(errno));
     found_error = -2;
   }
   lsize = temp_lsize;
@@ -1942,8 +1888,7 @@ int increase_log_memory(int new_lines)
   temp_lstatus = realloc(lstatus, log_rows * sizeof(*lstatus));
   if (temp_lstatus == NULL)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "Error allocating log memory (%s)\n", strerror(errno));
-    message_now(tempmessage);
+    ERROR("Error allocating log memory (%s)", strerror(errno));
     found_error = -2;
   }
   lstatus = temp_lstatus;
@@ -1959,8 +1904,7 @@ int read_log_file(char *log_file)
 {
   if (log_file == NULL)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "Error: No log file specified.\n");
-    message_now(tempmessage);
+    ERROR("No log file specified");
     return (1);
   }
 
@@ -1968,8 +1912,7 @@ int read_log_file(char *log_file)
   readfile = fopen(log_file, "r");
   if (readfile == NULL)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "Cannot open %s for reading (%s).\n", log_file, strerror(errno));
-    message_now(tempmessage);
+    ERROR("Cannot open %s for reading (%s)", log_file, strerror(errno));
     return (1);
   }
 
@@ -2011,10 +1954,8 @@ int read_log_file(char *log_file)
           current_position = strtoull(raw_position, &endptr, 0);
           if (*endptr)
           {
-            snprintf(tempmessage, sizeof(tempmessage), "error processing position on line %d\n", real_line_number);
-            message_now(tempmessage);
-            snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
-            message_now(tempmessage);
+            ERROR("error processing position on line %d", real_line_number);
+            ERROR("line%d= %s", real_line_number, line);
             found_error = 1;
           }
           current_status = strtoull(raw_size, &endptr, 0);
@@ -2046,19 +1987,15 @@ int read_log_file(char *log_file)
               }
               else
               {
-                snprintf(tempmessage, sizeof(tempmessage), "error processing line %d, status not recognized\n", real_line_number);
-                message_now(tempmessage);
-                snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
-                message_now(tempmessage);
+                ERROR("error processing line %d, status not recognized", real_line_number); 
+                ERROR("line%d= %s", real_line_number, line);
                 found_error = -1;
               }
             }
             else
             {
-              snprintf(tempmessage, sizeof(tempmessage), "error processing status on line %d\n", real_line_number);
-              message_now(tempmessage);
-              snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
-              message_now(tempmessage);
+              ERROR("error processing status on line %d", real_line_number);
+              ERROR("line%d= %s", real_line_number, line);
               found_error = 1;
             }
           }
@@ -2067,10 +2004,8 @@ int read_log_file(char *log_file)
         }
         else if (!found_current)
         {
-          snprintf(tempmessage, sizeof(tempmessage), "error processing progress log file line %d, expecting current status\n", real_line_number);
-          message_now(tempmessage);
-          snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
-          message_now(tempmessage);
+          ERROR("error processing progress log file line %d, expecting current status", real_line_number);
+          ERROR("line%d= %s", real_line_number, line);
           found_error = 1;
         }
 
@@ -2081,46 +2016,36 @@ int read_log_file(char *log_file)
           lposition[i] = strtoull(raw_position, &endptr, 0);
           if (*endptr)
           {
-            snprintf(tempmessage, sizeof(tempmessage), "error processing position on line %d\n", real_line_number);
-            message_now(tempmessage);
-            snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
-            message_now(tempmessage);
+            ERROR("error processing position on line %d", real_line_number);
+            ERROR("line%d= %s", real_line_number, line);
             found_error = 1;
           }
           lsize[i] = strtoull(raw_size, &endptr, 0);
           if (*endptr)
           {
-            snprintf(tempmessage, sizeof(tempmessage), "error processing size on line %d\n", real_line_number);
-            message_now(tempmessage);
-            snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
-            message_now(tempmessage);
+            ERROR("error processing size on line %d", real_line_number);
+            ERROR("line%d= %s", real_line_number, line);
             found_error = 1;
           }
           lstatus[i] = strtoll(raw_status, &endptr, 0);
           if (*endptr)
           {
-            snprintf(tempmessage, sizeof(tempmessage), "error processing status on line %d\n", real_line_number);
-            message_now(tempmessage);
-            snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
-            message_now(tempmessage);
+            ERROR("error processing status on line %d", real_line_number);
+            ERROR("line%d= %s", real_line_number, line);
             found_error = 1;
           }
           lstatus[i] += (strtoll(raw_info, &endptr, 0)) << 8;
           if (*endptr)
           {
-            snprintf(tempmessage, sizeof(tempmessage), "error processing info on line %d\n", real_line_number);
-            message_now(tempmessage);
-            snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
-            message_now(tempmessage);
+            ERROR("error processing info on line %d", real_line_number);
+            ERROR("line%d= %s", real_line_number, line);
             found_error = 1;
           }
           lstatus[i] += (strtoll(raw_errstat, &endptr, 0)) << 32;
           if (*endptr)
           {
-            snprintf(tempmessage, sizeof(tempmessage), "error processing err/stat on line %d\n", real_line_number);
-            message_now(tempmessage);
-            snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
-            message_now(tempmessage);
+            ERROR("error processing err/stat on line %d", real_line_number);
+            ERROR("line%d= %s", real_line_number, line);
             found_error = 1;
           }
           //fprintf (stdout, "%d=  %d  0x%08llx  0x%08llx  0x%08llx\n", real_line_number, i, lposition[i], lsize[i], lstatus[i]);    //debug
@@ -2134,26 +2059,21 @@ int read_log_file(char *log_file)
           temp_position = strtoull(raw_position, &endptr, 0);
           if (*endptr)
           {
-            snprintf(tempmessage, sizeof(tempmessage), "error processing position on line %d\n", real_line_number);
-            message_now(tempmessage);
-            snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
-            message_now(tempmessage);
+            ERROR("error processing position on line %d", real_line_number);
+            ERROR("line%d= %s", real_line_number, line);
             found_error = -1;
           }
           temp_size = strtoull(raw_size, &endptr, 0);
           if (*endptr)
           {
-            snprintf(tempmessage, sizeof(tempmessage), "error processing size on line %d\n", real_line_number);
-            message_now(tempmessage);
-            snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
-            message_now(tempmessage);
+            ERROR("error processing size on line %d", real_line_number);
+            ERROR("line%d= %s", real_line_number, line);
             found_error = -1;
           }
           scanline = sscanf(raw_status, "%c %[^\n]", &temp_status, rest_of_line);
           if (scanline != 1)
           {
-            snprintf(tempmessage, sizeof(tempmessage), "error processing status on line %d\n", real_line_number);
-            message_now(tempmessage);
+            ERROR("error processing status on line %d", real_line_number);
             found_error = -1;
           }
 
@@ -2184,10 +2104,8 @@ int read_log_file(char *log_file)
             }
             else
             {
-              snprintf(tempmessage, sizeof(tempmessage), "error processing line %d, status not recognized\n", real_line_number);
-              message_now(tempmessage);
-              snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
-              message_now(tempmessage);
+              ERROR("error processing line %d, status not recognized", real_line_number);
+              ERROR("line%d= %s", real_line_number, line);
               found_error = -1;
             }
 
@@ -2199,10 +2117,8 @@ int read_log_file(char *log_file)
 
         else
         {
-          snprintf(tempmessage, sizeof(tempmessage), "error processing progress log file line %d\n", real_line_number);
-          message_now(tempmessage);
-          snprintf(tempmessage, sizeof(tempmessage), "line%d= %s", real_line_number, line);
-          message_now(tempmessage);
+          ERROR("error processing progress log file line %d", real_line_number);
+          ERROR("line%d= %s", real_line_number, line);
           found_error = 1;
         }
       }
@@ -2231,16 +2147,14 @@ int read_log_file(char *log_file)
 
 int check_log(void)
 {
-  snprintf(tempmessage, sizeof(tempmessage), "Checking progress log file...\n");
-  message_now(tempmessage);
+  INFO("Checking progress log file...");
   int i;
   int fail = 0;
 
   // check that first position is 0
   if (lposition[0] != 0)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "The first position is not 0\n");
-    message_now(tempmessage);
+    ERROR("The first position is not 0");
     fail = 1;
   }
 
@@ -2249,37 +2163,32 @@ int check_log(void)
     // check if there is an overlap
     if ( (lposition[i] + lsize[i]) > lposition[i+1] )
     {
-      snprintf(tempmessage, sizeof(tempmessage), "Overlap found on line %d\n", i+1);
-      message_now(tempmessage);
+      ERROR("Overlap found on line %d", i+1);
       fail = 2;
     }
     // check if size is 0
     if (lsize[i] == 0)
     {
-      snprintf(tempmessage, sizeof(tempmessage), "Size of 0 found on line %d\n", i+1);
-      message_now(tempmessage);
+      ERROR("Size of 0 found on line %d", i+1);
       fail = 3;
     }
     // check if there is a gap
     if ( (lposition[i] + lsize[i]) < lposition[i+1])
     {
-      snprintf(tempmessage, sizeof(tempmessage), "Gap found on line %d\n", i+1);
-      message_now(tempmessage);
+      ERROR("Gap found on line %d", i+1);
       fail = 4;
     }
     // check if the next status is the same
     if (lstatus[i] == lstatus[i+1])
     {
-      snprintf(tempmessage, sizeof(tempmessage), "Same status found on line %d\n", i+1);
-      message_now(tempmessage);
+      ERROR("Same status found on line %d", i+1);
       fail = 5;
     }
   }
 
   // get total size from last position
   total_size = total_lines>0 ? lposition[total_lines-1] + lsize[total_lines-1] : 0;
-  snprintf(tempmessage, sizeof(tempmessage), "total size = %lld\n", total_size);
-  message_now(tempmessage);
+  INFO("total size = %lld", total_size);
 
   return fail;
 }
@@ -2294,8 +2203,7 @@ int get_block_status(long long position, long long size)
   int line = find_block(position);
   if (line == -1)
   {
-    //snprintf(tempmessage, sizeof(tempmessage), "Error: Position 0x%llx not found in progress log file\n", position);
-    //message_now(tempmessage);
+    ERROR("Error: Position 0x%llx not found in progress log file", position);
     return -1;
   }
   // process current status
@@ -2492,16 +2400,20 @@ int clear_error_message(void)
 // function to display help
 void help(void)
 {
-  fprintf (stdout, "\n");
-  fprintf (stdout, "Usage: hddscviewer [options]\n");
-  fprintf (stdout, "\n");
-  fprintf (stdout, "OPTIONS:\n");
-  fprintf (stdout, " -v, --version              Show version and exit\n");
-  fprintf (stdout, " -h, --help                 Show this help and exit\n");
-  fprintf (stdout, "\n");
-  fprintf (stdout, "Report bugs to sdcomputingservice@gmail.com\n");
-  fprintf (stdout, "Please be sure to include 'hddscviewer' in the subject line. \n");
-  fprintf (stdout, "\n");
+  // TODO: change bug report to point to github?
+  const char* const helptext = 
+    "Usage: hddscviewer [options]\n"
+    "\n"
+    "OPTIONS:\n"
+    " -v, --version              Show version and exit\n"
+    " -h, --help                 Show this help and exit\n"
+    "\n"
+    "Report bugs to sdcomputingservice@gmail.com\n"
+    "Please be sure to include 'hddscviewer' in the subject line. \n"
+    "\n"
+  ;
+
+  fputs (helptext, stdout);
 }
 
 
@@ -2603,21 +2515,20 @@ void import_language_file(void)
                                         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                         GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
                                         NULL);
-  if ( access( "/usr/local/share/doc/hddscviewer/Language/English", F_OK ) == 0 )
+  if ( access( "/usr/local/share/doc/hddscviewer/Language/English", F_OK ) == 0 ) //TODO: add util.c function to check if file exists
   {
     gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), "/usr/local/share/doc/hddscviewer/Language");
-    g_print ("found installed languages\n");
+    INFO("found installed languages\n");
   }
   else if ( access( "Language/English", F_OK ) == 0 )
   {
     gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), "Language");
-    g_print ("found languages locally\n");
+    INFO("found languages locally\n");
   }
   if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
   {
-    char *filename;
-    filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-    fprintf (stdout, "%s\n", filename);
+    char *filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+    INFO("Selected file: '%s'\n", filename);
     file_import_sel(filename);
     g_free (filename);
   }
@@ -2635,8 +2546,7 @@ static void file_import_sel( char *import_file )
   readfile = fopen(import_file, "r");
   if (readfile == NULL)
   {
-    snprintf(tempmessage, sizeof(tempmessage), "%s: %s (%s)", curlang[LANGLANGIMPORTERR], import_file, strerror(errno));
-    message_error(tempmessage);
+    INFO("Cannot open %s for reading (%s)", import_file, strerror(errno));
     print_gui_error_message(error_message, curlang[LANGERROR], 1);
     clear_error_message();
   }
@@ -2719,7 +2629,7 @@ static size_t WriteMemoryCallback(void *contents, size_t size, size_t nmemb, voi
   mem->memory = realloc(mem->memory, mem->size + realsize + 1);
   if(mem->memory == NULL) {
     /* out of memory! */
-    printf("not enough memory (realloc returned NULL)\n");
+    ERROR("not enough memory (realloc returned NULL)\n");
     return 0;
   }
 
@@ -2770,27 +2680,19 @@ int translate_all(void)
 
     if (total_language_items % 3)
     {
-      fprintf (stdout, "\n*****************************************************\n");
-      fprintf (stdout, "\n*****************************************************\n");
-      fprintf (stdout, "\n*****************************************************\n");
-      fprintf (stdout, "language count not dividable by 3\n");
-      fprintf (stdout, "\n*****************************************************\n");
-      fprintf (stdout, "\n*****************************************************\n");
-      fprintf (stdout, "\n*****************************************************\n");
+      ERROR("language count %d not dividable by 3", total_language_items);
       return -1;
     }
     for (i = 0; i < total_language_items; i+=3)
     {
-      fprintf (stdout, "translating %d\n", i/3);
+      INFO("translating %d", i/3);
       char *translang = languages[i+1];
       char *language = languages[i];
       const char *native = languages[i+2];
       copy_enlanguage();
       if ( translate_language("en", translang, language, native) )
       {
-        fprintf (stdout, "\n*****************************************************\n");
-        fprintf (stdout, "Failed to translate to %s\n", language);
-        fprintf (stdout, "\n*****************************************************\n");
+        ERROR("Failed to translate to %s", language);
         translate_failed = 1;
       }
       if (translate == 80009)
@@ -2802,9 +2704,7 @@ int translate_all(void)
         copy_newlanguage();
         if (translate_language(translang, "en", language, "english") )
         {
-          fprintf (stdout, "\n*****************************************************\n");
-          fprintf (stdout, "Failed to reverse translate %s\n", language);
-          fprintf (stdout, "\n*****************************************************\n");
+          ERROR("Failed to reverse translate %s", language);
           translate_failed = 1;
         }
         for (n = 0; n < LANGCOUNT; n++)
@@ -2872,13 +2772,7 @@ int translate_all(void)
   }
   if (translate_failed)
   {
-    fprintf (stdout, "\n*****************************************************\n");
-    fprintf (stdout, "\n*****************************************************\n");
-    fprintf (stdout, "\n*****************************************************\n");
-    fprintf (stdout, "Failed to translate\n");
-    fprintf (stdout, "\n*****************************************************\n");
-    fprintf (stdout, "\n*****************************************************\n");
-    fprintf (stdout, "\n*****************************************************\n");
+    ERROR("Failed to translate");
     return -1;
   }
   return 0;
@@ -2930,6 +2824,7 @@ int translate_language(char *fromlang, char *translang, const char *language, co
       }
       //fprintf (stdout, "%s\n", new_data);
 
+      //TODO: convert to snprintf
       strcpy(url_data, "https://translate.googleapis.com/translate_a/single?client=gtx&sl=");
       strcat(url_data, fromlang);
       strcat(url_data, "&tl=");
@@ -2937,7 +2832,7 @@ int translate_language(char *fromlang, char *translang, const char *language, co
       strcat(url_data, "&dt=t&q=");
       strcat(url_data, new_data);
 
-      fprintf (stdout, "%d %s to %s  ", i, fromlang, translang);
+      INFO("Translating %d %s to %s", i, fromlang, translang);
       do_nanosleep(TRANSLATETIMERFAST);  // this is a timer to deal with google translator
       const char *data = get_translated_data(url_data);
       //fprintf (stdout, "%s\n", data);
@@ -3032,7 +2927,7 @@ int translate_language(char *fromlang, char *translang, const char *language, co
       //fprintf (stdout, "%s\n", newlang[found_count]);
       if (MAXLANGLENGTH - l < strlen(line))
       {
-        fprintf (stdout, "Warning: language count %d exceeded max length and was truncated.\n", found_count);
+        WARN("language count %d exceeded max length and was truncated.", found_count);
         failure = 1;
       }
     }
@@ -3047,7 +2942,7 @@ int translate_language(char *fromlang, char *translang, const char *language, co
   }
   else
   {
-    fprintf (stdout, "FAILED count=%d found_count=%d LANGCOUNT=%d\n", count, found_count, LANGCOUNT-1);
+    ERROR("count=%d found_count=%d LANGCOUNT=%d", count, found_count, LANGCOUNT-1);
     failure = 1;
   }
 
@@ -3132,11 +3027,11 @@ char* get_translated_data(char *url_data)
   /* check for errors */
   if(res != CURLE_OK)
   {
-    fprintf(stdout, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
+    ERROR("curl_easy_perform() failed: %s", curl_easy_strerror(res));
   }
   else
   {
-    fprintf(stdout, "%lu bytes retrieved\n", (long)chunk.size);
+    INFO("curl_easy_perform() success, %lu bytes retrieved", (long)chunk.size);
     //printf("%s\n", chunk.memory);
   }
 
@@ -3195,6 +3090,7 @@ int translate_language_slow(char *fromlang, char *translang, const char *languag
     }
     //fprintf (stdout, "%s\n", new_data);
 
+    //TODO: convert to snprintf
     strcpy(url_data, "https://translate.googleapis.com/translate_a/single?client=gtx&sl=");
     strcat(url_data, fromlang);
     strcat(url_data, "&tl=");
@@ -3202,7 +3098,7 @@ int translate_language_slow(char *fromlang, char *translang, const char *languag
     strcat(url_data, "&dt=t&q=");
     strcat(url_data, new_data);
 
-    fprintf (stdout, "%d %s to %s  ", count, fromlang, translang);
+    INFO("Translating %d %s to %s", count, fromlang, translang);
     do_nanosleep(TRANSLATETIMERSLOW);  // this is a timer to deal with google translator
     const char *data = get_translated_data(url_data);
     //fprintf (stdout, "%s\n", data);
@@ -3250,7 +3146,7 @@ int translate_language_slow(char *fromlang, char *translang, const char *languag
     //fprintf (stdout, "%s\n", new_lang_data);
     if (strlen(new_lang_data) >= MAXLANGLENGTH)
     {
-      fprintf (stdout, "Warning: language count %d exceeded max length and was truncated.\n", count);
+      WARN("language count %d exceeded max length and was truncated.", count);
       failure = 1;
     }
     strcpy (newlang[count], new_lang_data);
@@ -3387,8 +3283,4 @@ int setup_enlanguage(void)
 
 return 0;
 }
-
-
-
-
 
