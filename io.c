@@ -6696,8 +6696,8 @@ int process_resources_ccc(unsigned long long *start, unsigned long long *end, un
           fprintf (stdout, "0x%llx 0x%llx 0x%llx\n", start[i], end[i], flag[i]);
         }
       }
-      unsigned long long potential_hba_start;
-      unsigned long long potential_hba_end;
+      unsigned long long potential_hba_start=0;
+      unsigned long long potential_hba_end=0;
       // new fixed method of memory mapping ports, the 6th in the list should be the hba
       int fixed_method = 1;
       if (fixed_method && count>=5)
